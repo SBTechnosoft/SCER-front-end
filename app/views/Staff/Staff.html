@@ -1,0 +1,54 @@
+<h3>
+	
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Staff</small>
+</h3>
+<div data-ng-controller="StaffController as table" class="container-fluid">
+	<div class="panel panel-default">
+		 <!--h4 class="panel-heading"></h4-->
+		<div class="panel-body">
+			<div class="form-group">
+			
+				<label class="col-sm-1 control-label"> Company </label>
+					<div class="col-sm-4">
+						<select chosen="" data-ng-model="state" data-ng-options="s for s in table.states" class="form-control chosen-select"></select>
+					</div>
+					
+				<label class="col-sm-1 control-label"> Branch </label>
+					<div class="col-sm-4">
+						<select chosen="" data-ng-model="state" data-ng-options="s for s in table.states" class="form-control chosen-select"></select>
+					</div>
+					
+				<button type="button" class="mr mb-sm btn btn-primary">Go</button>
+				
+			</div>
+		</div>
+	</div>
+   <div class="panel panel-default">
+      <div class="panel-heading" >
+         <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
+		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="app.AddStaff" >
+			<span class="btn-label"><i class="fa fa-plus"></i></span>
+		Add Staff</button>
+         <div class="panel-title">Branch Name</div>
+      </div>
+      <table data-ng-table="table.tableParams"  class="table table-bordered table-striped">
+	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+         <tbody>
+            <tr data-ng-repeat="user in $data">
+				<td data-title="'Name'"  >{{user.name}}</td>
+				<td data-title="'Address'"  >{{user.address}}</td>
+			    <td data-title="'Mobile'"  >{{user.mobile}}</td>
+				<td data-title="'City'"  >{{user.city}}</td>
+
+			   <td data-title="'Action'" > 
+					<center>
+						<i ui-sref="" ng-click="edit_comp()" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+						<i ui-sref="" ng-click="delete_comp()" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
+					</center>
+				</td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+  
+</div>

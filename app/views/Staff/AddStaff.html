@@ -1,0 +1,100 @@
+<h3>
+   <small>
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   <a ui-sref="app.Staff" >Staff</a> >> 
+   Add New Staff</small>
+</h3>
+<!-- START panel-->
+<div data-ng-controller="AddStaffController as form" class="container-fluid">
+	
+   <div class="panel panel-default">
+      <h4 class="panel-heading">Basic Details</h4>
+      <div class="panel-body">
+         <form method="get" action="/" novalidate="" class="form-horizontal">
+			<div class="col-md-9">
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Company</label>
+                  <div class="col-sm-8">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Branch</label>
+                  <div class="col-sm-8">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+            <fieldset>
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-2 control-label">Name</label>
+                  <div class="col-sm-8">
+                     <input id="input-id-1" type="text" placeholder="Name" class="form-control" />
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset>
+				<div class="form-group">
+                  <label for="input-id-1" class="col-sm-2 control-label">Email ID</label>
+                  <div class="col-sm-8">
+                     <input id="input-id-1" type="text" placeholder="Email ID" class="form-control" />
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+				<div class="form-group">
+                  <label for="input-id-1" class="col-sm-2 control-label">Password</label>
+                  <div class="col-sm-8">
+                     <input id="input-id-1" type="password" placeholder="Password" class="form-control" />
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+				<div class="form-group">
+                  <label for="input-id-1" class="col-sm-2 control-label">Re-Enter Password</label>
+                  <div class="col-sm-8">
+                     <input id="input-id-1" type="password" placeholder="Re-Enter Password" class="form-control" />
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">State</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">City</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">PIN Code</label>
+					<div class="col-sm-3">
+					   <input type="text" masked="999999" placeholder="PIN Code" class="form-control" />
+					   <span class="help-block">Masked="395001"</span>
+					</div>
+				</div>
+			</fieldset>
+			 <button type="button" class="mr mb-sm btn btn-danger pull-right">Cancel</button>
+			 <button type="button" class="mr mb-sm btn btn-success pull-right">Save</button>
+			</div>
+			<div class="col-md-3">
+			<img src="app/img/mb-sample.jpg" height="100" width="80%" class="brand-logo-collapsed"/>
+			<input id="input-id-1" type="file"   />
+			</div>
+			
+         </form>
+      </div>
+   </div>
+   <!-- END panel-->
+</div>

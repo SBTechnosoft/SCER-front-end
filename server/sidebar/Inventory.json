@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Product",
+    "sref": "#",
+    "icon": "icon-bar-graph",
+    "subnav": [
+      { "text": "Add Product",  "sref": "app.AddInvProduct", "translate": "" },
+      { "text": "List Product", "sref": "app.InvProduct", "translate": "" }
+    ]
+  },
+  {
+    "text": "Category",
+    "sref": "app.InvCategory",
+    "icon": "icon-box"
+  },
+  {
+    "type": "separator"
+  },
+  {
+    "text": "Group",
+    "sref": "app.InvGroup",
+    "icon": "icon-book"
+  },
+  {
+    "text": "Order/Notes",
+    "sref": "#",
+    "icon": "icon-ribbon",
+    "subnav": [
+      { "text": "Purchase Order",  "sref": "app.InvPurchase", "translate": "" },
+      { "text": "Sales Order", "sref": "app.InvSales", "translate": "" }
+    ]
+  },
+  {
+    "text": "Stock Register",
+    "sref": "app.AddInvStock",
+    "icon": "icon-stack"
+  }
+]

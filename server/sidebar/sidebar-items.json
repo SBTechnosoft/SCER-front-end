@@ -1,0 +1,38 @@
+[
+  {
+    "text": "Profile",
+    "sref": "app.dashboard",
+    "icon": "icon-bar-graph",
+    "translate": ""
+  },
+  {
+    "text": "Companies",
+    "sref": "#",
+    "icon": "icon-box",
+    "subnav": [
+      {"text": "All", "sref": "app.table-ngtable", "translate": "" },
+      {"text": "Modify/Delete", "sref": "app.form-inputs", "translate": "" }
+    ],
+    "translate": ""
+  },
+  {
+    "text": "Branches",
+    "sref": "#",
+    "icon": "icon-grid",
+    "subnav": [
+      {"text": "All", "sref": "app.Branch", "translate": "" },
+      {"text": "Modify/Delete", "sref": "app.AddBranch", "translate": "" }
+    ],
+    "translate": ""
+  },
+  {
+    "text": "Staff",
+    "sref": "#",
+    "icon": "fa fa-users",
+    "subnav": [
+      {"text": "All", "sref": "app.Staff", "translate": "" },
+      {"text": "Modify/Delete", "sref": "app.AddStaff", "translate": "" }
+    ],
+    "translate": ""
+  }
+]

@@ -1,0 +1,36 @@
+<h3>
+	
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   Inventory >>
+   Product</small>
+</h3>
+<div data-ng-controller="InvProductController as table" class="container-fluid">
+	
+   <div class="panel panel-default">
+      <div class="panel-heading" >
+         <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
+		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="app.AddInvProduct" >
+			<span class="btn-label"><i class="fa fa-plus"></i></span>
+		Add Product</button>
+         <div class="panel-title">All Product</div>
+      </div>
+      <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
+	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+         <tbody>
+            <tr data-ng-repeat="user in $data">
+				<td data-title="'Product Name'" sortable="'name'" filter="{ 'name': 'text' }" >{{user.name}}</td>
+				<td data-title="'Category'" sortable="'category'" filter="{ 'category': 'text' }" >{{user.category}}</td>
+			    <td data-title="'Group'" sortable="'group'" filter="{ 'group': 'text' }" >{{user.group}}</td>
+				<td data-title="'Measurement'" sortable="'measure'" filter="{ 'measure': 'text' }" >{{user.measure}}</td>
+		
+			   <td data-title="'Action'" filter="{ 'action': 'text' }"> 
+					<center>
+						<i ui-sref="" ng-click="edit_comp()" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+						<i ui-sref="" ng-click="delete_comp()" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
+					</center>
+				</td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>

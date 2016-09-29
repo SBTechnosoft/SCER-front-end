@@ -1,0 +1,60 @@
+<h3>
+   <small>
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   Inventory >> 
+    <a ui-sref="app.InvProduct" >Product</a> >> 
+   Add New Product</small>
+</h3>
+<!-- START panel-->
+
+<div data-ng-controller="AddInvProductController as form" class="container-fluid panel-body">
+ <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	
+   <div class="panel panel-default">
+      <h4 class="panel-heading">Basic Details</h4>
+      <div class="panel-body">
+         <form method="get" action="/" novalidate="" class="form-horizontal">
+			
+            <fieldset>
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-2 control-label">Product Name</label>
+                  <div class="col-sm-7">
+                     <input id="input-id-1" type="text" placeholder="Product Name" class="form-control" />
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Categoy</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Group</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>	
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Measurement Unit</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>	
+			 <button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
+			 <button type="button" class="mr mb-sm btn btn-success pull-right" data-ng-click="pop()" >Save</button>
+         </form>
+      </div>
+   </div>
+   
+   
+   
+   
+   <!-- END panel-->
+</div>

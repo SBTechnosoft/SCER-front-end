@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]>    <html class="ie9" lang="en" data-ng-app="singular"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="en" data-ng-app="singular">
+<!--<![endif]-->
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <meta name="description" content="{{app.description}}">
+   <meta name="keywords" content="app, responsive, angular, bootstrap, dashboard, admin">
+   <title data-ng-bind="pageTitle()">CRM</title>
+   <!-- App CSS-->
+   <link rel="stylesheet" href="app/css/app.css" data-ng-if="!app.layout.isRTL">
+   <link rel="stylesheet" href="app/css/apprtl.css" data-ng-if="app.layout.isRTL">
+</head>
+
+<body data-ng-class="{ 'layout-fixed' : app.layout.isFixed, 'aside-collapsed' : app.sidebar.isCollapsed, 'layout-boxed' : app.layout.isBoxed, 'aside-slide' : app.sidebar.slide, 'in-app': $state.includes('app')}">
+   <div data-ui-view="" data-autoscroll="false" data-ng-class="app.viewAnimation" class="app-container"></div>
+   <!-- App Scripts-->
+   <script src="app/js/base.js"></script>
+   <script src="app/js/app.js"></script>
+   <script src="app/js/controllers/appCtrl.js"></script>
+    <script src="app/js/controllers/config.js"></script>
+	<script src="app/js/controllers/constants.js"></script>
+	<script src="app/js/controllers/calendarCtrl.js"></script>
+	<script src="app/js/controllers/mailboxCtrl.js"></script>
+	<script src="app/js/controllers/taskCtrl.js"></script>
+	<script src="app/js/controllers/chartCtrl.js"></script>
+	<script src="app/js/controllers/flotchartDrt.js"></script>
+	<script src="app/js/controllers/flotchartOptionSrv.js"></script>
+	<script src="app/js/controllers/sparklineDrt.js"></script>
+	<script src="app/js/controllers/flatdocDrt.js"></script>
+	<script src="app/js/controllers/dashboardCtrl.js"></script>
+	<script src="app/js/controllers/bootstrapSliderDrt.js"></script>
+	<script src="app/js/controllers/formInputCtrl.js"></script>
+	<script src="app/js/controllers/formValidationCtrl.js"></script>
+	<script src="app/js/controllers/maskDrt.js"></script>
+	<script src="app/js/controllers/searchFormCtrl.js"></script>
+	<script src="app/js/controllers/wysiwygDrt.js"></script>
+	<script src="app/js/controllers/climaconDrt.js"></script>
+	<script src="app/js/controllers/serviceSrv.js"></script>
+	<script src="app/js/controllers/headerNavCtrl.js?r=5002"></script>
+	<script src="app/js/controllers/settingCtrl.js"></script>
+	<script src="app/js/controllers/summaryCtrl.js"></script>
+	<script src="app/js/controllers/googleMapCtrl.js"></script>
+	<script src="app/js/controllers/vectorMapCtrl.js"></script>
+	<script src="app/js/controllers/vectorMapDrt.js"></script>
+	<script src="app/js/controllers/portletCtrl.js"></script>
+	<script src="app/js/controllers/sidebarCtrl.js"></script>
+	<script src="app/js/controllers/sidebarDrt.js"></script>
+	<script src="app/js/controllers/sidebarMenuSrv.js"></script>
+	<script src="app/js/controllers/angularTableCtrl.js"></script>
+	
+	<script src="app/js/controllers/checkallDrt.js"></script>
+	<script src="app/js/controllers/responsiveTableCtrl.js"></script>
+	<script src="app/js/controllers/alertDemoCtrl.js"></script>
+	<script src="app/js/controllers/buttonCtrl.js"></script>
+	<script src="app/js/controllers/carouselCtrl.js"></script>
+	<script src="app/js/controllers/datePickerCtrl.js"></script>
+	<script src="app/js/controllers/paginationCtrl.js"></script>
+	<script src="app/js/controllers/popoverCtrl.js"></script>
+	<script src="app/js/controllers/progressCtrl.js"></script>
+	<script src="app/js/controllers/ratingCtrl.js"></script>
+	<script src="app/js/controllers/timePickerCtrl.js"></script>
+	<script src="app/js/controllers/toasterCtrl.js"></script>
+	<script src="app/js/controllers/tooltipCtrl.js"></script>
+	<script src="app/js/controllers/typeaheadCtrl.js"></script>
+	<!--script src="app/js/controllers/modalCtrl.js"></script-->
+	<script src="app/js/controllers/notificationCtrl.js"></script>
+	<script src="app/js/controllers/scrollDrt.js"></script>
+	<script src="app/js/controllers/animateEnableDrt.js"></script>
+	<script src="app/js/controllers/hrefDrt.js"></script>
+	<script src="app/js/controllers/toggleFullScreenDrt.js"></script>
+	<script src="app/js/controllers/resetKeyDrt.js"></script>
+	<script src="app/js/controllers/toggleStateDrt.js"></script>
+	<script src="app/js/controllers/titleCaseFltr.js"></script>
+	<script src="app/js/controllers/browserSrv.js"></script>
+	<script src="app/js/controllers/colorFctr.js"></script>
+	<script src="app/js/controllers/supportSrv.js"></script>
+	<script src="app/js/controllers/toggleStateSrv.js"></script>
+   <script src="app/js/controllers/touchDragSrv.js"></script>
+   
+    <!-- Branch -->
+    <script src="app/js/controllers/Branch/BranchCtrl.js"></script>
+	<script src="app/js/controllers/Branch/AddBranchCtrl.js"></script>
+	
+	 <!-- Staff -->
+    <script src="app/js/controllers/Staff/StaffCtrl.js"></script>
+	<script src="app/js/controllers/Staff/AddStaffCtrl.js"></script>
+	
+	<!-- INVENTORY -->
+		<!--Product -->
+		<script src="app/js/controllers/Inventory/Product/InvProductCtrl.js"></script>
+		<script src="app/js/controllers/Inventory/Product/AddInvProductCtrl.js"></script>
+		<!--Stock -->
+		<script src="app/js/controllers/Inventory/StockRegister/InvStockCtrl.js"></script>
+		<script src="app/js/controllers/Inventory/StockRegister/AddInvStockCtrl.js"></script>
+		<script src="app/js/controllers/Inventory/StockRegister/InvStockModalCtrl.js"></script>
+		<!--category -->
+		<script src="app/js/controllers/Inventory/Category/InvCategoryCtrl.js"></script>
+	<!-- End INVENTORY -->
+   
+  
+   
+</body>
+
+</html>

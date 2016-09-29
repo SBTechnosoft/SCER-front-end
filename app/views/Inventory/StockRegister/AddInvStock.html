@@ -1,0 +1,157 @@
+
+<h3>
+   <small>
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   Inventory >> 
+   Generate Stock Register</small>
+</h3>
+<!-- START panel-->
+
+<div data-ng-controller="AddInvStockController as form" class="container-fluid panel-body">
+ <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	
+   <div class="panel panel-default">
+      <h4 class="panel-heading">Search</h4>
+      <div class="panel-body">
+		<div data-ng-controller="InvStockModalController">
+				   <!-- Modal inline template-->
+				   <script type="text/ng-template" id="/myModalContent.html">
+						  <div class="modal-header">
+							  <button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close">×</button>
+							  <h4 id="myModalLabel" class="modal-title">Modal title</h4>
+						  </div>
+						  <div class="modal-body my-model-body">
+						   <form method="get" action="/" novalidate="" class="form-horizontal">
+								<fieldset>
+								   <div class="form-group">
+									  <label class="col-sm-2 control-label">Product</label>
+									  <div class="col-sm-5">
+										 <select chosen="$rootScope.ArraystockModel.state" data-ng-model="stockModel.state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+									  </div>
+								   </div>
+								</fieldset>
+								<fieldset>
+								   <div class="form-group">
+									  <label class="col-sm-2 control-label">Categoy</label>
+									  <div class="col-sm-5">
+										 <select chosen="" data-ng-model="stockModel.state2" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+									  </div>
+								   </div>
+								</fieldset>
+								<fieldset>
+								   <div class="form-group">
+									  <label class="col-sm-2 control-label">Group</label>
+									  <div class="col-sm-5">
+										 <select chosen="" data-ng-model="stockModel.state3" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+									  </div>
+								   </div>
+								</fieldset>	
+								<fieldset>
+								   <div class="form-group">
+									  <label class="col-sm-2 control-label">Product</label>
+									  <div class="col-sm-5">
+										 <select chosen="$rootScope.ArraystockModel.state" data-ng-model="stockModel.state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+									  </div>
+								   </div>
+								</fieldset>
+								<fieldset>
+								   <div class="form-group">
+									  <label class="col-sm-2 control-label">Categoy</label>
+									  <div class="col-sm-5">
+										 <select chosen="" data-ng-model="stockModel.state2" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+									  </div>
+								   </div>
+								</fieldset>
+								<fieldset>
+								   <div class="form-group">
+									  <label class="col-sm-2 control-label">Group</label>
+									  <div class="col-sm-5">
+										 <select chosen="" data-ng-model="stockModel.state3" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+									  </div>
+								   </div>
+								</fieldset>	
+								
+								
+								 <button type="button" class="mr mb-sm btn btn-success pull-right" ui-sref="app.InvStock" >Generate</button>
+							</form>
+						  </div>
+						  <!--div class="modal-footer">
+							  <button data-ng-click="ok()" class="btn btn-primary">OK</button>
+							  <button data-ng-click="cancel()" class="btn btn-warning">Cancel</button>
+						  </div-->
+				   </script>
+				   <!--p>Launch Demo Modal</p-->
+				   <!-- Button trigger modal -->
+				 
+				   <button data-ng-click="open('lg')" class="btn btn-primary">Open modal</button>
+				   <div id="modal-state"></div>
+		</div>
+         <form method="get" action="/" novalidate="" class="form-horizontal">
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Start Date:</label>
+                  <div class="col-sm-8 col-lg-4">
+                     <p class="input-group">
+                        <input type="text" datepicker-popup="{{format}}" ng-change="form.check()" data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+                        class="form-control" />
+                        <span class="input-group-btn">
+                           <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
+                              <em class="fa fa-calendar"></em>
+                           </button>
+                        </span>
+                     </p>
+                  </div>
+                  
+               </div>
+            </fieldset>
+			<fieldset>
+				 <div class="form-group">
+				<label class="col-sm-2 control-label">End Date:</label>
+					  <div class="col-sm-8 col-lg-4">
+						 <p class="input-group">
+							<input type="text" datepicker-popup="{{format}}" data-ng-model="form.dt2" is-open="form.openedEnd" min-date="form.dt1" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+							class="form-control" />
+							<span class="input-group-btn">
+							   <button type="button" data-ng-click="form.openEnd($event)" class="btn btn-default">
+								  <em class="fa fa-calendar"></em>
+							   </button>
+							</span>
+						 </p>
+					  </div>
+				</div>
+			</fieldset>
+           <fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Product</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Categoy</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Group</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>	
+			
+			 <button type="button" class="mr mb-sm btn btn-success pull-right" ui-sref="app.InvStock" >Generate</button>
+         </form>
+      </div>
+   </div>
+   
+   
+   
+   
+   <!-- END panel-->
+</div>

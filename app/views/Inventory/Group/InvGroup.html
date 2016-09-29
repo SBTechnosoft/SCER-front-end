@@ -1,0 +1,35 @@
+<h3>
+	
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Group</small>
+</h3>
+<div data-ng-controller="InvCategoryController as table" class="container-fluid">
+	<div class="panel panel-default">
+		 <!--h4 class="panel-heading"></h4-->
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-sm-1 control-label"> Group </label>
+					<div class="col-sm-4">
+						<select chosen="" data-ng-model="state" data-ng-options="s for s in table.states" class="form-control chosen-select"></select>
+					</div>
+					
+				<label class="col-sm-1 control-label"> Name </label>
+					<div class="col-sm-4">
+						<input id="input-id-1" type="text" placeholder="Category Name" class="form-control" />
+					</div>
+				<button type="button" class="mr mb-sm btn btn-primary">Save</button>
+			</div>
+		</div>
+	</div>
+   <div class="panel panel-default">
+      <div class="panel-heading" >
+         <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
+		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="#" >
+			<span class="btn-label"><i class="fa fa-plus"></i></span>
+		Add Group</button>
+         <div class="panel-title">Group</div>
+      </div>
+      
+	  <tree-grid tree-data="tree_data"></tree-grid>
+   </div>
+  
+</div>
