@@ -2,42 +2,7 @@
 <nav role="navigation" data-ng-controller="HeaderNavController" class="navbar topnavbar">
 	<!--My -->
 	
-	<div collapse="headerMenuCollapsed" class="nav-wrapper collapse navbar-collapse my-quick-access">
-      <!-- START Left navbar-->
-      <ul class="nav navbar-nav">
-         
-      </ul>
-      <!-- END Left navbar-->
-      <!-- START Top navbar search form-->
-      <!-- Header Link Start -->
-	  <ul class="nav navbar-nav navbar-right">
-		<li>
-		 <!--a ng-click="getsidebar()" ui-sref="app.table-ngtable" href="/app/table-ngtable" -->
-            <a  title="Bill" style="color:#43a8eb" >
-			<center><em class="fa fa-credit-card"  ></em></center>
-			</a>
-        </li>
-		
-	  </ul>
-	  
-	  <!-- Header link End -->
-	  <!--form role="search" class="search-form navbar-form navbar-left">
-         <div class="form-group">
-            <div data-ng-controller="SearchFormController" class="input-group">
-               <span class="input-group-addon">
-                  <em class="icon-search"></em>
-               </span>
-               <input type="text" data-ng-model="routeSelected" typeahead="state for state in states | filter:$viewValue | limitTo:8" placeholder="{{ 'topbar.search.PLACEHOLDER' | translate }}" typeahead-on-select="onRouteSelect($item, $model, $label)"
-               class="form-control" />
-            </div>
-         </div>
-         <button type="submit" class="hidden btn btn-default">Submit</button>
-      </form-->
-      <!-- END Top navbar search form-->
-      <!-- START Right Navbar-->
-      
-      <!-- END Right Navbar-->
-   </div>
+	
    <!-- END Nav wrapper-->
 	<!-- End My -->
    <!-- START navbar header-->
@@ -118,7 +83,8 @@
       <!-- START Right Navbar-->
       <ul class="nav navbar-nav navbar-right">
 		
-         <!-- START Alert menu--> 
+         <!-- START Alert menu-->
+		 
          <li dropdown="" class="dropdown dropdown-list my-topNav-padding" style="padding-top:10px">
             <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle">
                <div class="point-pin">
@@ -255,6 +221,48 @@
                </li>
             </ul>
          </li>
+		 <!--Quick Menu -->
+		 <li dropdown="" class="dropdown dropdown-list my-topNav-padding" style="padding-top:10px">
+            <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle" title="Quick Access">
+               <div class="point-pin">
+                  <em class="fa fa-ellipsis-h"></em>
+                  <div class=""></div>
+				  
+               </div>
+               <span class="visible-xs-inline ml">View Alerts</span>
+            </a>
+            <!-- START Dropdown menu-->
+            <ul offcanvas-dropdown="" class="dropdown-menu my-dropdown-menu fadeInLeft2 animated">
+               <!-- START list item-->
+               <li data-ng-init="offcontent1 = true" data-ng-click="cancel($event)" class="bt">
+				
+                  <a href="#">
+                    <em class="fa fa-credit-card" style="font-size:28px;" ></em>
+                  </a>
+				  <a href="#"  >
+                    <em class="icon-box" style="font-size:28px;" ></em>
+                  </a>
+				  <a href="#" >
+                    <em class="fa fa-inr" style="font-size:28px;" ></em>
+                  </a>
+				  
+               </li>
+               <!-- START list item-->
+               <!--li data-ng-init="offcontent2 = true" data-ng-click="cancel($event)">
+                  <a href="#"  >
+                     <em class="fa fa-inr" style="font-size:28px;" ></em>
+                  </a>
+				  <a href="#" >
+                    <em class="fa fa-inr" style="font-size:28px;" ></em>
+                  </a>
+				  <a href="#" >
+                    <em class="fa fa-inr" style="font-size:28px;" ></em>
+                  </a>
+               </li-->
+              
+            </ul>
+         </li>
+		 <!--Quick Menu End -->
          <!-- Fullscreen (only desktops)-->
          <li class="visible-lg my-topNav-padding">
             <a href="#" toggle-fullscreen="toggle-fullscreen">

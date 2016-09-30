@@ -21,9 +21,9 @@
 				<td data-title="'Pincode'" sortable="'pincode'" filter="{ 'pincode': 'text' }" >{{user.pincode}}</td>
 				<td data-title="'City'" sortable="'city'" filter="{ 'city': 'text' }" >{{user.city}}</td>
 				 
-                <td data-title="'Default'"  >
+                <td data-title="'Default'" ng-init="companyradio='Moroni'" >
 			  
-                  <input type="radio"  ng-model="companyradio" ng-checked="{{user.name=='Moroni' ? true:false}}"  />
+                  <input type="radio"  name="companyradio" ng-model="companyradio"  ng-value="user.name" />
                </td>
 			   <td data-title="'Action'" filter="{ 'action': 'text' }"> 
 					<center>

@@ -35,8 +35,9 @@
 				<td data-title="'Pincode'" sortable="'pincode'" filter="{ 'pincode': 'text' }" >{{user.pincode}}</td>
 				<td data-title="'City'" sortable="'city'" filter="{ 'city': 'text' }" >{{user.city}}</td>
 				 
-               <td data-title="'Default'">
-				<input type="radio" id="vv" ng-checked="{{user.name=='Branch1'?true:false}}" ng-model="brandRadio" />
+               <td data-title="'Default'" ng-init="brandRadio='Branch2'">
+				<!--input type="radio" ng-checked="{{user.name=='Branch1'?true:false}}" ng-model="brandRadio" /-->
+				<input type="radio" name="brandRadio"  ng-model="brandRadio" ng-value="user.name" />
                </td>
 			   <td data-title="'Action'" filter="{ '': 'text' }">
 					<center>

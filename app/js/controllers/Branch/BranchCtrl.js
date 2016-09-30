@@ -9,10 +9,7 @@ App.controller('BranchController', BranchController);
 function BranchController($scope, $filter, ngTableParams) {
   'use strict';
   var vm = this;
-	//$scope.brandradio="";
- 
- 
- 
+
  // Chosen data
   // ----------------------------------- 
 
@@ -79,15 +76,15 @@ function BranchController($scope, $filter, ngTableParams) {
       {name: "Branch4",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395004", city: "Surat", money: -54.0   },
       {name: "Branch5",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   },
 	  {name: "Branch78",  address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395001", city: "Surat", money: -10.0   },
-      {name: "Branch2", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
+      {name: "Branch243", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
       {name: "Branch3",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395003", city: "Surat", money: 5.5   },
       {name: "Branch4",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395004", city: "Surat", money: -54.0   },
       {name: "Branch5",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   },
 	  {name: "Branch7",  address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395001", city: "Surat", money: -10.0   },
-      {name: "Branch2", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
+      {name: "Branch2434", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
       {name: "Branch3",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395003", city: "Surat", money: 5.5   },
       {name: "Branch4",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395004", city: "Surat", money: -54.0   },
-      {name: "Branch5",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   }
+      {name: "Branch544",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   }
   ];
 
   vm.tableParams = new ngTableParams({
