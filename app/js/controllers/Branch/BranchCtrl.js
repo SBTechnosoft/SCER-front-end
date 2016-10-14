@@ -6,139 +6,86 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($scope, $filter, ngTableParams) {
+function BranchController($scope, $filter, ngTableParams,$http,apiCall,apiPath) {
   'use strict';
   var vm = this;
-
- // Chosen data
-  // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
-
-  // SORTING
-  // ----------------------------------- 
-
-  var data = [
-      {name: "Branch1",  address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395001", city: "Surat", money: -10.0   },
-      {name: "Branch2", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
-      {name: "Branch3",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395003", city: "Surat", money: 5.5   },
-      {name: "Branch4",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395004", city: "Surat", money: -54.0   },
-      {name: "Branch5",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   },
-	  {name: "Branch78",  address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395001", city: "Surat", money: -10.0   },
-      {name: "Branch243", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
-      {name: "Branch3",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395003", city: "Surat", money: 5.5   },
-      {name: "Branch4",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395004", city: "Surat", money: -54.0   },
-      {name: "Branch5",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   },
-	  {name: "Branch7",  address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395001", city: "Surat", money: -10.0   },
-      {name: "Branch2434", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
-      {name: "Branch3",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395003", city: "Surat", money: 5.5   },
-      {name: "Branch4",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395004", city: "Surat", money: -54.0   },
-      {name: "Branch544",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   }
-  ];
-
-  vm.tableParams = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      sorting: {
-          name: 'asc'     // initial sorting
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-		  //console.log(params.$params);
-		  // if()
-		  // {
-			  // alert('yes');
-		  // }
-		  // else{
-			  // alert('no');
-		  // }
-          // use build-in angular filter
-		 // console.log("Length: .."+params.$params.filter.city);
-		  
-		  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.name) != "undefined" && params.$params.filter.name != "")  || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.city) != "undefined" && params.$params.filter.city != "")))
-		  {
-				 var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-				  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-				  params.total(orderedData.length); // set total for recalc pagination
-				  $defer.resolve(vm.users);
-		  
-
-		  }
-		  else{
-			  
-			   params.total(data.length);
-			  
-		  }
-		 
-		 if(!$.isEmptyObject(params.$params.sorting))
-		  {
+  var data = [];
+  
+  //Company
+	$scope.init = function () {
 			
-			 //alert('ggg');
-			  var orderedData = params.sorting() ?
-					  $filter('orderBy')(data, params.orderBy()) :
-					  data;
-	  
-			  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			vm.states=[];
+		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			vm.states = response2;
+		 
+		});
+		 
+	}
+$scope.init();
+  //End
+  
+	apiCall.getCall(apiPath.getAllBranch).then(function(response){
+		data = response;
+		 $scope.TableData();
+	});
+	
+  $scope.TableData = function(){
+	
+
+	  vm.tableParams = new ngTableParams({
+		  page: 1,            // show first page
+		  count: 10,          // count per page
+		  sorting: {
+			  branch_name: 'asc'     // initial sorting
 		  }
-		
-      }
-  });
+	  }, {
+		  total: data.length, // length of data
+		  getData: function($defer, params) {
+			  //console.log(params.$params);
+			  // if()
+			  // {
+				  // alert('yes');
+			  // }
+			  // else{
+				  // alert('no');
+			  // }
+			  // use build-in angular filter
+			 // console.log("Length: .."+params.$params.filter.city);
+			  
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.branch_name) != "undefined" && params.$params.filter.branch_name != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.city_id) != "undefined" && params.$params.filter.city_id != "")))
+			  {
+					 var orderedData = params.filter() ?
+					 $filter('filter')(data, params.filter()) :
+					 data;
+
+					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+					  params.total(orderedData.length); // set total for recalc pagination
+					  $defer.resolve(vm.users);
+			  
+
+			  }
+			  else{
+				  
+				   params.total(data.length);
+				  
+			  }
+			 
+			 if(!$.isEmptyObject(params.$params.sorting))
+			  {
+				
+				 //alert('ggg');
+				  var orderedData = params.sorting() ?
+						  $filter('orderBy')(data, params.orderBy()) :
+						  data;
+		  
+				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			  }
+			
+		  }
+	  });
+	  
+  }
 
   // FILTERS
   // ----------------------------------- 
@@ -230,10 +177,17 @@ function BranchController($scope, $filter, ngTableParams) {
 	  alert('Edit');
   }
   
-  $scope.delete_comp = function()
+  $scope.delete_comp = function(branch_id)
   {
-	  alert('Delete');
+	  alert(branch_id);
+	  var deletePath = apiPath.getAllBranch+'/'+branch_id;
+	  
+	apiCall.deleteCall(deletePath).then(function(deleteres){
+		
+		console.log(deleteres);
+	 
+	});
   }
 
 }
-BranchController.$inject = ["$scope", "$filter", "ngTableParams"];
+BranchController.$inject = ["$scope", "$filter", "ngTableParams","$http","apiCall","apiPath"];

@@ -6,7 +6,7 @@
 </h3>
 <!-- START panel-->
 
-<div data-ng-controller="AddBranchController as form" class="container-fluid panel-body">
+<div  class="container-fluid panel-body">
  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
@@ -15,12 +15,12 @@
 			
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="addBranch.companyDropDown" data-ng-options="s.company_name for s in form.companyDrop track by s.company_id" class="form-control chosen-select"></select>
 					</div>
 					
 				<label class="col-sm-1 control-label"> Branch </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="addBranch.branchDropDown" data-ng-options="s.branch_name for s in form.branchDrop track by s.branch_id" class="form-control chosen-select"></select>
 					</div>
 					
 				<button type="button" class="mr mb-sm btn btn-primary">Go</button>
@@ -31,21 +31,21 @@
    <div class="panel panel-default">
       <h4 class="panel-heading">Basic Details</h4>
       <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
+         <form  novalidate="" class="form-horizontal">
 			
             <fieldset>
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Company Name</label>
-                  <div class="col-sm-7">
-                     <input id="input-id-1" type="text" placeholder="Company Name" class="form-control" />
+                  <label class="col-sm-2 control-label">Company</label>
+                  <div class="col-sm-5">
+                     <select chosen="" ng-model="addBranch.companyDropDown2" data-ng-options="s.company_name for s in form.companyDrop track by s.company_id" class="form-control chosen-select" ></select>
                   </div>
                </div>
-            </fieldset>
+			</fieldset>
 			<fieldset>
 				<div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Branch Name</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" type="text" placeholder="Branch Name" class="form-control" />
+                     <input id="input-id-1" type="text" ng-model="addBranch.branchName" placeholder="Branch Name" class="form-control" />
                   </div>
                </div>
 			</fieldset>
@@ -53,7 +53,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
 					<div class="col-sm-7">
-						<textarea style="" name="address" placeholder="Your First address" data-ng-model="address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea  name="address" ng-model="addBranch.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -61,7 +61,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
 					<div class="col-sm-7">
-						<textarea style="" name="address" placeholder="Your Second address" data-ng-model="address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea  name="address" ng-model="addBranch.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -69,7 +69,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">State</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                     <select chosen="" ng-model="addBranch.stateDropDown" data-ng-options="s.state_name for s in form.statesDrop track by s.state_abb" class="form-control chosen-select" ng-change="ChangeCity(addBranch.stateDropDown.state_abb)" ></select>
                   </div>
                </div>
 			</fieldset>
@@ -77,7 +77,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">City</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                     <select chosen="" ng-model="addBranch.cityDropDown" data-ng-options="s.city_name for s in form.cityDrop track by s.city_id" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -85,14 +85,14 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">PIN Code</label>
 					<div class="col-sm-3">
-					   <input type="text" masked="999999" placeholder="PIN Code" class="form-control" />
+					   <input type="text" ng-model="addBranch.pincode" masked="999999" placeholder="PIN Code" class="form-control" />
 					   <span class="help-block">Masked="395001"</span>
 					</div>
 				</div>
 			</fieldset>
 			
 			 <button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-			 <button type="button" class="mr mb-sm btn btn-success pull-right" data-ng-click="pop()" >Save</button>
+			 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
          </form>
       </div>
    </div>

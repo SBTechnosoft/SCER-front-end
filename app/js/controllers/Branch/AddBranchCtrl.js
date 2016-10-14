@@ -6,68 +6,36 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($scope,toaster) {
+function AddBranchController($scope,toaster,$http,apiCall,apiPath) {
   'use strict';
+  var vm = this;
+  $scope.addBranch=[];
+  vm.cityDrop=[];
+	//get Company
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			vm.companyDrop = response2;
+			
+		});
+		
+	//Get Branch
+	vm.branchDrop=[];
+	apiCall.getCall(apiPath.getAllBranch).then(function(response){
+		vm.branchDrop = response;
+			
+	});
+  
+	//Get State
+	vm.statesDrop=[];
+	apiCall.getCall(apiPath.getAllState).then(function(response3){
+		vm.statesDrop = response3;
+			
+	});
+	
+	
   
   
   
-  
-  // Chosen data
-  // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
-
   // Datepicker
   // ----------------------------------- 
 
@@ -198,10 +166,37 @@ function AddBranchController($scope,toaster) {
     {value: 5, name: 'Huge'}
   ];
   
+  $scope.ChangeCity = function(state)
+  {
+	//console.log(apiPath.getAllCity+state);
+	var getonecity = apiPath.getAllCity+state;
+	//Get City
+	apiCall.getCall(getonecity).then(function(response4){
+		vm.cityDrop = response4;
+			
+	});
+  }
   
-
-  $scope.pop = function() {
-    toaster.pop('success', 'Title', 'Message');
+  //Insert Branch
+var formdata = new FormData();
+  $scope.pop = function(addBranch) {
+	  
+	formdata.append('branch_name',addBranch.branchName);
+	formdata.append('address1',addBranch.fisrtAddress);
+	formdata.append('address2',addBranch.secondAddress);
+	formdata.append('pincode',addBranch.pincode);
+	formdata.append('is_display','no');
+	formdata.append('is_default','not');
+	formdata.append('state_abb',addBranch.stateDropDown.state_abb);
+	formdata.append('city_id',addBranch.cityDropDown.city_id);
+	formdata.append('company_id',addBranch.companyDropDown2.company_id);
+	
+	apiCall.postCall(apiPath.getAllBranch,formdata).then(function(response5){
+		
+		console.log(response5);
+		toaster.pop('success', 'Title', 'Message');
+		
+	});
   };
   
   $scope.cancel = function() {
@@ -210,4 +205,4 @@ function AddBranchController($scope,toaster) {
   
   
 }
-AddBranchController.$inject = ["$scope","toaster"];
+AddBranchController.$inject = ["$scope","toaster","$http","apiCall","apiPath"];

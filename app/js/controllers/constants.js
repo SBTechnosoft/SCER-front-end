@@ -38,7 +38,17 @@ App
       'flatdoc':            ['app/vendor/flatdoc/flatdoc.js'],
       'gcal':               ['app/vendor/fullcalendar/dist/gcal.js'],
 	  'treeGrid':          ['app/vendor/tree-grid/treeGrid.css',
-							 'app/vendor/tree-grid/tree-grid-directive.js']
+							 'app/vendor/tree-grid/tree-grid-directive.js'],
+	  'fileUpload':          ['app/vendor/fileUpload/vendor/jquery.ui.widget.js',
+						   'app/vendor/fileUpload/jquery.iframe-transport.js',
+						   'app/vendor/fileUpload/jquery.fileupload.js',
+						   'app/vendor/fileUpload/jquery.fileupload-process.js',
+						   'app/vendor/fileUpload/jquery.fileupload-image.js',
+						   'app/vendor/fileUpload/jquery.fileupload-audio.js',
+						   'app/vendor/fileUpload/jquery.fileupload-video.js',
+						   'app/vendor/fileUpload/jquery.fileupload-validate.js',
+						   'app/vendor/fileUpload/jquery.fileupload-angular.js'],
+	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js']
     },
     // Angular based script (use the right module name)
     modules: [
@@ -49,7 +59,7 @@ App
       {name: 'angularFileUpload', files: ['app/vendor/angular-file-upload/dist/angular-file-upload.min.js']},
       {name: 'angular-chosen',    files: ['app/vendor/chosen_v1.2.0/chosen.jquery.min.js',
                                           'app/vendor/chosen_v1.2.0/chosen.min.css',
-                                          'app/vendor/angular-chosen/angular-chosen.js']},
+                                          'app/vendor/angular-chosen/angular-chosen.min.js']},								  
       {name: 'ngTable',           files: ['app/vendor/ng-table/ng-table.min.js',
                                           'app/vendor/ng-table/ng-table.min.css']},
       {name: 'ngTableExport',     files: ['app/vendor/ng-table-export/ng-table-export.js']},
@@ -77,6 +87,13 @@ App
     'gray':                   '#A0AAB2',
     'gray-light':             '#e6e9ee',
     'gray-lighter':           '#f4f5f5'
+  })
+  //Api Path
+  .constant('apiPath', {
+    'getAllBranch':           'http://api.siliconbrain.co.in/branches/branch',
+    'getAllCompany':          'http://api.siliconbrain.co.in/companies/company',
+	'getAllState':          'http://api.siliconbrain.co.in/states/state',
+	'getAllCity':          'http://api.siliconbrain.co.in/cities/city/state/'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

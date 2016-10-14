@@ -1,19 +1,19 @@
 <h3>
 	
    <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Branch</small>
+  
 </h3>
-<div data-ng-controller="BranchController as table" class="container-fluid">
+<div   class="container-fluid" >
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
-			
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-7">
-						<select chosen="" data-ng-model="state" data-ng-options="s for s in table.states" class="form-control chosen-select"></select>
+						<select chosen=""  ng-model="stateCheck" ng-options="s.company_name for s in table.states" class="form-control chosen-select" >
+						</select>
 					</div>
 					
 				<button type="button" class="mr mb-sm btn btn-primary">Go</button>
-				
 			</div>
 		</div>
 	</div>
@@ -25,28 +25,31 @@
 		Add Branch</button>
          <div class="panel-title">All Branch</div>
       </div>
-      <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
+      <table data-ng-table="table.tableParams"  show-filter="true" class="table table-bordered table-striped">
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
          <tbody>
             <tr data-ng-repeat="user in $data">
-				<td data-title="'Branch Name'" sortable="'name'" filter="{ 'name': 'text' }" >{{user.name}}</td>
-				<td data-title="'Address1'" sortable="'address'" filter="{ 'address': 'text' }" >{{user.address}}</td>
+				<td data-title="'Branch Name'" sortable="'branch_name'" filter="{ 'branch_name': 'text' }" >{{user.branch_name}}</td>
+				<td data-title="'Address1'" sortable="'address1'" filter="{ 'address1': 'text' }" >{{user.address1}}</td>
 			    <td data-title="'Address2'" sortable="'address2'" filter="{ 'address2': 'text' }" >{{user.address2}}</td>
 				<td data-title="'Pincode'" sortable="'pincode'" filter="{ 'pincode': 'text' }" >{{user.pincode}}</td>
-				<td data-title="'City'" sortable="'city'" filter="{ 'city': 'text' }" >{{user.city}}</td>
+				<td data-title="'City'" sortable="'city_name'" filter="{ 'city_name': 'text' }" >{{user.city_name}}</td>
 				 
-               <td data-title="'Default'" ng-init="brandRadio='Branch2'">
+               <td data-title="'Default'" ng-init="brandRadio='abcdscdfcdfddddddddddd'">
 				<!--input type="radio" ng-checked="{{user.name=='Branch1'?true:false}}" ng-model="brandRadio" /-->
-				<input type="radio" name="brandRadio"  ng-model="brandRadio" ng-value="user.name" />
-               </td>
+				<input type="radio" name="brandRadio"  ng-model="brandRadio" ng-value="user.branch_name" />
+				</td>
 			   <td data-title="'Action'" filter="{ '': 'text' }">
 					<center>
 						<i ui-sref="" ng-click="edit_comp()" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
-						<i ui-sref="" ng-click="delete_comp()" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
+						<i ui-sref="" ng-click="delete_comp(user.branch_id)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
 					</center>
 				</td>
             </tr>
          </tbody>
       </table>
+	  <div data-ng-repeat="item in $data">
+		<div>{{item.branch_name}}</div>
+	  </div>
    </div>
 </div>

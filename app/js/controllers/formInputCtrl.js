@@ -6,9 +6,9 @@
 
 App.controller('FormInputController', FormInputController);
 
-function FormInputController($scope) {
+function FormInputController($scope,$http,$filter,$window) {
   'use strict';
-
+  
   // Chosen data
   // ----------------------------------- 
 
@@ -194,5 +194,7 @@ function FormInputController($scope) {
     {value: 3, name: 'Normal'},
     {value: 5, name: 'Huge'}
   ];
+  
+  
 }
-FormInputController.$inject = ["$scope"];
+FormInputController.$inject = ["$scope","$http","$filter","$window"];

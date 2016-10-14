@@ -13,26 +13,26 @@
       </div>
       <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
-         <tbody>
+        <tbody>
             <tr data-ng-repeat="user in $data">
-				<td data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }" >{{user.name}}</td>
-				<td data-title="'Address'" sortable="'address'" filter="{ 'address': 'text' }" >{{user.address}}</td>
+				<td data-title="'Image'"  filter="{ 'company_name': '' }" ><img src="http://api.siliconbrain.co.in/{{user.document_url}}{{user.document_name}}" height="50" width="70" title="{{user.document_name}}" /></td>
+				<td data-title="'Name'" sortable="'company_name'" filter="{ 'company_name': 'text' }" >{{user.company_name}}</td>
+				<td data-title="'Address'" sortable="'address1'" filter="{ 'address1': 'text' }" >{{user.address1}}</td>
 			    <td data-title="'Address2'" sortable="'address2'" filter="{ 'address2': 'text' }" >{{user.address2}}</td>
 				<td data-title="'Pincode'" sortable="'pincode'" filter="{ 'pincode': 'text' }" >{{user.pincode}}</td>
-				<td data-title="'City'" sortable="'city'" filter="{ 'city': 'text' }" >{{user.city}}</td>
+				<td data-title="'City'" sortable="'city_name'" filter="{ 'city_name': 'text' }" >{{user.city_name}}</td>
 				 
-                <td data-title="'Default'" ng-init="companyradio='Moroni'" >
-			  
-                  <input type="radio"  name="companyradio" ng-model="companyradio"  ng-value="user.name" />
-               </td>
-			   <td data-title="'Action'" filter="{ 'action': 'text' }"> 
+                <td data-title="'Default'" >
+                  <input type="radio"  name="companyradio" ng-model="companyradio"  ng-value="user.is_default" />
+                </td>
+			    <td data-title="'Action'" filter="{ 'action': 'text' }"> 
 					<center>
 						<i ui-sref="" ng-click="edit_comp()" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
 						<i ui-sref="" ng-click="delete_comp()" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
 					</center>
 				</td>
             </tr>
-         </tbody>
+        </tbody>
       </table>
    </div>
 </div>

@@ -6,76 +6,62 @@
 
 App.controller('AngularTableController', AngularTableController);
 
-function AngularTableController($scope, $filter,$http, ngTableParams) {
+function AngularTableController($scope, $filter,$http, ngTableParams,apiCall,apiPath) {
   'use strict';
   var vm = this;
+  
+	 var data = [];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response){
+		 data = response;
+		 $scope.TableData();
+	});
+ 
+	$scope.TableData = function()
+	{
+	  vm.tableParams = new ngTableParams({
+		  page: 1,            // show first page
+		  count: 10,          // count per page
+		  sorting: {
+			  company_name: 'asc'     // initial sorting
+		  }
+	  }, {
+		  total: data.length, // length of data
+		  getData: function($defer, params) {
+			  console.log(params.$params);
+			  
+			  // use build-in angular filter
+			   if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.company_name) != "undefined" && params.$params.filter.company_name != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.city_name) != "undefined" && params.$params.filter.city_name != "")))
+			  {
+					 var orderedData = params.filter() ?
+					 $filter('filter')(data, params.filter()) :
+					 data;
 
-  // SORTING
-  // ----------------------------------- 
+					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
- var data = [
-     {name: "Moroni",  address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395001", city: "Surat", money: -10.0   },
-     {name: "Tiancum", address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395002", city: "Surat", money: 120.5   },
-     {name: "Jacob",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395003", city: "Surat", money: 5.5   },
-     {name: "Nephi",   address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395004", city: "Surat", money: -54.0   },
-     {name: "Enos",    address: "1/3227 , GokulDham Society", address2: "B/H Police Station , Chowk", pincode: "395005", city: "Surat", money: 110.1   }
- ];
-	//var url="http://api.siliconbrain.co.in/Companies/Company";
-	//var data;
-	//var url="http://api.siliconbrain.co.in/Companies/Company";
-	// alert('before');
-	// $http.get(url).success(function(getData) {
-	// alert('Start');
-    // data = getData;
-	// console.log(data);
+					  params.total(orderedData.length); // set total for recalc pagination
+					  $defer.resolve(vm.users);
+			  
 
-  // });
-  // alert('after');
-	
-  vm.tableParams = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      sorting: {
-          name: 'asc'     // initial sorting
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-		  console.log(params.$params);
-		  // if()
-		  // {
-			  // alert('yes');
-		  // }
-		  // else{
-			  // alert('no');
-		  // }
-          // use build-in angular filter
-		   if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.name) != "undefined" && params.$params.filter.name != "")  || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.city) != "undefined" && params.$params.filter.city != "")))
-		  {
-				 var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-				  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-				  params.total(orderedData.length); // set total for recalc pagination
-				  $defer.resolve(vm.users);
+			  }
+			  else{
+				  
+				   params.total(data.length);
+				  
+			  }
+			 
+			 if(!$.isEmptyObject(params.$params.sorting))
+			  {
+				
+				 //alert('ggg');
+				  var orderedData = params.sorting() ?
+						  $filter('orderBy')(data, params.orderBy()) :
+						  data;
 		  
-
+				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			  }
 		  }
-		 
-		 if(!$.isEmptyObject(params.$params.sorting))
-		  {
-			
-			 //alert('ggg');
-			  var orderedData = params.sorting() ?
-					  $filter('orderBy')(data, params.orderBy()) :
-					  data;
-	  
-			  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-		  }
-      }
-  });
+	  });
+	}
 
   // FILTERS
   // ----------------------------------- 
@@ -173,4 +159,4 @@ function AngularTableController($scope, $filter,$http, ngTableParams) {
   }
 
 }
-AngularTableController.$inject = ["$scope", "$filter","$http","ngTableParams"];
+AngularTableController.$inject = ["$scope", "$filter","$http","ngTableParams","apiCall","apiPath"];

@@ -5,7 +5,7 @@
  =========================================================*/
 
 App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$ocLazyLoadProvider', 'appDependencies',
-    function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $ocLazyLoadProvider, appDependencies) {
+    function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $ocLazyLoadProvider,appDependencies) {
       'use strict';
 
       App.controller = $controllerProvider.register;
@@ -112,19 +112,21 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.form-inputs', {
             url: '/form-inputs',
             templateUrl: basepath('form-inputs.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','fileUpload','getBranchSrv')
         })
 		//Show Branch
 		.state('app.Branch', {
             url: '/Branch',
-            templateUrl: basepath('Branch/Branch.html?r='+Math.random()),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen')
+            templateUrl: 'app/views/Branch/Branch.html?r='+Math.random(),
+			controller: 'BranchController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
         })
 		//Add Branch
 		.state('app.AddBranch', {
             url: '/AddBranch',
             templateUrl: basepath('Branch/AddBranch.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster')
+			controller: 'AddBranchController as form',
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
         })
 		//Show Staff
 		.state('app.Staff', {
@@ -194,7 +196,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.table-ngtable', {
             url: '/table-ngtable',
             templateUrl: basepath('table-ngtable.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport')
+            resolve: requireDeps('ngTable', 'ngTableExport','getBranchSrv')
         })
         .state('app.calendar', {
             url: '/calendar',
