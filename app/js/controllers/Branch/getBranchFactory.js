@@ -39,6 +39,8 @@ App.factory('apiCall', ["$http","$q", function ($http,$q) {
 					$http({
                         url: url,
 						method: 'delete',
+						 dataType: 'jsonp',
+						crossDomain: true,
                         headers: {'Content-Type': undefined},
                     }).success(function(data, status, headers, config) {
 						console.log(status);

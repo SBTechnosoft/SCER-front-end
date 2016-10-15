@@ -6,14 +6,18 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($scope,toaster,$http,apiCall,apiPath) {
+function AddBranchController($scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location) {
   'use strict';
   var vm = this;
-  $scope.addBranch=[];
+ 
+  
+   $scope.addBranch=[];
+ 
   vm.cityDrop=[];
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			console.log(response2);
 			vm.companyDrop = response2;
 			
 		});
@@ -29,10 +33,58 @@ function AddBranchController($scope,toaster,$http,apiCall,apiPath) {
 	vm.statesDrop=[];
 	apiCall.getCall(apiPath.getAllState).then(function(response3){
 		vm.statesDrop = response3;
-			
+	
 	});
+	vm.sdfg;
+	if($stateParams.id){
+	  
+	//Edit Branch
+	var editBranch = apiPath.getAllBranch+'/'+$stateParams.id;
 	
+	apiCall.getCall(editBranch).then(function(res){
+		
+		console.log(res.company_id);
+		vm.sdfg = res.company_id;
+		//console.log(vm.sdfg);
+		$scope.addBranch.branchName = res.branch_name;
+		$scope.addBranch.fisrtAddress = res.address1;
+		$scope.addBranch.secondAddress = res.address2;
+		//$scope.addBranch.stateDropDown = res.state_abb;
+		//$scope.addBranch.cityDropDown = res.city_id;
+		
+		$scope.addBranch.pincode = res.pincode;
+		
+		//Company DropDown Selection
+		var companyDropPath = apiPath.getAllCompany+'/'+res.company_id;
+		apiCall.getCall(companyDropPath).then(function(res2){
+			$scope.addBranch.companyDropDown2 = res2;
+		});
+		
+		//State DropDown Selection
+		var stateDropPath = apiPath.getAllState+'/'+res.state_abb;
+		apiCall.getCall(stateDropPath).then(function(res3){
+			$scope.addBranch.stateDropDown = res3;
+		});
+		
+		//City DropDown
+		var cityAllDropPath = apiPath.getAllCity+res.state_abb;
+		apiCall.getCall(cityAllDropPath).then(function(res5){
+			vm.cityDrop = res5;
+		});
+		
+		//City DropDown Selection
+		var cityDropPath = apiPath.getOneCity+res.city_id;
+		apiCall.getCall(cityDropPath).then(function(res4){
+			$scope.addBranch.cityDropDown = res4;
+		});
 	
+	});
+  
+  }
+  else{
+	  
+	  console.log('Not');
+  }
   
   
   
@@ -178,9 +230,11 @@ function AddBranchController($scope,toaster,$http,apiCall,apiPath) {
   }
   
   //Insert Branch
-var formdata = new FormData();
+
   $scope.pop = function(addBranch) {
-	  
+	   var formdata = new FormData();
+	   
+	 // console.log(addBranch.companyDropDown2);
 	formdata.append('branch_name',addBranch.branchName);
 	formdata.append('address1',addBranch.fisrtAddress);
 	formdata.append('address2',addBranch.secondAddress);
@@ -191,12 +245,32 @@ var formdata = new FormData();
 	formdata.append('city_id',addBranch.cityDropDown.city_id);
 	formdata.append('company_id',addBranch.companyDropDown2.company_id);
 	
-	apiCall.postCall(apiPath.getAllBranch,formdata).then(function(response5){
+	if($stateParams.id)
+	{
+		var editBranch = apiPath.getAllBranch+'/'+$stateParams.id;
 		
-		console.log(response5);
-		toaster.pop('success', 'Title', 'Message');
+		apiCall.postCall(editBranch,formdata).then(function(response5){
 		
-	});
+			//console.log(response5);
+			
+			$location.path('app/Branch');
+			toaster.pop('success', 'Title', 'Message');
+		
+		});
+	}
+	else{
+		
+		apiCall.postCall(apiPath.getAllBranch,formdata).then(function(response5){
+		
+			//console.log(response5);
+			
+			$location.path('app/Branch');
+			toaster.pop('success', 'Title', 'Message');
+		
+		});
+		
+	}
+	
   };
   
   $scope.cancel = function() {
@@ -205,4 +279,4 @@ var formdata = new FormData();
   
   
 }
-AddBranchController.$inject = ["$scope","toaster","$http","apiCall","apiPath"];
+AddBranchController.$inject = ["$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location"];

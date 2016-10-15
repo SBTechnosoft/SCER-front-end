@@ -93,7 +93,8 @@ App
     'getAllBranch':           'http://api.siliconbrain.co.in/branches/branch',
     'getAllCompany':          'http://api.siliconbrain.co.in/companies/company',
 	'getAllState':          'http://api.siliconbrain.co.in/states/state',
-	'getAllCity':          'http://api.siliconbrain.co.in/cities/city/state/'
+	'getAllCity':          'http://api.siliconbrain.co.in/cities/city/state/',
+	'getOneCity':          'http://api.siliconbrain.co.in/cities/city/'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

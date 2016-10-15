@@ -13,8 +13,7 @@ if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript 
 
 
 var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils'])
-    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache', function ($rootScope, $state, $stateParams, $localStorage,$templateCache) {
-		
+    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http) {
 		
 		// $templateCache.removeAll();
 		 //location.reload(true);

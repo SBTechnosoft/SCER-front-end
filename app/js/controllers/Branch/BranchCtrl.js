@@ -6,7 +6,7 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($scope, $filter, ngTableParams,$http,apiCall,apiPath) {
+function BranchController($scope, $filter, ngTableParams,$http,apiCall,apiPath,$location) {
   'use strict';
   var vm = this;
   var data = [];
@@ -25,6 +25,7 @@ $scope.init();
   //End
   
 	apiCall.getCall(apiPath.getAllBranch).then(function(response){
+		console.log(response);
 		data = response;
 		 $scope.TableData();
 	});
@@ -172,15 +173,16 @@ $scope.init();
       }
   });
   
-  $scope.edit_comp = function()
+  $scope.edit_comp = function(branch_id)
   {
-	  alert('Edit');
+	  alert(branch_id);
+	  $location.path('app/AddBranch/'+branch_id);
   }
   
   $scope.delete_comp = function(branch_id)
   {
-	  alert(branch_id);
-	  var deletePath = apiPath.getAllBranch+'/'+branch_id;
+	alert(branch_id);
+	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
 	  
 	apiCall.deleteCall(deletePath).then(function(deleteres){
 		
@@ -190,4 +192,4 @@ $scope.init();
   }
 
 }
-BranchController.$inject = ["$scope", "$filter", "ngTableParams","$http","apiCall","apiPath"];
+BranchController.$inject = ["$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location"];

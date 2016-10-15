@@ -123,9 +123,9 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         })
 		//Add Branch
 		.state('app.AddBranch', {
-            url: '/AddBranch',
+            url: '/AddBranch/:id',
             templateUrl: basepath('Branch/AddBranch.html?r='+Math.random()),
-			controller: 'AddBranchController as form',
+			//controller: 'AddBranchController as form',
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
         })
 		//Show Staff
