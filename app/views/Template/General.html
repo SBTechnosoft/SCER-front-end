@@ -1,0 +1,46 @@
+<h3>
+   <small>
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   Template >> 
+   General</small>
+</h3>
+<!-- START panel-->
+<div data-ng-controller="tempGeneralController as form" class="container-fluid">
+	
+   <div class="panel panel-default">
+      <h4 class="panel-heading">Template Design</h4>
+      <div class="panel-body">
+         <form method="get" action="/" novalidate="" class="form-horizontal">
+			<div class="col-md-10">
+				<fieldset>
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">Template Name</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Name" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">Template Design</label>
+					  <div class="col-sm-9">
+						 <textarea  id="textdesc" name="textdesc" ng-model="addBranch.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+					  </div>
+				   </div>
+				</fieldset>
+				
+				 <button type="button" class="mr mb-sm btn btn-danger pull-right">Cancel</button>
+				 <button type="button" class="mr mb-sm btn btn-success pull-right">Save</button>
+			</div>
+			<div class="col-md-2">
+			<h4 class="panel-heading">Templates</h4>
+				<h4><ul>
+				   <li>Invoice</li>
+				   <li>Quotation</li>
+				</ul></h4>
+			</div>
+         </form>
+      </div>
+   </div>
+   <!-- END panel-->
+</div>

@@ -27,7 +27,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 
 
       // default route to dashboard
-      $urlRouterProvider.otherwise('/app/dashboard');
+      $urlRouterProvider.otherwise('/page/login');
 
       // 
       // App Routes
@@ -140,6 +140,26 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Staff/AddStaff.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
         })
+		//Invoice#
+		.state('app.Invoice', {
+            url: '/Invoice',
+            templateUrl: basepath('Invoice/Invoice.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport')
+        })
+		//Quotation#
+		.state('app.Quotation', {
+            url: '/Quotation',
+            templateUrl: basepath('Quotation/Quotation.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport')
+        })
+		/*** Template ***/
+		//General
+		.state('app.tempGeneral', {
+            url: '/tempGeneral',
+            templateUrl: basepath('Template/General.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','tinymce')
+        })
+		/*** End Template ***/
 		//Add Inventory Product
 		.state('app.AddInvProduct', {
             url: '/AddInvProduct',
@@ -176,6 +196,26 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Inventory/Group/InvGroup.html?r='+Math.random()),
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid')
         })
+		//Accounting Sales
+		.state('app.AccSales', {
+            url: '/AccSales',
+            templateUrl: basepath('Accounting/Sales/AccSales.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+        })
+		//Accounting Purchase
+		.state('app.AccPurchase', {
+            url: '/AccPurchase',
+            templateUrl: basepath('Accounting/Purchase/AccPurchase.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+        })
+		/*** Quick Menu ***/
+		//Bill
+		.state('app.Bill', {
+            url: '/Bill',
+            templateUrl: basepath('QuickMenu/Bill.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+        })
+		/*** End Quick Menu ***/
         .state('app.form-validation', {
             url: '/form-validation',
             templateUrl: basepath('form-validation.html')

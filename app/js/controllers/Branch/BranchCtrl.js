@@ -175,13 +175,13 @@ $scope.init();
   
   $scope.edit_comp = function(branch_id)
   {
-	  alert(branch_id);
+	  
 	  $location.path('app/AddBranch/'+branch_id);
   }
   
   $scope.delete_comp = function(branch_id)
   {
-	alert(branch_id);
+	
 	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
 	  
 	apiCall.deleteCall(deletePath).then(function(deleteres){

@@ -1,13 +1,13 @@
 [
   {
     "text": "Sales",
-    "sref": "app.dashboard",
+    "sref": "app.AccSales",
     "icon": "icon-bar-graph",
     "alert": {"text":"3", "class": "label-info"}
   },
   {
     "text": "Purchase",
-    "sref": "#",
+    "sref": "app.AccPurchase",
     "icon": "icon-box"
   },
   {

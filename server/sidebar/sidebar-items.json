@@ -34,5 +34,32 @@
       {"text": "Modify/Delete", "sref": "app.AddStaff", "translate": "" }
     ],
     "translate": ""
+  },
+  {
+    "type": "separator"
+  },
+  {
+    "text": "Invoice#",
+    "sref": "app.Invoice",
+    "icon": "icon-paper"
+  },
+  {
+    "text": "Quotation#",
+    "sref": "app.Quotation",
+    "icon": "icon-stack"
+  },
+  {
+    "type": "separator"
+  },
+  {
+    "text": "Template",
+    "sref": "#",
+    "icon": "fa fa-text-height",
+    "subnav": [
+      {"text": "General", "sref": "app.tempGeneral", "translate": "" },
+      {"text": "Email", "sref": "app.tempEmail", "translate": "" },
+	  {"text": "SMS", "sref": "app.tempSMS", "translate": "" }
+    ],
+    "translate": ""
   }
 ]

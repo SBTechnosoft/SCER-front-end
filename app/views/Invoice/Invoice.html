@@ -1,0 +1,112 @@
+<h3>
+   <small>
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   Invoice#</small>
+</h3>
+<!-- START panel-->
+<div data-ng-controller="InvoiceController as form" class="container-fluid">
+	
+   <div class="panel panel-default">
+      <h4 class="panel-heading">Invoice Setting</h4>
+      <div class="panel-body">
+         <form method="get" action="/" novalidate="" class="form-horizontal">
+			<div class="col-md-9">
+				<fieldset>
+				   <div class="form-group">
+					  <label class="col-sm-2 control-label">Company</label>
+					  <div class="col-sm-8">
+						 <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">Invoice Label</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">Started At</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Started At" class="form-control" />
+					  </div>
+				    </div>
+				</fieldset>
+				
+				
+			</div>
+			
+			<div class="col-md-3">
+				<fieldset style="visibility:hidden">
+							<div class="form-group">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-8">
+									<div class="radio c-radio">
+											<label>
+											<input type="radio" />
+											<span class="fa fa-circle"></span>Prefix</label>
+									</div>
+									<div class="radio c-radio">
+											<label>
+											<input type="radio"  />
+											<span class="fa fa-circle"></span>Postfix</label>
+									</div>
+								</div>
+							</div>
+				</fieldset>
+				<fieldset>
+						<div class="form-group">
+							<label class="col-sm-2 control-label"></label>
+							<div class="col-sm-10">
+								<div class="radio-inline c-radio">
+										<label>
+										   <input id="inlineradio1" type="radio" name="i-radio" value="prefix"  />
+										   <span class="fa fa-circle"></span>Prefix</label>
+									 </div>
+									 <div class="radio-inline c-radio">
+										<label>
+										   <input id="inlineradio2" type="radio" name="i-radio" value="postfix" checked="checked" />
+										   <span class="fa fa-circle"></span>Postfix</label>
+									 </div>
+							</div>
+							
+						</div>
+				</fieldset>
+				
+				 <button type="button" class="mr mb-sm btn btn-danger pull-right">Cancel</button>
+				 <button type="button" class="mr mb-sm btn btn-success pull-right">Save</button>
+			</div>
+		
+         </form>
+      </div>
+   </div>
+   
+   <div class="panel panel-default">
+      <div class="panel-heading" >
+         <div class="panel-title">All Invoice</div>
+      </div>
+      <table data-ng-table="form.tableParams"  show-filter="true" class="table table-bordered table-striped">
+	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+         <tbody>
+            <tr data-ng-repeat="user in $data">
+				<td data-title="'Company Name'" sortable="'company_name'" filter="{ 'company_name': 'text' }" >{{user.company_name}}</td>
+				<td data-title="'Label'" sortable="'label'" filter="{ 'label': 'text' }" >{{user.label}}</td>
+			    <td data-title="'Prefix/Postfix'" sortable="'fix'" filter="{ 'fix': 'text' }" >{{user.fix}}</td>
+				<td data-title="'Started_at'" sortable="'started_at'" filter="{ 'started_at': 'text' }" >{{user.started_at}}</td>
+				<!--td data-title="'created_at'" sortable="'created_at'" filter="{ 'created_at': 'text' }" >{{user.created_at}}</td-->
+		
+			   <!--td data-title="'Action'" filter="{ '': 'text' }">
+					<center>
+						<i ui-sref="" ng-click="edit_comp(user.branch_id)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+						<i ui-sref="" ng-click="delete_comp(user.branch_id)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
+					</center>
+				</td-->
+            </tr>
+         </tbody>
+      </table>
+   </div>
+   <!-- END panel-->
+</div>

@@ -48,7 +48,9 @@ App
 						   'app/vendor/fileUpload/jquery.fileupload-video.js',
 						   'app/vendor/fileUpload/jquery.fileupload-validate.js',
 						   'app/vendor/fileUpload/jquery.fileupload-angular.js'],
-	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js']
+	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js'],
+	'tinymce':				['app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js',
+							'app/vendor/tinymce/js/tinymce/tinymce.min.js']
     },
     // Angular based script (use the right module name)
     modules: [
