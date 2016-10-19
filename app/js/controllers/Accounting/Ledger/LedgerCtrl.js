@@ -10,7 +10,19 @@ function AccLedgerController($scope,$filter, ngTableParams) {
   'use strict';
  var vm = this;
  
-
+	$scope.trueData = false;
+	$scope.showInput = function()
+	{
+		
+		$scope.trueData = true;
+	}
+	
+	$scope.clickSave = function()
+	{
+		
+		$scope.trueData = false;
+	}
+	
  //Table
 	var data = [
       {company_name: "Moroni",label:"dsf/1945/", fix:"Prefix", started_at: 2 },

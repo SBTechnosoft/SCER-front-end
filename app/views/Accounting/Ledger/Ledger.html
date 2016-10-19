@@ -7,7 +7,7 @@
 <!-- START panel-->
 <div data-ng-controller="AccLedgerController as form" class="container-fluid">
 	
-<div class="col-md-7">
+<div class="col-md-7" ng-show="trueData">
    <div class="panel panel-default">
       <h4 class="panel-heading">Basic Details</h4>
       <div class="panel-body">
@@ -127,8 +127,8 @@
                </div>
             </fieldset>
 		
-			<button type="button" class="mr mb-sm btn btn-danger pull-right">Cancel</button>
-			<button type="button" class="mr mb-sm btn btn-success pull-right">Save</button>
+			<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
+			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
 				 
 	  </div>
 	  
@@ -139,7 +139,10 @@
    <div class="panel panel-default">
       <h4 class="panel-heading">Ledger</h4>
       <div class="panel-body">
-         
+        <ul>
+			<li><a ng-click="showInput()">First Ledger</a></li>
+			<li><a >Second Ledger</a></li>
+		</ul>
       </div>
    </div>
 </div>
