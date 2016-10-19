@@ -208,6 +208,24 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Accounting/Purchase/AccPurchase.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
         })
+		//Accounting Payment
+		.state('app.AccPayment', {
+            url: '/AccPayment',
+            templateUrl: basepath('Accounting/Payment/AccPayment.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+        })
+		//Accounting Receipt
+		.state('app.AccReceipt', {
+            url: '/AccReceipt',
+            templateUrl: basepath('Accounting/Receipt/AccReceipt.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+        })
+		//Accounting Ledger
+		.state('app.AccLedger', {
+            url: '/AccLedger',
+            templateUrl: basepath('Accounting/Ledger/Ledger.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport')
+        })
 		/*** Quick Menu ***/
 		//Bill
 		.state('app.Bill', {

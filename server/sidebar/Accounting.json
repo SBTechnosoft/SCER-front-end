@@ -25,18 +25,21 @@
   },
   {
     "text": "Special Journal",
-    "sref": "app.charts",
+    "sref": "#",
     "icon": "icon-pie-graph",
     "alert": {"text":"12", "class": "label-success"}
   },
   {
+    "type": "separator"
+  },
+  {
     "text": "Payment",
-    "sref": "#",
+    "sref": "app.AccPayment",
     "icon": "icon-map"
   },
   {
     "text": "Receipt",
-    "sref": "#",
+    "sref": "app.AccReceipt",
     "icon": "icon-play"
   },
   {
@@ -47,9 +50,9 @@
     "sref": "#",
     "icon": "icon-ribbon",
     "subnav": [
-      { "text": "Trail Balance",  "sref": "app.mailbox.folder.list({folder: 'inbox'})", "translate": "" },
-      { "text": "P&L", "sref": "app.calendar", "translate": "" },
-      { "text": "Balance Sheet", "sref": "app.tasks", "translate": "" }
+      { "text": "Trail Balance",  "sref": "#", "translate": "" },
+      { "text": "P&L", "sref": "#", "translate": "" },
+      { "text": "Balance Sheet", "sref": "#", "translate": "" }
     ]
   },
   {
@@ -59,7 +62,7 @@
   },
   {
     "text": "Ledgers",
-    "sref": "#",
+    "sref": "app.AccLedger",
     "icon": "icon-stack"
   }
 ]

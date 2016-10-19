@@ -7489,8 +7489,8 @@ fieldset[disabled] .btn-orange.active {
 }
 .panel-inverse > .panel-heading {
   color: #ffffff;
-  background-color: #363c47;
-  border-color: #363c47;
+  background-color: #5F7076; /* #363c47 */
+  border-color: #5F7076; /* #363c47 */
 }
 .panel-inverse > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #e6e9ee;

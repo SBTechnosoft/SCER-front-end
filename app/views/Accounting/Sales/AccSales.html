@@ -29,45 +29,62 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="panel panel-default">
-      <h4 class="panel-heading">Sales</h4>
-      <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
-			<div class="col-md-7">
-            <fieldset>
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Invoice#</label>
-                  <div class="col-sm-6">
-                     <input id="input-id-1" type="text" placeholder="Invoice Number" class="form-control" />
-                  </div>
-               </div>
-            </fieldset>
-			<fieldset>
-				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Client Name</label>
-                  <div class="col-sm-6">
-                     <input id="input-id-1" type="text" placeholder="Client Name(JS)" class="form-control" />
-                  </div>
-               </div>
-			</fieldset>
+	<div class="col-md-7" style="padding-left:0px;padding-right:15px"> 
+		<div class="panel panel-default">
+		<h4 class="panel-heading">Sales</h4>
+					<div class="panel-body">
+					 
+								 <form method="get" action="/" novalidate="" class="form-horizontal">
+									
+									<fieldset>
+									   <div class="form-group">
+										  <label for="input-id-1" class="col-sm-3 control-label">Invoice#</label>
+										  <div class="col-sm-6">
+											 <input id="input-id-1" type="text" placeholder="Invoice Number" class="form-control" />
+										  </div>
+									   </div>
+									</fieldset>
+									<fieldset>
+										<div class="form-group">
+										  <label for="input-id-1" class="col-sm-3 control-label">Client Name</label>
+										  <div class="col-sm-6">
+											 <input id="input-id-1" type="text" placeholder="Client Name(JS)" class="form-control" />
+										  </div>
+									   </div>
+									</fieldset>
+								</form>
+						
+					
+				
+			
+			
 			</div>
-			<div class="col-md-5">
-				<dl class="dl-horizontal">
-				   <dt>Opening Balance:</dt>
-				   <dd>250000</dd>
-				   <dt>Current Balance:</dt>
-				   <dd>3595400</dd>
-				</dl>
-				 
-				<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right">View History</button>
+		</div>
+	</div>
+	
+	<div class="col-md-5" style="padding-left:15px;padding-right:0px"> 
+		<div class="panel panel-default">
+		<h4 class="panel-heading">History</h4>
+					<div class="panel-body">
+					
+						
+						<dl class="dl-horizontal">
+						   <dt>Opening Balance:</dt>
+						   <dd>250000</dd>
+						   <dt>Current Balance:</dt>
+						   <dd>3595400</dd>
+						</dl>
+						
+						 
+						<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right">View History</button>
+						
 				
 			</div>
-         </form>
-		 </div>
+		</div>
 	</div>
+     
+	<div class="col-md-12" style="padding-left:0px;padding-right:0px"> 
 	<div class="panel panel-default">
-      <h4 class="panel-heading">Table</h4>
 			<table  class="table table-bordered table-striped">
 				<thead>
 					<tr>
@@ -164,24 +181,17 @@
 			</table>
 		
 	</div>
-	<div class="panel panel-default">
-      <h4 class="panel-heading">Remark</h4>
-      <div class="panel-body">
-		<div class="col-md-12">
-			<fieldset>
-					<div class="form-group">
-						<label for="input-id-1" class="col-sm-1 control-label">Remark</label>
-						<div class="col-sm-9">
-							<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-						</div>
-					</div>
-			</fieldset>
+	</div>
+		
 			
+						
+							<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<br />
 			<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
 				 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
-		</div>
-	</div>
-	</div>
+			
+		
+	
 		
      
    <!-- END panel-->

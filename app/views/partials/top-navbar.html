@@ -8,8 +8,8 @@
    <!-- START navbar header-->
    <div data-ng-class="app.theme.brand" class="navbar-header" style="background-color: #17A1E5 !important;height:81px">
       <a ui-sref="app.dashboard" class="navbar-brand">
-         <img src="app/img/logo.png" alt="App Logo" class="brand-logo" />
-         <img src="app/img/logo-single.png" alt="App Logo" class="brand-logo-collapsed" />
+         <img src="app/img/banner_113_45.png" alt="App Logo" class="brand-logo" />
+         <img src="app/img/banner_45_45.png" alt="App Logo" class="brand-logo-collapsed" />
       </a>
       <!-- Mobile buttons-->
       <div class="mobile-toggles" >
@@ -40,6 +40,12 @@
       <!-- Header Link Start -->
 	  <ul class="nav navbar-nav navbar-left">
 		<li>
+            <a ui-sref="" title="Dashboard">
+			<center><em class="fa fa-dashboard" style="font-size:28px;" ></em></center>
+              Dashboard
+			</a>
+        </li>
+		<li>
 		 <!--a ng-click="getsidebar()" ui-sref="app.table-ngtable" href="/app/table-ngtable" -->
             <a ui-sref="" ng-click="getsidebar()"  title="Accounting" >
 			<center><em class="fa fa-inr" style="font-size:28px;" ></em></center>
@@ -56,6 +62,12 @@
             <a ui-sref="" title="CRM">
 			<center><em class="fa fa-users" style="font-size:28px;" ></em></center>
               CRM
+			</a>
+        </li>
+		<li>
+            <a ui-sref="" title="Analyzer">
+			<center><em class="fa icon-bar-graph-2" style="font-size:28px;" ></em></center>
+              Analyzer
 			</a>
         </li>
 		<li>

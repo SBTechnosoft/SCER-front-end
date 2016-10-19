@@ -1,0 +1,98 @@
+<h3>
+   <small>
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   Accounting >>
+   Receipt</small>
+</h3>
+<!-- START panel-->
+<div data-ng-controller="AccReceiptController as form" class="container-fluid">
+	<div class="panel panel-default">
+		 <!--h4 class="panel-heading"></h4-->
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-sm-1 control-label"> Company </label>
+					<div class="col-sm-4">
+						<select chosen="" data-ng-model="addBranch.companyDropDown" data-ng-options="s.company_name for s in form.companyDrop track by s.company_id" class="form-control chosen-select"></select>
+					</div>
+				<label class="col-sm-1 control-label"> Date </label>
+					<div class="col-sm-4">
+						 <p class="input-group"style="float:right">
+							<input type="text" datepicker-popup="{{format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+							class="form-control" />
+							<span class="input-group-btn">
+							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
+								  <em class="fa fa-calendar"></em>
+							   </button>
+							</span>
+						 </p>
+					</div>
+			</div>
+		</div>
+	</div>
+	
+	<form method="get" action="/" novalidate="" class="form-horizontal">
+									
+		<fieldset class="my-fieldset-paddingBottom">
+		   <div class="form-group">
+			  <label for="input-id-1" class="col-sm-2 control-label">Account</label>
+			  <div class="col-sm-4">
+				 <input id="input-id-1" type="text" placeholder="Account" class="form-control" />
+			  </div>
+		   </div>
+		</fieldset>
+		<fieldset>
+			<div class="form-group">
+			  <label for="input-id-1" class="col-sm-2 control-label">Current Balance</label>
+			  <div class="col-sm-6">
+				 <h4>350000</h4>
+			  </div>
+		   </div>
+		</fieldset>
+	</form>
+     
+	<div class="col-md-12" style="padding-left:0px;padding-right:0px"> 
+	<div class="panel panel-default">
+			<table  class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th class="header">Particulars</th>
+						<th>Amount</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="addAfter">
+						<td>
+							<input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Name(JS)" />
+							<h5 class="text-center">Current Balance 205000 Dr/Cr</h5>
+						</td>
+						<td >
+							<input id="input-id-1" type="text" ng-model="amount"  class="form-control"  />
+							<h5 class="text-center" style="visibility:hidden">Current Balance 205000 Dr/Cr</h5>
+						</td>
+						<td style="">
+						<center>
+							<i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i>
+						</center>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		
+	</div>
+	</div>
+		
+			
+						
+							<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<br />
+			<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
+				 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
+			
+		
+	
+		
+     
+   <!-- END panel-->
+</div>
