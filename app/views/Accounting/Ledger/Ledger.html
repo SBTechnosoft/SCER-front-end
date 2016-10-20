@@ -7,17 +7,29 @@
 <!-- START panel-->
 <div data-ng-controller="AccLedgerController as form" class="container-fluid">
 	
-<div class="col-md-7" ng-show="trueData">
-   <div class="panel panel-default">
+<div class="col-md-9" style="padding-left:0px">
+	<div class="panel panel-default" ng-show="alertData">
+		<div class="panel-body">
+			<div class="alert alert-info">
+				<i class="fa fa-exclamation-triangle"></i> &nbsp; <b>Select Ledger</b>
+			</div>
+			<div class="alert alert-info" style="visibility:hidden">
+				Select Ledger
+			</div>
+			<div class="alert alert-info" style="visibility:hidden">
+				Select Ledger
+			</div>
+		</div>
+	</div>
+   <div class="panel panel-default" ng-show="trueData">
       <h4 class="panel-heading">Basic Details</h4>
       <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
-
+		<form method="get" action="/" novalidate="" class="form-horizontal" >
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
 					  <label class="col-sm-3 control-label">Name</label>
 					  <div class="col-sm-8">
-						 <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset >
@@ -33,15 +45,15 @@
 					<div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Opening B/L</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Opening B/L" class="form-control" />
+						 <input id="input-id-1" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
 					  </div>
 				    </div>
 				</fieldset>
-				
-         </form>
+		</form>
       </div>
 	   <h4 class="panel-heading">Additional Details</h4>
       <div class="panel-body">
+		<form method="get" action="/" novalidate="" class="form-horizontal">
 			<fieldset class="my-fieldset-paddingBottom">
 			   <div class="form-group">
 				  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
@@ -52,7 +64,7 @@
 			</fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
 			   <div class="form-group">
-				  <label class="col-sm-3 control-label">Invoice# Affected</label>
+				  <label class="col-sm-3 control-label">Inventory Affected</label>
 				  <div class="col-sm-8">
 					 <select chosen="" data-ng-model="state"  class="form-control chosen-select">
 						 <option value="yes">Yes</option>
@@ -61,10 +73,12 @@
 				  </div>
 			   </div>
 			</fieldset>
+		</form>
 	  </div>
 	  
 	  <h4 class="panel-heading">Address/Contact</h4>
       <div class="panel-body">
+		<form method="get" action="/" novalidate="" class="form-horizontal">
 			<fieldset class="my-fieldset-paddingBottom">
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
@@ -97,22 +111,22 @@
                   </div>
                </div>
 			</fieldset>
-		
+		</form>
 	  </div>
 	  
 	  <h4 class="panel-heading">Taxation Details</h4>
       <div class="panel-body">
-			
+		<form method="get" action="/" novalidate="" class="form-horizontal">
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-1 control-label">TIN</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" masked="9999999999" type="text" placeholder="TIN Number" class="form-control" />
+                     <input id="input-id-1" masked="9999999999" type="text" placeholder="TIN Number" class="form-control"  />
                   </div>
 				  
 				   <label for="input-id-1" class="col-sm-1 control-label">PAN</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" masked="" type="text" placeholder="PAN Number" class="form-control" />
+                     <input id="input-id-1" masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
                   </div>
 				  
                </div>
@@ -121,7 +135,7 @@
                <div class="form-group">
 				   <label for="input-id-1" class="col-sm-1 control-label">GST</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" masked="" type="text" placeholder="GST Number" class="form-control" />
+                     <input id="input-id-1" masked="" type="text" placeholder="GST Number" class="form-control"  dir="rtl" />
                   </div>
 				  
                </div>
@@ -129,20 +143,78 @@
 		
 			<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
 			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
-				 
+		</form>
 	  </div>
-	  
+	 
    </div>
 </div>
 
-<div class="col-md-5">
+<div class="col-md-3" style="padding-right:0px">
    <div class="panel panel-default">
-      <h4 class="panel-heading">Ledger</h4>
+      <h4 class="panel-heading">Ledger
+		<i ui-sref="" title="Add" ng-click="showInput()" class="fa fa-plus" style="font-size:17px;color:#17A1E5;float:right"> </i>
+		
+	  </h4>
+	  <div class="form-group">
+		 <div class="col-sm-12">
+			<div class="input-group m-b"> 
+			<span class="input-group-addon"><i class="fa fa-search" ></i></span>
+			<input id="input-id-1" type="text" class="form-control" placeholder="Search" />
+			</div>
+		 </div>
+	  </div>
       <div class="panel-body">
-        <ul>
-			<li><a ng-click="showInput()">First Ledger</a></li>
-			<li><a >Second Ledger</a></li>
-		</ul>
+		 <!--ul class="nav navbar-nav navbar-left">
+			<li  >
+				<a ng-click="showInput()" >
+					<i class="sidebar-item-icon icon-layers" ></i> <span style="letter-spacing: .025em;
+	font-weight: bold;">First Ledger</span>
+				</a>
+			</li>
+			<li>
+				<a ng-click="showInput()" >
+					<i class="sidebar-item-icon icon-layers" ></i> <span style="letter-spacing: .025em;
+	font-weight: bold;">Second Ledger Second Ledger</span>
+				</a>
+			</li>
+			<li  >
+				<a ng-click="showInput()" >
+					<i class="sidebar-item-icon icon-layers" ></i> <span style="letter-spacing: .025em;
+	font-weight: bold;">First Ledger</span>
+				</a>
+			</li>
+		</ul-->
+		
+		<table class="table  table-striped" style="border-width:0px">
+			<tr>
+				<td>
+					
+					<i class="sidebar-item-icon icon-layers" ></i> <span style="letter-spacing: .025em;
+	font-weight: bold;">First Ledger</span>
+				
+				</td>
+				<td>
+					<i ui-sref="" title="Edit" ng-click="showInput()" class="fa fa-edit" style="font-size:17px;color:#17A1E5"> </i> 
+				</td>
+				<td>
+					<i ui-sref="" title="View" ng-click="showInput()" class="fa fa-list-alt" style="font-size:17px;color:#17A1E5"></i>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					
+				<i class="sidebar-item-icon icon-layers" ></i> <span style="letter-spacing: .025em;
+	font-weight: bold;">Second Ledger</span>
+				
+				</td>
+				<td>
+					<i ui-sref="" title="Edit" ng-click="showInput()" class="fa fa-edit" style="font-size:17px;color:#17A1E5"> </i> 
+				</td>
+				<td>
+					<i ui-sref="" title="View" ng-click="showInput()" class="fa fa-list-alt" style="font-size:17px;color:#17A1E5"></i>
+				</td>
+			</tr>
+		</table>
       </div>
    </div>
 </div>

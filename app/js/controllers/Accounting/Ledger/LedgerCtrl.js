@@ -11,16 +11,19 @@ function AccLedgerController($scope,$filter, ngTableParams) {
  var vm = this;
  
 	$scope.trueData = false;
+	$scope.alertData = true;
 	$scope.showInput = function()
 	{
 		
 		$scope.trueData = true;
+		$scope.alertData = false;
 	}
 	
 	$scope.clickSave = function()
 	{
 		
 		$scope.trueData = false;
+		$scope.alertData = true;
 	}
 	
  //Table

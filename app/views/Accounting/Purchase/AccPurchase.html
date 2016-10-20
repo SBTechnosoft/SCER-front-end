@@ -41,7 +41,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Bill#</label>
 						  <div class="col-sm-6">
-							 <input id="input-id-1" type="text" placeholder="Bill Number" class="form-control" />
+							 <input id="input-id-1" type="text" placeholder="Bill Number" class="form-control" dir="rtl" />
 						  </div>
 					   </div>
 					</fieldset>
@@ -61,9 +61,8 @@
 	<div class="col-md-5" style="padding-left:15px;padding-right:0px"> 
 		<div class="panel panel-default">
 		<h4 class="panel-heading">History</h4>
-					<div class="panel-body">
+			<div class="panel-body">
 					
-						
 						<dl class="dl-horizontal">
 						   <dt>Opening Balance:</dt>
 						   <dd>250000</dd>
@@ -71,10 +70,13 @@
 						   <dd>3595400</dd>
 						</dl>
 						
-						 
-						<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right">View History</button>
+						<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
 						
-				
+						<dl class="dl-horizontal" style="visibility:hidden">
+							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
+							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
+							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
+						</dl>
 			</div>
 		</div>
 	</div>
