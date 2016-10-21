@@ -17,7 +17,7 @@ function AddBranchController($scope,toaster,$http,apiCall,apiPath,$state,$stateP
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			console.log(response2);
+			//console.log(response2);
 			vm.companyDrop = response2;
 			
 		});

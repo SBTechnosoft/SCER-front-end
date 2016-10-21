@@ -53,7 +53,7 @@
                   <div class="col-sm-8">
                      <input id="input-id-1" type="text" placeholder="Name" class="form-control" />
                   </div>
-				  <i class="fa fa-info-circle" title="History" />
+				  <i class="fa fa-info-circle" title="History" ui-sref="" />
                </div>
             </fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
@@ -222,6 +222,7 @@
 	</div>
 	<div class="panel panel-default">
 		<div class="panel-body">
+			 <form method="get" action="/" novalidate="" class="form-horizontal">
 			<fieldset>
                <div class="form-group">
                   <label class="col-sm-2 control-label"> Payment Mode </label>
@@ -267,7 +268,7 @@
 			 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save & Generate</button>
 			 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
 		
-		
+		</form>
 		
       </div>
 	</div>

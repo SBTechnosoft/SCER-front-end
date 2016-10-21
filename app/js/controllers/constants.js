@@ -92,11 +92,11 @@ App
   })
   //Api Path
   .constant('apiPath', {
-    'getAllBranch':           'http://api.siliconbrain.co.in/branches/branch',
-    'getAllCompany':          'http://api.siliconbrain.co.in/companies/company',
-	'getAllState':          'http://api.siliconbrain.co.in/states/state',
-	'getAllCity':          'http://api.siliconbrain.co.in/cities/city/state/',
-	'getOneCity':          'http://api.siliconbrain.co.in/cities/city/'
+    'getAllBranch':           'http://api.siliconbrain.co.in/branches',
+    'getAllCompany':          'http://api.siliconbrain.co.in/companies',
+	'getAllState':          'http://api.siliconbrain.co.in/states',
+	'getAllCity':          'http://api.siliconbrain.co.in/cities/state/',
+	'getOneCity':          'http://api.siliconbrain.co.in/cities'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {
