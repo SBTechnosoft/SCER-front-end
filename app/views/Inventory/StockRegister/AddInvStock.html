@@ -16,64 +16,33 @@
 		<div data-ng-controller="InvStockModalController">
 				   <!-- Modal inline template-->
 				   <script type="text/ng-template" id="/myModalContent.html">
-						  <div class="modal-header">
-							  <button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close">×</button>
+						<div class="modal-header">
+							<button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close">×</button>  
 							  <h4 id="myModalLabel" class="modal-title">Modal title</h4>
 						  </div>
 						  <div class="modal-body my-model-body">
 						   <center>
 						   <form method="get" action="/" novalidate="" class="form-horizontal">
-						  
-								<fieldset>
-								   <div class="form-group">
-									  <label class="col-sm-2 control-label">Product</label>
-									  <div class="col-sm-5">
-										 <select chosen="$rootScope.ArraystockModel.state" data-ng-model="stockModel.state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
-									  </div>
-								   </div>
-								</fieldset>
-								<fieldset>
-								   <div class="form-group">
-									  <label class="col-sm-2 control-label">Categoy</label>
-									  <div class="col-sm-5">
-										 <select chosen="" data-ng-model="stockModel.state2" data-ng-options="s for s in states" class="form-control chosen-select"></select>
-									  </div>
-								   </div>
-								</fieldset>
-								<fieldset>
-								   <div class="form-group">
-									  <label class="col-sm-2 control-label">Group</label>
-									  <div class="col-sm-5">
-										 <select chosen="" data-ng-model="stockModel.state3" data-ng-options="s for s in states" class="form-control chosen-select"></select>
-									  </div>
-								   </div>
-								</fieldset>	
-								<fieldset>
-								   <div class="form-group">
-									  <label class="col-sm-2 control-label">Product</label>
-									  <div class="col-sm-5">
-										 <select chosen="$rootScope.ArraystockModel.state" data-ng-model="stockModel.state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
-									  </div>
-								   </div>
-								</fieldset>
-								<fieldset>
-								   <div class="form-group">
-									  <label class="col-sm-2 control-label">Categoy</label>
-									  <div class="col-sm-5">
-										 <select chosen="" data-ng-model="stockModel.state2" data-ng-options="s for s in states" class="form-control chosen-select"></select>
-									  </div>
-								   </div>
-								</fieldset>
-								<fieldset>
-								   <div class="form-group">
-									  <label class="col-sm-2 control-label">Group</label>
-									  <div class="col-sm-5">
-										 <select chosen="" data-ng-model="stockModel.state3" data-ng-options="s for s in states" class="form-control chosen-select"></select>
-									  </div>
-								   </div>
-								</fieldset>	
 								
-								
+								<fieldset class="my-fieldset-paddingBottom">
+			   <div class="form-group">
+				  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
+				  <div class="col-sm-8">
+					 <input id="input-id-1" type="text" placeholder="Under" class="form-control" />
+				  </div>
+			   </div>
+			</fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+			   <div class="form-group">
+				  <label class="col-sm-3 control-label">Inventory Affected</label>
+				  <div class="col-sm-8">
+					 <select chosen data-ng-model="state"  class="form-control chosen-select">
+						 <option value="yes">Yes</option>
+						 <option value="no">No</option>
+					 </select>
+				  </div>
+			   </div>
+			</fieldset>
 								 <button type="button" class="mr mb-sm btn btn-success pull-right" ui-sref="app.InvStock" >Generate</button>
 							
 							</form>
@@ -87,8 +56,8 @@
 				   <!--p>Launch Demo Modal</p-->
 				   <!-- Button trigger modal -->
 				 
-				   <!--button data-ng-click="open('lg')" class="btn btn-primary">Open modal</button>
-				   <div id="modal-state"></div-->
+				   <button data-ng-click="open('lg')" class="btn btn-primary">Open modal</button>
+				   <div id="modal-state"></div>
 		</div>
          <form method="get" action="/" novalidate="" class="form-horizontal">
 			<fieldset>
@@ -108,6 +77,7 @@
                   
                </div>
             </fieldset>
+			
 			<fieldset>
 				 <div class="form-group">
 				<label class="col-sm-2 control-label">End Date:</label>

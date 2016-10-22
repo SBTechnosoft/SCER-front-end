@@ -49,6 +49,7 @@
 						  <div class="col-sm-6">
 							 <input id="input-id-1" type="text" placeholder="Client Name(JS)" class="form-control" />
 						  </div>
+						 <label for="input-id-1" class="control-label"> <i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add Account"> </i> </label>
 					   </div>
 					</fieldset>
 				</form>
@@ -58,140 +59,255 @@
 	
 	<div class="col-md-5" style="padding-left:15px;padding-right:0px"> 
 		<div class="panel panel-default">
-		<h4 class="panel-heading">History</h4>
-					<div class="panel-body">
+			<h4 class="panel-heading">History</h4>
+				<div class="panel-body">
+					<dl class="dl-horizontal">
+					   <dt>Opening Balance:</dt>
+					   <dd>250000</dd>
+					   <dt>Current Balance:</dt>
+					   <dd>3595400</dd>
+					</dl>
 					
-						
-						<dl class="dl-horizontal">
-						   <dt>Opening Balance:</dt>
-						   <dd>250000</dd>
-						   <dt>Current Balance:</dt>
-						   <dd>3595400</dd>
-						</dl>
-						
-						 
-						<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right">View History</button>
-						
-						<dl class="dl-horizontal" style="visibility:hidden">
-							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
-							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
-							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
-						</dl>
-				
-			</div>
+					 
+					<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right">View History</button>
+					
+					<dl class="dl-horizontal" style="visibility:hidden">
+						<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
+						<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
+						<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
+					</dl>
+				</div>
 		</div>
 	</div>
      
 	<div class="col-md-12" style="padding-left:0px;padding-right:0px"> 
 	<div class="panel panel-default">
-			<table  class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<th class="header">Name of Item</th>
-						<th class="header">Discount</th>
-						<th>Rate</th>
-						<th>Quantity</th>
-						<th>Amount</th>
-						<th>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr id="addAfter">
-						<td><input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Item Name(JS)" /></td>
-						<td>
-							<select  ng-model="discountDropDown"  class="form-control" style="width:40%;float:left;">
-								<option value="flat" selected="selected">Flat</option>
-								<option value="percentage">Percentage</option>
-							</select>
-							<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:30%;" /> 
-						</td>
-						<td>5000</td>
-						<td>
-							<select  ng-model="qtyDropDown1"  class="form-control" >
-									<option value="flat" selected="selected">1</option>
-									<option value="percentage">2</option>
-							</select>
-						</td>
-						<td >4500</td>
-						<td style="">
+		<table  class="table table-bordered table-striped" >
+			<thead>
+				<tr>
+					<th class="header" style="width:40%">Name of Item</th>
+					<th class="header" style="width:25%">Discount</th>
+					<th style="width:8%" >Rate</th>
+					<th style="width:9%" >Quantity</th>
+					<th style="width:10%" >Amount</th>
+					<th style="width:8%">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="addAfter">
+					<td>
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Enter Product Name(JS)" />
+							<span class="input-group-btn" data-ng-controller="AccSalesModalController">
+							   <button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+							</span>
+						</div>
+					</td>
+					<td>
+						<select  ng-model="discountDropDown"  class="form-control" style="width:50%;float:left;">
+							<option value="flat" selected="selected">Flat</option>
+							<option value="percentage">Percentage</option>
+						</select>
+						<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:50%;" /> 
+					</td>
+					<td>5000</td>
+					<td>
+						<input id="input-id-1" type="text" ng-model="qtyName"  class="form-control" style="width:100%;" /> 
+					</td>
+					<td >4500</td>
+					<td style="">
 						<center>
-							<i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i>
+							<!--i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i-->
+							<i ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"></i>
 						</center>
-						</td>
-					</tr>
-					<tr >
-						<td><input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Item Name(JS)" /></td>
-						<td>
-							<select  ng-model="discountDropDown"  class="form-control" style="width:40%;float:left;">
-								<option value="flat" selected="selected">Flat</option>
-								<option value="percentage">Percentage</option>
-							</select>
-							<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:30%;" /> 
-						</td>
-						<td>5000</td>
-						<td>
-							<select  ng-model="qtyDropDown2"  class="form-control" >
-									<option value="flat" selected="selected">1</option>
-									<option value="percentage">2</option>
-							</select>
-						</td>
-						<td >4500</td>
-						<td style="">
-						<center>
-							<i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i>
-							<i ui-sref="" ng-click="" class="fa icon-square-cross" style="font-size:20px;color:red" title="Delete"></i>
-						</center>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Total</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Tax</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>Grand Total</td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
-		
+					</td>
+				</tr>
+				<tr >
+					<td>
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Enter Product Name(JS)" />
+							<span class="input-group-btn">
+							   <button type="button" class="btn btn-default"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+							</span>
+						</div>
+					</td>
+					<td>
+						<select  ng-model="discountDropDown"  class="form-control" style="width:50%;float:left;">
+							<option value="flat" selected="selected">Flat</option>
+							<option value="percentage">Percentage</option>
+						</select>
+						<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:50%;" /> 
+					</td>
+					<td>5000</td>
+					<td>
+						<input id="input-id-1" type="text" ng-model="qtyName"  class="form-control" style="width:100%;" /> 
+					</td>
+					<td >4500</td>
+					<td style="">
+					<center>
+						<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"> </i>
+						&nbsp;
+						<i ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete"> </i>
+					</center>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Total</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Tax</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Grand Total</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 	</div>
 		
+		<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+		<br />
+		<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
+		<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
 			
-						
-							<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-						<br />
-			<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-				 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
-			
-		
-	
-		
-     
    <!-- END panel-->
 </div>
+<script type="text/ng-template" id="/myModalContent.html">
+	<div class="modal-header">
+		<button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close">×</button>  
+		  <h4 id="myModalLabel" class="modal-title">Modal title</h4>
+	</div>
+	<div class="modal-body my-model-body">
+		<center>
+			<form method="get" action="/" novalidate="" class="form-horizontal">
+				
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">Name</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset >
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Alias</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Alias" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Opening B/L</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
+					  </div>
+					</div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Under" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">Inventory Affected</label>
+					  <div class="col-sm-8">
+						 <select chosen data-ng-model="state"  class="form-control chosen-select">
+							 <option value="yes">Yes</option>
+							 <option value="no">No</option>
+						 </select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
+						<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
+						<div class="col-sm-8">
+							<textarea  name="address" ng-model="addBranch.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
+						<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
+						<div class="col-sm-8">
+							<textarea  name="address" ng-model="addBranch.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">State</label>
+					  <div class="col-sm-7">
+						 <select chosen="" ng-model="addBranch.stateDropDown" data-ng-options="s.state_name for s in form.statesDrop track by s.state_abb" class="form-control chosen-select" ng-change="ChangeCity(addBranch.stateDropDown.state_abb)" ></select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">City</label>
+					  <div class="col-sm-7">
+						 <select chosen="" ng-model="addBranch.cityDropDown" data-ng-options="s.city_name for s in form.cityDrop track by s.city_id" class="form-control chosen-select"></select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">TIN</label>
+					  <div class="col-sm-7">
+						 <input id="input-id-1" masked="9999999999" type="text" placeholder="TIN Number" class="form-control"  />
+					  </div>
+					</div>
+				</fieldset> 
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					   <label for="input-id-1" class="col-sm-3 control-label">PAN</label>
+					  <div class="col-sm-7">
+						 <input id="input-id-1" masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					   <label for="input-id-1" class="col-sm-3 control-label">GST</label>
+					  <div class="col-sm-7">
+						 <input id="input-id-1" masked="" type="text" placeholder="GST Number" class="form-control"  dir="rtl" />
+					  </div>
+					  
+				   </div>
+				</fieldset>
+			
+				<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
+				<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
+			</form>
+		</center>
+	</div>
+</script>

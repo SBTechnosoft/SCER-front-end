@@ -51,6 +51,7 @@
 						  <div class="col-sm-6">
 							 <input id="input-id-1" type="text" placeholder="Vender Name(JS)" class="form-control" />
 						  </div>
+						  <label for="input-id-1" class="control-label"> <i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add Account"> </i> </label>
 					   </div>
 					</fieldset>
 				</form>
@@ -87,60 +88,70 @@
 			<table  class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th class="header">Name of Item</th>
-						<th class="header">Discount</th>
-						<th>Rate</th>
-						<th>Quantity</th>
-						<th>Amount</th>
-						<th>
-						</th>
+						<th class="header" style="width:40%">Name of Item</th>
+						<th class="header" style="width:25%">Discount</th>
+						<th style="width:8%" >Rate</th>
+						<th style="width:9%" >Quantity</th>
+						<th style="width:10%" >Amount</th>
+						<th style="width:8%">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr id="addAfter">
-						<td><input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Item Name(JS)" /></td>
 						<td>
-							<select  ng-model="discountDropDown"  class="form-control" style="width:40%;float:left;">
+							<!--input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Item Name(JS)" style="width:95%;float:left"/>
+							<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;float:right" title="Add"> </i-->
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Enter Product Name(JS)" />
+								<span class="input-group-btn">
+								   <button type="button" class="btn btn-default"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+								</span>
+							</div>
+						</td>
+						<td>
+							<select  ng-model="discountDropDown"  class="form-control" style="width:50%;float:left;">
 								<option value="flat" selected="selected">Flat</option>
 								<option value="percentage">Percentage</option>
 							</select>
-							<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:30%;" /> 
+							<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:50%;" /> 
 						</td>
 						<td>5000</td>
 						<td>
-							<select  ng-model="qtyDropDown1"  class="form-control" >
-									<option value="flat" selected="selected">1</option>
-									<option value="percentage">2</option>
-							</select>
+							<input id="input-id-1" type="text" ng-model="qtyName"  class="form-control"  /> 
 						</td>
 						<td >4500</td>
 						<td style="">
 						<center>
-							<i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i>
+							<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"> </i>
 						</center>
 						</td>
 					</tr>
 					<tr >
-						<td><input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Item Name(JS)" /></td>
 						<td>
-							<select  ng-model="discountDropDown"  class="form-control" style="width:40%;float:left;">
+							<div class="input-group">
+							<input type="text" class="form-control" placeholder="Enter Product Name(JS)" />
+							<span class="input-group-btn">
+							   <button type="button" class="btn btn-default"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+							</span>
+						</div>
+						</td>
+						<td>
+							<select  ng-model="discountDropDown"  class="form-control" style="width:50%;float:left;">
 								<option value="flat" selected="selected">Flat</option>
 								<option value="percentage">Percentage</option>
 							</select>
-							<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:30%;" /> 
+							<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:50%;" /> 
 						</td>
 						<td>5000</td>
 						<td>
-							<select  ng-model="qtyDropDown2"  class="form-control" >
-									<option value="flat" selected="selected">1</option>
-									<option value="percentage">2</option>
-							</select>
+							<input id="input-id-1" type="text" ng-model="qtyName2"  class="form-control"  />
 						</td>
 						<td >4500</td>
 						<td style="">
 						<center>
-							<i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i>
-							<i ui-sref="" ng-click="" class="fa icon-square-cross" style="font-size:20px;color:red" title="Delete"></i>
+							<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"> </i>
+							&nbsp;
+							<i ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete"> </i>
 						</center>
 						</td>
 					</tr>
@@ -182,21 +193,18 @@
 	</div>
 	</div>
 	
-			<fieldset>
-				<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-			</fieldset>	
+		<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+		<br />
+		<div class="form-group">
+			<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
+			<div class="col-sm-6">
+				<input type="file" />
+			</div>
+		</div>
 			
-			<fieldset>
-					<div class="form-group">
-						<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
-						<div class="col-sm-9">
-							<input type="file" />
-						</div>
-					</div>
-			</fieldset>
 			
-			<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
+		<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
+		<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
 		
 		
      

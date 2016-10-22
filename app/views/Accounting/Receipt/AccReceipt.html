@@ -41,7 +41,7 @@
 				  <div class="col-sm-4">
 					 <input id="input-id-1" type="text" placeholder="Account" class="form-control" />
 				  </div>
-				  <i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;" title="Add"></i>
+				  <label for="input-id-1" class="control-label"><i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add Account"> </i></label>
 			   </div>
 			</fieldset>
 			<fieldset>
@@ -61,26 +61,35 @@
 			<table  class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th class="header">Particulars</th>
-						<th>Amount</th>
-						<th>Action</th>
+						<th class="header" style="width:70%">Particulars</th>
+						<th style="width:20%">Amount</th>
+						<th style="width:10%">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr id="addAfter">
 						<td>
-							<input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Name(JS)" />
-							<h5 class="text-center">Current Balance 205000 Dr/Cr</h5>
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Enter Name(JS)" />
+								<span class="input-group-btn">
+								   <button type="button" class="btn btn-default"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+								</span>
+							</div>
+							<h5>Current Balance 205000 Dr/Cr</h5>
 						</td>
 						<td >
 							<input id="input-id-1" type="text" ng-model="amount"  class="form-control"  />
 							<h5 class="text-center" style="visibility:hidden">Current Balance 205000 Dr/Cr</h5>
 						</td>
 						<td style="">
-						<center>
-							<i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i>
-						</center>
+							<center>
+								<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"> </i>
+							</center>
 						</td>
+					</tr>
+					<tr>
+						<td>Total</td>
+						<td colspan="2"></td>
 					</tr>
 					
 				</tbody>

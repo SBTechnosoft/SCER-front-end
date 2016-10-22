@@ -13262,6 +13262,10 @@ body .jvectormap-zoomout {
 .my-fieldset-paddingBottom{
 	padding-bottom:0px !important;
 }
+.chosen-container
+{
+    width: 100% !important;
+}
 /* End */
 
 /* ========================================================================
