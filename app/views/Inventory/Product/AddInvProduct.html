@@ -15,10 +15,18 @@
       <div class="panel-body">
          <form method="get" action="/" novalidate="" class="form-horizontal">
 			
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Company</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
             <fieldset>
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Product Name</label>
-                  <div class="col-sm-7">
+                  <div class="col-sm-5">
                      <input id="input-id-1" type="text" placeholder="Product Name" class="form-control" />
                   </div>
                </div>

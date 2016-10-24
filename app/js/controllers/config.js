@@ -199,6 +199,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		//Accounting Sales
 		.state('app.AccSales', {
             url: '/AccSales',
+			controller: 'AccSalesController as form',
             templateUrl: basepath('Accounting/Sales/AccSales.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
         })

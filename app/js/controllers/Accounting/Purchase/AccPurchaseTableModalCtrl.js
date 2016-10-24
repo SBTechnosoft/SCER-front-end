@@ -4,13 +4,14 @@
  * Provides a simple way to implement bootstrap modals from templates
  =========================================================*/
 
-App.controller('AccPaymentModalController', ["$scope", "$modal", "$log","$rootScope", function ($scope, $modal, $log,$rootScope) {
+App.controller('AccPurchaseTableModalController', ["$scope", "$modal", "$log","$rootScope", function ($scope, $modal, $log,$rootScope) {
   'use strict';
+  
   
   $scope.open = function (size) {
 
     var modalInstance = $modal.open({
-      templateUrl: '/myModalContent.html',
+      templateUrl: '/myTableModalContent.html',
       controller: ModalInstanceCtrl,
       size: size
     });

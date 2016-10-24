@@ -51,7 +51,9 @@
 						  <div class="col-sm-6">
 							 <input id="input-id-1" type="text" placeholder="Vender Name(JS)" class="form-control" />
 						  </div>
-						  <label for="input-id-1" class="control-label"> <i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add Account"> </i> </label>
+						  <div data-ng-controller="AccPurchaseModalController">
+							<label for="input-id-1" class="control-label"> <i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add Account" data-ng-click="open('lg')"> </i> </label>
+						 </div>
 					   </div>
 					</fieldset>
 				</form>
@@ -103,8 +105,8 @@
 							<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;float:right" title="Add"> </i-->
 							<div class="input-group">
 								<input type="text" class="form-control" placeholder="Enter Product Name(JS)" />
-								<span class="input-group-btn">
-								   <button type="button" class="btn btn-default"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+								<span class="input-group-btn" data-ng-controller="AccPurchaseTableModalController">
+								   <button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 								</span>
 							</div>
 						</td>
@@ -193,20 +195,189 @@
 	</div>
 	</div>
 	
-		<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-		<br />
-		<div class="form-group">
-			<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
-			<div class="col-sm-6">
-				<input type="file" />
-			</div>
+	<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+	<br />
+	<div class="form-group">
+		<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
+		<div class="col-sm-6">
+			<input type="file" />
 		</div>
-			
-			
-		<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-		<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
+	</div>
+	
+	<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
+	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
 		
-		
-     
    <!-- END panel-->
 </div>
+<script type="text/ng-template" id="/myModalContent.html">
+	<div class="modal-header">
+		<button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close">×</button>  
+		  <h4 id="myModalLabel" class="modal-title">Modal title</h4>
+	</div>
+	<div class="modal-body my-model-body">
+		<center>
+			<form method="get" action="/" novalidate="" class="form-horizontal">
+				
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">Name</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset >
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Alias</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Alias" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Opening B/L</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
+					  </div>
+					</div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" type="text" placeholder="Under" class="form-control" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">Inventory Affected</label>
+					  <div class="col-sm-8">
+						 <select chosen data-ng-model="state"  class="form-control chosen-select">
+							 <option value="yes">Yes</option>
+							 <option value="no">No</option>
+						 </select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
+						<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
+						<div class="col-sm-8">
+							<textarea  name="address" ng-model="addBranch.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
+						<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
+						<div class="col-sm-8">
+							<textarea  name="address" ng-model="addBranch.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">State</label>
+					  <div class="col-sm-7">
+						 <select chosen="" ng-model="addBranch.stateDropDown" data-ng-options="s.state_name for s in form.statesDrop track by s.state_abb" class="form-control chosen-select" ng-change="ChangeCity(addBranch.stateDropDown.state_abb)" ></select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">City</label>
+					  <div class="col-sm-7">
+						 <select chosen="" ng-model="addBranch.cityDropDown" data-ng-options="s.city_name for s in form.cityDrop track by s.city_id" class="form-control chosen-select"></select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">TIN</label>
+					  <div class="col-sm-7">
+						 <input id="input-id-1" masked="9999999999" type="text" placeholder="TIN Number" class="form-control"  />
+					  </div>
+					</div>
+				</fieldset> 
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					   <label for="input-id-1" class="col-sm-3 control-label">PAN</label>
+					  <div class="col-sm-7">
+						 <input id="input-id-1" masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					   <label for="input-id-1" class="col-sm-3 control-label">GST</label>
+					  <div class="col-sm-7">
+						 <input id="input-id-1" masked="" type="text" placeholder="GST Number" class="form-control"  dir="rtl" />
+					  </div>
+					  
+				   </div>
+				</fieldset>
+			
+				<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
+				<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
+			</form>
+		</center>
+	</div>
+</script>
+<script type="text/ng-template" id="/myTableModalContent.html">
+	<div class="modal-header">
+		<button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close">×</button>  
+		  <h4 id="myModalLabel" class="modal-title">Modal title</h4>
+	</div>
+	<div class="modal-body my-model-body">
+		<center>
+			<form method="get" action="/" novalidate="" class="form-horizontal">
+				
+				<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-3 control-label">Company</label>
+                  <div class="col-sm-6">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+            <fieldset>
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Product Name</label>
+                  <div class="col-sm-6">
+                     <input id="input-id-1" type="text" placeholder="Product Name" class="form-control" />
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-3 control-label">Categoy</label>
+                  <div class="col-sm-6">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-3 control-label">Group</label>
+                  <div class="col-sm-6">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>	
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-3 control-label">Measurement Unit</label>
+                  <div class="col-sm-6">
+                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			
+				<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
+				<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
+			</form>
+		</center>
+	</div>
+</script>

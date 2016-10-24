@@ -9,6 +9,7 @@ App.controller('AccPurchaseController', AccPurchaseController);
 function AccPurchaseController($scope) {
   'use strict';
   
+ 
  $scope.AddSales = function()
  {
 	 alert('Add');
