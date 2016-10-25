@@ -213,7 +213,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccPayment', {
             url: '/AccPayment',
             templateUrl: basepath('Accounting/Payment/AccPayment.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg')
         })
 		//Accounting Receipt
 		.state('app.AccReceipt', {

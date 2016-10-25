@@ -10,6 +10,7 @@ function AccLedgerController($scope,$filter, ngTableParams) {
   'use strict';
  var vm = this;
  
+	
 	$scope.trueData = false;
 	$scope.alertData = true;
 	$scope.showInput = function()
@@ -25,6 +26,12 @@ function AccLedgerController($scope,$filter, ngTableParams) {
 		$scope.trueData = false;
 		$scope.alertData = true;
 	}
+	
+	$scope.setPcode = function(site) {
+  		console.log(site);
+  	}
+	
+	 //this.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel", "francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit", "guillaume", "nicolas", "joseph"];
 	
  //Table
 	var data = [
