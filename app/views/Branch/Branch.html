@@ -19,7 +19,7 @@
    <div class="panel panel-default">
       <div class="panel-heading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
-		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="app.AddBranch" >
+		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="" ng-click="GoToAddBranch()" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 			Add Branch</button>
          <div class="panel-title">All Branch</div>
@@ -34,7 +34,7 @@
 				<td data-title="'Pincode'" sortable="'pincode'" filter="{ 'pincode': 'text' }" >{{user.pincode}}</td>
 				<td data-title="'City'" sortable="'city_name'" filter="{ 'city_name': 'text' }" >{{user.city_name}}</td>
 				 
-               <td data-title="'Default'" ng-init="brandRadio='abcdscdfcdfddddddddddd'">
+               <td data-title="'Default'" ng-init="brandRadio='ok'">
 				<!--input type="radio" ng-checked="{{user.name=='Branch1'?true:false}}" ng-model="brandRadio" /-->
 				<input type="radio" name="brandRadio"  ng-model="brandRadio" ng-value="user.branch_name" />
 				</td>

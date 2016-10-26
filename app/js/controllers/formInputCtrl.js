@@ -6,9 +6,17 @@
 
 App.controller('FormInputController', FormInputController);
 
-function FormInputController($scope,$http,$filter,$window) {
+function FormInputController($rootScope,$scope,$http,$filter,$window) {
   'use strict';
   
+  /* Hide/Show Company Panel */
+
+		 $scope.$on('$locationChangeStart', function (event) {
+                $rootScope.AddCompanyModify = true;
+            });
+		
+	/* End */
+	
   // Chosen data
   // ----------------------------------- 
 
@@ -197,4 +205,4 @@ function FormInputController($scope,$http,$filter,$window) {
   
   
 }
-FormInputController.$inject = ["$scope","$http","$filter","$window"];
+FormInputController.$inject = ["$rootScope","$scope","$http","$filter","$window"];

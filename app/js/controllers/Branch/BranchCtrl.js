@@ -6,11 +6,17 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($scope, $filter, ngTableParams,$http,apiCall,apiPath,$location) {
+function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location) {
   'use strict';
   var vm = this;
   var data = [];
   
+  //Go To AddBranch
+  $scope.GoToAddBranch = function(){
+	  
+	 $rootScope.AddBranchModify = false;
+	 $location.path('app/AddBranch/'); 
+  }
   //Company
 	$scope.init = function () {
 			
@@ -192,4 +198,4 @@ $scope.init();
   }
 
 }
-BranchController.$inject = ["$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location"];
+BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location"];

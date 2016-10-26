@@ -6,10 +6,16 @@
 
 App.controller('AngularTableController', AngularTableController);
 
-function AngularTableController($scope, $filter,$http, ngTableParams,apiCall,apiPath) {
+function AngularTableController($rootScope,$scope, $filter,$http, ngTableParams,apiCall,apiPath,$location) {
   'use strict';
   var vm = this;
   
+  //Go To AddCompany
+  $scope.GoToAddCompany = function(){
+	  
+	 $rootScope.AddCompanyModify = false;
+	 $location.path('app/form-inputs'); 
+  }
 	 var data = [];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response){
 		 data = response;
@@ -159,4 +165,4 @@ function AngularTableController($scope, $filter,$http, ngTableParams,apiCall,api
   }
 
 }
-AngularTableController.$inject = ["$scope", "$filter","$http","ngTableParams","apiCall","apiPath"];
+AngularTableController.$inject = ["$rootScope","$scope", "$filter","$http","ngTableParams","apiCall","apiPath","$location"];

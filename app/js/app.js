@@ -53,11 +53,13 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       picture:  'app/img/user/08.jpg'
     };
 	
+	//Branch Modify
+	$rootScope.AddBranchModify = true;
+	//Company Modify
+	$rootScope.AddCompanyModify = true;
 	
 	
-     //  var url = 'server/php/';
 	
-
   }
 ]);
 

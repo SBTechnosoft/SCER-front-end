@@ -6,11 +6,18 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location) {
+function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location) {
   'use strict';
   var vm = this;
  
-  
+	/* Hide/Show Company Panel */
+	
+		//$rootScope.BranchModify = false;
+		 $scope.$on('$locationChangeStart', function (event) {
+                $rootScope.AddBranchModify = true;
+            });
+		
+	/* End */
    $scope.addBranch=[];
  
   vm.cityDrop=[];
@@ -279,4 +286,4 @@ function AddBranchController($scope,toaster,$http,apiCall,apiPath,$state,$stateP
   
   
 }
-AddBranchController.$inject = ["$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location"];
+AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location"];
