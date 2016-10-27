@@ -1,49 +1,15 @@
 
 /**=========================================================
- * Module: AccSalesController.js
+ * Module: AccPaymentController.js
  * Controller for input components
  =========================================================*/
 
-App.controller('AccSalesController', AccSalesController);
+App.controller('AccSpecialJrnlController', AccSpecialJrnlController);
 
-function AccSalesController($scope) {
+function AccSpecialJrnlController($scope) {
   'use strict';
   
-  var vm = this;
-  
-  /* Table */
-	vm.AccSalesTable = [];
-	vm.AccSalesTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
-	
-	$scope.add = function(){
-		  console.log(vm.AccSalesTable);
-		 var data = {};	
-		// console.log(this.AccSalesTable);
-		data.name ='';
-		data.discountDropDown ='';
-		data.discountBox ='';
-		data.qty ='';
-		vm.AccSalesTable.push(data);
-		console.log(vm.AccSalesTable);
-
-    };
-	
-	$scope.removeRow = function (idx) {
-		vm.AccSalesTable.splice(idx, 1);
-	};
-	
-  /* End */
-  
-  $scope.pop = function(data)
-  {
-	  console.log(data);
-	  
-  }
-  
- $scope.AddSales = function()
- {
-	 alert('Add');
- }
+ 
   // Chosen data
   // ----------------------------------- 
 
@@ -239,4 +205,4 @@ function AccSalesController($scope) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccSalesController.$inject = ["$scope"];
+AccSpecialJrnlController.$inject = ["$scope"];

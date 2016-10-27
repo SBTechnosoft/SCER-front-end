@@ -209,6 +209,12 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Accounting/Purchase/AccPurchase.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
         })
+		//Accounting Special journal
+		.state('app.AccSpecialJrnl', {
+            url: '/AccSpecialJrnl',
+            templateUrl: basepath('Accounting/SpecialJournal/AccSpecialJrnl.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg')
+        })
 		//Accounting Payment
 		.state('app.AccPayment', {
             url: '/AccPayment',

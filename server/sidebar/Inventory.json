@@ -34,5 +34,10 @@
     "text": "Stock Register",
     "sref": "app.AddInvStock",
     "icon": "icon-stack"
+  },
+  {
+    "text": "Stock Summary",
+    "sref": "app.InvStockSummary",
+    "icon": "icon-stack"
   }
 ]
