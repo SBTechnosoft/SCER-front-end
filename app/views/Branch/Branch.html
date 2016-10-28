@@ -9,7 +9,7 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-7">
-						<select chosen=""  ng-model="stateCheck" ng-options="s.company_name for s in table.states" class="form-control chosen-select" >
+						<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states" class="form-control chosen-select" >
 						</select>
 					</div>
 				<button type="button" class="mr mb-sm btn btn-primary">Go</button>
@@ -28,11 +28,11 @@
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
          <tbody>
             <tr data-ng-repeat="user in $data">
-				<td data-title="'Branch Name'" sortable="'branch_name'" filter="{ 'branch_name': 'text' }" >{{user.branch_name}}</td>
+				<td data-title="'Branch Name'" sortable="'branchName'" filter="{ 'branchName': 'text' }" >{{user.branchName}}</td>
 				<td data-title="'Address1'" sortable="'address1'" filter="{ 'address1': 'text' }" >{{user.address1}}</td>
 			    <td data-title="'Address2'" sortable="'address2'" filter="{ 'address2': 'text' }" >{{user.address2}}</td>
 				<td data-title="'Pincode'" sortable="'pincode'" filter="{ 'pincode': 'text' }" >{{user.pincode}}</td>
-				<td data-title="'City'" sortable="'city_name'" filter="{ 'city_name': 'text' }" >{{user.city_name}}</td>
+				<td data-title="'City'" sortable="'city.cityName'" filter="{ 'city.cityName': 'text' }" >{{user.city.cityName}}</td>
 				 
                <td data-title="'Default'" ng-init="brandRadio='ok'">
 				<!--input type="radio" ng-checked="{{user.name=='Branch1'?true:false}}" ng-model="brandRadio" /-->
@@ -40,8 +40,8 @@
 				</td>
 			   <td data-title="'Action'" filter="{ '': 'text' }">
 					<center>
-						<i ui-sref="" ng-click="edit_comp(user.branch_id)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
-						<i ui-sref="" ng-click="delete_comp(user.branch_id)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
+						<i ui-sref="" ng-click="edit_comp(user.branchId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+						<i ui-sref="" ng-click="delete_comp(user.branchId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
 					</center>
 				</td>
             </tr>

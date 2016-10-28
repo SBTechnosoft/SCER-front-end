@@ -15,12 +15,12 @@
 			
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="addBranch.companyDropDown" data-ng-options="s.company_name for s in form.companyDrop track by s.company_id" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="addBranch.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select"></select>
 					</div>
 					
 				<label class="col-sm-1 control-label"> Branch </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="addBranch.branchDropDown" data-ng-options="s.branch_name for s in form.branchDrop track by s.branch_id" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="addBranch.branchDropDown" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" class="form-control chosen-select"></select>
 					</div>
 					
 				<button type="button" class="mr mb-sm btn btn-primary">Go</button>
@@ -37,7 +37,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Company</label>
                   <div class="col-sm-5">
-                     <select chosen=""  ng-model="addBranch.companyDropDown2" ng-options="s.company_name for s in form.companyDrop track by s.company_id" class="form-control chosen-select" ></select>
+                     <select chosen=""  ng-model="addBranch.companyDropDown2" ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ></select>
                   </div>
                </div>
 			</fieldset>
@@ -69,7 +69,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">State</label>
                   <div class="col-sm-5">
-                     <select chosen="" ng-model="addBranch.stateDropDown" data-ng-options="s.state_name for s in form.statesDrop track by s.state_abb" class="form-control chosen-select" ng-change="ChangeCity(addBranch.stateDropDown.state_abb)" ></select>
+                     <select chosen="" ng-model="addBranch.stateDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" class="form-control chosen-select" ng-change="ChangeCity(addBranch.stateDropDown.stateAbb)" ></select>
                   </div>
                </div>
 			</fieldset>
@@ -77,7 +77,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">City</label>
                   <div class="col-sm-5">
-                     <select chosen="" ng-model="addBranch.cityDropDown" data-ng-options="s.city_name for s in form.cityDrop track by s.city_id" class="form-control chosen-select"></select>
+                     <select chosen="" ng-model="addBranch.cityDropDown" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>

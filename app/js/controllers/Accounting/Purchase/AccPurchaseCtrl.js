@@ -9,11 +9,36 @@ App.controller('AccPurchaseController', AccPurchaseController);
 function AccPurchaseController($scope) {
   'use strict';
   
- 
- $scope.AddSales = function()
- {
-	 alert('Add');
- }
+   var vm = this;
+   
+ /* Table */
+	vm.AccPurchaseTable = [];
+	vm.AccPurchaseTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
+	
+	$scope.addRow = function(){
+		  console.log(vm.AccPurchaseTable);
+		 var data = {};	
+		// console.log(this.AccSalesTable);
+		data.name ='';
+		data.discountDropDown ='';
+		data.discountBox ='';
+		data.qty ='';
+		vm.AccPurchaseTable.push(data);
+		console.log(vm.AccPurchaseTable);
+
+    };
+	
+	$scope.removeRow = function (idx) {
+		vm.AccPurchaseTable.splice(idx, 1);
+	};
+	
+  /* End */
+  
+  $scope.pop = function(data)
+  {
+	  console.log(data);
+	  
+  }
   // Chosen data
   // ----------------------------------- 
 

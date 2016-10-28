@@ -15,7 +15,7 @@ function AccSalesController($scope) {
 	vm.AccSalesTable = [];
 	vm.AccSalesTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
 	
-	$scope.add = function(){
+	$scope.addRow = function(){
 		  console.log(vm.AccSalesTable);
 		 var data = {};	
 		// console.log(this.AccSalesTable);

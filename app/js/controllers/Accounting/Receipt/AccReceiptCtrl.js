@@ -9,6 +9,30 @@ App.controller('AccReceiptController', AccReceiptController);
 function AccReceiptController($scope) {
   'use strict';
   
+  var vm = this;
+  
+  /* Table */
+  
+	vm.AccReceiptTable = [];
+	vm.AccReceiptTable = [{"name":"","amount":""}];
+	
+	$scope.addRow = function(){
+		var data = {};	
+		data.name ='';
+		data.amount ='';
+		vm.AccReceiptTable.push(data);
+    };
+	
+	$scope.removeRow = function (idx) {
+		vm.AccReceiptTable.splice(idx, 1);
+	};
+	
+  /* End */
+  
+	$scope.pop = function(data)
+	{
+		console.log(data);  
+	}
  
   // Chosen data
   // ----------------------------------- 

@@ -50,10 +50,10 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	
 	apiCall.getCall(editBranch).then(function(res){
 		
-		console.log(res.company_id);
-		vm.sdfg = res.company_id;
+		
+		vm.sdfg = res.companyId;
 		//console.log(vm.sdfg);
-		$scope.addBranch.branchName = res.branch_name;
+		$scope.addBranch.branchName = res.branchName;
 		$scope.addBranch.fisrtAddress = res.address1;
 		$scope.addBranch.secondAddress = res.address2;
 		//$scope.addBranch.stateDropDown = res.state_abb;
@@ -62,25 +62,26 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		$scope.addBranch.pincode = res.pincode;
 		
 		//Company DropDown Selection
-		var companyDropPath = apiPath.getAllCompany+'/'+res.company_id;
+		var companyDropPath = apiPath.getAllCompany+'/'+res.company.companyId;
 		apiCall.getCall(companyDropPath).then(function(res2){
+			
 			$scope.addBranch.companyDropDown2 = res2;
 		});
 		
 		//State DropDown Selection
-		var stateDropPath = apiPath.getAllState+'/'+res.state_abb;
+		var stateDropPath = apiPath.getAllState+'/'+res.state.stateAbb;
 		apiCall.getCall(stateDropPath).then(function(res3){
 			$scope.addBranch.stateDropDown = res3;
 		});
 		
 		//City DropDown
-		var cityAllDropPath = apiPath.getAllCity+res.state_abb;
+		var cityAllDropPath = apiPath.getAllCity+res.state.stateAbb;
 		apiCall.getCall(cityAllDropPath).then(function(res5){
 			vm.cityDrop = res5;
 		});
 		
 		//City DropDown Selection
-		var cityDropPath = apiPath.getOneCity+res.city_id;
+		var cityDropPath = apiPath.getOneCity+'/'+res.city.cityId;
 		apiCall.getCall(cityDropPath).then(function(res4){
 			$scope.addBranch.cityDropDown = res4;
 		});
@@ -242,15 +243,15 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	   var formdata = new FormData();
 	   
 	 // console.log(addBranch.companyDropDown2);
-	formdata.append('branch_name',addBranch.branchName);
+	formdata.append('branchName',addBranch.branchName);
 	formdata.append('address1',addBranch.fisrtAddress);
 	formdata.append('address2',addBranch.secondAddress);
 	formdata.append('pincode',addBranch.pincode);
 	formdata.append('is_display','no');
 	formdata.append('is_default','not');
-	formdata.append('state_abb',addBranch.stateDropDown.state_abb);
-	formdata.append('city_id',addBranch.cityDropDown.city_id);
-	formdata.append('company_id',addBranch.companyDropDown2.company_id);
+	formdata.append('stateAbb',addBranch.stateDropDown.stateAbb);
+	formdata.append('cityId',addBranch.cityDropDown.cityId);
+	formdata.append('companyId',addBranch.companyDropDown2.companyId);
 	
 	if($stateParams.id)
 	{

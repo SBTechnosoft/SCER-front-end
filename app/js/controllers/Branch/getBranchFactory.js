@@ -7,8 +7,9 @@ App.factory('apiCall', ["$http","$q", function ($http,$q) {
 					
 					$http.get(url)
 					.success(function (data) {
+					
 						deferred.resolve(data);
-						
+
 					})
 					.error(function (error) {
 						deferred.reject(error);

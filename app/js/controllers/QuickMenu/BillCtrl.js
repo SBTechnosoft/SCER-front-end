@@ -9,6 +9,34 @@ App.controller('BillController', BillController);
 function BillController($scope) {
   'use strict';
  
+ var vm = this;
+  
+  /* Table */
+	vm.AccBillTable = [];
+	vm.AccBillTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
+	
+	$scope.addRow = function(){
+		 
+		var data = {};	
+		data.name ='';
+		data.discountDropDown ='';
+		data.discountBox ='';
+		data.qty ='';
+		vm.AccBillTable.push(data);
+		
+    };
+	
+	$scope.removeRow = function (idx) {
+		vm.AccBillTable.splice(idx, 1);
+	};
+	
+  /* End */
+  
+  $scope.pop = function(data)
+  {
+	  console.log(data);
+	  
+  }
  
   // Chosen data
   // ----------------------------------- 

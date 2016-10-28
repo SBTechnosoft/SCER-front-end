@@ -9,7 +9,31 @@ App.controller('AccPaymentController', AccPaymentController);
 function AccPaymentController($scope) {
   'use strict';
   
- 
+  var vm = this;
+  
+  /* Table */
+  
+	vm.AccPaymentTable = [];
+	vm.AccPaymentTable = [{"name":"","amount":""}];
+	
+	$scope.addRow = function(){
+		var data = {};	
+		data.name ='';
+		data.amount ='';
+		vm.AccPaymentTable.push(data);
+    };
+	
+	$scope.removeRow = function (idx) {
+		vm.AccPaymentTable.splice(idx, 1);
+	};
+	
+  /* End */
+  
+	$scope.pop = function(data)
+	{
+		console.log(data);  
+	}
+
   // Chosen data
   // ----------------------------------- 
 

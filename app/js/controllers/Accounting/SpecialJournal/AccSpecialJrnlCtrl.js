@@ -9,6 +9,34 @@ App.controller('AccSpecialJrnlController', AccSpecialJrnlController);
 function AccSpecialJrnlController($scope) {
   'use strict';
   
+   var vm = this;
+  
+  /* Table */
+	vm.AccSpecialJrnlTable = [];
+	vm.AccSpecialJrnlTable = [{"DropCr":"dr","name":"Speial","Dbt":"2000","Crdt":""},{"DropCr":"dr","name":"Item2","Dbt":"2000","Crdt":""},{"DropCr":"cr","name":"To Sales","Dbt":"","Crdt":"4000"}];
+	
+	$scope.addRow = function(){
+		 
+		 var data = {};
+		data.DropCr ='';
+		data.name ='';
+		data.Dbt ='';
+		data.Crdt ='';
+		vm.AccSpecialJrnlTable.push(data);
+
+    };
+	
+	$scope.removeRow = function (idx) {
+		vm.AccSpecialJrnlTable.splice(idx, 1);
+	};
+	
+  /* End */
+  
+  $scope.pop = function(data)
+  {
+	  console.log(data);
+	  
+  }
  
   // Chosen data
   // ----------------------------------- 

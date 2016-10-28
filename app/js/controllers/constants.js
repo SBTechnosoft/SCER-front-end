@@ -97,7 +97,7 @@ App
 	'getAllState':          'http://api.siliconbrain.co.in/states',
 	'getAllCity':          'http://api.siliconbrain.co.in/cities/state/',
 	'getOneCity':          'http://api.siliconbrain.co.in/cities',
-	'getLedgerGroups':     'http://api.siliconbrain.co.in/account/ledger-groups',
+	'getLedgerGroups':     'http://api.siliconbrain.co.in/account/ledger-groups'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {
