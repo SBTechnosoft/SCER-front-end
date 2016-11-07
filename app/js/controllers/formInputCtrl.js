@@ -9,11 +9,11 @@ App.controller('FormInputController', FormInputController);
 function FormInputController($rootScope,$scope,$http,$filter,$window) {
   'use strict';
   
-  /* Hide/Show Company Panel */
+	/* Hide/Show Company Panel */
 
-		 $scope.$on('$locationChangeStart', function (event) {
+		$scope.$on('$locationChangeStart', function (event) {
                 $rootScope.AddCompanyModify = true;
-            });
+        });
 		
 	/* End */
 	

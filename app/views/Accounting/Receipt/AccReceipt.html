@@ -39,11 +39,14 @@
 			   <div class="form-group">
 				  <label for="input-id-1" class="col-sm-2 control-label">Account</label>
 				  <div class="col-sm-4">
-					 <input typeahead="state for state in form.states | filter:$viewValue | limitTo:10" ng-model="AccountName" id="input-id-1" type="text" placeholder="Account(JS)" class="form-control" />
+					<div class="input-group">
+									<input typeahead="state for state in form.states | filter:$viewValue | limitTo:10" ng-model="item.clientName" type="text" class="form-control" placeholder="Account" />
+									<span class="input-group-btn" ng-controller="AccReceiptLedgerModalController">
+							 		<button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+									</span>
+								</div>
 				  </div>
-				  <div data-ng-controller="AccReceiptLedgerModalController">
-					<label for="input-id-1" class="control-label"><i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add Account" data-ng-click="open('lg')"> </i></label>
-				  </div>
+				 
 			  </div>
 			</fieldset>
 			<fieldset>

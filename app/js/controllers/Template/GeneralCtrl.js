@@ -6,8 +6,10 @@
 
 App.controller('tempGeneralController', tempGeneralController);
 
-function tempGeneralController($scope) {
+function tempGeneralController($scope,apiCall,apiPath) {
   'use strict';
+  var vm = this;
+  
 	tinymce.init({
 		selector: '#textdesc',
 		 force_br_newlines : false,
@@ -70,6 +72,20 @@ function tempGeneralController($scope) {
     'Wyoming'
   ];
 
+	//All Template In Right
+	vm.AllTempRight = [];
+	apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+		
+		vm.AllTempRight = responseTemp;
+	
+	});
+	
+	// Edit Template
+	$scope.EditTemplate = function(id)
+	{
+		alert(id);
+	}
+	
   // Datepicker
   // ----------------------------------- 
 
@@ -200,4 +216,4 @@ function tempGeneralController($scope) {
     {value: 5, name: 'Huge'}
   ];
 }
-tempGeneralController.$inject = ["$scope"];
+tempGeneralController.$inject = ["$scope","apiCall","apiPath"];

@@ -97,7 +97,10 @@ App
 	'getAllState':          'http://api.siliconbrain.co.in/states',
 	'getAllCity':          'http://api.siliconbrain.co.in/cities/state/',
 	'getOneCity':          'http://api.siliconbrain.co.in/cities',
-	'getLedgerGroups':     'http://api.siliconbrain.co.in/account/ledger-groups'
+	'getLedgerGroups':     'http://api.siliconbrain.co.in/accounting/ledger-groups',
+	'getAllInvoice':     'http://api.siliconbrain.co.in/settings/invoice-numbers',
+	'getAllQuotation':     'http://api.siliconbrain.co.in/settings/QuotationNumebrs',
+	'getAllTemplate':     'http://api.siliconbrain.co.in/settings/templates'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

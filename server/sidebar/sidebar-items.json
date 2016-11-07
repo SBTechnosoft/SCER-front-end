@@ -10,8 +10,8 @@
     "sref": "#",
     "icon": "icon-box",
     "subnav": [
-      {"text": "All", "sref": "app.table-ngtable", "translate": "" },
-      {"text": "Modify/Delete", "sref": "app.form-inputs", "translate": "" }
+      {"text": "All", "sref": "app.Company", "translate": "" },
+      {"text": "Modify/Delete", "sref": "app.AddCompany", "translate": "" }
     ],
     "translate": ""
   },

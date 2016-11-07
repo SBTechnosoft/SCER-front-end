@@ -1,65 +1,43 @@
 
 /**=========================================================
- * Module: BranchCtrl.js
+ * Module: AngularTableController.js
  * Controller for ngTables
  =========================================================*/
 
-App.controller('BranchController', BranchController);
+App.controller('CompanyController', CompanyController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location) {
+function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCall,apiPath,$location) {
   'use strict';
   var vm = this;
-  var data = [];
   
-  //Go To AddBranch
-  $scope.GoToAddBranch = function(){
+  //Go To AddCompany
+	$scope.GoToAddCompany = function(){
 	  
-	 $rootScope.AddBranchModify = false;
-	 $location.path('app/AddBranch/'); 
-  }
-  //Company
-	$scope.init = function () {
-			
-			vm.states=[];
-		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			vm.states = response2;
-		 
-		});
-		 
+	 $rootScope.AddCompanyModify = false;
+	 $location.path('app/AddCompany/'); 
 	}
-$scope.init();
-  //End
-  
-	apiCall.getCall(apiPath.getAllBranch).then(function(response){
-		console.log(response);
-		data = response;
+	
+	var data = [];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response){
+		 data = response;
 		 $scope.TableData();
 	});
-	
-  $scope.TableData = function(){
-	
-
+ 
+	$scope.TableData = function()
+	{
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  branchName: 'asc'     // initial sorting
+			  companyName: 'asc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
-			  //console.log(params.$params);
-			  // if()
-			  // {
-				  // alert('yes');
-			  // }
-			  // else{
-				  // alert('no');
-			  // }
-			  // use build-in angular filter
-			 // console.log("Length: .."+params.$params.filter.city);
+			  console.log(params.$params);
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.branchName) != "undefined" && params.$params.filter.branchName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.city_id) != "undefined" && params.$params.filter.city_id != "")))
+			  // use build-in angular filter
+			   if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -88,11 +66,9 @@ $scope.init();
 		  
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			  }
-			
 		  }
 	  });
-	  
-  }
+	}
 
   // FILTERS
   // ----------------------------------- 
@@ -179,23 +155,16 @@ $scope.init();
       }
   });
   
-  $scope.edit_comp = function(branch_id)
+  $scope.edit_comp = function(id)
   {
 	  
-	  $location.path('app/AddBranch/'+branch_id);
+	  $location.path('app/AddCompany/'+id);
   }
   
-  $scope.delete_comp = function(branch_id)
+  $scope.delete_comp = function()
   {
-	
-	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
-	  
-	apiCall.deleteCall(deletePath).then(function(deleteres){
-		
-		console.log(deleteres);
-	 
-	});
+	  alert('Delete');
   }
 
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location"];
+CompanyController.$inject = ["$rootScope","$scope", "$filter","$http","ngTableParams","apiCall","apiPath","$location"];

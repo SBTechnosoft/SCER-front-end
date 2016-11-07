@@ -15,7 +15,7 @@
 				   <div class="form-group">
 					  <label class="col-sm-2 control-label">Company</label>
 					  <div class="col-sm-8">
-						 <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+						 <select chosen="" data-ng-model="state" data-ng-options="s.companyName for s in form.invoiceCompanyDrop track by s.companyId" class="form-control chosen-select"></select>
 					  </div>
 				   </div>
 				</fieldset>
@@ -92,10 +92,10 @@
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
          <tbody>
             <tr data-ng-repeat="user in $data">
-				<td data-title="'Company Name'" sortable="'company_name'" filter="{ 'company_name': 'text' }" >{{user.company_name}}</td>
-				<td data-title="'Label'" sortable="'label'" filter="{ 'label': 'text' }" >{{user.label}}</td>
-			    <td data-title="'Prefix/Postfix'" sortable="'fix'" filter="{ 'fix': 'text' }" >{{user.fix}}</td>
-				<td data-title="'Started_at'" sortable="'started_at'" filter="{ 'started_at': 'text' }" >{{user.started_at}}</td>
+				<td data-title="'Company Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.company.companyName}}</td>
+				<td data-title="'Label'" sortable="'invoiceLabel'" filter="{ 'invoiceLabel': 'text' }" >{{user.invoiceLabel}}</td>
+			    <td data-title="'Prefix/Postfix'" sortable="'invoiceType'" filter="{ 'invoiceType': 'text' }" >{{user.invoiceType}}</td>
+				<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" >{{user.startAt}}</td>
 				<!--td data-title="'created_at'" sortable="'created_at'" filter="{ 'created_at': 'text' }" >{{user.created_at}}</td-->
 		
 			   <!--td data-title="'Action'" filter="{ '': 'text' }">

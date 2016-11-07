@@ -14,11 +14,11 @@ function AccSpecialJrnlController($scope) {
   /* Table */
 	vm.AccSpecialJrnlTable = [];
 	vm.AccSpecialJrnlTable = [{"DropCr":"dr","name":"Speial","Dbt":"2000","Crdt":""},{"DropCr":"dr","name":"Item2","Dbt":"2000","Crdt":""},{"DropCr":"cr","name":"To Sales","Dbt":"","Crdt":"4000"}];
-	
+	console.log(vm.AccSpecialJrnlTable);
 	$scope.addRow = function(){
 		 
 		 var data = {};
-		data.DropCr ='';
+		data.DropCr ='dr';
 		data.name ='';
 		data.Dbt ='';
 		data.Crdt ='';
@@ -35,6 +35,7 @@ function AccSpecialJrnlController($scope) {
   $scope.pop = function(data)
   {
 	  console.log(data);
+	  console.log(vm.AccSpecialJrnlTable);
 	  
   }
  

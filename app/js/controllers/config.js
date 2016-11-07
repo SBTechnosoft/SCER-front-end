@@ -109,9 +109,9 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/icons-climacon',
             templateUrl: basepath('icons-climacon.html')
         })
-        .state('app.form-inputs', {
-            url: '/form-inputs',
-            templateUrl: basepath('form-inputs.html?r='+Math.random()),
+        .state('app.AddCompany', {
+            url: '/AddCompany/:id',
+            templateUrl: basepath('Company/AddCompany.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','fileUpload','getBranchSrv')
         })
 		//Show Branch
@@ -144,20 +144,20 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.Invoice', {
             url: '/Invoice',
             templateUrl: basepath('Invoice/Invoice.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport','getBranchSrv')
         })
 		//Quotation#
 		.state('app.Quotation', {
             url: '/Quotation',
             templateUrl: basepath('Quotation/Quotation.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport','getBranchSrv')
         })
 		/*** Template ***/
 		//General
 		.state('app.tempGeneral', {
             url: '/tempGeneral',
             templateUrl: basepath('Template/General.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','tinymce')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','tinymce','getBranchSrv')
         })
 		/*** End Template ***/
 		//Add Inventory Product
@@ -201,7 +201,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccSales',
 			controller: 'AccSalesController as form',
             templateUrl: basepath('Accounting/Sales/AccSales.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
         })
 		//Accounting Purchase
 		.state('app.AccPurchase', {
@@ -258,9 +258,9 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/table-responsive',
             templateUrl: basepath('table-responsive.html')
         })
-        .state('app.table-ngtable', {
-            url: '/table-ngtable',
-            templateUrl: basepath('table-ngtable.html'),
+        .state('app.Company', {
+            url: '/Company',
+            templateUrl: basepath('Company/Company.html'),
             resolve: requireDeps('ngTable', 'ngTableExport','getBranchSrv')
         })
         .state('app.calendar', {

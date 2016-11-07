@@ -6,35 +6,26 @@
 
 App.controller('InvoiceController', InvoiceController);
 
-function InvoiceController($scope,$filter, ngTableParams) {
+function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath) {
   'use strict';
  var vm = this;
+ var data = [];
  //Table
-	var data = [
-      {company_name: "Moroni",label:"dsf/1945/", fix:"Prefix", started_at: 2 },
-      {company_name: "Tiancum",label:"dsf/1945/",fix:"Postfix", started_at: 6 },
-      {company_name: "Jacob", label:"dsf/1945/", fix:"Prefix", started_at: 27  },
-      {company_name: "Nephi",label:"dsf/1945/",  fix:"Prefix", started_at: 29   },
-      {company_name: "Enos",  label:"dsf/1945/",fix:"Prefix",  started_at: 34 },
-      {company_name: "Tiancum",label:"dsf/1945/",fix:"Postfix", started_at: 43 },
-      {company_name: "Jacob",label:"dsf/1945/", fix:"Prefix",  started_at: 54  },
-      {company_name: "Nephi", label:"dsf/1945/",fix:"Prefix",  started_at: 29  },
-      {company_name: "Enos",  label:"dsf/1945/", fix:"Postfix", started_at: 34 },
-      {company_name: "Tiancum",label:"dsf/1945/",fix:"Prefix", started_at: 10 },
-      {company_name: "Jacob", label:"dsf/1945/",fix:"Prefix",  started_at: 27  },
-      {company_name: "Nephi",  label:"dsf/1945/",fix:"Prefix", started_at: 29  },
-      {company_name: "Enos",  label:"dsf/1945/", fix:"Postfix", started_at: 34 },
-      {company_name: "Tiancum", label:"dsf/1945/",fix:"Prefix",started_at: 43 },
-      {company_name: "Jacob", label:"dsf/1945/", fix:"Prefix", started_at: 27  },
-      {company_name: "Nephi", label:"dsf/1945/", fix:"Postfix", started_at: 29 },
-      {company_name: "Enos", label:"dsf/1945/",  fix:"Postfix", started_at: 34 }
-  ];
+	
+	// Get All Invoice Call 
+	apiCall.getCall(apiPath.getAllInvoice).then(function(response){
+		console.log(response);
+		data = response;
+		 $scope.TableData();
+	});
+	
+	$scope.TableData = function(){
   
-  vm.tableParams = new ngTableParams({
+ 	 vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  company_name: 'asc'     // initial sorting
+			  companyName: 'asc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
@@ -50,7 +41,7 @@ function InvoiceController($scope,$filter, ngTableParams) {
 			  // use build-in angular filter
 			 // console.log("Length: .."+params.$params.filter.city);
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.company_name) != "undefined" && params.$params.filter.company_name != "")  || (typeof(params.$params.filter.label) != "undefined" && params.$params.filter.label != "") || (typeof(params.$params.filter.fix) != "undefined" && params.$params.filter.fix != "") || (typeof(params.$params.filter.started_at) != "undefined" && params.$params.filter.started_at != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")  || (typeof(params.$params.filter.invoiceLabel) != "undefined" && params.$params.filter.invoiceLabel != "") || (typeof(params.$params.filter.invoiceType) != "undefined" && params.$params.filter.invoiceType != "") || (typeof(params.$params.filter.startAt) != "undefined" && params.$params.filter.startAt != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -82,66 +73,22 @@ function InvoiceController($scope,$filter, ngTableParams) {
 			
 		  }
 	  });
-	  
+	}
 	  
 	  
 	  
  //End Table
   // Chosen data
   // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+	vm.invoiceCompanyDrop= [];
+	// Get All Invoice Call 
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.invoiceCompanyDrop = responseCompanyDrop;
+	
+	});
+	
+  
 
   // Datepicker
   // ----------------------------------- 
@@ -273,4 +220,4 @@ function InvoiceController($scope,$filter, ngTableParams) {
     {value: 5, name: 'Huge'}
   ];
 }
-InvoiceController.$inject = ["$scope","$filter", "ngTableParams"];
+InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath"];
