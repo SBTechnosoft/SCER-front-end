@@ -10,6 +10,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCal
   'use strict';
   var vm = this;
   var data = [];
+  var formdata = new FormData();
   
   //Go To AddBranch
   $scope.GoToAddBranch = function(){
@@ -178,6 +179,19 @@ $scope.init();
           $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
       }
   });
+  
+  $scope.isDefault_branch = function(id)
+  {
+	formdata.append('isDefault','ok');
+	var editBranch2 = apiPath.getAllBranch+'/'+id;
+		
+		apiCall.postCall(editBranch2,formdata).then(function(response5){
+		
+			$location.path('app/Branch');
+			//toaster.pop('success', 'Title', 'Message');
+		
+		});
+  }
   
   $scope.edit_comp = function(branch_id)
   {

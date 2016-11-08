@@ -15,7 +15,7 @@
 				   <div class="form-group">
 					  <label class="col-sm-2 control-label">Company</label>
 					  <div class="col-sm-8">
-						 <select chosen="" data-ng-model="state" data-ng-options="s.companyName for s in form.invoiceCompanyDrop track by s.companyId" class="form-control chosen-select"></select>
+						 <select chosen="" data-ng-model="addInvoice.companyDrop"  data-ng-options="s.companyName for s in form.invoiceCompanyDrop track by s.companyId" class="form-control chosen-select"></select>
 					  </div>
 				   </div>
 				</fieldset>
@@ -23,7 +23,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Invoice Label</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
+						 <input id="input-id-1" ng-model="addInvoice.invoiceLabel" type="text" placeholder="Invoice Label" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset>
@@ -31,7 +31,7 @@
 					<div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Started At</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Started At" class="form-control" />
+						 <input id="input-id-1" ng-model="addInvoice.startAt" type="text" placeholder="Started At" class="form-control" />
 					  </div>
 				    </div>
 				</fieldset>
@@ -46,7 +46,7 @@
 								<div class="col-sm-8">
 									<div class="radio c-radio">
 											<label>
-											<input type="radio" />
+											<input type="radio"  />
 											<span class="fa fa-circle"></span>Prefix</label>
 									</div>
 									<div class="radio c-radio">
@@ -63,12 +63,12 @@
 							<div class="col-sm-10">
 								<div class="radio-inline c-radio">
 										<label>
-										   <input id="inlineradio1" type="radio" name="i-radio" value="prefix"  />
+										   <input ng-model="addInvoice.invoiceType" id="inlineradio1" type="radio" name="i-radio" value="prefix" ng-checked="true"  />
 										   <span class="fa fa-circle"></span>Prefix</label>
 									 </div>
 									 <div class="radio-inline c-radio">
 										<label>
-										   <input id="inlineradio2" type="radio" name="i-radio" value="postfix" checked="checked" />
+										   <input ng-model="addInvoice.invoiceType" id="inlineradio2" type="radio" name="i-radio" value="postfix"  />
 										   <span class="fa fa-circle"></span>Postfix</label>
 									 </div>
 							</div>
@@ -77,7 +77,7 @@
 				</fieldset>
 				
 				 <button type="button" class="mr mb-sm btn btn-danger pull-right">Cancel</button>
-				 <button type="button" class="mr mb-sm btn btn-success pull-right">Save</button>
+				 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="insertInvoiceData(addInvoice)">Save</button>
 			</div>
 		
          </form>

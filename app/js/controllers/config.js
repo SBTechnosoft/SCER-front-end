@@ -112,7 +112,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.AddCompany', {
             url: '/AddCompany/:id',
             templateUrl: basepath('Company/AddCompany.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','fileUpload','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','fileUpload','getBranchSrv','toaster')
         })
 		//Show Branch
 		.state('app.Branch', {
@@ -144,13 +144,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.Invoice', {
             url: '/Invoice',
             templateUrl: basepath('Invoice/Invoice.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv')
         })
 		//Quotation#
 		.state('app.Quotation', {
             url: '/Quotation',
             templateUrl: basepath('Quotation/Quotation.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv')
         })
 		/*** Template ***/
 		//General

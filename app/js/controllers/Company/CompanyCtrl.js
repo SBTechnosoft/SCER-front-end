@@ -9,7 +9,8 @@ App.controller('CompanyController', CompanyController);
 function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCall,apiPath,$location) {
   'use strict';
   var vm = this;
-  
+   var formdata = new FormData();
+   
   //Go To AddCompany
 	$scope.GoToAddCompany = function(){
 	  
@@ -155,15 +156,35 @@ function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCa
       }
   });
   
+  $scope.isDefault_comp = function(id)
+  {
+	formdata.append('isDefault','ok');
+	var editCompany2 = apiPath.getAllCompany+'/'+id;
+		
+		apiCall.postCall(editCompany2,formdata).then(function(response5){
+		
+			$location.path('app/Company');
+			//toaster.pop('success', 'Title', 'Message');
+		
+		});
+  }
+  
   $scope.edit_comp = function(id)
   {
 	  
 	  $location.path('app/AddCompany/'+id);
   }
   
-  $scope.delete_comp = function()
+  $scope.delete_comp = function(id)
   {
-	  alert('Delete');
+	  //alert(id);
+	var deletePath = apiPath.getAllCompany+'/'+id;
+	  
+	apiCall.deleteCall(deletePath).then(function(deleteres){
+		
+		console.log(deleteres);
+	 
+	});
   }
 
 }

@@ -36,7 +36,7 @@
 				 
                <td data-title="'Default'" ng-init="brandRadio='ok'">
 				<!--input type="radio" ng-checked="{{user.name=='Branch1'?true:false}}" ng-model="brandRadio" /-->
-				<input type="radio" name="brandRadio"  ng-model="brandRadio" ng-value="user.branch_name" />
+				<input type="radio" name="brandRadio"  ng-model="brandRadio" ng-value="user.isDefault" ng-click="isDefault_branch(user.branchId)" />
 				</td>
 			   <td data-title="'Action'" filter="{ '': 'text' }">
 					<center>

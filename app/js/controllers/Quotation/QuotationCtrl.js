@@ -10,6 +10,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
   'use strict';
  	var vm = this;
 	var data =[];
+	$scope.addquotation =[];
 
  
 	// Get All Invoice Call 
@@ -41,7 +42,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
 			  // use build-in angular filter
 			 // console.log("Length: .."+params.$params.filter.city);
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")  || (typeof(params.$params.filter.QuotationLabel) != "undefined" && params.$params.filter.QuotationLabel != "") || (typeof(params.$params.filter.QuotationType) != "undefined" && params.$params.filter.QuotationType != "") || (typeof(params.$params.filter.createdAt) != "undefined" && params.$params.filter.createdAt != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")  || (typeof(params.$params.filter.QuotationLabel) != "undefined" && params.$params.filter.QuotationLabel != "") || (typeof(params.$params.filter.QuotationType) != "undefined" && params.$params.filter.QuotationType != "") || (typeof(params.$params.filter.startAt) != "undefined" && params.$params.filter.startAt != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -215,5 +216,34 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
     {value: 3, name: 'Normal'},
     {value: 5, name: 'Huge'}
   ];
+  
+  $scope.insertQuotationData = function(addquotation)
+  {
+	  var formdata = new FormData();
+	 //console.log(addInvoice);
+	 
+	 formdata.append('companyId',addquotation.companyDrop.companyId);
+	 formdata.append('quotationLabel',addquotation.quotationLabel);
+	 formdata.append('startAt',addquotation.startAt);
+	 formdata.append('quotationType',addquotation.quotationType);
+	 
+	 apiCall.postCall(apiPath.getAllQuotation,formdata).then(function(response5){
+		
+			console.log(response5);
+			//$location.path('app/Invoice');
+			apiCall.getCall(apiPath.getAllQuotation).then(function(response){
+				data = response;
+				$scope.TableData();
+			});
+			//toaster.pop('success', 'Title', 'Message');
+		
+	});
+	
+	$scope.addquotation.companyDrop.companyId='';
+	$scope.addquotation.quotationLabel = '';
+	$scope.addquotation.startAt = '';
+	$scope.addquotation.quotationType = 'prefix';
+	
+  }
 }
 QuotationController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath"];

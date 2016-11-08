@@ -9,7 +9,7 @@ App.controller('AddBranchController', AddBranchController);
 function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location) {
   'use strict';
   var vm = this;
- 
+  var formdata = new FormData();
 	/* Hide/Show Company Panel */
 	
 		//$rootScope.BranchModify = false;
@@ -226,7 +226,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
     {value: 5, name: 'Huge'}
   ];
   
-  $scope.ChangeCity = function(state)
+  $scope.ChangeCity = function(Fname,state)
   {
 	//console.log(apiPath.getAllCity+state);
 	var getonecity = apiPath.getAllCity+state;
@@ -235,23 +235,39 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		vm.cityDrop = response4;
 			
 	});
+	if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
   }
   
+  //Changed Data When Update
+  $scope.changeBranchData = function(Fname,value){
+		console.log(Fname+'..'+value);
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+	}
+	
   //Insert Branch
 
   $scope.pop = function(addBranch) {
-	   var formdata = new FormData();
+	  
 	   
 	 // console.log(addBranch.companyDropDown2);
-	formdata.append('branchName',addBranch.branchName);
-	formdata.append('address1',addBranch.fisrtAddress);
-	formdata.append('address2',addBranch.secondAddress);
-	formdata.append('pincode',addBranch.pincode);
-	formdata.append('is_display','no');
-	formdata.append('is_default','not');
-	formdata.append('stateAbb',addBranch.stateDropDown.stateAbb);
-	formdata.append('cityId',addBranch.cityDropDown.cityId);
-	formdata.append('companyId',addBranch.companyDropDown2.companyId);
+	// formdata.append('branchName',addBranch.branchName);
+	// formdata.append('address1',addBranch.fisrtAddress);
+	// formdata.append('address2',addBranch.secondAddress);
+	// formdata.append('pincode',addBranch.pincode);
+	// formdata.append('is_display','no');
+	// formdata.append('is_default','not');
+	// formdata.append('stateAbb',addBranch.stateDropDown.stateAbb);
+	// formdata.append('cityId',addBranch.cityDropDown.cityId);
+	// formdata.append('companyId',addBranch.companyDropDown2.companyId);
+	
 	
 	if($stateParams.id)
 	{
@@ -268,6 +284,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	}
 	else{
 		
+		formdata.append('isDefault','not');
 		apiCall.postCall(apiPath.getAllBranch,formdata).then(function(response5){
 		
 			//console.log(response5);

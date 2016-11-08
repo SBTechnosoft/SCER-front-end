@@ -15,7 +15,7 @@
 				   <div class="form-group">
 					  <label class="col-sm-2 control-label">Company</label>
 					  <div class="col-sm-8">
-						 <select chosen="" data-ng-model="state" data-ng-options="s.companyName for s in form.quotationCompanyDrop track by s.companyId" class="form-control chosen-select"></select>
+						 <select chosen=""  data-ng-model="addquotation.companyDrop" data-ng-options="s.companyName for s in form.quotationCompanyDrop track by s.companyId" class="form-control chosen-select"></select>
 					  </div>
 				   </div>
 				</fieldset>
@@ -23,7 +23,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Quotation Label</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Quotation Label" class="form-control" />
+						 <input id="input-id-1" ng-model="addquotation.quotationLabel" type="text" placeholder="Quotation Label" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset>
@@ -31,31 +31,29 @@
 					<div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Started At</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Started At" class="form-control" />
+						 <input id="input-id-1" ng-model="addquotation.startAt" type="text" placeholder="Started At" class="form-control" />
 					  </div>
 				    </div>
 				</fieldset>
-				
-				
 			</div>
 			
 			<div class="col-md-3">
 				<fieldset style="visibility:hidden">
-							<div class="form-group">
-								<label class="col-sm-2 control-label"></label>
-								<div class="col-sm-8">
-									<div class="radio c-radio">
-											<label>
-											<input type="radio" />
-											<span class="fa fa-circle"></span>Prefix</label>
-									</div>
-									<div class="radio c-radio">
-											<label>
-											<input type="radio"  />
-											<span class="fa fa-circle"></span>Postfix</label>
-									</div>
-								</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-8">
+							<div class="radio c-radio">
+									<label>
+									<input  type="radio" />
+									<span class="fa fa-circle"></span>Prefix</label>
 							</div>
+							<div class="radio c-radio">
+									<label>
+									<input type="radio"  />
+									<span class="fa fa-circle"></span>Postfix</label>
+							</div>
+						</div>
+					</div>
 				</fieldset>
 				<fieldset>
 						<div class="form-group">
@@ -63,12 +61,12 @@
 							<div class="col-sm-10">
 								<div class="radio-inline c-radio">
 										<label>
-										   <input id="inlineradio1" type="radio" name="i-radio" value="prefix"  />
+										   <input ng-model="addquotation.quotationType" id="inlineradio1" type="radio" name="i-radio" value="prefix" ng-checked="true" />
 										   <span class="fa fa-circle"></span>Prefix</label>
 									 </div>
 									 <div class="radio-inline c-radio">
 										<label>
-										   <input id="inlineradio2" type="radio" name="i-radio" value="postfix" checked="checked" />
+										   <input ng-model="addquotation.quotationType" id="inlineradio2" type="radio" name="i-radio" value="postfix"  />
 										   <span class="fa fa-circle"></span>Postfix</label>
 									 </div>
 							</div>
@@ -77,7 +75,7 @@
 				</fieldset>
 				
 				 <button type="button" class="mr mb-sm btn btn-danger pull-right">Cancel</button>
-				 <button type="button" class="mr mb-sm btn btn-success pull-right">Save</button>
+				 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="insertQuotationData(addquotation)">Save</button>
 			</div>
          </form>
       </div>
@@ -92,9 +90,9 @@
          <tbody>
             <tr data-ng-repeat="user in $data">
 				<td data-title="'Company Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.company.companyName}}</td>
-				<td data-title="'Label'" sortable="'QuotationLabel'" filter="{ 'QuotationLabel': 'text' }" >{{user.QuotationLabel}}</td>
-			    <td data-title="'Prefix/Postfix'" sortable="'QuotationType'" filter="{ 'QuotationType': 'text' }" >{{user.QuotationType}}</td>
-				<td data-title="'Started_at'" sortable="'createdAt'" filter="{ 'createdAt': 'text' }" >{{user.createdAt}}</td>
+				<td data-title="'Label'" sortable="'QuotationLabel'" filter="{ 'QuotationLabel': 'text' }" >{{user.quotationLabel}}</td>
+			    <td data-title="'Prefix/Postfix'" sortable="'QuotationType'" filter="{ 'QuotationType': 'text' }" >{{user.quotationType}}</td>
+				<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" >{{user.startAt}}</td>
 				<!--td data-title="'created_at'" sortable="'created_at'" filter="{ 'created_at': 'text' }" >{{user.created_at}}</td-->
 		
 			   <!--td data-title="'Action'" filter="{ '': 'text' }">

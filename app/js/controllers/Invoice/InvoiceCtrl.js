@@ -6,10 +6,11 @@
 
 App.controller('InvoiceController', InvoiceController);
 
-function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath) {
+function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$location) {
   'use strict';
  var vm = this;
  var data = [];
+ $scope.addInvoice = [];
  //Table
 	
 	// Get All Invoice Call 
@@ -219,5 +220,35 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath) {
     {value: 3, name: 'Normal'},
     {value: 5, name: 'Huge'}
   ];
+  
+  //Insert Invoice
+  $scope.insertInvoiceData = function(addInvoice)
+  {
+	  var formdata = new FormData();
+	 //console.log(addInvoice);
+	 
+	 formdata.append('companyId',addInvoice.companyDrop.companyId);
+	 formdata.append('invoiceLabel',addInvoice.invoiceLabel);
+	 formdata.append('startAt',addInvoice.startAt);
+	 formdata.append('invoiceType',addInvoice.invoiceType);
+	 
+	 apiCall.postCall(apiPath.getAllInvoice,formdata).then(function(response5){
+		
+			//console.log(response5);
+			//$location.path('app/Invoice');
+			apiCall.getCall(apiPath.getAllInvoice).then(function(response){
+				data = response;
+				$scope.TableData();
+			});
+			//toaster.pop('success', 'Title', 'Message');
+		
+	});
+	
+	$scope.addInvoice.companyDrop.companyId='';
+	$scope.addInvoice.invoiceLabel = '';
+	$scope.addInvoice.startAt = '';
+	$scope.addInvoice.invoiceType = 'prefix';
+	
+  }
 }
-InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath"];
+InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath","$location"];

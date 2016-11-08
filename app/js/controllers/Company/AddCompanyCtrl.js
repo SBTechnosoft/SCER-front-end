@@ -6,7 +6,7 @@
 
 App.controller('AddCompanyController', AddCompanyController);
 
-function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,apiPath,$location,$stateParams) {
+function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,apiPath,$location,$stateParams,toaster) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -37,7 +37,7 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		vm.statesDrop = response3;
 	});
 	
-	$scope.ChangeState = function(state)
+	$scope.ChangeState = function(Fname,state)
 	{
 		//console.log(apiPath.getAllCity+state);
 		var getonecity = apiPath.getAllCity+state;
@@ -46,6 +46,12 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 			vm.cityDrop = response4;
 				
 		});
+		
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,state);
 	}
 	
 	//Set Data For Edit
@@ -251,34 +257,40 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
   ];
   
   $scope.uploadFile = function(files) {
-		console.log(files);
+		//console.log(files);
 		formdata.append("file[]", files[0]);
 
 	};
 	
+	$scope.changeCompanyData = function(Fname,value){
+		console.log(Fname+'..'+value);
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+	}
+	
   $scope.addCompanyForm = function(addCompany)
   {
 	
-	
-	  
-	formdata.append('companyName',addCompany.Name);
-	formdata.append('companyDisplayName',addCompany.displayName);
-	formdata.append('address1',addCompany.address1);
-	formdata.append('address2',addCompany.address2);
-	formdata.append('cityId',addCompany.cityDropDown.cityId);
-	formdata.append('stateAbb',addCompany.statesDropDown.stateAbb);
-	formdata.append('pincode',addCompany.pincode);
-	formdata.append('pan',addCompany.pan);
-	formdata.append('tin',addCompany.tin);
-	formdata.append('vatNo',addCompany.vat);
-	formdata.append('serviceTaxNo',addCompany.serviceTax);
-	formdata.append('basicCurrencySymbol',addCompany.currency);
-	formdata.append('formalName',addCompany.formalName);
-	formdata.append('noOfDecimalPoints',addCompany.decimal);
-	formdata.append('currencySymbol',addCompany.curSymbol);
-	formdata.append('isDefault','no');
-	formdata.append('isDisplay','no');
-	
+	// formdata.append('companyName',addCompany.Name);
+	// formdata.append('companyDisplayName',addCompany.displayName);
+	// formdata.append('address1',addCompany.address1);
+	// formdata.append('address2',addCompany.address2);
+	// formdata.append('cityId',addCompany.cityDropDown.cityId);
+	// formdata.append('stateAbb',addCompany.statesDropDown.stateAbb);
+	// formdata.append('pincode',addCompany.pincode);
+	// formdata.append('pan',addCompany.pan);
+	// formdata.append('tin',addCompany.tin);
+	// formdata.append('vatNo',addCompany.vat);
+	// formdata.append('serviceTaxNo',addCompany.serviceTax);
+	// formdata.append('basicCurrencySymbol',addCompany.currency);
+	// formdata.append('formalName',addCompany.formalName);
+	// formdata.append('noOfDecimalPoints',addCompany.decimal);
+	// formdata.append('currencySymbol',addCompany.curSymbol);
+	// formdata.append('isDefault','not');
+	// formdata.append('isDisplay','no');
 	
 	
 	if($stateParams.id)
@@ -287,23 +299,23 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		
 		apiCall.postCall(editCompany2,formdata).then(function(response5){
 		
-			$location.path('app/Company/');
-			//toaster.pop('success', 'Title', 'Message');
+			//$location.path('app/Company');
+			toaster.pop('success', 'Title', 'Message');
 		
 		});
 	}
 	else
 	{
-		//apiCall.postCall(apiPath.getAllCompany,formdata).then(function(response5){
+		apiCall.postCall(apiPath.getAllCompany,formdata).then(function(response5){
 		
 			//console.log(response5);
-			$location.path('app/Company/');
-			//toaster.pop('success', 'Title', 'Message');
+			//$location.path('app/Company');
+			toaster.pop('success', 'Title', 'Message');
 			
-		//});
+		});
 	}
 	
   }
   
 }
-AddCompanyController.$inject = ["$rootScope","$scope","$http","$filter","$window","apiCall","apiPath","$location","$stateParams"];
+AddCompanyController.$inject = ["$rootScope","$scope","$http","$filter","$window","apiCall","apiPath","$location","$stateParams","toaster"];

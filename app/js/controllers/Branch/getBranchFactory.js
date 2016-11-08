@@ -40,12 +40,10 @@ App.factory('apiCall', ["$http","$q", function ($http,$q) {
 					$http({
                         url: url,
 						method: 'delete',
-						 dataType: 'jsonp',
-						crossDomain: true,
+						processData: false,
                         headers: {'Content-Type': undefined},
                     }).success(function(data, status, headers, config) {
-						console.log(status);
-						console.log(data);
+						
 						deferred.resolve(data);
 						
                     });
