@@ -142,7 +142,9 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">Base Currency Symbol</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addCompany.currency" ng-change="changeCompanyData('basicCurrencySymbol',addCompany.currency)" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addCompany.currency" ng-change="changeCompanyData('basicCurrencySymbol',addCompany.currency)" data-ng-options="s for s in form.states" class="form-control chosen-select">
+						<option value=""></option>
+					 </select>
                   </div>
                </div>
             </fieldset>
@@ -158,7 +160,9 @@
 				<div class="form-group">
                   <label class="col-sm-3 control-label">Number of Decimal Points</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select">
+						<option value=""></option>
+					 </select>
                   </div>
                </div>
 			</fieldset>
@@ -166,7 +170,9 @@
 				<div class="form-group">
 					 <label class="col-sm-3 control-label">Currency Symbol</label>
 					 <div class="col-sm-5">
-						<select chosen="" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" class="form-control chosen-select">
+							<option value=""></option>
+						</select>
 					</div>
 				</div>
 			</fieldset>

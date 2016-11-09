@@ -9,68 +9,217 @@ App.controller('tempGeneralController', tempGeneralController);
 function tempGeneralController($scope,apiCall,apiPath) {
   'use strict';
   var vm = this;
-  
-	tinymce.init({
-		selector: '#textdesc',
-		 force_br_newlines : false,
-		  force_p_newlines : false,
-		   remove_linebreaks : true
-	  });
-  // Chosen data
-  // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+  $scope.generalTemp = [];
+  var formdata = new FormData();
+	
+      tinymce.init({
+       selector: "#textdesc",
+	   height : "280",
+       menu : {
+        file   : {title : 'File'  , items : 'newdocument'},
+        edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall'},
+        newmenu: {title : 'Setting', items : 'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item11 item12 item13 item14 item15 item16 item17 item18 item19 item20 item21 item22 item23 item24 item25 item26'}
+       },
+       menubar: 'file edit newmenu',
+       setup: function(editor) {
+        editor.addMenuItem('item1', {
+         text: 'Client Name',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[ClientName]');
+         }
+        });
+        editor.addMenuItem('item2', {
+         text: 'Company',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[Company]');
+         }
+        });
+        editor.addMenuItem('item3', {
+         text: 'Order Date',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[OrderDate]');
+         }
+        });
+        editor.addMenuItem('item4', {
+         text: 'Order Name',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[OrderName]');
+         }
+        });
+        editor.addMenuItem('item5', {
+         text: 'Venue',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[Venue]');
+         }
+        });
+        editor.addMenuItem('item6', {
+         text: 'Order Id',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[OrderId]');
+         }
+        });
+        editor.addMenuItem('item7', {
+         text: 'Client Charge',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[ClientCharge]');
+         }
+        });
+        editor.addMenuItem('item8', {
+         text: 'Discount',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[Discount]');
+         }
+        });
+        editor.addMenuItem('item9', {
+         text: 'Tax Amount',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[TaxAmt]');
+         }
+        });
+        editor.addMenuItem('item10', {
+         text: 'Total',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[Total]');
+         }
+        });
+        editor.addMenuItem('item11', {
+         text: 'Tax Rate',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[TaxRate]');
+         }
+        });
+        editor.addMenuItem('item12', {
+         text: 'Delivery Date',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[DeliveryDate]');
+         }
+        });
+        editor.addMenuItem('item13', {
+         text: 'Organization',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[Organization]');
+         }
+        });
+        editor.addMenuItem('item14', {
+         text: 'Banner_Img',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[Banner_Img]');
+         }
+        });
+        editor.addMenuItem('item15', {
+         text: 'OrderDesc',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[OrderDesc]');
+         }
+        });
+        editor.addMenuItem('item16', {
+         text: 'Email',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[Email]');
+         }
+        });
+        editor.addMenuItem('item17', {
+         text: 'HomeMob',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[HomeMob]');
+         }
+        });
+        editor.addMenuItem('item18', {
+         text: 'WorkMob',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[WorkMob]');
+         }
+        });
+        editor.addMenuItem('item19', {
+         text: 'Mobile',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[Mobile]');
+         }
+        });
+        editor.addMenuItem('item20', {
+         text: 'ADATE',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[ADATE]');
+         }
+        });
+        editor.addMenuItem('item21', {
+         text: 'INVID',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[INVID]');
+         }
+        });
+        editor.addMenuItem('item22', {
+         text: 'CLIENTADD',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[CLIENTADD]');
+         }
+        });
+        editor.addMenuItem('item23', {
+         text: 'CMPLOGO',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[CMPLOGO]');
+         }
+        });
+        editor.addMenuItem('item24', {
+         text: 'PAIDAMT',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[PAIDAMT]');
+         }
+        });
+        editor.addMenuItem('item25', {
+         text: 'REMAINAMT',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[REMAINAMT]');
+         }
+        });
+        editor.addMenuItem('item26', {
+         text: 'OPERATOR',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[OPERATOR]');
+         }
+        });
+       }
+       
+       
+      });
+     
 
 	//All Template In Right
 	vm.AllTempRight = [];
@@ -80,10 +229,41 @@ function tempGeneralController($scope,apiCall,apiPath) {
 	
 	});
 	
+	//Save Tempalte ID For Update
+	$scope.tempID;
+	
 	// Edit Template
 	$scope.EditTemplate = function(id)
 	{
-		alert(id);
+	
+		$scope.tempID = id;
+		apiCall.getCall(apiPath.getAllTemplate+'/'+id).then(function(responseTemp){
+		
+			$scope.generalTemp.tempName = responseTemp.templateName;
+			tinyMCE.get('textdesc').setContent(responseTemp.templateBody);
+	
+		});
+	}
+	
+	// Update Template
+	$scope.addUpTemplate = function()
+	{
+		formdata.append('templateName',$scope.generalTemp.tempName);
+		formdata.append('templateBody',tinyMCE.get('textdesc').getContent());
+		//formdata.append('templateType',addBranch.branchName);
+	
+		apiCall.postCall(apiPath.getAllTemplate+'/'+$scope.tempID,formdata).then(function(responseTemp){
+
+			$scope.generalTemp.tempName = '';
+			tinyMCE.get('textdesc').setContent('');
+	
+		});
+	}
+	
+	$scope.cancel = function()
+	{
+		$scope.generalTemp.tempName = '';
+		tinyMCE.get('textdesc').setContent('');
 	}
 	
   // Datepicker

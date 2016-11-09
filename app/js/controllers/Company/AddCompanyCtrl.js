@@ -111,7 +111,8 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 
   this.states = [
     'INR',
-    'USD'
+    'USD',
+	'SRV'
   ];
 	
 	this.states2 = [
@@ -299,7 +300,7 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		
 		apiCall.postCall(editCompany2,formdata).then(function(response5){
 		
-			//$location.path('app/Company');
+			$location.path('app/Company');
 			toaster.pop('success', 'Title', 'Message');
 		
 		});
@@ -309,7 +310,7 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		apiCall.postCall(apiPath.getAllCompany,formdata).then(function(response5){
 		
 			//console.log(response5);
-			//$location.path('app/Company');
+			$location.path('app/Company');
 			toaster.pop('success', 'Title', 'Message');
 			
 		});
