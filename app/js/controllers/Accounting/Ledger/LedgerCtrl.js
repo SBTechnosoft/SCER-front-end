@@ -6,10 +6,11 @@
 
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($scope,$filter, ngTableParams) {
+function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster) {
   'use strict';
  var vm = this;
- 
+ $scope.ledgerForm = [];
+  var formdata = new FormData();
 	
 	$scope.trueData = false;
 	$scope.alertData = true;
@@ -26,10 +27,6 @@ function AccLedgerController($scope,$filter, ngTableParams) {
 		$scope.trueData = false;
 		$scope.alertData = true;
 	}
-	
-	$scope.setPcode = function(site) {
-  		console.log(site);
-  	}
 	
 	 //this.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel", "francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit", "guillaume", "nicolas", "joseph"];
 	
@@ -115,57 +112,83 @@ function AccLedgerController($scope,$filter, ngTableParams) {
   // ----------------------------------- 
 
   this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
+    '1',
+	'2',
+	'3',
+	'4',
+	'5',
+	'6',
+	'7',
+	'8',
+	'9',
+	'10'
   ];
+  this.invAffectDrop = [
+	'yes',
+	'no'
+  ]
+	//Get State
+	vm.statesDrop=[];
+	apiCall.getCall(apiPath.getAllState).then(function(response3){
+		
+		vm.statesDrop = response3;
+	
+	});
+	
+	$scope.setPcode = function(Fname,value) {
+  		//console.log(name+'..'+value);
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+  	}
+	
+	$scope.ChangeState = function(Fname,state)
+	 {
+		
+		var getonecity = apiPath.getAllCity+state;
+		
+		//Get City
+		apiCall.getCall(getonecity).then(function(response4){
+			vm.cityDrop = response4;
+				
+		});
+			if(formdata.get(Fname))
+			{
+				formdata.delete(Fname);
+			}
+			
+			formdata.append(Fname,state);
+	}
+	
+  
+	//Changed Data When Update
+	$scope.changeLedgerData = function(Fname,value){
+		console.log(Fname+'..'+value);
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+	}
+	
+	$scope.addUpLedger = function()
+	{
+		formdata.append('companyId',10);
+		//formdata.append('companyId',10);
+		apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
+		
+			//console.log(response5);
+			
+			$location.path('app/AccLedger');
+			toaster.pop('success', 'Title', 'Message');
+			//formdata.removeAll();
+			$scope.ledgerForm = [];
+			//console.log(formdata.get('ledgerName'));
+		
+		});
+	}
 
   // Datepicker
   // ----------------------------------- 
@@ -297,4 +320,4 @@ function AccLedgerController($scope,$filter, ngTableParams) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$scope","$filter", "ngTableParams"];
+AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster"];

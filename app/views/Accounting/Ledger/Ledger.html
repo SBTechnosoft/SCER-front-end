@@ -31,7 +31,7 @@
 				   <div class="form-group">
 					  <label class="col-sm-3 control-label">Name</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
+						 <input id="input-id-1" tabindex="2" ng-model="ledgerForm.ledgerName" ng-change="changeLedgerData('ledgerName',ledgerForm.ledgerName)" type="text" placeholder="Invoice Label" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset >
@@ -39,7 +39,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Alias</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
+						 <input ng-model="ledgerForm.alias" tabindex="2" ng-change="changeLedgerData('alias',ledgerForm.alias)" id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset>
@@ -47,7 +47,7 @@
 					<div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Opening B/L</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
+						 <input ng-model="ledgerForm.openingBal" tabindex="2" ng-change="changeLedgerData('openingBal',ledgerForm.openingBal)" id="input-id-1" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
 					  </div>
 				    </div>
 				</fieldset>
@@ -60,7 +60,7 @@
 			   <div class="form-group">
 				  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
 				  <div class="col-sm-8">
-					 <input typeahead="state for state in form.states | filter:$viewValue | limitTo:10" typeahead-on-select="setPcode($item)" ng-model="selected" id="input-id-1" type="text" placeholder="Under" class="form-control autocomplete" />
+					 <input ng-model="ledgerForm.under" tabindex="2"  typeahead="state for state in form.states | filter:$viewValue | limitTo:10" typeahead-on-select="setPcode('ledgerGroupId',$item)" ng-model="selected" id="input-id-1" type="text" placeholder="Under" class="form-control autocomplete" />
 				  </div>
 			   </div>
 			</fieldset>
@@ -68,9 +68,8 @@
 			   <div class="form-group">
 				  <label class="col-sm-3 control-label">Inventory Affected</label>
 				  <div class="col-sm-8">
-					 <select chosen data-ng-model="state"  class="form-control chosen-select">
-						 <option value="yes">Yes</option>
-						 <option value="no">No</option>
+					 <select chosen data-ng-model="ledgerForm.invAffect" tabindex="2" data-ng-options="s for s in form.invAffectDrop" ng-change="changeLedgerData('inventoryAffected',ledgerForm.invAffect)"  class="form-control chosen-select">
+						 <option value=""></option>
 					 </select>
 				  </div>
 			   </div>
@@ -85,7 +84,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
 					<div class="col-sm-8">
-						<textarea  name="address" ng-model="addBranch.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea ng-model="ledgerForm.address1" tabindex="2" ng-change="changeLedgerData('address1',ledgerForm.address1)"  name="address"  placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -93,7 +92,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
 					<div class="col-sm-8">
-						<textarea  name="address" ng-model="addBranch.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea ng-model="ledgerForm.address2" tabindex="2" ng-change="changeLedgerData('address2',ledgerForm.address2)"  name="address" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -101,7 +100,7 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">State</label>
                   <div class="col-sm-7">
-                     <select chosen="" ng-model="addBranch.stateDropDown" data-ng-options="s.state_name for s in form.statesDrop track by s.state_abb" class="form-control chosen-select" ng-change="ChangeCity(addBranch.stateDropDown.state_abb)" ></select>
+                     <select chosen="" ng-model="ledgerForm.stateDropDown" tabindex="2" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',ledgerForm.stateDropDown.stateAbb)"  class="form-control chosen-select" ></select>
                   </div>
                </div>
 			</fieldset>
@@ -109,7 +108,7 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">City</label>
                   <div class="col-sm-7">
-                     <select chosen="" ng-model="addBranch.cityDropDown" data-ng-options="s.city_name for s in form.cityDrop track by s.city_id" class="form-control chosen-select"></select>
+                     <select chosen="" ng-model="ledgerForm.cityDrop" tabindex="2" ng-change="changeLedgerData('cityId',ledgerForm.cityDrop.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -123,12 +122,12 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-1 control-label">TIN</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" masked="9999999999" type="text" placeholder="TIN Number" class="form-control"  />
+                     <input id="input-id-1" ng-model="ledgerForm.tin"  tabindex="2" ng-change="changeLedgerData('tin',ledgerForm.tin)"  type="text" placeholder="TIN Number" class="form-control"  />
                   </div>
 				  
 				   <label for="input-id-1" class="col-sm-1 control-label">PAN</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
+                     <input ng-model="ledgerForm.pan" tabindex="2" ng-change="changeLedgerData('pan',ledgerForm.pan)" id="input-id-1" masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
                   </div>
                </div>
             </fieldset>
@@ -136,14 +135,14 @@
                <div class="form-group">
 				   <label for="input-id-1" class="col-sm-1 control-label">GST</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" masked="" type="text" placeholder="GST Number" class="form-control"  dir="rtl" />
+                     <input ng-model="ledgerForm.gstNo" tabindex="2" ng-change="changeLedgerData('gstNo',ledgerForm.gstNo)" id="input-id-1" masked="" type="text" placeholder="GST Number" class="form-control"  dir="rtl" />
                   </div>
 				  
                </div>
             </fieldset>
 		
-			<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
+			<button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="clickSave()" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id">Cancel</button>
+			<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addUpLedger()">Save</button>
 		</form>
 	  </div>
 	 

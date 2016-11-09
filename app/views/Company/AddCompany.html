@@ -29,7 +29,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Name</label>
                   <div class="col-sm-8">
-                     <input id="input-id-1" ng-model="addCompany.Name" type="text" placeholder="Name" class="form-control" ng-change="changeCompanyData('companyName',addCompany.Name)"/>
+                     <input id="input-id-1" tabindex="1" ng-model="addCompany.Name" type="text" placeholder="Name" class="form-control" ng-change="changeCompanyData('companyName',addCompany.Name)"/>
                   </div>
                </div>
             </fieldset>
@@ -37,7 +37,7 @@
 				<div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Display Name</label>
                   <div class="col-sm-8">
-                     <input id="input-id-1" ng-model="addCompany.displayName" ng-change="changeCompanyData('companyDisplayName',addCompany.displayName)"  type="text" placeholder="Display Name" class="form-control" />
+                     <input id="input-id-1" tabindex="2" ng-model="addCompany.displayName" ng-change="changeCompanyData('companyDisplayName',addCompany.displayName)"  type="text" placeholder="Display Name" class="form-control" />
                   </div>
                </div>
 			</fieldset>
@@ -46,7 +46,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
 					<div class="col-sm-8">
-						<textarea style="" name="address"   placeholder="Your First address" data-ng-model="addCompany.address1" ng-change="changeCompanyData('address1',addCompany.address1)" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea style="" tabindex="2" name="address"   placeholder="Your First address" data-ng-model="addCompany.address1" ng-change="changeCompanyData('address1',addCompany.address1)" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -54,7 +54,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
 					<div class="col-sm-8">
-						<textarea style="" name="address"  placeholder="Your Second address" data-ng-model="addCompany.address2" ng-change="changeCompanyData('address2',addCompany.address2)" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea style="" tabindex="2" name="address"  placeholder="Your Second address" data-ng-model="addCompany.address2" ng-change="changeCompanyData('address2',addCompany.address2)" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -62,7 +62,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">State</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addCompany.statesDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',addCompany.statesDropDown.stateAbb)" class="form-control chosen-select"></select>
+                     <select chosen="" tabindex="2" data-ng-model="addCompany.statesDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',addCompany.statesDropDown.stateAbb)" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -70,7 +70,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">City</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addCompany.cityDropDown" ng-change="changeCompanyData('cityId',addCompany.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select"></select>
+                     <select chosen="" tabindex="2" data-ng-model="addCompany.cityDropDown" ng-change="changeCompanyData('cityId',addCompany.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -78,7 +78,7 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">PIN Code</label>
 					<div class="col-sm-3">
-					   <input type="text" ng-model="addCompany.pincode" ng-change="changeCompanyData('pincode',addCompany.pincode)"  masked="999999" placeholder="PIN Code" class="form-control" />
+					   <input type="text" tabindex="2" ng-model="addCompany.pincode" ng-change="changeCompanyData('pincode',addCompany.pincode)"  masked="999999" placeholder="PIN Code" class="form-control" />
 					   <span class="help-block">Masked="395001"</span>
 					</div>
 				</div>
@@ -86,7 +86,7 @@
 			</div>
 			<div class="col-md-3">
 			<img src="http://api.siliconbrain.co.in/{{addCompany.documentUrl}}{{addCompany.documentName}}" height="100" width="80%" class="brand-logo-collapsed"/>
-			<input id="input-id-1" type="file"  onchange="angular.element(this).scope().uploadFile(this.files)"  />
+			<input id="input-id-1" type="file" tabindex="1" onchange="angular.element(this).scope().uploadFile(this.files)"  />
 			</div>
          </form>
       </div>
@@ -99,12 +99,12 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">TIN</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" ng-model="addCompany.tin" ng-change="changeCompanyData('tin',addCompany.tin)"   type="text" placeholder="TIN Number" class="form-control" />
+                     <input id="input-id-1" tabindex="2" ng-model="addCompany.tin" ng-change="changeCompanyData('tin',addCompany.tin)"   type="text" placeholder="TIN Number" class="form-control" />
                   </div>
 				  
 				   <label for="input-id-1" class="col-sm-2 control-label">PAN</label>
                   <div class="col-sm-3">
-                     <input id="input-id-1" ng-model="addCompany.pan" ng-change="changeCompanyData('pan',addCompany.pan)"  masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
+                     <input id="input-id-1" tabindex="2" ng-model="addCompany.pan" ng-change="changeCompanyData('pan',addCompany.pan)"  masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
                   </div>
 				  
                </div>
@@ -113,12 +113,12 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">VAT</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" ng-model="addCompany.vat" ng-change="changeCompanyData('vatNo',addCompany.vat)"  masked="" type="text" placeholder="VAT" class="form-control" dir="rtl" />
+                     <input id="input-id-1" tabindex="2" ng-model="addCompany.vat" ng-change="changeCompanyData('vatNo',addCompany.vat)"  masked="" type="text" placeholder="VAT" class="form-control" dir="rtl" />
                   </div>
 				  
 				   <label for="input-id-1" class="col-sm-2 control-label">GST</label>
                   <div class="col-sm-3">
-                     <input id="input-id-1" masked="" ng-model="addCompany.gst" ng-change="changeCompanyData('gst',addCompany.gst)"  type="text" placeholder="GST Number" class="form-control" dir="rtl" />
+                     <input id="input-id-1" tabindex="2" masked="" ng-model="addCompany.gst" ng-change="changeCompanyData('gst',addCompany.gst)"  type="text" placeholder="GST Number" class="form-control" dir="rtl" />
                   </div>
 				  
                </div>
@@ -127,7 +127,7 @@
 				<div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Service Tax</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" ng-model="addCompany.serviceTax" ng-change="changeCompanyData('serviceTaxNo',addCompany.serviceTax)"  type="text" placeholder="Display Name" class="form-control" />
+                     <input id="input-id-1" tabindex="2" ng-model="addCompany.serviceTax" ng-change="changeCompanyData('serviceTaxNo',addCompany.serviceTax)"  type="text" placeholder="Display Name" class="form-control" />
                   </div>
                </div>
 			</fieldset>
@@ -142,7 +142,7 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">Base Currency Symbol</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addCompany.currency" ng-change="changeCompanyData('basicCurrencySymbol',addCompany.currency)" data-ng-options="s for s in form.states" class="form-control chosen-select">
+                     <select chosen="" tabindex="2" data-ng-model="addCompany.currency" ng-change="changeCompanyData('basicCurrencySymbol',addCompany.currency)" data-ng-options="s for s in form.states" class="form-control chosen-select">
 						<option value=""></option>
 					 </select>
                   </div>
@@ -152,7 +152,7 @@
 				<div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Formal Name</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" ng-model="addCompany.formalName" ng-change="changeCompanyData('formalName',addCompany.formalName)"  type="text" placeholder="Formal Name" class="form-control" />
+                     <input id="input-id-1" tabindex="2" ng-model="addCompany.formalName" ng-change="changeCompanyData('formalName',addCompany.formalName)"  type="text" placeholder="Formal Name" class="form-control" />
                   </div>
                </div>
 			</fieldset>
@@ -160,7 +160,7 @@
 				<div class="form-group">
                   <label class="col-sm-3 control-label">Number of Decimal Points</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select">
+                     <select chosen="" tabindex="2" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select">
 						<option value=""></option>
 					 </select>
                   </div>
@@ -170,14 +170,14 @@
 				<div class="form-group">
 					 <label class="col-sm-3 control-label">Currency Symbol</label>
 					 <div class="col-sm-5">
-						<select chosen="" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" class="form-control chosen-select">
+						<select chosen="" tabindex="2" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" class="form-control chosen-select">
 							<option value=""></option>
 						</select>
 					</div>
 				</div>
 			</fieldset>
-			<button type="button" class="mr mb-sm btn btn-danger pull-right">Cancel</button>
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addCompanyForm(addCompany)" >Save</button>
+			<button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="3">Cancel</button>
+			<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addCompanyForm(addCompany)" >Save</button>
 			
          </form>
       </div>

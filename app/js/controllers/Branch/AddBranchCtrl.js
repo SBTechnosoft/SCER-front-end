@@ -239,7 +239,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value);
+		formdata.append(Fname,state);
   }
   
   //Changed Data When Update

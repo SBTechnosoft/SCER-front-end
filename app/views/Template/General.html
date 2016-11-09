@@ -6,6 +6,7 @@
 </h3>
 <!-- START panel-->
 <div data-ng-controller="tempGeneralController as form" class="container-fluid">
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="col-md-10" style="padding-left:0px">
 	   <div class="panel panel-default">
 		  <h4 class="panel-heading">Template Design</h4>
@@ -16,7 +17,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-2 control-label">Template Name</label>
 						  <div class="col-sm-4">
-							 <input id="input-id-1" type="text" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" />
+							 <input id="input-id-1"  type="text" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" />
 						  </div>
 					   </div>
 					</fieldset>
@@ -24,13 +25,13 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-2 control-label">Template Design</label>
 						  <div class="col-sm-10">
-							 <textarea  id="textdesc"  name="textdesc" ng-model="generalTemp.tempDesign" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+							 <textarea  id="textdesc"   name="textdesc" ng-model="generalTemp.tempDesign" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
 						  </div>
 					   </div>
 					</fieldset>
 					</form>
 					 <button type="button" class="mr mb-sm btn btn-danger pull-right" style="margin-right:0px !important" ng-click="cancel()" >Cancel</button>
-					 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpTemplate()">Save</button>
+					 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpTemplate()" >Save</button>
 				 
 				 </div>
 				

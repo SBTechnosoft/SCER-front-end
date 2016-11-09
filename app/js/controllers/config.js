@@ -157,7 +157,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.tempGeneral', {
             url: '/tempGeneral',
             templateUrl: basepath('Template/General.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','tinymce','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','tinymce','getBranchSrv','toaster')
         })
 		/*** End Template ***/
 		//Add Inventory Product
@@ -231,7 +231,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccLedger', {
             url: '/AccLedger',
             templateUrl: basepath('Accounting/Ledger/Ledger.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport','getBranchSrv','toaster')
         })
 		/*** Quick Menu ***/
 		//Bill

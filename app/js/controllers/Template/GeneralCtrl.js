@@ -6,7 +6,7 @@
 
 App.controller('tempGeneralController', tempGeneralController);
 
-function tempGeneralController($scope,apiCall,apiPath) {
+function tempGeneralController($scope,apiCall,apiPath,toaster) {
   'use strict';
   var vm = this;
   $scope.generalTemp = [];
@@ -253,9 +253,11 @@ function tempGeneralController($scope,apiCall,apiPath) {
 		//formdata.append('templateType',addBranch.branchName);
 	
 		apiCall.postCall(apiPath.getAllTemplate+'/'+$scope.tempID,formdata).then(function(responseTemp){
-
+			
+			toaster.pop('success', '', 'Updated Successfully');
 			$scope.generalTemp.tempName = '';
 			tinyMCE.get('textdesc').setContent('');
+			$scope.tempID = '';
 	
 		});
 	}
@@ -396,4 +398,4 @@ function tempGeneralController($scope,apiCall,apiPath) {
     {value: 5, name: 'Huge'}
   ];
 }
-tempGeneralController.$inject = ["$scope","apiCall","apiPath"];
+tempGeneralController.$inject = ["$scope","apiCall","apiPath","toaster"];

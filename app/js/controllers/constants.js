@@ -100,7 +100,8 @@ App
 	'getLedgerGroups':     'http://api.siliconbrain.co.in/accounting/ledger-groups',
 	'getAllInvoice':     'http://api.siliconbrain.co.in/settings/invoice-numbers',
 	'getAllQuotation':     'http://api.siliconbrain.co.in/settings/quotation-numbers',
-	'getAllTemplate':     'http://api.siliconbrain.co.in/settings/templates'
+	'getAllTemplate':     'http://api.siliconbrain.co.in/settings/templates',
+	'getAllLedger':     'http://api.siliconbrain.co.in/accounting/ledgers'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {
