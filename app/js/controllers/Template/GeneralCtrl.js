@@ -11,7 +11,8 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
   var vm = this;
   $scope.generalTemp = [];
   var formdata = new FormData();
-	
+  
+ 
       tinymce.init({
        selector: "#textdesc",
 	   height : "280",

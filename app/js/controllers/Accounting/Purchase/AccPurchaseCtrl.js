@@ -6,12 +6,14 @@
 
 App.controller('AccPurchaseController', AccPurchaseController);
 
-function AccPurchaseController($scope) {
+function AccPurchaseController($scope,apiCall,apiPath) {
   'use strict';
   
    var vm = this;
-   
- /* Table */
+   $scope.accPurchase = [];
+    var formdata = new FormData();
+	
+	/* Table */
 	vm.AccPurchaseTable = [];
 	vm.AccPurchaseTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
 	
@@ -28,6 +30,22 @@ function AccPurchaseController($scope) {
 
     };
 	
+	//Auto suggest Client Name
+	vm.clientNameDrop=[];
+	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+		vm.clientNameDrop = response3;
+	
+	});
+	
+	$scope.setAccPurchase = function(Fname,value) {
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value.ledgerId);
+  	}
+	
 	$scope.removeRow = function (idx) {
 		vm.AccPurchaseTable.splice(idx, 1);
 	};
@@ -42,58 +60,13 @@ function AccPurchaseController($scope) {
   // Chosen data
   // ----------------------------------- 
 
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+  vm.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.companyDrop = responseCompanyDrop;
+	
+	});
 
   // Datepicker
   // ----------------------------------- 
@@ -234,4 +207,4 @@ function AccPurchaseController($scope) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccPurchaseController.$inject = ["$scope"];
+AccPurchaseController.$inject = ["$scope","apiCall","apiPath"];

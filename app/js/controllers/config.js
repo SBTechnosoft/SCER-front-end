@@ -157,7 +157,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.tempGeneral', {
             url: '/tempGeneral',
             templateUrl: basepath('Template/General.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','tinymce','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
         })
 		/*** End Template ***/
 		//Add Inventory Product
@@ -207,7 +207,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccPurchase', {
             url: '/AccPurchase',
             templateUrl: basepath('Accounting/Purchase/AccPurchase.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
         })
 		//Accounting Special journal
 		.state('app.AccSpecialJrnl', {
@@ -219,13 +219,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccPayment', {
             url: '/AccPayment',
             templateUrl: basepath('Accounting/Payment/AccPayment.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv')
         })
 		//Accounting Receipt
 		.state('app.AccReceipt', {
             url: '/AccReceipt',
             templateUrl: basepath('Accounting/Receipt/AccReceipt.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
         })
 		//Accounting Ledger
 		.state('app.AccLedger', {
@@ -238,7 +238,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.Bill', {
             url: '/Bill',
             templateUrl: basepath('QuickMenu/Bill.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
         })
 		/*** End Quick Menu ***/
         .state('app.form-validation', {

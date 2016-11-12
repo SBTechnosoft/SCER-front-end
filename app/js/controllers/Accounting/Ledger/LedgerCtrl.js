@@ -110,19 +110,13 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
  //End Table
   // Chosen data
   // ----------------------------------- 
-
-  this.states = [
-    '1',
-	'2',
-	'3',
-	'4',
-	'5',
-	'6',
-	'7',
-	'8',
-	'9',
-	'10'
-  ];
+	vm.states=[];
+	apiCall.getCall(apiPath.getAllLedgerGroup).then(function(response3){
+		
+		vm.states = response3;
+	
+	});
+  
   this.invAffectDrop = [
 	'yes',
 	'no'
@@ -136,7 +130,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	});
 	
 	$scope.setPcode = function(Fname,value) {
-  		//console.log(name+'..'+value);
+  		//console.log(value.ledgerGroupId);
 		if(formdata.get(Fname))
 		{
 			formdata.delete(Fname);

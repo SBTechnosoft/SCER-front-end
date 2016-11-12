@@ -60,7 +60,7 @@
 			   <div class="form-group">
 				  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
 				  <div class="col-sm-8">
-					 <input ng-model="ledgerForm.under" tabindex="2"  typeahead="state for state in form.states | filter:$viewValue | limitTo:10" typeahead-on-select="setPcode('ledgerGroupId',$item)" ng-model="selected" id="input-id-1" type="text" placeholder="Under" class="form-control autocomplete" />
+					 <input ng-model="ledgerForm.under" tabindex="2"  typeahead="state.ledgerGroupName for state in form.states | filter:$viewValue | limitTo:10" typeahead-on-select="setPcode('ledgerGroupId',$item)" ng-model="selected" id="input-id-1" type="text" placeholder="Under" class="form-control autocomplete" />
 				  </div>
 			   </div>
 			</fieldset>

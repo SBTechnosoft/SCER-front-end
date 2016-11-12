@@ -10,13 +10,15 @@ function AccSalesController($scope,apiCall,apiPath) {
   'use strict';
   
   var vm = this;
+  $scope.AccSales = [];
+  var formdata = new FormData();
   
   /* Table */
 	vm.AccSalesTable = [];
 	vm.AccSalesTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
 	
 	$scope.addRow = function(){
-		  console.log(vm.AccSalesTable);
+		  //console.log(vm.AccSalesTable);
 		 var data = {};	
 		// console.log(this.AccSalesTable);
 		data.name ='';
@@ -24,9 +26,25 @@ function AccSalesController($scope,apiCall,apiPath) {
 		data.discountBox ='';
 		data.qty ='';
 		vm.AccSalesTable.push(data);
-		console.log(vm.AccSalesTable);
+		//console.log(vm.AccSalesTable);
 
     };
+	
+	//Auto suggest Client Name
+	vm.clientNameDrop=[];
+	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+		vm.clientNameDrop = response3;
+	
+	});
+	
+	$scope.setAccSales = function(Fname,value) {
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value.ledgerId);
+  	}
 	
 	$scope.removeRow = function (idx) {
 		vm.AccSalesTable.splice(idx, 1);

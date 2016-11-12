@@ -6,10 +6,12 @@
 
 App.controller('AccReceiptController', AccReceiptController);
 
-function AccReceiptController($scope) {
+function AccReceiptController($scope,apiCall,apiPath) {
   'use strict';
   
   var vm = this;
+  $scope.accReceipt = [];
+  var formdata = new FormData();
   
   /* Table */
   
@@ -29,6 +31,22 @@ function AccReceiptController($scope) {
 	
   /* End */
   
+  //Auto suggest Client Name
+	vm.accountDrop=[];
+	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+		vm.accountDrop = response3;
+	
+	});
+	
+	$scope.setAccReceipt = function(Fname,value) {
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value.ledgerId);
+  	}
+	
 	$scope.pop = function(data)
 	{
 		console.log(data);  
@@ -36,59 +54,13 @@ function AccReceiptController($scope) {
  
   // Chosen data
   // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+vm.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.companyDrop = responseCompanyDrop;
+	
+	});
 
   // Datepicker
   // ----------------------------------- 
@@ -229,4 +201,4 @@ function AccReceiptController($scope) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccReceiptController.$inject = ["$scope"];
+AccReceiptController.$inject = ["$scope","apiCall","apiPath"];

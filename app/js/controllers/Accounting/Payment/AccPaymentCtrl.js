@@ -6,10 +6,12 @@
 
 App.controller('AccPaymentController', AccPaymentController);
 
-function AccPaymentController($scope) {
+function AccPaymentController($scope,apiCall,apiPath) {
   'use strict';
   
   var vm = this;
+  $scope.accPayment = [];
+  var formdata = new FormData();
   
   /* Table */
   
@@ -36,59 +38,30 @@ function AccPaymentController($scope) {
 
   // Chosen data
   // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+	vm.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.companyDrop = responseCompanyDrop;
+	
+	});
+	
+	
+  //Auto suggest Account
+	vm.accountDrop=[];
+	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+		vm.accountDrop = response3;
+	
+	});
+	
+	$scope.setAccPayment = function(Fname,value) {
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value.ledgerId);
+  	}
 
   // Datepicker
   // ----------------------------------- 
@@ -229,4 +202,4 @@ function AccPaymentController($scope) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccPaymentController.$inject = ["$scope"];
+AccPaymentController.$inject = ["$scope","apiCall","apiPath"];

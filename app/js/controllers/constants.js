@@ -101,6 +101,7 @@ App
 	'getAllInvoice':     'http://api.siliconbrain.co.in/settings/invoice-numbers',
 	'getAllQuotation':     'http://api.siliconbrain.co.in/settings/quotation-numbers',
 	'getAllTemplate':     'http://api.siliconbrain.co.in/settings/templates',
+	'getAllLedgerGroup':     'http://api.siliconbrain.co.in/accounting/ledger-groups',
 	'getAllLedger':     'http://api.siliconbrain.co.in/accounting/ledgers'
   })
   // Same MQ as defined in the css
