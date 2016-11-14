@@ -6,64 +6,100 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster) {
+function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location) {
   'use strict';
+  var vm = this;
+  $scope.addInvProduct = [];
+  var formdata = new FormData();
   
   // Chosen data
   // ----------------------------------- 
-
-  this.states = [
+		
+  this.measureUnitDrop = [
     'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
+    'California'
   ];
+  
+	//Company Dropdown data
+	vm.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.companyDrop = responseCompanyDrop;
+	
+	});
+	
+	//Category Dropdown data
+	vm.categoryDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCategory).then(function(responseDrop){
+		
+		vm.categoryDrop = responseDrop;
+	
+	});
+	
+	//Group Dropdown data
+	vm.groupDrop = [];
+	
+	apiCall.getCall(apiPath.getAllGroup).then(function(responseDrop){
+		
+		vm.groupDrop = responseDrop;
+	
+	});
+	
+	//Edit Product
+	if($stateParams.id){
+		
+		var editProduct = apiPath.getAllProduct+'/'+$stateParams.id;
+	
+		apiCall.getCall(editProduct).then(function(res){
+			
+			$scope.addInvProduct.name = res.productName;
+			
+			//Company DropDown Selection
+			var companyDropPath = apiPath.getAllCompany+'/'+res.company.companyId;
+			apiCall.getCall(companyDropPath).then(function(res2){
+				
+				$scope.addInvProduct.company = res2;
+			});
+			
+			//Get Branch
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+res.company.companyId;
+			console.log('here...'+getAllBranch);
+			apiCall.getCall(getAllBranch).then(function(response4){
+				vm.branchDrop = response4;
+					
+			});
+			
+			//Branch DropDown Selection
+			var branchDropPath = apiPath.getAllBranch+'/'+res.branch.branchId;
+			
+			apiCall.getCall(branchDropPath).then(function(res2){
+				
+				$scope.addInvProduct.branch = res2;
+			});
+			
+			//Category DropDown Selection
+			var categoryDropPath = apiPath.getAllCategory+'/'+res.productCategory.productCategoryId;
+			apiCall.getCall(categoryDropPath).then(function(res2){
+				
+				$scope.addInvProduct.category = res2;
+			});
+			
+			//Group DropDown Selection
+			var groupDropPath = apiPath.getAllGroup+'/'+res.productGroup.productGroupId;
+			apiCall.getCall(groupDropPath).then(function(res2){
+				
+				$scope.addInvProduct.group = res2;
+			});
+			
+			//Measure DropDown Selection
+			
+				$scope.addInvProduct.measureUnit = res.measurementUnit;
+			
+		});
+	}
 
   // Datepicker
   // ----------------------------------- 
@@ -195,10 +231,60 @@ function AddInvProductController($scope,toaster) {
     {value: 5, name: 'Huge'}
   ];
   
+  $scope.changeCompany = function(Fname,state)
+  {
+	  vm.branchDrop = [];
+	var getAllBranch = apiPath.getOneBranch+state;
+	//Get Branch
+	apiCall.getCall(getAllBranch).then(function(response4){
+		vm.branchDrop = response4;
+			
+	});
+	if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,state);
+  }
   
+  //Changed Data When Update
+  $scope.changeInvProductData = function(Fname,value){
+		//console.log(Fname+'..'+value);
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+	}
 
   $scope.pop = function() {
-    toaster.pop('success', 'Title', 'Message');
+	
+		if($stateParams.id){
+			
+			//formdata.append('branchId',1);
+			formdata.append('isDisplay','yes');
+			var editProduct = apiPath.getAllProduct+'/'+$stateParams.id;
+			apiCall.postCall(editProduct,formdata).then(function(response5){
+			
+				//console.log(response5);
+				$location.path('app/InvProduct');
+				toaster.pop('success', 'Title', 'Message');
+			
+			});
+		}
+		else{
+			//formdata.append('branchId',1);
+			formdata.append('isDisplay','yes');
+			apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
+			
+				//console.log(response5);
+				$location.path('app/InvProduct');
+				toaster.pop('success', 'Title', 'Message');
+			
+			});
+		}
+		$scope.addInvProduct = [];
+		
   };
   
   $scope.cancel = function() {
@@ -207,4 +293,4 @@ function AddInvProductController($scope,toaster) {
   
   
 }
-AddInvProductController.$inject = ["$scope","toaster"];
+AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location"];

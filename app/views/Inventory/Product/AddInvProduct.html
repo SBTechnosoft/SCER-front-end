@@ -1,3 +1,8 @@
+<style>
+.chosen-container .chosen-results {
+    max-height:130px;
+}
+</style>
 <h3>
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
@@ -19,7 +24,15 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Company</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.company" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addInvProduct.company.companyId)" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label">Branch</label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="addInvProduct.branch" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" ng-change="changeInvProductData('branchId',addInvProduct.branch.branchId)" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -27,7 +40,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Product Name</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" type="text" placeholder="Product Name" class="form-control" />
+                     <input id="input-id-1" ng-model="addInvProduct.name" ng-change="changeInvProductData('productName',addInvProduct.name)" type="text" placeholder="Product Name" class="form-control" />
                   </div>
                </div>
             </fieldset>
@@ -35,7 +48,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Categoy</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.category" data-ng-options="s.productCategoryName for s in form.categoryDrop track by s.productCategoryId" ng-change="changeInvProductData('productCategoryId',addInvProduct.category.productCategoryId)" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -43,7 +56,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Group</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.group" data-ng-options="s.productGroupName for s in form.groupDrop track by s.productGroupId" ng-change="changeInvProductData('productGroupId',addInvProduct.group.productGroupId)" class="form-control chosen-select" size='5'></select>
                   </div>
                </div>
 			</fieldset>	
@@ -51,7 +64,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Measurement Unit</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in form.states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.measureUnit" data-ng-options="s for s in form.measureUnitDrop" ng-change="changeInvProductData('measurementUnit',addInvProduct.measureUnit)" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>	

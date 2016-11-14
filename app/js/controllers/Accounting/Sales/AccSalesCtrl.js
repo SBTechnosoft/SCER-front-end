@@ -13,28 +13,43 @@ function AccSalesController($scope,apiCall,apiPath) {
   $scope.AccSales = [];
   var formdata = new FormData();
   
-  /* Table */
+	/* Table */
 	vm.AccSalesTable = [];
-	vm.AccSalesTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
+	vm.AccSalesTable = [{"productId":"","productName":"","discountDropDown":"","discountBox":"","qty":""}];
 	
 	$scope.addRow = function(){
-		  //console.log(vm.AccSalesTable);
+		  
 		 var data = {};	
 		// console.log(this.AccSalesTable);
-		data.name ='';
+		data.productId='';
+		data.productName ='';
 		data.discountDropDown ='';
 		data.discountBox ='';
 		data.qty ='';
 		vm.AccSalesTable.push(data);
-		//console.log(vm.AccSalesTable);
+		
 
     };
+	
+	$scope.settabledata = function(item,index)
+	{
+		vm.AccSalesTable[index].productId = item.productId;
+	}
 	
 	//Auto suggest Client Name
 	vm.clientNameDrop=[];
 	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
 		vm.clientNameDrop = response3;
+	
+	});
+	
+	//Auto Suggest Product Dropdown data
+	vm.productNameDrop = [];
+	
+	apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+		
+		vm.productNameDrop = responseDrop;
 	
 	});
 	

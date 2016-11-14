@@ -15,13 +15,14 @@ function AccPurchaseController($scope,apiCall,apiPath) {
 	
 	/* Table */
 	vm.AccPurchaseTable = [];
-	vm.AccPurchaseTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
+	vm.AccPurchaseTable = [{"productId":"","productName":"","discountDropDown":"","discountBox":"","qty":""}];
 	
 	$scope.addRow = function(){
 		  console.log(vm.AccPurchaseTable);
 		 var data = {};	
 		// console.log(this.AccSalesTable);
-		data.name ='';
+		data.productId='';
+		data.productName ='';
 		data.discountDropDown ='';
 		data.discountBox ='';
 		data.qty ='';
@@ -30,11 +31,26 @@ function AccPurchaseController($scope,apiCall,apiPath) {
 
     };
 	
+	$scope.settabledata = function(item,index)
+	{
+		vm.AccPurchaseTable[index].productId = item.productId;
+		console.log(vm.AccPurchaseTable);
+	}
+	
 	//Auto suggest Client Name
 	vm.clientNameDrop=[];
 	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
 		vm.clientNameDrop = response3;
+	
+	});
+	
+	//Auto Suggest Product Dropdown data
+	vm.productNameDrop = [];
+	
+	apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+		
+		vm.productNameDrop = responseDrop;
 	
 	});
 	

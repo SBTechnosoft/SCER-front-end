@@ -16,14 +16,21 @@ function AccPaymentController($scope,apiCall,apiPath) {
   /* Table */
   
 	vm.AccPaymentTable = [];
-	vm.AccPaymentTable = [{"name":"","amount":""}];
+	vm.AccPaymentTable = [{"ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addRow = function(){
 		var data = {};	
-		data.name ='';
+		data.ledgerId='';
+		data.ledgerName ='';
 		data.amount ='';
 		vm.AccPaymentTable.push(data);
     };
+	
+	$scope.settabledata = function(item,index)
+	{
+		vm.AccPaymentTable[index].ledgerId = item.ledgerId;
+		
+	}
 	
 	$scope.removeRow = function (idx) {
 		vm.AccPaymentTable.splice(idx, 1);
@@ -47,11 +54,13 @@ function AccPaymentController($scope,apiCall,apiPath) {
 	});
 	
 	
-  //Auto suggest Account
+	//Auto suggest Account
 	vm.accountDrop=[];
+	vm.tableNameDrop=[];
 	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
 		vm.accountDrop = response3;
+		vm.tableNameDrop = response3;
 	
 	});
 	
@@ -62,6 +71,8 @@ function AccPaymentController($scope,apiCall,apiPath) {
 		}
 		formdata.append(Fname,value.ledgerId);
   	}
+
+
 
   // Datepicker
   // ----------------------------------- 

@@ -16,14 +16,21 @@ function AccReceiptController($scope,apiCall,apiPath) {
   /* Table */
   
 	vm.AccReceiptTable = [];
-	vm.AccReceiptTable = [{"name":"","amount":""}];
+	vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addRow = function(){
 		var data = {};	
-		data.name ='';
+		data.ledgerId='';
+		data.ledgerName ='';
 		data.amount ='';
 		vm.AccReceiptTable.push(data);
     };
+	
+	$scope.settabledata = function(item,index)
+	{
+		vm.AccReceiptTable[index].ledgerId = item.ledgerId;
+		console.log(vm.AccReceiptTable);
+	}
 	
 	$scope.removeRow = function (idx) {
 		vm.AccReceiptTable.splice(idx, 1);
@@ -33,9 +40,11 @@ function AccReceiptController($scope,apiCall,apiPath) {
   
   //Auto suggest Client Name
 	vm.accountDrop=[];
+	vm.tableNameDrop=[];
 	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
 		vm.accountDrop = response3;
+		vm.tableNameDrop = response3;
 	
 	});
 	

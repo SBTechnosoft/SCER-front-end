@@ -162,15 +162,15 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		/*** End Template ***/
 		//Add Inventory Product
 		.state('app.AddInvProduct', {
-            url: '/AddInvProduct',
+            url: '/AddInvProduct/:id',
             templateUrl: basepath('Inventory/Product/AddInvProduct.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
         })
 		//Show Inventory Product
 		.state('app.InvProduct', {
             url: '/InvProduct',
             templateUrl: basepath('Inventory/Product/InvProduct.html?r='+Math.random()),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
         })
 		//Add Inventory Stock
 		.state('app.AddInvStock', {
@@ -213,7 +213,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccSpecialJrnl', {
             url: '/AccSpecialJrnl',
             templateUrl: basepath('Accounting/SpecialJournal/AccSpecialJrnl.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv')
         })
 		//Accounting Payment
 		.state('app.AccPayment', {

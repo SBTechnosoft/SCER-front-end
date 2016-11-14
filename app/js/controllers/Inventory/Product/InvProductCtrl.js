@@ -6,7 +6,7 @@
 
 App.controller('InvProductController', InvProductController);
 
-function InvProductController($scope, $filter, ngTableParams) {
+function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -72,69 +72,80 @@ function InvProductController($scope, $filter, ngTableParams) {
   // SORTING
   // ----------------------------------- 
 
-  var data = [
-      {name: "Product1",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product2",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product3",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product4",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product5",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product6",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product7",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product8",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product9",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product10",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product11",  category: "Glass", group: "Cup", measure: "Inch" },
-	  {name: "Product12",  category: "Glass", group: "Cup", measure: "Inch" }
+  // var data = [
+      // {name: "Product1",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product2",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product3",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product4",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product5",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product6",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product7",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product8",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product9",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product10",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product11",  category: "Glass", group: "Cup", measure: "Inch" },
+	  // {name: "Product12",  category: "Glass", group: "Cup", measure: "Inch" }
       
-  ];
+  // ];
+  var data = [];
+  apiCall.getCall(apiPath.getAllProduct).then(function(response){
+		data = response;
+		 $scope.TableData();
+	});
 
-  vm.tableParams = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      sorting: {
-          name: 'asc'     // initial sorting
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-		  console.log(params.$params);
-		  // if()
-		  // {
-			  // alert('yes');
-		  // }
-		  // else{
-			  // alert('no');
-		  // }
-          // use build-in angular filter
-		  console.log("Length: .."+params.$params.filter.city);
-		  
-		  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.name) != "undefined" && params.$params.filter.name != "")  || (typeof(params.$params.filter.category) != "undefined" && params.$params.filter.category != "") || (typeof(params.$params.filter.group) != "undefined" && params.$params.filter.group != "") || (typeof(params.$params.filter.measure) != "undefined" && params.$params.filter.measure != "") ))
-		  {
-				 var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-				  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-				  params.total(orderedData.length); // set total for recalc pagination
-				  $defer.resolve(vm.users);
-		  
-
-		  }
+	 $scope.TableData = function(){
 		 
-		 if(!$.isEmptyObject(params.$params.sorting))
-		  {
-			
-			 //alert('ggg');
-			  var orderedData = params.sorting() ?
-					  $filter('orderBy')(data, params.orderBy()) :
-					  data;
-	  
-			  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+	  vm.tableParams = new ngTableParams({
+		  page: 1,            // show first page
+		  count: 10,          // count per page
+		  sorting: {
+			  name: 'asc'     // initial sorting
 		  }
-		
-      }
-  });
+	  }, {
+		  total: data.length, // length of data
+		  getData: function($defer, params) {
+			 
+			  // if()
+			  // {
+				  // alert('yes');
+			  // }
+			  // else{
+				  // alert('no');
+			  // }
+			  // use build-in angular filter
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryId) != "undefined" && params.$params.filter.productCategoryId != "") || (typeof(params.$params.filter.productGroupId) != "undefined" && params.$params.filter.productGroupId != "") || (typeof(params.$params.filter.measurementUnit) != "undefined" && params.$params.filter.measurementUnit != "") ))
+			  {
+					 var orderedData = params.filter() ?
+					 $filter('filter')(data, params.filter()) :
+					 data;
+
+					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+					  params.total(orderedData.length); // set total for recalc pagination
+					  $defer.resolve(vm.users);
+			  
+
+			  }
+			else
+			{
+				   params.total(data.length);
+				  
+			}
+			 
+			 if(!$.isEmptyObject(params.$params.sorting))
+			  {
+				
+				 //alert('ggg');
+				  var orderedData = params.sorting() ?
+						  $filter('orderBy')(data, params.orderBy()) :
+						  data;
+		  
+				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			  }
+			
+		  }
+	  });
+	}
 
   // FILTERS
   // ----------------------------------- 
@@ -221,15 +232,15 @@ function InvProductController($scope, $filter, ngTableParams) {
       }
   });
   
-  $scope.edit_comp = function()
+  $scope.edit_comp = function(id)
   {
-	  alert('Edit');
+	  $location.path('app/AddInvProduct/'+id);
   }
   
-  $scope.delete_comp = function()
+  $scope.delete_comp = function(id)
   {
-	  alert('Delete');
+	  alert(id);
   }
 
 }
-InvProductController.$inject = ["$scope", "$filter", "ngTableParams"];
+InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location"];

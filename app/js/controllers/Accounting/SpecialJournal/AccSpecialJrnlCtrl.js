@@ -6,25 +6,40 @@
 
 App.controller('AccSpecialJrnlController', AccSpecialJrnlController);
 
-function AccSpecialJrnlController($scope) {
+function AccSpecialJrnlController($scope,apiCall,apiPath) {
   'use strict';
   
    var vm = this;
   
   /* Table */
 	vm.AccSpecialJrnlTable = [];
-	vm.AccSpecialJrnlTable = [{"DropCr":"dr","name":"Speial","Dbt":"2000","Crdt":""},{"DropCr":"dr","name":"Item2","Dbt":"2000","Crdt":""},{"DropCr":"cr","name":"To Sales","Dbt":"","Crdt":"4000"}];
-	console.log(vm.AccSpecialJrnlTable);
+	vm.AccSpecialJrnlTable = [{"DropCr":"dr","ledgerId":"","ledgerName":"Speial","Dbt":"2000","Crdt":""},{"DropCr":"dr","ledgerId":"","ledgerName":"Item2","Dbt":"2000","Crdt":""},{"DropCr":"cr","ledgerId":"","ledgerName":"To Sales","Dbt":"","Crdt":"4000"}];
+	
 	$scope.addRow = function(){
 		 
 		 var data = {};
 		data.DropCr ='dr';
-		data.name ='';
+		data.ledgerId='';
+		data.ledgerName ='';
 		data.Dbt ='';
 		data.Crdt ='';
 		vm.AccSpecialJrnlTable.push(data);
 
     };
+	
+	$scope.settabledata = function(item,index)
+	{
+		vm.AccSpecialJrnlTable[index].ledgerId = item.ledgerId;
+		console.log(vm.AccSpecialJrnlTable);
+	}
+	
+	//Auto suggest Client Name
+	vm.clientNameDrop=[];
+	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+		vm.clientNameDrop = response3;
+	
+	});
 	
 	$scope.removeRow = function (idx) {
 		vm.AccSpecialJrnlTable.splice(idx, 1);
@@ -41,59 +56,13 @@ function AccSpecialJrnlController($scope) {
  
   // Chosen data
   // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+	vm.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.companyDrop = responseCompanyDrop;
+	
+	});
 
   // Datepicker
   // ----------------------------------- 
@@ -234,4 +203,4 @@ function AccSpecialJrnlController($scope) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccSpecialJrnlController.$inject = ["$scope"];
+AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath"];
