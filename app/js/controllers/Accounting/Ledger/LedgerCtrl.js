@@ -8,24 +8,135 @@ App.controller('AccLedgerController', AccLedgerController);
 
 function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster) {
   'use strict';
- var vm = this;
- $scope.ledgerForm = [];
-  var formdata = new FormData();
-	
+  
+	var vm = this;
+	$scope.ledgerForm = [];
+	$scope.ledgerEditId = [];
+	var formdata = new FormData();
+	vm.disableValue = false;
+  
 	$scope.trueData = false;
 	$scope.alertData = true;
+	
 	$scope.showInput = function()
-	{
-		
+	{	
+		vm.disableValue = false;
+		$scope.ledgerForm = [];
 		$scope.trueData = true;
 		$scope.alertData = false;
 	}
 	
-	$scope.clickSave = function()
-	{
+	//View Single Ledger In Readonly Mode
+	$scope.viewReadOlny = function(id)
+	{	
 		
-		$scope.trueData = false;
-		$scope.alertData = true;
+		$scope.trueData = true;
+		$scope.alertData = false;
+		
+		apiCall.getCall(apiPath.getAllLedger+'/'+id).then(function(response){
+			
+			$scope.ledgerForm.ledgerName = response.ledgerName;
+			$scope.ledgerForm.alias = response.alias;
+			$scope.ledgerForm.invAffect = response.inventoryAffected;
+			$scope.ledgerForm.address1 = response.address1;
+			$scope.ledgerForm.address2 = response.address2;
+			$scope.ledgerForm.tin = response.tin;
+			$scope.ledgerForm.pan = response.pan;
+			$scope.ledgerForm.gstNo = response.gstNo;
+			
+			//Under textbox Selection
+			apiCall.getCall(apiPath.getAllLedgerGroup+'/'+response.ledgerGroup.ledgerGroupId).then(function(response3){
+				$scope.ledgerForm.under = response3;
+			});
+	
+			//State DropDown Selection
+			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;
+			apiCall.getCall(stateDropPath).then(function(res3){
+				$scope.ledgerForm.stateDropDown = res3;
+			});
+			
+			//City DropDown
+			vm.cityDrop = [];
+			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
+			apiCall.getCall(cityAllDropPath).then(function(res5){
+				vm.cityDrop = res5;
+			});
+			
+			//City DropDown Selection
+			var cityDropPath = apiPath.getOneCity+'/'+response.city.cityId;
+			apiCall.getCall(cityDropPath).then(function(res4){
+				$scope.ledgerForm.cityDrop = res4;
+				vm.disableValue = true;
+			});
+			
+		});
+		//vm.disableValue = true;
+	}
+	
+	
+	vm.allLedgerData = [];
+	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+		vm.allLedgerData = response3;
+	
+	});
+	
+	$scope.editLedgerData = function(id)
+	{
+		vm.disableValue = false;
+		$scope.trueData = true;
+		$scope.alertData = false;
+		$scope.ledgerEditId.id = id;
+		
+		apiCall.getCall(apiPath.getAllLedger+'/'+id).then(function(response){
+			
+			$scope.ledgerForm.ledgerName = response.ledgerName;
+			$scope.ledgerForm.alias = response.alias;
+			$scope.ledgerForm.invAffect = response.inventoryAffected;
+			$scope.ledgerForm.address1 = response.address1;
+			$scope.ledgerForm.address2 = response.address2;
+			$scope.ledgerForm.tin = response.tin;
+			$scope.ledgerForm.pan = response.pan;
+			$scope.ledgerForm.gstNo = response.gstNo;
+			
+			//Under textbox Selection
+			apiCall.getCall(apiPath.getAllLedgerGroup+'/'+response.ledgerGroup.ledgerGroupId).then(function(response3){
+				$scope.ledgerForm.under = response3;
+			});
+			
+			//Company DropDown Selection
+			var companyDropPath = apiPath.getAllCompany+'/'+response.company.companyId;
+			apiCall.getCall(companyDropPath).then(function(res3){
+				$scope.ledgerForm.companyDropDown = res3;
+			});
+			
+			//State DropDown Selection
+			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;
+			apiCall.getCall(stateDropPath).then(function(res3){
+				$scope.ledgerForm.stateDropDown = res3;
+			});
+			
+			//City DropDown
+			vm.cityDrop = [];
+			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
+			apiCall.getCall(cityAllDropPath).then(function(res5){
+				vm.cityDrop = res5;
+			});
+			
+			//City DropDown Selection
+			var cityDropPath = apiPath.getOneCity+'/'+response.city.cityId;
+			apiCall.getCall(cityDropPath).then(function(res4){
+				$scope.ledgerForm.cityDrop = res4;
+			});
+			
+			// $scope.ledgerForm.ledgerName = response.ledgerName;
+			// $scope.ledgerForm.ledgerName = response.ledgerName;
+			// $scope.ledgerForm.ledgerName = response.ledgerName;
+			// $scope.ledgerForm.ledgerName = response.ledgerName;
+		
+		});
+		
+		
 	}
 	
 	 //this.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel", "francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit", "guillaume", "nicolas", "joseph"];
@@ -110,10 +221,10 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
  //End Table
   // Chosen data
   // ----------------------------------- 
-	vm.states=[];
+	vm.underWhat=[];
 	apiCall.getCall(apiPath.getAllLedgerGroup).then(function(response3){
 		
-		vm.states = response3;
+		vm.underWhat = response3;
 	
 	});
   
@@ -121,6 +232,14 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	'yes',
 	'no'
   ]
+	//Get Company
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response3){
+		
+		vm.companyDrop = response3;
+	
+	});
+	
 	//Get State
 	vm.statesDrop=[];
 	apiCall.getCall(apiPath.getAllState).then(function(response3){
@@ -135,7 +254,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value);
+		formdata.append(Fname,value.ledgerGroupId);
   	}
 	
 	$scope.ChangeState = function(Fname,state)
@@ -159,7 +278,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
   
 	//Changed Data When Update
 	$scope.changeLedgerData = function(Fname,value){
-		console.log(Fname+'..'+value);
+		//console.log(Fname+'..'+value);
 		if(formdata.get(Fname))
 		{
 			formdata.delete(Fname);
@@ -169,18 +288,35 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	
 	$scope.addUpLedger = function()
 	{
-		formdata.append('companyId',10);
+		
 		//formdata.append('companyId',10);
-		apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
 		
-			//console.log(response5);
+		if($scope.ledgerEditId.id)
+		{
+			var ledgerPath = apiPath.getAllLedger+'/'+$scope.ledgerEditId.id;
+			$scope.ledgerEditId = [];
 			
-			$location.path('app/AccLedger');
-			toaster.pop('success', 'Title', 'Message');
-			//formdata.removeAll();
-			$scope.ledgerForm = [];
-			//console.log(formdata.get('ledgerName'));
+		}
+		else{
+			
+			var ledgerPath = apiPath.getAllLedger;
+		}
 		
+		
+		apiCall.postCall(ledgerPath,formdata).then(function(response5){
+		
+			$location.path('app/AccLedger');
+			console.log(response5);
+			toaster.pop('success', 'Title', 'Message');
+			$scope.ledgerForm = [];
+			var formdata = new FormData();
+			apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+				vm.allLedgerData = response3;
+	
+			});	
+			$scope.trueData = false;
+			$scope.alertData = true;
 		});
 	}
 

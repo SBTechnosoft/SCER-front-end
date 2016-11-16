@@ -6,12 +6,13 @@
 
 App.controller('InvCategoryController', InvCategoryController);
 
-function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams) {
+function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$interval) {
 	
   'use strict';
   var vm = this;
 	
 	var tree;
+	//var myTreeData;
 
         var rawTreeData = [
             {
@@ -159,45 +160,42 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
                 "TimeZone": "BST"
             }
         ];
+	//Get Category Data
+	var rawTreeData2=[{"productCategoryName":"","productCategoryId":"1","productCategoryDescription":"abcdddddcc ddd","isDisplay":"yes","createdAt":"16-11-2016","updatedAt":"16-11-2016","productParentCategoryId":""}];
+	
 
-
-        var myTreeData = getTree(rawTreeData, 'DemographicId', 'ParentId');
+        var myTreeData = getTree(rawTreeData2, 'productCategoryId', 'productParentCategoryId');
 		$scope.tree_data = myTreeData;
         $scope.my_tree = tree = {};
 
         $scope.expanding_property = {
-            field: "Name",
-            displayName: "Demographic Name",
+            field: "productCategoryName",
+            displayName: "Category Name",
             sortable: true,
             filterable: true,
             cellTemplate: "<i>{{row.branch[expandingProperty.field]}}</i>"
         };
         $scope.col_defs = [
             {
-                field: "Description",
+                field: "productCategoryDescription",
+				displayName: "Desc",
                 sortable: true,
                 sortingType: "string"
-            },
-            {
-                field: "Area",
-                sortable: true,
-                sortingType: "number",
-                filterable: true
-            },
-            {
-                field: "Population",
-                sortable: true,
-                sortingType: "number"
-            },
-            {
-                field: "TimeZone",
-                displayName: "Time Zone",
-                cellTemplate: "<strong>{{row.branch[col.field]}}</strong>"
             }
         ];
         $scope.my_tree_handler = function (branch) {
-            console.log('you clicked on', branch)
+            console.log('you clicked on', branch);
         }
+		
+		apiCall.getCall(apiPath.getAllCategory).then(function(response){
+			
+			var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+			$scope.tree_data = myTreeData2;
+			
+		});
+		
+     
+ 
  // Chosen data
   // ----------------------------------- 
 
@@ -458,4 +456,4 @@ $scope.branchF = [
   
 
 }
-InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams"];
+InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$interval"];
