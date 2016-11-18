@@ -6,14 +6,17 @@
 
 App.controller('InvGroupController', InvGroupController);
 
-function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath) {
+function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll) {
 	
   'use strict';
   var vm = this;
+	$scope.invGroupData = [];
+	var formdata = new FormData();
+	$scope.invGroupID = [];
 	
 	var tree;
 
-       var rawTreeData=[{"productGroupName":"abc12,-_`&().34","productGroupId":"4","productGroupDescription":"abcdddddddd","isDisplay":"no","createdAt":"16-11-2016","updatedAt":"16-11-2016","productGroupParentId":""}];
+       var rawTreeData=[{"productGroupName":"","productGroupId":"","productGroupDescription":"","isDisplay":"","createdAt":"","updatedAt":"","productGroupParentId":""}];
 
         var myTreeData = getTree(rawTreeData, 'productGroupId', 'productGroupParentId');
 		$scope.tree_data = myTreeData;
@@ -29,82 +32,108 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
         $scope.col_defs = [
             {
                 field: "productGroupDescription",
-                sortable: true,
-                sortingType: "string"
+                displayName: "Description"
             },
-            {
-                field: "isDisplay",
-                sortable: true,
-                sortingType: "string",
-                filterable: true
-            }
+			{
+			field: "productGroupId",
+			displayName: "Action",
+			cellTemplate: "<i ui-sref=\"\" ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ui-sref=\"\" ng-click=\"cellTemplateScope.deleteCat(row.branch[col.field])\" class=\"fa fa-times-circle\" style=\"font-size:17px;color:red\"></i>",
+			cellTemplateScope: {
+				deleteCat: function(data) {         // this works too: $scope.someMethod;
+					console.log(data);
+					apiCall.deleteCall(apiPath.getAllGroup+'/'+data).then(function(response){
+			
+						console.log(response);
+			
+					});
+				},
+				editCat: function(data){
+					
+					$scope.invGroupID.id = data;
+					apiCall.getCall(apiPath.getAllGroup+'/'+data).then(function(response){
+						
+						$scope.invGroupData.groupName = response.productGroupName;
+						$scope.invGroupData.groupDesc = response.productGroupDescription;
+						//console.log(response);
+						if(response.productGroupParentId==''){
+							//console.log('yes');
+						}
+						else{
+							
+							apiCall.getCall(apiPath.getAllGroup+'/'+response.productGroupParentId).then(function(response){
+								$scope.invGroupData.groupDropDown = response;
+							});
+						}
+							
+						
+					
+					});
+					
+					$anchorScroll();
+				}
+			}
+			}
         ];
         $scope.my_tree_handler = function (branch) {
             console.log('you clicked on', branch);
         }
 		
+		vm.groupDrop = [];
 		apiCall.getCall(apiPath.getAllGroup).then(function(response){
 			
+			vm.groupDrop = response;
 			var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
 			$scope.tree_data = myTreeData2;
 			
 		});
 		
- // Chosen data
-  // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+		$scope.addUpGroup = function(){
+		 
+		 
+			if($scope.invGroupData.groupDropDown)
+			{
+				console.log('yes');
+				formdata.append('productGroupName',$scope.invGroupData.groupName);
+				formdata.append('productGroupDescription',$scope.invGroupData.groupDesc);
+				formdata.append('productGroupParentId',$scope.invGroupData.groupDropDown.productGroupId);
+				formdata.append('isDisplay','yes');
+				
+			}
+			else{
+				console.log('no');
+				formdata.append('productGroupName',$scope.invGroupData.groupName);
+				formdata.append('productGroupDescription',$scope.invGroupData.groupDesc);
+				formdata.append('productGroupParentId','');
+				formdata.append('isDisplay','yes');
+			}
+			
+			if($scope.invGroupID.id){
+				
+				var groupPath = apiPath.getAllGroup+'/'+$scope.invGroupID.id;
+				$scope.invGroupID = [];
+			}
+			else{
+				var groupPath = apiPath.getAllGroup;
+			}
+			apiCall.postCall(groupPath,formdata).then(function(response){
+				
+				formdata.delete('productGroupName');
+				formdata.delete('productGroupDescription');
+				formdata.delete('productGroupParentId');
+				formdata.delete('isDisplay');
+				$scope.invGroupData = [];
+				apiCall.getCall(apiPath.getAllGroup).then(function(response){
+				
+					vm.groupDrop = response;
+					var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+					$scope.tree_data = myTreeData2;
+				
+				});
+				
+			});
+		
+	 }
+		
 
   // SORTING
   // ----------------------------------- 
@@ -310,4 +339,4 @@ $scope.branchF = [
   
 
 }
-InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath"];
+InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll"];

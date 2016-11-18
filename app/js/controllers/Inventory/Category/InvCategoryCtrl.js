@@ -6,10 +6,14 @@
 
 App.controller('InvCategoryController', InvCategoryController);
 
-function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$interval) {
+function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$interval,$anchorScroll) {
 	
   'use strict';
   var vm = this;
+	
+	$scope.invCategoryData = [];
+	var formdata = new FormData();
+	$scope.invCategoryID = [];
 	
 	var tree;
 	//var myTreeData;
@@ -161,7 +165,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
             }
         ];
 	//Get Category Data
-	var rawTreeData2=[{"productCategoryName":"","productCategoryId":"1","productCategoryDescription":"abcdddddcc ddd","isDisplay":"yes","createdAt":"16-11-2016","updatedAt":"16-11-2016","productParentCategoryId":""}];
+	var rawTreeData2=[{"productCategoryName":"","productCategoryId":"","productCategoryDescription":"","isDisplay":"","createdAt":"","updatedAt":"","productParentCategoryId":""}];
 	
 
         var myTreeData = getTree(rawTreeData2, 'productCategoryId', 'productParentCategoryId');
@@ -175,82 +179,117 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
             filterable: true,
             cellTemplate: "<i>{{row.branch[expandingProperty.field]}}</i>"
         };
+		
         $scope.col_defs = [
             {
                 field: "productCategoryDescription",
-				displayName: "Desc",
-                sortable: true,
-                sortingType: "string"
-            }
+				displayName: "Description"
+            },
+			{
+			field: "productCategoryId",
+			displayName: "Action",
+			cellTemplate: "<i ui-sref=\"\" ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ui-sref=\"\" ng-click=\"cellTemplateScope.deleteCat(row.branch[col.field])\" class=\"fa fa-times-circle\" style=\"font-size:17px;color:red\"></i>",
+			cellTemplateScope: {
+				deleteCat: function(data) {         // this works too: $scope.someMethod;
+					console.log(data);
+					apiCall.deleteCall(apiPath.getAllCategory+'/'+data).then(function(response){
+			
+						console.log(response);
+			
+					});
+				},
+				editCat: function(data){
+					
+					$scope.invCategoryID.id = data;
+					apiCall.getCall(apiPath.getAllCategory+'/'+data).then(function(response){
+						
+						$scope.invCategoryData.categoryName = response.productCategoryName;
+						$scope.invCategoryData.categoryDesc = response.productCategoryDescription;
+						//console.log(response);
+						if(response.productParentCategoryId==''){
+							//console.log('yes');
+						}
+						else{
+							
+							apiCall.getCall(apiPath.getAllCategory+'/'+response.productParentCategoryId).then(function(response){
+								$scope.invCategoryData.categoryDropDown = response;
+							});
+						}
+							
+						
+					
+					});
+					
+					$anchorScroll();
+				}
+			}
+			}
         ];
+		
         $scope.my_tree_handler = function (branch) {
             console.log('you clicked on', branch);
         }
+		$scope.deleteData = function(){
+			alert('Delete');
+			//console.log('Here',branch);
+		}
 		
+		vm.categoryDrop = [];
 		apiCall.getCall(apiPath.getAllCategory).then(function(response){
 			
+			vm.categoryDrop = response;
 			var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
 			$scope.tree_data = myTreeData2;
 			
 		});
 		
-     
+     $scope.addUpCategory = function(){
+		 
+		 
+		if($scope.invCategoryData.categoryDropDown)
+		{
+			formdata.append('productCategoryName',$scope.invCategoryData.categoryName);
+			formdata.append('productCategoryDescription',$scope.invCategoryData.categoryDesc);
+			formdata.append('productParentCategoryId',$scope.invCategoryData.categoryDropDown.productCategoryId);
+			formdata.append('isDisplay','yes');
+			
+		}
+		else{
+			
+			formdata.append('productCategoryName',$scope.invCategoryData.categoryName);
+			formdata.append('productCategoryDescription',$scope.invCategoryData.categoryDesc);
+			formdata.append('productParentCategoryId','');
+			formdata.append('isDisplay','yes');
+		}
+		
+		if($scope.invCategoryID.id){
+			
+			var categoryPath = apiPath.getAllCategory+'/'+$scope.invCategoryID.id;
+			$scope.invCategoryID = [];
+		}
+		else{
+			var categoryPath = apiPath.getAllCategory;
+		}
+		apiCall.postCall(categoryPath,formdata).then(function(response){
+			
+			formdata.delete('productCategoryName');
+			formdata.delete('productCategoryDescription');
+			formdata.delete('productParentCategoryId');
+			formdata.delete('isDisplay');
+			$scope.invCategoryData = [];
+			apiCall.getCall(apiPath.getAllCategory).then(function(response){
+			
+				vm.categoryDrop = response;
+				var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+				$scope.tree_data = myTreeData2;
+			
+			});
+			
+		});
+		
+	 }
  
- // Chosen data
-  // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
+ 
 
   // SORTING
   // ----------------------------------- 
@@ -456,4 +495,4 @@ $scope.branchF = [
   
 
 }
-InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$interval"];
+InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$interval","$anchorScroll"];

@@ -188,13 +188,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.InvCategory', {
             url: '/InvCategory',
             templateUrl: basepath('Inventory/Category/InvCategory.html?r='+Math.random()),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv','toaster')
         })
 		//Show Inventory Group
 		.state('app.InvGroup', {
             url: '/InvGroup',
             templateUrl: basepath('Inventory/Group/InvGroup.html?r='+Math.random()),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv','toaster')
         })
 		//Accounting Sales
 		.state('app.AccSales', {

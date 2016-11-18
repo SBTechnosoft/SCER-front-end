@@ -235,7 +235,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		vm.cityDrop = response4;
 			
 	});
-	if(formdata.get(Fname))
+		if(formdata.get(Fname))
 		{
 			formdata.delete(Fname);
 		}

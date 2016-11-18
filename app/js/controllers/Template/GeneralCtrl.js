@@ -24,11 +24,11 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
        menubar: 'file edit newmenu',
        setup: function(editor) {
         editor.addMenuItem('item1', {
-         text: 'Client Name',
+         text: 'Date',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[ClientName]');
+          editor.insertContent('[date]');
          }
         });
         editor.addMenuItem('item2', {
@@ -40,182 +40,133 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
          }
         });
         editor.addMenuItem('item3', {
-         text: 'Order Date',
+         text: 'Contact',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[OrderDate]');
+          editor.insertContent('[Contact]');
          }
         });
         editor.addMenuItem('item4', {
-         text: 'Order Name',
+         text: 'Client Name',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[OrderName]');
+          editor.insertContent('[ClientName]');
          }
         });
         editor.addMenuItem('item5', {
-         text: 'Venue',
+         text: 'Invoice#',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[Venue]');
+          editor.insertContent('[InvoiceNumber]');
          }
         });
         editor.addMenuItem('item6', {
-         text: 'Order Id',
+         text: 'First Address',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[OrderId]');
+          editor.insertContent('[FirstAddress]');
          }
         });
         editor.addMenuItem('item7', {
-         text: 'Client Charge',
+         text: 'Second Address',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[ClientCharge]');
+          editor.insertContent('[SecondAddress]');
          }
         });
         editor.addMenuItem('item8', {
-         text: 'Discount',
+         text: 'State',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[Discount]');
+          editor.insertContent('[State]');
          }
         });
         editor.addMenuItem('item9', {
-         text: 'Tax Amount',
+         text: 'City',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[TaxAmt]');
+          editor.insertContent('[City]');
          }
         });
-        editor.addMenuItem('item10', {
-         text: 'Total',
-         context: 'newmenu',
-         onclick: function (){ 
-           
-          editor.insertContent('[Total]');
-         }
-        });
-        editor.addMenuItem('item11', {
-         text: 'Tax Rate',
-         context: 'newmenu',
-         onclick: function (){ 
-           
-          editor.insertContent('[TaxRate]');
-         }
-        });
-        editor.addMenuItem('item12', {
-         text: 'Delivery Date',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[DeliveryDate]');
-         }
-        });
-        editor.addMenuItem('item13', {
-         text: 'Organization',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[Organization]');
-         }
-        });
-        editor.addMenuItem('item14', {
-         text: 'Banner_Img',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[Banner_Img]');
-         }
-        });
+        
         editor.addMenuItem('item15', {
-         text: 'OrderDesc',
+         text: 'Product items',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[OrderDesc]');
+          editor.insertContent('[ProductItems]');
          }
         });
         editor.addMenuItem('item16', {
-         text: 'Email',
+         text: 'Total',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[Email]');
+          editor.insertContent('[Total]');
          }
         });
         editor.addMenuItem('item17', {
-         text: 'HomeMob',
+         text: 'Tax',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[HomeMob]');
+          editor.insertContent('[Tax]');
          }
         });
         editor.addMenuItem('item18', {
-         text: 'WorkMob',
+         text: 'Grand Total',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[WorkMob]');
+          editor.insertContent('[GrandTotal]');
          }
         });
         editor.addMenuItem('item19', {
-         text: 'Mobile',
+         text: 'Advance',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[Mobile]');
+          editor.insertContent('[Advance]');
          }
         });
         editor.addMenuItem('item20', {
-         text: 'ADATE',
+         text: 'Balance',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[ADATE]');
+          editor.insertContent('[Balance]');
          }
         });
         editor.addMenuItem('item21', {
-         text: 'INVID',
+         text: 'Payment Mode',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[INVID]');
+          editor.insertContent('[PaymentMode]');
          }
         });
         editor.addMenuItem('item22', {
-         text: 'CLIENTADD',
+         text: 'Bank Name',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[CLIENTADD]');
+          editor.insertContent('[BankName]');
          }
         });
         editor.addMenuItem('item23', {
-         text: 'CMPLOGO',
+         text: 'Cheque#',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[CMPLOGO]');
+          editor.insertContent('[ChequeNumber]');
          }
         });
         editor.addMenuItem('item24', {
-         text: 'PAIDAMT',
+         text: 'Remark',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[PAIDAMT]');
+          editor.insertContent('[Remark]');
          }
         });
-        editor.addMenuItem('item25', {
-         text: 'REMAINAMT',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[REMAINAMT]');
-         }
-        });
-        editor.addMenuItem('item26', {
-         text: 'OPERATOR',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[OPERATOR]');
-         }
-        });
+        
        }
        
        
