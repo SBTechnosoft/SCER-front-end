@@ -19,7 +19,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCal
 	 $location.path('app/AddBranch/'); 
   }
   //Company
-	$scope.init = function () {
+	$scope.init = function (){
 			
 			vm.states=[];
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
@@ -32,8 +32,14 @@ $scope.init();
   //End
   
 	apiCall.getCall(apiPath.getAllBranch).then(function(response){
-		console.log(response);
+		//console.log(response);
 		data = response;
+		
+		for (var i = 0; i < data.length; i++) {
+		  data[i].cityName = ""; //initialization of new property 
+		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+		}
+		
 		 $scope.TableData();
 	});
 	
@@ -60,7 +66,7 @@ $scope.init();
 			  // use build-in angular filter
 			 // console.log("Length: .."+params.$params.filter.city);
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.branchName) != "undefined" && params.$params.filter.branchName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.city_id) != "undefined" && params.$params.filter.city_id != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.branchName) != "undefined" && params.$params.filter.branchName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -182,12 +188,14 @@ $scope.init();
   
   $scope.isDefault_branch = function(id)
   {
+	
 	formdata.append('isDefault','ok');
 	var editBranch2 = apiPath.getAllBranch+'/'+id;
 		
 		apiCall.postCall(editBranch2,formdata).then(function(response5){
 		
-			$location.path('app/Branch');
+			formdata.delete('isDefault');
+			//$location.path('app/Branch');
 			//toaster.pop('success', 'Title', 'Message');
 		
 		});

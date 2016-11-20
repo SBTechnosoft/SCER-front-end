@@ -30,7 +30,7 @@
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
 					  <label class="col-sm-3 control-label">Company</label>
-					  <div class="col-sm-7">
+					  <div class="col-sm-8">
 						 <select chosen="" ng-model="ledgerForm.companyDropDown" tabindex="2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeLedgerData('companyId',ledgerForm.companyDropDown.companyId)" ng-disabled="form.disableValue"  class="form-control chosen-select" ></select>
 					  </div>
 				   </div>
@@ -43,6 +43,17 @@
 					  </div>
 				   </div>
 				</fieldset >
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Email ID</label>
+						<div class="col-sm-8">
+							<div class="input-group m-b">
+								<span class="input-group-addon">@</span>
+								<input type="text" tabindex="2" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" ng-disabled="form.disableValue" placeholder="Email ID" class="form-control" />
+							</div>
+						</div>
+				   </div>
+				</fieldset>
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Alias</label>
@@ -89,6 +100,14 @@
       <div class="panel-body">
 		<form method="get" action="/" novalidate="" class="form-horizontal">
 			<fieldset class="my-fieldset-paddingBottom">
+			   <div class="form-group">
+				  <label class="col-sm-3 control-label">Contact#</label>
+				  <div class="col-sm-8">
+					 <input id="input-id-1" tabindex="2" ng-model="ledgerForm.contact" ng-change="changeLedgerData('contact',ledgerForm.contact)" ng-disabled="form.disableValue" type="text" placeholder="Contact Number" class="form-control" />
+				  </div>
+			   </div>
+			</fieldset >
+			<fieldset class="my-fieldset-paddingBottom">
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
 					<div class="col-sm-8">
@@ -107,7 +126,7 @@
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">State</label>
-                  <div class="col-sm-7">
+                  <div class="col-sm-8">
                      <select chosen="" ng-model="ledgerForm.stateDropDown" tabindex="2" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',ledgerForm.stateDropDown.stateAbb)" ng-disabled="form.disableValue"  class="form-control chosen-select" ></select>
                   </div>
                </div>
@@ -115,7 +134,7 @@
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">City</label>
-                  <div class="col-sm-7">
+                  <div class="col-sm-8">
                      <select chosen="" ng-model="ledgerForm.cityDrop" tabindex="2" ng-change="changeLedgerData('cityId',ledgerForm.cityDrop.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" ng-disabled="form.disableValue" class="form-control chosen-select"></select>
                   </div>
                </div>

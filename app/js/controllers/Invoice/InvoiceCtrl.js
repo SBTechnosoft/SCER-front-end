@@ -17,6 +17,10 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 	apiCall.getCall(apiPath.getAllInvoice).then(function(response){
 		console.log(response);
 		data = response;
+		for (var i = 0; i < data.length; i++) {
+		  data[i].companyName = ""; //initialization of new property 
+		  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+		}
 		 $scope.TableData();
 	});
 	

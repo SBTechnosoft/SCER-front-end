@@ -17,6 +17,10 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
 	apiCall.getCall(apiPath.getAllQuotation).then(function(response){
 		console.log(response);
 		data = response;
+		for (var i = 0; i < data.length; i++) {
+		  data[i].companyName = ""; //initialization of new property 
+		  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+		}
 		 $scope.TableData();
 	});
   
@@ -42,7 +46,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
 			  // use build-in angular filter
 			 // console.log("Length: .."+params.$params.filter.city);
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")  || (typeof(params.$params.filter.QuotationLabel) != "undefined" && params.$params.filter.QuotationLabel != "") || (typeof(params.$params.filter.QuotationType) != "undefined" && params.$params.filter.QuotationType != "") || (typeof(params.$params.filter.startAt) != "undefined" && params.$params.filter.startAt != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")  || (typeof(params.$params.filter.quotationLabel) != "undefined" && params.$params.filter.quotationLabel != "") || (typeof(params.$params.filter.quotationType) != "undefined" && params.$params.filter.quotationType != "") || (typeof(params.$params.filter.startAt) != "undefined" && params.$params.filter.startAt != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :

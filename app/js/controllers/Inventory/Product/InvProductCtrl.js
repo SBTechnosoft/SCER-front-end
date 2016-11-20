@@ -90,6 +90,12 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
   var data = [];
   apiCall.getCall(apiPath.getAllProduct).then(function(response){
 		data = response;
+		for (var i = 0; i < data.length; i++) {
+		  data[i].productCategoryName = ""; //initialization of new property 
+		  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
+		  data[i].productGroupName = ""; //initialization of new property 
+		  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+		}
 		 $scope.TableData();
 	});
 
@@ -113,7 +119,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 				  // alert('no');
 			  // }
 			  // use build-in angular filter
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryId) != "undefined" && params.$params.filter.productCategoryId != "") || (typeof(params.$params.filter.productGroupId) != "undefined" && params.$params.filter.productGroupId != "") || (typeof(params.$params.filter.measurementUnit) != "undefined" && params.$params.filter.measurementUnit != "") ))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.measurementUnit) != "undefined" && params.$params.filter.measurementUnit != "") ))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :

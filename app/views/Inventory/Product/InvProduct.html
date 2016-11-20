@@ -19,11 +19,11 @@
          <tbody>
             <tr data-ng-repeat="user in $data">
 				<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
-				<td data-title="'Category'" sortable="'productCategoryId'" filter="{ 'productCategoryId': 'text' }" >{{user.productCategory.productCategoryName}}</td>
-			    <td data-title="'Group'" sortable="'productGroupId'" filter="{ 'productGroupId': 'text' }" >{{user.productGroup.productGroupName}}</td>
+				<td data-title="'Category'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategory.productCategoryName}}</td>
+			    <td data-title="'Group'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroup.productGroupName}}</td>
 				<td data-title="'Measurement'" sortable="'measurementUnit'" filter="{ 'measurementUnit': 'text' }" >{{user.measurementUnit}}</td>
 		
-			   <td data-title="'Action'" filter="{ 'action': 'text' }"> 
+			   <td data-title="'Action'" > 
 					<center>
 						<i ui-sref="" ng-click="edit_comp(user.productId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
 						<i ui-sref="" ng-click="delete_comp(user.productId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>

@@ -10,12 +10,15 @@
 	<div class="panel panel-default" ng-show="AddCompanyModify">
 		 <!--h4 class="panel-heading"></h4-->
 		 <div class="panel-body">
-		 <label>Company</label>
+		 
 			<div class="input-group">
+				<label for="input-id-1" class="col-sm-1 control-label">Company</label>
 				<!--input type="text" class="form-control" placeholder="Company Name" /-->
-                     <select chosen="" data-ng-model="addCompany.companyDropDown2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select"></select>
-				<span class="input-group-btn">
-				   <button type="button" class="btn btn-default" style="background-color:#17A1E5;color:white !important">Go!</button>
+				<div class="col-md-11">
+                     <select chosen="" data-ng-model="addCompany.companyDropDown2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany()" class="form-control chosen-select"></select>
+				</div>
+				<span class="input-group-btn" >
+				   <button type="button" ng-disabled="form.selectCompany" class="btn btn-default" style="background-color:#17A1E5;color:white !important" ng-click="gotoModify()">Go!</button>
 				</span>
             </div>
 		 </div>

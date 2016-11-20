@@ -181,6 +181,13 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 	
 	});
 	
+	//get Company
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			//console.log(response2);
+			vm.companyDrop = response2;
+			
+		});
 	//Save Tempalte ID For Update
 	$scope.tempID;
 	
@@ -200,6 +207,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 	// Update Template
 	$scope.addUpTemplate = function()
 	{
+		//formdata.append('companyId',$scope.companyDropDown.companyId);
 		formdata.append('templateName',$scope.generalTemp.tempName);
 		formdata.append('templateBody',tinyMCE.get('textdesc').getContent());
 		//formdata.append('templateType',addBranch.branchName);

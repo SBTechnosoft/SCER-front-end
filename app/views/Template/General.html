@@ -14,11 +14,18 @@
 		  <h4 class="panel-heading">Template Design</h4>
 		  <div class="panel-body">
 			 <form method="get" action="/" novalidate="" class="form-horizontal">
-				
+					<fieldset>
+					   <div class="form-group">
+						  <label class="col-sm-2 control-label">Company</label>
+						  <div class="col-sm-5">
+							 <select chosen="" tabindex="1"  ng-model="generalTemp.companyDropDown"  ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ></select>
+						  </div>
+					   </div>
+					</fieldset>
 					<fieldset>
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-2 control-label">Template Name</label>
-						  <div class="col-sm-4">
+						  <div class="col-sm-5">
 							 <input id="input-id-1"  type="text" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" />
 						  </div>
 					   </div>

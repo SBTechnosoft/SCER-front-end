@@ -10,6 +10,8 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   'use strict';
   var vm = this;
   var formdata = new FormData();
+  vm.selectBranch;
+  vm.selectBranch = true;
 	/* Hide/Show Company Panel */
 	
 		//$rootScope.BranchModify = false;
@@ -18,6 +20,29 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
             });
 		
 	/* End */
+	//Change Branch On Select Company
+	$scope.changeCompany = function(state)
+	{
+		 vm.branchDrop = [];
+		var getAllBranch = apiPath.getOneBranch+state;
+		//Get Branch
+		apiCall.getCall(getAllBranch).then(function(response4){
+			vm.branchDrop = response4;
+				
+		});
+	}
+	
+	$scope.enableSaveButton = function(){
+		//alert('fga');
+		vm.selectBranch = false;
+	}
+	$scope.goToModify = function()
+	{
+		//alert('gggg');
+		var id = $scope.addBranch.branchDropDown.branchId;
+		$location.path('app/AddBranch/'+id); 
+	}
+	
    $scope.addBranch=[];
  
   vm.cityDrop=[];
@@ -30,11 +55,11 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		});
 		
 	//Get Branch
-	vm.branchDrop=[];
-	apiCall.getCall(apiPath.getAllBranch).then(function(response){
-		vm.branchDrop = response;
+	// vm.branchDrop=[];
+	// apiCall.getCall(apiPath.getAllBranch).then(function(response){
+		// vm.branchDrop = response;
 			
-	});
+	// });
   
 	//Get State
 	vm.statesDrop=[];

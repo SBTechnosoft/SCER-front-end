@@ -10,7 +10,9 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
   'use strict';
   var vm = this;
    var formdata = new FormData();
-  vm.sdfg;
+   vm.selectCompany;
+   vm.selectCompany = true;
+	vm.sdfg;
 	$scope.addCompany = [];
 	
 	/* Hide/Show Company Panel */
@@ -21,6 +23,18 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		
 	/* End */
 	
+	//Edit Data On Change Company
+	$scope.changeCompany = function()
+	{
+		vm.selectCompany = false;
+		
+	}
+	
+	$scope.gotoModify = function(){
+		
+		var id = $scope.addCompany.companyDropDown2.companyId;
+		 $location.path('app/AddCompany/'+id);
+	}
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){

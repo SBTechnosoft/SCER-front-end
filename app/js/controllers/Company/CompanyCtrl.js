@@ -20,8 +20,13 @@ function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCa
 	
 	var data = [];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response){
-		 data = response;
-		 $scope.TableData();
+		
+		data = response;
+		for (var i = 0; i < data.length; i++) {
+		  data[i].cityName = ""; //initialization of new property 
+		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+		}
+		$scope.TableData();
 	});
  
 	$scope.TableData = function()
@@ -163,7 +168,8 @@ function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCa
 		
 		apiCall.postCall(editCompany2,formdata).then(function(response5){
 		
-			$location.path('app/Company');
+			formdata.delete('isDefault');
+			//$location.path('app/Company');
 			//toaster.pop('success', 'Title', 'Message');
 		
 		});
