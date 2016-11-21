@@ -1,14 +1,21 @@
 [
   {
     "text": "Sales",
-    "sref": "app.AccSales",
+    "sref": "#",
     "icon": "icon-bar-graph",
-    "alert": {"text":"3", "class": "label-info"}
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewSales", "translate": "" },
+      { "text": "Edit", "sref": "app.AccSales", "translate": "" }
+    ]
   },
   {
     "text": "Purchase",
-    "sref": "app.AccPurchase",
-    "icon": "icon-box"
+    "sref": "#",
+    "icon": "icon-box",
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewPurchase", "translate": "" },
+      { "text": "Edit", "sref": "app.AccPurchase", "translate": "" }
+    ]
   },
   {
     "type": "separator"
@@ -25,9 +32,12 @@
   },
   {
     "text": "Special Journal",
-    "sref": "app.AccSpecialJrnl",
+    "sref": "#",
     "icon": "icon-pie-graph",
-    "alert": {"text":"12", "class": "label-success"}
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewSpecialJrnl", "translate": "" },
+      { "text": "Edit", "sref": "app.AccSpecialJrnl", "translate": "" }
+    ]
   },
   {
     "type": "separator"

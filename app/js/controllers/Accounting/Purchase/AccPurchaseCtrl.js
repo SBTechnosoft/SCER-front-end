@@ -14,6 +14,33 @@ function AccPurchaseController($scope,apiCall,apiPath) {
     var formdata = new FormData();
 	
 	/* Table */
+	vm.AccClientMultiTable = [];
+	vm.AccClientMultiTable = [{"DropCr":"dr","ledgerId":"","clientName":"Virat A/C","Dbt":"2000","Crdt":""},{"DropCr":"dr","ledgerId":"","clientName":"Cashe A/C","Dbt":"2000","Crdt":""}];
+	
+	$scope.addClientRow = function(){
+		 
+		 var data = {};
+		data.DropCr ='dr';
+		data.ledgerId='';
+		data.clientName ='';
+		data.Dbt ='';
+		data.Crdt ='';
+		vm.AccClientMultiTable.push(data);
+
+    };
+	
+	$scope.settabledata = function(item,index)
+	{
+		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
+		console.log(vm.AccClientMultiTable);
+	}
+	
+	$scope.removeClientRow = function (idx) {
+		vm.AccClientMultiTable.splice(idx, 1);
+	};
+	/* End */
+	
+	/* Table */
 	vm.AccPurchaseTable = [];
 	vm.AccPurchaseTable = [{"productId":"","productName":"","discountDropDown":"","discountBox":"","qty":""}];
 	

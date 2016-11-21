@@ -203,17 +203,56 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Accounting/Sales/AccSales.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
         })
+		//Accounting View Sales
+		.state('app.AccViewSales', {
+            url: '/AccViewSales',
+            templateUrl: basepath('Accounting/Sales/AccViewSales.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Sales
+		.state('app.AccDataSales', {
+            url: '/AccDataSales',
+            templateUrl: basepath('Accounting/Sales/AccDataSales.html?r='+Math.random()),
+			controller: 'AccDataSalesController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
+        })
 		//Accounting Purchase
 		.state('app.AccPurchase', {
             url: '/AccPurchase',
             templateUrl: basepath('Accounting/Purchase/AccPurchase.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
         })
+		//Accounting View Purchase
+		.state('app.AccViewPurchase', {
+            url: '/AccViewPurchase',
+            templateUrl: basepath('Accounting/Purchase/AccViewPurchase.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Purchase
+		.state('app.AccDataPurchase', {
+            url: '/AccDataPurchase',
+            templateUrl: basepath('Accounting/Purchase/AccDataPurchase.html?r='+Math.random()),
+			controller: 'AccDataPurchaseController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+        })
 		//Accounting Special journal
 		.state('app.AccSpecialJrnl', {
             url: '/AccSpecialJrnl',
             templateUrl: basepath('Accounting/SpecialJournal/AccSpecialJrnl.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv')
+        })
+		//Accounting View Special journal
+		.state('app.AccViewSpecialJrnl', {
+            url: '/AccViewSpecialJrnl',
+            templateUrl: basepath('Accounting/SpecialJournal/AccViewSpecialJrnl.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Special journal
+		.state('app.AccDataSpecialJrnl', {
+            url: '/AccDataSpecialJrnl',
+            templateUrl: basepath('Accounting/SpecialJournal/AccDataSpecialJrnl.html?r='+Math.random()),
+			controller: 'AccDataSpecialJrnlController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
         })
 		//Accounting Payment
 		.state('app.AccPayment', {
