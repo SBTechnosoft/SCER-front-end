@@ -2,12 +2,12 @@
 <h3>
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
-   Special Journal >> 
-   View Special Journal</small>
+   Purchase >> 
+   View Purchase</small>
 </h3>
 <!-- START panel-->
 
-<div data-ng-controller="AccViewSpecialJrnlController as form" class="container-fluid panel-body">
+<div data-ng-controller="AccViewCreditNotesController as form" class="container-fluid panel-body">
  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	
    <div class="panel panel-default">
@@ -18,7 +18,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Company</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="accViewSales.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(accViewSales.companyDropDown.companyId)" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="accViewPurchase.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(accViewPurchase.companyDropDown.companyId)" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -26,7 +26,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Branch</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="accViewSales.branchDropDown" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="accViewPurchase.branchDropDown" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -64,7 +64,7 @@
 				</div>
 			</fieldset>
 			
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ui-sref="app.AccDataSpecialJrnl" >Generate</button>
+			<button type="button" class="mr mb-sm btn btn-success pull-right" ui-sref="app.AccDataCreditNotes" >Generate</button>
 			
 			
 			<!-- Not Visible -->

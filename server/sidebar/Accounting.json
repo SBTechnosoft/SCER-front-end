@@ -23,12 +23,20 @@
   {
     "text": "Credit Notes",
     "sref": "#",
-    "icon": "icon-book"
+    "icon": "icon-book",
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewCreditNotes", "translate": "" },
+      { "text": "Edit", "sref": "app.AccCreditNotes", "translate": "" }
+    ]
   },
   {
     "text": "Debit Notes",
     "sref": "#",
-    "icon": "icon-grid"
+    "icon": "icon-grid",
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewDebitNotes", "translate": "" },
+      { "text": "Edit", "sref": "app.AccDebitNotes", "translate": "" }
+    ]
   },
   {
     "text": "Special Journal",
@@ -44,13 +52,21 @@
   },
   {
     "text": "Payment",
-    "sref": "app.AccPayment",
-    "icon": "icon-map"
+    "sref": "#",
+    "icon": "icon-map",
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewPayment", "translate": "" },
+      { "text": "Edit", "sref": "app.AccPayment", "translate": "" }
+    ]
   },
   {
     "text": "Receipt",
-    "sref": "app.AccReceipt",
-    "icon": "icon-play"
+    "sref": "#",
+    "icon": "icon-play",
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewReceipt", "translate": "" },
+      { "text": "Edit", "sref": "app.AccReceipt", "translate": "" }
+    ]
   },
   {
     "type": "separator"
@@ -68,7 +84,11 @@
   {
     "text": "Taxation",
     "sref": "#",
-    "icon": "icon-stack"
+    "icon": "icon-stack",
+    "subnav": [
+      { "text": "View",  "sref": "app.AccViewTaxation", "translate": "" },
+      { "text": "Edit", "sref": "app.AccTaxation", "translate": "" }
+    ]
   },
   {
     "text": "Ledgers",

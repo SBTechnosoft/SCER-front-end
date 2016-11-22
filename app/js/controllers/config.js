@@ -235,6 +235,32 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 			controller: 'AccDataPurchaseController as table',
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
         })
+		//Accounting View Credit Notes
+		.state('app.AccViewCreditNotes', {
+            url: '/AccViewCreditNotes',
+            templateUrl: basepath('Accounting/CreditNotes/AccViewCreditNotes.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Credit Notes
+		.state('app.AccDataCreditNotes', {
+            url: '/AccDataCreditNotes',
+            templateUrl: basepath('Accounting/CreditNotes/AccDataCreditNotes.html?r='+Math.random()),
+			controller: 'AccDataCreditNotesController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+        })
+		//Accounting View Debit Notes
+		.state('app.AccViewDebitNotes', {
+            url: '/AccViewDebitNotes',
+            templateUrl: basepath('Accounting/DebitNotes/AccViewDebitNotes.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Debit Notes
+		.state('app.AccDataDebitNotes', {
+            url: '/AccDataDebitNotes',
+            templateUrl: basepath('Accounting/DebitNotes/AccDataDebitNotes.html?r='+Math.random()),
+			controller: 'AccDataCreditNotesController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+        })
 		//Accounting Special journal
 		.state('app.AccSpecialJrnl', {
             url: '/AccSpecialJrnl',
@@ -260,11 +286,50 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Accounting/Payment/AccPayment.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv')
         })
+		//Accounting View Payment
+		.state('app.AccViewPayment', {
+            url: '/AccViewPayment',
+            templateUrl: basepath('Accounting/Payment/AccViewPayment.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Payment
+		.state('app.AccDataPayment', {
+            url: '/AccDataPayment',
+            templateUrl: basepath('Accounting/Payment/AccDataPayment.html?r='+Math.random()),
+			controller: 'AccDataPaymentController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+        })
 		//Accounting Receipt
 		.state('app.AccReceipt', {
             url: '/AccReceipt',
             templateUrl: basepath('Accounting/Receipt/AccReceipt.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
+        })
+		//Accounting View Receipt
+		.state('app.AccViewReceipt', {
+            url: '/AccViewReceipt',
+            templateUrl: basepath('Accounting/Receipt/AccViewReceipt.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Receipt
+		.state('app.AccDataReceipt', {
+            url: '/AccDataReceipt',
+            templateUrl: basepath('Accounting/Receipt/AccDataReceipt.html?r='+Math.random()),
+			controller: 'AccDataReceiptController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+        })
+		//Accounting View Taxation
+		.state('app.AccViewTaxation', {
+            url: '/AccViewTaxation',
+            templateUrl: basepath('Accounting/Taxation/AccViewTaxation.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+        })
+		//Accounting Data Taxation
+		.state('app.AccDataTaxation', {
+            url: '/AccDataTaxation',
+            templateUrl: basepath('Accounting/Taxation/AccDataTaxation.html?r='+Math.random()),
+			controller: 'AccDataTaxationController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
         })
 		//Accounting Ledger
 		.state('app.AccLedger', {

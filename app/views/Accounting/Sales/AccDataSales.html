@@ -31,23 +31,57 @@
 			   </tab>
 				  
                <tab heading="Chart">
-					<!-- START row-->
-   <div class="panel panel-default">
-      <div class="panel-heading">
-         <div class="panel-title">Realtime</div>
-      </div>
-      <div class="panel-body">
-         <div class="row">
-            <div class="col-md-10">
-               <flot dataset="realTimeChartData" options="realTimeChartOpts" height="300"></flot>
+					<div class="row">
+					  <div class="col-lg-6">
+						 <div class="panel panel-transparent">
+							<div class="panel-heading">
+							   <div class="panel-title">Pie</div>
+							</div>
+							<div class="panel-wrapper">
+							   <div class="panel-body">
+								  <flot src="'server/chart/pie.json'" options="table.chartPieFlotChart"></flot>
+							   </div>
+							</div>
+						 </div>
+					  </div>
+					<div class="col-lg-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <div class="panel-title">Area</div>
             </div>
-            <div class="col-md-2">
-               <label>Set an update interval</label>
-               <input type="text" data-ng-model="realTimeChartUpdateInterval" class="form-control" />
+            <div class="panel-wrapper">
+               <div class="panel-body">
+                  <flot src="'server/chart/area.json'" options="table.chartAreaFlotChart" series="{'lines': areaSeries}"></flot>
+                  <div class="text-center mt-lg">
+                     <div class="btn-switch mb btn-switch-warning">
+                        <input type="checkbox" id="input-btn-switch-10" data-ng-model="areaSeries[0]" />
+                        <label for="input-btn-switch-10" class="btn btn-fw btn-warning">
+                           <em class="fa fa-check"></em>
+                           <strong>HTML</strong>
+                        </label>
+                     </div>
+                     <div class="btn-switch mb btn-switch-orange">
+                        <input type="checkbox" id="input-btn-switch-11" data-ng-model="areaSeries[1]" />
+                        <label for="input-btn-switch-11" class="btn btn-fw btn-orange">
+                           <em class="fa fa-check"></em>
+                           <strong>CSS</strong>
+                        </label>
+                     </div>
+                     <div class="btn-switch mb btn-switch-danger">
+                        <input type="checkbox" id="input-btn-switch-12" data-ng-model="areaSeries[2]" />
+                        <label for="input-btn-switch-12" class="btn btn-fw btn-danger">
+                           <em class="fa fa-check"></em>
+                           <strong>JS</strong>
+                        </label>
+                     </div>
+                  </div>
+               </div>
             </div>
          </div>
       </div>
-   </div>
+					 </div>
+					 
+  
 			   </tab>
             </tabset>
          </div>

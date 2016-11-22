@@ -4,20 +4,13 @@
  * Controller for ngTables
  =========================================================*/
 
-App.controller('AccDataSalesController', AccDataSalesController);
+App.controller('AccDataDebitNotesController', AccDataDebitNotesController);
 
-function AccDataSalesController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,flotOptions, colors,$timeout) {
+function AccDataDebitNotesController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location) {
   'use strict';
   var vm = this;
   var data = [];
   var formdata = new FormData();
-  
-  // An array of boolean to tell the directive which series we want to show
-  vm.areaSeries = [true, true, true];
-  vm.chartAreaFlotChart       = flotOptions['area'];
-  
-   vm.chartPieFlotChart        = flotOptions['pie'];
-  
   
   //Go To AddBranch
   $scope.GoToAddBranch = function(){
@@ -217,56 +210,6 @@ $scope.init();
 	 
 	});
   }
-	
-	// Setup realtime update
-  // ----------------------------------- 
 
-  vm.realTimeChartOpts = angular.extend({}, flotOptions['default'], {
-    series: {
-      lines: { show: true, fill: true, fillColor:  { colors: ["#00b4ff", "#1d93d9"] } },
-      shadowSize: 0 // Drawing is faster without shadows
-    },
-    yaxis: {
-      min: 0,
-      max: 130
-    },
-    xaxis: {
-      show: false
-    },
-    colors: ["#1d93d9"]
-  });
-
-  vm.realTimeChartUpdateInterval = 30;
-
-  var data = [],
-      totalPoints = 500;
-    
-  update();
-
-  function getRandomData() {
-    if (data.length > 0)
-      data = data.slice(1);
-    // Do a random walk
-    while (data.length < totalPoints) {
-      var prev = data.length > 0 ? data[data.length - 1] : 50,
-        y = prev + Math.random() * 10 - 5;
-      if (y < 0) {
-        y = 0;
-      } else if (y > 100) {
-        y = 100;
-      }
-      data.push(y);
-    }
-    // Zip the generated y values with the x values
-    var res = [];
-    for (var i = 0; i < data.length; ++i) {
-      res.push([i, data[i]]);
-    }
-    return [res];
-  }
-  function update() {
-    vm.realTimeChartData = getRandomData();
-    $timeout(update, vm.realTimeChartUpdateInterval);
-  }
 }
-AccDataSalesController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","flotOptions","colors","$timeout"];
+AccDataDebitNotesController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location"];

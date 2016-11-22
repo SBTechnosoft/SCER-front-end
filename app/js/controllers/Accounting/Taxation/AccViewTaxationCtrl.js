@@ -1,82 +1,75 @@
 
 /**=========================================================
- * Module: AddStaffController.js
+ * Module: AddInvStockCtrl.js
  * Controller for input components
  =========================================================*/
 
-App.controller('BillController', BillController);
+App.controller('AccViewTaxationController', AccViewTaxationController);
 
-function BillController($scope,apiCall,apiPath) {
+function AccViewTaxationController($scope,toaster,apiCall,apiPath) {
   'use strict';
- 
- var vm = this;
   
-  /* Table */
-	vm.AccBillTable = [];
-	vm.AccBillTable = [{"name":"","discountDropDown":"","discountBox":"","qty":""}];
+  
+   var vm = this; 
+  $scope.accViewPurchase = [];
+  
+  //Company Dropdown data
+	vm.companyDrop = [];
 	
-	$scope.addRow = function(){
-		 
-		var data = {};	
-		data.name ='';
-		data.discountDropDown ='';
-		data.discountBox ='';
-		data.qty ='';
-		vm.AccBillTable.push(data);
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
-    };
+		vm.companyDrop = responseCompanyDrop;
 	
-	$scope.removeRow = function (idx) {
-		vm.AccBillTable.splice(idx, 1);
-	};
+	});
 	
-  /* End */
-  
-  $scope.pop = function(data)
+  //Get All Branch on Company Change
+  $scope.changeCompany = function(id)
   {
-	  console.log(data);
-	  
-  }
- 
-  //get Company
-	vm.companyDrop=[];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			//console.log(response2);
-			vm.companyDrop = response2;
-			
+	  vm.branchDrop = [];
+		var getAllBranch = apiPath.getOneBranch+id;
+		//Get Branch
+		apiCall.getCall(getAllBranch).then(function(response4){
+			vm.branchDrop = response4;
+				
 		});
-
+  }
+  
   // Datepicker
   // ----------------------------------- 
 	this.minStart = new Date();
-
+	this.maxStart = new Date();
   this.today = function() {
     this.dt1 = new Date();
   };
   this.today();
-
+  
+  this.today2 = function() {
+    this.dt2 = this.dt1;
+  };
+  this.today2();
+	
+	this.check = function()
+  {
+	  
+	 this.dt2 = this.dt1;
+  };
+  
   this.clear = function () {
     this.dt1 = null;
   };
 
   // Disable weekend selection
   this.disabled = function(date, mode) {
+	
     return false; //( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
   };
 
-  this.toggleMin = function() {
-    this.minDate = this.minDate ? null : new Date();
-  };
-  this.toggleMin();
+  // this.toggleMin = function() {
+    // this.minDate = this.minDate ? null : new Date();
+  // };
+  // this.toggleMin();
 
-  this.open = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-
-    this.opened = true;
-  };
-	
-	this.openStart = function($event) {
+  this.openStart = function($event) {
 	  
     $event.preventDefault();
     $event.stopPropagation();
@@ -84,6 +77,13 @@ function BillController($scope,apiCall,apiPath) {
     this.openedStart = true;
   };
   
+  this.openEnd = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    this.openedEnd = true;
+  };
+
   this.dateOptions = {
     formatYear: 'yy',
     startingDay: 1
@@ -184,5 +184,17 @@ function BillController($scope,apiCall,apiPath) {
     {value: 3, name: 'Normal'},
     {value: 5, name: 'Huge'}
   ];
+  
+  
+
+  $scope.pop = function() {
+    toaster.pop('success', 'Title', 'Message');
+  };
+  
+  $scope.cancel = function() {
+    toaster.pop('info', 'Form Reset', 'Message');
+  };
+  
+  
 }
-BillController.$inject = ["$scope","apiCall","apiPath"];
+AccViewTaxationController.$inject = ["$scope","toaster","apiCall","apiPath"];
