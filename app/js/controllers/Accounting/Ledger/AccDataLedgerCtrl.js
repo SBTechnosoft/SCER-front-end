@@ -4,41 +4,26 @@
  * Controller for ngTables
  =========================================================*/
 
-App.controller('BranchController', BranchController);
+App.controller('AccDataLedgerController', AccDataLedgerController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,$state) {
+function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,getSetFactory) {
   'use strict';
   var vm = this;
   var data = [];
   var formdata = new FormData();
   
-  //Go To AddBranch
-  $scope.GoToAddBranch = function(){
-	  
-	 $rootScope.AddBranchModify = false;
-	 $location.path('app/AddBranch/'); 
-  }
-  //Company
-	$scope.init = function (){
-			
-			vm.states=[];
-		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			vm.states = response2;
-		 
-		});
-		 
-	}
-$scope.init();
-  //End
   
-	apiCall.getCall(apiPath.getAllBranch).then(function(response){
+  var ledgerId = getSetFactory.get();
+  var GetTransationPath = apiPath.getAllLedger+'/'+ledgerId+'/transactions';
+  
+	apiCall.getCall(GetTransationPath).then(function(response){
 		//console.log(response);
 		data = response;
 		
-		for (var i = 0; i < data.length; i++) {
-		  data[i].cityName = ""; //initialization of new property 
-		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-		}
+		// for (var i = 0; i < data.length; i++) {
+		  // data[i].cityName = ""; //initialization of new property 
+		  // data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+		// }
 		
 		 $scope.TableData();
 	});
@@ -50,23 +35,14 @@ $scope.init();
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  branchName: 'asc'     // initial sorting
+			  entryDate: 'asc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
-			  //console.log(params.$params);
-			  // if()
-			  // {
-				  // alert('yes');
-			  // }
-			  // else{
-				  // alert('no');
-			  // }
-			  // use build-in angular filter
-			 // console.log("Length: .."+params.$params.filter.city);
+			 
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.branchName) != "undefined" && params.$params.filter.branchName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "")  || (typeof(params.$params.filter.amountType) != "undefined" && params.$params.filter.amountType != "")) || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != ""))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -195,6 +171,7 @@ $scope.init();
 		apiCall.postCall(editBranch2,formdata).then(function(response5){
 		
 			formdata.delete('isDefault');
+		
 			//$location.path('app/Branch');
 			//toaster.pop('success', 'Title', 'Message');
 		
@@ -204,8 +181,7 @@ $scope.init();
   $scope.edit_comp = function(branch_id)
   {
 	  
-	  //$location.path('app/AddBranch/'+branch_id);
-	   $state.go("app.AddBranch", { id: branch_id });
+	  $location.path('app/AddBranch/'+branch_id);
   }
   
   $scope.delete_comp = function(branch_id)
@@ -221,4 +197,4 @@ $scope.init();
   }
 
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","$state"];
+AccDataLedgerController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","getSetFactory"];

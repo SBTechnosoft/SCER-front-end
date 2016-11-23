@@ -6,7 +6,7 @@
 
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster) {
+function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster,getSetFactory,$state) {
   'use strict';
   
 	var vm = this;
@@ -17,6 +17,15 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
   
 	$scope.trueData = false;
 	$scope.alertData = true;
+	
+	$scope.viewLedgerDetails = function(id){
+		
+		//alert(id);
+		getSetFactory.set(id);
+		//$location.path('app/AccDataLedger');
+		$state.go("app.AccDataLedger");
+		
+	}
 	
 	$scope.showInput = function()
 	{	
@@ -36,8 +45,10 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		apiCall.getCall(apiPath.getAllLedger+'/'+id).then(function(response){
 			
 			$scope.ledgerForm.ledgerName = response.ledgerName;
+			$scope.ledgerForm.emailId = response.emailId;
 			$scope.ledgerForm.alias = response.alias;
 			$scope.ledgerForm.invAffect = response.inventoryAffected;
+			$scope.ledgerForm.contact = response.contactNo;
 			$scope.ledgerForm.address1 = response.address1;
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
@@ -91,8 +102,10 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		apiCall.getCall(apiPath.getAllLedger+'/'+id).then(function(response){
 			
 			$scope.ledgerForm.ledgerName = response.ledgerName;
+			$scope.ledgerForm.emailId = response.emailId;
 			$scope.ledgerForm.alias = response.alias;
 			$scope.ledgerForm.invAffect = response.inventoryAffected;
+			$scope.ledgerForm.contact = response.contactNo;
 			$scope.ledgerForm.address1 = response.address1;
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
@@ -450,4 +463,4 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster"];
+AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster","getSetFactory","$state"];

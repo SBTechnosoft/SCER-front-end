@@ -337,6 +337,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Accounting/Ledger/Ledger.html?r='+Math.random()),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport','getBranchSrv','toaster')
         })
+		//Accounting Data Ledger
+		.state('app.AccDataLedger', {
+            url: '/AccDataLedger',
+            templateUrl: basepath('Accounting/Ledger/AccDataLedger.html?r='+Math.random()),
+			controller: 'AccDataLedgerController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+        })
 		/*** Quick Menu ***/
 		//Bill
 		.state('app.Bill', {
