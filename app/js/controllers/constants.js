@@ -106,7 +106,9 @@ App
 	'getAllLedger':     'http://api.siliconbrain.co.in/accounting/ledgers',
 	'getAllProduct':     'http://api.siliconbrain.co.in/products',
 	'getAllCategory':     'http://api.siliconbrain.co.in/product-categories',
-	'getAllGroup':     'http://api.siliconbrain.co.in/product-groups'
+	'getAllGroup':     'http://api.siliconbrain.co.in/product-groups',
+	'getJrnlNext': 'http://api.siliconbrain.co.in/accounting/journals/next',
+	'postJrnl': 'http://api.siliconbrain.co.in/accounting/journals'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

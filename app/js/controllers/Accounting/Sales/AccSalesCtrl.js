@@ -3,33 +3,42 @@
  * Module: AccSalesController.js
  * Controller for input components
  =========================================================*/
-
+App.filter('sumOfValue', function () {
+    return function (data, key) {        
+        if (angular.isUndefined(data) && angular.isUndefined(key))
+            return 0;        
+        var sum = 0;        
+        angular.forEach(data,function(value){
+            sum = sum + parseInt(value[key]);
+        });        
+        return sum;
+    }
+});
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($scope,apiCall,apiPath) {
+function AccSalesController($scope,apiCall,apiPath,$http) {
   'use strict';
   
   var vm = this;
-  $scope.AccSales = [];
+  $scope.accSales = [];
   var formdata = new FormData();
   
 	/* Table */
 	vm.AccClientMultiTable = [];
-	vm.AccClientMultiTable = [{"DropCr":"dr","ledgerId":"","clientName":"Virat A/C","Dbt":"2000","Crdt":""},{"DropCr":"dr","ledgerId":"","clientName":"Cashe A/C","Dbt":"2000","Crdt":""}];
+	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addClientRow = function(){
 		 
 		 var data = {};
-		data.DropCr ='dr';
+		data.amountType ='debit';
 		data.ledgerId='';
-		data.clientName ='';
-		data.Dbt ='';
-		data.Crdt ='';
+		data.ledgerName ='';
+		data.amount ='';
 		vm.AccClientMultiTable.push(data);
 
     };
 	
-	$scope.settabledata = function(item,index)
+	$scope.setMultiTable = function(item,index)
 	{
 		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
 		console.log(vm.AccClientMultiTable);
@@ -42,7 +51,7 @@ function AccSalesController($scope,apiCall,apiPath) {
   
 	/* Table */
 	vm.AccSalesTable = [];
-	vm.AccSalesTable = [{"productId":"","productName":"","discountDropDown":"","discountBox":"","qty":""}];
+	vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1"}];
 	
 	$scope.addRow = function(){
 		  
@@ -50,9 +59,10 @@ function AccSalesController($scope,apiCall,apiPath) {
 		// console.log(this.AccSalesTable);
 		data.productId='';
 		data.productName ='';
-		data.discountDropDown ='';
-		data.discountBox ='';
-		data.qty ='';
+		data.discountType ='flat';
+		data.discount ='';
+		data.price ='1000';
+		data.qty ='1';
 		vm.AccSalesTable.push(data);
 		
 
@@ -65,6 +75,7 @@ function AccSalesController($scope,apiCall,apiPath) {
 	$scope.settabledata = function(item,index)
 	{
 		vm.AccSalesTable[index].productId = item.productId;
+		console.log(vm.AccSalesTable);
 	}
 	
 	//Auto suggest Client Name
@@ -84,22 +95,89 @@ function AccSalesController($scope,apiCall,apiPath) {
 	
 	});
 	
-	$scope.setAccSales = function(Fname,value) {
-		if(formdata.get(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		formdata.append(Fname,value.ledgerId);
-  	}
+	// $scope.setAccSales = function(Fname,value) {
+		// if(formdata.get(Fname))
+		// {
+			// formdata.delete(Fname);
+		// }
+		// formdata.append(Fname,value.ledgerId);
+  	// }
 	
 	
 	
   /* End */
-  
-  $scope.pop = function(data)
+  var jfid;
+	 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+		jfid = response.nextValue;
+	
+	});
+  $scope.pop = function()
   {
-	  console.log(data);
+	   var formdata  = new FormData();
+	console.log(jfid);
+	  console.log($scope.accSales.companyDropDown.companyId);
+	 var  date = new Date(vm.dt1);
+	//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+	var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	   console.log(fdate);
+	   console.log($scope.accSales.invoiceNo);
+	  console.log(vm.AccClientMultiTable);
+	  console.log(vm.AccSalesTable);
+	   //console.log($scope.accSales.remark);
+	   
 	  
+	
+	 formdata.append('jfId',jfid);
+	 formdata.append('companyId',$scope.accSales.companyDropDown.companyId);
+	
+	 formdata.append('entryDate',fdate);
+	 formdata.append('transactionDate',fdate);
+	 formdata.append('invoiceNumber',$scope.accSales.invoiceNo);
+	 formdata.append('billNumber','');
+	
+	//data
+	 var json = angular.copy(vm.AccClientMultiTable);
+	 
+	 for(var i=0;i<json.length;i++){
+		 
+		angular.forEach(json[i], function (value,key) {
+			
+			formdata.append('data['+i+']['+key+']',value);
+		});
+				
+	 }
+	 
+	//Inventory
+	  var json2 = angular.copy(vm.AccSalesTable);
+	 
+	 for(var i=0;i<json2.length;i++){
+		 
+		angular.forEach(json2[i], function (value,key) {
+			
+			formdata.append('inventory['+i+']['+key+']',value);
+		});
+				
+	 }
+	   
+	   $http({
+			url: apiPath.postJrnl,
+			 method: 'post',
+			processData: false,
+			 headers: {'Content-Type': undefined,'type':'sales'},
+			data:formdata
+		}).success(function(data, status, headers, config) {
+			console.log(data);	
+			
+			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+				jfid = response.nextValue;
+	
+			});
+	
+		}).error(function(data, status, headers, config) {
+			
+		});
   }
   
  $scope.AddSales = function()
@@ -255,4 +333,4 @@ function AccSalesController($scope,apiCall,apiPath) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccSalesController.$inject = ["$scope","apiCall","apiPath"];
+AccSalesController.$inject = ["$scope","apiCall","apiPath","$http"];

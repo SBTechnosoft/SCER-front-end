@@ -10,19 +10,18 @@ function AccSpecialJrnlController($scope,apiCall,apiPath) {
   'use strict';
   
    var vm = this;
-  
+  $scope.addAccJrnl = [];
   /* Table */
 	vm.AccSpecialJrnlTable = [];
-	vm.AccSpecialJrnlTable = [{"DropCr":"dr","ledgerId":"","ledgerName":"Speial","Dbt":"2000","Crdt":""},{"DropCr":"dr","ledgerId":"","ledgerName":"Item2","Dbt":"2000","Crdt":""},{"DropCr":"cr","ledgerId":"","ledgerName":"To Sales","Dbt":"","Crdt":"4000"}];
+	vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addRow = function(){
 		 
 		 var data = {};
-		data.DropCr ='dr';
+		data.amountType ='debit';
 		data.ledgerId='';
 		data.ledgerName ='';
-		data.Dbt ='';
-		data.Crdt ='';
+		data.amount ='';
 		vm.AccSpecialJrnlTable.push(data);
 
     };
@@ -46,12 +45,57 @@ function AccSpecialJrnlController($scope,apiCall,apiPath) {
 	};
 	
   /* End */
-  
-  $scope.pop = function(data)
+	var jfid;
+	 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+		jfid = response.nextValue;
+	
+	});
+	
+	
+  $scope.pop = function()
   {
-	  console.log(data);
-	  console.log(vm.AccSpecialJrnlTable);
-	  
+		console.log(jfid);
+		var  date = new Date(vm.dt1);
+		//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	
+	 var formdata  = new FormData();
+	
+	 formdata.append('jfId',jfid);
+	 formdata.append('companyId',$scope.addAccJrnl.companyDropDown.companyId);
+	
+	 formdata.append('entryDate',fdate);
+	
+	 var json = angular.copy(vm.AccSpecialJrnlTable);
+	 
+	 for(var i=0;i<json.length;i++){
+		 
+		angular.forEach(json[i], function (value,key) {
+			
+			formdata.append('data['+i+']['+key+']',value);
+		});
+				
+	 }
+	 
+	 //Insert Special journal
+	 apiCall.postCall(apiPath.postJrnl,formdata).then(function(response){
+		
+		console.log(response);
+		$scope.addAccJrnl = [];
+		vm.dt1 = new Date();
+		vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+		
+		 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+			jfid = response.nextValue;
+	
+		});
+	
+	 });
+	 
+	
+	 
   }
  
   // Chosen data

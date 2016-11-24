@@ -37,7 +37,7 @@
 				   <div class="form-group" >
 					  <label for="input-id-1" class="col-sm-1 control-label">No#</label>
 					  <div class="col-sm-4">
-						 <input  ng-model="noNumber" id="input-id-1" type="text" placeholder="Enter No#" class="form-control" />
+						 <input  ng-model="addAccJrnl.noNumber" id="input-id-1" type="text" placeholder="Enter No#" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset>
@@ -60,9 +60,9 @@
 				<tbody>
 					<tr id="addAfter" ng-repeat="item in form.AccSpecialJrnlTable">
 						<td>
-							<select  ng-model="item.DropCr" class="form-control">
-								<option value="dr" selected="selected">Dr</option>
-								<option value="cr">Cr</option>
+							<select  ng-model="item.amountType" class="form-control">
+								<option value="debit" selected="selected">Dr</option>
+								<option value="credit">Cr</option>
 							</select>
 						</td>
 						<td>
@@ -75,10 +75,10 @@
 							<h5 >Current Balance 205000 Dr/Cr</h5>
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.Dbt"  class="form-control" dir="rtl" 
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" 
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.Crdt"  class="form-control" dir="rtl" />
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-if="item.amountType=='credit'"  class="form-control" dir="rtl" />
 						</td>
 						<td style="">
 							<center>
@@ -92,10 +92,10 @@
 						<td></td>
 						<td>Total</td>
 						<td >
-							<span style="float:right">5000</span>
+							<span style="float:right">0</span>
 						</td>
 						<td >
-							<span style="float:right">5000</span>
+							<span style="float:right">0</span>
 						</td>
 						<td ></td>
 					</tr>
@@ -108,7 +108,7 @@
 	<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 	<br />
 	<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
+	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" >Save</button>
 			
      
    <!-- END panel-->

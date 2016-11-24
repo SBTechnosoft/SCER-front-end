@@ -15,7 +15,7 @@
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
         <tbody>
             <tr data-ng-repeat="user in $data">
-				<td data-title="'Image'"  filter="{ 'companyName': '' }" ><img src="http://api.siliconbrain.co.in/{{user.documentUrl}}{{user.documentName}}" height="50" width="70" title="{{user.documentName}}" /></td>
+				<td data-title="'Image'"  filter="{ 'companyName': '' }" ><img src="http://api.siliconbrain.co.in/{{user.logo.documentUrl}}{{user.logo.documentName}}" height="50" width="70" title="{{user.documentName}}" /></td>
 				<td data-title="'Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.companyName}}</td>
 				<td data-title="'Address'" sortable="'address1'" filter="{ 'address1': 'text' }" >{{user.address1}}</td>
 			    <td data-title="'Address2'" sortable="'address2'" filter="{ 'address2': 'text' }" >{{user.address2}}</td>

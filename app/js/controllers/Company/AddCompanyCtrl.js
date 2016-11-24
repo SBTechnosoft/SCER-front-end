@@ -91,8 +91,8 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		$scope.addCompany.formalName = res.formalName;
 		$scope.addCompany.decimal = res.noOfDecimalPoints;
 		$scope.addCompany.curSymbol = res.currencySymbol;
-		$scope.addCompany.documentUrl = res.documentUrl;
-		$scope.addCompany.documentName = res.documentName;
+		$scope.addCompany.documentUrl = res.logo.documentUrl;
+		$scope.addCompany.documentName = res.logo.documentName;
 		
 		//State DropDown Selection
 		var stateDropPath = apiPath.getAllState+'/'+res.stateAbb;
@@ -321,9 +321,14 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 	}
 	else
 	{
+		formdata.append('isDefault','not');
+			formdata.append('isDisplay','no');
+			
 		apiCall.postCall(apiPath.getAllCompany,formdata).then(function(response5){
 		
 			//console.log(response5);
+			
+			
 			$location.path('app/Company');
 			toaster.pop('success', 'Title', 'Message');
 			
