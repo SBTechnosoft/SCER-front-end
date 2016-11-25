@@ -245,6 +245,13 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	'yes',
 	'no'
   ]
+  
+  this.amountTypeDrop = [
+	'Debit',
+	'Credit'
+  ];
+  
+  $scope.ledgerForm.amountType = 'Credit';
 	//Get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response3){

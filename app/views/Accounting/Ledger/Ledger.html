@@ -65,7 +65,12 @@
 				<fieldset class="my-fieldset-paddingBottom">
 					<div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Opening B/L</label>
-					  <div class="col-sm-8">
+					  <div class="col-sm-2">
+						 <select chosen data-ng-model="ledgerForm.amountType" tabindex="2" data-ng-options="s for s in form.amountTypeDrop" ng-change="changeLedgerData('amountType',ledgerForm.amountType)" ng-disabled="form.disableValue"  class="form-control chosen-select" >
+						 <option value=""></option>
+						</select>
+						</div>
+						<div class="col-sm-6">
 						 <input ng-model="ledgerForm.openingBal" tabindex="2" ng-change="changeLedgerData('openingBal',ledgerForm.openingBal)" ng-disabled="form.disableValue" id="input-id-1" ng-disabled="form.disableValue" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
 					  </div>
 				    </div>
@@ -167,9 +172,11 @@
 				  
                </div>
             </fieldset>
-		
-			<button type="button" ng-disabled="form.disableValue" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="clickSave()" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id">Cancel</button>
-			<button type="button" ng-disabled="form.disableValue" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addUpLedger()">Save</button>
+			
+			<fieldset class="my-fieldset-paddingBottom">
+				<button type="button" ng-disabled="form.disableValue" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="clickSave()" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id">Cancel</button>
+				<button type="button" ng-disabled="form.disableValue" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addUpLedger()">Save</button>
+			</fieldset>
 		</form>
 	  </div>
 	 

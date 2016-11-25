@@ -25,7 +25,7 @@ App.factory('apiCall', ["$http","$q", function ($http,$q) {
                         url: url,
 						method: 'post',
 						processData: false,
-                        headers: {'Content-Type': undefined},
+                       headers: {'Content-Type': undefined},
                         data:formdata
                     }).success(function(data, status, headers, config) {
 						deferred.resolve(data);

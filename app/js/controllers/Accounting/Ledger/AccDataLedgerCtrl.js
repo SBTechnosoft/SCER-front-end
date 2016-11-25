@@ -6,24 +6,54 @@
 
 App.controller('AccDataLedgerController', AccDataLedgerController);
 
-function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,getSetFactory) {
+function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,getSetFactory,flotOptions, colors,$timeout) {
   'use strict';
   var vm = this;
   var data = [];
   var formdata = new FormData();
+   var ledgerId = getSetFactory.get();
+  //vm.pieChartData = [];
+  vm.headingName;
   
+  apiCall.getCall(apiPath.getAllLedger+'/'+ledgerId).then(function(responseDrop){
+		
+		vm.headingName = responseDrop.ledgerName;
+	
+	});
   
-  var ledgerId = getSetFactory.get();
+  //Chart Config
+	// An array of boolean to tell the directive which series we want to show
+	 vm.areaSeries = [true, true, true];
+	vm.chartAreaFlotChart = flotOptions['area'];
+  
+   vm.chartPieFlotChart = flotOptions['pie'];
+  
+ 
   var GetTransationPath = apiPath.getAllLedger+'/'+ledgerId+'/transactions';
   
 	apiCall.getCall(GetTransationPath).then(function(response){
 		//console.log(response);
 		data = response;
-		
-		// for (var i = 0; i < data.length; i++) {
-		  // data[i].cityName = ""; //initialization of new property 
-		  // data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-		// }
+		vm.pieChartData = [{ "color" : "#39C558",
+    "data" : "0",
+    "label" : "Debit"
+  },
+  { "color" : "#00b4ff",
+    "data" : "0",
+    "label" : "Credit"
+  }];
+  
+		for (var i = 0; i < data.length; i++) {
+			
+		  if(data[i].amountType=='debit'){
+			vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseInt(data[i].amount);
+			
+		  }
+		  else{
+			vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseInt(data[i].amount);
+		  }
+		}
+		console.log(vm.pieChartData);
 		
 		 $scope.TableData();
 	});
@@ -197,4 +227,4 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   }
 
 }
-AccDataLedgerController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","getSetFactory"];
+AccDataLedgerController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","getSetFactory","flotOptions","colors","$timeout"];

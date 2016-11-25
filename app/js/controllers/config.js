@@ -233,7 +233,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataPurchase',
             templateUrl: basepath('Accounting/Purchase/AccDataPurchase.html?r='+Math.random()),
 			controller: 'AccDataPurchaseController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		//Accounting View Credit Notes
 		.state('app.AccViewCreditNotes', {
@@ -246,7 +246,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataCreditNotes',
             templateUrl: basepath('Accounting/CreditNotes/AccDataCreditNotes.html?r='+Math.random()),
 			controller: 'AccDataCreditNotesController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		//Accounting View Debit Notes
 		.state('app.AccViewDebitNotes', {
@@ -259,7 +259,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataDebitNotes',
             templateUrl: basepath('Accounting/DebitNotes/AccDataDebitNotes.html?r='+Math.random()),
 			controller: 'AccDataCreditNotesController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		//Accounting Special journal
 		.state('app.AccSpecialJrnl', {
@@ -278,7 +278,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataSpecialJrnl',
             templateUrl: basepath('Accounting/SpecialJournal/AccDataSpecialJrnl.html?r='+Math.random()),
 			controller: 'AccDataSpecialJrnlController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		//Accounting Payment
 		.state('app.AccPayment', {
@@ -297,7 +297,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataPayment',
             templateUrl: basepath('Accounting/Payment/AccDataPayment.html?r='+Math.random()),
 			controller: 'AccDataPaymentController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		//Accounting Receipt
 		.state('app.AccReceipt', {
@@ -316,7 +316,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataReceipt',
             templateUrl: basepath('Accounting/Receipt/AccDataReceipt.html?r='+Math.random()),
 			controller: 'AccDataReceiptController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		//Accounting View Taxation
 		.state('app.AccViewTaxation', {
@@ -329,7 +329,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataTaxation',
             templateUrl: basepath('Accounting/Taxation/AccDataTaxation.html?r='+Math.random()),
 			controller: 'AccDataTaxationController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		//Accounting Ledger
 		.state('app.AccLedger', {
@@ -342,7 +342,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataLedger',
             templateUrl: basepath('Accounting/Ledger/AccDataLedger.html?r='+Math.random()),
 			controller: 'AccDataLedgerController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		/*** Quick Menu ***/
 		//Bill

@@ -6,7 +6,7 @@
 
 App.controller('AccPurchaseController', AccPurchaseController);
 
-function AccPurchaseController($scope,apiCall,apiPath) {
+function AccPurchaseController($scope,apiCall,apiPath,$http) {
   'use strict';
   
    var vm = this;
@@ -15,21 +15,20 @@ function AccPurchaseController($scope,apiCall,apiPath) {
 	
 	/* Table */
 	vm.AccClientMultiTable = [];
-	vm.AccClientMultiTable = [{"DropCr":"dr","ledgerId":"","clientName":"Virat A/C","Dbt":"2000","Crdt":""},{"DropCr":"dr","ledgerId":"","clientName":"Cashe A/C","Dbt":"2000","Crdt":""}];
+	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addClientRow = function(){
 		 
 		 var data = {};
-		data.DropCr ='dr';
+		data.amountType ='debit';
 		data.ledgerId='';
-		data.clientName ='';
-		data.Dbt ='';
-		data.Crdt ='';
+		data.ledgerName ='';
+		data.amount ='';
 		vm.AccClientMultiTable.push(data);
 
     };
 	
-	$scope.settabledata = function(item,index)
+	$scope.setAccPurchase = function(item,index)
 	{
 		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
 		console.log(vm.AccClientMultiTable);
@@ -42,7 +41,7 @@ function AccPurchaseController($scope,apiCall,apiPath) {
 	
 	/* Table */
 	vm.AccPurchaseTable = [];
-	vm.AccPurchaseTable = [{"productId":"","productName":"","discountDropDown":"","discountBox":"","qty":""}];
+	vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"0","qty":"1"}];
 	
 	$scope.addRow = function(){
 		  console.log(vm.AccPurchaseTable);
@@ -50,8 +49,8 @@ function AccPurchaseController($scope,apiCall,apiPath) {
 		// console.log(this.AccSalesTable);
 		data.productId='';
 		data.productName ='';
-		data.discountDropDown ='';
-		data.discountBox ='';
+		data.discountType ='';
+		data.discount ='';
 		data.qty ='';
 		vm.AccPurchaseTable.push(data);
 		console.log(vm.AccPurchaseTable);
@@ -81,13 +80,7 @@ function AccPurchaseController($scope,apiCall,apiPath) {
 	
 	});
 	
-	$scope.setAccPurchase = function(Fname,value) {
-		if(formdata.get(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		formdata.append(Fname,value.ledgerId);
-  	}
+	
 	
 	$scope.removeRow = function (idx) {
 		vm.AccPurchaseTable.splice(idx, 1);
@@ -95,9 +88,88 @@ function AccPurchaseController($scope,apiCall,apiPath) {
 	
   /* End */
   
-  $scope.pop = function(data)
+  //Set Multiple File In Formdata On Change
+	$scope.uploadFile = function(files) {
+		//console.log(files);
+		//formdata.append("file[]", files[0]);
+		angular.forEach(files, function (value,key) {
+			console.log(value);
+			//formdata.append('file[]',value);
+		});
+
+	};
+	//Set Last JfId In jfid variable
+	var jfid;
+	apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+		jfid = response.nextValue;
+	
+	});
+	
+  $scope.pop = function()
   {
-	  console.log(data);
+	var formdata  = new FormData();
+	console.log(jfid);
+	console.log($scope.accPurchase.companyDropDown.companyId);
+	var  date = new Date(vm.dt1);
+	//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+	var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	console.log(fdate);
+	console.log($scope.accPurchase.billNo);
+	console.log(vm.AccClientMultiTable);
+	console.log(vm.AccPurchaseTable);
+   console.log($scope.accPurchase.remark);
+   
+   formdata.append('jfId',jfid);
+	 formdata.append('companyId',$scope.accPurchase.companyDropDown.companyId);
+	
+	 formdata.append('entryDate',fdate);
+	 formdata.append('transactionDate',fdate);
+	 formdata.append('invoiceNumber','');
+	 formdata.append('billNumber',$scope.accPurchase.billNo);
+	
+	//data
+	 var json = angular.copy(vm.AccClientMultiTable);
+	 
+	 for(var i=0;i<json.length;i++){
+		 
+		angular.forEach(json[i], function (value,key) {
+			
+			formdata.append('data['+i+']['+key+']',value);
+		});
+				
+	 }
+	 
+	//Inventory
+	  var json2 = angular.copy(vm.AccPurchaseTable);
+	 
+	 for(var i=0;i<json2.length;i++){
+		 
+		angular.forEach(json2[i], function (value,key) {
+			
+			formdata.append('inventory['+i+']['+key+']',value);
+		});
+				
+	 }
+	   
+	   $http({
+			url: apiPath.postJrnl,
+			 method: 'post',
+			processData: false,
+			 headers: {'Content-Type': undefined,'type':'purchase'},
+			data:formdata
+		}).success(function(data, status, headers, config) {
+			console.log(data);	
+			
+			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+				jfid = response.nextValue;
+	
+			});
+	
+		}).error(function(data, status, headers, config) {
+			
+		});
 	  
   }
   // Chosen data
@@ -250,4 +322,4 @@ function AccPurchaseController($scope,apiCall,apiPath) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccPurchaseController.$inject = ["$scope","apiCall","apiPath"];
+AccPurchaseController.$inject = ["$scope","apiCall","apiPath","$http"];
