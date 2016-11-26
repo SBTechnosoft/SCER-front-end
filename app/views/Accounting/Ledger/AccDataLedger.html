@@ -55,27 +55,20 @@
             </div>
             <div class="panel-wrapper">
                <div class="panel-body">
-                  <flot src="'server/chart/area.json'" options="table.chartAreaFlotChart" series="{'lines': areaSeries}"></flot>
+                  <flot dataset="table.pieFlotCharts" options="table.chartAreaFlotChart" series="{'lines': areaSeries}"></flot>
                   <div class="text-center mt-lg">
-                     <div class="btn-switch mb btn-switch-warning">
+                     <div class="btn-switch mb btn-switch-success">
                         <input type="checkbox" id="input-btn-switch-10" data-ng-model="areaSeries[0]" />
                         <label for="input-btn-switch-10" class="btn btn-fw btn-warning">
                            <em class="fa fa-check"></em>
-                           <strong>HTML</strong>
+                           <strong>Debit</strong>
                         </label>
                      </div>
-                     <div class="btn-switch mb btn-switch-orange">
+                     <div class="btn-switch mb btn-switch-blue">
                         <input type="checkbox" id="input-btn-switch-11" data-ng-model="areaSeries[1]" />
                         <label for="input-btn-switch-11" class="btn btn-fw btn-orange">
                            <em class="fa fa-check"></em>
-                           <strong>CSS</strong>
-                        </label>
-                     </div>
-                     <div class="btn-switch mb btn-switch-danger">
-                        <input type="checkbox" id="input-btn-switch-12" data-ng-model="areaSeries[2]" />
-                        <label for="input-btn-switch-12" class="btn btn-fw btn-danger">
-                           <em class="fa fa-check"></em>
-                           <strong>JS</strong>
+                           <strong>Credit</strong>
                         </label>
                      </div>
                   </div>
