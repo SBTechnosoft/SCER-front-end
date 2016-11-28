@@ -108,7 +108,12 @@ App
 	'getAllCategory':     'http://api.siliconbrain.co.in/product-categories',
 	'getAllGroup':     'http://api.siliconbrain.co.in/product-groups',
 	'getJrnlNext': 'http://api.siliconbrain.co.in/accounting/journals/next',
-	'postJrnl': 'http://api.siliconbrain.co.in/accounting/journals'
+	'postJrnl': 'http://api.siliconbrain.co.in/accounting/journals',
+	'getAllClient': 'http://api.siliconbrain.co.in/clients',
+	'getAllBank': 'http://api.siliconbrain.co.in/banks',
+	'postBill': 'http://api.siliconbrain.co.in/accounting/bill',
+	'getLatestInvoice1': 'http://api.siliconbrain.co.in/settings/invoice-numbers/company/',
+	'getLatestInvoice2': '/latest'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

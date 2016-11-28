@@ -84,110 +84,34 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   
 		for (var i = 0; i < data.length; i++) {
 			
-		  if(data[i].amountType=='debit'){
+			if(data[i].amountType=='debit'){
 			  
-			vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseInt(data[i].amount);
-			var date = data[i].entryDate;
-			var splitedate = date.split("-").reverse().join("-");
-			var getdate = new Date(splitedate);
-			var month = getdate.getMonth()+1;
+				vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseInt(data[i].amount);
+				var date = data[i].entryDate;
+				var splitedate = date.split("-").reverse().join("-");
+				var getdate = new Date(splitedate);
+				var month = getdate.getMonth();
+				
+					vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseInt(data[i].amount);
+					
+				//console.log(vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount));
 			
-			switch (month) {
-            case 1:
-                vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount);
-                break;
-            case 2:
-                 vm.pieFlotCharts[0]["data"][1][1] = parseInt(vm.pieFlotCharts[0]["data"][1][1]) + parseInt(data[i].amount);
-                break;
-			case 3:
-                 vm.pieFlotCharts[0]["data"][2][1] = parseInt(vm.pieFlotCharts[0]["data"][2][1]) + parseInt(data[i].amount);
-                break;
-            case 4:
-                 vm.pieFlotCharts[0]["data"][3][1] = parseInt(vm.pieFlotCharts[0]["data"][3][1]) + parseInt(data[i].amount);
-                break;
-			case 5:
-                 vm.pieFlotCharts[0]["data"][4][1] = parseInt(vm.pieFlotCharts[0]["data"][4][1]) + parseInt(data[i].amount);
-                break;
-            case 6:
-                 vm.pieFlotCharts[0]["data"][5][1] = parseInt(vm.pieFlotCharts[0]["data"][5][1]) + parseInt(data[i].amount);
-                break;
-			case 7:
-                 vm.pieFlotCharts[0]["data"][6][1] = parseInt(vm.pieFlotCharts[0]["data"][6][1]) + parseInt(data[i].amount);
-                break;
-            case 8:
-                 vm.pieFlotCharts[0]["data"][7][1] = parseInt(vm.pieFlotCharts[0]["data"][7][1]) + parseInt(data[i].amount);
-                break;
-			case 9:
-                 vm.pieFlotCharts[0]["data"][8][1] = parseInt(vm.pieFlotCharts[0]["data"][8][1]) + parseInt(data[i].amount);
-                break;
-            case 10:
-                 vm.pieFlotCharts[0]["data"][9][1] = parseInt(vm.pieFlotCharts[0]["data"][9][1]) + parseInt(data[i].amount);
-                break;
-			case 11:
-                 vm.pieFlotCharts[0]["data"][10][1] = parseInt(vm.pieFlotCharts[0]["data"][10][1]) + parseInt(data[i].amount);
-                break;
-            case 12:
-                 vm.pieFlotCharts[0]["data"][11][1] = parseInt(vm.pieFlotCharts[0]["data"][11][1]) + parseInt(data[i].amount);
-                break;
-            default:
-
-        }
-			//console.log(vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount));
-			
-		  }
-		else{
-			vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseInt(data[i].amount);
-			
-			var date = data[i].entryDate;
-			var splitedate = date.split("-").reverse().join("-");
-			var getdate = new Date(splitedate);
-			var month = getdate.getMonth()+1;
-			
-			switch (month) {
-            case 1:
-                vm.pieFlotCharts[1]["data"][0][1] = parseInt(vm.pieFlotCharts[1]["data"][0][1]) + parseInt(data[i].amount);
-                break;
-            case 2:
-                 vm.pieFlotCharts[1]["data"][1][1] = parseInt(vm.pieFlotCharts[1]["data"][1][1]) + parseInt(data[i].amount);
-                break;
-			case 3:
-                 vm.pieFlotCharts[1]["data"][2][1] = parseInt(vm.pieFlotCharts[1]["data"][2][1]) + parseInt(data[i].amount);
-                break;
-            case 4:
-                 vm.pieFlotCharts[1]["data"][3][1] = parseInt(vm.pieFlotCharts[1]["data"][3][1]) + parseInt(data[i].amount);
-                break;
-			case 5:
-                 vm.pieFlotCharts[1]["data"][4][1] = parseInt(vm.pieFlotCharts[1]["data"][4][1]) + parseInt(data[i].amount);
-                break;
-            case 6:
-                 vm.pieFlotCharts[1]["data"][5][1] = parseInt(vm.pieFlotCharts[1]["data"][5][1]) + parseInt(data[i].amount);
-                break;
-			case 7:
-                 vm.pieFlotCharts[1]["data"][6][1] = parseInt(vm.pieFlotCharts[1]["data"][6][1]) + parseInt(data[i].amount);
-                break;
-            case 8:
-                 vm.pieFlotCharts[1]["data"][7][1] = parseInt(vm.pieFlotCharts[1]["data"][7][1]) + parseInt(data[i].amount);
-                break;
-			case 9:
-                 vm.pieFlotCharts[1]["data"][8][1] = parseInt(vm.pieFlotCharts[1]["data"][8][1]) + parseInt(data[i].amount);
-                break;
-            case 10:
-                 vm.pieFlotCharts[1]["data"][9][1] = parseInt(vm.pieFlotCharts[1]["data"][9][1]) + parseInt(data[i].amount);
-                break;
-			case 11:
-                 vm.pieFlotCharts[1]["data"][10][1] = parseInt(vm.pieFlotCharts[1]["data"][10][1]) + parseInt(data[i].amount);
-                break;
-            case 12:
-                 vm.pieFlotCharts[1]["data"][11][1] = parseInt(vm.pieFlotCharts[1]["data"][11][1]) + parseInt(data[i].amount);
-                break;
-            default:
-
-        }
-			//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
-		  }
+			}
+			else{
+				vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseInt(data[i].amount);
+				
+				var date = data[i].entryDate;
+				var splitedate = date.split("-").reverse().join("-");
+				var getdate = new Date(splitedate);
+				var month = getdate.getMonth();
+				
+					vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseInt(data[i].amount);
+				   
+				//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
+			}
 		}
-		
-		 $scope.TableData();
+		console.log(vm.pieFlotCharts);
+		$scope.TableData();
 	});
 	
   $scope.TableData = function(){
