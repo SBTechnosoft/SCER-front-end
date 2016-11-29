@@ -30,8 +30,6 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 	//vm.chartSplineFlotChart = flotOptions['spline'];
    
 
-
- 
   var GetTransationPath = apiPath.getAllLedger+'/'+ledgerId+'/transactions';
   
 	apiCall.getCall(GetTransationPath).then(function(response){

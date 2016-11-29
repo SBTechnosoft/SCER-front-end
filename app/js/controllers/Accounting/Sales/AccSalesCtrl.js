@@ -22,10 +22,13 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
   var vm = this;
   $scope.accSales = [];
   var formdata = new FormData();
+  $scope.totalTable;
+  $scope.grandTotalTable;
+  
   
 	/* Table */
 	vm.AccClientMultiTable = [];
-	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addClientRow = function(){
 		 
@@ -51,7 +54,7 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
   
 	/* Table */
 	vm.AccSalesTable = [];
-	vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1"}];
+	vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
 	
 	$scope.addRow = function(){
 		  
@@ -63,6 +66,7 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
 		data.discount ='';
 		data.price ='1000';
 		data.qty ='1';
+		data.amount = '';
 		vm.AccSalesTable.push(data);
 		
 
@@ -78,6 +82,15 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
 		console.log(vm.AccSalesTable);
 	}
 	
+	$scope.getTotal = function(){
+    var total = 0;
+    for(var i = 0; i < vm.AccSalesTable.length; i++){
+        var product = vm.AccSalesTable[i];
+        total += product.amount;
+    }
+    return total;
+}
+
 	//Auto suggest Client Name
 	vm.clientNameDrop=[];
 	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
@@ -114,6 +127,7 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
 	});
   $scope.pop = function()
   {
+	
 	   var formdata  = new FormData();
 	console.log(jfid);
 	  console.log($scope.accSales.companyDropDown.companyId);
@@ -164,10 +178,16 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
 			url: apiPath.postJrnl,
 			 method: 'post',
 			processData: false,
+			contentType: false,
+			 crossDomain: true,
+			// dataType: 'jsonp',
+			 //mimeType:'multipart/form-data',
+			//cache: false,
+			 //async:true,
 			 headers: {'Content-Type': undefined,'type':'sales'},
 			data:formdata
 		}).success(function(data, status, headers, config) {
-			console.log(data);	
+			console.log(headers);	
 			
 			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 		
@@ -238,7 +258,7 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker

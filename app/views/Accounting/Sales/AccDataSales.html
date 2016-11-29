@@ -16,7 +16,7 @@
 					 <tbody>
 						<tr data-ng-repeat="user in $data">
 						<td data-title="'Sr. No.'"  >{{$index+1}}</td>
-							<td data-title="'Date'" sortable="'date'" filter="{ 'date': 'text' }" >{{user.createdAt}}</td>
+							<td data-title="'Date'" sortable="'date'" filter="{ 'date': 'text' }" >{{09-12-2016 | date:'yyyy-MMM-dd'}}</td>
 							<td data-title="'Perticular'" sortable="'branchName'" filter="{ 'branchName': 'text' }" >{{user.branchName}}</td>
 							<td data-title="'Amount'" sortable="'amount'" filter="{ 'amount': 'text' }" >{{user.pincode}}</td>
 						   <td data-title="'Action'" sortable="'action'">

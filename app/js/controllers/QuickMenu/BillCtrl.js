@@ -22,6 +22,8 @@ function BillController($scope,apiCall,apiPath,$http) {
 	var vm = this;
 	var formdata = new FormData();
 	$scope.quickBill = [];
+	//Invoice Number 
+	$scope.quickBill.invoiceNumber;
 	
 	vm.paymentModeDrop =['cash','credit','bank','card'];
   
@@ -90,9 +92,43 @@ function BillController($scope,apiCall,apiPath,$http) {
 	
   /* End */
   
-	//Invoice Number 
-	$scope.quickBill.invoiceNumber;
+	//get Company
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			//console.log(response2);
+			vm.companyDrop = response2;
+			
+			for(var i=0;i<response2.length;i++){
+				
+				if(response2[i].isDefault == 'ok')
+				{
+					$scope.quickBill.companyDropDown = response2[i];
+					var id = response2[i].companyId;
+					var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
+		
+					//Get City
+					apiCall.getCall(getLatest).then(function(response4){
+						var label = response4[0].invoiceLabel;
+						var endAt = response4[0].endAt;
+						
+						if(response4[0].invoiceType=='postfix'){
+							
+							$scope.quickBill.invoiceNumber = endAt+label;
+							//console.log($scope.quickBill.invoiceNumber);
+						}
+						else{
+							$scope.quickBill.invoiceNumber = label+endAt;
+							//console.log($scope.quickBill.invoiceNumber);
+						}
+							
+					});
+				}
+			}
+			
+	});
 	
+	
+	//Change Invoice Number When Company Changed
 	$scope.changeCompany = function(id)
 	 {
 		
@@ -106,11 +142,11 @@ function BillController($scope,apiCall,apiPath,$http) {
 			if(response4[0].invoiceType=='postfix'){
 				
 				$scope.quickBill.invoiceNumber = endAt+label;
-				console.log($scope.quickBill.invoiceNumber);
+				//console.log($scope.quickBill.invoiceNumber);
 			}
 			else{
 				$scope.quickBill.invoiceNumber = label+endAt;
-				console.log($scope.quickBill.invoiceNumber);
+				//console.log($scope.quickBill.invoiceNumber);
 			}
 				
 		});
@@ -133,13 +169,12 @@ function BillController($scope,apiCall,apiPath,$http) {
 
   $scope.pop = function()
   {
-	 console.log($scope.totalTable);
-	 console.log($scope.quickBill.tax);
-	 console.log($scope.grandTotalTable);
-	 console.log($scope.quickBill.advance);
-	 console.log($scope.balanceTable);
+		var  date = new Date(vm.dt1);
+		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+		
 	  // console.log($scope.quickBill.companyDropDown.companyId);
-	  // console.log(vm.dt1);
+	   
+	   // console.log(fdate);
 	  // console.log($scope.quickBill.BillContact);
 	  // console.log($scope.quickBill.WorkNo);
 	  // console.log($scope.quickBill.companyName);
@@ -149,6 +184,13 @@ function BillController($scope,apiCall,apiPath,$http) {
 	  // console.log($scope.quickBill.secondAddress);
 	  // console.log($scope.quickBill.stateAbb.stateAbb);
 	  // console.log($scope.quickBill.cityId.cityId);
+	   // console.log($scope.quickBill.invoiceNumber);	
+	   // console.log(fdate); // transactionDate
+	    // console.log($scope.totalTable);
+		// console.log($scope.quickBill.tax);
+		// console.log($scope.grandTotalTable);
+		 // console.log($scope.quickBill.advance);
+		  // console.log($scope.balanceTable);
 	  // console.log($scope.quickBill.paymentMode);
 	  // console.log($scope.quickBill.BankName.bankId);
 	  // console.log($scope.quickBill.chequeNo);
@@ -156,67 +198,59 @@ function BillController($scope,apiCall,apiPath,$http) {
 	  // console.log(vm.AccBillTable);
 	  
 	  //Inventory
-	  // var json2 = angular.copy(vm.AccBillTable);
+	  var json2 = angular.copy(vm.AccBillTable);
 	 
-	 // for(var i=0;i<json2.length;i++){
+	 for(var i=0;i<json2.length;i++){
 		 
-		// angular.forEach(json2[i], function (value,key) {
+		angular.forEach(json2[i], function (value,key) {
 			
-			// formdata.append('inventory['+i+']['+key+']',value);
-		// });
+			formdata.append('inventory['+i+']['+key+']',value);
+		});
 				
-	 // }
+	 }
 	  
 	  //formdata.append();
-	  // formdata.append('total',$scope.totalTable);
-	 // formdata.append('tax',$scope.quickBill.tax);
-	 // formdata.append('grandTotal',$scope.grandTotalTable);
-	 // formdata.append('advance',$scope.quickBill.advance);
-	 // formdata.append('balance',$scope.balanceTable);
-	  // formdata.append('companyId',$scope.quickBill.companyDropDown.companyId);
-	  // formdata.append('entryDate',vm.dt1);
-	  // formdata.append('contactNo',$scope.quickBill.BillContact);
-	  // formdata.append('workNo',$scope.quickBill.WorkNo);
-	  // formdata.append('companyName',$scope.quickBill.companyName);
-	  // formdata.append('clientName',$scope.quickBill.clientName);
-	  // formdata.append('emailId',$scope.quickBill.emailId);
-	  // formdata.append('address1',$scope.quickBill.fisrtAddress);
-	  // formdata.append('address2',$scope.quickBill.secondAddress);
-	  // formdata.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
-	  // formdata.append('cityId',$scope.quickBill.cityId.cityId);
-	  // formdata.append('transactionDate',vm.dt1);
-	  // formdata.append('paymentMode',$scope.quickBill.paymentMode);
-	  // formdata.append('bankName',$scope.quickBill.BankName.bankId);
-	  // formdata.append('checkNumber',$scope.quickBill.chequeNo);
-	  // formdata.append('remark',$scope.quickBill.remark);
 	  
-	  // $http({
-			// url: apiPath.postBill,
-			 // method: 'post',
-			// processData: false,
-			 // headers: {'Content-Type': undefined,'type':'sales'},
-			// data:formdata
-		// }).success(function(data, status, headers, config) {
-			// console.log(data);	
-			
-			// apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-		
-				// jfid = response.nextValue;
+	  formdata.append('companyId',$scope.quickBill.companyDropDown.companyId);
+	  formdata.append('entryDate',fdate);
+	  formdata.append('contactNo',$scope.quickBill.BillContact);
+	  formdata.append('workNo',$scope.quickBill.WorkNo);
+	  formdata.append('companyName',$scope.quickBill.companyName);
+	  formdata.append('clientName',$scope.quickBill.clientName);
+	  formdata.append('invoiceNumber',$scope.quickBill.invoiceNumber);
+	  formdata.append('emailId',$scope.quickBill.emailId);
+	  formdata.append('address1',$scope.quickBill.fisrtAddress);
+	  formdata.append('address2',$scope.quickBill.secondAddress);
+	  formdata.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
+	  formdata.append('cityId',$scope.quickBill.cityId.cityId);
+	  formdata.append('transactionDate',fdate);
+	  formdata.append('total',$scope.totalTable);
+	 formdata.append('tax',$scope.quickBill.tax);
+	 formdata.append('grandTotal',$scope.grandTotalTable);
+	 formdata.append('advance',$scope.quickBill.advance);
+	 formdata.append('balance',$scope.balanceTable);
+	  formdata.append('paymentMode',$scope.quickBill.paymentMode);
+	  formdata.append('bankName',$scope.quickBill.BankName.bankId);
+	  formdata.append('checkNumber',$scope.quickBill.chequeNo);
+	  formdata.append('remark',$scope.quickBill.remark);
+	  
+	  $http({
+			url: apiPath.postBill,
+			 method: 'post',
+			processData: false,
+			 crossDomain: true,
+			 dataType: 'jsonp',
+			 headers: {'Content-Type': undefined,'type':'sales'},
+			data:formdata
+		}).success(function(data, status, headers, config) {
+			console.log(data);	
 	
-			// });
-	
-		// }).error(function(data, status, headers, config) {
+		}).error(function(data, status, headers, config) {
 			
-		// });
+		});
   }
  
-	//get Company
-	vm.companyDrop=[];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			//console.log(response2);
-			vm.companyDrop = response2;
-			
-	});
+	
 		
 	//Auto Suggest Client Contact Dropdown data
 	vm.clientSuggest = [];
@@ -246,8 +280,8 @@ function BillController($scope,apiCall,apiPath,$http) {
 		//console.log(files);
 		//formdata.append("file[]", files[0]);
 		angular.forEach(files, function (value,key) {
-			console.log(value);
-			//formdata.append('file[]',value);
+			//console.log(value);
+			formdata.append('file[]',value);
 		});
 
 	};
@@ -296,7 +330,7 @@ function BillController($scope,apiCall,apiPath,$http) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker

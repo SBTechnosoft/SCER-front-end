@@ -16,6 +16,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
     .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http) {
 		
 		// $templateCache.removeAll();
+		//$httpProvider.defaults.withCredentials = true;
 		 //location.reload(true);
     // Set reference to access them from any scope
     $rootScope.$state = $state;

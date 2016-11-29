@@ -12,10 +12,12 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
    var vm = this;
    $scope.accPurchase = [];
     var formdata = new FormData();
+	$scope.totalTable;
+	$scope.grandTotalTable;
 	
 	/* Table */
 	vm.AccClientMultiTable = [];
-	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addClientRow = function(){
 		 
@@ -41,7 +43,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
 	
 	/* Table */
 	vm.AccPurchaseTable = [];
-	vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"0","qty":"1"}];
+	vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":"1000","qty":"1","amount":""}];
 	
 	$scope.addRow = function(){
 		  console.log(vm.AccPurchaseTable);
@@ -49,9 +51,11 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
 		// console.log(this.AccSalesTable);
 		data.productId='';
 		data.productName ='';
-		data.discountType ='';
+		data.discountType ='flat';
+		data.price ='1000';
 		data.discount ='';
-		data.qty ='';
+		data.qty ='1';
+		data.amount = '';
 		vm.AccPurchaseTable.push(data);
 		console.log(vm.AccPurchaseTable);
 
@@ -63,6 +67,14 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
 		console.log(vm.AccPurchaseTable);
 	}
 	
+	$scope.getTotal = function(){
+    var total = 0;
+    for(var i = 0; i < vm.AccPurchaseTable.length; i++){
+        var product = vm.AccPurchaseTable[i];
+        total += product.amount;
+    }
+    return total;
+}
 	//Auto suggest Client Name
 	vm.clientNameDrop=[];
 	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
@@ -227,7 +239,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker

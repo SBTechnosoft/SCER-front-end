@@ -17,7 +17,7 @@
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
-							<input type="text" datepicker-popup="{{format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 							class="form-control" />
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -97,9 +97,9 @@
 						</td>
 						<td style="">
 							<center>
-								<i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add" ></i>
+								<i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add" ng-if="$index!=0" ></i>
 								&nbsp;
-								<i ng-click="removeClientRow($index)" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0"></i>
+								<i ng-click="removeClientRow($index)" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0&&$index!=1"></i>
 							</center>
 						</td>
 					</tr>
@@ -177,13 +177,15 @@
 							<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="width:50%;" dir="rtl" /> 
 						</td>
 						<td>
-							<span style="float:right">5000</span>
+							<span style="float:right">{{item.price}}</span>
 						</td>
 						<td>
 							<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" dir="rtl" /> 
 						</td>
 						<td >
-							<span style="float:right">4500</span>
+							<!--span style="float:right">4500</span-->
+							<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = (item.price*item.qty) - item.discount}}</span>
+							<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = (item.price*item.qty)-((item.price*item.qty)*item.discount/100)}}</span>
 						</td>
 						<td style="">
 						<center>
@@ -206,7 +208,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
+						<td style="text-align:right">{{totalTable = getTotal()}}</td>
 						<td></td>
 					</tr>
 					<tr>
@@ -214,7 +216,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
+						<td><input id="input-id-1" type="text" ng-model="accPurchase.tax"  class="form-control"  dir="rtl" /> </td>
 						<td></td>
 					</tr>
 					<tr>
@@ -222,7 +224,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
+						<td style="text-align:right">{{grandTotalTable = totalTable -- accPurchase.tax}}</td>
 						<td></td>
 					</tr>
 				</tbody>

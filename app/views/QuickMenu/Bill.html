@@ -20,7 +20,7 @@
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
-							<input type="text" datepicker-popup="{{format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 							class="form-control" />
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -43,7 +43,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Contact</label>
                   <div class="col-sm-8">
-                     <input style="cursor:pointer" typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" />
+                     <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" />
                   </div>
                </div>
             </fieldset >
