@@ -11,13 +11,19 @@
             <tabset>
                <tab heading="Table">
 				
-				<table data-ng-table="table.tableParams"  show-filter="true" class="table table-bordered table-striped">
+				<table data-ng-table="table.tableParams"  show-filter="false" class="table table-bordered table-striped">
 					<!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 					 <tbody>
 						<tr data-ng-repeat="user in $data">
 						<td data-title="'Sr. No.'"  >{{$index+1}}</td>
-							<td data-title="'Date'" sortable="'date'" filter="{ 'date': 'text' }" >{{user.createdAt}}</td>
-							<td data-title="'Perticular'" sortable="'branchName'" filter="{ 'branchName': 'text' }" >{{user.branchName}}</td>
+							<td data-title="'Date'" sortable="'date'" filter="{ 'date': 'text' }" >{{user.entryDate}}</td>
+							<td data-title="'Perticular'" sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }" >{{user.ledger.ledgerName}}</td>
+							
+							<td data-title="'Debit'" sortable="'amountTypeDebit'" filter="{ 'amountTypeDebit': 'text' }"  ><span ng-if="user.amountType=='debit'">{{user.amountType}}</span></td>
+							
+							<td data-title="'Credit'" sortable="'amountTypeCredit'" filter="{ 'amountTypeCredit': 'text' }"  ><span ng-if="user.amountType=='credit'">{{user.amountType}}</span></td>
+							
+							<td data-title="'Amount'" sortable="'amount'" filter="{ 'amount': 'text' }" >{{user.amount}}</td>
 						   <td data-title="'Action'" sortable="'action'">
 								<center>
 									<i ui-sref="" ng-click="edit_comp(user.branchId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
@@ -30,8 +36,51 @@
 			   
 			   </tab>
 				  
-               <tab heading="Chart">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-                  aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat , sunt in culpa qui officia deserunt mollit anim id est laborum.</tab>
+               <tab heading="Chart">
+				<div class="row">
+					  <div class="col-lg-6">
+						 <div class="panel panel-transparent">
+							<div class="panel-heading">
+							   <div class="panel-title">Pie</div>
+							</div>
+							<div class="panel-wrapper">
+							   <div class="panel-body">
+								  <flot dataset="table.pieChartData" options="table.chartPieFlotChart"></flot>
+							   </div>
+							</div>
+						 </div>
+					  </div>
+					<div class="col-lg-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <div class="panel-title">Area</div>
+            </div>
+            <div class="panel-wrapper">
+               <div class="panel-body">
+                  <flot dataset="table.pieFlotCharts" options="table.chartAreaFlotChart" series="{'lines': areaSeries}"></flot>
+                  <div class="text-center mt-lg">
+                     <div class="btn-switch mb btn-switch-success">
+                        <input type="checkbox" id="input-btn-switch-10" data-ng-model="areaSeries[0]" />
+                        <label for="input-btn-switch-10" class="btn btn-fw btn-warning">
+                           <em class="fa fa-check"></em>
+                           <strong>Debit</strong>
+                        </label>
+                     </div>
+                     <div class="btn-switch mb btn-switch-blue">
+                        <input type="checkbox" id="input-btn-switch-11" data-ng-model="areaSeries[1]" />
+                        <label for="input-btn-switch-11" class="btn btn-fw btn-orange">
+                           <em class="fa fa-check"></em>
+                           <strong>Credit</strong>
+                        </label>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+					 </div>
+  
+			   </tab>
             </tabset>
          </div>
     </div>

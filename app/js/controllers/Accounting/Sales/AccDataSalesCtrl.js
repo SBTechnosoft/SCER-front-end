@@ -12,11 +12,12 @@ function AccDataSalesController($rootScope,$scope, $filter, ngTableParams,$http,
   var data = [];
   var formdata = new FormData();
   
-  // An array of boolean to tell the directive which series we want to show
-  vm.areaSeries = [true, true, true];
-  vm.chartAreaFlotChart       = flotOptions['area'];
   
-   vm.chartPieFlotChart        = flotOptions['pie'];
+  // An array of boolean to tell the directive which series we want to show
+  $scope.areaSeries = [true, true];
+  vm.chartAreaFlotChart  = flotOptions['area'];
+  
+   vm.chartPieFlotChart  = flotOptions['pie'];
   
   
   //Go To AddBranch
@@ -25,30 +26,110 @@ function AccDataSalesController($rootScope,$scope, $filter, ngTableParams,$http,
 	 $rootScope.AddBranchModify = false;
 	 $location.path('app/AddBranch/'); 
   }
-  //Company
-	$scope.init = function (){
-			
-			vm.states=[];
-		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			vm.states = response2;
-		 
-		});
-		 
-	}
-$scope.init();
-  //End
   
-	apiCall.getCall(apiPath.getAllBranch).then(function(response){
-		//console.log(response);
-		data = response;
-		
-		for (var i = 0; i < data.length; i++) {
-		  data[i].cityName = ""; //initialization of new property 
-		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-		}
-		
-		 $scope.TableData();
-	});
+	  console.log($rootScope.accView.companyId);
+	  console.log($rootScope.accView.fromDate);
+	  console.log($rootScope.accView.toDate);
+	  
+	  var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
+	  
+	  console.log(getJrnlPath);
+	  
+	  $http({
+			url: getJrnlPath,
+			 method: 'get',
+			processData: false,
+			 headers: {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate}
+		}).success(function(response, status, headers, config) {
+			
+			console.log(response);
+			data = response;
+			
+			vm.pieChartData = [{ "color" : "#6cc539",
+							"data" : "0",
+							"label" : "Debit"
+						  },
+						  { "color" : "#00b4ff",
+							"data" : "0",
+							"label" : "Credit"
+						  }];
+			vm.pieFlotCharts = [{
+						  "label": "Debit",
+						  "color": "#6cc539",
+						  "data": [
+							["Jan", "0"],
+							["Feb", "0"],
+							["Mar", "0"],
+							["Apr", "0"],
+							["May", "0"],
+							["Jun", "0"],
+							["Jul", "0"],
+							["Aug", "0"],
+							["Sep", "0"],
+							["Oct", "0"],
+							["Nov", "0"],
+							["Dec", "0"]
+						  ]
+						},{
+						  "label": "Credit",
+						  "color": "#00b4ff",
+						  "data": [
+							["Jan", "0"],
+							["Feb", "0"],
+							["Mar", "0"],
+							["Apr", "0"],
+							["May", "0"],
+							["Jun", "0"],
+							["Jul", "0"],
+							["Aug", "0"],
+							["Sep", "0"],
+							["Oct", "0"],
+							["Nov", "0"],
+							["Dec", "0"]
+						  ]
+						}];
+  
+			for (var i = 0; i < data.length; i++) {
+				
+				if(data[i].amountType=='debit'){
+				  
+					vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseInt(data[i].amount);
+					var date = data[i].entryDate;
+					var splitedate = date.split("-").reverse().join("-");
+					var getdate = new Date(splitedate);
+					var month = getdate.getMonth();
+					
+						vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseInt(data[i].amount);
+						
+					//console.log(vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount));
+				
+				}
+				else{
+					vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseInt(data[i].amount);
+					
+					var date = data[i].entryDate;
+					var splitedate = date.split("-").reverse().join("-");
+					var getdate = new Date(splitedate);
+					var month = getdate.getMonth();
+					
+						vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseInt(data[i].amount);
+					   
+					//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
+				}
+			}
+			console.log(vm.pieFlotCharts);
+						  
+			// for (var i = 0; i < data.length; i++) {
+			  // data[i].cityName = ""; //initialization of new property 
+			  // data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+			// }
+			
+			 $scope.TableData();
+		 
+		}).error(function(data, status, headers, config) {
+			
+		});
+	
 	
   $scope.TableData = function(){
 	
@@ -57,14 +138,14 @@ $scope.init();
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  branchName: 'asc'     // initial sorting
+			  ledgerName: 'asc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.branchName) != "undefined" && params.$params.filter.branchName != "")  || (typeof(params.$params.filter.date) != "undefined" && params.$params.filter.date != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")|| (typeof(params.$params.filter.amountTypeCredit) != "undefined" && params.$params.filter.amountTypeCredit != "")|| (typeof(params.$params.filter.amountTypeDebit) != "undefined" && params.$params.filter.amountTypeDebit != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -86,7 +167,6 @@ $scope.init();
 			 if(!$.isEmptyObject(params.$params.sorting))
 			  {
 				
-				 //alert('ggg');
 				  var orderedData = params.sorting() ?
 						  $filter('orderBy')(data, params.orderBy()) :
 						  data;
@@ -218,55 +298,6 @@ $scope.init();
 	});
   }
 	
-	// Setup realtime update
-  // ----------------------------------- 
-
-  vm.realTimeChartOpts = angular.extend({}, flotOptions['default'], {
-    series: {
-      lines: { show: true, fill: true, fillColor:  { colors: ["#00b4ff", "#1d93d9"] } },
-      shadowSize: 0 // Drawing is faster without shadows
-    },
-    yaxis: {
-      min: 0,
-      max: 130
-    },
-    xaxis: {
-      show: false
-    },
-    colors: ["#1d93d9"]
-  });
-
-  vm.realTimeChartUpdateInterval = 30;
-
-  var data = [],
-      totalPoints = 500;
-    
-  update();
-
-  function getRandomData() {
-    if (data.length > 0)
-      data = data.slice(1);
-    // Do a random walk
-    while (data.length < totalPoints) {
-      var prev = data.length > 0 ? data[data.length - 1] : 50,
-        y = prev + Math.random() * 10 - 5;
-      if (y < 0) {
-        y = 0;
-      } else if (y > 100) {
-        y = 100;
-      }
-      data.push(y);
-    }
-    // Zip the generated y values with the x values
-    var res = [];
-    for (var i = 0; i < data.length; ++i) {
-      res.push([i, data[i]]);
-    }
-    return [res];
-  }
-  function update() {
-    vm.realTimeChartData = getRandomData();
-    $timeout(update, vm.realTimeChartUpdateInterval);
-  }
+	
 }
 AccDataSalesController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","flotOptions","colors","$timeout"];

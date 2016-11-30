@@ -13,7 +13,7 @@ if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript 
 
 
 var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils'])
-    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http) {
+    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','apiPath', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,apiPath) {
 		
 		// $templateCache.removeAll();
 		//$httpProvider.defaults.withCredentials = true;
@@ -59,7 +59,34 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	//Company Modify
 	$rootScope.AddCompanyModify = true;
 	
+	//Accounting View Data 
+	$rootScope.accView =[];
 	
+	var  accdate = new Date();
+	var accModifyDate  = accdate.getDate()+'-'+(accdate.getMonth()+1)+'-'+accdate.getFullYear();
+	
+	$rootScope.accView.fromDate = accModifyDate; // FromDate
+	$rootScope.accView.toDate = accModifyDate; // TODate
+	
+	$http({
+			url: apiPath.getAllCompany,
+			 method: 'get',
+			processData: false,
+			 headers: {'Content-Type': undefined}
+		}).success(function(data, status, headers, config) {
+			
+			for(var i=0;i<data.length;i++){
+				
+				if(data[i].isDefault == 'ok')
+				{
+					$rootScope.accView.companyId = data[i].companyId; //Company ID
+					
+				}
+			}
+	
+		}).error(function(data, status, headers, config) {
+			
+		});
 	
   }
 ]);

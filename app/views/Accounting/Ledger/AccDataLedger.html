@@ -18,6 +18,7 @@
 						<td data-title="'Sr. No.'"  >{{$index+1}}</td>
 						
 							<td data-title="'Entry Date'" sortable="'entryDate'" filter="{ 'entryDate': 'text' }" >{{user.entryDate}}</td>
+							<td data-title="'Perticular'" sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }" >{{user.ledger.ledgerName}}</td>
 							<td data-title="'Debit'" sortable="'amountTypeDebit'" filter="{ 'amountTypeDebit': 'text' }"  ><span ng-if="user.amountType=='debit'">{{user.amountType}}</span></td>
 							<td data-title="'Credit'" sortable="'amountTypeCredit'" filter="{ 'amountTypeCredit': 'text' }"  ><span ng-if="user.amountType=='credit'">{{user.amountType}}</span></td>
 							<td data-title="'Amount'" sortable="'amount'" filter="{ 'amount': 'text' }" ><span style="float:right">{{user.amount}}</span></td>

@@ -90,7 +90,7 @@ function AccViewDebitNotesController($scope,toaster,apiCall,apiPath) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker

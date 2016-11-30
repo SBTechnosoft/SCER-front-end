@@ -238,7 +238,7 @@
 	<div class="form-group">
 		<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
 		<div class="col-sm-6">
-			<input type="file" onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
+			<input type="file" ng-model="accPurchase.attach" onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
 		</div>
 	</div>
 	

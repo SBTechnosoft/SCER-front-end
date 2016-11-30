@@ -17,7 +17,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
 	
 	/* Table */
 	vm.AccClientMultiTable = [];
-	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+	vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
 	
 	$scope.addClientRow = function(){
 		 
@@ -106,7 +106,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
 		//formdata.append("file[]", files[0]);
 		angular.forEach(files, function (value,key) {
 			console.log(value);
-			//formdata.append('file[]',value);
+			formdata.append('file[]',value);
 		});
 
 	};
@@ -120,23 +120,30 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
 	
   $scope.pop = function()
   {
-	var formdata  = new FormData();
-	console.log(jfid);
-	console.log($scope.accPurchase.companyDropDown.companyId);
-	var  date = new Date(vm.dt1);
-	//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
-	var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-	console.log(fdate);
-	console.log($scope.accPurchase.billNo);
-	console.log(vm.AccClientMultiTable);
-	console.log(vm.AccPurchaseTable);
-   console.log($scope.accPurchase.remark);
+	
+	// console.log(jfid);
+	// console.log($scope.accPurchase.companyDropDown.companyId);
+	//console.log(entrydate);
+	//console.log(transactionDate);
+	// console.log($scope.accPurchase.billNo);
+	// console.log(vm.AccClientMultiTable);
+	// console.log(vm.AccPurchaseTable);
+   // console.log($scope.accPurchase.remark);
+   //var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
    
-   formdata.append('jfId',jfid);
+   
+	var  date = new Date(vm.dt1);
+	var entrydate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	var  date = new Date();
+	var transactionDate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	
+	
+   
+	formdata.append('jfId',jfid);
 	 formdata.append('companyId',$scope.accPurchase.companyDropDown.companyId);
 	
-	 formdata.append('entryDate',fdate);
-	 formdata.append('transactionDate',fdate);
+	 formdata.append('entryDate',entrydate);
+	 formdata.append('transactionDate',transactionDate);
 	 formdata.append('invoiceNumber','');
 	 formdata.append('billNumber',$scope.accPurchase.billNo);
 	
@@ -171,13 +178,19 @@ function AccPurchaseController($scope,apiCall,apiPath,$http) {
 			 headers: {'Content-Type': undefined,'type':'purchase'},
 			data:formdata
 		}).success(function(data, status, headers, config) {
-			console.log(data);	
+			
+			$scope.accPurchase = [];
+			angular.element("input[type='file']").val(null);
+			vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
+			vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":"1000","qty":"1","amount":""}];
 			
 			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 		
 				jfid = response.nextValue;
 	
 			});
+			
+			
 	
 		}).error(function(data, status, headers, config) {
 			

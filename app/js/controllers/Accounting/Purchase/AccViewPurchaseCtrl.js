@@ -6,7 +6,7 @@
 
 App.controller('AccViewPurchaseController', AccViewPurchaseController);
 
-function AccViewPurchaseController($scope,toaster,apiCall,apiPath) {
+function AccViewPurchaseController($rootScope,$scope,toaster,apiCall,apiPath,$state) {
   'use strict';
   
   
@@ -33,6 +33,22 @@ function AccViewPurchaseController($scope,toaster,apiCall,apiPath) {
 				
 		});
   }
+  
+	$scope.redirectToData = function(){
+		
+		var  fromdate = new Date(vm.dt1);
+		var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
+		
+		var  todate = new Date(vm.dt2);
+		var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
+		
+		$rootScope.accView.companyId = $scope.accViewPurchase.companyDropDown.companyId;
+		$rootScope.accView.fromDate = modifyFromDate; // FromDate
+		$rootScope.accView.toDate = modifyToDate; // TODate
+		
+		 $state.go("app.AccDataPurchase");
+		
+	}
   
   // Datepicker
   // ----------------------------------- 
@@ -90,7 +106,7 @@ function AccViewPurchaseController($scope,toaster,apiCall,apiPath) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker
@@ -197,4 +213,4 @@ function AccViewPurchaseController($scope,toaster,apiCall,apiPath) {
   
   
 }
-AccViewPurchaseController.$inject = ["$scope","toaster","apiCall","apiPath"];
+AccViewPurchaseController.$inject = ["$rootScope","$scope","toaster","apiCall","apiPath","$state"];

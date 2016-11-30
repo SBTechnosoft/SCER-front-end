@@ -114,7 +114,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	});
   
   }
-  else{
+  else if($rootScope.AddBranchModify){
 	  
 	  console.log('Not');
   }

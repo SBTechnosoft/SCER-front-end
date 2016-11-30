@@ -6,11 +6,11 @@
 
 App.controller('AccViewSpecialJrnlController', AccViewSpecialJrnlController);
 
-function AccViewSpecialJrnlController($scope,toaster,apiCall,apiPath) {
+function AccViewSpecialJrnlController($rootScope,$scope,toaster,apiCall,apiPath,$state) {
   'use strict';
   
   var vm = this; 
-  $scope.accViewSales = [];
+  $scope.accViewSpecialJrnl = [];
   
   //Company Dropdown data
 	vm.companyDrop = [];
@@ -32,6 +32,22 @@ function AccViewSpecialJrnlController($scope,toaster,apiCall,apiPath) {
 				
 		});
   }
+  
+	$scope.redirectToData = function(){
+		
+		var  fromdate = new Date(vm.dt1);
+		var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
+		
+		var  todate = new Date(vm.dt2);
+		var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
+		
+		$rootScope.accView.companyId = $scope.accViewSpecialJrnl.companyDropDown.companyId;
+		$rootScope.accView.fromDate = modifyFromDate; // FromDate
+		$rootScope.accView.toDate = modifyToDate; // TODate
+		
+		 $state.go("app.AccDataSpecialJrnl");
+		
+	}
 
   // Datepicker
   // ----------------------------------- 
@@ -89,7 +105,7 @@ function AccViewSpecialJrnlController($scope,toaster,apiCall,apiPath) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker
@@ -196,4 +212,4 @@ function AccViewSpecialJrnlController($scope,toaster,apiCall,apiPath) {
   
   
 }
-AccViewSpecialJrnlController.$inject = ["$scope","toaster","apiCall","apiPath"];
+AccViewSpecialJrnlController.$inject = ["$rootScope","$scope","toaster","apiCall","apiPath","$state"];

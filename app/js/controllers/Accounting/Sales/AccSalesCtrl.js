@@ -178,7 +178,7 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
 			url: apiPath.postJrnl,
 			 method: 'post',
 			processData: false,
-			contentType: false,
+			//contentType: false,
 			 crossDomain: true,
 			// dataType: 'jsonp',
 			 //mimeType:'multipart/form-data',
@@ -187,7 +187,7 @@ function AccSalesController($scope,apiCall,apiPath,$http) {
 			 headers: {'Content-Type': undefined,'type':'sales'},
 			data:formdata
 		}).success(function(data, status, headers, config) {
-			console.log(headers);	
+			//console.log(headers);	
 			
 			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 		

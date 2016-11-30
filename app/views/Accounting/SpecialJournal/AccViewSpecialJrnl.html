@@ -18,7 +18,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Company</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="accViewSales.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(accViewSales.companyDropDown.companyId)" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="accViewSpecialJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(accViewSpecialJrnl.companyDropDown.companyId)" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -26,7 +26,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Branch</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="accViewSales.branchDropDown" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="accViewSpecialJrnl.branchDropDown" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -35,7 +35,7 @@
                   <label class="col-sm-2 control-label">Start Date</label>
                   <div class="col-sm-8 col-lg-4">
                      <p class="input-group">
-                        <input type="text" datepicker-popup="{{format}}" ng-change="form.check()" data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+                        <input type="text" datepicker-popup="{{form.format}}" ng-change="form.check()" data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
                         class="form-control" />
                         <span class="input-group-btn">
                            <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -52,7 +52,7 @@
 				<label class="col-sm-2 control-label">End Date</label>
 				  <div class="col-sm-8 col-lg-4">
 					 <p class="input-group">
-						<input type="text" datepicker-popup="{{format}}" data-ng-model="form.dt2" is-open="form.openedEnd" min-date="form.dt1" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+						<input type="text" datepicker-popup="{{form.format}}" data-ng-model="form.dt2" is-open="form.openedEnd" min-date="form.dt1" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 						class="form-control" />
 						<span class="input-group-btn">
 						   <button type="button" data-ng-click="form.openEnd($event)" class="btn btn-default">
@@ -64,7 +64,7 @@
 				</div>
 			</fieldset>
 			
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ui-sref="app.AccDataSpecialJrnl" >Generate</button>
+			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="redirectToData()" >Generate</button>
 			
 			
 			<!-- Not Visible -->

@@ -24,6 +24,8 @@ function BillController($scope,apiCall,apiPath,$http) {
 	$scope.quickBill = [];
 	//Invoice Number 
 	$scope.quickBill.invoiceNumber;
+	$scope.quickBill.invoiceEndAt;
+	$scope.quickBill.invoiceId;
 	
 	vm.paymentModeDrop =['cash','credit','bank','card'];
   
@@ -109,15 +111,16 @@ function BillController($scope,apiCall,apiPath,$http) {
 					//Get City
 					apiCall.getCall(getLatest).then(function(response4){
 						var label = response4[0].invoiceLabel;
-						var endAt = response4[0].endAt;
+						$scope.quickBill.invoiceEndAt = response4[0].endAt;
+						$scope.quickBill.invoiceId = response4[0].invoiceId;
 						
 						if(response4[0].invoiceType=='postfix'){
 							
-							$scope.quickBill.invoiceNumber = endAt+label;
+							$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
 							//console.log($scope.quickBill.invoiceNumber);
 						}
 						else{
-							$scope.quickBill.invoiceNumber = label+endAt;
+							$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
 							//console.log($scope.quickBill.invoiceNumber);
 						}
 							
@@ -137,15 +140,17 @@ function BillController($scope,apiCall,apiPath,$http) {
 		//Get City
 		apiCall.getCall(getLatest).then(function(response4){
 			var label = response4[0].invoiceLabel;
-			var endAt = response4[0].endAt;
+			$scope.quickBill.invoiceEndAt = response4[0].endAt;
+			$scope.quickBill.invoiceId = response4[0].invoiceId;
+			
 			
 			if(response4[0].invoiceType=='postfix'){
 				
-				$scope.quickBill.invoiceNumber = endAt+label;
+				$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
 				//console.log($scope.quickBill.invoiceNumber);
 			}
 			else{
-				$scope.quickBill.invoiceNumber = label+endAt;
+				$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
 				//console.log($scope.quickBill.invoiceNumber);
 			}
 				
@@ -230,20 +235,31 @@ function BillController($scope,apiCall,apiPath,$http) {
 	 formdata.append('advance',$scope.quickBill.advance);
 	 formdata.append('balance',$scope.balanceTable);
 	  formdata.append('paymentMode',$scope.quickBill.paymentMode);
-	  formdata.append('bankName',$scope.quickBill.BankName.bankId);
+	 formdata.append('bankName',$scope.quickBill.BankName.bankId);
 	  formdata.append('checkNumber',$scope.quickBill.chequeNo);
 	  formdata.append('remark',$scope.quickBill.remark);
-	  
+	 
 	  $http({
 			url: apiPath.postBill,
 			 method: 'post',
 			processData: false,
 			 crossDomain: true,
-			 dataType: 'jsonp',
+			 //dataType: 'jsonp',
 			 headers: {'Content-Type': undefined,'type':'sales'},
 			data:formdata
 		}).success(function(data, status, headers, config) {
-			console.log(data);	
+			var formdataNew = new FormData();
+			 var newEndAt = parseInt($scope.quickBill.invoiceEndAt)+1;
+			formdataNew.append('endAt',newEndAt);
+			
+			angular.element("input[type='file']").val(null);
+			
+			apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
+		
+				console.log(response3);
+				formdataNew.delete('endAt');
+	
+			});
 	
 		}).error(function(data, status, headers, config) {
 			

@@ -95,19 +95,19 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		$scope.addCompany.documentName = res.logo.documentName;
 		
 		//State DropDown Selection
-		var stateDropPath = apiPath.getAllState+'/'+res.stateAbb;
+		var stateDropPath = apiPath.getAllState+'/'+res.state.stateAbb;
 		apiCall.getCall(stateDropPath).then(function(res3){
 			$scope.addCompany.statesDropDown = res3;
 		});
 		
 		//City DropDown
-		var cityAllDropPath = apiPath.getAllCity+res.stateAbb;
+		var cityAllDropPath = apiPath.getAllCity+res.state.stateAbb;
 		apiCall.getCall(cityAllDropPath).then(function(res5){
 			vm.cityDrop = res5;
 		});
 		
 		//City DropDown Selection
-		var cityDropPath = apiPath.getOneCity+'/'+res.cityId;
+		var cityDropPath = apiPath.getOneCity+'/'+res.city.cityId;
 		apiCall.getCall(cityDropPath).then(function(res4){
 			$scope.addCompany.cityDropDown = res4;
 		});

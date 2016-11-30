@@ -126,7 +126,7 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 		  getData: function($defer, params) {
 			 
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "")  || (typeof(params.$params.filter.amountType) != "undefined" && params.$params.filter.amountType != "")) || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != ""))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "")  || (typeof(params.$params.filter.amountType) != "undefined" && params.$params.filter.amountType != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
