@@ -198,6 +198,8 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 		$scope.tempID = id;
 		apiCall.getCall(apiPath.getAllTemplate+'/'+id).then(function(responseTemp){
 		
+			console.log(responseTemp.company);
+			$scope.generalTemp.companyDropDown = responseTemp.company;
 			$scope.generalTemp.tempName = responseTemp.templateName;
 			tinyMCE.get('textdesc').setContent(responseTemp.templateBody);
 	
@@ -207,19 +209,60 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 	// Update Template
 	$scope.addUpTemplate = function()
 	{
-		//formdata.append('companyId',$scope.companyDropDown.companyId);
-		formdata.append('templateName',$scope.generalTemp.tempName);
-		formdata.append('templateBody',tinyMCE.get('textdesc').getContent());
-		//formdata.append('templateType',addBranch.branchName);
-	
-		apiCall.postCall(apiPath.getAllTemplate+'/'+$scope.tempID,formdata).then(function(responseTemp){
+		if($scope.tempID){
 			
-			toaster.pop('success', '', 'Updated Successfully');
-			$scope.generalTemp.tempName = '';
-			tinyMCE.get('textdesc').setContent('');
-			$scope.tempID = '';
+			formdata.append('companyId',$scope.generalTemp.companyDropDown.companyId);
+			formdata.append('templateName',$scope.generalTemp.tempName);
+			
+			formdata.append('templateBody',tinyMCE.get('textdesc').getContent());
+			//formdata.append('templateType',addBranch.branchName);
 	
-		});
+			apiCall.postCall(apiPath.getAllTemplate+'/'+$scope.tempID,formdata).then(function(responseTemp){
+				
+				toaster.pop('success', '', 'Updated Successfully');
+				$scope.generalTemp = [];
+				tinyMCE.get('textdesc').setContent('');
+				$scope.tempID = '';
+				formdata.delete('companyId');
+				formdata.delete('templateName');
+				
+				formdata.delete('templateBody');
+				apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+		
+					vm.AllTempRight = responseTemp;
+	
+				});
+		
+			});
+		
+		}
+		else{
+			
+			formdata.append('companyId',$scope.generalTemp.companyDropDown.companyId);
+			formdata.append('templateName',$scope.generalTemp.tempName);
+			formdata.append('templateType','general');
+			formdata.append('templateBody',tinyMCE.get('textdesc').getContent());
+			//formdata.append('templateType',addBranch.branchName);
+	
+			apiCall.postCall(apiPath.getAllTemplate,formdata).then(function(responseTemp){
+				
+				toaster.pop('success', '', 'Insert Successfully');
+				$scope.generalTemp = [];
+				tinyMCE.get('textdesc').setContent('');
+				formdata.delete('companyId');
+				formdata.delete('templateName');
+				formdata.delete('templateType');
+				formdata.delete('templateBody');
+				
+				apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+		
+					vm.AllTempRight = responseTemp;
+	
+				});
+		
+			});
+		}
+		
 	}
 	
 	$scope.cancel = function()

@@ -16,7 +16,7 @@ App.filter('sumOfValue', function () {
 });
 App.controller('BillController', BillController);
 
-function BillController($scope,apiCall,apiPath,$http) {
+function BillController($scope,apiCall,apiPath,$http,$window) {
   'use strict';
  
 	var vm = this;
@@ -110,17 +110,18 @@ function BillController($scope,apiCall,apiPath,$http) {
 		
 					//Get City
 					apiCall.getCall(getLatest).then(function(response4){
-						var label = response4[0].invoiceLabel;
-						$scope.quickBill.invoiceEndAt = response4[0].endAt;
-						$scope.quickBill.invoiceId = response4[0].invoiceId;
+						console.log(response4);
+						var label = response4.invoiceLabel;
+						$scope.quickBill.invoiceEndAt = response4.endAt;
+						$scope.quickBill.invoiceId = response4.invoiceId;
 						
-						if(response4[0].invoiceType=='postfix'){
+						if(response4.invoiceType=='postfix'){
 							
-							$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
+							$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
 							//console.log($scope.quickBill.invoiceNumber);
 						}
 						else{
-							$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
+							$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
 							//console.log($scope.quickBill.invoiceNumber);
 						}
 							
@@ -139,18 +140,19 @@ function BillController($scope,apiCall,apiPath,$http) {
 		
 		//Get City
 		apiCall.getCall(getLatest).then(function(response4){
-			var label = response4[0].invoiceLabel;
-			$scope.quickBill.invoiceEndAt = response4[0].endAt;
-			$scope.quickBill.invoiceId = response4[0].invoiceId;
+			var label = response4.invoiceLabel;
+			$scope.quickBill.invoiceEndAt = response4.endAt;
+			$scope.quickBill.invoiceId = response4.invoiceId;
 			
 			
-			if(response4[0].invoiceType=='postfix'){
-				
-				$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
+			if(response4.invoiceType=='postfix'){
+				console.log('postfix');
+				$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
 				//console.log($scope.quickBill.invoiceNumber);
 			}
 			else{
-				$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
+				console.log('Prefix');
+				$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label ;
 				//console.log($scope.quickBill.invoiceNumber);
 			}
 				
@@ -172,8 +174,9 @@ function BillController($scope,apiCall,apiPath,$http) {
 	$scope.balanceTable;
 	//alert($scope.getTotal());
 
-  $scope.pop = function()
+  $scope.pop = function(generate)
   {
+		alert(generate);
 		var  date = new Date(vm.dt1);
 		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 		
@@ -235,9 +238,13 @@ function BillController($scope,apiCall,apiPath,$http) {
 	 formdata.append('advance',$scope.quickBill.advance);
 	 formdata.append('balance',$scope.balanceTable);
 	  formdata.append('paymentMode',$scope.quickBill.paymentMode);
-	 formdata.append('bankName',$scope.quickBill.BankName.bankId);
+	 formdata.append('bankName',$scope.quickBill.BankName.bankName);
 	  formdata.append('checkNumber',$scope.quickBill.chequeNo);
 	  formdata.append('remark',$scope.quickBill.remark);
+	 
+	 formdata.append('billNumber','');
+	 formdata.append('isDisplay','yes');
+	 
 	 
 	  $http({
 			url: apiPath.postBill,
@@ -248,25 +255,28 @@ function BillController($scope,apiCall,apiPath,$http) {
 			 headers: {'Content-Type': undefined,'type':'sales'},
 			data:formdata
 		}).success(function(data, status, headers, config) {
-			var formdataNew = new FormData();
-			 var newEndAt = parseInt($scope.quickBill.invoiceEndAt)+1;
-			formdataNew.append('endAt',newEndAt);
-			
+			//var formdataNew = new FormData();
+			 //var newEndAt = parseInt($scope.quickBill.invoiceEndAt)+1;
+			//formdataNew.append('endAt',newEndAt);
+			//console.log();
 			angular.element("input[type='file']").val(null);
 			
-			apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
+			// apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
 		
-				console.log(response3);
-				formdataNew.delete('endAt');
+				// console.log(response3);
+				// formdataNew.delete('endAt');
 	
-			});
+			// });
 	
 		}).error(function(data, status, headers, config) {
 			
 		});
   }
  
-	
+	$scope.popGenerate = function(){
+		
+		$window.open('https://www.google.com', '_blank');
+	}
 		
 	//Auto Suggest Client Contact Dropdown data
 	vm.clientSuggest = [];
@@ -441,4 +451,4 @@ function BillController($scope,apiCall,apiPath,$http) {
     {value: 5, name: 'Huge'}
   ];
 }
-BillController.$inject = ["$scope","apiCall","apiPath","$http"];
+BillController.$inject = ["$scope","apiCall","apiPath","$http","$window"];
