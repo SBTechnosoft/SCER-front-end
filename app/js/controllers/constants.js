@@ -68,7 +68,8 @@ App
       {name: 'AngularGM',         files: ['app/vendor/AngularGM/angular-gm.min.js']},
       {name: 'ui.calendar',       files: ['app/vendor/fullcalendar/dist/fullcalendar.min.js',
                                           'app/vendor/fullcalendar/dist/fullcalendar.css',
-                                          'app/vendor/angular-ui-calendar/src/calendar.js']}
+                                          'app/vendor/angular-ui-calendar/src/calendar.js']},
+      {name: 'tiny',     files: ['https://raw.githubusercontent.com/angular-ui/ui-tinymce/master/src/tinymce.js']}
     ]
 
   })

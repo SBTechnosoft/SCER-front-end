@@ -3,7 +3,40 @@
  * Module: tempGeneralCtrl.js
  * Controller for input components
  =========================================================*/
+function myFileBrowser (field_name, url, type, win) {
 
+    // alert("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
+
+    /* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
+       the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
+       These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
+
+    /* Here goes the URL to your server-side script which manages all file browser things. */
+    var cmsURL = window.location.pathname;     // your URL could look like "/scripts/my_file_browser.php"
+    var searchString = window.location.search; // possible parameters
+    if (searchString.length < 1) {
+        // add "?" to the URL to include parameters (in other words: create a search string because there wasn't one before)
+        searchString = "?";
+    }
+
+    // newer writing style of the TinyMCE developers for tinyMCE.openWindow
+
+    tinyMCE.openWindow({
+        file : cmsURL + searchString + "&type=" + type, // PHP session ID is now included if there is one at all
+        title : "File Browser",
+        width : 420,  // Your dimensions may differ - toy around with them!
+        height : 400,
+        close_previous : "no"
+    }, {
+        window : win,
+        input : field_name,
+        resizable : "yes",
+        inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
+        editor_id : tinyMCE.selectedInstance.editorId
+    });
+    return false;
+  }
+  
 App.controller('tempGeneralController', tempGeneralController);
 
 function tempGeneralController($scope,apiCall,apiPath,toaster) {
@@ -15,20 +48,27 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
  
       tinymce.init({
        selector: "#textdesc",
-	   height : "280",
-       menu : {
-        file   : {title : 'File'  , items : 'newdocument'},
-        edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall'},
+	    height : "280",
+	   theme: 'modern',
+	    paste_data_images: true,
+	    menu : {
+		file   : {title : 'File'  , items : 'newdocument'},
+        edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall '},
+        insert : {title : 'Insert', items : 'link  media |images template hr'},
+        view   : {title : 'View'  , items : 'visualaid'},
+        format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
+        table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
+        tools  : {title : 'Tools' , items : 'spellchecker code'},
         newmenu: {title : 'Setting', items : 'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item11 item12 item13 item14 item15 item16 item17 item18 item19 item20 item21 item22 item23 item24 item25 item26'}
        },
-       menubar: 'file edit newmenu',
-       setup: function(editor) {
+	   menubar: 'file edit insert view format table tools newmenu',
+	   setup: function(editor) {
         editor.addMenuItem('item1', {
-         text: 'Date',
+         text: 'Client Name',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[date]');
+          editor.insertContent('[ClientName]');
          }
         });
         editor.addMenuItem('item2', {
@@ -40,139 +80,239 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
          }
         });
         editor.addMenuItem('item3', {
-         text: 'Contact',
+         text: 'Order Date',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[Contact]');
+          editor.insertContent('[OrderDate]');
          }
         });
         editor.addMenuItem('item4', {
-         text: 'Client Name',
+         text: 'Order Name',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[ClientName]');
+          editor.insertContent('[OrderName]');
          }
         });
         editor.addMenuItem('item5', {
-         text: 'Invoice#',
+         text: 'Venue',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[InvoiceNumber]');
+          editor.insertContent('[Venue]');
          }
         });
         editor.addMenuItem('item6', {
-         text: 'First Address',
+         text: 'Order Id',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[FirstAddress]');
+          editor.insertContent('[OrderId]');
          }
         });
         editor.addMenuItem('item7', {
-         text: 'Second Address',
+         text: 'Client Charge',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[SecondAddress]');
+          editor.insertContent('[ClientCharge]');
          }
         });
         editor.addMenuItem('item8', {
-         text: 'State',
+         text: 'Discount',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[State]');
+          editor.insertContent('[Discount]');
          }
         });
         editor.addMenuItem('item9', {
-         text: 'City',
+         text: 'Tax Amount',
          context: 'newmenu',
          onclick: function (){ 
            
-          editor.insertContent('[City]');
+          editor.insertContent('[TaxAmt]');
          }
         });
-        
-        editor.addMenuItem('item15', {
-         text: 'Product items',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[ProductItems]');
-         }
-        });
-        editor.addMenuItem('item16', {
+        editor.addMenuItem('item10', {
          text: 'Total',
          context: 'newmenu',
-         onclick: function (){           
+         onclick: function (){ 
+           
           editor.insertContent('[Total]');
          }
         });
-        editor.addMenuItem('item17', {
-         text: 'Tax',
+        editor.addMenuItem('item11', {
+         text: 'Tax Rate',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[TaxRate]');
+         }
+        });
+        editor.addMenuItem('item12', {
+         text: 'Delivery Date',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[Tax]');
+          editor.insertContent('[DeliveryDate]');
+         }
+        });
+        editor.addMenuItem('item13', {
+         text: 'Organization',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[Organization]');
+         }
+        });
+        editor.addMenuItem('item14', {
+         text: 'Banner_Img',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[Banner_Img]');
+         }
+        });
+        editor.addMenuItem('item15', {
+         text: 'OrderDesc',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[OrderDesc]');
+         }
+        });
+        editor.addMenuItem('item16', {
+         text: 'Email',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[Email]');
+         }
+        });
+        editor.addMenuItem('item17', {
+         text: 'HomeMob',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[HomeMob]');
          }
         });
         editor.addMenuItem('item18', {
-         text: 'Grand Total',
+         text: 'WorkMob',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[GrandTotal]');
+          editor.insertContent('[WorkMob]');
          }
         });
         editor.addMenuItem('item19', {
-         text: 'Advance',
+         text: 'Mobile',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[Advance]');
+          editor.insertContent('[Mobile]');
          }
         });
         editor.addMenuItem('item20', {
-         text: 'Balance',
+         text: 'ADATE',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[Balance]');
+          editor.insertContent('[ADATE]');
          }
         });
         editor.addMenuItem('item21', {
-         text: 'Payment Mode',
+         text: 'INVID',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[PaymentMode]');
+          editor.insertContent('[INVID]');
          }
         });
         editor.addMenuItem('item22', {
-         text: 'Bank Name',
+         text: 'CLIENTADD',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[BankName]');
+          editor.insertContent('[CLIENTADD]');
          }
         });
         editor.addMenuItem('item23', {
-         text: 'Cheque#',
+         text: 'CMPLOGO',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[ChequeNumber]');
+          editor.insertContent('[CMPLOGO]');
          }
         });
         editor.addMenuItem('item24', {
-         text: 'Remark',
+         text: 'PAIDAMT',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[Remark]');
+          editor.insertContent('[PAIDAMT]');
          }
         });
-        
-       }
-       
-       
-      });
-     
+        editor.addMenuItem('item25', {
+         text: 'REMAINAMT',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[REMAINAMT]');
+         }
+        });
+        editor.addMenuItem('item26', {
+         text: 'OPERATOR',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[OPERATOR]');
+         }
+        });
+       },
+	    plugins: [
+			'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+			'searchreplace wordcount visualblocks visualchars code fullscreen',
+			'insertdatetime media nonbreaking save table contextmenu directionality',
+			'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc filemanager'
+		  ],
+		  toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+		  toolbar2: 'print preview media | forecolor backcolor emoticons | codesample',
+		  image_advtab: true,
+		  templates: [
+			{ title: 'Test template 1', content: 'Test 1' },
+			{ title: 'Test template 2', content: 'Test 2' }
+		  ],
+		  content_css: [
+			'//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+			'//www.tinymce.com/css/codepen.min.css'
+		  ],
+		  file_browser_callback : function (field_name, url, type, win) {
+					
+			//alert("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
 
+			/* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
+			   the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
+			   These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
+			console.log(window.location.toString());
+			
+			// var cmsURL = window.location.toString();    // script URL - use an absolute path!
+			var cmsURL="file:///C:/Users/Admin/Desktop/1.png";
+			
+			if (cmsURL.indexOf("?") < 0) {
+				//add the type as the only query parameter
+				cmsURL = cmsURL + "?type=" + type;
+			}
+			else {
+				//add the type as an additional query parameter
+				// (PHP session ID is now included if there is one at all)
+				cmsURL = cmsURL + "&type=" + type;
+			}
+
+			tinyMCE.activeEditor.windowManager.open({
+				file : cmsURL,
+				title : 'My File Browser',
+				width : 420,  // Your dimensions may differ - toy around with them!
+				height : 400,
+				resizable : "yes",
+				inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
+				close_previous : "no"
+			}, {
+				window : win,
+				input : field_name
+			});
+			return false;
+		  }
+      });	
+     
+	
 	//All Template In Right
 	vm.AllTempRight = [];
 	apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
