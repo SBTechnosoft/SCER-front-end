@@ -176,7 +176,7 @@ function BillController($scope,apiCall,apiPath,$http,$window) {
 
   $scope.pop = function(generate)
   {
-		alert(generate);
+		//alert(generate);
 		var  date = new Date(vm.dt1);
 		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 		
@@ -260,13 +260,23 @@ function BillController($scope,apiCall,apiPath,$http,$window) {
 			//formdataNew.append('endAt',newEndAt);
 			//console.log();
 			angular.element("input[type='file']").val(null);
-			
+			formdata.delete('file');
 			// apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
 		
 				// console.log(response3);
 				// formdataNew.delete('endAt');
 	
 			// });
+			
+			if(generate == 'generate'){
+				console.log('generate');
+				console.log(data.documentPath);
+				var pdfPath = 'http://api.siliconbrain.co.in/'+data.documentPath;
+				$window.open(pdfPath, '_blank');
+			}
+			else{
+				console.log('Not');
+			}
 	
 		}).error(function(data, status, headers, config) {
 			

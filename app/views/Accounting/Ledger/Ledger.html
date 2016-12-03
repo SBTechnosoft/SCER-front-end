@@ -199,9 +199,12 @@
 			</div>
 		 </div>
 	  </div>
-      <div class="panel-body">
-		<table class="table  table-striped" style="border-width:0px">
-			<tr ng-repeat="item in form.allLedgerData | filter:query">
+      <div class="panel-body" style="overflow-y: scroll !important;
+max-height: calc(100vh - 250px) !important;">
+	 
+		<table class="table  table-striped" >
+		
+			<tr ng-repeat="item in form.allLedgerData | filter:query" >
 				<td >
 					 <span ui-sref="" style="letter-spacing: .025em;
 	font-weight: bold;" ng-click="viewLedgerDetails(item.ledgerId)"> <i class="sidebar-item-icon icon-layers" ></i> {{item.ledgerName}}</span>
@@ -213,6 +216,7 @@
 					<i ui-sref="." title="View" ng-click="viewReadOlny(item.ledgerId)" class="fa fa-list-alt" style="font-size:17px;color:#17A1E5"></i>
 				</td>
 			</tr>
+			
 			<!--tr>
 				<td>
 				<i class="sidebar-item-icon icon-layers" ></i> <span style="letter-spacing: .025em;
@@ -226,6 +230,7 @@
 				</td>
 			</tr-->
 		</table>
+		
       </div>
    </div>
 </div>
