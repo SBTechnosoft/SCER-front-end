@@ -6,7 +6,7 @@
 
 App.controller('AccDataSpecialJrnlController', AccDataSpecialJrnlController);
 
-function AccDataSpecialJrnlController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,flotOptions, colors,$timeout) {
+function AccDataSpecialJrnlController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,$state,getSetFactory) {
   'use strict';
   var vm = this;
   var data = [];
@@ -274,23 +274,24 @@ function AccDataSpecialJrnlController($rootScope,$scope, $filter, ngTableParams,
 		});
   }
   
-  $scope.edit_comp = function(branch_id)
+  $scope.editSpecialJrnl = function(id)
   {
+	  getSetFactory.set(id);
 	  
-	  $location.path('app/AddBranch/'+branch_id);
+	  $state.go("app.AccSpecialJrnl");
   }
   
-  $scope.delete_comp = function(branch_id)
+  $scope.deleteSpecialJrnl = function(id)
   {
 	
-	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
+	// var deletePath = apiPath.getAllBranch+'/'+parseInt(id);
 	  
-	apiCall.deleteCall(deletePath).then(function(deleteres){
+	// apiCall.deleteCall(deletePath).then(function(deleteres){
 		
-		console.log(deleteres);
+		// console.log(deleteres);
 	 
-	});
+	// });
   }
 
 }
-AccDataSpecialJrnlController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","flotOptions","colors","$timeout"];
+AccDataSpecialJrnlController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","$state","getSetFactory"];

@@ -11,7 +11,11 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   var vm = this;
   var data = [];
   var formdata = new FormData();
+  
    var ledgerId = getSetFactory.get();
+   
+   getSetFactory.blank(); // Empty It
+   
   //vm.pieChartData = [];
   vm.headingName;
 
@@ -108,7 +112,7 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 				//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
 			}
 		}
-		console.log(vm.pieFlotCharts);
+		//console.log(vm.pieFlotCharts);
 		$scope.TableData();
 	});
 	

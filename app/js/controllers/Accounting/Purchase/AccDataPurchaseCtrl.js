@@ -24,7 +24,7 @@ function AccDataPurchaseController($rootScope,$scope, $filter, ngTableParams,$ht
 	  console.log($rootScope.accView.fromDate);
 	  console.log($rootScope.accView.toDate);
 	  
-	  var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
+	  var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
 	  
 	  console.log(getJrnlPath);
 	  
@@ -32,7 +32,7 @@ function AccDataPurchaseController($rootScope,$scope, $filter, ngTableParams,$ht
 			url: getJrnlPath,
 			 method: 'get',
 			processData: false,
-			 headers: {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate}
+			 headers: {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'purchase'}
 		}).success(function(response, status, headers, config) {
 			
 			console.log(response);

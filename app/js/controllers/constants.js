@@ -114,7 +114,9 @@ App
 	'postBill': 'http://api.siliconbrain.co.in/accounting/bills',
 	'getLatestInvoice1': 'http://api.siliconbrain.co.in/settings/invoice-numbers/company/',
 	'getLatestInvoice2': '/latest',
-	'getJrnlByCompany': 'http://api.siliconbrain.co.in/accounting/journals/company/'
+	'getJrnlByCompany': 'http://api.siliconbrain.co.in/accounting/journals/company/',
+	'getOneJrnl': 'http://api.siliconbrain.co.in/accounting/journals/',
+	'getLedgerJrnl':   'http://api.siliconbrain.co.in/accounting/ledgers/company/',
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

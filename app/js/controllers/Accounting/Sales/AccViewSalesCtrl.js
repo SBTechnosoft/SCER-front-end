@@ -51,7 +51,7 @@ function AccViewSalesController($rootScope,$scope,toaster,apiCall,apiPath,$state
 	
   // Datepicker
   // ----------------------------------- 
-	this.minStart = new Date();
+	this.minStart = new Date(0,0,1);
 	this.maxStart = new Date();
   this.today = function() {
     this.dt1 = new Date();

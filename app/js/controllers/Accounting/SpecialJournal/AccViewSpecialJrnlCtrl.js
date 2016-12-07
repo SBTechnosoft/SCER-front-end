@@ -21,9 +21,9 @@ function AccViewSpecialJrnlController($rootScope,$scope,toaster,apiCall,apiPath,
 	
 	});
 	
-  //Get All Branch on Company Change
-  $scope.changeCompany = function(id)
-  {
+	//Get All Branch on Company Change
+	$scope.changeCompany = function(id)
+	{
 	  vm.branchDrop = [];
 		var getAllBranch = apiPath.getOneBranch+id;
 		//Get Branch
@@ -31,7 +31,7 @@ function AccViewSpecialJrnlController($rootScope,$scope,toaster,apiCall,apiPath,
 			vm.branchDrop = response4;
 				
 		});
-  }
+	}
   
 	$scope.redirectToData = function(){
 		
@@ -51,10 +51,14 @@ function AccViewSpecialJrnlController($rootScope,$scope,toaster,apiCall,apiPath,
 
   // Datepicker
   // ----------------------------------- 
-	this.minStart = new Date();
+    var setDate = new Date();
+	this.minStart = new Date(0,0,1);
 	this.maxStart = new Date();
   this.today = function() {
+	  // var setDate = new Date();
+    // this.dt1 = new Date(setDate.getFullYear(),0,1);
     this.dt1 = new Date();
+	
   };
   this.today();
   

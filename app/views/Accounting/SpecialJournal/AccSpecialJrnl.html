@@ -12,12 +12,12 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeSpecialJrnlData('companyId',addAccJrnl.companyDropDown.companyId)" class="form-control chosen-select"></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 				<div class="col-sm-4">
 					 <p class="input-group"style="float:right">
-						<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+						<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false"  datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 						class="form-control" />
 						<span class="input-group-btn">
 						   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -37,7 +37,7 @@
 				   <div class="form-group" >
 					  <label for="input-id-1" class="col-sm-1 control-label">No#</label>
 					  <div class="col-sm-4">
-						 <input  ng-model="addAccJrnl.noNumber" id="input-id-1" type="text" placeholder="Enter No#" class="form-control" />
+						 <p class="form-control-static">{{addAccJrnl.jfid}}</p>
 					  </div>
 				   </div>
 				</fieldset>
@@ -60,7 +60,7 @@
 				<tbody>
 					<tr id="addAfter" ng-repeat="item in form.AccSpecialJrnlTable">
 						<td>
-							<select  ng-model="item.amountType" class="form-control">
+							<select  ng-model="item.amountType" class="form-control" ng-change="changeSpecialJrnlTable()">
 								<option value="debit" selected="selected">Dr</option>
 								<option value="credit">Cr</option>
 							</select>
@@ -75,10 +75,10 @@
 							<h5 >Current Balance 205000 Dr/Cr</h5>
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" 
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" 
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-if="item.amountType=='credit'"  class="form-control" dir="rtl" />
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='credit'"  class="form-control" dir="rtl" />
 						</td>
 						<td style="">
 							<center>

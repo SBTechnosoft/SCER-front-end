@@ -277,6 +277,35 @@ function BillController($scope,apiCall,apiPath,$http,$window) {
 			else{
 				console.log('Not');
 			}
+			
+			$scope.quickBill = [];
+			vm.dt1 = new Date();
+			vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+			
+			formdata.delete('companyId');
+			formdata.delete('entryDate');
+			formdata.delete('contactNo');
+			formdata.delete('workNo');
+			formdata.delete('companyName');
+			formdata.delete('clientName');
+			formdata.delete('invoiceNumber');
+			formdata.delete('emailId');
+			formdata.delete('address1');
+			formdata.delete('address2');
+			formdata.delete('stateAbb');
+			formdata.delete('cityId');
+			formdata.delete('transactionDate');
+			formdata.delete('total');
+			formdata.delete('tax');
+			formdata.delete('grandTotal');
+			formdata.delete('advance');
+			formdata.delete('balance');
+			formdata.delete('paymentMode');
+			formdata.delete('bankName');
+			formdata.delete('checkNumber');
+			formdata.delete('remark');
+			formdata.delete('inventory');
+			
 	
 		}).error(function(data, status, headers, config) {
 			

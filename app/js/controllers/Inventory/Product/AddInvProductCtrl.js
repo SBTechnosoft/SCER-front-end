@@ -16,8 +16,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
   // ----------------------------------- 
 		
   this.measureUnitDrop = [
-    'Alabama',
-    'California'
+    'kilo',
+    'litre'
   ];
   
 	//Company Dropdown data

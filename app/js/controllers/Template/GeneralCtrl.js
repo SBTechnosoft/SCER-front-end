@@ -1,42 +1,4 @@
 
-/**=========================================================
- * Module: tempGeneralCtrl.js
- * Controller for input components
- =========================================================*/
-function myFileBrowser (field_name, url, type, win) {
-
-    // alert("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
-
-    /* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
-       the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
-       These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
-
-    /* Here goes the URL to your server-side script which manages all file browser things. */
-    var cmsURL = window.location.pathname;     // your URL could look like "/scripts/my_file_browser.php"
-    var searchString = window.location.search; // possible parameters
-    if (searchString.length < 1) {
-        // add "?" to the URL to include parameters (in other words: create a search string because there wasn't one before)
-        searchString = "?";
-    }
-
-    // newer writing style of the TinyMCE developers for tinyMCE.openWindow
-
-    tinyMCE.openWindow({
-        file : cmsURL + searchString + "&type=" + type, // PHP session ID is now included if there is one at all
-        title : "File Browser",
-        width : 420,  // Your dimensions may differ - toy around with them!
-        height : 400,
-        close_previous : "no"
-    }, {
-        window : win,
-        input : field_name,
-        resizable : "yes",
-        inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
-        editor_id : tinyMCE.selectedInstance.editorId
-    });
-    return false;
-  }
-  
 App.controller('tempGeneralController', tempGeneralController);
 
 function tempGeneralController($scope,apiCall,apiPath,toaster) {
@@ -274,42 +236,10 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 			'//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
 			'//www.tinymce.com/css/codepen.min.css'
 		  ],
-		  file_browser_callback : function (field_name, url, type, win) {
-					
-			//alert("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
-
-			/* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
-			   the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
-			   These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
-			console.log(window.location.toString());
-			
-			// var cmsURL = window.location.toString();    // script URL - use an absolute path!
-			var cmsURL="file:///C:/Users/Admin/Desktop/1.png";
-			
-			if (cmsURL.indexOf("?") < 0) {
-				//add the type as the only query parameter
-				cmsURL = cmsURL + "?type=" + type;
-			}
-			else {
-				//add the type as an additional query parameter
-				// (PHP session ID is now included if there is one at all)
-				cmsURL = cmsURL + "&type=" + type;
-			}
-
-			tinyMCE.activeEditor.windowManager.open({
-				file : cmsURL,
-				title : 'My File Browser',
-				width : 420,  // Your dimensions may differ - toy around with them!
-				height : 400,
-				resizable : "yes",
-				inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
-				close_previous : "no"
-			}, {
-				window : win,
-				input : field_name
-			});
-			return false;
-		  }
+		  file_browser_callback_types: 'file image',
+		  file_browser_callback: function(field_name, url, type, win) {
+	            if(type=='image') $('#my_form input').click();
+	        }
       });	
      
 	

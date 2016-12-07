@@ -6,10 +6,14 @@ App.factory('getSetFactory', function() {
  function get() {
   return savedData;
  }
+ function blank() {
+   savedData = {};
+ }
 
  return {
   set: set,
-  get: get
+  get: get,
+  blank: blank
  }
 
 });

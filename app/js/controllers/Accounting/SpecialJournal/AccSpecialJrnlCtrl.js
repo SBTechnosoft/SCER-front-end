@@ -6,11 +6,41 @@
 
 App.controller('AccSpecialJrnlController', AccSpecialJrnlController);
 
-function AccSpecialJrnlController($scope,apiCall,apiPath) {
+function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory) {
   'use strict';
   
    var vm = this;
-  $scope.addAccJrnl = [];
+   var formdata  = new FormData();
+   $scope.addAccJrnl = [];
+   $scope.addAccJrnl.jfid;
+   $scope.changeInArray;
+   var getSetJfId; //For Update
+   
+	if(Object.keys(getSetFactory.get()).length){
+		getSetJfId = getSetFactory.get();
+		$scope.addAccJrnl.jfid = getSetJfId;
+		//console.log(getSetJfId);
+		getSetFactory.blank();
+		
+		// var getOneJrnlPath = apiPath.getOneJrnl+parseInt(getSetJfId);
+	  
+		// apiCall.getCall(getOneJrnlPath).then(function(response){
+			
+			// console.log(response);
+		 
+		// });
+	}
+	else{
+		
+		//console.log('Not');
+		apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+			$scope.addAccJrnl.jfid = response.nextValue;
+	
+		});
+	}
+  
+  
   /* Table */
 	vm.AccSpecialJrnlTable = [];
 	vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
@@ -30,6 +60,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath) {
 	{
 		vm.AccSpecialJrnlTable[index].ledgerId = item.ledgerId;
 		console.log(vm.AccSpecialJrnlTable);
+		$scope.changeInArray = true;
 	}
 	
 	//Auto suggest Client Name
@@ -45,57 +76,105 @@ function AccSpecialJrnlController($scope,apiCall,apiPath) {
 	};
 	
   /* End */
-	var jfid;
-	 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-		
-		jfid = response.nextValue;
 	
-	});
+	 //Changed Data When Update
+	$scope.changeSpecialJrnlData = function(Fname,value){
+		
+		console.log(Fname+'..'+value);
+		if(formdata.get(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+	}
+	
+	//Changed date
+	// $scope.changeSpecialJrnlDate = function(Fname,value){
+		
+		// if(formdata.get(Fname))
+		// {
+			// formdata.delete(Fname);
+		// }
+		// var  date = new Date(vm.dt1);
+		// var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+		// console.log(Fname+'..'+fdate);
+		// formdata.append(Fname,fdate);
+	// }
+	
+	$scope.changeSpecialJrnlTable = function(){
+		
+		$scope.changeInArray = true;
+		console.log($scope.changeInArray);
+	}
 	
 	
   $scope.pop = function()
   {
-		console.log(jfid);
-		var  date = new Date(vm.dt1);
-		//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
-		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	//console.log($scope.addAccJrnl.jfid);
+	var  date = new Date(vm.dt1);
+	var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+
+	// formdata.append('companyId',$scope.addAccJrnl.companyDropDown.companyId);
+	formdata.append('entryDate',fdate);
 	
-	 var formdata  = new FormData();
+	formdata.append('jfId',$scope.addAccJrnl.jfid);
 	
-	 formdata.append('jfId',jfid);
-	 formdata.append('companyId',$scope.addAccJrnl.companyDropDown.companyId);
-	
-	 formdata.append('entryDate',fdate);
-	
-	 var json = angular.copy(vm.AccSpecialJrnlTable);
-	 
-	 for(var i=0;i<json.length;i++){
+	// if($scope.changeInArray){
+		
+		// var json = angular.copy(vm.AccSpecialJrnlTable);
 		 
-		angular.forEach(json[i], function (value,key) {
-			
-			formdata.append('data['+i+']['+key+']',value);
-		});
+		// for(var i=0;i<json.length;i++){
+			 
+			// angular.forEach(json[i], function (value,key) {
 				
-	 }
+				// formdata.append('data['+i+']['+key+']',value);
+			// });
+			
+		// }
+	// }
+	
+	var json = angular.copy(vm.AccSpecialJrnlTable);
+		 
+		for(var i=0;i<json.length;i++){
+			 
+			angular.forEach(json[i], function (value,key) {
+				
+				formdata.append('data['+i+']['+key+']',value);
+			});
+			
+		}
 	 
 	 //Insert Special journal
-	 apiCall.postCall(apiPath.postJrnl,formdata).then(function(response){
+	apiCall.postCall(apiPath.postJrnl,formdata).then(function(response){
 		
 		console.log(response);
 		$scope.addAccJrnl = [];
 		vm.dt1 = new Date();
+		
+		for(var i=0;i<json.length;i++){
+			 
+			angular.forEach(json[i], function (value,key) {
+				
+				formdata.delete('data['+i+']['+key+']',value);
+			});
+			
+		}
+		
 		vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
 		 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 		
-			jfid = response.nextValue;
+			$scope.addAccJrnl.jfid = response.nextValue;
 	
 		});
 	
-	 });
-	 
+		formdata.delete('jfId');
+		formdata.delete('companyId');
+		formdata.delete('entryDate');
 	
-	 
+	});
+	
   }
  
   // Chosen data
@@ -152,7 +231,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker
@@ -247,4 +326,4 @@ function AccSpecialJrnlController($scope,apiCall,apiPath) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath"];
+AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath","getSetFactory"];
