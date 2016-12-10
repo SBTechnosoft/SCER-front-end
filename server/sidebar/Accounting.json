@@ -5,7 +5,7 @@
     "icon": "icon-bar-graph",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewSales", "translate": "" },
-      { "text": "Edit", "sref": "app.AccSales", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccSales", "translate": "" }
     ]
   },
   {
@@ -14,7 +14,7 @@
     "icon": "icon-box",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewPurchase", "translate": "" },
-      { "text": "Edit", "sref": "app.AccPurchase", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccPurchase", "translate": "" }
     ]
   },
   {
@@ -26,7 +26,7 @@
     "icon": "icon-book",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewCreditNotes", "translate": "" },
-      { "text": "Edit", "sref": "app.AccCreditNotes", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccCreditNotes", "translate": "" }
     ]
   },
   {
@@ -35,7 +35,7 @@
     "icon": "icon-grid",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewDebitNotes", "translate": "" },
-      { "text": "Edit", "sref": "app.AccDebitNotes", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccDebitNotes", "translate": "" }
     ]
   },
   {
@@ -44,7 +44,7 @@
     "icon": "icon-pie-graph",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewSpecialJrnl", "translate": "" },
-      { "text": "Edit", "sref": "app.AccSpecialJrnl", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccSpecialJrnl", "translate": "" }
     ]
   },
   {
@@ -56,7 +56,7 @@
     "icon": "icon-map",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewPayment", "translate": "" },
-      { "text": "Edit", "sref": "app.AccPayment", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccPayment", "translate": "" }
     ]
   },
   {
@@ -65,7 +65,7 @@
     "icon": "icon-play",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewReceipt", "translate": "" },
-      { "text": "Edit", "sref": "app.AccReceipt", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccReceipt", "translate": "" }
     ]
   },
   {
@@ -87,7 +87,7 @@
     "icon": "icon-stack",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewTaxation", "translate": "" },
-      { "text": "Edit", "sref": "app.AccTaxation", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccTaxation", "translate": "" }
     ]
   },
   {

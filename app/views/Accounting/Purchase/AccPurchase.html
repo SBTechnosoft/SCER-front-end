@@ -6,18 +6,19 @@
 </h3>
 <!-- START panel-->
 <div data-ng-controller="AccPurchaseController as form" class="container-fluid">
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
 		<div class="panel-body">
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="accPurchase.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="accPurchase.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeAccPurchase('companyId',accPurchase.companyDropDown.companyId)" class="form-control chosen-select"></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
-							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" ng-change="changePurchaseDate('entryDate')" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 							class="form-control" />
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -41,7 +42,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Bill#</label>
 						  <div class="col-sm-6">
-							 <input id="input-id-1" ng-model="accPurchase.billNo" type="text" placeholder="Bill Number" class="form-control" dir="rtl" />
+							 <input id="input-id-1" ng-model="accPurchase.billNo" ng-change="changeAccPurchase('billNumber',accPurchase.billNo)" type="text" placeholder="Bill Number" class="form-control" dir="rtl" />
 						  </div>
 					   </div>
 					</fieldset>
@@ -75,7 +76,7 @@
 				<tbody>
 					<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable">
 						<td>
-							<select  ng-model="item.amountType" class="form-control">
+							<select  ng-model="item.amountType" class="form-control" ng-change="changeJrnlTable()">
 								<option value="debit" selected="selected">Dr</option>
 								<option value="credit">Cr</option>
 							</select>
@@ -83,17 +84,17 @@
 						<td>
 							<div class="input-group" >
 								<input typeahead="item.ledgerName for item in form.clientNameDrop | filter:$viewValue | limitTo:10" ng-model="item.ledgerName" type="text" typeahead-on-select="setAccPurchase($item,$index)" type="text" class="form-control" placeholder="Enter Vender Name" />
-								<span class="input-group-btn" ng-controller="AccPurchaseModalController">
-								<button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+								<span class="input-group-btn">
+								<button type="button" class="btn btn-default" data-ng-click="openLedger('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 								</span>
 							</div>
 							<h5 >Current Balance 205000 Dr/Cr</h5>
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" 
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" 
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" />
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" />
 						</td>
 						<td style="">
 							<center>
@@ -164,23 +165,23 @@
 							<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;float:right" title="Add"> </i-->
 							<div class="input-group">
 								<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | limitTo:10" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)" />
-								<span class="input-group-btn" data-ng-controller="AccPurchaseTableModalController">
-								   <button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+								<span class="input-group-btn">
+								   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 								</span>
 							</div>
 						</td>
 						<td>
-							<select  ng-model="item.discountType"  class="form-control" style="width:50%;float:left;">
+							<select  ng-model="item.discountType"  class="form-control" style="width:50%;float:left;" ng-change="changeProductTable()">
 								<option value="flat" selected="selected">Flat</option>
 								<option value="percentage">Percentage</option>
 							</select>
-							<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="width:50%;" dir="rtl" /> 
+							<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" style="width:50%;" dir="rtl" /> 
 						</td>
 						<td>
 							<span style="float:right">{{item.price}}</span>
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" dir="rtl" /> 
+							<input id="input-id-1" type="text" ng-model="item.qty" ng-change="changeProductTable()" class="form-control" dir="rtl" /> 
 						</td>
 						<td >
 							<!--span style="float:right">4500</span-->
@@ -258,112 +259,143 @@
 				
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
+					  <label class="col-sm-3 control-label">Company</label>
+					  <div class="col-sm-8">
+						 <select chosen="" ng-model="ledgerForm.companyDropDown" tabindex="2" data-ng-options="s.companyName for s in companyDrop track by s.companyId"  ng-change="changeLedgerData('companyId',ledgerForm.companyDropDown.companyId)"  class="form-control chosen-select" ></select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
 					  <label class="col-sm-3 control-label">Name</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Invoice Label" class="form-control" />
+						 <input id="input-id-1" tabindex="2" ng-model="ledgerForm.ledgerName" ng-change="changeLedgerData('ledgerName',ledgerForm.ledgerName)"  type="text" placeholder="Ledger Name" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset >
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Email ID</label>
+						<div class="col-sm-8">
+							<div class="input-group m-b">
+								<span class="input-group-addon">@</span>
+								<input type="text" tabindex="2" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" placeholder="Email ID" class="form-control" />
+							</div>
+						</div>
+				   </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Alias</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Alias" class="form-control" />
+						 <input ng-model="ledgerForm.alias" tabindex="2" ng-change="changeLedgerData('alias',ledgerForm.alias)"  id="input-id-1" type="text"  placeholder="Alias" class="form-control" />
 					  </div>
 				   </div>
 				</fieldset>
 				<fieldset class="my-fieldset-paddingBottom">
 					<div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Opening B/L</label>
-					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
-					  </div>
-					</div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
-					  <div class="col-sm-8">
-						 <input id="input-id-1" type="text" placeholder="Under" class="form-control" />
-					  </div>
-				   </div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					  <label class="col-sm-3 control-label">Inventory Affected</label>
-					  <div class="col-sm-8">
-						 <select chosen data-ng-model="state"  class="form-control chosen-select">
-							 <option value="yes">Yes</option>
-							 <option value="no">No</option>
-						 </select>
-					  </div>
-				   </div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-					<div class="form-group">
-						<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
-						<div class="col-sm-8">
-							<textarea  name="address" ng-model="addBranch.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+					  <div class="col-sm-3">
+						 <select chosen data-ng-model="ledgerForm.amountType" tabindex="2" data-ng-options="s for s in amountTypeDrop" ng-change="changeLedgerData('amountType',ledgerForm.amountType)"  class="form-control chosen-select" >
+						 <option value=""></option>
+						</select>
 						</div>
+						<div class="col-sm-5">
+						 <input ng-model="ledgerForm.openingBal" tabindex="2" ng-change="changeLedgerData('openingBal',ledgerForm.openingBal)" id="input-id-1"  type="text" placeholder="Opening B/L" class="form-control" dir="rtl" />
+					  </div>
+				    </div>
+				</fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
+			   <div class="form-group">
+				  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
+				  <div class="col-sm-8">
+					 <input ng-model="ledgerForm.under" tabindex="2"  typeahead="state.ledgerGroupName for state in underWhat | filter:$viewValue | limitTo:10" typeahead-on-select="setPcode('ledgerGroupId',$item)" ng-model="selected"  id="input-id-1" type="text" placeholder="Under" class="form-control autocomplete" />
+				  </div>
+			   </div>
+			</fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+			   <div class="form-group">
+				  <label class="col-sm-3 control-label">Inventory Affected</label>
+				  <div class="col-sm-8">
+					 <select chosen data-ng-model="ledgerForm.invAffect" tabindex="2" ng-change="changeLedgerData('inventoryAffected',ledgerForm.invAffect)" data-ng-options="s for s in invAffectDrop"  class="form-control chosen-select">
+						 <option value=""></option>
+					 </select>
+				  </div>
+			   </div>
+			</fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+			   <div class="form-group">
+				  <label class="col-sm-3 control-label">Contact#</label>
+				  <div class="col-sm-8">
+					 <input id="input-id-1" tabindex="2" ng-model="ledgerForm.contact" ng-change="changeLedgerData('contactNo',ledgerForm.contact)" type="text" placeholder="Contact Number" class="form-control" />
+				  </div>
+			   </div>
+			</fieldset >
+			<fieldset class="my-fieldset-paddingBottom">
+				<div class="form-group">
+					<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
+					<div class="col-sm-8">
+						<textarea ng-model="ledgerForm.address1" tabindex="2" ng-change="changeLedgerData('address1',ledgerForm.address1)"  name="address"  placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-					<div class="form-group">
-						<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
-						<div class="col-sm-8">
-							<textarea  name="address" ng-model="addBranch.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-						</div>
+				</div>
+			</fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+				<div class="form-group">
+					<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
+					<div class="col-sm-8">
+						<textarea ng-model="ledgerForm.address2" tabindex="2" ng-change="changeLedgerData('address2',ledgerForm.address2)" name="address" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 					</div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					  <label class="col-sm-3 control-label">State</label>
-					  <div class="col-sm-7">
-						 <select chosen="" ng-model="addBranch.stateDropDown" data-ng-options="s.state_name for s in form.statesDrop track by s.state_abb" class="form-control chosen-select" ng-change="ChangeCity(addBranch.stateDropDown.state_abb)" ></select>
-					  </div>
-				   </div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					  <label class="col-sm-3 control-label">City</label>
-					  <div class="col-sm-7">
-						 <select chosen="" ng-model="addBranch.cityDropDown" data-ng-options="s.city_name for s in form.cityDrop track by s.city_id" class="form-control chosen-select"></select>
-					  </div>
-				   </div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					  <label for="input-id-1" class="col-sm-3 control-label">TIN</label>
-					  <div class="col-sm-7">
-						 <input id="input-id-1" masked="9999999999" type="text" placeholder="TIN Number" class="form-control"  />
-					  </div>
-					</div>
-				</fieldset> 
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					   <label for="input-id-1" class="col-sm-3 control-label">PAN</label>
-					  <div class="col-sm-7">
-						 <input id="input-id-1" masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
-					  </div>
-				   </div>
-				</fieldset>
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					   <label for="input-id-1" class="col-sm-3 control-label">GST</label>
-					  <div class="col-sm-7">
-						 <input id="input-id-1" masked="" type="text" placeholder="GST Number" class="form-control"  dir="rtl" />
-					  </div>
-					  
-				   </div>
-				</fieldset>
+				</div>
+			</fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label class="col-sm-3 control-label">State</label>
+                  <div class="col-sm-8">
+                     <select chosen="" ng-model="ledgerForm.stateDropDown" ng-change="ChangeState('stateAbb',ledgerForm.stateDropDown.stateAbb)" tabindex="2" data-ng-options="s.stateName for s in statesDrop track by s.stateAbb"  class="form-control chosen-select" ></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label class="col-sm-3 control-label">City</label>
+                  <div class="col-sm-8">
+                     <select chosen="" ng-model="ledgerForm.cityDrop" tabindex="2" ng-change="changeLedgerData('cityId',ledgerForm.cityDrop.cityId)" data-ng-options="s.cityName for s in cityDrop track by s.cityId"  class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-1 control-label">TIN</label>
+                  <div class="col-sm-4">
+                     <input id="input-id-1" ng-model="ledgerForm.tin"  tabindex="2" ng-change="changeLedgerData('tin',ledgerForm.tin)"  type="text" placeholder="TIN Number" class="form-control"  />
+                  </div>
+				  
+				   <label for="input-id-1" class="col-sm-1 control-label">PAN</label>
+                  <div class="col-sm-5">
+                     <input ng-model="ledgerForm.pan" tabindex="2" ng-change="changeLedgerData('pan',ledgerForm.pan)"  id="input-id-1" masked="" type="text"  placeholder="PAN Number" class="form-control" dir="rtl" />
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+				   <label for="input-id-1" class="col-sm-1 control-label">GST</label>
+                  <div class="col-sm-4">
+                     <input ng-model="ledgerForm.gstNo" tabindex="2" ng-change="changeLedgerData('gstNo',ledgerForm.gstNo)"  id="input-id-1" masked="" type="text"  placeholder="GST Number" class="form-control"  dir="rtl" />
+                  </div>
+				  
+               </div>
+            </fieldset>
 			
-				<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
-				<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
+			<fieldset class="my-fieldset-paddingBottom">
+				<button type="button"  class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="cancel()" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id">Cancel</button>
+				<button type="button"  class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="clickSave()">Save</button>
+			</fieldset>
+
 			</form>
 		</center>
 	</div>
 </script>
-<script type="text/ng-template" id="/myTableModalContent.html">
+<script type="text/ng-template" id="/myProductModalContent.html">
 	<div class="modal-header">
 		<button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close">×</button>  
 		  <h4 id="myModalLabel" class="modal-title">Modal title</h4>
@@ -376,7 +408,15 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">Company</label>
                   <div class="col-sm-6">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addModelProduct.company" data-ng-options="s.companyName for s in companyDrop track by s.companyId" ng-change="changeCompany(addModelProduct.company.companyId)" class="form-control chosen-select"></select>
+                  </div>
+               </div>
+			</fieldset>
+			<fieldset>
+               <div class="form-group">
+                  <label class="col-sm-3 control-label">Branch</label>
+                  <div class="col-sm-6">
+                     <select chosen="" data-ng-model="addModelProduct.branch" data-ng-options="s.branchName for s in branchDrop track by s.branchId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -384,7 +424,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Product Name</label>
                   <div class="col-sm-6">
-                     <input id="input-id-1" type="text" placeholder="Product Name" class="form-control" />
+                     <input id="input-id-1" ng-model="addModelProduct.productName" type="text" placeholder="Product Name" class="form-control" />
                   </div>
                </div>
             </fieldset>
@@ -392,7 +432,7 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">Categoy</label>
                   <div class="col-sm-6">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addModelProduct.category" data-ng-options="s.productCategoryName for s in categoryDrop track by s.productCategoryId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>
@@ -400,7 +440,7 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">Group</label>
                   <div class="col-sm-6">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addModelProduct.group" data-ng-options="s.productGroupName for s in groupDrop track by s.productGroupId" class="form-control chosen-select"></select>
                   </div>
                </div>
 			</fieldset>	
@@ -408,12 +448,12 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">Measurement Unit</label>
                   <div class="col-sm-6">
-                     <select chosen="" data-ng-model="state" data-ng-options="s for s in states" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addModelProduct.measureUnit" data-ng-options="s for s in measureUnitDrop" class="form-control chosen-select"></select>
                   </div>
                </div>
-			</fieldset>
+			</fieldset>	
 			
-				<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="clickSave()">Cancel</button>
+				<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="cancel()">Cancel</button>
 				<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()">Save</button>
 			</form>
 		</center>

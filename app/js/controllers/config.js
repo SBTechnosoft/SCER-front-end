@@ -201,7 +201,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccSales',
 			controller: 'AccSalesController as form',
             templateUrl: basepath('Accounting/Sales/AccSales.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
         })
 		//Accounting View Sales
 		.state('app.AccViewSales', {
@@ -220,7 +220,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccPurchase', {
             url: '/AccPurchase',
             templateUrl: basepath('Accounting/Purchase/AccPurchase.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
         })
 		//Accounting View Purchase
 		.state('app.AccViewPurchase', {
@@ -265,7 +265,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccSpecialJrnl', {
             url: '/AccSpecialJrnl',
             templateUrl: basepath('Accounting/SpecialJournal/AccSpecialJrnl.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv','toaster')
         })
 		//Accounting View Special journal
 		.state('app.AccViewSpecialJrnl', {

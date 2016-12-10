@@ -16,7 +16,7 @@ App.filter('sumOfValue', function () {
 });
 App.controller('BillController', BillController);
 
-function BillController($scope,apiCall,apiPath,$http,$window) {
+function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope) {
   'use strict';
  
 	var vm = this;
@@ -278,33 +278,51 @@ function BillController($scope,apiCall,apiPath,$http,$window) {
 				console.log('Not');
 			}
 			
+			// Delete formdata  keys
+			for (var key of formdata.keys()) {
+			   formdata.delete(key); 
+			}
+			
+			//Delete Inventory Data From Formdata Object
+			var json3 = angular.copy(vm.AccBillTable);
+			 
+			for(var i=0;i<json3.length;i++){
+				 
+				angular.forEach(json3[i], function (value,key) {
+					
+					formdata.delete('inventory['+i+']['+key+']',value);
+				});
+					
+			}
+			
 			$scope.quickBill = [];
 			vm.dt1 = new Date();
 			vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
 			
-			formdata.delete('companyId');
-			formdata.delete('entryDate');
-			formdata.delete('contactNo');
-			formdata.delete('workNo');
-			formdata.delete('companyName');
-			formdata.delete('clientName');
-			formdata.delete('invoiceNumber');
-			formdata.delete('emailId');
-			formdata.delete('address1');
-			formdata.delete('address2');
-			formdata.delete('stateAbb');
-			formdata.delete('cityId');
-			formdata.delete('transactionDate');
-			formdata.delete('total');
-			formdata.delete('tax');
-			formdata.delete('grandTotal');
-			formdata.delete('advance');
-			formdata.delete('balance');
-			formdata.delete('paymentMode');
-			formdata.delete('bankName');
-			formdata.delete('checkNumber');
-			formdata.delete('remark');
-			formdata.delete('inventory');
+			
+			// formdata.delete('companyId');
+			// formdata.delete('entryDate');
+			// formdata.delete('contactNo');
+			// formdata.delete('workNo');
+			// formdata.delete('companyName');
+			// formdata.delete('clientName');
+			// formdata.delete('invoiceNumber');
+			// formdata.delete('emailId');
+			// formdata.delete('address1');
+			// formdata.delete('address2');
+			// formdata.delete('stateAbb');
+			// formdata.delete('cityId');
+			// formdata.delete('transactionDate');
+			// formdata.delete('total');
+			// formdata.delete('tax');
+			// formdata.delete('grandTotal');
+			// formdata.delete('advance');
+			// formdata.delete('balance');
+			// formdata.delete('paymentMode');
+			// formdata.delete('bankName');
+			// formdata.delete('checkNumber');
+			// formdata.delete('remark');
+			// formdata.delete('inventory');
 			
 	
 		}).error(function(data, status, headers, config) {
@@ -489,5 +507,147 @@ function BillController($scope,apiCall,apiPath,$http,$window) {
     {value: 3, name: 'Normal'},
     {value: 5, name: 'Huge'}
   ];
+  
+  /**
+  Product Model Start
+  **/
+  $scope.openProduct = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: '/myProductModalContent.html',
+      controller: ModalInstanceCtrl,
+      size: size
+    });
+
+   
+    modalInstance.result.then(function () {
+     
+		apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+		
+			vm.productNameDrop = responseDrop;
+	
+		});
+	
+    }, function () {
+      console.log('Cancel');	
+    });
+  };
+
+  // Please note that $modalInstance represents a modal window (instance) dependency.
+  // It is not the same as the $modal service used above.
+
+  var ModalInstanceCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath) {
+	  
+		$scope.stockModel=[];
+			
+	var vm = this;
+	$scope.addModelProduct = [];
+	
+	 //Company Dropdown data
+	$scope.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		$scope.companyDrop = responseCompanyDrop;
+	
+	});
+	
+	$scope.changeCompany = function(state)
+	{
+		$scope.branchDrop = [];
+		var getAllBranch = apiPath.getOneBranch+state;
+		//Get Branch
+		apiCall.getCall(getAllBranch).then(function(response4){
+			$scope.branchDrop = response4;
+				
+		});
+	}
+	
+	//Category Dropdown data
+	$scope.categoryDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCategory).then(function(responseDrop){
+		
+		$scope.categoryDrop = responseDrop;
+	
+	});
+	
+	//Group Dropdown data
+	$scope.groupDrop = [];
+	
+	apiCall.getCall(apiPath.getAllGroup).then(function(responseDrop){
+		
+		$scope.groupDrop = responseDrop;
+	
+	});
+	
+	$scope.measureUnitDrop = [
+    'kilo',
+    'litre'
+  ];
+ 
+	$scope.clickSave = function(){
+		
+		var formdata = new FormData();
+		
+		formdata.append('companyId',$scope.addModelProduct.company.companyId);
+		formdata.append('branchId',$scope.addModelProduct.branch.branchId);
+		formdata.append('productName',$scope.addModelProduct.productName);
+		formdata.append('productCategoryId',$scope.addModelProduct.category.productCategoryId);
+		formdata.append('productGroupId',$scope.addModelProduct.group.productGroupId);
+		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
+		
+		//formdata.append('branchId',1);
+		//formdata.append('isDisplay','yes');
+		apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
+		
+			console.log(response5);
+			$modalInstance.close('closed');
+			// Delete formdata  keys
+			for (var key of formdata.keys()) {
+			   formdata.delete(key); 
+			}
+		
+		});
+		
+		
+	}
+	
+	if($rootScope.ArraystockModel)
+	{
+		$scope.stockModel.state=$rootScope.ArraystockModel.state;
+		$scope.stockModel.state2=$rootScope.ArraystockModel.state2;
+		$scope.stockModel.state3=$rootScope.ArraystockModel.state3;
+	}
+  // $scope.stockModel.state;
+
+    $scope.ok = function () {
+      $modalInstance.close('closed');
+    };
+
+    $scope.cancel = function () {
+	
+		$scope.addModelProduct = [];
+		// if($scope.stockModel)
+		 // {
+			// $rootScope.ArraystockModel=[];
+			// $rootScope.ArraystockModel.state=$scope.stockModel.state;
+			// $rootScope.ArraystockModel.state2=$scope.stockModel.state2;
+			// $rootScope.ArraystockModel.state3=$scope.stockModel.state3;
+		 // }
+		//$modalInstance.dismiss();
+    };
+	
+	$scope.closeButton = function () {
+
+		$modalInstance.dismiss();
+    };
+	
+	
+  };
+  ModalInstanceCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath"];
+  /**
+  Product Model End
+  **/
 }
-BillController.$inject = ["$scope","apiCall","apiPath","$http","$window"];
+BillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope"];

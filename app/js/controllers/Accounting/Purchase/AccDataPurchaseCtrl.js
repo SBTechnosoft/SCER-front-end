@@ -6,7 +6,7 @@
 
 App.controller('AccDataPurchaseController', AccDataPurchaseController);
 
-function AccDataPurchaseController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,flotOptions, colors,$timeout) {
+function AccDataPurchaseController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,flotOptions, colors,$timeout,getSetFactory,$state) {
   'use strict';
   var vm = this;
   var data = [];
@@ -17,8 +17,6 @@ function AccDataPurchaseController($rootScope,$scope, $filter, ngTableParams,$ht
   vm.chartAreaFlotChart  = flotOptions['area'];
   
    vm.chartPieFlotChart  = flotOptions['pie'];
-  
-  
   
 	 console.log($rootScope.accView.companyId);
 	  console.log($rootScope.accView.fromDate);
@@ -273,23 +271,25 @@ function AccDataPurchaseController($rootScope,$scope, $filter, ngTableParams,$ht
 		});
   }
   
-  $scope.edit_comp = function(branch_id)
+  $scope.editPurchase = function(id)
   {
 	  
-	  $location.path('app/AddBranch/'+branch_id);
+	  getSetFactory.set(id);
+	  
+	  $state.go("app.AccPurchase");
   }
   
-  $scope.delete_comp = function(branch_id)
+  $scope.deletePurchase = function(id)
   {
 	
-	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
+	// var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
 	  
-	apiCall.deleteCall(deletePath).then(function(deleteres){
+	// apiCall.deleteCall(deletePath).then(function(deleteres){
 		
-		console.log(deleteres);
+		// console.log(deleteres);
 	 
-	});
+	// });
   }
 
 }
-AccDataPurchaseController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","flotOptions","colors","$timeout"];
+AccDataPurchaseController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","flotOptions","colors","$timeout","getSetFactory","$state"];

@@ -247,8 +247,8 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
   ]
   
   this.amountTypeDrop = [
-	'Debit',
-	'Credit'
+	'debit',
+	'credit'
   ];
   
   $scope.ledgerForm.amountType = 'Credit';
@@ -270,7 +270,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	
 	$scope.setPcode = function(Fname,value) {
   		//console.log(value.ledgerGroupId);
-		if(formdata.get(Fname))
+		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
@@ -287,7 +287,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			vm.cityDrop = response4;
 				
 		});
-			if(formdata.get(Fname))
+			if(formdata.has(Fname))
 			{
 				formdata.delete(Fname);
 			}
@@ -299,7 +299,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	//Changed Data When Update
 	$scope.changeLedgerData = function(Fname,value){
 		//console.log(Fname+'..'+value);
-		if(formdata.get(Fname))
+		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
@@ -320,6 +320,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		else{
 			
 			var ledgerPath = apiPath.getAllLedger;
+			formdata.append('balanceFlag','opening');
 		}
 		
 		
