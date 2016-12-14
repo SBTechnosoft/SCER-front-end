@@ -17,6 +17,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	 $scope.accPurchase.jfid; // JFID
 	 
 	vm.AccClientMultiTable = [];
+	vm.multiCurrentBalance = [];
 	$scope.changeJrnlArray = false; // Change When Update in Journal Table Array
 	
 	vm.AccPurchaseTable = [];
@@ -87,44 +88,42 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 			//console.log($scope.accPurchase.getSetJrnlId);
 			getSetFactory.blank();
 			
-			var getOneJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
-			console.log(getOneJrnlPath);
+			var getOneJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
+			//console.log(getOneJrnlPath);
 		  
-			$http({
-			url: getOneJrnlPath,
-			 method: 'get',
-			processData: false,
-			 headers: {'Content-Type': undefined,'type':'purchase','jfId':parseInt($scope.accPurchase.getSetJrnlId)}
-			}).success(function(data, status, headers, config) {
+			var headerDataEdit = {'Content-Type': undefined,'type':'purchase','jfId':parseInt($scope.accPurchase.getSetJrnlId)};
+	   
+			
+			apiCall.getCallHeader(getOneJrnlPath,headerDataEdit).then(function(data){
 				
 				//Set JFID
-				$scope.accPurchase.jfid = data.ledger[0].jfId;
+				$scope.accPurchase.jfid = data.journal[0].jfId;
 				
 				//Set Invoice Number
 				$scope.accPurchase.billNo = data.productTransaction[0].billNumber;
 				
 				//Company DropDown Selection
-				var companyDropPath = apiPath.getAllCompany+'/'+data.ledger[0].company.companyId;
+				var companyDropPath = apiPath.getAllCompany+'/'+data.journal[0].company.companyId;
 				apiCall.getCall(companyDropPath).then(function(res2){
 				
 					$scope.accPurchase.companyDropDown = res2;
 				});
 				
 				//Set Date
-				var getResdate = data.ledger[0].entryDate;
+				var getResdate = data.journal[0].entryDate;
 				var splitedate = getResdate.split("-").reverse().join("-");
 				vm.dt1 = new Date(splitedate);
 				vm.minStart = new Date(splitedate);
 				//vm.maxStart = new Date(splitedate);
 				
 				//Set Table Array
-				for(var i=0;i<data.ledger.length;i++){
+				for(var i=0;i<data.journal.length;i++){
 					
 					 var tempData = {};
-					tempData.amountType = data.ledger[i].amountType;
-					tempData.ledgerId= data.ledger[i].ledger.ledgerId;
-					tempData.ledgerName = data.ledger[i].ledger.ledgerName;
-					tempData.amount = parseInt(data.ledger[i].amount);
+					tempData.amountType = data.journal[i].amountType;
+					tempData.ledgerId= data.journal[i].ledger.ledgerId;
+					tempData.ledgerName = data.journal[i].ledger.ledgerName;
+					tempData.amount = parseInt(data.journal[i].amount);
 					
 					vm.AccClientMultiTable.push(tempData);
 				}
@@ -160,6 +159,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 			vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 			
 			vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+			
+			vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
 		}
 		//End Update Set
 	
@@ -174,20 +175,32 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 		data.ledgerName ='';
 		data.amount ='';
 		vm.AccClientMultiTable.push(data);
+		
+		var balance = {};
+		balance.contactNo = '';
+		balance.amountType = '';
+		vm.multiCurrentBalance.push(balance);
+		
 		$scope.changeJrnlArray = true;
 
     };
 	
 	$scope.setAccPurchase = function(item,index)
 	{
+		vm.multiCurrentBalance[index].contactNo = Math.floor((Math.random() * 1000000) + 100000);
+		vm.multiCurrentBalance[index].amountType = 'Dr';
+		
 		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
 		console.log(vm.AccClientMultiTable);
 		$scope.changeJrnlArray = true;
 	}
 	
 	$scope.removeClientRow = function (idx) {
+		
 		vm.AccClientMultiTable.splice(idx, 1);
+		vm.multiCurrentBalance.splice(idx, 1);
 		$scope.changeJrnlArray = true;
+		
 	};
 	/* End */
 	
@@ -230,13 +243,16 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
     }
     return total;
 }
-	//Auto suggest Client Name
-	vm.clientNameDrop=[];
-	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
-		
-		vm.clientNameDrop = response3;
+
+	/* END */
 	
-	});
+	//Auto suggest Client Name
+	// vm.clientNameDrop=[];
+	// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+		
+		// vm.clientNameDrop = response3;
+	
+	// });
 	
 	//Auto Suggest Product Dropdown data
 	vm.productNameDrop = [];
@@ -247,8 +263,27 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	
 	});
 	
+	//Auto suggest Client Name
+	vm.clientNameDrop=[];
 	
-  /* End */
+	//Set JSuggest Data When Company
+	$scope.changeCompany = function(Fname,value){
+		
+		//Auto suggest Client Name
+		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		apiCall.getCall(jsuggestPath).then(function(response3){
+			
+			vm.clientNameDrop = response3;
+		
+		});
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+		
+	}
   
   //Set Multiple File In Formdata On Change
 	$scope.uploadFile = function(files) {
@@ -397,13 +432,13 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 			formdata.append('entryDate',fdate);
 		}
 		
-		if(!formdata.has('entryDate')){
+		if(formdata.has('transactionDate')){
 			
-			formdata.append('entryDate',fdate);
+			formdata.delete('transactionDate',fdate);
 		}
 		
 		formdata.append('transactionDate',fdate);
-		formdata.append('invoiceNumber','');
+		//formdata.append('invoiceNumber','');
 		
 		$scope.changeJrnlArray = true; // For Delete Array In Journal FormData After Success
 		$scope.changeProductArray = true; // For Delete Array In Product FormData After Success
@@ -426,13 +461,11 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	// formdata.append('invoiceNumber','');
 	 //formdata.append('billNumber',$scope.accPurchase.billNo);
 	   
-	   $http({
-			url: accPurchasePath,
-			 method: 'post',
-			processData: false,
-			 headers: {'Content-Type': undefined,'type':'purchase'},
-			data:formdata
-		}).success(function(data, status, headers, config) {
+			
+	var headerData = {'Content-Type': undefined,'type':'purchase'};
+	   
+			
+		apiCall.postCallHeader(accPurchasePath,headerData,formdata).then(function(data){
 			
 			console.log(data);
 			vm.dt1 = new Date();

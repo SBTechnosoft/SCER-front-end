@@ -27,6 +27,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   $scope.accSales.jfid; // JFID
   
   vm.AccClientMultiTable = []; // Journal Table Array
+  vm.multiCurrentBalance = []; // Current Balance Array For Journal Table
   $scope.changeJrnlArray = false; // Change When Update in Journal Table Array
   
   vm.AccSalesTable = []; // Product Table Array
@@ -41,7 +42,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	});
 	
-	 // Datepicker
+	// Datepicker
   // ----------------------------------- 
 	this.minStart = new Date();
 	this.maxStart = new Date();
@@ -98,52 +99,51 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		//console.log($scope.accSales.getSetJrnlId);
 		getSetFactory.blank();
 		
-		var getOneJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
+		//var getOneJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
+		var getOneJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
 		console.log(getOneJrnlPath);
 		
-		 $http({
-			url: getOneJrnlPath,
-			 method: 'get',
-			processData: false,
-			 headers: {'Content-Type': undefined,'type':'sales','jfId':parseInt($scope.accSales.getSetJrnlId)}
-		}).success(function(data, status, headers, config) {
+		var headerDataEdit = {'Content-Type': undefined,'type':'sales','jfId':parseInt($scope.accSales.getSetJrnlId)};
+	   
 			
+		apiCall.getCallHeader(getOneJrnlPath,headerDataEdit).then(function(data){
+		
 			console.log(data);
 			
 			
 			//Set JFID
-			$scope.accSales.jfid = data.ledger[0].jfId;
+			$scope.accSales.jfid = data.journal[0].jfId;
 			console.log('JFID...'+$scope.accSales.jfid);
 			
 			//Set Invoice Number
 			$scope.accSales.invoiceNo = data.productTransaction[0].invoiceNumber;
 			console.log('invoiceNo...'+$scope.accSales.invoiceNo);
 			
-			console.log('Company...'+data.ledger[0].company.companyId);
-			console.log('Company Name...'+data.ledger[0].company.companyName);
+			console.log('Company...'+data.journal[0].company.companyId);
+			console.log('Company Name...'+data.journal[0].company.companyName);
 			
 			//Company DropDown Selection
-			var companyDropPath = apiPath.getAllCompany+'/'+data.ledger[0].company.companyId;
+			var companyDropPath = apiPath.getAllCompany+'/'+data.journal[0].company.companyId;
 			apiCall.getCall(companyDropPath).then(function(res2){
 			
 				$scope.accSales.companyDropDown = res2;
 			});
 			
 			//Set Date
-			var getResdate = data.ledger[0].entryDate;
+			var getResdate = data.journal[0].entryDate;
 			var splitedate = getResdate.split("-").reverse().join("-");
 			vm.dt1 = new Date(splitedate);
 			vm.minStart = new Date(splitedate);
 			vm.maxStart = new Date(splitedate);
 			
 			//Set Table Array
-			for(var i=0;i<data.ledger.length;i++){
+			for(var i=0;i<data.journal.length;i++){
 				
 				 var tempData = {};
-				tempData.amountType = data.ledger[i].amountType;
-				tempData.ledgerId= data.ledger[i].ledger.ledgerId;
-				tempData.ledgerName = data.ledger[i].ledger.ledgerName;
-				tempData.amount = parseInt(data.ledger[i].amount);
+				tempData.amountType = data.journal[i].amountType;
+				tempData.ledgerId= data.journal[i].ledger.ledgerId;
+				tempData.ledgerName = data.journal[i].ledger.ledgerName;
+				tempData.amount = parseInt(data.journal[i].amount);
 				
 				vm.AccClientMultiTable.push(tempData);
 			}
@@ -180,9 +180,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
 		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+		
+		vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
 	}
 	//End Update Set
-  
+	
+	
+	
 	/* Journal  Table */
 	$scope.addClientRow = function(){
 		 
@@ -192,22 +196,36 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		data.ledgerName ='';
 		data.amount ='';
 		vm.AccClientMultiTable.push(data);
+		
+		var balance = {};
+		balance.contactNo = '';
+		balance.amountType = '';
+		vm.multiCurrentBalance.push(balance);
+		
 		$scope.changeJrnlArray = true;
 
     };
 	
 	$scope.setMultiTable = function(item,index)
 	{
-		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
 		
+		vm.multiCurrentBalance[index].contactNo = Math.floor((Math.random() * 1000000) + 100000);
+		vm.multiCurrentBalance[index].amountType = 'Dr';
+		
+		//console.log(vm.multiCurrentBalance);
+		
+		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
 		$scope.changeJrnlArray = true;
-		//console.log(vm.AccClientMultiTable);
+		console.log(vm.AccClientMultiTable);
 	}
 	
 	$scope.removeClientRow = function (idx) {
 		
 		$scope.changeJrnlArray = true;
 		vm.AccClientMultiTable.splice(idx, 1);
+		
+		vm.multiCurrentBalance.splice(idx, 1);
+		//console.log(vm.multiCurrentBalance);
 	};
 	/* End */
   
@@ -252,12 +270,12 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	}
 
 	//Auto suggest Client Name
-	vm.clientNameDrop=[];
-	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+	// vm.clientNameDrop=[];
+	// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
-		vm.clientNameDrop = response3;
+		// vm.clientNameDrop = response3;
 	
-	});
+	// });
 	
 	//Auto Suggest Product Dropdown data
 	vm.productNameDrop = [];
@@ -267,6 +285,42 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		vm.productNameDrop = responseDrop;
 	
 	});
+	
+	//Auto suggest Client Name For Debit
+	vm.clientNameDropDr=[];
+	//var headerDr = {'Content-Type': undefined,'legderGroup':['9','12','32']};
+	var headerDr = {'Content-Type': undefined};
+	
+	//Auto suggest Client Name For Credit
+	vm.clientNameDropCr=[];
+	//var headerCr = {'Content-Type': undefined,'legderGroup':['28']};
+	var headerCr = {'Content-Type': undefined};
+	
+	//Set JSuggest Data When Company
+	$scope.changeCompany = function(Fname,value){
+		
+		//Auto suggest Client Name For Debit
+		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		
+		apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
+			
+			vm.clientNameDropDr = response3;
+		
+		});
+		
+		apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+			
+			vm.clientNameDropCr = response3;
+		
+		});
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+		
+	}
 	
 	$scope.changeAccSales = function(Fname,value) {
 		if(formdata.has(Fname))
@@ -411,21 +465,10 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 	}
 	
-	
+	var headerData = {'Content-Type': undefined,'type':'sales'};
 	   
-	   $http({
-			url: accSalesPath,
-			 method: 'post',
-			processData: false,
-			//contentType: false,
-			 crossDomain: true,
-			// dataType: 'jsonp',
-			 //mimeType:'multipart/form-data',
-			//cache: false,
-			 //async:true,
-			 headers: {'Content-Type': undefined,'type':'sales'},
-			data:formdata
-		}).success(function(data, status, headers, config) {
+			
+		apiCall.postCallHeader(accSalesPath,headerData,formdata).then(function(data){
 			
 			console.log(data);	
 			vm.dt1 = new Date();

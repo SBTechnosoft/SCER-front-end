@@ -258,7 +258,7 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
 			//var formdataNew = new FormData();
 			 //var newEndAt = parseInt($scope.quickBill.invoiceEndAt)+1;
 			//formdataNew.append('endAt',newEndAt);
-			//console.log();
+			console.log(data);
 			angular.element("input[type='file']").val(null);
 			formdata.delete('file');
 			// apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
