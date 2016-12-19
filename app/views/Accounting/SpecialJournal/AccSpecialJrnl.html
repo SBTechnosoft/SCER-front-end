@@ -13,13 +13,13 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeSpecialJrnlData('companyId',addAccJrnl.companyDropDown.companyId)" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addAccJrnl.companyDropDown.companyId)" class="form-control chosen-select"></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 				<div class="col-sm-4">
 					 <p class="input-group"style="float:right">
 						<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false"  datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
-						class="form-control" />
+						class="form-control" readonly/>
 						<span class="input-group-btn">
 						   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
 							  <em class="fa fa-calendar"></em>
@@ -63,7 +63,7 @@
 						<td>
 							<select  ng-model="item.amountType" class="form-control" ng-change="changeSpecialJrnlTable()">
 								<option value="debit" selected="selected">Dr</option>
-								<option value="credit">Cr</option>
+								<option value="credit" ng-if="$index!=0" >Cr</option>
 							</select>
 						</td>
 						<td>
@@ -73,7 +73,7 @@
 								   <button type="button" class="btn btn-default" data-ng-click="openLedger('lg')"><i  class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 								</span>
 							</div>
-							<h5 >Current Balance 205000 Dr/Cr</h5>
+							<h5 >Current Balance {{form.multiCurrentBalance[$index]['contactNo']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 						</td>
 						<td>
 							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" 
@@ -93,10 +93,10 @@
 						<td></td>
 						<td>Total</td>
 						<td >
-							<span style="float:right">0</span>
+							<span style="float:right">{{form.AccSpecialJrnlTable | sumOfDebit:'amount'}}</span>
 						</td>
 						<td >
-							<span style="float:right">0</span>
+							<span style="float:right">{{form.AccSpecialJrnlTable | sumOfCredit:'amount'}}</span>
 						</td>
 						<td ></td>
 					</tr>

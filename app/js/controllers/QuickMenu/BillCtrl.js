@@ -245,16 +245,11 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
 	 formdata.append('billNumber','');
 	 formdata.append('isDisplay','yes');
 	 
-	 
-	  $http({
-			url: apiPath.postBill,
-			 method: 'post',
-			processData: false,
-			 crossDomain: true,
-			 //dataType: 'jsonp',
-			 headers: {'Content-Type': undefined,'type':'sales'},
-			data:formdata
-		}).success(function(data, status, headers, config) {
+	var headerData = {'Content-Type': undefined,'type':'sales'};
+	   
+			
+		apiCall.postCallHeader(apiPath.postBill,headerData,formdata).then(function(data){
+			
 			//var formdataNew = new FormData();
 			 //var newEndAt = parseInt($scope.quickBill.invoiceEndAt)+1;
 			//formdataNew.append('endAt',newEndAt);
@@ -346,7 +341,31 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
 	
 	$scope.setClientSuggest = function(Fname,data){
 		
-		console.log(data.contactNo);
+		console.log(data.clientId);
+		$scope.quickBill.WorkNo = data.workNo;
+		$scope.quickBill.companyName = data.companyName;
+		$scope.quickBill.clientName = data.clientName;
+		$scope.quickBill.emailId = data.emailId;
+		$scope.quickBill.fisrtAddress = data.address1;
+		$scope.quickBill.secondAddress = data.address2;
+		
+		//State DropDown Selection
+		var stateDropPath = apiPath.getAllState+'/'+data.state.stateAbb;
+		apiCall.getCall(stateDropPath).then(function(res3){
+			$scope.quickBill.stateAbb = res3;
+		});
+		
+		//City DropDown
+		var cityAllDropPath = apiPath.getAllCity+data.state.stateAbb;
+		apiCall.getCall(cityAllDropPath).then(function(res5){
+			vm.cityDrop = res5;
+		});
+		
+		//City DropDown Selection
+		var cityDropPath = apiPath.getOneCity+'/'+data.city.cityId;
+		apiCall.getCall(cityDropPath).then(function(res4){
+			$scope.quickBill.cityId = res4;
+		});
 	}
 	
 	//get Company

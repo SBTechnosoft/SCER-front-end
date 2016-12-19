@@ -6,12 +6,14 @@
 
 App.controller('AccPaymentController', AccPaymentController);
 
-function AccPaymentController($scope,apiCall,apiPath) {
+function AccPaymentController($scope,apiCall,apiPath,$rootScope) {
   'use strict';
   
   var vm = this;
   $scope.accPayment = [];
   var formdata = new FormData();
+  
+ // console.log($rootScope.defaultCompany());
   
   /* Table */
   
@@ -213,4 +215,4 @@ function AccPaymentController($scope,apiCall,apiPath) {
     {value: 5, name: 'Huge'}
   ];
 }
-AccPaymentController.$inject = ["$scope","apiCall","apiPath"];
+AccPaymentController.$inject = ["$scope","apiCall","apiPath","$rootScope"];

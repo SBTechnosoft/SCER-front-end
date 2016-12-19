@@ -15,6 +15,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
    $scope.addAccJrnl.jfid;
    $scope.changeInArray = false;
    vm.AccSpecialJrnlTable = []; //Table Array
+   vm.multiCurrentBalance = [];
    
    //Company Drop Down 
    vm.companyDrop = [];
@@ -86,6 +87,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 	  
 		apiCall.getCall(getOneJrnlPath).then(function(response){
 			
+			console.log(response);
 			//Set JFID
 			$scope.addAccJrnl.jfid = response[0].jfId;
 			
@@ -113,6 +115,14 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				tempData.amount = parseInt(response[i].amount);
 				
 				vm.AccSpecialJrnlTable.push(tempData);
+				
+				//Set Current Balance 
+				// var tempBalanceData = {};
+				
+				// tempBalanceData.contactNo = Math.floor((Math.random() * 1000000) + 100000);
+				// tempBalanceData.amountType = data.journal[i].amountType;
+				
+				// vm.multiCurrentBalance.push(tempBalanceData);
 			}
 			//console.log(vm.AccSpecialJrnlTable);
 		});
@@ -127,6 +137,8 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 	
 		});
 		vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+		
+		vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
 	}
   
   
@@ -140,31 +152,58 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		data.ledgerName ='';
 		data.amount ='';
 		vm.AccSpecialJrnlTable.push(data);
+		
+		var balance = {};
+		balance.contactNo = '';
+		balance.amountType = '';
+		vm.multiCurrentBalance.push(balance);
+			
 		$scope.changeInArray = true;
 
     };
 	
 	$scope.settabledata = function(item,index)
 	{
+		vm.multiCurrentBalance[index].contactNo = item.currentBalance;
+		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
+			
 		vm.AccSpecialJrnlTable[index].ledgerId = item.ledgerId;
 		console.log(vm.AccSpecialJrnlTable);
 		$scope.changeInArray = true;
 	}
 	
-	//Auto suggest Client Name
-	vm.clientNameDrop=[];
-	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
-		
-		vm.clientNameDrop = response3;
-	
-	});
-	
 	$scope.removeRow = function (idx) {
+		
 		vm.AccSpecialJrnlTable.splice(idx, 1);
+		vm.multiCurrentBalance.splice(idx, 1);
 		$scope.changeInArray = true;
 	};
 	
   /* End */
+	
+	//Auto suggest Client Name
+	vm.clientNameDrop=[];
+	
+	//Set JSuggest Data When Company
+	$scope.changeCompany = function(Fname,value){
+		
+		//Auto suggest Client Name
+		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		var headerData = {'Content-Type': undefined};
+		
+		apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
+			
+			vm.clientNameDrop = response3;
+		
+		});
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+		
+	}
 	
 	 //Changed Data When Update
 	$scope.changeSpecialJrnlData = function(Fname,value){
@@ -318,6 +357,8 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 			$scope.addAccJrnl = [];
 			
 			vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+			
+			vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
 			
 			 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 			

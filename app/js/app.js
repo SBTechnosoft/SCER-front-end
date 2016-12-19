@@ -87,6 +87,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 		}).error(function(data, status, headers, config) {
 			
 		});
+		
 	
   }
 ]);

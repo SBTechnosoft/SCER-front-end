@@ -55,9 +55,18 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			$scope.ledgerForm.pan = response.pan;
 			$scope.ledgerForm.gstNo = response.gstNo;
 			
+			$scope.ledgerForm.amountType = response.openingBalanceType;
+			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);
+			
 			//Under textbox Selection
 			apiCall.getCall(apiPath.getAllLedgerGroup+'/'+response.ledgerGroup.ledgerGroupId).then(function(response3){
 				$scope.ledgerForm.under = response3;
+			});
+			
+			//Company DropDown Selection
+			var companyDropPath = apiPath.getAllCompany+'/'+response.company.companyId;
+			apiCall.getCall(companyDropPath).then(function(res3){
+				$scope.ledgerForm.companyDropDown = res3;
 			});
 	
 			//State DropDown Selection
@@ -111,6 +120,9 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			$scope.ledgerForm.tin = response.tin;
 			$scope.ledgerForm.pan = response.pan;
 			$scope.ledgerForm.gstNo = response.gstNo;
+			
+			$scope.ledgerForm.amountType = response.openingBalanceType;
+			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);
 			
 			//Under textbox Selection
 			apiCall.getCall(apiPath.getAllLedgerGroup+'/'+response.ledgerGroup.ledgerGroupId).then(function(response3){
@@ -326,11 +338,17 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		
 		apiCall.postCall(ledgerPath,formdata).then(function(response5){
 		
-			$location.path('app/AccLedger');
+			//$location.path('app/AccLedger');
 			console.log(response5);
 			toaster.pop('success', 'Title', 'Message');
 			$scope.ledgerForm = [];
-			var formdata = new FormData();
+			
+			// Delete formdata  keys
+			for (var key of formdata.keys()) {
+			   formdata.delete(key); 
+			}
+		
+			//var formdata = new FormData();
 			apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
 				vm.allLedgerData = response3;

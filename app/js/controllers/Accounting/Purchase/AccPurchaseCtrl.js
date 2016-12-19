@@ -126,6 +126,14 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 					tempData.amount = parseInt(data.journal[i].amount);
 					
 					vm.AccClientMultiTable.push(tempData);
+					
+					//Set Current Balance 
+					var tempBalanceData = {};
+					
+					tempBalanceData.contactNo = Math.floor((Math.random() * 1000000) + 100000);
+					tempBalanceData.amountType = data.journal[i].amountType;
+					
+					vm.multiCurrentBalance.push(tempBalanceData);
 				}
 				
 				//Set Product Array
@@ -187,8 +195,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	
 	$scope.setAccPurchase = function(item,index)
 	{
-		vm.multiCurrentBalance[index].contactNo = Math.floor((Math.random() * 1000000) + 100000);
-		vm.multiCurrentBalance[index].amountType = 'Dr';
+		vm.multiCurrentBalance[index].contactNo =  item.currentBalance;
+		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 		
 		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
 		console.log(vm.AccClientMultiTable);
@@ -264,16 +272,40 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	});
 	
 	//Auto suggest Client Name
-	vm.clientNameDrop=[];
+	vm.clientNameDropDr=[];
+	var headerDr = {'Content-Type': undefined,'ledgerGroup':[26]};
+	
+	vm.clientNameDropCr=[];
+	var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12,31,18]};
 	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
 		
 		//Auto suggest Client Name
 		var jsuggestPath = apiPath.getLedgerJrnl+value;
-		apiCall.getCall(jsuggestPath).then(function(response3){
+		apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
 			
-			vm.clientNameDrop = response3;
+			for(var t=0;t<response3.length;t++){
+				
+				for(var k=0;k<response3[t].length;k++){
+					
+					vm.clientNameDropDr.push(response3[t][k]);
+				}
+				
+			}
+		
+		});
+		
+		apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+			
+			for(var t=0;t<response3.length;t++){
+				
+				for(var k=0;k<response3[t].length;k++){
+					
+					vm.clientNameDropCr.push(response3[t][k]);
+				}
+				
+			}
 		
 		});
 		
@@ -317,6 +349,19 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 		formdata.append(Fname,fdate);
 	}
 	
+	
+	//Change in Journal Table
+	$scope.changeAmountType = function(index){
+		
+		vm.AccClientMultiTable[index].ledgerId = '';
+		vm.AccClientMultiTable[index].ledgerName = '';
+		
+		vm.multiCurrentBalance[index].contactNo =  '';
+		vm.multiCurrentBalance[index].amountType = '';
+		
+		$scope.changeJrnlArray = true;
+		
+	}
 	
 	//Change in Journal Table
 	$scope.changeJrnlTable = function(){
@@ -998,5 +1043,33 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
   /**
   Product Model End
   **/
+  
+  
+  /**
+	History Modal 
+	**/
+	
+	$scope.openHistoryModal = function (size) {
+
+		var modalInstance = $modal.open({
+		  templateUrl: '/myHistoryPurchaseModalContent.html',
+		  controller: historyPurchaseModaleCtrl,
+		  size: size
+		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+	
+	};
+	
+	/**
+	End History Modal 
+	**/
+	
 }
 AccPurchaseController.$inject = ["$scope","apiCall","apiPath","$http","$modal", "$log","$rootScope","getSetFactory","toaster"];
