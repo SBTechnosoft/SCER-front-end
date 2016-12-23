@@ -23,6 +23,19 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	vm.AccPurchaseTable = [];
 	$scope.changeProductArray = false; // Change When Update in Product Table Array
 	
+	/**
+		Jsuggest Debit/Credit
+	**/
+		//Auto suggest Client Name
+		vm.clientNameDropDr=[];
+		var headerDr = {'Content-Type': undefined,'ledgerGroup':[26]};
+		
+		vm.clientNameDropCr=[];
+		var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12,31,18]};
+	/**
+		End
+	**/
+	
 	// ----------------------------------- 
 
   vm.companyDrop = [];
@@ -109,6 +122,41 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 					$scope.accPurchase.companyDropDown = res2;
 				});
 				
+				/** 
+				Jsuggest OF Credit/Debit
+				**/
+					//Auto suggest Client Name For Debit
+					var jsuggestPathEdit = apiPath.getLedgerJrnl+data.journal[0].company.companyId;
+					
+					apiCall.getCallHeader(jsuggestPathEdit,headerDr).then(function(response3){
+						
+						for(var t=0;t<response3.length;t++){
+							
+							for(var k=0;k<response3[t].length;k++){
+								
+								vm.clientNameDropDr.push(response3[t][k]);
+							}
+							
+						}
+					
+					});
+					
+					apiCall.getCallHeader(jsuggestPathEdit,headerCr).then(function(response3){
+						
+						for(var t=0;t<response3.length;t++){
+							
+							for(var k=0;k<response3[t].length;k++){
+								
+								vm.clientNameDropCr.push(response3[t][k]);
+							}
+							
+						}
+					
+					});
+				/**
+					End
+				**/
+				
 				//Set Date
 				var getResdate = data.journal[0].entryDate;
 				var splitedate = getResdate.split("-").reverse().join("-");
@@ -130,8 +178,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 					//Set Current Balance 
 					var tempBalanceData = {};
 					
-					tempBalanceData.contactNo = Math.floor((Math.random() * 1000000) + 100000);
-					tempBalanceData.amountType = data.journal[i].amountType;
+					tempBalanceData.contactNo = data.journal[i].ledger.currentBalance;
+					tempBalanceData.amountType = data.journal[i].ledger.currentBalanceType;
 					
 					vm.multiCurrentBalance.push(tempBalanceData);
 				}
@@ -271,15 +319,11 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	
 	});
 	
-	//Auto suggest Client Name
-	vm.clientNameDropDr=[];
-	var headerDr = {'Content-Type': undefined,'ledgerGroup':[26]};
-	
-	vm.clientNameDropCr=[];
-	var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12,31,18]};
-	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
+		
+		vm.clientNameDropDr=[];
+		vm.clientNameDropCr=[];
 		
 		//Auto suggest Client Name
 		var jsuggestPath = apiPath.getLedgerJrnl+value;
@@ -569,6 +613,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 			}
 			
 			$scope.accPurchase = [];
+			vm.clientNameDropDr=[]; // Debit Jsuggest Blank
+			vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 			
 			angular.element("input[type='file']").val(null);
 			
@@ -638,10 +684,15 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 		}
 		
 		$scope.accPurchase = [];
+		vm.clientNameDropDr=[]; // Debit Jsuggest Blank
+		vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 		
 		angular.element("input[type='file']").val(null);
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
+		
+		vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
+		
 		vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":"1000","qty":"1","amount":""}];
 		
 		apiCall.getCall(apiPath.getJrnlNext).then(function(response){

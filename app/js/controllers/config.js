@@ -206,15 +206,24 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		//Accounting View Sales
 		.state('app.AccViewSales', {
             url: '/AccViewSales',
-            templateUrl: basepath('Accounting/Sales/AccViewSales.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+				viewDataType: function(){
+					return 'sales';
+				}
+			})
         })
 		//Accounting Data Sales
 		.state('app.AccDataSales', {
             url: '/AccDataSales',
-            templateUrl: basepath('Accounting/Sales/AccDataSales.html?r='+Math.random()),
-			controller: 'AccDataSalesController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
+            templateUrl: basepath('Accounting/viewData/AccDataViews.html?r='+Math.random()),
+			controller: 'AccViewDataController as table',
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+				headerType: function(){
+					return 'sales';
+				}
+			})
         })
 		//Accounting Purchase
 		.state('app.AccPurchase', {
@@ -225,15 +234,24 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		//Accounting View Purchase
 		.state('app.AccViewPurchase', {
             url: '/AccViewPurchase',
-            templateUrl: basepath('Accounting/Purchase/AccViewPurchase.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+				viewDataType: function(){
+					return 'purchase';
+				}
+			})
         })
 		//Accounting Data Purchase
 		.state('app.AccDataPurchase', {
             url: '/AccDataPurchase',
-            templateUrl: basepath('Accounting/Purchase/AccDataPurchase.html?r='+Math.random()),
-			controller: 'AccDataPurchaseController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
+             templateUrl: basepath('Accounting/viewData/AccDataViews.html?r='+Math.random()),
+			controller: 'AccViewDataController as table',
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+				headerType: function(){
+					return 'purchase';
+				}
+			})
         })
 		//Accounting View Credit Notes
 		.state('app.AccViewCreditNotes', {
@@ -270,53 +288,80 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		//Accounting View Special journal
 		.state('app.AccViewSpecialJrnl', {
             url: '/AccViewSpecialJrnl',
-            templateUrl: basepath('Accounting/SpecialJournal/AccViewSpecialJrnl.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+				viewDataType: function(){
+					return 'specialJournal';
+				}
+			})
         })
 		//Accounting Data Special journal
 		.state('app.AccDataSpecialJrnl', {
             url: '/AccDataSpecialJrnl',
-            templateUrl: basepath('Accounting/SpecialJournal/AccDataSpecialJrnl.html?r='+Math.random()),
-			controller: 'AccDataSpecialJrnlController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
+             templateUrl: basepath('Accounting/viewData/AccDataViews.html?r='+Math.random()),
+			controller: 'AccViewDataController as table',
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+				headerType: function(){
+					return 'specialJournal';
+				}
+			})
         })
 		//Accounting Payment
 		.state('app.AccPayment', {
             url: '/AccPayment',
             templateUrl: basepath('Accounting/Payment/AccPayment.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv','toaster')
         })
 		//Accounting View Payment
 		.state('app.AccViewPayment', {
             url: '/AccViewPayment',
-            templateUrl: basepath('Accounting/Payment/AccViewPayment.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv'),{
+				viewDataType: function(){
+					return 'payment';
+				}
+			})
         })
 		//Accounting Data Payment
 		.state('app.AccDataPayment', {
             url: '/AccDataPayment',
-            templateUrl: basepath('Accounting/Payment/AccDataPayment.html?r='+Math.random()),
-			controller: 'AccDataPaymentController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
+             templateUrl: basepath('Accounting/viewData/AccDataViews.html?r='+Math.random()),
+			controller: 'AccViewDataController as table',
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+				headerType: function(){
+					return 'payment';
+				}
+			})
         })
 		//Accounting Receipt
 		.state('app.AccReceipt', {
             url: '/AccReceipt',
             templateUrl: basepath('Accounting/Receipt/AccReceipt.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
         })
 		//Accounting View Receipt
 		.state('app.AccViewReceipt', {
             url: '/AccViewReceipt',
-            templateUrl: basepath('Accounting/Receipt/AccViewReceipt.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+				viewDataType: function(){
+					return 'receipt';
+				}
+			})
         })
 		//Accounting Data Receipt
 		.state('app.AccDataReceipt', {
             url: '/AccDataReceipt',
-            templateUrl: basepath('Accounting/Receipt/AccDataReceipt.html?r='+Math.random()),
-			controller: 'AccDataReceiptController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
+             templateUrl: basepath('Accounting/viewData/AccDataViews.html?r='+Math.random()),
+			controller: 'AccViewDataController as table',
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+				headerType: function(){
+					return 'receipt';
+				}
+			})
         })
 		//Accounting View Taxation
 		.state('app.AccViewTaxation', {

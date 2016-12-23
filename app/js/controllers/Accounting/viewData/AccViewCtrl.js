@@ -4,14 +4,16 @@
  * Controller for input components
  =========================================================*/
 
-App.controller('AccViewPaymentController', AccViewPaymentController);
+App.controller('AccViewController', AccViewController);
 
-function AccViewPaymentController($scope,apiCall,apiPath,$rootScope,$state) {
+function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,viewDataType) {
   'use strict';
-
-   var vm = this; 
-  $scope.accViewPayment = [];
   
+  var vm = this; 
+  $scope.accViewSales = [];
+  
+  $scope.viewDataTypePath = viewDataType;
+ 
   //Company Dropdown data
 	vm.companyDrop = [];
 	
@@ -21,37 +23,59 @@ function AccViewPaymentController($scope,apiCall,apiPath,$rootScope,$state) {
 	
 	});
 	
-	  //Get All Branch on Company Change
-	  $scope.changeCompany = function(id)
-	  {
-		  vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+id;
-			//Get Branch
-			apiCall.getCall(getAllBranch).then(function(response4){
-				vm.branchDrop = response4;
-					
-			});
-	  }
-  
+  //Get All Branch on Company Change
+  $scope.changeCompany = function(id)
+  {
+	  vm.branchDrop = [];
+		var getAllBranch = apiPath.getOneBranch+id;
+		//Get Branch
+		apiCall.getCall(getAllBranch).then(function(response4){
+			vm.branchDrop = response4;
+				
+		});
+  }
+	
 	$scope.redirectToData = function(){
 		
-		var fromdate = new Date(vm.dt1);
+		//var viewDataTypePath = viewDataType;
+		var  fromdate = new Date(vm.dt1);
 		var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
 		
 		var  todate = new Date(vm.dt2);
 		var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
 		
-		$rootScope.accView.companyId = $scope.accViewPayment.companyDropDown.companyId;
+		$rootScope.accView.companyId = $scope.accViewSales.companyDropDown.companyId;
 		$rootScope.accView.fromDate = modifyFromDate; // FromDate
 		$rootScope.accView.toDate = modifyToDate; // TODate
 		
-		 $state.go("app.AccDataPayment");
+		if($scope.viewDataTypePath == 'sales'){
+			
+			$state.go("app.AccDataSales");
+			
+		}
+		else if($scope.viewDataTypePath == 'purchase'){
+			
+			$state.go("app.AccDataPurchase");
+		}
+		else if($scope.viewDataTypePath == 'payment'){
+			
+			$state.go("app.AccDataPayment");
+		}
+		else if($scope.viewDataTypePath == 'receipt'){
+			
+			$state.go("app.AccDataReceipt");
+		}
+		else if($scope.viewDataTypePath == 'specialJournal'){
+			
+			$state.go("app.AccDataSpecialJrnl");
+		}
+		 //$state.go("app.AccDataSales");
 		
 	}
 	
   // Datepicker
   // ----------------------------------- 
-	this.minStart = new Date();
+	this.minStart = new Date(0,0,1);
 	this.maxStart = new Date();
   this.today = function() {
     this.dt1 = new Date();
@@ -201,6 +225,15 @@ function AccViewPaymentController($scope,apiCall,apiPath,$rootScope,$state) {
   ];
   
   
+
+  $scope.pop = function() {
+    toaster.pop('success', 'Title', 'Message');
+  };
+  
+  $scope.cancel = function() {
+    toaster.pop('info', 'Form Reset', 'Message');
+  };
+  
   
 }
-AccViewPaymentController.$inject = ["$scope","apiCall","apiPath","$rootScope","$state"];
+AccViewController.$inject = ["$rootScope","$scope","toaster","apiCall","apiPath","$state","viewDataType"];

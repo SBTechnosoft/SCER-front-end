@@ -117,12 +117,12 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				vm.AccSpecialJrnlTable.push(tempData);
 				
 				//Set Current Balance 
-				// var tempBalanceData = {};
+				var tempBalanceData = {};
 				
-				// tempBalanceData.contactNo = Math.floor((Math.random() * 1000000) + 100000);
-				// tempBalanceData.amountType = data.journal[i].amountType;
+				tempBalanceData.contactNo = response[i].ledger.currentBalance;
+				tempBalanceData.amountType = response[i].ledger.currentBalanceType;
 				
-				// vm.multiCurrentBalance.push(tempBalanceData);
+				vm.multiCurrentBalance.push(tempBalanceData);
 			}
 			//console.log(vm.AccSpecialJrnlTable);
 		});

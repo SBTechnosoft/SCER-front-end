@@ -34,6 +34,24 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   vm.AccSalesTable = []; // Product Table Array
   $scope.changeProductArray = false; // Change When Update in Product Table Array
   
+  /**
+	Jsuggest Debit/Credit
+	**/
+	
+	//Auto suggest Client Name For Debit
+	vm.clientNameDropDr=[];
+	var headerDr = {'Content-Type': undefined,'ledgerGroup':[9,12,32,18]};
+	// var headerDr = {'Content-Type': undefined};
+	
+	//Auto suggest Client Name For Credit
+	vm.clientNameDropCr=[];
+	var headerCr = {'Content-Type': undefined,'ledgerGroup':[28]};
+	// var headerCr = {'Content-Type': undefined};
+	
+	/**
+		End
+		**/
+  
   //Company dropDown
 	vm.companyDrop = [];
 	
@@ -114,14 +132,14 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			
 			//Set JFID
 			$scope.accSales.jfid = data.journal[0].jfId;
-			console.log('JFID...'+$scope.accSales.jfid);
+			//console.log('JFID...'+$scope.accSales.jfid);
 			
 			//Set Invoice Number
 			$scope.accSales.invoiceNo = data.productTransaction[0].invoiceNumber;
-			console.log('invoiceNo...'+$scope.accSales.invoiceNo);
+			//console.log('invoiceNo...'+$scope.accSales.invoiceNo);
 			
-			console.log('Company...'+data.journal[0].company.companyId);
-			console.log('Company Name...'+data.journal[0].company.companyName);
+			//console.log('Company...'+data.journal[0].company.companyId);
+			//console.log('Company Name...'+data.journal[0].company.companyName);
 			
 			//Company DropDown Selection
 			var companyDropPath = apiPath.getAllCompany+'/'+data.journal[0].company.companyId;
@@ -129,6 +147,41 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			
 				$scope.accSales.companyDropDown = res2;
 			});
+			
+			/** 
+				Jsuggest OF Credit/Debit
+			**/
+				//Auto suggest Client Name For Debit
+				var jsuggestPathEdit = apiPath.getLedgerJrnl+data.journal[0].company.companyId;
+				
+				apiCall.getCallHeader(jsuggestPathEdit,headerDr).then(function(response3){
+					
+					for(var t=0;t<response3.length;t++){
+						
+						for(var k=0;k<response3[t].length;k++){
+							
+							vm.clientNameDropDr.push(response3[t][k]);
+						}
+						
+					}
+				
+				});
+				
+				apiCall.getCallHeader(jsuggestPathEdit,headerCr).then(function(response3){
+					
+					for(var t=0;t<response3.length;t++){
+						
+						for(var k=0;k<response3[t].length;k++){
+							
+							vm.clientNameDropCr.push(response3[t][k]);
+						}
+						
+					}
+				
+				});
+			/**
+				End
+			**/
 			
 			//Set Date
 			var getResdate = data.journal[0].entryDate;
@@ -151,8 +204,8 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				//Set Current Balance 
 				var tempBalanceData = {};
 				
-				tempBalanceData.contactNo = Math.floor((Math.random() * 1000000) + 100000);
-				tempBalanceData.amountType = data.journal[i].amountType;
+				tempBalanceData.contactNo = data.journal[i].ledger.currentBalance;
+				tempBalanceData.amountType = data.journal[i].ledger.currentBalanceType;
 				
 				vm.multiCurrentBalance.push(tempBalanceData);
 				
@@ -299,18 +352,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	});
 	
-	//Auto suggest Client Name For Debit
-	vm.clientNameDropDr=[];
-	var headerDr = {'Content-Type': undefined,'ledgerGroup':[9,12,32,18]};
-	// var headerDr = {'Content-Type': undefined};
 	
-	//Auto suggest Client Name For Credit
-	vm.clientNameDropCr=[];
-	var headerCr = {'Content-Type': undefined,'ledgerGroup':[28]};
-	// var headerCr = {'Content-Type': undefined};
 	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
+		
+		vm.clientNameDropDr=[];
+		vm.clientNameDropCr=[];
 		
 		//Auto suggest Client Name For Debit
 		var jsuggestPath = apiPath.getLedgerJrnl+value;
@@ -440,6 +488,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				});
 				
 			}
+			
 			var  date = new Date();
 			//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
 			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
@@ -585,8 +634,6 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 			});
 	
-		}).error(function(data, status, headers, config) {
-			
 		});
   }
   
@@ -640,6 +687,8 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		
 		$scope.accSales = []; //Blank Data
+		vm.clientNameDropDr=[]; // Debit Jsuggest Blank
+		vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
@@ -766,76 +815,110 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   **/
 	$scope.openLedger = function (size,index) {
 	
-    var modalInstance = $modal.open({
-      templateUrl: '/myModalContent.html',
-      controller: ModalLedgerCtrl,
-      size: size,
-	  resolve:{
-		  ledgerIndex: function(){
-			  return index;
-		  }
-	  }
-    });
-
-    var state = $('#modal-state');
-    modalInstance.result.then(function (data) {
-      
-		console.log(data);
-	 
-		if($scope.accSales.companyDropDown){
-			
-			//Auto suggest Client Name For Debit
-			var jsuggestPath = apiPath.getLedgerJrnl+$scope.accSales.companyDropDown.companyId;
-			
-			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
-				
-				for(var t=0;t<response3.length;t++){
-					
-					for(var k=0;k<response3[t].length;k++){
-						
-						vm.clientNameDropDr.push(response3[t][k]);
-					}
-					
-				}
-			
-			});
-			
-			apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
-				
-				for(var t2=0;t2<response3.length;t2++){
-					
-					for(var k2=0;k2<response3[t2].length;k2++){
-						
-						vm.clientNameDropCr.push(response3[t2][k2]);
-					}
-					
-				}
-			
-			});
-		}
-	
-    }, function (data) {
+	if($scope.accSales.companyDropDown){
 		
-		//alert(data);
-      
-    });
+	
+		var modalInstance = $modal.open({
+		  templateUrl: '/myModalContent.html',
+		  controller: ModalLedgerCtrl,
+		  size: size,
+		  resolve:{
+			  ledgerIndex: function(){
+				  return index;
+			  },
+			  companyId: function(){
+				 
+				return $scope.accSales.companyDropDown;
+			  }
+		  }
+		});
+
+		var state = $('#modal-state');
+		modalInstance.result.then(function (data) {
+		  
+			
+		 
+			if($scope.accSales.companyDropDown){
+				
+				//Auto suggest Client Name For Debit
+				var jsuggestPath = apiPath.getLedgerJrnl+$scope.accSales.companyDropDown.companyId;
+				
+				vm.clientNameDropDr =[];
+				
+				apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
+					
+					for(var t=0;t<response3.length;t++){
+						
+						for(var k=0;k<response3[t].length;k++){
+							
+							vm.clientNameDropDr.push(response3[t][k]);
+						}
+						
+					}
+				
+				});
+				
+				vm.clientNameDropCr = [];
+				
+				apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+					
+					for(var t2=0;t2<response3.length;t2++){
+						
+						for(var k2=0;k2<response3[t2].length;k2++){
+							
+							vm.clientNameDropCr.push(response3[t2][k2]);
+						}
+						
+					}
+					
+					
+				});
+				
+				//Set Last Inserted Ledger
+				console.log(data);
+				
+				
+				var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
+				apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
+					
+					console.log(response);
+					vm.AccClientMultiTable[data.index].ledgerName = response.ledger_name;
+					vm.AccClientMultiTable[data.index].ledgerId = response.ledger_id;
+					
+				});
+				
+			}
+		
+		}, function (data) {
+			
+			//alert(data);
+		  
+		});
+	}
+	else{
+		
+		alert('Please Select Company');
+	}
   };
 
   // Please note that $modalInstance represents a modal window (instance) dependency.
   // It is not the same as the $modal service used above.
 
-  var ModalLedgerCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath,ledgerIndex) {
+  var ModalLedgerCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath,ledgerIndex,companyId) {
 	  
 	  $scope.ledgerIndex = ledgerIndex;
 	$scope.stockModel=[];
 	var formdata = new FormData();
 	$scope.ledgerForm = [];	
 	  
+	 $scope.defaultCompany = companyId;
+	 
 	//Get Company
 	$scope.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response3){
 		
 		$scope.companyDrop = response3;
+		$scope.ledgerForm.companyDropDown = $scope.defaultCompany;
 	
 	});
 	
@@ -914,24 +997,26 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		var filterArray = {};
 		
-		// formdata.append('balanceFlag','opening');
-		// apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
+		formdata.append('balanceFlag','opening');
+		formdata.append('companyId',$scope.ledgerForm.companyDropDown.companyId);
+		apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
 		
-			// console.log(response5);
+			console.log(response5);
 			
 			
-			// Delete formdata  keys
-			// for (var key of formdata.keys()) {
-			   // formdata.delete(key); 
-			// }
+			//Delete formdata  keys
+			for (var key of formdata.keys()) {
+			   formdata.delete(key); 
+			}
 			
 			filterArray.index = $scope.ledgerIndex;
 			filterArray.companyId = $scope.ledgerForm.companyDropDown.companyId;
 			filterArray.ledgerName = $scope.ledgerForm.ledgerName;
 			
 			$modalInstance.close(filterArray);
-			// $scope.ledgerForm = [];
-		// });
+			
+			$scope.ledgerForm = [];
+		});
 		
     };
 
@@ -949,7 +1034,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	
   };
-  ModalLedgerCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","ledgerIndex"];
+  ModalLedgerCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","ledgerIndex","companyId"];
   /**
   *
   Ledger Model End
@@ -959,38 +1044,67 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   /**
   Product Model Start
   **/
-  $scope.openProduct = function (size) {
-
-	var modalInstance = $modal.open({
-	  templateUrl: '/myProductModalContent.html',
-	  controller: ModalInstanceCtrl,
-	  size: size
-	});
-
-   
-	modalInstance.result.then(function () {
-	 
-		apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+  $scope.openProduct = function (size,index) {
+	
+	if($scope.accSales.companyDropDown){
 		
-			vm.productNameDrop = responseDrop;
-	
+		var modalInstance = $modal.open({
+		  templateUrl: '/myProductModalContent.html',
+		  controller: ModalInstanceCtrl,
+		  size: size,
+		  resolve:{
+			  productIndex: function(){
+				  return index;
+			  },
+			  companyId: function(){
+				 
+				return $scope.accSales.companyDropDown;
+			  }
+		  }
 		});
-	
-	}, function () {
-	  console.log('Cancel');	
-	});
-	
+
+	   
+		modalInstance.result.then(function (data) {
+		 
+			console.log(data);
+			
+			apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+			
+				vm.productNameDrop = responseDrop;
+		
+			});
+			
+			var headerSearch = {'Content-Type': undefined,'productName':data.productName};
+			
+			apiCall.getCallHeader(apiPath.getProductByCompany+data.companyId,headerSearch).then(function(response){
+				
+				console.log(response);
+				vm.AccSalesTable[data.index].productName = response.productName;
+				vm.AccSalesTable[data.index].productId = response.productId;
+				
+			});
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+	}
+	else{
+		alert('Please Select Company');
+	}
   };
 
   // Please note that $modalInstance represents a modal window (instance) dependency.
   // It is not the same as the $modal service used above.
 
-  var ModalInstanceCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath) {
+  var ModalInstanceCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId) {
 	  
 		$scope.stockModel=[];
 			
 	var vm = this;
 	$scope.addModelProduct = [];
+	
+	$scope.defaultCompany = companyId;
+	$scope.productIndex = productIndex;
 	
 	 //Company Dropdown data
 	$scope.companyDrop = [];
@@ -998,6 +1112,16 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
 		$scope.companyDrop = responseCompanyDrop;
+		$scope.addModelProduct.company = $scope.defaultCompany;
+		
+		$scope.branchDrop = [];
+		var getAllBranch = apiPath.getOneBranch+$scope.defaultCompany.companyId;
+		//Get Branch
+		apiCall.getCall(getAllBranch).then(function(response4){
+			
+			$scope.branchDrop = response4;
+		
+		});
 	
 	});
 	
@@ -1039,6 +1163,8 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		var formdata = new FormData();
 		
+		var filterArray = {};
+		
 		formdata.append('companyId',$scope.addModelProduct.company.companyId);
 		formdata.append('branchId',$scope.addModelProduct.branch.branchId);
 		formdata.append('productName',$scope.addModelProduct.productName);
@@ -1047,16 +1173,23 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
 		
 		//formdata.append('branchId',1);
-		//formdata.append('isDisplay','yes');
+		formdata.append('isDisplay','yes');
 		apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
 		
-			console.log(response5);
-			$modalInstance.close('closed');
+			//console.log(response5);
+			
+			
 			// Delete formdata  keys
 			for (var key of formdata.keys()) {
 			   formdata.delete(key); 
 			}
-		
+			
+			filterArray.index = $scope.productIndex;
+			filterArray.companyId = $scope.addModelProduct.company.companyId;
+			filterArray.productName = $scope.addModelProduct.productName;
+			
+			$modalInstance.close(filterArray);
+			
 		});
 		
 		
@@ -1094,7 +1227,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	
   };
-  ModalInstanceCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath"];
+  ModalInstanceCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId"];
   /**
   Product Model End
   **/
@@ -1105,19 +1238,25 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	$scope.openHistoryModal = function (size) {
 
-		var modalInstance = $modal.open({
-		  templateUrl: '/myHistorySalesModalContent.html',
-		  controller: historySalesModaleCtrl,
-		  size: size
-		});
+		if($scope.accSales.companyDropDown){
+			
+			var modalInstance = $modal.open({
+			  templateUrl: '/myHistorySalesModalContent.html',
+			  controller: historySalesModaleCtrl,
+			  size: size
+			});
 
-	   
-		modalInstance.result.then(function () {
-		 
-		
-		}, function () {
-		  console.log('Cancel');	
-		});
+		   
+			modalInstance.result.then(function () {
+			 
+			
+			}, function () {
+			  console.log('Cancel');	
+			});
+		}
+		else{
+			alert('Please Select Company');
+		}
 	
 	};
 	

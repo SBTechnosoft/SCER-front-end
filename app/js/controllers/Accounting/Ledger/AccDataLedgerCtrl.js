@@ -94,12 +94,15 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 				var getdate = new Date(splitedate);
 				var month = getdate.getMonth();
 				
+					console.log(vm.pieFlotCharts[0]["data"][month]);
 					vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseInt(data[i].amount);
 					
-				//console.log(vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount));
+				console.log(vm.pieFlotCharts);
 			
 			}
 			else{
+				
+				//console.log(data);
 				vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseInt(data[i].amount);
 				
 				var date = data[i].entryDate;
@@ -107,6 +110,8 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 				var getdate = new Date(splitedate);
 				var month = getdate.getMonth();
 				
+				// console.log(month);
+				// console.log(vm.pieFlotCharts[1]["data"][month]);
 					vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseInt(data[i].amount);
 				   
 				//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);

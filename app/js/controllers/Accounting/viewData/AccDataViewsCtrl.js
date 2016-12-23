@@ -4,36 +4,61 @@
  * Controller for ngTables
  =========================================================*/
 
-App.controller('AccDataPaymentController', AccDataPaymentController);
+App.controller('AccViewDataController', AccViewDataController);
 
-function AccDataPaymentController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,$state,getSetFactory,headerType) {
+function AccViewDataController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,headerType) {
   'use strict';
   var vm = this;
   var data = [];
-  
   var formdata = new FormData();
   
   
-  if(headerType=='payment'){
-	  alert('done');
-  }
-	// An array of boolean to tell the directive which series we want to show
-	$scope.areaSeries = [true, true];
-	vm.chartAreaFlotChart  = flotOptions['area'];
-	vm.chartPieFlotChart  = flotOptions['pie'];
-	  
-	 console.log($rootScope.accView.companyId);
+  // An array of boolean to tell the directive which series we want to show
+  $scope.areaSeries = [true, true];
+  vm.chartAreaFlotChart  = flotOptions['area'];
+  
+   vm.chartPieFlotChart  = flotOptions['pie'];
+  
+	$scope.headerType = headerType;
+	
+	//alert(headerType);
+	
+	if($scope.headerType == 'sales'){
+		
+		var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
+		console.log(getJrnlPath);
+		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'sales'};
+	}
+	else if($scope.headerType == 'purchase'){
+		
+		var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
+		console.log(getJrnlPath);
+		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'purchase'};
+	}
+	else if($scope.headerType == 'payment'){
+		
+		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
+		console.log(getJrnlPath);
+		 var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
+	}
+	else if($scope.headerType == 'receipt'){
+		
+		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
+		console.log(getJrnlPath);
+		// var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'sales'};
+		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
+	}
+	else if($scope.headerType == 'specialJournal'){
+		
+		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
+		console.log(getJrnlPath);
+		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
+	}
+  
+	  console.log($rootScope.accView.companyId);
 	  console.log($rootScope.accView.fromDate);
 	  console.log($rootScope.accView.toDate);
 	  
-  
-	  var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
-	  
-	  console.log(getJrnlPath);
-	 
-		// var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'payment'};
-		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
-		
 		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 			
 			console.log(response);
@@ -122,6 +147,7 @@ function AccDataPaymentController($rootScope,$scope, $filter, ngTableParams,$htt
 		 
 		});
 	
+	
   $scope.TableData = function(){
 	
 
@@ -136,7 +162,7 @@ function AccDataPaymentController($rootScope,$scope, $filter, ngTableParams,$htt
 		  getData: function($defer, params) {
 			 
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.date) != "undefined" && params.$params.filter.date != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")|| (typeof(params.$params.filter.amountTypeDebit) != "undefined" && params.$params.filter.amountTypeDebit != "")|| (typeof(params.$params.filter.amountTypeCredit) != "undefined" && params.$params.filter.amountTypeCredit != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")|| (typeof(params.$params.filter.amountTypeCredit) != "undefined" && params.$params.filter.amountTypeCredit != "")|| (typeof(params.$params.filter.amountTypeDebit) != "undefined" && params.$params.filter.amountTypeDebit != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -158,7 +184,6 @@ function AccDataPaymentController($rootScope,$scope, $filter, ngTableParams,$htt
 			 if(!$.isEmptyObject(params.$params.sorting))
 			  {
 				
-				 //alert('ggg');
 				  var orderedData = params.sorting() ?
 						  $filter('orderBy')(data, params.orderBy()) :
 						  data;
@@ -256,17 +281,54 @@ function AccDataPaymentController($rootScope,$scope, $filter, ngTableParams,$htt
       }
   });
   
-  $scope.editAccPaymentJrnl = function(id)
-  {
-	  getSetFactory.set(id);
-	  
-	  $state.go("app.AccSpecialJrnl");
-  }
-  
-  $scope.deleteAccPaymentJrnl = function(id)
+  $scope.isDefault_branch = function(id)
   {
 	
-	// var deletePath = apiPath.getAllBranch+'/'+parseInt(id);
+	formdata.append('isDefault','ok');
+	var editBranch2 = apiPath.getAllBranch+'/'+id;
+		
+		apiCall.postCall(editBranch2,formdata).then(function(response5){
+		
+			formdata.delete('isDefault');
+		
+			//$location.path('app/Branch');
+			//toaster.pop('success', 'Title', 'Message');
+		
+		});
+  }
+  
+	$scope.editDataView= function(id)
+	{
+		getSetFactory.set(id);
+	  
+		if($scope.headerType == 'sales'){
+			
+			$state.go("app.AccSales");
+			
+		}
+		else if($scope.headerType == 'purchase'){
+			
+			$state.go("app.AccPurchase");
+		}
+		else if($scope.headerType == 'payment'){
+			
+			$state.go("app.AccPayment");
+		}
+		else if($scope.headerType == 'receipt'){
+			
+			$state.go("app.AccReceipt");
+		}
+		else if($scope.headerType == 'specialJournal'){
+			
+			$state.go("app.AccSpecialJrnl");
+		}
+	
+	}
+  
+  $scope.deleteDataView = function(id)
+  {
+	
+	// var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
 	  
 	// apiCall.deleteCall(deletePath).then(function(deleteres){
 		
@@ -274,6 +336,7 @@ function AccDataPaymentController($rootScope,$scope, $filter, ngTableParams,$htt
 	 
 	// });
   }
-
+	
+	
 }
-AccDataPaymentController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","$state","getSetFactory","headerType"];
+AccViewDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","headerType"];

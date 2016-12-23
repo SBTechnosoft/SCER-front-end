@@ -6,18 +6,19 @@
 </h3>
 <!-- START panel-->
 <div data-ng-controller="AccPaymentController as form" class="container-fluid">
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
 		<div class="panel-body">
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="accPayment.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="accPayment.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accPayment.companyDropDown.companyId)" class="form-control chosen-select"></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 				<div class="col-sm-4">
 					 <p class="input-group"style="float:right">
-						<input type="text" datepicker-popup="{{format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+						<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 						class="form-control" />
 						<span class="input-group-btn">
 						   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -37,13 +38,32 @@
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group" >
 					  <label for="input-id-1" class="col-sm-2 control-label">Account</label>
-					  <div class="col-sm-4">
-						<div class="input-group">
-									<input typeahead="item.ledgerName for item in form.accountDrop | filter:$viewValue | limitTo:10" ng-model="accPayment.account" type="text" typeahead-on-select="setAccPayment('account',$item)" class="form-control" placeholder="Account" />
-									<span class="input-group-btn" ng-controller="AccPaymentLedgerModalController">
-							 		<button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
-									</span>
-								</div>
+					  <div class="col-sm-5">
+						<div class="input-group m-b">
+							<div dropdown="dropdown" class="input-group-btn">
+							   <button type="button" dropdown-toggle="" class="btn btn-default dropdown-toggle">Cr
+								  <span class="caret"></span>
+							   </button>
+							   <ul class="dropdown-menu">
+								  <li><a href="#">Cr</a>
+								  </li>
+								  
+							   </ul>
+							</div>
+							<input typeahead="item.ledgerName for item in form.accountDrop | filter:$viewValue | limitTo:10" ng-model="accPayment.account" type="text" typeahead-on-select="setAccPayment($item)" class="form-control" placeholder="Account" />
+							<span class="input-group-btn" ng-controller="AccPaymentLedgerModalController">
+							<button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+							</span>
+						</div>
+						<!--div class="input-group m-b">
+							<select  class="form-control" style="width:80px">
+								<option value="credit" selected="selected" >Cr</option>
+							</select>
+							<input typeahead="item.ledgerName for item in form.accountDrop | filter:$viewValue | limitTo:10" ng-model="accPayment.account" type="text" typeahead-on-select="setAccPayment('account',$item)" class="form-control" placeholder="Account" />
+							<span class="input-group-btn" ng-controller="AccPaymentLedgerModalController">
+							<button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+							</span>
+						</div-->
 					  </div>
 						
 				   </div>
@@ -65,13 +85,19 @@
 			<table  class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th class="header" style="width:70%">Particulars</th>
+						<th class="header" style="width:10%">Debit</th>
+						<th class="header" style="width:60%">Particulars</th>
 						<th style="width:20%">Amount</th>
 						<th style="width:10%">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr id="addAfter" ng-repeat="item in form.AccPaymentTable">
+						<td>
+							<select ng-model="item.amountType"  class="form-control" ng-change="changeAmountType($index)" >
+								<option value="debit" selected="selected" >Dr</option>
+							</select>
+						</td>
 						<td>
 							<div class="input-group" >
 								<input typeahead="s.ledgerName for s in form.tableNameDrop | filter:$viewValue | limitTo:10" ng-model="item.ledgerName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Name(JS)" />
@@ -95,8 +121,12 @@
 						
 					</tr>
 					<tr>
-						<td>Total</td>
-						<td colspan="2"></td>
+						<td></td>
+						<td >Total</td>
+						<td >
+							<span style="float:right">{{accPayment.totalAmount = getTotal()}}</span>
+						</td>
+						<td ></td>
 					</tr>
 				</tbody>
 			</table>
@@ -107,7 +137,7 @@
 	<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 	<br />
 	<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop(addBranch)" >Save</button>
+	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpAccPayment()" >Save</button>
 			
      
    <!-- END panel-->

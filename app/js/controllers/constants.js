@@ -105,6 +105,7 @@ App
 	'getAllLedgerGroup':     'http://api.siliconbrain.co.in/accounting/ledger-groups',
 	'getAllLedger':     'http://api.siliconbrain.co.in/accounting/ledgers',
 	'getAllProduct':     'http://api.siliconbrain.co.in/products',
+	'getProductByCompany': 'http://api.siliconbrain.co.in/products/company/',
 	'getAllCategory':     'http://api.siliconbrain.co.in/product-categories',
 	'getAllGroup':     'http://api.siliconbrain.co.in/product-groups',
 	'getJrnlNext': 'http://api.siliconbrain.co.in/accounting/journals/next',

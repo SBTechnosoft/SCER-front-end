@@ -20,13 +20,6 @@ function AccDataSalesController($rootScope,$scope, $filter, ngTableParams,$http,
    vm.chartPieFlotChart  = flotOptions['pie'];
   
   
-  //Go To AddBranch
-  $scope.GoToAddBranch = function(){
-	  
-	 $rootScope.AddBranchModify = false;
-	 $location.path('app/AddBranch/'); 
-  }
-  
 	  console.log($rootScope.accView.companyId);
 	  console.log($rootScope.accView.fromDate);
 	  console.log($rootScope.accView.toDate);
@@ -35,12 +28,10 @@ function AccDataSalesController($rootScope,$scope, $filter, ngTableParams,$http,
 	  
 	  console.log(getJrnlPath);
 	  
-	  $http({
-			url: getJrnlPath,
-			 method: 'get',
-			processData: false,
-			 headers: {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'sales'}
-		}).success(function(response, status, headers, config) {
+		
+		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'sales'};
+		
+		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 			
 			console.log(response);
 			data = response;
@@ -126,8 +117,6 @@ function AccDataSalesController($rootScope,$scope, $filter, ngTableParams,$http,
 			
 			 $scope.TableData();
 		 
-		}).error(function(data, status, headers, config) {
-			
 		});
 	
 	

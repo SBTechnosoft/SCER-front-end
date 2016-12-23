@@ -6,29 +6,44 @@
 
 App.controller('AccReceiptController', AccReceiptController);
 
-function AccReceiptController($scope,apiCall,apiPath) {
+function AccReceiptController($scope,apiCall,apiPath,toaster) {
   'use strict';
   
   var vm = this;
   $scope.accReceipt = [];
   var formdata = new FormData();
   
+   $scope.accReceipt.totalAmount;
+  $scope.accReceipt.jfid; // JFID
+  
+  var account = {};
+  account.amountType = 'debit';
+  
+  //Auto suggest Account
+	vm.accountDrop=[];
+	var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12]};
+	 
+	vm.tableNameDrop=[];
+	var headerDr = {'Content-Type': undefined,'ledgerGroup':[31]};
+	
   /* Table */
   
 	vm.AccReceiptTable = [];
-	vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":""}];
+	vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
 	
 	$scope.addRow = function(){
 		var data = {};	
 		data.ledgerId='';
 		data.ledgerName ='';
 		data.amount ='';
+		data.amountType = 'credit';
 		vm.AccReceiptTable.push(data);
     };
 	
 	$scope.settabledata = function(item,index)
 	{
 		vm.AccReceiptTable[index].ledgerId = item.ledgerId;
+		
 		console.log(vm.AccReceiptTable);
 	}
 	
@@ -37,39 +52,174 @@ function AccReceiptController($scope,apiCall,apiPath) {
 	};
 	
   /* End */
-  
-  //Auto suggest Client Name
-	vm.accountDrop=[];
-	vm.tableNameDrop=[];
-	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+	
+	$scope.setAccReceipt = function(item) {
 		
-		vm.accountDrop = response3;
-		vm.tableNameDrop = response3;
-	
-	});
-	
-	$scope.setAccReceipt = function(Fname,value) {
-		if(formdata.get(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		formdata.append(Fname,value.ledgerId);
+		//console.log(item);
+		account.ledgerId = item.ledgerId;
+		account.ledgerName = item.ledgerName;
   	}
 	
-	$scope.pop = function(data)
-	{
-		console.log(data);  
+	//Total For Array Table
+	$scope.getTotal = function(){
+		
+		var total = 0;
+		for(var i = 0; i < vm.AccReceiptTable.length; i++){
+			
+			var product = vm.AccReceiptTable[i];
+			total += parseInt(product.amount);
+			
+		}
+		return total;
 	}
+	
+	//Set JfId on Load 
+	apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+			$scope.accReceipt.jfid = response.nextValue;
+	
+	});
  
   // Chosen data
   // ----------------------------------- 
-vm.companyDrop = [];
+	vm.companyDrop = [];
 	
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
 		vm.companyDrop = responseCompanyDrop;
 	
 	});
+	
+	//Set JSuggest Data When Company
+	$scope.changeCompany = function(Fname,value){
+		//Auto suggest Account
+		vm.accountDrop=[];
+		vm.tableNameDrop=[];
+		
+		//Auto suggest Client Name For Debit
+		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		
+		apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+			
+			for(var t=0;t<response3.length;t++){
+				
+				for(var k=0;k<response3[t].length;k++){
+					
+					vm.accountDrop.push(response3[t][k]);
+				}
+				
+			}
+		
+		});
+		
+		apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
+			
+			for(var t=0;t<response3.length;t++){
+				
+				for(var k=0;k<response3[t].length;k++){
+					
+					vm.tableNameDrop.push(response3[t][k]);
+				}
+				
+			}
+		
+		});
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+		
+		
+	}
+	
+	$scope.addUpReceipt = function(){
+		
+		vm.tempAccReceiptTable = [];
+		account.amount = $scope.accReceipt.totalAmount;
+		
+		vm.tempAccReceiptTable.push(account);
+		
+		var cnt = vm.AccReceiptTable.length;
+		for(var i=0;i<cnt;i++){
+			vm.tempAccReceiptTable.push(vm.AccReceiptTable[i]);
+		}
+		
+		console.log(vm.tempAccReceiptTable);
+		
+		var json = angular.copy(vm.tempAccReceiptTable);
+			 
+			for(var j=0;j<json.length;j++){
+				 
+				angular.forEach(json[j], function (value,key) {
+					
+					formdata.append('data['+j+']['+key+']',value);
+					
+				});
+				
+			}
+			
+		var  date = new Date(vm.dt1);
+		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+		console.log(fdate);
+		
+		if(formdata.has('entryDate')){
+			
+			formdata.delete('entryDate',fdate);
+		}
+		formdata.append('entryDate',fdate);
+		formdata.append('jfId',$scope.accReceipt.jfid);
+		
+		
+		var accPaymentPath = apiPath.postJrnl;
+		
+		var headerData = {'Content-Type': undefined,'type':'receipt'};
+		
+		apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
+				
+			console.log(data);
+			vm.dt1 = new Date();
+			vm.minStart = new Date();
+			vm.maxStart = new Date();
+		
+			var jsonDel = angular.copy(vm.tempAccReceiptTable);
+			 
+			for(var j=0;j<jsonDel.length;j++){
+				 
+				angular.forEach(jsonDel[j], function (value,key) {
+					
+					formdata.delete('data['+j+']['+key+']',value);
+					
+				});
+				
+			}
+			
+			// Delete formdata  keys
+			for (var key of formdata.keys()) {
+			   formdata.delete(key); 
+			}
+			
+			$scope.accReceipt = [];
+			$scope.accReceipt.totalAmount;
+			vm.tableNameDrop = [];
+			vm.accountDrop = [];
+			var account = {};
+			account.amountType = 'credit';
+  
+			toaster.pop('success', 'Title', 'Insert Successfully');
+			
+			vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
+			
+			//Next JfId
+			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+	
+				$scope.accReceipt.jfid = response.nextValue;
+
+			});
+			
+		});
+	}
 
   // Datepicker
   // ----------------------------------- 
@@ -115,7 +265,7 @@ vm.companyDrop = [];
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker
@@ -210,4 +360,4 @@ vm.companyDrop = [];
     {value: 5, name: 'Huge'}
   ];
 }
-AccReceiptController.$inject = ["$scope","apiCall","apiPath"];
+AccReceiptController.$inject = ["$scope","apiCall","apiPath","toaster"];

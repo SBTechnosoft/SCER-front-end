@@ -29,12 +29,9 @@ function AccDataSpecialJrnlController($rootScope,$scope, $filter, ngTableParams,
 	  
 	  console.log(getJrnlPath);
 	  
-	  $http({
-			url: getJrnlPath,
-			 method: 'get',
-			processData: false,
-			 headers: {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate}
-		}).success(function(response, status, headers, config) {
+		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
+		
+		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 			
 			console.log(response);
 			data = response;
@@ -120,8 +117,6 @@ function AccDataSpecialJrnlController($rootScope,$scope, $filter, ngTableParams,
 			
 			 $scope.TableData();
 		 
-		}).error(function(data, status, headers, config) {
-			
 		});
 	
   $scope.TableData = function(){
@@ -258,21 +253,7 @@ function AccDataSpecialJrnlController($rootScope,$scope, $filter, ngTableParams,
       }
   });
   
-  $scope.isDefault_branch = function(id)
-  {
-	
-	formdata.append('isDefault','ok');
-	var editBranch2 = apiPath.getAllBranch+'/'+id;
-		
-		apiCall.postCall(editBranch2,formdata).then(function(response5){
-		
-			formdata.delete('isDefault');
-		
-			//$location.path('app/Branch');
-			//toaster.pop('success', 'Title', 'Message');
-		
-		});
-  }
+  
   
   $scope.editSpecialJrnl = function(id)
   {
