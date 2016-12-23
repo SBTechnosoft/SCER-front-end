@@ -204,7 +204,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				//Set Current Balance 
 				var tempBalanceData = {};
 				
-				tempBalanceData.contactNo = data.journal[i].ledger.currentBalance;
+				tempBalanceData.currentBalance = data.journal[i].ledger.currentBalance;
 				tempBalanceData.amountType = data.journal[i].ledger.currentBalanceType;
 				
 				vm.multiCurrentBalance.push(tempBalanceData);
@@ -244,7 +244,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
 		
-		vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 	}
 	//End Update Set
 	
@@ -261,7 +261,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			vm.AccClientMultiTable.push(data);
 			
 			var balance = {};
-			balance.contactNo = '';
+			balance.currentBalance = '';
 			balance.amountType = '';
 			vm.multiCurrentBalance.push(balance);
 			
@@ -272,7 +272,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		$scope.setMultiTable = function(item,index)
 		{
 			console.log(item);
-			vm.multiCurrentBalance[index].contactNo = item.currentBalance;
+			vm.multiCurrentBalance[index].currentBalance = item.currentBalance;
 			vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 			
 			//console.log(vm.multiCurrentBalance);
@@ -427,7 +427,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		vm.AccClientMultiTable[index].ledgerId = '';
 		vm.AccClientMultiTable[index].ledgerName = '';
 		
-		vm.multiCurrentBalance[index].contactNo = '';
+		vm.multiCurrentBalance[index].currentBalance = '';
 		vm.multiCurrentBalance[index].amountType = '';
 			
 		$scope.changeJrnlArray = true;
@@ -624,7 +624,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			
 			vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 			
-			vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
+			vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 		
 			vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
 		
@@ -692,7 +692,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
-		vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 	
 		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
 	
@@ -817,17 +817,15 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	if($scope.accSales.companyDropDown){
 		
-	
 		var modalInstance = $modal.open({
-		  templateUrl: '/myModalContent.html',
-		  controller: ModalLedgerCtrl,
+		  templateUrl: 'app/views/PopupModal/Accounting/ledgerModal.html',
+		  controller: AccLedgerModalController,
 		  size: size,
 		  resolve:{
 			  ledgerIndex: function(){
 				  return index;
 			  },
 			  companyId: function(){
-				 
 				return $scope.accSales.companyDropDown;
 			  }
 		  }
@@ -836,8 +834,6 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		var state = $('#modal-state');
 		modalInstance.result.then(function (data) {
 		  
-			
-		 
 			if($scope.accSales.companyDropDown){
 				
 				//Auto suggest Client Name For Debit
@@ -885,6 +881,10 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 					vm.AccClientMultiTable[data.index].ledgerName = response.ledger_name;
 					vm.AccClientMultiTable[data.index].ledgerId = response.ledger_id;
 					
+					vm.multiCurrentBalance[data.index].currentBalance = response.currentBalance;
+					vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
+			
+					
 				});
 				
 			}
@@ -901,140 +901,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	}
   };
 
-  // Please note that $modalInstance represents a modal window (instance) dependency.
-  // It is not the same as the $modal service used above.
-
-  var ModalLedgerCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath,ledgerIndex,companyId) {
-	  
-	  $scope.ledgerIndex = ledgerIndex;
-	$scope.stockModel=[];
-	var formdata = new FormData();
-	$scope.ledgerForm = [];	
-	  
-	 $scope.defaultCompany = companyId;
-	 
-	//Get Company
-	$scope.companyDrop=[];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response3){
-		
-		$scope.companyDrop = response3;
-		$scope.ledgerForm.companyDropDown = $scope.defaultCompany;
-	
-	});
-	
-	//Get State
-	$scope.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
-		
-		$scope.statesDrop = response3;
-	
-	});
-	
-	$scope.ChangeState = function(Fname,state)
-	 {
-		
-		var getonecity = apiPath.getAllCity+state;
-		
-		//Get City
-		apiCall.getCall(getonecity).then(function(response4){
-			$scope.cityDrop = response4;
-				
-		});
-		console.log(Fname+'...'+state);
-			if(formdata.has(Fname))
-			{
-				formdata.delete(Fname);
-			}
-			
-			formdata.append(Fname,state);
-	}
-	
-	 $scope.underWhat=[];
-	apiCall.getCall(apiPath.getAllLedgerGroup).then(function(response3){
-		
-		$scope.underWhat = response3;
-	
-	});
-	
-	$scope.setPcode = function(Fname,value) {
-  		//console.log(value.ledgerGroupId);
-		if(formdata.has(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		formdata.append(Fname,value.ledgerGroupId);
-  	}
   
-	  $scope.invAffectDrop = [
-		'yes',
-		'no'
-	  ]
-	  
-	  $scope.amountTypeDrop = [
-		'debit',
-		'credit'
-	  ];
-	  
-	//Changed Data When Update
-	$scope.changeLedgerData = function(Fname,value){
-		//console.log(Fname+'..'+value);
-		if(formdata.has(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		formdata.append(Fname,value);
-	}
-	
-	if($rootScope.ArraystockModel)
-	{
-		$scope.stockModel.state=$rootScope.ArraystockModel.state;
-		$scope.stockModel.state2=$rootScope.ArraystockModel.state2;
-		$scope.stockModel.state3=$rootScope.ArraystockModel.state3;
-	}
-  // $scope.stockModel.state;
-
-    $scope.clickSave = function () {
-		
-		var filterArray = {};
-		
-		formdata.append('balanceFlag','opening');
-		formdata.append('companyId',$scope.ledgerForm.companyDropDown.companyId);
-		apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
-		
-			console.log(response5);
-			
-			
-			//Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
-			
-			filterArray.index = $scope.ledgerIndex;
-			filterArray.companyId = $scope.ledgerForm.companyDropDown.companyId;
-			filterArray.ledgerName = $scope.ledgerForm.ledgerName;
-			
-			$modalInstance.close(filterArray);
-			
-			$scope.ledgerForm = [];
-		});
-		
-    };
-
-    $scope.cancel = function () {
-	
-		if($scope.stockModel)
-		 {
-			$rootScope.ArraystockModel=[];
-			$rootScope.ArraystockModel.state=$scope.stockModel.state;
-			$rootScope.ArraystockModel.state2=$scope.stockModel.state2;
-			$rootScope.ArraystockModel.state3=$scope.stockModel.state3;
-		 }
-		$modalInstance.dismiss('qwerty');
-    };
-	
-	
-  };
-  ModalLedgerCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","ledgerIndex","companyId"];
   /**
   *
   Ledger Model End
@@ -1049,8 +916,8 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	if($scope.accSales.companyDropDown){
 		
 		var modalInstance = $modal.open({
-		  templateUrl: '/myProductModalContent.html',
-		  controller: ModalInstanceCtrl,
+		  templateUrl: 'app/views/PopupModal/Accounting/productModal.html',
+		  controller: AccProductModalController,
 		  size: size,
 		  resolve:{
 			  productIndex: function(){
@@ -1092,142 +959,6 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		alert('Please Select Company');
 	}
   };
-
-  // Please note that $modalInstance represents a modal window (instance) dependency.
-  // It is not the same as the $modal service used above.
-
-  var ModalInstanceCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId) {
-	  
-		$scope.stockModel=[];
-			
-	var vm = this;
-	$scope.addModelProduct = [];
-	
-	$scope.defaultCompany = companyId;
-	$scope.productIndex = productIndex;
-	
-	 //Company Dropdown data
-	$scope.companyDrop = [];
-	
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-		
-		$scope.companyDrop = responseCompanyDrop;
-		$scope.addModelProduct.company = $scope.defaultCompany;
-		
-		$scope.branchDrop = [];
-		var getAllBranch = apiPath.getOneBranch+$scope.defaultCompany.companyId;
-		//Get Branch
-		apiCall.getCall(getAllBranch).then(function(response4){
-			
-			$scope.branchDrop = response4;
-		
-		});
-	
-	});
-	
-	$scope.changeCompany = function(state)
-	{
-		$scope.branchDrop = [];
-		var getAllBranch = apiPath.getOneBranch+state;
-		//Get Branch
-		apiCall.getCall(getAllBranch).then(function(response4){
-			$scope.branchDrop = response4;
-				
-		});
-	}
-	
-	//Category Dropdown data
-	$scope.categoryDrop = [];
-	
-	apiCall.getCall(apiPath.getAllCategory).then(function(responseDrop){
-		
-		$scope.categoryDrop = responseDrop;
-	
-	});
-	
-	//Group Dropdown data
-	$scope.groupDrop = [];
-	
-	apiCall.getCall(apiPath.getAllGroup).then(function(responseDrop){
-		
-		$scope.groupDrop = responseDrop;
-	
-	});
-	
-	$scope.measureUnitDrop = [
-    'kilo',
-    'litre'
-  ];
- 
-	$scope.clickSave = function(){
-		
-		var formdata = new FormData();
-		
-		var filterArray = {};
-		
-		formdata.append('companyId',$scope.addModelProduct.company.companyId);
-		formdata.append('branchId',$scope.addModelProduct.branch.branchId);
-		formdata.append('productName',$scope.addModelProduct.productName);
-		formdata.append('productCategoryId',$scope.addModelProduct.category.productCategoryId);
-		formdata.append('productGroupId',$scope.addModelProduct.group.productGroupId);
-		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
-		
-		//formdata.append('branchId',1);
-		formdata.append('isDisplay','yes');
-		apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
-		
-			//console.log(response5);
-			
-			
-			// Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
-			
-			filterArray.index = $scope.productIndex;
-			filterArray.companyId = $scope.addModelProduct.company.companyId;
-			filterArray.productName = $scope.addModelProduct.productName;
-			
-			$modalInstance.close(filterArray);
-			
-		});
-		
-		
-	}
-	
-	if($rootScope.ArraystockModel)
-	{
-		$scope.stockModel.state=$rootScope.ArraystockModel.state;
-		$scope.stockModel.state2=$rootScope.ArraystockModel.state2;
-		$scope.stockModel.state3=$rootScope.ArraystockModel.state3;
-	}
-  // $scope.stockModel.state;
-
-    $scope.ok = function () {
-      $modalInstance.close('closed');
-    };
-
-    $scope.cancel = function () {
-	
-		$scope.addModelProduct = [];
-		// if($scope.stockModel)
-		 // {
-			// $rootScope.ArraystockModel=[];
-			// $rootScope.ArraystockModel.state=$scope.stockModel.state;
-			// $rootScope.ArraystockModel.state2=$scope.stockModel.state2;
-			// $rootScope.ArraystockModel.state3=$scope.stockModel.state3;
-		 // }
-		//$modalInstance.dismiss();
-    };
-	
-	$scope.closeButton = function () {
-
-		$modalInstance.dismiss();
-    };
-	
-	
-  };
-  ModalInstanceCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId"];
   /**
   Product Model End
   **/

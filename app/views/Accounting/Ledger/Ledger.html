@@ -193,14 +193,20 @@
 	  </h4>
 	  <div class="form-group">
 		 <div class="col-sm-12">
+		 
+		   <div class="form-group">
+			 <select chosen="" ng-model="getLegderCompany.companyDropDown"  data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompanyToGetList(getLegderCompany.companyDropDown.companyId)"   class="form-control chosen-select" >
+			 
+			 </select>
+		   </div>
 			<div class="input-group m-b"> 
-			<span class="input-group-addon"><i class="fa fa-search" ></i></span>
-			<input id="input-id-1" ng-model="query['ledgerName']" type="text" class="form-control" placeholder="Search" />
+				<span class="input-group-addon"><i class="fa fa-search" ></i></span>
+				<input id="input-id-1" ng-model="query['ledgerName']" type="text" class="form-control" placeholder="Search" />
 			</div>
 		 </div>
 	  </div>
       <div class="panel-body" style="overflow-y: scroll !important;
-max-height: calc(100vh - 250px) !important;">
+max-height: calc(100vh - 300px) !important;">
 	 
 		<table class="table  table-striped" >
 		

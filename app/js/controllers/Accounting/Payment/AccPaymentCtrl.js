@@ -6,7 +6,7 @@
 
 App.controller('AccPaymentController', AccPaymentController);
 
-function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster) {
+function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal) {
   'use strict';
   
   var vm = this;
@@ -18,6 +18,11 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster) {
   
   var account = {};
   account.amountType = 'credit';
+  
+  vm.multiCurrentBalance = []; // Current Balance Array For Table
+  vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
+  
+  vm.accountCurrentBalance = {};
   
   //Auto suggest Account
 	vm.accountDrop=[];
@@ -41,11 +46,19 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster) {
 		data.amountType = 'debit';
 		vm.AccPaymentTable.push(data);
 		
+		var balance = {};
+		balance.currentBalance = '';
+		balance.amountType = '';
+		vm.multiCurrentBalance.push(balance);
+		
     };
 	
 	$scope.settabledata = function(item,index)
 	{
 		vm.AccPaymentTable[index].ledgerId = item.ledgerId;
+		
+		vm.multiCurrentBalance[index].currentBalance = item.currentBalance;
+		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 		
 		console.log(vm.AccPaymentTable);
 		
@@ -53,6 +66,7 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster) {
 	
 	$scope.removeRow = function (idx) {
 		vm.AccPaymentTable.splice(idx, 1);
+		vm.multiCurrentBalance.splice(idx, 1);
 	};
 	
   /* End */
@@ -123,6 +137,10 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster) {
 		//console.log(item);
 		account.ledgerId = item.ledgerId;
 		account.ledgerName = item.ledgerName;
+		
+		vm.accountCurrentBalance.currentBalance = item.currentBalance;
+		vm.accountCurrentBalance.amountType= item.currentBalanceType;
+		
 		
   	}
 
@@ -216,6 +234,7 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster) {
 			toaster.pop('success', 'Title', 'Insert Successfully');
 			
 			vm.AccPaymentTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"debit"}];
+			vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
 			
 			//Next JfId
 			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
@@ -367,5 +386,122 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster) {
     {value: 3, name: 'Normal'},
     {value: 5, name: 'Huge'}
   ];
+  
+  /**
+  *
+  Ledger Model Start
+  *
+  **/
+	$scope.openLedger = function (size,index) {
+	
+	if($scope.accPayment.companyDropDown){
+		
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Accounting/ledgerModal.html',
+		  controller: AccLedgerModalController,
+		  size: size,
+		  resolve:{
+			  ledgerIndex: function(){
+				  return index;
+			  },
+			  companyId: function(){
+				return $scope.accPayment.companyDropDown;
+			  }
+		  }
+		});
+
+		var state = $('#modal-state');
+		modalInstance.result.then(function (data) {
+		  
+			
+			
+			//Auto suggest Client Name For Debit
+			var jsuggestPath = apiPath.getLedgerJrnl+$scope.accPayment.companyDropDown.companyId;
+			
+			vm.tableNameDrop =[];
+			
+			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
+				
+				for(var t=0;t<response3.length;t++){
+					
+					for(var k=0;k<response3[t].length;k++){
+						
+						vm.tableNameDrop.push(response3[t][k]);
+					}
+					
+				}
+			
+			});
+			
+			vm.accountDrop = [];
+			
+			apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+				
+				for(var t2=0;t2<response3.length;t2++){
+					
+					for(var k2=0;k2<response3[t2].length;k2++){
+						
+						vm.accountDrop.push(response3[t2][k2]);
+					}
+					
+				}
+				
+				
+			});
+			
+			//Set Last Inserted Ledger
+			console.log(data);
+			
+			
+			var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
+			apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
+				
+				console.log(response);
+				
+				if(data.index == null){
+					
+					account.ledgerId = response.ledger_id;
+					account.ledgerName = response.ledger_name;
+					
+					$scope.accPayment.account = response.ledger_name;
+					
+					vm.accountCurrentBalance.currentBalance = response.currentBalance;
+					vm.accountCurrentBalance.amountType= response.currentBalanceType;
+					
+				}
+				else{
+					
+					vm.AccPaymentTable[data.index].ledgerName = response.ledger_name;
+					vm.AccPaymentTable[data.index].ledgerId = response.ledger_id;
+					
+					vm.multiCurrentBalance[data.index].currentBalance = response.currentBalance;
+					vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
+					
+				}
+		
+				
+			});
+				
+			
+		
+		}, function (data) {
+			
+			//alert(data);
+		  
+		});
+	}
+	else{
+		
+		alert('Please Select Company');
+	}
+  };
+
+  
+  /**
+  *
+  Ledger Model End
+  *
+  **/
+  
 }
-AccPaymentController.$inject = ["$scope","apiCall","apiPath","$rootScope","toaster"];
+AccPaymentController.$inject = ["$scope","apiCall","apiPath","$rootScope","toaster","$modal"];

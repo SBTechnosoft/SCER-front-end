@@ -527,144 +527,58 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
     {value: 5, name: 'Huge'}
   ];
   
+  
   /**
   Product Model Start
   **/
-  $scope.openProduct = function (size) {
-
-    var modalInstance = $modal.open({
-      templateUrl: '/myProductModalContent.html',
-      controller: ModalInstanceCtrl,
-      size: size
-    });
-
-   
-    modalInstance.result.then(function () {
-     
-		apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+  $scope.openProduct = function (size,index) {
+	
+	if($scope.quickBill.companyDropDown){
 		
-			vm.productNameDrop = responseDrop;
-	
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Accounting/productModal.html',
+		  controller: AccProductModalController,
+		  size: size,
+		  resolve:{
+			  productIndex: function(){
+				  return index;
+			  },
+			  companyId: function(){
+				 
+				return $scope.quickBill.companyDropDown;
+			  }
+		  }
 		});
-	
-    }, function () {
-      console.log('Cancel');	
-    });
-  };
 
-  // Please note that $modalInstance represents a modal window (instance) dependency.
-  // It is not the same as the $modal service used above.
-
-  var ModalInstanceCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath) {
-	  
-		$scope.stockModel=[];
+	   
+		modalInstance.result.then(function (data) {
+		 
+			console.log(data);
 			
-	var vm = this;
-	$scope.addModelProduct = [];
-	
-	 //Company Dropdown data
-	$scope.companyDrop = [];
-	
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+			apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+			
+				vm.productNameDrop = responseDrop;
 		
-		$scope.companyDrop = responseCompanyDrop;
-	
-	});
-	
-	$scope.changeCompany = function(state)
-	{
-		$scope.branchDrop = [];
-		var getAllBranch = apiPath.getOneBranch+state;
-		//Get Branch
-		apiCall.getCall(getAllBranch).then(function(response4){
-			$scope.branchDrop = response4;
+			});
+			
+			var headerSearch = {'Content-Type': undefined,'productName':data.productName};
+			
+			apiCall.getCallHeader(apiPath.getProductByCompany+data.companyId,headerSearch).then(function(response){
 				
+				console.log(response);
+				vm.AccBillTable[data.index].productName = response.productName;
+				vm.AccBillTable[data.index].productId = response.productId;
+				
+			});
+		
+		}, function () {
+		  console.log('Cancel');	
 		});
 	}
-	
-	//Category Dropdown data
-	$scope.categoryDrop = [];
-	
-	apiCall.getCall(apiPath.getAllCategory).then(function(responseDrop){
-		
-		$scope.categoryDrop = responseDrop;
-	
-	});
-	
-	//Group Dropdown data
-	$scope.groupDrop = [];
-	
-	apiCall.getCall(apiPath.getAllGroup).then(function(responseDrop){
-		
-		$scope.groupDrop = responseDrop;
-	
-	});
-	
-	$scope.measureUnitDrop = [
-    'kilo',
-    'litre'
-  ];
- 
-	$scope.clickSave = function(){
-		
-		var formdata = new FormData();
-		
-		formdata.append('companyId',$scope.addModelProduct.company.companyId);
-		formdata.append('branchId',$scope.addModelProduct.branch.branchId);
-		formdata.append('productName',$scope.addModelProduct.productName);
-		formdata.append('productCategoryId',$scope.addModelProduct.category.productCategoryId);
-		formdata.append('productGroupId',$scope.addModelProduct.group.productGroupId);
-		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
-		
-		//formdata.append('branchId',1);
-		//formdata.append('isDisplay','yes');
-		apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
-		
-			console.log(response5);
-			$modalInstance.close('closed');
-			// Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
-		
-		});
-		
-		
+	else{
+		alert('Please Select Company');
 	}
-	
-	if($rootScope.ArraystockModel)
-	{
-		$scope.stockModel.state=$rootScope.ArraystockModel.state;
-		$scope.stockModel.state2=$rootScope.ArraystockModel.state2;
-		$scope.stockModel.state3=$rootScope.ArraystockModel.state3;
-	}
-  // $scope.stockModel.state;
-
-    $scope.ok = function () {
-      $modalInstance.close('closed');
-    };
-
-    $scope.cancel = function () {
-	
-		$scope.addModelProduct = [];
-		// if($scope.stockModel)
-		 // {
-			// $rootScope.ArraystockModel=[];
-			// $rootScope.ArraystockModel.state=$scope.stockModel.state;
-			// $rootScope.ArraystockModel.state2=$scope.stockModel.state2;
-			// $rootScope.ArraystockModel.state3=$scope.stockModel.state3;
-		 // }
-		//$modalInstance.dismiss();
-    };
-	
-	$scope.closeButton = function () {
-
-		$modalInstance.dismiss();
-    };
-	
-	
   };
-  ModalInstanceCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath"];
   /**
   Product Model End
   **/

@@ -95,11 +95,11 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	
 	
 	vm.allLedgerData = [];
-	apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+	// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
-		vm.allLedgerData = response3;
+		// vm.allLedgerData = response3;
 	
-	});
+	// });
 	
 	$scope.editLedgerData = function(id)
 	{
@@ -310,12 +310,31 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
   
 	//Changed Data When Update
 	$scope.changeLedgerData = function(Fname,value){
+		
 		//console.log(Fname+'..'+value);
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
 		formdata.append(Fname,value);
+		
+	}
+	
+	$scope.getLegderCompany = [];
+	//Get Data When Company Change
+	$scope.changeCompanyToGetList = function(value){
+		
+		
+		//Auto suggest Client Name For Debit
+		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		
+		apiCall.getCall(jsuggestPath).then(function(response3){
+			
+			vm.allLedgerData = response3;
+			
+			console.log(response3);
+		
+		});
 	}
 	
 	$scope.addUpLedger = function()
@@ -349,11 +368,11 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			}
 		
 			//var formdata = new FormData();
-			apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+			// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
 		
-				vm.allLedgerData = response3;
+				// vm.allLedgerData = response3;
 	
-			});	
+			// });	
 			$scope.trueData = false;
 			$scope.alertData = true;
 		});

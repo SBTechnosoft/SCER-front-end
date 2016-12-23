@@ -119,7 +119,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				//Set Current Balance 
 				var tempBalanceData = {};
 				
-				tempBalanceData.contactNo = response[i].ledger.currentBalance;
+				tempBalanceData.currentBalance = response[i].ledger.currentBalance;
 				tempBalanceData.amountType = response[i].ledger.currentBalanceType;
 				
 				vm.multiCurrentBalance.push(tempBalanceData);
@@ -138,7 +138,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		});
 		vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
-		vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 	}
   
   
@@ -154,7 +154,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		vm.AccSpecialJrnlTable.push(data);
 		
 		var balance = {};
-		balance.contactNo = '';
+		balance.currentBalance = '';
 		balance.amountType = '';
 		vm.multiCurrentBalance.push(balance);
 			
@@ -164,10 +164,12 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 	
 	$scope.settabledata = function(item,index)
 	{
-		vm.multiCurrentBalance[index].contactNo = item.currentBalance;
+		vm.multiCurrentBalance[index].currentBalance = item.currentBalance;
 		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 			
 		vm.AccSpecialJrnlTable[index].ledgerId = item.ledgerId;
+		
+		console.log(item);
 		console.log(vm.AccSpecialJrnlTable);
 		$scope.changeInArray = true;
 	}
@@ -358,7 +360,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 			
 			vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 			
-			vm.multiCurrentBalance = [{"contactNo":"","amountType":""},{"contactNo":"","amountType":""}];
+			vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 			
 			 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 			
@@ -472,150 +474,62 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
   Ledger Model Start
   *
   **/
-	$scope.openLedger = function (size) {
+	$scope.openLedger = function (size,index) {
 
-    var modalInstance = $modal.open({
-      templateUrl: '/myModalContent.html',
-      controller: ModalLedgerCtrl,
-      size: size
-    });
+	if($scope.addAccJrnl.companyDropDown){
 
-    var state = $('#modal-state');
-    modalInstance.result.then(function () {
-      
-		apiCall.getCall(apiPath.getAllLedger).then(function(response3){
-		
-			vm.clientNameDrop = response3;
-	
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Accounting/ledgerModal.html',
+		  controller: AccLedgerModalController,
+		  size: size,
+			resolve:{
+				ledgerIndex: function(){
+					return index;
+				},
+				companyId: function(){
+					return $scope.addAccJrnl.companyDropDown;
+				}
+			}
 		});
-	
-    }, function () {
-      
-    });
-  };
 
-  // Please note that $modalInstance represents a modal window (instance) dependency.
-  // It is not the same as the $modal service used above.
-
-  var ModalLedgerCtrl = function ($scope, $modalInstance,$rootScope,apiCall,apiPath) {
-	  
-	$scope.stockModel=[];
-	var formdata = new FormData();
-	$scope.ledgerForm = [];	
-	  
-	//Get Company
-	$scope.companyDrop=[];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response3){
+		var state = $('#modal-state');
 		
-		$scope.companyDrop = response3;
-	
-	});
-	
-	//Get State
-	$scope.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
-		
-		$scope.statesDrop = response3;
-	
-	});
-	
-	$scope.ChangeState = function(Fname,state)
-	 {
-		
-		var getonecity = apiPath.getAllCity+state;
-		
-		//Get City
-		apiCall.getCall(getonecity).then(function(response4){
-			$scope.cityDrop = response4;
+		modalInstance.result.then(function (data) {
+		  
+			//Auto suggest Client Name
+			var jsuggestPath = apiPath.getLedgerJrnl+data.companyId;
+			var headerData = {'Content-Type': undefined};
+			
+			apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
 				
+				vm.clientNameDrop = response3;
+			
+			});
+			
+			console.log(data);
+			
+			var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
+			apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
+				
+				console.log(response);
+				vm.AccSpecialJrnlTable[data.index].ledgerName = response.ledger_name;
+				vm.AccSpecialJrnlTable[data.index].ledgerId = response.ledger_id;
+				
+				vm.multiCurrentBalance[data.index].currentBalance = response.currentBalance;
+				vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
+		
+				
+			});
+		
+		}, function () {
+		  
 		});
-		console.log(Fname+'...'+state);
-			if(formdata.has(Fname))
-			{
-				formdata.delete(Fname);
-			}
-			
-			formdata.append(Fname,state);
 	}
-	
-	 $scope.underWhat=[];
-	apiCall.getCall(apiPath.getAllLedgerGroup).then(function(response3){
-		
-		$scope.underWhat = response3;
-	
-	});
-	
-	$scope.setPcode = function(Fname,value) {
-  		//console.log(value.ledgerGroupId);
-		if(formdata.has(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		formdata.append(Fname,value.ledgerGroupId);
-  	}
-  
-	  $scope.invAffectDrop = [
-		'yes',
-		'no'
-	  ]
-	  
-	  $scope.amountTypeDrop = [
-		'debit',
-		'credit'
-	  ];
-	  
-	//Changed Data When Update
-	$scope.changeLedgerData = function(Fname,value){
-		//console.log(Fname+'..'+value);
-		if(formdata.has(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		formdata.append(Fname,value);
+	else{
+		alert('Please Select Company');
 	}
-	
-	if($rootScope.ArraystockModel)
-	{
-		$scope.stockModel.state=$rootScope.ArraystockModel.state;
-		$scope.stockModel.state2=$rootScope.ArraystockModel.state2;
-		$scope.stockModel.state3=$rootScope.ArraystockModel.state3;
-	}
-  // $scope.stockModel.state;
-
-    $scope.clickSave = function () {
-		
-		
-		formdata.append('balanceFlag','opening');
-		apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
-		
-			console.log(response5);
-			$scope.ledgerForm = [];
-			
-			// Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
-			
-			$modalInstance.close('closed');
-		});
-		
-    };
-
-    $scope.cancel = function () {
-	
-		if($scope.stockModel)
-		 {
-			$rootScope.ArraystockModel=[];
-			$rootScope.ArraystockModel.state=$scope.stockModel.state;
-			$rootScope.ArraystockModel.state2=$scope.stockModel.state2;
-			$rootScope.ArraystockModel.state3=$scope.stockModel.state3;
-		 }
-		$modalInstance.dismiss();
-    };
-	
-	
   };
-  ModalLedgerCtrl.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath"];
+
   /**
   *
   Ledger Model End
