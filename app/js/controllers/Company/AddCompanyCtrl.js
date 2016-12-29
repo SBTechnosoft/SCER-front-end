@@ -6,7 +6,7 @@
 
 App.controller('AddCompanyController', AddCompanyController);
 
-function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,apiPath,$location,$stateParams,toaster) {
+function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,apiPath,$location,$stateParams,toaster,apiResponse) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -23,9 +23,11 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		
 	/* End */
 	
+	
 	//Edit Data On Change Company
 	$scope.changeCompany = function()
 	{
+		
 		vm.selectCompany = false;
 		
 	}
@@ -41,7 +43,13 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 			//console.log(response2);
 			vm.companyDrop = response2;
 			
-		});
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
+				
+				$scope.addCompany.companyDropDown2 = response;
+				vm.selectCompany = false;
+			});
+	});
 		
 	//Get State
 	vm.statesDrop=[];
@@ -314,8 +322,16 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		
 		apiCall.postCall(editCompany2,formdata).then(function(response5){
 		
-			$location.path('app/Company');
-			toaster.pop('success', 'Title', 'Message');
+			
+			if(apiResponse.ok == response5){
+				
+				toaster.pop('success', 'Title', 'Insert Successfully');
+				$location.path('app/Company');
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', response5);
+			}
 		
 		});
 	}
@@ -327,10 +343,15 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		apiCall.postCall(apiPath.getAllCompany,formdata).then(function(response5){
 		
 			//console.log(response5);
-			
-			
-			$location.path('app/Company');
-			toaster.pop('success', 'Title', 'Message');
+			if(apiResponse.ok == response5){
+				
+				toaster.pop('success', 'Title', 'Insert Successfully');
+				$location.path('app/Company');
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', response5);
+			}
 			
 		});
 	}
@@ -338,4 +359,4 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
   }
   
 }
-AddCompanyController.$inject = ["$rootScope","$scope","$http","$filter","$window","apiCall","apiPath","$location","$stateParams","toaster"];
+AddCompanyController.$inject = ["$rootScope","$scope","$http","$filter","$window","apiCall","apiPath","$location","$stateParams","toaster","apiResponse"];

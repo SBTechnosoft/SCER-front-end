@@ -15,11 +15,12 @@ $.getScript('app/vendor/ng-table/ng-table.min.css');
 
 App.controller('historySalesModaleCtrl',historySalesModaleCtrl);
 
-function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state) {
+function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,companyId) {
   'use strict';
   
 	 var data = [];
 	 
+	 $scope.CompanyID = companyId;
 		$scope.stockModel=[];
  
 	if($rootScope.ArraystockModel)
@@ -60,7 +61,8 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 		// $scope.chartAreaFlotChart  = flotOptions['area'];
 		// $scope.chartPieFlotChart  = flotOptions['pie'];
 		
-		 var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
+		 // var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
+		 var getJrnlPath = apiPath.getLedgerJrnl+$scope.CompanyID.companyId;
 	  
 	  //console.log(getJrnlPath);
 	  
@@ -134,4 +136,4 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 	**/
 }
 
-historySalesModaleCtrl.$inject = ["$scope", "$modalInstance","$rootScope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state"];
+historySalesModaleCtrl.$inject = ["$scope", "$modalInstance","$rootScope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","companyId"];

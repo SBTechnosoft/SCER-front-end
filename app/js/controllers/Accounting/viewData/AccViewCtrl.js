@@ -20,6 +20,21 @@ function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,view
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
 		vm.companyDrop = responseCompanyDrop;
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.accViewSales.companyDropDown = response;
+			
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			//Get Branch
+			apiCall.getCall(getAllBranch).then(function(response4){
+				
+				vm.branchDrop = response4;
+					
+			});
+		});
 	
 	});
 	

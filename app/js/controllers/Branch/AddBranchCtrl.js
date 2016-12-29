@@ -6,7 +6,7 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location) {
+function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location,apiResponse) {
   'use strict';
   var vm = this;
   var formdata = new FormData();
@@ -49,10 +49,29 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			//console.log(response2);
-			vm.companyDrop = response2;
+		
+		//console.log(response2);
+		vm.companyDrop = response2;
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
 			
+			$scope.addBranch.companyDropDown = response;
+			$scope.addBranch.companyDropDown2 = response;
+			
+			formdata.append('companyId',response.companyId);
+			
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			//Get Branch
+			apiCall.getCall(getAllBranch).then(function(response4){
+				
+				vm.branchDrop = response4;
+					
+			});
 		});
+	
+	});
 		
 	//Get Branch
 	// vm.branchDrop=[];
@@ -302,20 +321,36 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		
 			//console.log(response5);
 			
-			$location.path('app/Branch');
-			toaster.pop('success', 'Title', 'Message');
+			
+			if(apiResponse.ok == response5){
+				
+				toaster.pop('success', 'Title', 'Insert Successfully');
+				$location.path('app/Branch');
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', response5);
+			}
 		
 		});
 	}
 	else{
 		
 		formdata.append('isDefault','not');
+		formdata.append('isDisplay','yes');
 		apiCall.postCall(apiPath.getAllBranch,formdata).then(function(response5){
 		
 			//console.log(response5);
 			
-			$location.path('app/Branch');
-			toaster.pop('success', 'Title', 'Message');
+			if(apiResponse.ok == response5){
+				
+				toaster.pop('success', 'Title', 'Insert Successfully');
+				$location.path('app/Branch');
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', response5);
+			}
 		
 		});
 		
@@ -329,4 +364,4 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   
 }
-AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location"];
+AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location","apiResponse"];

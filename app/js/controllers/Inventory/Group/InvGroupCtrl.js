@@ -6,7 +6,7 @@
 
 App.controller('InvGroupController', InvGroupController);
 
-function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll) {
+function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll,toaster,apiResponse) {
 	
   'use strict';
   var vm = this;
@@ -121,14 +121,24 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 				formdata.delete('productGroupDescription');
 				formdata.delete('productGroupParentId');
 				formdata.delete('isDisplay');
-				$scope.invGroupData = [];
-				apiCall.getCall(apiPath.getAllGroup).then(function(response){
 				
-					vm.groupDrop = response;
-					var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
-					$scope.tree_data = myTreeData2;
+				if(apiResponse.ok == response){
 				
-				});
+					toaster.pop('success', 'Title', 'SuccessFull');
+				
+					$scope.invGroupData = [];
+					apiCall.getCall(apiPath.getAllGroup).then(function(response){
+					
+						vm.groupDrop = response;
+						var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+						$scope.tree_data = myTreeData2;
+					
+					});
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', response);
+				}
 				
 			});
 		
@@ -339,4 +349,4 @@ $scope.branchF = [
   
 
 }
-InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll"];
+InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll","toaster","apiResponse"];

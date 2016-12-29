@@ -12,6 +12,7 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
  var data = [];
  $scope.addInvoice = [];
  //Table
+ $scope.addInvoice.invoiceType = "prefix";
 	
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllInvoice).then(function(response){
@@ -90,7 +91,14 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
 		vm.invoiceCompanyDrop = responseCompanyDrop;
-	
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.addInvoice.companyDrop = response;
+			
+		});
+			
 	});
 	
   
@@ -242,6 +250,10 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 			//$location.path('app/Invoice');
 			apiCall.getCall(apiPath.getAllInvoice).then(function(response){
 				data = response;
+				for (var i = 0; i < data.length; i++) {
+				  data[i].companyName = ""; //initialization of new property 
+				  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+				}
 				$scope.TableData();
 			});
 			//toaster.pop('success', 'Title', 'Message');

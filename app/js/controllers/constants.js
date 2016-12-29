@@ -119,6 +119,10 @@ App
 	'getOneJrnl': 'http://api.siliconbrain.co.in/accounting/journals/',
 	'getLedgerJrnl':   'http://api.siliconbrain.co.in/accounting/ledgers/company/',
   })
+  //Api Path
+  .constant('apiResponse', {
+    'ok': '200: OK'
+  })
   // Same MQ as defined in the css
   .constant('appMediaquery', {
     'desktopLG':             1200,

@@ -11,7 +11,8 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
  	var vm = this;
 	var data =[];
 	$scope.addquotation =[];
-
+	
+	$scope.addquotation.quotationType = "prefix";
  
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllQuotation).then(function(response){
@@ -88,6 +89,12 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
 		vm.quotationCompanyDrop = responseCompanyDrop;
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.addquotation.companyDrop = response;
+		});
 	
 	});
 
@@ -237,6 +244,12 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
 			//$location.path('app/Invoice');
 			apiCall.getCall(apiPath.getAllQuotation).then(function(response){
 				data = response;
+				
+				for (var i = 0; i < data.length; i++) {
+				  data[i].companyName = ""; //initialization of new property 
+				  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+				}
+				console.log(data);
 				$scope.TableData();
 			});
 			//toaster.pop('success', 'Title', 'Message');

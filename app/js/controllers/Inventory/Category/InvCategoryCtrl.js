@@ -6,7 +6,7 @@
 
 App.controller('InvCategoryController', InvCategoryController);
 
-function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$interval,$anchorScroll) {
+function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$interval,$anchorScroll,apiResponse,toaster) {
 	
   'use strict';
   var vm = this;
@@ -272,18 +272,29 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 		}
 		apiCall.postCall(categoryPath,formdata).then(function(response){
 			
+			
 			formdata.delete('productCategoryName');
 			formdata.delete('productCategoryDescription');
 			formdata.delete('productParentCategoryId');
 			formdata.delete('isDisplay');
-			$scope.invCategoryData = [];
-			apiCall.getCall(apiPath.getAllCategory).then(function(response){
 			
-				vm.categoryDrop = response;
-				var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
-				$scope.tree_data = myTreeData2;
-			
-			});
+			if(apiResponse.ok == response){
+				
+				toaster.pop('success', 'Title', 'SuccessFull');
+				
+				$scope.invCategoryData = [];
+				apiCall.getCall(apiPath.getAllCategory).then(function(response){
+				
+					vm.categoryDrop = response;
+					var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+					$scope.tree_data = myTreeData2;
+				
+				});
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', response);
+			}
 			
 		});
 		
@@ -495,4 +506,4 @@ $scope.branchF = [
   
 
 }
-InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$interval","$anchorScroll"];
+InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$interval","$anchorScroll","apiResponse","toaster"];

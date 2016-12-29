@@ -6,7 +6,7 @@
 
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster,getSetFactory,$state) {
+function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster,getSetFactory,$state,apiResponse) {
   'use strict';
   
 	var vm = this;
@@ -31,6 +31,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	{	
 		vm.disableValue = false;
 		$scope.ledgerForm = [];
+		$scope.ledgerEditId = [];
 		$scope.trueData = true;
 		$scope.alertData = false;
 	}
@@ -299,6 +300,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			vm.cityDrop = response4;
 				
 		});
+		
 			if(formdata.has(Fname))
 			{
 				formdata.delete(Fname);
@@ -318,9 +320,36 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		}
 		formdata.append(Fname,value);
 		
+		if(formdata.get(Fname) == 'undefined'){
+			
+			
+			formdata.delete(Fname);
+			
+		}
+		
+		
+		
 	}
 	
 	$scope.getLegderCompany = [];
+	
+	//Set default Company
+	apiCall.getDefaultCompany().then(function(response){
+	
+		$scope.getLegderCompany.companyDropDown = response;
+		$scope.ledgerForm.companyDropDown = response;
+		
+		//Auto suggest Client Name For Debit
+		var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+		
+		apiCall.getCall(jsuggestPath).then(function(response3){
+			
+			vm.allLedgerData = response3;
+		
+		});
+		
+	});
+	
 	//Get Data When Company Change
 	$scope.changeCompanyToGetList = function(value){
 		
@@ -359,22 +388,49 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		
 			//$location.path('app/AccLedger');
 			console.log(response5);
-			toaster.pop('success', 'Title', 'Message');
-			$scope.ledgerForm = [];
 			
-			// Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
+				
+				toaster.pop('success', 'Title', 'Successfull');
+				
+				//Auto suggest Client Name For Debit
+				var jsuggestPath = apiPath.getLedgerJrnl+$scope.ledgerForm.companyDropDown.companyId;
+				
+				apiCall.getCall(jsuggestPath).then(function(response3){
+					
+					vm.allLedgerData = response3;
+				
+				});
+			
+				$scope.ledgerForm = [];
+				
+				// Delete formdata  keys
+				for (var key of formdata.keys()) {
+				   formdata.delete(key); 
+				}
+				formdata.delete('balanceFlag');
+				formdata.delete('ledgerName');
+				formdata.delete('alias');
+				formdata.delete('emailId');
+				formdata.delete('inventoryAffected');
+				formdata.delete('amountType');
+				formdata.delete('amount');
+				formdata.delete('stateAbb');
+				formdata.delete('cityId');
+				formdata.delete('contactNo');
+				formdata.delete('address1');
+				formdata.delete('address2');
+				
+				//var formdata = new FormData();
+				// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
+			
+					// vm.allLedgerData = response3;
 		
-			//var formdata = new FormData();
-			// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
-		
-				// vm.allLedgerData = response3;
-	
-			// });	
-			$scope.trueData = false;
-			$scope.alertData = true;
+				// });	
+				$scope.trueData = false;
+				$scope.alertData = true;
+			
+			
+			
 		});
 	}
 
@@ -508,4 +564,4 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster","getSetFactory","$state"];
+AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster","getSetFactory","$state","apiResponse"];

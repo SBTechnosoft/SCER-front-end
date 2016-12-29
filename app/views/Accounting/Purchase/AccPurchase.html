@@ -187,7 +187,7 @@
 							<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" style="width:50%;" dir="rtl" /> 
 						</td>
 						<td>
-							<span style="float:right">{{item.price}}</span>
+							<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" placeholder="Price" dir="rtl" />
 						</td>
 						<td>
 							<input id="input-id-1" type="text" ng-model="item.qty" ng-change="changeProductTable()" class="form-control" dir="rtl" /> 
@@ -199,9 +199,9 @@
 						</td>
 						<td style="">
 						<center>
-							<i ng-click="addRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"></i>
+							<i ng-click="addRow()" tabindex="1" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"></i>
 							&nbsp;
-							<i ng-click="removeRow($index)" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0"> </i>
+							<i ng-click="removeRow($index)" tabindex="1" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0"> </i>
 						</center>
 						</td>
 					</tr>
@@ -226,7 +226,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td><input id="input-id-1" type="text" ng-model="accPurchase.tax"  class="form-control"  dir="rtl" /> </td>
+						<td><input id="input-id-1" type="text" ng-model="accPurchase.tax" ng-change="changeAccPurchase('tax',accPurchase.tax)"  class="form-control"  dir="rtl" /> </td>
 						<td></td>
 					</tr>
 					<tr>

@@ -6,7 +6,7 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location) {
+function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse) {
   'use strict';
   var vm = this;
   $scope.addInvProduct = [];
@@ -257,7 +257,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 		formdata.append(Fname,value);
 	}
 
-  $scope.pop = function() {
+	$scope.pop = function() {
 	
 		if($stateParams.id){
 			
@@ -267,25 +267,41 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 			apiCall.postCall(editProduct,formdata).then(function(response5){
 			
 				//console.log(response5);
-				$location.path('app/InvProduct');
-				toaster.pop('success', 'Title', 'Message');
+				if(apiResponse.ok == response5){
+					
+					$location.path('app/InvProduct');
+					toaster.pop('success', 'Title', 'SuccessFull');
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', response5);
+				}
 			
 			});
 		}
 		else{
+			
 			//formdata.append('branchId',1);
 			formdata.append('isDisplay','yes');
 			apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
 			
 				//console.log(response5);
-				$location.path('app/InvProduct');
-				toaster.pop('success', 'Title', 'Message');
-			
+				if(apiResponse.ok == response5){
+					
+					toaster.pop('success', 'Title', 'SuccessFull');
+					
+					$location.path('app/InvProduct');
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', response5);
+				}
+				
 			});
 		}
-		$scope.addInvProduct = [];
+		//$scope.addInvProduct = [];
 		
-  };
+	};
   
   $scope.cancel = function() {
     toaster.pop('info', 'Form Reset', 'Message');
@@ -293,4 +309,4 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
   
   
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location"];
+AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse"];

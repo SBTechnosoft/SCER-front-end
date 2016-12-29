@@ -254,10 +254,18 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
-			//console.log(response2);
-			vm.companyDrop = response2;
+		
+		//console.log(response2);
+		vm.companyDrop = response2;
 			
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.generalTemp.companyDropDown = response;
 		});
+			
+	});
+		
 	//Save Tempalte ID For Update
 	$scope.tempID;
 	

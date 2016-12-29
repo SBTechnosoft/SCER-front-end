@@ -6,7 +6,7 @@
 
 App.controller('AccReceiptController', AccReceiptController);
 
-function AccReceiptController($scope,apiCall,apiPath,toaster,$modal) {
+function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse) {
   'use strict';
   
   var vm = this;
@@ -30,6 +30,46 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal) {
 	 
 	vm.tableNameDrop=[];
 	var headerDr = {'Content-Type': undefined,'ledgerGroup':[31]};
+	
+	//Set default Company
+	apiCall.getDefaultCompany().then(function(response){
+	
+		$scope.accReceipt.companyDropDown = response;
+		
+		//Auto suggest Account
+		vm.accountDrop=[];
+		vm.tableNameDrop=[];
+		
+		//Auto suggest Client Name For Debit
+		var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+		
+		apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+			
+			for(var t=0;t<response3.length;t++){
+				
+				for(var k=0;k<response3[t].length;k++){
+					
+					vm.accountDrop.push(response3[t][k]);
+				}
+				
+			}
+		
+		});
+		
+		apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
+			
+			for(var t=0;t<response3.length;t++){
+				
+				for(var k=0;k<response3[t].length;k++){
+					
+					vm.tableNameDrop.push(response3[t][k]);
+				}
+				
+			}
+		
+		});
+	
+	});
 	
   /* Table */
   
@@ -196,45 +236,52 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal) {
 		apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
 				
 			console.log(data);
-			vm.dt1 = new Date();
-			vm.minStart = new Date();
-			vm.maxStart = new Date();
-		
-			var jsonDel = angular.copy(vm.tempAccReceiptTable);
-			 
-			for(var j=0;j<jsonDel.length;j++){
-				 
-				angular.forEach(jsonDel[j], function (value,key) {
-					
-					formdata.delete('data['+j+']['+key+']',value);
-					
-				});
+			if(apiResponse.ok == data){
 				
-			}
+				vm.dt1 = new Date();
+				vm.minStart = new Date();
+				vm.maxStart = new Date();
 			
-			// Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
-			
-			$scope.accReceipt = [];
-			$scope.accReceipt.totalAmount;
-			vm.tableNameDrop = [];
-			vm.accountDrop = [];
-			var account = {};
-			account.amountType = 'credit';
-  
-			toaster.pop('success', 'Title', 'Insert Successfully');
-			
-			vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
-			vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
-			
-			//Next JfId
-			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-	
-				$scope.accReceipt.jfid = response.nextValue;
+				var jsonDel = angular.copy(vm.tempAccReceiptTable);
+				 
+				for(var j=0;j<jsonDel.length;j++){
+					 
+					angular.forEach(jsonDel[j], function (value,key) {
+						
+						formdata.delete('data['+j+']['+key+']',value);
+						
+					});
+					
+				}
+				
+				// Delete formdata  keys
+				for (var key of formdata.keys()) {
+				   formdata.delete(key); 
+				}
+				
+				$scope.accReceipt = [];
+				$scope.accReceipt.totalAmount;
+				vm.tableNameDrop = [];
+				vm.accountDrop = [];
+				var account = {};
+				account.amountType = 'credit';
+	  
+				toaster.pop('success', 'Title', 'Insert Successfully');
+				
+				vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
+				vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
+				
+				//Next JfId
+				apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+					$scope.accReceipt.jfid = response.nextValue;
 
-			});
+				});
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', data);
+			}
 			
 		});
 	}
@@ -451,10 +498,10 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal) {
 				
 				if(data.index == null){
 					
-					account.ledgerId = response.ledger_id;
-					account.ledgerName = response.ledger_name;
+					account.ledgerId = response.ledgerId;
+					account.ledgerName = response.ledgerName;
 					
-					$scope.accReceipt.account = response.ledger_name;
+					$scope.accReceipt.account = response.ledgerName;
 					
 					vm.accountCurrentBalance.currentBalance = response.currentBalance;
 					vm.accountCurrentBalance.amountType= response.currentBalanceType;
@@ -462,8 +509,8 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal) {
 				}
 				else{
 					
-					vm.AccReceiptTable[data.index].ledgerName = response.ledger_name;
-					vm.AccReceiptTable[data.index].ledgerId = response.ledger_id;
+					vm.AccReceiptTable[data.index].ledgerName = response.ledgerName;
+					vm.AccReceiptTable[data.index].ledgerId = response.ledgerId;
 					
 					vm.multiCurrentBalance[data.index].currentBalance = response.currentBalance;
 					vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
@@ -494,4 +541,4 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal) {
   *
   **/
 }
-AccReceiptController.$inject = ["$scope","apiCall","apiPath","toaster","$modal"];
+AccReceiptController.$inject = ["$scope","apiCall","apiPath","toaster","$modal","apiResponse"];

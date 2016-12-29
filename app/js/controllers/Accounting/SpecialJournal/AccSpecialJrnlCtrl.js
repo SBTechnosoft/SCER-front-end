@@ -6,7 +6,7 @@
 
 App.controller('AccSpecialJrnlController', AccSpecialJrnlController);
 
-function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$log,$rootScope,toaster) {
+function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$log,$rootScope,toaster,apiResponse) {
   'use strict';
   
    var vm = this;
@@ -17,6 +17,9 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
    vm.AccSpecialJrnlTable = []; //Table Array
    vm.multiCurrentBalance = [];
    
+   //Auto suggest Client Name
+	vm.clientNameDrop=[];
+	
    //Company Drop Down 
    vm.companyDrop = [];
 	
@@ -98,6 +101,16 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				$scope.addAccJrnl.companyDropDown = res2;
 			});
 			
+			//Auto suggest Client Name
+			var jsuggestPath = apiPath.getLedgerJrnl+response[0].company.companyId;
+			var headerData = {'Content-Type': undefined};
+			
+			apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
+				
+				vm.clientNameDrop = response3;
+			
+			});
+			
 			//Set Date
 			var getResdate = response[0].entryDate;
 			var splitedate = getResdate.split("-").reverse().join("-");
@@ -136,6 +149,26 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 			$scope.addAccJrnl.jfid = response.nextValue;
 	
 		});
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+		
+			$scope.addAccJrnl.companyDropDown = response;
+			
+			formdata.append('companyId',response.companyId);
+
+			//Auto suggest Client Name
+			var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+			var headerData = {'Content-Type': undefined};
+			
+			apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
+				
+				vm.clientNameDrop = response3;
+			
+			});
+		
+		});
+		
 		vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
@@ -183,8 +216,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 	
   /* End */
 	
-	//Auto suggest Client Name
-	vm.clientNameDrop=[];
+	
 	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
@@ -321,58 +353,156 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		apiCall.postCall(SpecialJtnlPath,formdata).then(function(response){
 			
 			console.log(response);
-			vm.dt1 = new Date();
-			vm.minStart = new Date();
-			vm.maxStart = new Date();
 			
-			if($scope.changeInArray){
-				
-				console.log('Delete Array');
-				for(var i=0;i<json.length;i++){
-					 
-					angular.forEach(json[i], function (value,key) {
-						
-						formdata.delete('data['+i+']['+key+']',value);
-					});
-					
-				}
-				
-				$scope.changeInArray = false;
-				
-			}
-			
-			// Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
 			
 			//Display Toaster Message
 			if($scope.addAccJrnl.getSetJrnlId){
-				toaster.pop('success', 'Title', 'Update Successfully');
+				
+				if(apiResponse.ok == response){
+					
+					toaster.pop('success', 'Title', 'Update Successfully');
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', response);
+				}
 				
 			}
 			else{
-				toaster.pop('success', 'Title', 'Insert Successfully');
+				
+				if(apiResponse.ok == response){
+					
+					toaster.pop('success', 'Title', 'Insert Successfully');
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', response);
+				}
 				
 			}
 			
-			$scope.addAccJrnl = [];
+			if(apiResponse.ok == response){
+					
+				vm.dt1 = new Date();
+				vm.minStart = new Date();
+				vm.maxStart = new Date();
+				
+				if($scope.changeInArray){
+					
+					var json = angular.copy(vm.AccSpecialJrnlTable);
+					console.log('Delete Array');
+					for(var i=0;i<json.length;i++){
+						 
+						angular.forEach(json[i], function (value,key) {
+							
+							formdata.delete('data['+i+']['+key+']',value);
+						});
+						
+					}
+					
+					$scope.changeInArray = false;
+					
+				}
+				
+				// Delete formdata  keys
+				for (var key of formdata.keys()) {
+				   formdata.delete(key); 
+				}
 			
-			vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+				$scope.addAccJrnl = [];
+				
+				vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+				
+				vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
+				
+				//Set default Company
+				apiCall.getDefaultCompany().then(function(response){
+				
+					$scope.addAccJrnl.companyDropDown = response;
+
+					//Auto suggest Client Name
+					var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+					var headerData = {'Content-Type': undefined};
+					
+					apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
+						
+						vm.clientNameDrop = response3;
+					
+					});
+				
+				});
+				
+				 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+				
+					$scope.addAccJrnl.jfid = response.nextValue;
 			
-			vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
-			
-			 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-			
-				$scope.addAccJrnl.jfid = response.nextValue;
-		
-			});
+				});
+			}
 			
 			
 		
 		});
 	
 	
+  }
+  
+  $scope.cancel = function(){
+	  
+		vm.dt1 = new Date();
+		vm.minStart = new Date();
+		vm.maxStart = new Date();
+		
+		if($scope.changeInArray){
+			
+			var json = angular.copy(vm.AccSpecialJrnlTable);
+			
+			console.log('Delete Array');
+			for(var i=0;i<json.length;i++){
+				 
+				angular.forEach(json[i], function (value,key) {
+					
+					formdata.delete('data['+i+']['+key+']',value);
+				});
+				
+			}
+			
+			$scope.changeInArray = false;
+			
+		}
+		
+		// Delete formdata  keys
+		for (var key of formdata.keys()) {
+		   formdata.delete(key); 
+		}
+		
+		$scope.addAccJrnl = [];
+		
+		vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+		
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+		
+			$scope.addAccJrnl.companyDropDown = response;
+
+			//Auto suggest Client Name
+			var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+			var headerData = {'Content-Type': undefined};
+			
+			apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
+				
+				vm.clientNameDrop = response3;
+			
+			});
+		
+		});
+		
+		 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+			$scope.addAccJrnl.jfid = response.nextValue;
+	
+		});
   }
  
 
@@ -512,8 +642,8 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 			apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
 				
 				console.log(response);
-				vm.AccSpecialJrnlTable[data.index].ledgerName = response.ledger_name;
-				vm.AccSpecialJrnlTable[data.index].ledgerId = response.ledger_id;
+				vm.AccSpecialJrnlTable[data.index].ledgerName = response.ledgerName;
+				vm.AccSpecialJrnlTable[data.index].ledgerId = response.ledgerId;
 				
 				vm.multiCurrentBalance[data.index].currentBalance = response.currentBalance;
 				vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
@@ -536,4 +666,4 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
   *
   **/
 }
-AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$modal", "$log","$rootScope","toaster"];
+AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$modal", "$log","$rootScope","toaster","apiResponse"];
