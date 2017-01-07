@@ -18,13 +18,13 @@
    <div class="panel panel-default">
       <h4 class="panel-heading">Basic Details</h4>
       <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
+         <form action="#" name="formProduct" class="form-validate form-horizontal">
 			
 			<fieldset>
                <div class="form-group">
                   <label class="col-sm-2 control-label">Company</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addInvProduct.company" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addInvProduct.company.companyId)" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.company" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addInvProduct.company.companyId)" class="form-control chosen-select" ng-required="true" ></select>
                   </div>
                </div>
 			</fieldset>
@@ -32,7 +32,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Branch</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addInvProduct.branch" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" ng-change="changeInvProductData('branchId',addInvProduct.branch.branchId)" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.branch" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" ng-change="changeInvProductData('branchId',addInvProduct.branch.branchId)" class="form-control chosen-select" ng-required="true" ></select>
                   </div>
                </div>
 			</fieldset>
@@ -40,7 +40,14 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Product Name</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" ng-model="addInvProduct.name" ng-change="changeInvProductData('productName',addInvProduct.name)" type="text" placeholder="Product Name" class="form-control" />
+                     <input id="input-id-1" name="productName" ng-model="addInvProduct.name" ng-change="changeInvProductData('productName',addInvProduct.name)" type="text" placeholder="Product Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" auto-focus/>
+					 
+					<span ng-messages="formProduct.productName.$error" ng-if="formProduct.productName.$dirty || formProduct.productName.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
                   </div>
                </div>
             </fieldset>
@@ -48,7 +55,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Categoy</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addInvProduct.category" data-ng-options="s.productCategoryName for s in form.categoryDrop track by s.productCategoryId" ng-change="changeInvProductData('productCategoryId',addInvProduct.category.productCategoryId)" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.category" data-ng-options="s.productCategoryName for s in form.categoryDrop track by s.productCategoryId" ng-change="changeInvProductData('productCategoryId',addInvProduct.category.productCategoryId)" class="form-control chosen-select" ng-required="true" ></select>
                   </div>
                </div>
 			</fieldset>
@@ -56,7 +63,7 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Group</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addInvProduct.group" data-ng-options="s.productGroupName for s in form.groupDrop track by s.productGroupId" ng-change="changeInvProductData('productGroupId',addInvProduct.group.productGroupId)" class="form-control chosen-select" size='5'></select>
+                     <select chosen="" data-ng-model="addInvProduct.group" data-ng-options="s.productGroupName for s in form.groupDrop track by s.productGroupId" ng-change="changeInvProductData('productGroupId',addInvProduct.group.productGroupId)" class="form-control chosen-select" size='5' ng-required="true"></select>
                   </div>
                </div>
 			</fieldset>	
@@ -64,12 +71,12 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">Measurement Unit</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addInvProduct.measureUnit" data-ng-options="s for s in form.measureUnitDrop" ng-change="changeInvProductData('measurementUnit',addInvProduct.measureUnit)" class="form-control chosen-select"></select>
+                     <select chosen="" data-ng-model="addInvProduct.measureUnit" data-ng-options="s for s in form.measureUnitDrop" ng-change="changeInvProductData('measurementUnit',addInvProduct.measureUnit)" class="form-control chosen-select" ng-required="true"></select>
                   </div>
                </div>
 			</fieldset>	
 			 <button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-			 <button type="button" class="mr mb-sm btn btn-success pull-right" data-ng-click="pop()" >Save</button>
+			 <button type="button" class="mr mb-sm btn btn-success pull-right" data-ng-click="pop()" ng-disabled="formProduct.$invalid" >Save</button>
          </form>
       </div>
    </div>
@@ -79,3 +86,20 @@
    
    <!-- END panel-->
 </div>
+
+
+<script type="text/ng-template" id="errorRequired">
+	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
+</script>
+
+<script type="text/ng-template" id="errorLonglength">
+	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternAlpha">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Alphabets}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternThisSpecial">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacter}}</span>
+</script>

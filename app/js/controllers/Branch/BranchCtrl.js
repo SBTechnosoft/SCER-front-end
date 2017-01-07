@@ -6,7 +6,7 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,$state) {
+function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,$state,apiResponse,toaster) {
   'use strict';
   var vm = this;
   var data = [];
@@ -201,14 +201,14 @@ $scope.init();
 		});
   }
   
-  $scope.edit_comp = function(branch_id)
+  $scope.editBranch= function(branch_id)
   {
 	  
 	  //$location.path('app/AddBranch/'+branch_id);
 	   $state.go("app.AddBranch", { id: branch_id });
   }
   
-  $scope.delete_comp = function(branch_id)
+  $scope.deleteBranch = function(branch_id)
   {
 	
 	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
@@ -216,9 +216,32 @@ $scope.init();
 	apiCall.deleteCall(deletePath).then(function(deleteres){
 		
 		console.log(deleteres);
+		
+		if(apiResponse.ok == deleteres){
+				
+			toaster.pop('success', 'Title', 'Delete Successfully');
+			
+			apiCall.getCall(apiPath.getAllBranch).then(function(response){
+				
+				//console.log(response);
+				data = response;
+				
+				for (var i = 0; i < data.length; i++) {
+				  data[i].cityName = ""; //initialization of new property 
+				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				}
+				
+				vm.tableParams.reload();
+				 
+			});
+		}
+		else{
+			
+			toaster.pop('warning', 'Opps!!', deleteres);
+		}
 	 
 	});
   }
 
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","$state"];
+BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","$state","apiResponse","toaster"];

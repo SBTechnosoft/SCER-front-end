@@ -5,17 +5,18 @@
 </h3>
 <!-- START panel-->
 <div data-ng-controller="InvoiceController as form" class="container-fluid">
-	
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
       <h4 class="panel-heading">Invoice Setting</h4>
       <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
+         <form action="#" name="formInvoice" class="form-validate form-horizontal">
 			<div class="col-md-9">
 				<fieldset>
 				   <div class="form-group">
 					  <label class="col-sm-2 control-label">Company</label>
 					  <div class="col-sm-8">
-						 <select chosen="" tabindex="2" data-ng-model="addInvoice.companyDrop"  data-ng-options="s.companyName for s in form.invoiceCompanyDrop track by s.companyId" class="form-control chosen-select"></select>
+						 <select chosen="" tabindex="2" data-ng-model="addInvoice.companyDrop"  data-ng-options="s.companyName for s in form.invoiceCompanyDrop track by s.companyId" class="form-control chosen-select" ng-required="true"></select>
+						 
 					  </div>
 				   </div>
 				</fieldset>
@@ -23,7 +24,15 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Invoice Label</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" ng-model="addInvoice.invoiceLabel" type="text" placeholder="Invoice Label" class="form-control" />
+						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-minlength="1" ng-maxlength="35" ng-required="true" ng-model="addInvoice.invoiceLabel" type="text" placeholder="Invoice Label" class="form-control" auto-focus/>
+						 
+						 <span ng-messages="formInvoice.invoiceLabel.$error" ng-if="formInvoice.invoiceLabel.$dirty || formInvoice.invoiceLabel.$touched"  role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+						</span>
+						
 					  </div>
 				   </div>
 				</fieldset>
@@ -31,7 +40,13 @@
 					<div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Started At</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" ng-model="addInvoice.startAt" type="text" placeholder="Started At" class="form-control" />
+						 <input id="input-id-1" tabindex="2" name="startAt" ng-model="addInvoice.startAt" ng-pattern="/^[0-9]*$/" ng-required="true" type="text" placeholder="Started At" class="form-control" />
+						 
+						 <span ng-messages="formInvoice.startAt.$error" ng-if="formInvoice.startAt.$dirty || formInvoice.startAt.$touched"  role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorPatternNumber"></span>
+						</span>
+						
 					  </div>
 				    </div>
 				</fieldset>
@@ -77,7 +92,7 @@
 				</fieldset>
 				
 				 <button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" >Cancel</button>
-				 <button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="insertInvoiceData(addInvoice)">Save</button>
+				 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-disabled="formInvoice.$invalid" tabindex="2" ng-click="insertInvoiceData(addInvoice)">Save</button>
 			</div>
 		
          </form>
@@ -110,3 +125,23 @@
    </div>
    <!-- END panel-->
 </div>
+
+<script type="text/ng-template" id="errorRequired">
+	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
+</script>
+
+<script type="text/ng-template" id="errorLonglength">
+	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorShortlength">
+	<span class="text-danger" ng-message="minlength">{{errorMessage.shortLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternNumber">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Numbers}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternThisSpecial">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacter}}</span>
+</script>

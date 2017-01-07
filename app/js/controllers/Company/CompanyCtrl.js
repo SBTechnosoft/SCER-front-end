@@ -6,7 +6,7 @@
 
 App.controller('CompanyController', CompanyController);
 
-function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCall,apiPath,$location) {
+function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -31,6 +31,7 @@ function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCa
  
 	$scope.TableData = function()
 	{
+		
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
@@ -189,9 +190,29 @@ function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCa
 	apiCall.deleteCall(deletePath).then(function(deleteres){
 		
 		console.log(deleteres);
+		
+		if(apiResponse.ok == deleteres){
+				
+			toaster.pop('success', 'Title', 'Delete Successfully');
+			
+			apiCall.getCall(apiPath.getAllCompany).then(function(response){
+				
+				data = [];
+				data = response;
+				for (var i = 0; i < data.length; i++) {
+				  data[i].cityName = ""; //initialization of new property 
+				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				}
+				vm.tableParams.reload();
+			});
+		}
+		else{
+			
+			toaster.pop('warning', 'Opps!!', deleteres);
+		}
 	 
 	});
   }
 
 }
-CompanyController.$inject = ["$rootScope","$scope", "$filter","$http","ngTableParams","apiCall","apiPath","$location"];
+CompanyController.$inject = ["$rootScope","$scope", "$filter","$http","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster"];

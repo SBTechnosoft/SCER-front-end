@@ -6,26 +6,40 @@
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
-		<div class="panel-body">
-			<div class="form-group">
-				<label class="col-sm-1 control-label"> Group </label>
-					<div class="col-sm-4">
-						<select chosen="" data-ng-model="invGroupData.groupDropDown" data-ng-options="s.productGroupName for s in table.groupDrop track by s.productGroupId" class="form-control chosen-select"></select>
-					</div>
-					
-				<label class="col-sm-1 control-label"> Name </label>
-					<div class="col-sm-4">
-						<input ng-model="invGroupData.groupName" id="input-id-1" type="text" placeholder="Group Name" class="form-control" />
-					</div>
-				<button type="button" class="mr mb-sm btn btn-primary" ng-click="addUpGroup()">Save</button>
+		<form  action="#" name="formGroup" class="form-validate form-horizontal">
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-sm-1 control-label"> Group </label>
+						<div class="col-sm-4">
+							<select chosen="" data-ng-model="invGroupData.groupDropDown" data-ng-options="s.productGroupName for s in table.groupDrop track by s.productGroupId" class="form-control chosen-select"></select>
+						</div>
+						
+					<label class="col-sm-1 control-label"> Name </label>
+						<div class="col-sm-4">
+							<input ng-model="invGroupData.groupName" name="groupName" id="input-id-1" type="text" placeholder="Group Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
+							
+							 <span ng-messages="formGroup.groupName.$error" ng-if="formGroup.groupName.$dirty || formGroup.groupName.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternAlpha"></span>
+							  </span>
+							  
+						</div>
+					<button type="button" class="mr mb-sm btn btn-primary" ng-click="addUpGroup()" ng-disabled="formGroup.$invalid" >Save</button>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-1 control-label"> Description </label>
+						<div class="col-sm-10">
+							<textarea ng-model="invGroupData.groupDesc" name="desc" id="input-id-1" type="text" placeholder="Group Description"  class="form-control" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
+							
+							<span ng-messages="formGroup.desc.$error" ng-if="formGroup.desc.$dirty || formGroup.desc.$touched"  role="alert">
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+							  
+						</div>
+				</div>
 			</div>
-			<div class="form-group">
-				<label class="col-sm-1 control-label"> Description </label>
-					<div class="col-sm-10">
-						<textarea ng-model="invGroupData.groupDesc" id="input-id-1" type="text" placeholder="Group Description" class="form-control" ></textarea>
-					</div>
-			</div>
-		</div>
+		</form>
 	</div>
    <div class="panel panel-default">
       <div class="panel-heading" >
@@ -40,3 +54,22 @@
    </div>
   
 </div>
+
+
+<script type="text/ng-template" id="errorRequired">
+	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
+</script>
+
+<script type="text/ng-template" id="errorLonglength">
+	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
+</script>
+
+
+<script type="text/ng-template" id="errorPatternAlpha">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Alphabets}}</span>
+</script>
+
+
+<script type="text/ng-template" id="errorPatternThisSpecial">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacter}}</span>
+</script>

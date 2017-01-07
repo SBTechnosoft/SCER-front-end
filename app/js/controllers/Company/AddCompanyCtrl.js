@@ -6,7 +6,7 @@
 
 App.controller('AddCompanyController', AddCompanyController);
 
-function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,apiPath,$location,$stateParams,toaster,apiResponse) {
+function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,apiPath,$location,$stateParams,toaster,apiResponse,validationMessage,validationPattern) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -14,6 +14,15 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
    vm.selectCompany = true;
 	vm.sdfg;
 	$scope.addCompany = [];
+	
+	//$rootScope.focusFunction('txtdata');
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	$scope.validationPattern = validationPattern; //pattern
+	
+	/* VALIDATION END */
 	
 	/* Hide/Show Company Panel */
 
@@ -358,5 +367,11 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 	
   }
   
+  $scope.cancel = function(){
+	 
+	 $scope.addCompany = [];
+	 //$scope.formCompany.$setPristine();
+  }
+  
 }
-AddCompanyController.$inject = ["$rootScope","$scope","$http","$filter","$window","apiCall","apiPath","$location","$stateParams","toaster","apiResponse"];
+AddCompanyController.$inject = ["$rootScope","$scope","$http","$filter","$window","apiCall","apiPath","$location","$stateParams","toaster","apiResponse","validationMessage","validationPattern"];

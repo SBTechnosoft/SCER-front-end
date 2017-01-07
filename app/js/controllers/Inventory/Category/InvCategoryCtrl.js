@@ -6,7 +6,7 @@
 
 App.controller('InvCategoryController', InvCategoryController);
 
-function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$interval,$anchorScroll,apiResponse,toaster) {
+function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$interval,$anchorScroll,apiResponse,toaster,validationMessage) {
 	
   'use strict';
   var vm = this;
@@ -14,6 +14,12 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 	$scope.invCategoryData = [];
 	var formdata = new FormData();
 	$scope.invCategoryID = [];
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
 	
 	var tree;
 	//var myTreeData;
@@ -193,8 +199,26 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 				deleteCat: function(data) {         // this works too: $scope.someMethod;
 					console.log(data);
 					apiCall.deleteCall(apiPath.getAllCategory+'/'+data).then(function(response){
-			
+						
 						console.log(response);
+						
+						if(apiResponse.ok == response){
+							
+							toaster.pop('success', 'Title', 'Delete SuccessFully');
+				
+							apiCall.getCall(apiPath.getAllCategory).then(function(response){
+							
+								vm.categoryDrop = response;
+								var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+								$scope.tree_data = myTreeData2;
+							
+							});
+							
+						}
+						else{
+				
+							toaster.pop('warning', 'Opps!!', response);
+						}
 			
 					});
 				},
@@ -215,7 +239,6 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 								$scope.invCategoryData.categoryDropDown = response;
 							});
 						}
-							
 						
 					
 					});
@@ -506,4 +529,4 @@ $scope.branchF = [
   
 
 }
-InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$interval","$anchorScroll","apiResponse","toaster"];
+InvCategoryController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$interval","$anchorScroll","apiResponse","toaster","validationMessage"];

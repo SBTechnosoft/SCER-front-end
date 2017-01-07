@@ -6,7 +6,7 @@
 
 App.controller('AccSpecialJrnlController', AccSpecialJrnlController);
 
-function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$log,$rootScope,toaster,apiResponse) {
+function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$log,$rootScope,toaster,apiResponse,validationMessage) {
   'use strict';
   
    var vm = this;
@@ -28,6 +28,12 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		vm.companyDrop = responseCompanyDrop;
 	
 	});
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
 	
 	 // Datepicker
   // ----------------------------------- 
@@ -666,4 +672,4 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
   *
   **/
 }
-AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$modal", "$log","$rootScope","toaster","apiResponse"];
+AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$modal", "$log","$rootScope","toaster","apiResponse","validationMessage"];

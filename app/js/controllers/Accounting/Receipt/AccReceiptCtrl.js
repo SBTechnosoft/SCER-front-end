@@ -6,7 +6,7 @@
 
 App.controller('AccReceiptController', AccReceiptController);
 
-function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse) {
+function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,validationMessage) {
   'use strict';
   
   var vm = this;
@@ -15,6 +15,12 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse)
   
    $scope.accReceipt.totalAmount;
   $scope.accReceipt.jfid; // JFID
+  
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
   
   var account = {};
   account.amountType = 'debit';
@@ -541,4 +547,4 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse)
   *
   **/
 }
-AccReceiptController.$inject = ["$scope","apiCall","apiPath","toaster","$modal","apiResponse"];
+AccReceiptController.$inject = ["$scope","apiCall","apiPath","toaster","$modal","apiResponse","validationMessage"];

@@ -12,7 +12,7 @@ if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript 
 
 
 
-var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils'])
+var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages'])
     .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','apiPath', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,apiPath) {
 		
 		// $templateCache.removeAll();
@@ -88,6 +88,12 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 			
 		});
 		
+	//Focus Textbox On Page Load
+	$rootScope.focusFunction = function(data){
+		
+		alert(data);
+	}
+	
 	
   }
 ]);

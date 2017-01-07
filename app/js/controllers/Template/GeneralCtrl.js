@@ -1,12 +1,17 @@
 
 App.controller('tempGeneralController', tempGeneralController);
 
-function tempGeneralController($scope,apiCall,apiPath,toaster) {
+function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,validationMessage) {
   'use strict';
   var vm = this;
   $scope.generalTemp = [];
   var formdata = new FormData();
   
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
  
       tinymce.init({
        selector: "#textdesc",
@@ -297,19 +302,26 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 	
 			apiCall.postCall(apiPath.getAllTemplate+'/'+$scope.tempID,formdata).then(function(responseTemp){
 				
-				toaster.pop('success', '', 'Updated Successfully');
-				$scope.generalTemp = [];
-				tinyMCE.get('textdesc').setContent('');
-				$scope.tempID = '';
-				formdata.delete('companyId');
-				formdata.delete('templateName');
-				
-				formdata.delete('templateBody');
-				apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+				if(apiResponse.ok == responseTemp){
+					
+					toaster.pop('success', '', 'Updated Successfully');
+					$scope.generalTemp = [];
+					tinyMCE.get('textdesc').setContent('');
+					$scope.tempID = '';
+					formdata.delete('companyId');
+					formdata.delete('templateName');
+					
+					formdata.delete('templateBody');
+					apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+			
+						vm.AllTempRight = responseTemp;
 		
-					vm.AllTempRight = responseTemp;
-	
-				});
+					});
+				}
+				else{
+			
+					toaster.pop('warning', 'Opps!!', responseTemp);
+				}
 		
 			});
 		
@@ -324,19 +336,26 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
 	
 			apiCall.postCall(apiPath.getAllTemplate,formdata).then(function(responseTemp){
 				
-				toaster.pop('success', '', 'Insert Successfully');
-				$scope.generalTemp = [];
-				tinyMCE.get('textdesc').setContent('');
-				formdata.delete('companyId');
-				formdata.delete('templateName');
-				formdata.delete('templateType');
-				formdata.delete('templateBody');
-				
-				apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+				if(apiResponse.ok == responseTemp){
+					
+					toaster.pop('success', '', 'Insert Successfully');
+					$scope.generalTemp = [];
+					tinyMCE.get('textdesc').setContent('');
+					formdata.delete('companyId');
+					formdata.delete('templateName');
+					formdata.delete('templateType');
+					formdata.delete('templateBody');
+					
+					apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+			
+						vm.AllTempRight = responseTemp;
 		
-					vm.AllTempRight = responseTemp;
-	
-				});
+					});
+				}
+				else{
+			
+					toaster.pop('warning', 'Opps!!', responseTemp);
+				}
 		
 			});
 		}
@@ -479,4 +498,4 @@ function tempGeneralController($scope,apiCall,apiPath,toaster) {
     {value: 5, name: 'Huge'}
   ];
 }
-tempGeneralController.$inject = ["$scope","apiCall","apiPath","toaster"];
+tempGeneralController.$inject = ["$scope","apiCall","apiPath","toaster","apiResponse","validationMessage"];

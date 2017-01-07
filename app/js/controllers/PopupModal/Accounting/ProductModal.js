@@ -6,13 +6,19 @@
 
 App.controller('AccProductModalController', AccProductModalController);
 
-function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId) {
+function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId,validationMessage) {
   'use strict';
   
   $scope.stockModel=[];
 			
 	var vm = this;
 	$scope.addModelProduct = [];
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
 	
 	$scope.defaultCompany = companyId;
 	$scope.productIndex = productIndex;
@@ -137,4 +143,4 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
     };
   
 }
-AccProductModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId"];
+AccProductModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId","validationMessage"];

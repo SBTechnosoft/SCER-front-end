@@ -6,12 +6,20 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location,apiResponse) {
+function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location,apiResponse,validationMessage) {
   'use strict';
   var vm = this;
   var formdata = new FormData();
   vm.selectBranch;
   vm.selectBranch = true;
+  
+	/* VALIDATION */
+	
+		$scope.errorMessage = validationMessage; //Error Messages In Constant
+		//$scope.validationPattern = validationPattern; //pattern
+	
+	/* VALIDATION END */
+	
 	/* Hide/Show Company Panel */
 	
 		//$rootScope.BranchModify = false;
@@ -364,4 +372,4 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   
 }
-AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location","apiResponse"];
+AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location","apiResponse","validationMessage"];

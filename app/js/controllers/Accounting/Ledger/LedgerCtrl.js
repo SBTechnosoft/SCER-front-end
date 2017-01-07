@@ -6,7 +6,7 @@
 
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster,getSetFactory,$state,apiResponse) {
+function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster,getSetFactory,$state,apiResponse,validationMessage) {
   'use strict';
   
 	var vm = this;
@@ -17,6 +17,12 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
   
 	$scope.trueData = false;
 	$scope.alertData = true;
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
 	
 	$scope.viewLedgerDetails = function(id){
 		
@@ -359,10 +365,17 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		
 		apiCall.getCall(jsuggestPath).then(function(response3){
 			
-			vm.allLedgerData = response3;
+			//console.log(response3);
 			
-			console.log(response3);
-		
+			if(apiResponse.noContent == response3){
+				
+				vm.allLedgerData = [];
+			}
+			else{
+				
+				vm.allLedgerData = response3;
+			}
+			
 		});
 	}
 	
@@ -392,14 +405,23 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 				
 				toaster.pop('success', 'Title', 'Successfull');
 				
+				
 				//Auto suggest Client Name For Debit
 				var jsuggestPath = apiPath.getLedgerJrnl+$scope.ledgerForm.companyDropDown.companyId;
 				
 				apiCall.getCall(jsuggestPath).then(function(response3){
 					
-					vm.allLedgerData = response3;
+					if(apiResponse.noContent == response3){
+			
+						vm.allLedgerData = [];
+					}
+					else{
+						
+						vm.allLedgerData = response3;
+					}
 				
 				});
+				
 			
 				$scope.ledgerForm = [];
 				
@@ -407,6 +429,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 				for (var key of formdata.keys()) {
 				   formdata.delete(key); 
 				}
+				
 				formdata.delete('balanceFlag');
 				formdata.delete('ledgerName');
 				formdata.delete('alias');
@@ -564,4 +587,4 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster","getSetFactory","$state","apiResponse"];
+AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster","getSetFactory","$state","apiResponse","validationMessage"];

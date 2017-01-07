@@ -5,7 +5,9 @@
     "icon": "icon-bar-graph",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewSales", "translate": "" },
-      { "text": "Add/Edit", "sref": "app.AccSales", "translate": "" }
+      { "text": "Add/Edit", "sref": "app.AccSales", "translate": "" },
+	  { "text": "Retail Sales",  "sref": "app.AccRetailSales", "translate": "" },
+      { "text": "Whole Sales", "sref": "app.AccWholeSales", "translate": "" }
     ]
   },
   {

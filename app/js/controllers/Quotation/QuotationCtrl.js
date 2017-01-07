@@ -6,14 +6,21 @@
 
 App.controller('QuotationController', QuotationController);
 
-function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
+function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toaster,apiResponse,validationMessage) {
   'use strict';
  	var vm = this;
 	var data =[];
 	$scope.addquotation =[];
 	
 	$scope.addquotation.quotationType = "prefix";
- 
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	//$scope.validationPattern = validationPattern; //pattern
+	
+	/* VALIDATION END */
+	
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllQuotation).then(function(response){
 		console.log(response);
@@ -242,16 +249,25 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
 		
 			console.log(response5);
 			//$location.path('app/Invoice');
-			apiCall.getCall(apiPath.getAllQuotation).then(function(response){
-				data = response;
+			if(apiResponse.ok == response5){
 				
-				for (var i = 0; i < data.length; i++) {
-				  data[i].companyName = ""; //initialization of new property 
-				  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-				}
-				console.log(data);
-				$scope.TableData();
-			});
+				toaster.pop('success', 'Title', 'Successfull');
+				
+				apiCall.getCall(apiPath.getAllQuotation).then(function(response){
+					data = response;
+					
+					for (var i = 0; i < data.length; i++) {
+					  data[i].companyName = ""; //initialization of new property 
+					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+					}
+					console.log(data);
+					vm.tableParams.reload();
+				});
+			}
+			else{
+			
+				toaster.pop('warning', 'Opps!!', response5);
+			}
 			//toaster.pop('success', 'Title', 'Message');
 		
 	});
@@ -263,4 +279,4 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath) {
 	
   }
 }
-QuotationController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath"];
+QuotationController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage"];

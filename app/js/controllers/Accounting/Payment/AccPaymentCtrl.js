@@ -6,7 +6,7 @@
 
 App.controller('AccPaymentController', AccPaymentController);
 
-function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,apiResponse) {
+function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,apiResponse,validationMessage) {
   'use strict';
   
   var vm = this;
@@ -15,6 +15,12 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
   
   $scope.accPayment.totalAmount;
   $scope.accPayment.jfid; // JFID
+  
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
   
   var account = {};
   account.amountType = 'credit';
@@ -551,4 +557,4 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
   **/
   
 }
-AccPaymentController.$inject = ["$scope","apiCall","apiPath","$rootScope","toaster","$modal","apiResponse"];
+AccPaymentController.$inject = ["$scope","apiCall","apiPath","$rootScope","toaster","$modal","apiResponse","validationMessage"];

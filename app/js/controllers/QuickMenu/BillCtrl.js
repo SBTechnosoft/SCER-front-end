@@ -16,7 +16,7 @@ App.filter('sumOfValue', function () {
 });
 App.controller('BillController', BillController);
 
-function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope) {
+function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage) {
   'use strict';
  
 	var vm = this;
@@ -27,11 +27,17 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
 	$scope.quickBill.invoiceEndAt;
 	$scope.quickBill.invoiceId;
 	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
+	
 	vm.paymentModeDrop =['cash','credit','bank','card'];
   
   /* Table */
 	vm.AccBillTable = [];
-	vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+	vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
 	
 	$scope.addRow = function(){
 		 
@@ -41,7 +47,7 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
 		data.discountType ='flat';
 		data.discount ='';
 		data.price = '500';
-		data.qty ='1';
+		data.qty =1;
 		data.amount = '';
 		vm.AccBillTable.push(data);
 		
@@ -238,8 +244,13 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
 	 formdata.append('advance',$scope.quickBill.advance);
 	 formdata.append('balance',$scope.balanceTable);
 	  formdata.append('paymentMode',$scope.quickBill.paymentMode);
-	 formdata.append('bankName',$scope.quickBill.BankName.bankName);
-	  formdata.append('checkNumber',$scope.quickBill.chequeNo);
+	  
+	  if($scope.quickBill.paymentMode == 'bank'){
+		  
+		 formdata.append('bankName',$scope.quickBill.BankName.bankName);
+		formdata.append('checkNumber',$scope.quickBill.chequeNo);
+	  }
+	
 	  formdata.append('remark',$scope.quickBill.remark);
 	 
 	 formdata.append('billNumber','');
@@ -292,32 +303,32 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
 			
 			$scope.quickBill = [];
 			vm.dt1 = new Date();
-			vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+			vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
 			
 			
-			// formdata.delete('companyId');
-			// formdata.delete('entryDate');
-			// formdata.delete('contactNo');
-			// formdata.delete('workNo');
-			// formdata.delete('companyName');
-			// formdata.delete('clientName');
-			// formdata.delete('invoiceNumber');
-			// formdata.delete('emailId');
-			// formdata.delete('address1');
-			// formdata.delete('address2');
-			// formdata.delete('stateAbb');
-			// formdata.delete('cityId');
-			// formdata.delete('transactionDate');
-			// formdata.delete('total');
-			// formdata.delete('tax');
-			// formdata.delete('grandTotal');
-			// formdata.delete('advance');
-			// formdata.delete('balance');
-			// formdata.delete('paymentMode');
-			// formdata.delete('bankName');
-			// formdata.delete('checkNumber');
-			// formdata.delete('remark');
-			// formdata.delete('inventory');
+			formdata.delete('companyId');
+			formdata.delete('entryDate');
+			formdata.delete('contactNo');
+			formdata.delete('workNo');
+			formdata.delete('companyName');
+			formdata.delete('clientName');
+			formdata.delete('invoiceNumber');
+			formdata.delete('emailId');
+			formdata.delete('address1');
+			formdata.delete('address2');
+			formdata.delete('stateAbb');
+			formdata.delete('cityId');
+			formdata.delete('transactionDate');
+			formdata.delete('total');
+			formdata.delete('tax');
+			formdata.delete('grandTotal');
+			formdata.delete('advance');
+			formdata.delete('balance');
+			formdata.delete('paymentMode');
+			formdata.delete('bankName');
+			formdata.delete('checkNumber');
+			formdata.delete('remark');
+			formdata.delete('inventory');
 			
 	
 		}).error(function(data, status, headers, config) {
@@ -583,4 +594,4 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
   Product Model End
   **/
 }
-BillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope"];
+BillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage"];

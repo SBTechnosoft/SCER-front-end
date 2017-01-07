@@ -3,6 +3,7 @@
    <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Company</small>
 </h3>
 <div data-ng-controller="CompanyController as table" class="container-fluid">
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
       <div class="panel-heading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->

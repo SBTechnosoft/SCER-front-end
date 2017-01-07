@@ -17,7 +17,7 @@ App.filter('sumOfValue', function () {
 
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,getSetFactory,toaster,apiResponse) {
+function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,getSetFactory,toaster,apiResponse,validationMessage) {
   'use strict';
   
   var vm = this;
@@ -33,6 +33,12 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   
   vm.AccSalesTable = []; // Product Table Array
   $scope.changeProductArray = false; // Change When Update in Product Table Array
+  
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
   
   /**
 	Jsuggest Debit/Credit
@@ -258,11 +264,15 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
 				
 				console.log(response3);
-				for(var t=0;t<response3.length;t++){
+				if(response3 != apiResponse.notFound){
 					
-					for(var k=0;k<response3[t].length;k++){
+					for(var t=0;t<response3.length;t++){
 						
-						vm.clientNameDropDr.push(response3[t][k]);
+						for(var k=0;k<response3[t].length;k++){
+							
+							vm.clientNameDropDr.push(response3[t][k]);
+						}
+						
 					}
 					
 				}
@@ -271,13 +281,16 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			
 			apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
 				
-				for(var t=0;t<response3.length;t++){
+				if(response3 != apiResponse.notFound){
 					
-					for(var k=0;k<response3[t].length;k++){
+					for(var t=0;t<response3.length;t++){
 						
-						vm.clientNameDropCr.push(response3[t][k]);
+						for(var k=0;k<response3[t].length;k++){
+							
+							vm.clientNameDropCr.push(response3[t][k]);
+						}
+						
 					}
-					
 				}
 			
 			});
@@ -286,7 +299,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
-		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
 		
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 	}
@@ -350,7 +363,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		data.discountType ='flat';
 		data.discount ='';
 		data.price ='1000';
-		data.qty ='1';
+		data.qty =1;
 		data.amount = '';
 		vm.AccSalesTable.push(data);
 		$scope.changeProductArray = true;
@@ -493,7 +506,42 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	}
 	
   /* End */
-	 
+	$scope.deleteArray = function(){
+		//Delete Journal Data From formdata Object
+		if($scope.changeJrnlArray){
+			
+			var jsonJrnlDelete = angular.copy(vm.AccClientMultiTable);
+			
+			for(var i=0;i<jsonJrnlDelete.length;i++){
+				 
+				angular.forEach(jsonJrnlDelete[i], function (value,key) {
+					
+					formdata.delete('data['+i+']['+key+']',value);
+				});
+				
+			}
+			
+			
+			
+		}
+		
+		//Delete Product Data From formdata Object
+		if($scope.changeProductArray){
+			
+			var jsonProductDelete = angular.copy(vm.AccSalesTable);
+			
+			for(var i=0;i<jsonProductDelete.length;i++){
+				 
+				angular.forEach(jsonProductDelete[i], function (value,key) {
+					
+					formdata.delete('inventory['+i+']['+key+']',value);
+				});
+				
+			}
+			
+		}
+	}
+	
   $scope.pop = function()
   {
 	
@@ -532,8 +580,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				});
 				
 			}
+			// formdata.append('transactionDate',$scope.totalTable);
+			// formdata.append('transactionDate',$scope.grandTotalTable);
 			
-			var  date = new Date();
+		}
+		
+		if(formdata.has('entryDate')){
+			var  date = new Date(vm.dt1);
 			//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
 			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 			
@@ -542,8 +595,12 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				formdata.delete('transactionDate');
 			}
 			formdata.append('transactionDate',fdate); // Inventory Change the date will be Change
-			// formdata.append('transactionDate',$scope.totalTable);
-			// formdata.append('transactionDate',$scope.grandTotalTable);
+		}
+		
+		
+		if(formdata.get('tax') == '' || formdata.get('tax') == 0){
+			
+			formdata.delete('tax');
 			
 		}
 		
@@ -600,6 +657,12 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			formdata.append('tax','');
 		}
 		
+		// if(formdata.get('tax') == '' || formdata.get('tax') == 0){
+			
+			// formdata.delete('tax');
+			
+		// }
+		
 		$scope.changeJrnlArray = true; // For Delete Array In Journal FormData After Success
 		$scope.changeProductArray = true; // For Delete Array In Product FormData After Success
 		
@@ -623,6 +686,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				}
 				else{
 					
+					$scope.deleteArray();
 					toaster.pop('warning', 'Opps!!', data);
 				}
 				
@@ -635,6 +699,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				}
 				else{
 					
+					// Delete formdata  keys
+					for (var key of formdata.keys()) {
+					   formdata.delete(key); 
+					}
+					formdata.delete('tax');
+					formdata.delete('jfId');
+					$scope.deleteArray();
 					toaster.pop('warning', 'Opps!!', data);
 					
 				}
@@ -697,7 +768,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				
 				vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 			
-				vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+				vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
 			
 				apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 			
@@ -766,7 +837,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 	
-		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":"1","amount":""}];
+		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
 	
 		apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 	
@@ -1074,4 +1145,4 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	**/
   
 }
-AccSalesController.$inject = ["$scope","apiCall","apiPath","$http","$modal", "$log","$rootScope","getSetFactory","toaster","apiResponse"];
+AccSalesController.$inject = ["$scope","apiCall","apiPath","$http","$modal", "$log","$rootScope","getSetFactory","toaster","apiResponse","validationMessage"];

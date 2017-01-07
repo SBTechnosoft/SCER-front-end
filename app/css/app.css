@@ -6363,7 +6363,7 @@ body {
 }
 .app-container > aside {
   position: absolute;
-  top: 60px; /* 80 */
+  top: 60px; /* 60px 80px */
   left: 0;
   bottom: 0;
   width: 220px;

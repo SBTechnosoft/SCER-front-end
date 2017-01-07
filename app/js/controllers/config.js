@@ -119,7 +119,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/Branch',
             templateUrl: 'app/views/Branch/Branch.html?r='+Math.random(),
 			controller: 'BranchController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
 		//Add Branch
 		.state('app.AddBranch', {
@@ -144,13 +144,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.Invoice', {
             url: '/Invoice',
             templateUrl: basepath('Invoice/Invoice.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv','toaster')
         })
 		//Quotation#
 		.state('app.Quotation', {
             url: '/Quotation',
             templateUrl: basepath('Quotation/Quotation.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv','toaster')
         })
 		/*** Template ***/
 		//General
@@ -170,7 +170,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.InvProduct', {
             url: '/InvProduct',
             templateUrl: basepath('Inventory/Product/InvProduct.html?r='+Math.random()),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
 		//Add Inventory Stock
 		.state('app.AddInvStock', {
@@ -417,7 +417,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.Company', {
             url: '/Company',
             templateUrl: basepath('Company/Company.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','getBranchSrv','toaster')
         })
         .state('app.calendar', {
             url: '/calendar',

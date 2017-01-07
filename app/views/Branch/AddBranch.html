@@ -31,7 +31,7 @@
    <div class="panel panel-default">
       <h4 class="panel-heading">Basic Details</h4>
       <div class="panel-body">
-         <form  novalidate="" class="form-horizontal">
+         <form action="#" name="formBranch" class="form-validate form-horizontal">
 			
             <fieldset>
                <div class="form-group">
@@ -45,7 +45,14 @@
 				<div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Branch Name</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" tabindex="1" type="text" ng-model="addBranch.branchName" ng-change="changeBranchData('branchName',addBranch.branchName)" placeholder="Branch Name" class="form-control" />
+                     <input id="input-id-1" name="theInput" tabindex="1" type="text" ng-model="addBranch.branchName" ng-change="changeBranchData('branchName',addBranch.branchName)" placeholder="Branch Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus />
+					 
+					<span ng-messages="formBranch.theInput.$error" ng-if="formBranch.theInput.$dirty || formBranch.theInput.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternAlpha"></span>
+					</span>
+					
                   </div>
                </div>
 			</fieldset>
@@ -53,7 +60,16 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
 					<div class="col-sm-7">
-						<textarea tabindex="1" name="address" ng-model="addBranch.fisrtAddress" ng-change="changeBranchData('address1',addBranch.fisrtAddress)" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea tabindex="1" name="firstAddress" ng-model="addBranch.fisrtAddress" ng-change="changeBranchData('address1',addBranch.fisrtAddress)" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35"  ></textarea>
+						
+						<span ng-messages="formBranch.firstAddress.$error" ng-if="formBranch.firstAddress.$dirty || formBranch.firstAddress.$touched"  role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorPatternAlphaNumeric"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+							
+						</span>
+					
 					</div>
 				</div>
 			</fieldset>
@@ -61,7 +77,15 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
 					<div class="col-sm-7">
-						<textarea tabindex="1" name="address" ng-model="addBranch.secondAddress" ng-change="changeBranchData('address2',addBranch.secondAddress)" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea tabindex="1" name="secondAddress" ng-model="addBranch.secondAddress" ng-change="changeBranchData('address2',addBranch.secondAddress)" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35" ></textarea>
+						
+						<span ng-messages="formBranch.secondAddress.$error" ng-if="formBranch.secondAddress.$dirty || formBranch.secondAddress.$touched"  role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorPatternAlphaNumeric"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
+							
 					</div>
 				</div>
 			</fieldset>
@@ -69,7 +93,12 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">State</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="1" ng-model="addBranch.stateDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" class="form-control chosen-select" ng-change="ChangeCity('stateAbb',addBranch.stateDropDown.stateAbb)" ></select>
+                     <select chosen="" tabindex="1" name="stateAbb" ng-model="addBranch.stateDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" class="form-control chosen-select" ng-change="ChangeCity('stateAbb',addBranch.stateDropDown.stateAbb)" ng-required="true" ></select>
+					 
+					 <span ng-messages="formBranch.stateAbb.$error" ng-if="formBranch.stateAbb.$dirty || formBranch.stateAbb.$touched" role="alert">
+						<span ng-messages-include="errorRequired"></span>
+					</span>
+						
                   </div>
                </div>
 			</fieldset>
@@ -77,7 +106,12 @@
                <div class="form-group">
                   <label class="col-sm-2 control-label">City</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="1" ng-model="addBranch.cityDropDown" ng-change="changeBranchData('cityId',addBranch.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select"></select>
+                     <select chosen="" tabindex="1" name="city" ng-model="addBranch.cityDropDown" ng-change="changeBranchData('cityId',addBranch.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select" ng-required="true"></select>
+					 
+					<span ng-messages="formBranch.city.$error" ng-if="formBranch.city.$dirty || formBranch.city.$touched" role="alert">
+						<span ng-messages-include="errorRequired"></span>
+					</span>
+						
                   </div>
                </div>
 			</fieldset>
@@ -85,14 +119,20 @@
 				<div class="form-group">
 					<label class="col-sm-2 control-label">PIN Code</label>
 					<div class="col-sm-3">
-					   <input type="text" tabindex="1" ng-model="addBranch.pincode" ng-change="changeBranchData('pincode',addBranch.pincode)" masked="999999" placeholder="PIN Code" class="form-control" />
+					   <input type="text" tabindex="1" name="pincode" ng-model="addBranch.pincode" ng-change="changeBranchData('pincode',addBranch.pincode)" masked="999999" placeholder="PIN Code" class="form-control" ng-required="true" ng-minlength="6" />
 					   <span class="help-block">Masked="395001"</span>
+					   
+					    <span ng-messages="formBranch.pincode.$error" ng-if="formBranch.pincode.$dirty || formBranch.pincode.$touched" role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
+					
 					</div>
 				</div>
 			</fieldset>
 			
 			 <button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="2" data-ng-click="cancel()" >Cancel</button>
-			 <button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="1" ng-click="pop(addBranch)" >Save</button>
+			 <button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="1" ng-click="pop(addBranch)" ng-disabled="formBranch.$invalid" >Save</button>
          </form>
       </div>
    </div>
@@ -100,3 +140,28 @@
    
    <!-- END panel-->
 </div>
+
+
+<script type="text/ng-template" id="errorRequired">
+	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
+</script>
+
+<script type="text/ng-template" id="errorLonglength">
+	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorShortlength">
+	<span class="text-danger" ng-message="minlength">{{errorMessage.shortLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternAlpha">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Alphabets}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternNumber">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Numbers}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternAlphaNumeric">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.AlphaNumeric}}</span>
+</script>

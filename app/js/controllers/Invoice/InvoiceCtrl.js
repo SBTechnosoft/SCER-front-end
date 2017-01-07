@@ -6,13 +6,20 @@
 
 App.controller('InvoiceController', InvoiceController);
 
-function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$location) {
+function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$location,toaster,apiResponse,validationMessage) {
   'use strict';
  var vm = this;
  var data = [];
  $scope.addInvoice = [];
  //Table
  $scope.addInvoice.invoiceType = "prefix";
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	//$scope.validationPattern = validationPattern; //pattern
+	
+	/* VALIDATION END */
 	
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllInvoice).then(function(response){
@@ -248,14 +255,24 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 		
 			//console.log(response5);
 			//$location.path('app/Invoice');
-			apiCall.getCall(apiPath.getAllInvoice).then(function(response){
-				data = response;
-				for (var i = 0; i < data.length; i++) {
-				  data[i].companyName = ""; //initialization of new property 
-				  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-				}
-				$scope.TableData();
-			});
+			if(apiResponse.ok == response5){
+				
+				toaster.pop('success', 'Title', 'Successfull');
+					
+				apiCall.getCall(apiPath.getAllInvoice).then(function(response){
+					data = response;
+					for (var i = 0; i < data.length; i++) {
+					  data[i].companyName = ""; //initialization of new property 
+					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+					}
+					
+					vm.tableParams.reload();
+				});
+			}
+			else{
+			
+				toaster.pop('warning', 'Opps!!', response5);
+			}
 			//toaster.pop('success', 'Title', 'Message');
 		
 	});
@@ -267,4 +284,4 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 	
   }
 }
-InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath","$location"];
+InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath","$location","toaster","apiResponse","validationMessage"];

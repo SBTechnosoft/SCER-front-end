@@ -6,7 +6,7 @@
 
 App.controller('AccLedgerModalController', AccLedgerModalController);
 
-function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,ledgerIndex,companyId) {
+function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,ledgerIndex,companyId,validationMessage) {
   'use strict';
   
 	$scope.ledgerIndex = ledgerIndex;
@@ -16,6 +16,13 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 	$scope.ledgerForm = [];	
 	  
 	 $scope.defaultCompany = companyId;
+	 
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
+	
 	 
 	//Get Company
 	$scope.companyDrop=[];
@@ -138,4 +145,4 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 	
   
 }
-AccLedgerModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","ledgerIndex","companyId"];
+AccLedgerModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","ledgerIndex","companyId","validationMessage"];

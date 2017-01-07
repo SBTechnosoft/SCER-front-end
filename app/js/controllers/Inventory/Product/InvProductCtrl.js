@@ -6,7 +6,7 @@
 
 App.controller('InvProductController', InvProductController);
 
-function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location) {
+function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -238,15 +238,32 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
       }
   });
   
-  $scope.edit_comp = function(id)
+  $scope.editProduct = function(id)
   {
 	  $location.path('app/AddInvProduct/'+id);
   }
   
-  $scope.delete_comp = function(id)
+  $scope.deleteProduct = function(id)
   {
-	  alert(id);
+		//alert(id);
+	  
+		apiCall.deleteCall(apiPath.getAllProduct+'/'+id).then(function(response){
+		
+			console.log(response);
+			
+			if(apiResponse.ok == response){
+				
+				toaster.pop('success', 'Title', 'Delete SuccessFully');
+				vm.tableParams.reload();
+				
+			}
+			else{
+
+				toaster.pop('warning', 'Opps!!', response);
+			}
+
+		});
   }
 
 }
-InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location"];
+InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster"];

@@ -6,13 +6,19 @@
 
 App.controller('InvGroupController', InvGroupController);
 
-function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll,toaster,apiResponse) {
+function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll,toaster,apiResponse,validationMessage) {
 	
   'use strict';
   var vm = this;
 	$scope.invGroupData = [];
 	var formdata = new FormData();
 	$scope.invGroupID = [];
+	
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
 	
 	var tree;
 
@@ -349,4 +355,4 @@ $scope.branchF = [
   
 
 }
-InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll","toaster","apiResponse"];
+InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll","toaster","apiResponse","validationMessage"];

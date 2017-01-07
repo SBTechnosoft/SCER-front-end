@@ -6,12 +6,18 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse) {
+function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse,validationMessage) {
   'use strict';
   var vm = this;
   $scope.addInvProduct = [];
   var formdata = new FormData();
   
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
+	
   // Chosen data
   // ----------------------------------- 
 		
@@ -99,6 +105,27 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 				$scope.addInvProduct.measureUnit = res.measurementUnit;
 			
 		});
+	}
+	else{
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+		
+			$scope.addInvProduct.company = response;
+			
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			//Get Branch
+			apiCall.getCall(getAllBranch).then(function(response4){
+				
+				vm.branchDrop = response4;
+					
+			});
+			
+			formdata.append('companyId',$scope.addInvProduct.company.companyId);
+			
+		});
+		
 	}
 
   // Datepicker
@@ -282,6 +309,10 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 		else{
 			
 			//formdata.append('branchId',1);
+			// if(!formdata.has('companyId')){
+				
+				// formdata.append('companyId',$scope.addInvProduct.company.companyId);
+			// }
 			formdata.append('isDisplay','yes');
 			apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
 			
@@ -309,4 +340,4 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
   
   
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse"];
+AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse","validationMessage"];

@@ -7,13 +7,15 @@
 <!-- START panel-->
 <div  class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	
+	<form  action="#" name="formSales" class="form-validate form-horizontal">
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
 		<div class="panel-body">
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="accSales.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accSales.companyDropDown.companyId)" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="accSales.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accSales.companyDropDown.companyId)" class="form-control chosen-select" ng-required="true" ></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
@@ -34,13 +36,19 @@
 		<div class="panel panel-default">
 		<h4 class="panel-heading">Sales</h4>
 			<div class="panel-body">
-				 <form method="get" action="/" novalidate="" class="form-horizontal">
 					
 					<fieldset>
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Invoice#</label>
 						  <div class="col-sm-6">
-							 <input ng-model="accSales.invoiceNo" ng-change="changeAccSales('invoiceNumber',accSales.invoiceNo)" id="input-id-1" type="text" placeholder="Invoice Number" class="form-control" dir="rtl" />
+							 <input ng-model="accSales.invoiceNo" name="invoice" ng-change="changeAccSales('invoiceNumber',accSales.invoiceNo)" id="input-id-1" type="text" placeholder="Invoice Number" class="form-control" dir="rtl" ng-minlength="2" ng-required="true"  ng-pattern="/^[0-9]*$/" auto-focus/>
+							 
+							 <span ng-messages="formSales.invoice.$error" ng-if="formSales.invoice.$dirty || formSales.invoice.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="shortLength"></span>
+								<span ng-messages-include="errorPatternNumber"></span>
+							</span>
+						
 						  </div>
 					   </div>
 					</fieldset>
@@ -60,7 +68,7 @@
 						  </div>
 					   </div>
 					</fieldset-->
-				</form>
+				
 			</div>
 			<!-- Client Multiple Table -->
 			<table  class="table table-bordered table-striped">
@@ -75,43 +83,50 @@
 				</thead>
 				<tbody >
 					<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable">
-						<td>
-							<select  ng-model="item.amountType"  class="form-control" ng-change="changeAmountType($index)" >
-								<option value="debit" selected="selected" >Dr</option>
-								<option value="credit" ng-if="$index!=0" >Cr</option>
-							</select>
-						</td>
-						<td ng-if="item.amountType=='debit'">
-							<div class="input-group" >
-								<input typeahead="item.ledgerName for item in form.clientNameDropDr | filter:$viewValue | limitTo:10" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="Enter Client Name" typeahead-editable="false"  />
-								<span class="input-group-btn" >
-								<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
-								</span>
-							</div>
-							<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
-						</td>
-						<td ng-if="item.amountType=='credit'">
-							<div class="input-group" >
-								<input typeahead="item.ledgerName for item in form.clientNameDropCr | filter:$viewValue | limitTo:10" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="Enter Client Name" typeahead-editable="false"  />
-								<span class="input-group-btn" >
-								<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
-								</span>
-							</div>
-							<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
-						</td>
-						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" />
-						</td>
-						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" />
-						</td>
-						<td style="">
-							<center>
-								<i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add" ng-if="$index!=0"></i>
-								&nbsp;
-								<i ng-click="removeClientRow($index)" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0&&$index!=1"></i>
-							</center>
-						</td>
+						
+							<td>
+								<select  ng-model="item.amountType"  class="form-control" ng-change="changeAmountType($index)" >
+									<option value="debit" selected="selected" >Dr</option>
+									<option value="credit" ng-if="$index!=0" >Cr</option>
+								</select>
+							</td>
+							<td ng-if="item.amountType=='debit'">
+								<div class="input-group" >
+									<input typeahead="item.ledgerName for item in form.clientNameDropDr | filter:$viewValue | limitTo:10" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
+									<span class="input-group-btn" >
+									<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+									</span>
+									
+								</div>
+								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
+							</td>
+							<td ng-if="item.amountType=='credit'">
+								<div class="input-group" >
+									<input typeahead="item.ledgerName for item in form.clientNameDropCr | filter:$viewValue | limitTo:10" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
+									<span class="input-group-btn" >
+									<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+									</span>
+								</div>
+								
+								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
+							</td>
+							<td>
+								<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" />
+							
+							</td>
+							<td>
+								<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" />
+								
+							</td>
+							<td style="">
+								<center>
+									<!--i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add" ng-if="$index!=0"></i-->
+									<i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"></i>
+									&nbsp;
+									<i ng-click="removeClientRow($index)" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0&&$index!=0"></i>
+								</center>
+							</td>
+						
 					</tr>
 					<tr>
 						<td></td>
@@ -172,7 +187,7 @@
 				<tr id="addAfter" ng-repeat="item in form.AccSalesTable">
 					<td>
 						<div class="input-group">
-							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | limitTo:10" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)" />
+							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | limitTo:10" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)" typeahead-editable="false" ng-required="true" />
 							<span class="input-group-btn" >
 							   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 							</span>
@@ -183,13 +198,15 @@
 							<option value="flat" selected="selected">Flat</option>
 							<option value="percentage">Percentage</option>
 						</select>
-						<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" style="width:50%;" dir="rtl" /> 
+						<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" style="width:50%;" dir="rtl" ng-pattern="/^[0-9]*$/" /> 
 					</td>
 					<td>
 						<span style="float:right">{{item.price}}</span>
 					</td>
 					<td>
-						<input id="input-id-1" type="text" ng-model="item.qty" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" /> 
+						<input id="input-id-1" type="number" ng-model="item.qty" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^(0|[1-9]\d{0,8})$/" />
+						
+						
 					</td>
 					<td >
 						<!--span style="float:right">{{item.price*item.qty}}</span-->
@@ -255,7 +272,13 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td><input id="input-id-1" type="text" ng-model="accSales.tax" ng-change="changeAccSales('tax',accSales.tax)" class="form-control"  dir="rtl" /> </td>
+					<td>	<input id="input-id-1" name="tax" type="text" ng-model="accSales.tax" ng-change="changeAccSales('tax',accSales.tax)" class="form-control"  dir="rtl"  ng-pattern="/^[0-9]*$/" /> 
+					
+						<span ng-messages="formSales.tax.$error" ng-if="formSales.tax.$dirty || formSales.tax.$touched"  role="alert">
+							<span ng-messages-include="errorPatternNumber"></span>
+						</span>
+					
+					</td>
 					<td></td>
 				</tr>
 				<tr>
@@ -274,8 +297,8 @@
 		<textarea ng-model="accSales.remark" name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 		<br />
 		<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-		<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" >Save</button>
-			
+		<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" ng-disabled="formSales.$invalid" >Save</button>
+	</form>
    <!-- END panel-->
 </div>
 
@@ -311,4 +334,38 @@
 		</table>
 			  
 	</div>
+</script>
+
+
+<script type="text/ng-template" id="errorRequired">
+	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
+</script>
+
+
+<script type="text/ng-template" id="errorEmail">
+	<span class="text-danger" ng-message="email">{{errorMessage.email}}</span>
+</script>
+
+<script type="text/ng-template" id="errorLonglength">
+	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorShortlength">
+	<span class="text-danger" ng-message="minlength">{{errorMessage.shortLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternAlpha">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Alphabets}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternNumber">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Numbers}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternAlphaNumeric">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.AlphaNumeric}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternThisSpecial">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacter}}</span>
 </script>

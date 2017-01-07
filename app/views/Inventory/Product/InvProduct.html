@@ -5,7 +5,7 @@
    Product</small>
 </h3>
 <div data-ng-controller="InvProductController as table" class="container-fluid">
-	
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
       <div class="panel-heading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
@@ -25,8 +25,8 @@
 		
 			   <td data-title="'Action'" > 
 					<center>
-						<i ui-sref="" ng-click="edit_comp(user.productId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
-						<i ui-sref="" ng-click="delete_comp(user.productId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
+						<i ui-sref="" ng-click="editProduct(user.productId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+						<i ui-sref="" ng-click="deleteProduct(user.productId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
 					</center>
 				</td>
             </tr>

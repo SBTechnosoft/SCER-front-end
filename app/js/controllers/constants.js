@@ -121,7 +121,25 @@ App
   })
   //Api Path
   .constant('apiResponse', {
-    'ok': '200: OK'
+    'ok': '200: OK',
+	'noContent': '204: No Content',
+	'notFound': '404: Not Found'
+  })
+  //Validation Pattern
+  .constant('validationPattern', {
+    'alphabets': '/^[a-zA-Z]*$/'
+  })
+  //Validation Error Message
+  .constant('validationMessage', {
+    'require': 'This Field is Required',
+	'Alphabets': 'Only Alphabets',
+	'AlphaNumeric': 'Only Alphabets & Numbers',
+	'Numbers': 'Only Numbers',
+	'longLength': 'Length is too Long.',
+	'shortLength': 'Length is too Short.',
+	'thisSpecialCharacter': 'This Special Character Not Allowed',
+	'thisSpecialCharacterAndNumber': 'Special Character & Number Not Allowed',
+	'email': 'Enter a Valid Email'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

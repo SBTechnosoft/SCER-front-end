@@ -1,11 +1,12 @@
+
 <h3>
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
-   <a ui-sref="app.table-ngtable" >Company</a> >> 
+   <a ui-sref="app.Company" >Company</a> >> 
    Add New Company</small>
 </h3>
 <!-- START panel-->
-<div data-ng-controller="AddCompanyController as form" class="container-fluid">
+<div data-ng-controller="AddCompanyController as form" class="container-fluid" >
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="panel panel-default" ng-show="AddCompanyModify">
 		 <!--h4 class="panel-heading"></h4-->
@@ -23,170 +24,283 @@
             </div>
 		 </div>
 	</div>
-   <div class="panel panel-default">
-      <h4 class="panel-heading">Basic Details</h4>
-      <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
-			<div class="col-md-9">
-            <fieldset>
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Name</label>
-                  <div class="col-sm-8">
-                     <input id="input-id-1" tabindex="1" ng-model="addCompany.Name" type="text" placeholder="Name" class="form-control" ng-change="changeCompanyData('companyName',addCompany.Name)"/>
-                  </div>
-               </div>
-            </fieldset>
-			<fieldset>
-				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Display Name</label>
-                  <div class="col-sm-8">
-                     <input id="input-id-1" tabindex="2" ng-model="addCompany.displayName" ng-change="changeCompanyData('companyDisplayName',addCompany.displayName)"  type="text" placeholder="Display Name" class="form-control" />
-                  </div>
-               </div>
-			</fieldset>
+	<form  action="#" name="formCompany" class="form-validate form-horizontal">
+	   <div class="panel panel-default">
+		  <h4 class="panel-heading">Basic Details</h4>
+		  <div class="panel-body">
 			
-			<fieldset>
-				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
-					<div class="col-sm-8">
-						<textarea style="" tabindex="2" name="address"   placeholder="Your First address" data-ng-model="addCompany.address1" ng-change="changeCompanyData('address1',addCompany.address1)" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+				<div class="col-md-9">
+				<fieldset>
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">Name</label>
+					  <div class="col-sm-8">
+						 <!--input id="input-id-1" tabindex="1" ng-model="addCompany.Name" type="text" placeholder="Name" class="form-control" ng-change="changeCompanyData('companyName',addCompany.Name)" focus-me="shouldBeOpen" /-->
+						 <input id="input-id-1" name="theInput" tabindex="1" ng-model="addCompany.Name" type="text" placeholder="Name" class="form-control" ng-change="changeCompanyData('companyName',addCompany.Name)"  ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35"  auto-focus/>
+						 <!--p ng-show="formCompany.theInput.$error.maxlength" class="text-danger">{{errorMessage.longLength}}</p>
+						 <p ng-show="formCompany.theInput.$error.pattern" class="text-danger">{{errorMessage.Alphabets}}</p-->
+						 
+							  <span ng-messages="formCompany.theInput.$error" ng-if="formCompany.theInput.$dirty || formCompany.theInput.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternAlpha"></span>
+							  </span>
+							 <!--div ng-messages="formCompany.theInput.$error" role="alert">
+								<div ng-message="required">This Field is Require.</div>
+								<div ng-message="maxlength">Length is Too Long.</div>
+							 </div-->
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">Display Name</label>
+					  <div class="col-sm-8">
+						 <input id="input-id-1" name="displayName" tabindex="2" ng-model="addCompany.displayName" ng-change="changeCompanyData('companyDisplayName',addCompany.displayName)" required="" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="50" type="text" placeholder="Display Name" class="form-control" />
+						 
+						<span ng-messages="formCompany.displayName.$error" ng-if="formCompany.displayName.$dirty || formCompany.displayName.$touched"  role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorPatternAlpha"></span>
+						</span>
+						
+					  </div>
+				   </div>
+				</fieldset>
+				
+				<fieldset>
+					<div class="form-group">
+						<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
+						<div class="col-sm-8">
+							<textarea style="" tabindex="2" name="firstAddress"   placeholder="Your First address" data-ng-model="addCompany.address1" ng-change="changeCompanyData('address1',addCompany.address1)" class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
+							
+							<span ng-messages="formCompany.firstAddress.$error" ng-if="formCompany.firstAddress.$dirty || formCompany.firstAddress.$touched" role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorPatternAlphaNumeric"></span>
+							</span>
+						
+						</div>
 					</div>
-				</div>
-			</fieldset>
-			<fieldset>
-				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
-					<div class="col-sm-8">
-						<textarea style="" tabindex="2" name="address"  placeholder="Your Second address" data-ng-model="addCompany.address2" ng-change="changeCompanyData('address2',addCompany.address2)" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+						<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
+						<div class="col-sm-8">
+							<textarea style="" tabindex="2" name="secondAddress"  placeholder="Your Second address" data-ng-model="addCompany.address2" ng-change="changeCompanyData('address2',addCompany.address2)" class="form-control ng-pristine ng-valid ng-touched" required="" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
+							
+							<span ng-messages="formCompany.secondAddress.$error" ng-if="formCompany.secondAddress.$dirty || formCompany.secondAddress.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorPatternAlphaNumeric"></span>
+							</span>
+						
+						</div>
 					</div>
-				</div>
-			</fieldset>
-			<fieldset>
-               <div class="form-group">
-                  <label class="col-sm-2 control-label">State</label>
-                  <div class="col-sm-5">
-                     <select chosen="" tabindex="2" data-ng-model="addCompany.statesDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',addCompany.statesDropDown.stateAbb)" class="form-control chosen-select"></select>
-                  </div>
-               </div>
-			</fieldset>
-			<fieldset>
-               <div class="form-group">
-                  <label class="col-sm-2 control-label">City</label>
-                  <div class="col-sm-5">
-                     <select chosen="" tabindex="2" data-ng-model="addCompany.cityDropDown" ng-change="changeCompanyData('cityId',addCompany.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select"></select>
-                  </div>
-               </div>
-			</fieldset>
-			<fieldset>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">PIN Code</label>
-					<div class="col-sm-3">
-					   <input type="text" tabindex="2" ng-model="addCompany.pincode" ng-change="changeCompanyData('pincode',addCompany.pincode)"  masked="999999" placeholder="PIN Code" class="form-control" />
-					   <span class="help-block">Masked="395001"</span>
+				</fieldset>
+				<fieldset>
+				   <div class="form-group">
+					  <label class="col-sm-2 control-label">State</label>
+					  <div class="col-sm-5">
+						 <select name="stateAbb" chosen="" tabindex="2" data-ng-model="addCompany.statesDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',addCompany.statesDropDown.stateAbb)" class="form-control chosen-select ng-pristine ng-valid ng-touched" required></select>
+						 
+						 <span ng-messages="formCompany.stateAbb.$error" ng-if="formCompany.stateAbb.$dirty || formCompany.stateAbb.$touched" role="alert">
+							<span ng-messages-include="errorRequired"></span>
+						</span>
+						
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+				   <div class="form-group">
+					  <label class="col-sm-2 control-label">City</label>
+					  <div class="col-sm-5">
+						 <select name="city" chosen="" tabindex="2" data-ng-model="addCompany.cityDropDown" ng-change="changeCompanyData('cityId',addCompany.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select" required=""></select>
+						 
+						 <span ng-messages="formCompany.city.$error" ng-if="formCompany.city.$dirty || formCompany.city.$touched" role="alert">
+							<span ng-messages-include="errorRequired"></span>
+						</span>
+							
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+						<label class="col-sm-2 control-label">PIN Code</label>
+						<div class="col-sm-3">
+						   <input type="text" name="pincode" tabindex="2" ng-model="addCompany.pincode" ng-change="changeCompanyData('pincode',addCompany.pincode)"  masked="999999" placeholder="PIN Code" class="form-control" required="" />
+						   <span class="help-block">Masked="395001"</span>
+						   
+						   <span ng-messages="formCompany.pincode.$error" ng-if="formCompany.pincode.$dirty || formCompany.pincode.$touched" role="alert">
+								<span ng-messages-include="errorRequired"></span>
+							</span>
+						</div>
 					</div>
+				</fieldset>
 				</div>
-			</fieldset>
-			</div>
-			<div class="col-md-3">
-			<img src="http://api.siliconbrain.co.in/{{addCompany.documentUrl}}{{addCompany.documentName}}" height="100" width="80%" class="brand-logo-collapsed"/>
-			<input id="input-id-1" type="file" tabindex="1" onchange="angular.element(this).scope().uploadFile(this.files)"  />
-			</div>
-         </form>
-      </div>
-   </div>
-   <div class="panel panel-default">
-      <h4 class="panel-heading">Registration & Texation Details</h4>
-      <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
-            <fieldset>
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">TIN</label>
-                  <div class="col-sm-4">
-                     <input id="input-id-1" tabindex="2" ng-model="addCompany.tin" ng-change="changeCompanyData('tin',addCompany.tin)"   type="text" placeholder="TIN Number" class="form-control" />
-                  </div>
-				  
-				   <label for="input-id-1" class="col-sm-2 control-label">PAN</label>
-                  <div class="col-sm-3">
-                     <input id="input-id-1" tabindex="2" ng-model="addCompany.pan" ng-change="changeCompanyData('pan',addCompany.pan)"  masked="" type="text" placeholder="PAN Number" class="form-control" dir="rtl" />
-                  </div>
-				  
-               </div>
-            </fieldset>
-			<fieldset>
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">VAT</label>
-                  <div class="col-sm-4">
-                     <input id="input-id-1" tabindex="2" ng-model="addCompany.vat" ng-change="changeCompanyData('vatNo',addCompany.vat)"  masked="" type="text" placeholder="VAT" class="form-control" dir="rtl" />
-                  </div>
-				  
-				   <label for="input-id-1" class="col-sm-2 control-label">GST</label>
-                  <div class="col-sm-3">
-                     <input id="input-id-1" tabindex="2" masked="" ng-model="addCompany.gst" ng-change="changeCompanyData('gst',addCompany.gst)"  type="text" placeholder="GST Number" class="form-control" dir="rtl" />
-                  </div>
-				  
-               </div>
-            </fieldset>
-			<fieldset>
-				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Service Tax</label>
-                  <div class="col-sm-7">
-                     <input id="input-id-1" tabindex="2" ng-model="addCompany.serviceTax" ng-change="changeCompanyData('serviceTaxNo',addCompany.serviceTax)"  type="text" placeholder="Display Name" class="form-control" />
-                  </div>
-               </div>
-			</fieldset>
-         </form>
-      </div>
-   </div>
-   <div class="panel panel-default">
-      <h4 class="panel-heading">Settings</h4>
-      <div class="panel-body">
-         <form method="get" action="/" novalidate="" class="form-horizontal">
-            <fieldset>
-               <div class="form-group">
-                  <label class="col-sm-3 control-label">Base Currency Symbol</label>
-                  <div class="col-sm-5">
-                     <select chosen="" tabindex="2" data-ng-model="addCompany.currency" ng-change="changeCompanyData('basicCurrencySymbol',addCompany.currency)" data-ng-options="s for s in form.states" class="form-control chosen-select">
-						<option value=""></option>
-					 </select>
-                  </div>
-               </div>
-            </fieldset>
-			<fieldset>
-				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Formal Name</label>
-                  <div class="col-sm-5">
-                     <input id="input-id-1" tabindex="2" ng-model="addCompany.formalName" ng-change="changeCompanyData('formalName',addCompany.formalName)"  type="text" placeholder="Formal Name" class="form-control" />
-                  </div>
-               </div>
-			</fieldset>
-			<fieldset>
-				<div class="form-group">
-                  <label class="col-sm-3 control-label">Number of Decimal Points</label>
-                  <div class="col-sm-5">
-                     <select chosen="" tabindex="2" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select">
-						<option value=""></option>
-					 </select>
-                  </div>
-               </div>
-			</fieldset>
-			<fieldset>
-				<div class="form-group">
-					 <label class="col-sm-3 control-label">Currency Symbol</label>
-					 <div class="col-sm-5">
-						<select chosen="" tabindex="2" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" class="form-control chosen-select">
+				<div class="col-md-3">
+				<img src="http://api.siliconbrain.co.in/{{addCompany.documentUrl}}{{addCompany.documentName}}" height="100" width="80%" class="brand-logo-collapsed"/>
+				<input id="input-id-1" type="file" tabindex="1" onchange="angular.element(this).scope().uploadFile(this.files)"  />
+				</div>
+		   
+		  </div>
+	   </div>
+	   <div class="panel panel-default">
+		  <h4 class="panel-heading">Registration & Texation Details</h4>
+		  <div class="panel-body">
+			
+				<fieldset>
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">TIN</label>
+					  <div class="col-sm-4">
+						 <input id="input-id-1" tabindex="2" name="tin" ng-model="addCompany.tin" ng-change="changeCompanyData('tin',addCompany.tin)" ng-pattern="/^([a-zA-Z0-9])+$/" ng-minlength="11" ng-maxlength="11"  type="text" placeholder="TIN Number" class="form-control" />
+						 
+						<span ng-messages="formCompany.tin.$error" ng-if="formCompany.tin.$dirty || formCompany.tin.$touched" role="alert">
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
+							
+					  </div>
+					  
+					   <label for="input-id-1" class="col-sm-2 control-label">PAN</label>
+					  <div class="col-sm-3">
+						 <input id="input-id-1" tabindex="2" name="pan" ng-model="addCompany.pan" ng-change="changeCompanyData('pan',addCompany.pan)" type="text" placeholder="PAN Number" ng-pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/" ng-minlength="10" ng-maxlength="10" class="form-control" dir="rtl" />
+						 
+						 <span ng-messages="formCompany.pan.$error" ng-if="formCompany.pan.$dirty || formCompany.pan.$touched" role="alert">
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
+						
+					  </div>
+					  
+				   </div>
+				</fieldset>
+				<fieldset>
+				   <div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">VAT</label>
+					  <div class="col-sm-4">
+						 <input id="input-id-1" tabindex="2" name="vatNo" ng-model="addCompany.vat" ng-change="changeCompanyData('vatNo',addCompany.vat)"  masked="" type="text" placeholder="VAT" ng-pattern="/^([a-zA-Z0-9])+$/" ng-minlength="11" ng-maxlength="11" class="form-control" dir="rtl" />
+						 
+						  <span ng-messages="formCompany.vatNo.$error" ng-if="formCompany.vatNo.$dirty || formCompany.vatNo.$touched" role="alert">
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
+						
+					  </div>
+					  
+					   <label for="input-id-1" class="col-sm-2 control-label">GST</label>
+					  <div class="col-sm-3">
+						 <input id="input-id-1" tabindex="2" name="gst" masked="" ng-model="addCompany.gst" ng-change="changeCompanyData('gst',addCompany.gst)"   type="text" placeholder="GST Number" class="form-control" dir="rtl" />
+					  </div>
+					  
+				   </div>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+					  <label for="input-id-1" class="col-sm-2 control-label">Service Tax</label>
+					  <div class="col-sm-7">
+						 <input id="input-id-1" name="serviceTax" tabindex="2" ng-model="addCompany.serviceTax" ng-change="changeCompanyData('serviceTaxNo',addCompany.serviceTax)"  ng-pattern="/^([a-zA-Z0-9]{15})+$/" ng-minlength="1" ng-maxlength="35"  type="text" placeholder="Display Name" class="form-control" />
+						 
+						<span ng-messages="formCompany.serviceTax.$error" ng-if="formCompany.serviceTax.$dirty || formCompany.serviceTax.$touched" role="alert">
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
+						
+					  </div>
+				   </div>
+				</fieldset>
+			 
+		  </div>
+	   </div>
+	   <div class="panel panel-default">
+		  <h4 class="panel-heading">Settings</h4>
+		  <div class="panel-body">
+			
+				<fieldset>
+				   <div class="form-group">
+					  <label class="col-sm-3 control-label">Base Currency Symbol</label>
+					  <div class="col-sm-5">
+						 <select chosen="" tabindex="2" data-ng-model="addCompany.currency" ng-change="changeCompanyData('basicCurrencySymbol',addCompany.currency)" data-ng-options="s for s in form.states" class="form-control chosen-select">
 							<option value=""></option>
-						</select>
+						 </select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+					  <label for="input-id-1" class="col-sm-3 control-label">Formal Name</label>
+					  <div class="col-sm-5">
+						 <input id="input-id-1" name="formalName" tabindex="2" ng-model="addCompany.formalName" ng-change="changeCompanyData('formalName',addCompany.formalName)" ng-pattern="/^[a-zA-Z &_`#().\'-]+$/" ng-minlength="1" ng-maxlength="35"   type="text" placeholder="Formal Name" class="form-control" />
+						 
+						 <span ng-messages="formCompany.formalName.$error" ng-if="formCompany.formalName.$dirty || formCompany.formalName.$touched" role="alert">
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
+						
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+					  <label class="col-sm-3 control-label">Number of Decimal Points</label>
+					  <div class="col-sm-5">
+						 <select chosen="" tabindex="2" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select">
+							<option value=""></option>
+						 </select>
+					  </div>
+				   </div>
+				</fieldset>
+				<fieldset>
+					<div class="form-group">
+						 <label class="col-sm-3 control-label">Currency Symbol</label>
+						 <div class="col-sm-5">
+							<select chosen="" tabindex="2" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" class="form-control chosen-select">
+								<option value=""></option>
+							</select>
+						</div>
 					</div>
-				</div>
-			</fieldset>
-			<button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="3">Cancel</button>
-			<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addCompanyForm(addCompany)" >Save</button>
+				</fieldset>
+				<button type="button" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="cancel()" >Cancel</button>
+				<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addCompanyForm(addCompany)" ng-disabled="formCompany.$invalid" >Save</button>
+				
 			
-         </form>
-      </div>
-   </div>
+		  </div>
+	   </div>
+   </form>
 
    
    
    <!-- END panel-->
 </div>
+
+<script type="text/ng-template" id="errorRequired">
+	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
+</script>
+
+<script type="text/ng-template" id="errorLonglength">
+	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorShortlength">
+	<span class="text-danger" ng-message="minlength">{{errorMessage.shortLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternAlpha">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Alphabets}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternNumber">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.Numbers}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternAlphaNumeric">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.AlphaNumeric}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternThisSpecial">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacter}}</span>
+</script>
+
+
