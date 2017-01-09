@@ -6,65 +6,194 @@
 
 App.controller('AddStaffController', AddStaffController);
 
-function AddStaffController($scope) {
+function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location,apiResponse,validationMessage,getSetFactory) {
   'use strict';
  
-  // Chosen data
-  // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
-
+	var vm = this;
+	$scope.addStaff = [];
+	var formdata = new FormData();
+	
+	/* VALIDATION */
+	
+		$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
+	
+	//Company Dropdown data
+	vm.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.companyDrop = responseCompanyDrop;
+	
+	});
+	
+	//Get State
+	vm.statesDrop=[];
+	apiCall.getCall(apiPath.getAllState).then(function(response3){
+		
+		vm.statesDrop = response3;
+	
+	});
+	
+	 //Update Set
+	if(Object.keys(getSetFactory.get()).length){
+		
+		$scope.addStaff.getSetStaffId = getSetFactory.get();
+		getSetFactory.blank();
+		
+		var getOneStaff = apiPath.getOneStaff+$scope.addStaff.getSetStaffId;
+		
+		apiCall.getCall(getOneStaff).then(function(response){
+		
+			//Company DropDown Selection
+			var companyDropPath = apiPath.getAllCompany+'/'+response.company.companyId;
+			apiCall.getCall(companyDropPath).then(function(res2){
+			
+				$scope.addStaff.company = res2;
+			});
+			
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+response.company.companyId;
+			//Get Branch
+			apiCall.getCall(getAllBranch).then(function(response4){
+				
+				vm.branchDrop = response4;
+			
+			});
+			
+			//Branch DropDown Selection
+			var branchDropPath = apiPath.getAllBranch+'/'+response.branch.branchId;
+			
+			apiCall.getCall(branchDropPath).then(function(res2){
+				
+				$scope.addStaff.branch = res2;
+			});
+			
+			//Staff Name
+			$scope.addStaff.name = response.userName;
+			//Staff EmailID
+			$scope.addStaff.emailId = response.emailId;
+			//Staff Password
+			$scope.addStaff.password = response.password;
+			//Staff Contact
+			$scope.addStaff.contact = response.contactNo;
+			//Staff Address
+			$scope.addStaff.address = response.address;
+			//Staff Pincode
+			$scope.addStaff.pincode = response.pincode;
+			
+			//State DropDown Selection
+			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;
+			apiCall.getCall(stateDropPath).then(function(res3){
+				$scope.addStaff.stateDropDown = res3;
+			});
+			
+			//City DropDown
+			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
+			apiCall.getCall(cityAllDropPath).then(function(res5){
+				vm.cityDrop = res5;
+			});
+			
+			//City DropDown Selection
+			var cityDropPath = apiPath.getOneCity+'/'+response.city.cityId;
+			apiCall.getCall(cityDropPath).then(function(res4){
+				$scope.addStaff.cityDropDown = res4;
+			});
+			
+		});
+	}
+	
+	  
+	$scope.changeCompany = function(Fname,state)
+	{
+		vm.branchDrop = [];
+		var getAllBranch = apiPath.getOneBranch+state;
+		//Get Branch
+		apiCall.getCall(getAllBranch).then(function(response4){
+			
+			vm.branchDrop = response4;
+		
+		});
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,state);
+	}
+	
+	
+	
+	$scope.ChangeState = function(Fname,state)
+	{
+		//console.log(apiPath.getAllCity+state);
+		var getonecity = apiPath.getAllCity+state;
+		//Get City
+		apiCall.getCall(getonecity).then(function(response4){
+			
+			vm.cityDrop = response4;
+		
+		});
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,state);
+	}
+	
+	//Changed Data When Update
+	$scope.changeStaffData = function(Fname,value){
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value);
+	}
+ 
+	$scope.addUpStaff = function(){
+		
+		if($scope.addStaff.getSetStaffId){
+			
+			var addEditPath = apiPath.getOneStaff+$scope.addStaff.getSetStaffId;
+			var popUp = "Update Successfully";
+		}
+		else{
+			
+			var addEditPath = apiPath.getAllStaff;
+			var popUp = "Insert Successfully";
+		}
+		
+		apiCall.postCall(addEditPath,formdata).then(function(response5){
+		
+			console.log(response5);
+			
+			if(apiResponse.ok == response5){
+				
+				$scope.addStaff = [];
+				toaster.pop('success', 'Title', popUp);
+				$state.go("app.Staff");
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', response5);
+			}
+		
+		});
+	}
+	
+	$scope.cancel = function(){
+		
+		$scope.addStaff = [];
+		
+		// Delete formdata  keys
+		for (var key of formdata.keys()) {
+		   formdata.delete(key); 
+		}
+	}
+	
   // Datepicker
   // ----------------------------------- 
 
@@ -195,4 +324,4 @@ function AddStaffController($scope) {
     {value: 5, name: 'Huge'}
   ];
 }
-AddStaffController.$inject = ["$scope"];
+AddStaffController.$inject = ["$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location","apiResponse","validationMessage","getSetFactory"];

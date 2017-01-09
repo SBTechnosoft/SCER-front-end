@@ -13,11 +13,14 @@
 		 Bill
 		 </h4>
 		<div class="panel-body">
+			
 			<div class="form-group">
-				<label class="col-sm-1 control-label"> Company </label>
+				
+				<label class="col-sm-2 control-label"> Company </label>
 					<div class="col-sm-4">
 						<select chosen="" data-ng-model="quickBill.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(quickBill.companyDropDown.companyId)" class="form-control chosen-select" ng-required="true"></select>
 					</div>
+				
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
@@ -29,152 +32,188 @@
 							</span>
 						 </p>
 					</div>
+				
 				<!--button type="button" class="mr mb-sm btn btn-primary">Go</button-->
 				
 			</div>
+			
 		</div>
 	</div>
    <div class="panel panel-default">
       <h4 class="panel-heading">Client Details</h4>
       <div class="panel-body">
      
-			<div class="col-md-12">
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Contact</label>
-                  <div class="col-sm-8">
-                     <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"  ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10" auto-focus />
-					 
-					<span ng-messages="formBill.contactNo.$error" ng-if="formBill.contactNo.$dirty || formBill.contactNo.$touched" role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorPatternNumber"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorShortlength"></span>
-					</span>
-							
-                  </div>
-               </div>
-            </fieldset >
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Work#</label>
-                  <div class="col-sm-8">
-                     <input ng-model="quickBill.WorkNo" name="WorkNo" id="input-id-1" type="tel" placeholder="Work Number" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" />
-					 
-					<span ng-messages="formBill.WorkNo.$error" ng-if="formBill.WorkNo.$dirty || formBill.WorkNo.$touched" role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorPatternNumber"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorShortlength"></span>
-					</span>
-							
-                  </div>
-               </div>
-            </fieldset >
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Company Name</label>
-                  <div class="col-sm-8">
-                     <input ng-model="quickBill.companyName" name="companyName" id="input-id-1" type="text" placeholder="Company Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" />
-					 
-					 <span ng-messages="formBill.companyName.$error" ng-if="formBill.companyName.$dirty || formBill.companyName.$touched" role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorPatternAlpha"></span>
-						<span ng-messages-include="errorLonglength"></span>
-					</span>
-					
-                  </div>
-               </div>
-            </fieldset>
-            <fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Client Name</label>
-                  <div class="col-sm-8">
-                     <input ng-model="quickBill.clientName" name="clientName" id="input-id-1" type="text" placeholder="Client Name" class="form-control"  ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" />
-					 
-					  <span ng-messages="formBill.clientName.$error" ng-if="formBill.clientName.$dirty || formBill.clientName.$touched" role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorPatternNumber"></span>
-						<span ng-messages-include="errorLonglength"></span>
-					</span>
-					
-                  </div>
-				  <i class="fa fa-info-circle" title="History" ui-sref="" />
-               </div>
-            </fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Invoice#</label>
-                  <div class="col-sm-8">
-                     {{quickBill.invoiceNumber}}
-                  </div>
-               </div>
-			</fieldset>
-			 <fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Email ID</label>
-					<div class="col-sm-8">
-						<div class="input-group m-b">
-							<span class="input-group-addon">@</span>
-							<input ng-model="quickBill.emailId" name="emailId" type="email" placeholder="Email ID" class="form-control" ng-required="true" />
-							
-						</div>
-						
-						<span ng-messages="formBill.emailId.$error" ng-if="formBill.emailId.$dirty || formBill.emailId.$touched"  role="alert">
-							<span ng-messages-include="errorRequired"></span>
-							<span ng-messages-include="errorEmail"></span>
-						</span>
-							
-					</div>
-               </div>
-            </fieldset>
+		<div class="col-md-12">
 			
-			<fieldset class="my-fieldset-paddingBottom">
-				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
-					<div class="col-sm-8">
-						<textarea  name="firstAddress" ng-model="quickBill.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/"></textarea>
-						
-						<span ng-messages="formBill.firstAddress.$error" ng-if="formBill.firstAddress.$dirty || formBill.firstAddress.$touched" role="alert">
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Contact</label>
+						  <div class="col-sm-8">
+							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"  ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10" auto-focus />
+							 
+							<span ng-messages="formBill.contactNo.$error" ng-if="formBill.contactNo.$dirty || formBill.contactNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
-								<span ng-messages-include="errorPatternThisSpecial"></span>
+								<span ng-messages-include="errorPatternNumber"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorShortlength"></span>
 							</span>
-							
-					</div>
+									
+						  </div>
+					   </div>
+					</fieldset >
 				</div>
-			</fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
-					<div class="col-sm-8">
-						<textarea  name="secondAddress" ng-model="quickBill.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
-						
-						<span ng-messages="formBill.secondAddress.$error" ng-if="formBill.secondAddress.$dirty || formBill.secondAddress.$touched" role="alert">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Work#</label>
+						  <div class="col-sm-8">
+							 <input ng-model="quickBill.WorkNo" name="WorkNo" id="input-id-1" type="tel" placeholder="Work Number" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" />
+							 
+							<span ng-messages="formBill.WorkNo.$error" ng-if="formBill.WorkNo.$dirty || formBill.WorkNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
-								<span ng-messages-include="errorPatternThisSpecial"></span>
+								<span ng-messages-include="errorPatternNumber"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorShortlength"></span>
 							</span>
-							
-					</div>
+									
+						  </div>
+					   </div>
+					</fieldset >
 				</div>
-			</fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-				<div class="form-group">
-					<label class="col-sm-2 control-label"> State </label>
-					<div class="col-sm-8">
-						<select chosen="" data-ng-model="quickBill.stateAbb" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',quickBill.stateAbb.stateAbb)" class="form-control chosen-select" ng-required="true" ></select>
-					</div>
-				</div>
-			</fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-				<div class="form-group">
-					<label class="col-sm-2 control-label"> City </label>
-					<div class="col-sm-8">
-						<select chosen="" data-ng-model="quickBill.cityId" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId"  class="form-control chosen-select" ng-required="true" ></select>
-					</div>
-				</div>
-			</fieldset>
-			 
 			</div>
+			
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Company Name</label>
+						  <div class="col-sm-8">
+							 <input ng-model="quickBill.companyName" name="companyName" id="input-id-1" type="text" placeholder="Company Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" />
+							 
+							 <span ng-messages="formBill.companyName.$error" ng-if="formBill.companyName.$dirty || formBill.companyName.$touched" role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorPatternAlpha"></span>
+								<span ng-messages-include="errorLonglength"></span>
+							</span>
+							
+						  </div>
+					   </div>
+					</fieldset>
+				</div>
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Client Name</label>
+						  <div class="col-sm-8">
+							 <input ng-model="quickBill.clientName" name="clientName" id="input-id-1" type="text" placeholder="Client Name" class="form-control"  ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" />
+							 
+							  <span ng-messages="formBill.clientName.$error" ng-if="formBill.clientName.$dirty || formBill.clientName.$touched" role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorPatternNumber"></span>
+								<span ng-messages-include="errorLonglength"></span>
+							</span>
+							
+						  </div>
+						  <i class="fa fa-info-circle" title="History" ui-sref="" />
+					   </div>
+					</fieldset>
+				</div>
+			</div>
+			
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Invoice#</label>
+						  <div class="col-sm-8">
+							 {{quickBill.invoiceNumber}}
+						  </div>
+					   </div>
+					</fieldset>
+				</div>
+				<div class="col-sm-6">
+					 <fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Email ID</label>
+							<div class="col-sm-8">
+								<div class="input-group m-b">
+									<span class="input-group-addon">@</span>
+									<input ng-model="quickBill.emailId" name="emailId" type="email" placeholder="Email ID" class="form-control" ng-required="true" />
+									
+								</div>
+								
+								<span ng-messages="formBill.emailId.$error" ng-if="formBill.emailId.$dirty || formBill.emailId.$touched"  role="alert">
+									<span ng-messages-include="errorRequired"></span>
+									<span ng-messages-include="errorEmail"></span>
+								</span>
+									
+							</div>
+					   </div>
+					</fieldset>
+				</div>
+			</div>
+			
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group">
+							<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
+							<div class="col-sm-8">
+								<textarea  name="firstAddress" ng-model="quickBill.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/"></textarea>
+								
+								<span ng-messages="formBill.firstAddress.$error" ng-if="formBill.firstAddress.$dirty || formBill.firstAddress.$touched" role="alert">
+										<span ng-messages-include="errorRequired"></span>
+										<span ng-messages-include="errorPatternThisSpecial"></span>
+									</span>
+									
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group">
+							<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
+							<div class="col-sm-8">
+								<textarea  name="secondAddress" ng-model="quickBill.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
+								
+								<span ng-messages="formBill.secondAddress.$error" ng-if="formBill.secondAddress.$dirty || formBill.secondAddress.$touched" role="alert">
+										<span ng-messages-include="errorRequired"></span>
+										<span ng-messages-include="errorPatternThisSpecial"></span>
+									</span>
+									
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group">
+							<label class="col-sm-3 control-label"> State </label>
+							<div class="col-sm-8">
+								<select chosen="" data-ng-model="quickBill.stateAbb" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',quickBill.stateAbb.stateAbb)" class="form-control chosen-select" ng-required="true" ></select>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group">
+							<label class="col-sm-3 control-label"> City </label>
+							<div class="col-sm-8">
+								<select chosen="" data-ng-model="quickBill.cityId" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId"  class="form-control chosen-select" ng-required="true" ></select>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			 
+		</div>
 			<!--div class="col-md-3">
 				 <button type="button" class="mr mb-sm btn btn-turquoise">View History</button>
 			</div-->
@@ -296,44 +335,57 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label class="col-sm-2 control-label"> Payment Mode </label>
-					<div class="col-sm-6">
-						<select chosen="" data-ng-model="quickBill.paymentMode" data-ng-options="s for s in form.paymentModeDrop" class="form-control chosen-select" ng-required="true" >
-						<option value=""></option>
-						</select>
-					</div>
-               </div>
-            </fieldset>
-			<fieldset class="my-fieldset-paddingBottom" ng-if="quickBill.paymentMode=='bank'">
-               <div class="form-group">
-                  <label class="col-sm-2 control-label"> Bank Name </label>
-					<div class="col-sm-6">
-						<select chosen="" data-ng-model="quickBill.BankName" data-ng-options="s.bankName for s in form.bankDrop track by s.bankId" class="form-control chosen-select"></select>
-					</div>
-               </div>
-            </fieldset>
-			<fieldset class="my-fieldset-paddingBottom" ng-if="quickBill.paymentMode=='bank'">
-				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">cheque#</label>
-                  <div class="col-sm-6">
-                     <input ng-model="quickBill.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" />
-					 <span ng-messages="formBill.chequeNo.$error" ng-if="formBill.chequeNo.$dirty || formBill.chequeNo.$touched"  role="alert">
-						<span ng-messages-include="errorPatternNumber"></span>
-					</span>
-					 
-                  </div>
-               </div>
-			</fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">Remark</label>
-					<div class="col-sm-6">
-						<textarea ng-model="quickBill.remark" name="address"  placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-					</div>
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label"> Payment Mode </label>
+							<div class="col-sm-8">
+								<select chosen="" data-ng-model="quickBill.paymentMode" data-ng-options="s for s in form.paymentModeDrop" class="form-control chosen-select" ng-required="true" >
+								<option value=""></option>
+								</select>
+							</div>
+					   </div>
+					</fieldset>
 				</div>
-			</fieldset>
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom" ng-if="quickBill.paymentMode=='bank'">
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label"> Bank Name </label>
+							<div class="col-sm-8">
+								<select chosen="" data-ng-model="quickBill.BankName" data-ng-options="s.bankName for s in form.bankDrop track by s.bankId" class="form-control chosen-select" size="5"></select>
+							</div>
+					   </div>
+					</fieldset>
+				</div>
+			</div>
+			
+			<div class="col-sm-12">
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group">
+							<label for="input-id-1" class="col-sm-3 control-label">Remark</label>
+							<div class="col-sm-8">
+								<textarea ng-model="quickBill.remark" name="address"  placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="col-sm-6">
+					<fieldset class="my-fieldset-paddingBottom" ng-if="quickBill.paymentMode=='bank'">
+						<div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">cheque#</label>
+						  <div class="col-sm-8">
+							 <input ng-model="quickBill.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" />
+							 <span ng-messages="formBill.chequeNo.$error" ng-if="formBill.chequeNo.$dirty || formBill.chequeNo.$touched"  role="alert">
+								<span ng-messages-include="errorPatternNumber"></span>
+							</span>
+							 
+						  </div>
+					   </div>
+					</fieldset>
+				</div>
+			</div>
 			<fieldset class="my-fieldset-paddingBottom">
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">Attachment</label>

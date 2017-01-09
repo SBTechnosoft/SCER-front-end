@@ -132,13 +132,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.Staff', {
             url: '/Staff',
             templateUrl: basepath('Staff/Staff.html?r='+Math.random()),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
 		//Add Staff
 		.state('app.AddStaff', {
             url: '/AddStaff',
             templateUrl: basepath('Staff/AddStaff.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
         })
 		//Invoice#
 		.state('app.Invoice', {

@@ -267,17 +267,17 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 		vm.branchDrop = response4;
 			
 	});
-	if(formdata.get(Fname))
+	if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
 		formdata.append(Fname,state);
   }
   
-  //Changed Data When Update
-  $scope.changeInvProductData = function(Fname,value){
+	//Changed Data When Update
+	$scope.changeInvProductData = function(Fname,value){
 		//console.log(Fname+'..'+value);
-		if(formdata.get(Fname))
+		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}

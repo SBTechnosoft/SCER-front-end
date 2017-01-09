@@ -118,6 +118,8 @@ App
 	'getJrnlByCompany': 'http://api.siliconbrain.co.in/accounting/journals/company/',
 	'getOneJrnl': 'http://api.siliconbrain.co.in/accounting/journals/',
 	'getLedgerJrnl':   'http://api.siliconbrain.co.in/accounting/ledgers/company/',
+	'getAllStaff': 'http://api.siliconbrain.co.in/users',
+	'getOneStaff': 'http://api.siliconbrain.co.in/users/'
   })
   //Api Path
   .constant('apiResponse', {
@@ -139,7 +141,8 @@ App
 	'shortLength': 'Length is too Short.',
 	'thisSpecialCharacter': 'This Special Character Not Allowed',
 	'thisSpecialCharacterAndNumber': 'Special Character & Number Not Allowed',
-	'email': 'Enter a Valid Email'
+	'email': 'Enter a Valid Email',
+	'notMatch': 'Not Match!'
   })
   // Same MQ as defined in the css
   .constant('appMediaquery', {

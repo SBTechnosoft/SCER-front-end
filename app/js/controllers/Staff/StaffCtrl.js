@@ -6,10 +6,10 @@
 
 App.controller('StaffController', StaffController);
 
-function StaffController($scope, $filter, ngTableParams) {
+function StaffController($scope, $filter, ngTableParams,$http,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory) {
   'use strict';
   var vm = this;
- 
+	var data = [];
 	
  // Chosen data
   // ----------------------------------- 
@@ -67,6 +67,8 @@ function StaffController($scope, $filter, ngTableParams) {
     'Wyoming'
   ];
 
+  
+  
   // SORTING
   // ----------------------------------- 
 $scope.branchF = [
@@ -74,62 +76,70 @@ $scope.branchF = [
       {pop: "Branch2" }
   ];
   
-  var data = [
-      {name: "Staff1",  address: "1/3227 , GokulDham Society", mobile: "9564587458", city: "Surat"  },
-      {name: "Staff2", address: "1/3227 , GokulDham Society", mobile: "857456987", city: "Surat"  },
-      {name: "Staff3",   address: "1/3227 , GokulDham Society", mobile: "9996587221", city: "Surat"  },
-      {name: "Staff4",   address: "1/3227 , GokulDham Society", mobile: "9745222222", city: "Surat"  },
-      {name: "Staff5",    address: "1/3227 , GokulDham Society", mobile: "8885964754", city: "Surat" }
-  ];
+  // var data = [
+      // {userName: "Staff1",   address: "1/3227 , GokulDham Society", contactNo: "9564587458", cityName: "Surat"  },
+      // {userName: "Staff2", address: "1/3227 , GokulDham Society", contactNo: "857456987", cityName: "Surat"  },
+      // {userName: "Staff3",   address: "1/3227 , GokulDham Society", contactNo: "9996587221", cityName: "Surat"  },
+      // {userName: "Staff4",   address: "1/3227 , GokulDham Society", contactNo: "9745222222", cityName: "Surat"  },
+      // {userName: "Staff5",    address: "1/3227 , GokulDham Society", contactNo: "8885964754", cityName: "Surat" }
+  // ];
   
  
+	apiCall.getCall(apiPath.getAllStaff).then(function(response){
+		
+		console.log(response);
+		data = response;
+		
+		for (var i = 0; i < data.length; i++) {
+		  data[i].cityName = ""; //initialization of new property 
+		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+		}
+		
+		 $scope.TableData();
+	});
   
   //alert(branchF);
+	$scope.TableData = function(){
+		
+	  vm.tableParams = new ngTableParams({
+		  page: 1,            // show first page
+		  count: 10,          // count per page
+		  sorting: {
+			  userName: 'asc'     // initial sorting
+		  }
+	  }, {
+		  total: data.length, // length of data
+		  getData: function($defer, params) {
+			  console.log(params.$params);
+			 
+			  // use build-in angular filter
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.userName) != "undefined" && params.$params.filter.userName != "") || (typeof(params.$params.filter.emailId) != "undefined" && params.$params.filter.emailId != "") || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
+			  {
+					 var orderedData = params.filter() ?
+					 $filter('filter')(data, params.filter()) :
+					 data;
 
-  vm.tableParams = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      sorting: {
-          name: 'asc'     // initial sorting
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-		  console.log(params.$params);
-		  // if()
-		  // {
-			  // alert('yes');
-		  // }
-		  // else{
-			  // alert('no');
-		  // }
-          // use build-in angular filter
-		  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.name) != "undefined" && params.$params.filter.name != "")  || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.mobile) != "undefined" && params.$params.filter.mobile != "") || (typeof(params.$params.filter.city) != "undefined" && params.$params.filter.city != "")))
-		  {
-				 var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
+					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
-				  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+					  params.total(orderedData.length); // set total for recalc pagination
+					  $defer.resolve(vm.users);
+			  
 
-				  params.total(orderedData.length); // set total for recalc pagination
-				  $defer.resolve(vm.users);
+			  }
+			 
+			 if(!$.isEmptyObject(params.$params.sorting))
+			  {
+				
+				 //alert('ggg');
+				  var orderedData = params.sorting() ?
+						  $filter('orderBy')(data, params.orderBy()) :
+						  data;
 		  
-
+				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			  }
 		  }
-		 
-		 if(!$.isEmptyObject(params.$params.sorting))
-		  {
-			
-			 //alert('ggg');
-			  var orderedData = params.sorting() ?
-					  $filter('orderBy')(data, params.orderBy()) :
-					  data;
-	  
-			  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-		  }
-      }
-  });
+	  });
+	}
 
   // FILTERS
   // ----------------------------------- 
@@ -216,15 +226,46 @@ $scope.branchF = [
       }
   });
   
-   $scope.edit_comp = function()
-  {
-	  alert('Edit');
-  }
-  
-  $scope.delete_comp = function()
-  {
-	  alert('Delete');
-  }
+	$scope.editStaff= function(id)
+	{
+		getSetFactory.set(id);
+		$state.go("app.AddStaff");
+	}
+	  
+	 $scope.deleteStaff = function(id)
+	 {
+		
+		var deletePath = apiPath.getAllStaff+'/'+parseInt(id);
+		  
+		apiCall.deleteCall(deletePath).then(function(deleteres){
+			
+			console.log(deleteres);
+			
+			if(apiResponse.ok == deleteres){
+					
+				toaster.pop('success', 'Title', 'Delete Successfully');
+				
+				apiCall.getCall(apiPath.getAllStaff).then(function(response){
+					
+					//console.log(response);
+					data = response;
+					
+					for (var i = 0; i < data.length; i++) {
+					  data[i].cityName = ""; //initialization of new property 
+					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					}
+					
+					vm.tableParams.reload();
+					 
+				});
+			}
+			else{
+				
+				toaster.pop('warning', 'Opps!!', deleteres);
+			}
+		 
+		});
+	}
 
 }
-StaffController.$inject = ["$scope", "$filter", "ngTableParams"];
+StaffController.$inject = ["$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory"];

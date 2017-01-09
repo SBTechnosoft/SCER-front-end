@@ -53,7 +53,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	
    $scope.addBranch=[];
  
-  vm.cityDrop=[];
+	vm.cityDrop=[];
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
@@ -94,6 +94,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		vm.statesDrop = response3;
 	
 	});
+	
 	vm.sdfg;
 	if($stateParams.id){
 	  
@@ -296,8 +297,8 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   //Changed Data When Update
   $scope.changeBranchData = function(Fname,value){
-		console.log(Fname+'..'+value);
-		if(formdata.get(Fname))
+		
+		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
@@ -366,9 +367,15 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	
   };
   
-  $scope.cancel = function() {
-    toaster.pop('info', 'Form Reset', 'Message');
-  };
+	$scope.cancel = function() {
+	  
+		toaster.pop('info', 'Form Reset', 'Message');
+		
+		// Delete formdata  keys
+		for (var key of formdata.keys()) {
+		   formdata.delete(key); 
+		}
+	};
   
   
 }
