@@ -2,19 +2,19 @@
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
    Quickmenu >> 
-   Bill</small>
+   Retailsale Bill</small>
 </h3>
 
 <!-- START panel-->
-<div data-ng-controller="BillController as form" class="container-fluid">
+<div data-ng-controller="RetailsaleBillController as form" class="container-fluid">
 	<form  action="#" name="formBill" class="form-validate form-horizontal">
 	<div class="panel panel-default">
 		 <h4 class="panel-heading" >
-		 Bill
+		 Retailsale Bill
 		 </h4>
-		<div class="panel-body">
+		<div class="panel-body" style="padding:0px">
 			
-			<div class="form-group">
+			<div class="form-group" style="margin-bottom:0px">
 				
 				<label class="col-sm-2 control-label"> Company </label>
 					<div class="col-sm-4">
@@ -38,8 +38,7 @@
 			</div>
 			
 		</div>
-	</div>
-   <div class="panel panel-default">
+	
       <h4 class="panel-heading">Client Details</h4>
       <div class="panel-body">
      
@@ -111,7 +110,7 @@
 							 
 							  <span ng-messages="formBill.clientName.$error" ng-if="formBill.clientName.$dirty || formBill.clientName.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
-								<span ng-messages-include="errorPatternNumber"></span>
+								<span ng-messages-include="errorPatternAlpha"></span>
 								<span ng-messages-include="errorLonglength"></span>
 							</span>
 							

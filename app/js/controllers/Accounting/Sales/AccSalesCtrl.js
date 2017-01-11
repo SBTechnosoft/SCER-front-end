@@ -20,7 +20,7 @@ App.controller('AccSalesController', AccSalesController);
 function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,getSetFactory,toaster,apiResponse,validationMessage) {
   'use strict';
   
-  var vm = this;
+  var vm = this;  e76c5c6589e33a02d18a0b2b759b3fb6
   $scope.accSales = [];
   var formdata = new FormData();
   $scope.totalTable;
@@ -294,6 +294,15 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				}
 			
 			});
+			
+			//Auto Suggest Product Dropdown data
+			vm.productNameDrop = [];
+			
+			apiCall.getCall(apiPath.getProductByCompany+response.companyId+'/branch').then(function(responseDrop){
+				
+				vm.productNameDrop = responseDrop;
+			
+			});
 		
 		});
 		
@@ -402,13 +411,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	// });
 	
 	//Auto Suggest Product Dropdown data
-	vm.productNameDrop = [];
+	// vm.productNameDrop = [];
 	
-	apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+	// apiCall.getCall(apiPath.getProductByCompany).then(function(responseDrop){
 		
-		vm.productNameDrop = responseDrop;
+		// vm.productNameDrop = responseDrop;
 	
-	});
+	// });
 	
 	
 	//Set JSuggest Data When Company
@@ -443,6 +452,15 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				}
 				
 			}
+		
+		});
+		
+		//Auto Suggest Product Dropdown data
+		vm.productNameDrop = [];
+		
+		apiCall.getCall(apiPath.getProductByCompany+value+'/branch').then(function(responseDrop){
+			
+			vm.productNameDrop = responseDrop;
 		
 		});
 		
@@ -1078,7 +1096,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		 
 			console.log(data);
 			
-			apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+			apiCall.getCall(apiPath.getProductByCompany+data.companyId+'/branch').then(function(responseDrop){
 			
 				vm.productNameDrop = responseDrop;
 		

@@ -264,6 +264,15 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 					}
 				
 				});
+				
+				//Auto Suggest Product Dropdown data
+				vm.productNameDrop = [];
+				
+				apiCall.getCall(apiPath.getProductByCompany+response.companyId+'/branch').then(function(responseDrop){
+					
+					vm.productNameDrop = responseDrop;
+				
+				});
 			
 			});
 			
@@ -366,13 +375,13 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	// });
 	
 	//Auto Suggest Product Dropdown data
-	vm.productNameDrop = [];
+	// vm.productNameDrop = [];
 	
-	apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+	// apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
 		
-		vm.productNameDrop = responseDrop;
+		// vm.productNameDrop = responseDrop;
 	
-	});
+	// });
 	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
@@ -405,6 +414,15 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 				}
 				
 			}
+		
+		});
+		
+		//Auto Suggest Product Dropdown data
+		vm.productNameDrop = [];
+		
+		apiCall.getCall(apiPath.getProductByCompany+value+'/branch').then(function(responseDrop){
+			
+			vm.productNameDrop = responseDrop;
 		
 		});
 		
@@ -1056,7 +1074,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$http,$modal,$log,$rootSco
 	   
 		modalInstance.result.then(function (data) {
 		 
-			apiCall.getCall(apiPath.getAllProduct).then(function(responseDrop){
+			apiCall.getCall(apiPath.getProductByCompany+data.companyId+'/branch').then(function(responseDrop){
 			
 				vm.productNameDrop = responseDrop;
 		

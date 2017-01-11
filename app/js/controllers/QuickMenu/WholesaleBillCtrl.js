@@ -14,9 +14,9 @@ App.filter('sumOfValue', function () {
         return sum;
     }
 });
-App.controller('BillController', BillController);
+App.controller('WholesaleBillController', WholesaleBillController);
 
-function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage) {
+function WholesaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage) {
   'use strict';
  
 	var vm = this;
@@ -594,4 +594,4 @@ function BillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootSc
   Product Model End
   **/
 }
-BillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage"];
+WholesaleBillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage"];

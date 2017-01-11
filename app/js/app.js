@@ -23,6 +23,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
     $rootScope.$stateParams = $stateParams;
     $rootScope.$storage = $localStorage;
 
+		
     // Scope Globals
     // ----------------------------------- 
     $rootScope.app = {
@@ -53,6 +54,12 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       job:      'Developer',
       picture:  'app/img/user/08.jpg'
     };
+	
+	/** Authentication Token & UserName **/
+		
+		$rootScope.authenticate = [];
+		
+	/** END **/
 	
 	//Branch Modify
 	$rootScope.AddBranchModify = true;

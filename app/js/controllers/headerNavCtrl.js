@@ -4,7 +4,7 @@
  * Controls the header navigation
  =========================================================*/
 
-App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache', function($scope,$rootScope,$http,$templateCache) {
+App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state', function($scope,$rootScope,$http,$templateCache,$state) {
   'use strict';
   
   $scope.headerMenuCollapsed = false;
@@ -87,6 +87,12 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
         });
   };
   
-  
+	  $scope.logout = function(){
+		  
+		  //alert('in');
+		  $rootScope.$storage.$reset();
+		  
+		  $state.go("page.login");
+	  }
 
 }]);

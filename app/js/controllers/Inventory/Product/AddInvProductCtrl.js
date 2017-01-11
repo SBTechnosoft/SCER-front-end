@@ -104,6 +104,14 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 			
 				$scope.addInvProduct.measureUnit = res.measurementUnit;
 			
+			
+			$scope.addInvProduct.purchasePrice = res.purchasePrice;
+			$scope.addInvProduct.wholesaleMargin = res.wholesaleMargin;
+			$scope.addInvProduct.semiWholesaleMargin = res.semiWholesaleMargin;
+			$scope.addInvProduct.vat = res.vat;
+			$scope.addInvProduct.mrp = res.mrp;
+			$scope.addInvProduct.margin = res.margin;
+			
 		});
 	}
 	else{

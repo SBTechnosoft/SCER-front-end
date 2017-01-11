@@ -6756,7 +6756,7 @@ body {
   cursor: pointer;
 }
 .sidebar > .sidebar-nav {
-  padding-bottom: 20px;
+  padding-bottom: 60px;   /* 20px */
 }
 .sidebar > .sidebar-nav > .nav {
   position: relative;

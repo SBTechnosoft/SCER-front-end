@@ -39,15 +39,6 @@ App
       'gcal':               ['app/vendor/fullcalendar/dist/gcal.js'],
 	  'treeGrid':          ['app/vendor/tree-grid/treeGrid.css',
 							 'app/vendor/tree-grid/tree-grid-directive.js'],
-	  'fileUpload':          ['app/vendor/fileUpload/vendor/jquery.ui.widget.js',
-						   'app/vendor/fileUpload/jquery.iframe-transport.js',
-						   'app/vendor/fileUpload/jquery.fileupload.js',
-						   'app/vendor/fileUpload/jquery.fileupload-process.js',
-						   'app/vendor/fileUpload/jquery.fileupload-image.js',
-						   'app/vendor/fileUpload/jquery.fileupload-audio.js',
-						   'app/vendor/fileUpload/jquery.fileupload-video.js',
-						   'app/vendor/fileUpload/jquery.fileupload-validate.js',
-						   'app/vendor/fileUpload/jquery.fileupload-angular.js'],
 	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js'],
 	'tinymce':				['app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js',
 							'app/vendor/tinymce/js/tinymce/tinymce.min.js']
@@ -119,7 +110,8 @@ App
 	'getOneJrnl': 'http://api.siliconbrain.co.in/accounting/journals/',
 	'getLedgerJrnl':   'http://api.siliconbrain.co.in/accounting/ledgers/company/',
 	'getAllStaff': 'http://api.siliconbrain.co.in/users',
-	'getOneStaff': 'http://api.siliconbrain.co.in/users/'
+	'getOneStaff': 'http://api.siliconbrain.co.in/users/',
+	'loginAuth': 'http://api.siliconbrain.co.in/authenticate'
   })
   //Api Path
   .constant('apiResponse', {

@@ -1,18 +1,29 @@
-App.factory('apiCall', ["$http","$q","apiPath", function ($http,$q,apiPath) {
+App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function ($http,$q,apiPath,$rootScope,$state) {
+	
+	//if($rootScope.$storage.authToken != 'undefined'){
 		
+		//var authToken = $rootScope.$storage.authToken;
+		//console.log(authToken);
+	// }
+	// else{
+		
+		// $state.go("page.login");
+		// console.log('else');
+	// }
+	
+	
 	return {
 		 getCall : function(url){
 			 
 			var deferred = $q.defer();
 			
-			$http.get(url)
-			.success(function (data) {
-			
+			$http({
+				url: url,
+				method: 'get',
+				processData: false,
+			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken}
+			}).success(function(data, status, headers, config) {
 				deferred.resolve(data);
-
-			})
-			.error(function (error) {
-				deferred.reject(error);
 			});
 
 			return deferred.promise;
@@ -25,7 +36,7 @@ App.factory('apiCall', ["$http","$q","apiPath", function ($http,$q,apiPath) {
 				url: url,
 				method: 'post',
 				processData: false,
-			   headers: {'Content-Type': undefined},
+			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 				data:formdata
 			}).success(function(data, status, headers, config) {
 				deferred.resolve(data);
@@ -34,7 +45,10 @@ App.factory('apiCall', ["$http","$q","apiPath", function ($http,$q,apiPath) {
 			return deferred.promise;
 		},
 		getCallHeader : function(url,headerData){
-			 
+			
+			//var headerDataIn = headerData;
+			headerData.authenticationToken = $rootScope.$storage.authToken;
+			
 			var deferred = $q.defer();
 			
 			$http({
@@ -50,6 +64,8 @@ App.factory('apiCall', ["$http","$q","apiPath", function ($http,$q,apiPath) {
 			
 		},
 		postCallHeader : function(url,headerData,formdata){
+			
+			headerData.authenticationToken = $rootScope.$storage.authToken;
 			
 			var deferred = $q.defer();
 			 
@@ -73,7 +89,7 @@ App.factory('apiCall', ["$http","$q","apiPath", function ($http,$q,apiPath) {
 				url: url,
 				method: 'delete',
 				processData: false,
-				headers: {'Content-Type': undefined},
+				headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
 				deferred.resolve(data);
@@ -91,7 +107,7 @@ App.factory('apiCall', ["$http","$q","apiPath", function ($http,$q,apiPath) {
 				url: apiPath.getAllCompany,
 				method: 'get',
 				processData: false,
-			   headers: {'Content-Type': undefined},
+			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
 				for(var i=0;i<data.length;i++){
@@ -114,7 +130,7 @@ App.factory('apiCall', ["$http","$q","apiPath", function ($http,$q,apiPath) {
 				url: apiPath.getAllBranch,
 				method: 'get',
 				processData: false,
-			   headers: {'Content-Type': undefined},
+			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
 				for(var i=0;i<data.length;i++){

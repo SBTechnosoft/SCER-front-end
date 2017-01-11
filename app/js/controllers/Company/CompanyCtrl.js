@@ -6,11 +6,12 @@
 
 App.controller('CompanyController', CompanyController);
 
-function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster) {
+function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,$localStorage) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
    
+ 
   //Go To AddCompany
 	$scope.GoToAddCompany = function(){
 	  
@@ -18,8 +19,11 @@ function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCa
 	 $location.path('app/AddCompany/'); 
 	}
 	
+	
+	
 	var data = [];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response){
+	var headerData = {'Content-Type': undefined,'authenticationToken':$rootScope.authenticate.authToken};
+	apiCall.getCallHeader(apiPath.getAllCompany,headerData).then(function(response){
 		
 		data = response;
 		for (var i = 0; i < data.length; i++) {
@@ -215,4 +219,4 @@ function CompanyController($rootScope,$scope, $filter,$http, ngTableParams,apiCa
   }
 
 }
-CompanyController.$inject = ["$rootScope","$scope", "$filter","$http","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster"];
+CompanyController.$inject = ["$rootScope","$scope", "$filter","$http","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","$localStorage"];

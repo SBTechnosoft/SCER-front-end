@@ -68,6 +68,14 @@ function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,view
 			$state.go("app.AccDataSales");
 			
 		}
+		else if($scope.viewDataTypePath == 'Retailsales'){
+			
+			$state.go("app.AccDataRetailSales");
+		}
+		else if($scope.viewDataTypePath == 'Wholesales'){
+			
+			$state.go("app.AccDataWholeSales");
+		}
 		else if($scope.viewDataTypePath == 'purchase'){
 			
 			$state.go("app.AccDataPurchase");

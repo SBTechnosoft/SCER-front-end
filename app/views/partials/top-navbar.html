@@ -257,7 +257,7 @@
 				  
                </li-->
 			   <li data-ng-init="offcontent1 = true" data-ng-click="cancel($event)">
-                  <a ui-sref="app.Bill" data-ng-click="offcontent1 = false" class="p">
+                  <a ui-sref="app.RetailsaleBill" data-ng-click="offcontent1 = false" class="p">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">
@@ -266,7 +266,20 @@
                             </div>
                         </div>
                         <div class="media-body clearfix">
-                           <p class="m0">Bill</p>
+                           <p class="m0">Retailsales Bill</p>
+                        </div>
+                    </div>
+                  </a>
+				   <a ui-sref="app.WholesaleBill" data-ng-click="offcontent1 = false" class="p">
+                     <!-- START media preview-->
+                    <div class="media">
+					    <div class="pull-left">
+                            <div class="point-pin">
+								<i class="fa fa-credit-card"></i>
+                            </div>
+                        </div>
+                        <div class="media-body clearfix">
+                           <p class="m0">Wholesale Bill</p>
                         </div>
                     </div>
                   </a>
@@ -347,7 +360,8 @@
                </li>
                <!-- START list item-->
                <li data-ng-init="offcontent3 = true" data-ng-click="cancel($event)" class="bt">
-                  <a class="p" ui-sref="page.login">
+                  <!--a class="p" ui-sref="page.login"-->
+                  <a class="p" ng-click="logout()">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">

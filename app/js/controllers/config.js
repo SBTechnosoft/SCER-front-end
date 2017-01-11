@@ -112,7 +112,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.AddCompany', {
             url: '/AddCompany/:id',
             templateUrl: basepath('Company/AddCompany.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','fileUpload','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		//Show Branch
 		.state('app.Branch', {
@@ -126,7 +126,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AddBranch/:id',
             templateUrl: basepath('Branch/AddBranch.html?r='+Math.random()),
 			//controller: 'AddBranchController as form',
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
         })
 		//Show Staff
 		.state('app.Staff', {
@@ -138,33 +138,33 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AddStaff', {
             url: '/AddStaff',
             templateUrl: basepath('Staff/AddStaff.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
         })
 		//Invoice#
 		.state('app.Invoice', {
             url: '/Invoice',
             templateUrl: basepath('Invoice/Invoice.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','ngTable','ngTableExport','getBranchSrv','toaster')
         })
 		//Quotation#
 		.state('app.Quotation', {
             url: '/Quotation',
             templateUrl: basepath('Quotation/Quotation.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','ngTable','ngTableExport','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','ngTable','ngTableExport','getBranchSrv','toaster')
         })
 		/*** Template ***/
 		//General
 		.state('app.tempGeneral', {
             url: '/tempGeneral',
             templateUrl: basepath('Template/General.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		/*** End Template ***/
 		//Add Inventory Product
 		.state('app.AddInvProduct', {
             url: '/AddInvProduct/:id',
             templateUrl: basepath('Inventory/Product/AddInvProduct.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
         })
 		//Show Inventory Product
 		.state('app.InvProduct', {
@@ -176,7 +176,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AddInvStock', {
             url: '/AddInvStock',
             templateUrl: basepath('Inventory/StockRegister/AddInvStock.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster')
         })
 		//Show Inventory Stock
 		.state('app.InvStock', {
@@ -201,14 +201,14 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccSales',
 			controller: 'AccSalesController as form',
             templateUrl: basepath('Accounting/Sales/AccSales.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		//Accounting View Sales
 		.state('app.AccViewSales', {
             url: '/AccViewSales',
             templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
 				viewDataType: function(){
 					return 'sales';
 				}
@@ -225,18 +225,62 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				}
 			})
         })
+		//Accounting View Retail Sales
+		.state('app.AccViewRetailSales', {
+            url: '/AccViewRetailSales',
+            templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+				viewDataType: function(){
+					return 'Retailsales';
+				}
+			})
+        })
+		//Accounting Data Retail Sales
+		.state('app.AccDataRetailSales', {
+            url: '/AccDataRetailSales',
+            templateUrl: basepath('Accounting/viewData/AccDataViews.html?r='+Math.random()),
+			controller: 'AccViewDataController as table',
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+				headerType: function(){
+					return 'Retailsales';
+				}
+			})
+        })
+		//Accounting View Whole Sales
+		.state('app.AccViewWholeSales', {
+            url: '/AccViewWholeSales',
+            templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+				viewDataType: function(){
+					return 'Wholesales';
+				}
+			})
+        })
+		//Accounting Data Whole Sales
+		.state('app.AccDataWholeSales', {
+            url: '/AccDataWholeSales',
+            templateUrl: basepath('Accounting/viewData/AccDataViews.html?r='+Math.random()),
+			controller: 'AccViewDataController as table',
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+				headerType: function(){
+					return 'Wholesales';
+				}
+			})
+        })
 		//Accounting Purchase
 		.state('app.AccPurchase', {
             url: '/AccPurchase',
             templateUrl: basepath('Accounting/Purchase/AccPurchase.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		//Accounting View Purchase
 		.state('app.AccViewPurchase', {
             url: '/AccViewPurchase',
             templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
 				viewDataType: function(){
 					return 'purchase';
 				}
@@ -257,7 +301,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccViewCreditNotes', {
             url: '/AccViewCreditNotes',
             templateUrl: basepath('Accounting/CreditNotes/AccViewCreditNotes.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
         })
 		//Accounting Data Credit Notes
 		.state('app.AccDataCreditNotes', {
@@ -270,7 +314,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccViewDebitNotes', {
             url: '/AccViewDebitNotes',
             templateUrl: basepath('Accounting/DebitNotes/AccViewDebitNotes.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
         })
 		//Accounting Data Debit Notes
 		.state('app.AccDataDebitNotes', {
@@ -283,14 +327,14 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccSpecialJrnl', {
             url: '/AccSpecialJrnl',
             templateUrl: basepath('Accounting/SpecialJournal/AccSpecialJrnl.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		//Accounting View Special journal
 		.state('app.AccViewSpecialJrnl', {
             url: '/AccViewSpecialJrnl',
             templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
 				viewDataType: function(){
 					return 'specialJournal';
 				}
@@ -311,14 +355,14 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccPayment', {
             url: '/AccPayment',
             templateUrl: basepath('Accounting/Payment/AccPayment.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider','wysiwyg','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		//Accounting View Payment
 		.state('app.AccViewPayment', {
             url: '/AccViewPayment',
             templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'payment';
 				}
@@ -339,14 +383,14 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccReceipt', {
             url: '/AccReceipt',
             templateUrl: basepath('Accounting/Receipt/AccReceipt.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		//Accounting View Receipt
 		.state('app.AccViewReceipt', {
             url: '/AccViewReceipt',
             templateUrl: basepath('Accounting/viewData/AccView.html?r='+Math.random()),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
 				viewDataType: function(){
 					return 'receipt';
 				}
@@ -367,7 +411,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccViewTaxation', {
             url: '/AccViewTaxation',
             templateUrl: basepath('Accounting/Taxation/AccViewTaxation.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','toaster','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
         })
 		//Accounting Data Taxation
 		.state('app.AccDataTaxation', {
@@ -380,7 +424,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccLedger', {
             url: '/AccLedger',
             templateUrl: basepath('Accounting/Ledger/Ledger.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','ngTable', 'ngTableExport','getBranchSrv','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','ngTable', 'ngTableExport','getBranchSrv','toaster')
         })
 		//Accounting Data Ledger
 		.state('app.AccDataLedger', {
@@ -390,11 +434,17 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
         })
 		/*** Quick Menu ***/
-		//Bill
-		.state('app.Bill', {
-            url: '/Bill',
-            templateUrl: basepath('QuickMenu/Bill.html?r='+Math.random()),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen', 'slider', 'wysiwyg','getBranchSrv')
+		//Retailsale Bill
+		.state('app.RetailsaleBill', {
+            url: '/RetailsaleBill',
+            templateUrl: basepath('QuickMenu/RetailsaleBill.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv')
+        })
+		//WholeSale Bill
+		.state('app.WholesaleBill', {
+            url: '/WholesaleBill',
+            templateUrl: basepath('QuickMenu/WholesaleBill.html?r='+Math.random()),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv')
         })
 		/*** End Quick Menu ***/
         .state('app.form-validation', {
