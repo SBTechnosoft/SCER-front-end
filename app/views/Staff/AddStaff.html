@@ -28,6 +28,18 @@
                   </div>
                </div>
 			</fieldset>
+			
+			<fieldset >
+               <div class="form-group">
+                  <label class="col-sm-2 control-label"> Type </label>
+                  <div class="col-sm-5">
+                     <select chosen="" data-ng-model="addStaff.userType" data-ng-options="s for s in form.userTypeDrop" ng-change="changeStaffData('userType',addStaff.userType)" class="form-control chosen-select" ng-required="true">
+						<option value=""></option>
+					 </select>
+                  </div>
+               </div>
+			</fieldset>	
+			
             <fieldset>
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Name</label>

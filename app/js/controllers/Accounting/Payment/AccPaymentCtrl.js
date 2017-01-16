@@ -84,18 +84,22 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 	vm.AccPaymentTable = [];
 	vm.AccPaymentTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"debit"}];
 	
-	$scope.addRow = function(){
+	$scope.addRow = function(index){
+		var plusOne = index+1;
+		
 		var data = {};	
 		data.ledgerId='';
 		data.ledgerName ='';
 		data.amount ='';
 		data.amountType = 'debit';
-		vm.AccPaymentTable.push(data);
+		//vm.AccPaymentTable.push(data);
+		vm.AccPaymentTable.splice(plusOne, 0, data);
 		
 		var balance = {};
 		balance.currentBalance = '';
 		balance.amountType = '';
-		vm.multiCurrentBalance.push(balance);
+		//vm.multiCurrentBalance.push(balance);
+		vm.multiCurrentBalance.splice(plusOne, 0, balance);
 		
     };
 	

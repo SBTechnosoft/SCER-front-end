@@ -3,28 +3,25 @@
  * Module: AccSalesController.js
  * Controller for input components
  =========================================================*/
-App.filter('sumOfValue', function () {
-    return function (data, key) {        
-        if (angular.isUndefined(data) && angular.isUndefined(key))
-            return 0;        
-        var sum = 0;        
-        angular.forEach(data,function(value){
-            sum = sum + parseInt(value[key]);
-        });        
-        return sum;
-    }
-});
+
 
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,getSetFactory,toaster,apiResponse,validationMessage) {
+function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
   'use strict';
   
-  var vm = this;  e76c5c6589e33a02d18a0b2b759b3fb6
+ // $templateCache.remove($state.current.templateUrl);
+   //alert($state.current.templateUrl);
+  var vm = this;   
   $scope.accSales = [];
   var formdata = new FormData();
   $scope.totalTable;
   $scope.grandTotalTable;
+ // $scope.accSales.tax = 0;
+  
+  $scope.totalDebit; // sum of Debit Amount
+  $scope.totalCredit;  // sum of Credit Amount
+  
   $scope.accSales.jfid; // JFID
   
   vm.AccClientMultiTable = []; // Journal Table Array
@@ -308,9 +305,11 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
-		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
-		
+		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+		vm.productTax = [{"tax":0}];
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
+		
+		
 	}
 	//End Update Set
 	
@@ -318,19 +317,24 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	
 	/* Journal  Table */
-		$scope.addClientRow = function(){
+		$scope.addClientRow = function(index){
 			 
+			var plusOne = index+1;
+			//alert(plusOne);
 			 var data = {};
 			data.amountType ='debit';
 			data.ledgerId='';
 			data.ledgerName ='';
 			data.amount ='';
-			vm.AccClientMultiTable.push(data);
+			//vm.AccClientMultiTable.push(data);
+			
+			vm.AccClientMultiTable.splice(plusOne, 0, data);
 			
 			var balance = {};
 			balance.currentBalance = '';
 			balance.amountType = '';
-			vm.multiCurrentBalance.push(balance);
+			//vm.multiCurrentBalance.push(balance);
+			vm.multiCurrentBalance.splice(plusOne, 0, balance);
 			
 			$scope.changeJrnlArray = true;
 
@@ -363,18 +367,26 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   
 	/* Product  Table */
 	
-	$scope.addRow = function(){
+	$scope.addRow = function(index){
 		  
+		  var plusOne = index+1;
 		 var data = {};	
 		// console.log(this.AccSalesTable);
 		data.productId='';
 		data.productName ='';
 		data.discountType ='flat';
 		data.discount ='';
-		data.price ='1000';
+		data.price = 0;
 		data.qty =1;
 		data.amount = '';
-		vm.AccSalesTable.push(data);
+		//vm.AccSalesTable.push(data);
+		vm.AccSalesTable.splice(plusOne,0,data);
+		
+		var varTax = {};
+		varTax.tax = 0;
+		
+		vm.productTax.splice(plusOne, 0, varTax);
+			
 		$scope.changeProductArray = true;
 		
 
@@ -382,24 +394,42 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 	$scope.removeRow = function (idx) {
 		vm.AccSalesTable.splice(idx, 1);
+		vm.productTax.splice(idx, 1);
 		$scope.changeProductArray = true;
 	};
 	
 	$scope.settabledata = function(item,index)
 	{
 		vm.AccSalesTable[index].productId = item.productId;
+		
+		var grandPrice;
+
+		grandPrice = productArrayFactory.calculate(item.purchasePrice,item.vat,item.margin);
+			
+		if(grandPrice == 0){
+			
+			grandPrice = parseInt(item.mrp);
+		}
+		
+		vm.AccSalesTable[index].price = grandPrice;
+		
+		vm.productTax[index].tax = productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
+		
+		//$scope.accSales.tax = $scope.accSales.tax + productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
+		
+		
 		$scope.changeProductArray = true;
 		console.log(vm.AccSalesTable);
 	}
 	
 	//Total For Product Table
 	$scope.getTotal = function(){
-    var total = 0;
-    for(var i = 0; i < vm.AccSalesTable.length; i++){
-        var product = vm.AccSalesTable[i];
-        total += product.amount;
-    }
-    return total;
+		var total = 0;
+		for(var i = 0; i < vm.AccSalesTable.length; i++){
+			var product = vm.AccSalesTable[i];
+			total += product.amount;
+		}
+		return total;
 	}
 
 	//Auto suggest Client Name
@@ -560,10 +590,17 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		}
 	}
 	
+	
   $scope.pop = function()
   {
+		 
+	if($scope.totalDebit != $scope.totalCredit){
 	
-	   
+		toaster.pop('alert', 'Opps!!', 'Credit/Debit Amount is Not Equal');
+		return false;
+	}
+		
+	
 	if($scope.accSales.getSetJrnlId){
 		
 		
@@ -783,6 +820,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				vm.clientNameDropCr=[]; //Blank Debit Jsuggest Legder Data 
 				
 				vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+				vm.productTax = [{"tax":0}];
 				
 				vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 			
@@ -852,6 +890,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+		vm.productTax = [{"tax":0}];
 		
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 	
@@ -1163,4 +1202,4 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	**/
   
 }
-AccSalesController.$inject = ["$scope","apiCall","apiPath","$http","$modal", "$log","$rootScope","getSetFactory","toaster","apiResponse","validationMessage"];
+AccSalesController.$inject = ["$scope","apiCall","apiPath","$http","$modal", "$log","$rootScope","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory"];

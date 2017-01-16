@@ -330,7 +330,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 			
 			formdata.append('companyId',$scope.generalTemp.companyDropDown.companyId);
 			formdata.append('templateName',$scope.generalTemp.tempName);
-			formdata.append('templateType','general');
+			formdata.append('templateType','invoice');
 			formdata.append('templateBody',tinyMCE.get('textdesc').getContent());
 			//formdata.append('templateType',addBranch.branchName);
 	

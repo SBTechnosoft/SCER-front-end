@@ -4,7 +4,7 @@
  * Controls the header navigation
  =========================================================*/
 
-App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state', function($scope,$rootScope,$http,$templateCache,$state) {
+App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse) {
   'use strict';
   
   $scope.headerMenuCollapsed = false;
@@ -70,29 +70,44 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 		
   };
   
-  // GET Inventory Sidebar
-  $scope.getInventory = function(){
-	 
-	var menuJson = 'server/sidebar/Inventory.json',
-      menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
-	
-      $http.get(menuURL)
-        .success(function(items) {
-			//$rootScope.menuItems=[];
-           $rootScope.menuItems = items;
-		   
-        })
-        .error(function(data, status, headers, config) {
-          alert('Failure loading menu');
-        });
-  };
+	  // GET Inventory Sidebar
+	  $scope.getInventory = function(){
+		 
+		var menuJson = 'server/sidebar/Inventory.json',
+		  menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
+		
+		  $http.get(menuURL)
+			.success(function(items) {
+				//$rootScope.menuItems=[];
+			   $rootScope.menuItems = items;
+			   
+			})
+			.error(function(data, status, headers, config) {
+			  alert('Failure loading menu');
+			});
+	  };
   
 	  $scope.logout = function(){
 		  
-		  //alert('in');
-		  $rootScope.$storage.$reset();
+		//alert('in');
+		$rootScope.$storage.$reset();
+		    
+		// apiCall.deleteCall(apiPath.deleteToken+14).then(function(deleteres){
+			
+			// if(apiResponse.ok == deleteres){
+				
+				// $state.go("page.login");
+				
+			// }
+			// else{
+				
+				// alert('Opps!, Problem Occure');
+			// }
+		 
+		// });
+		
+		$state.go("page.login");
 		  
-		  $state.go("page.login");
 	  }
 
 }]);

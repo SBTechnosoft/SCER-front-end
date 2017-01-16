@@ -234,6 +234,7 @@ $scope.branchF = [
 	  
 	 $scope.deleteStaff = function(id)
 	 {
+		return false;
 		
 		var deletePath = apiPath.getAllStaff+'/'+parseInt(id);
 		  

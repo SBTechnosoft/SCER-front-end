@@ -249,6 +249,7 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 	 formdata.append('companyId',addInvoice.companyDrop.companyId);
 	 formdata.append('invoiceLabel',addInvoice.invoiceLabel);
 	 formdata.append('startAt',addInvoice.startAt);
+	  formdata.append('endAt',addInvoice.startAt);
 	 formdata.append('invoiceType',addInvoice.invoiceType);
 	 
 	 apiCall.postCall(apiPath.getAllInvoice,formdata).then(function(response5){
@@ -268,6 +269,11 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 					
 					vm.tableParams.reload();
 				});
+				
+				$scope.addInvoice.companyDrop.companyId='';
+				$scope.addInvoice.invoiceLabel = '';
+				$scope.addInvoice.startAt = '';
+				$scope.addInvoice.invoiceType = 'prefix';
 			}
 			else{
 			
@@ -277,10 +283,13 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 		
 	});
 	
-	$scope.addInvoice.companyDrop.companyId='';
-	$scope.addInvoice.invoiceLabel = '';
-	$scope.addInvoice.startAt = '';
-	$scope.addInvoice.invoiceType = 'prefix';
+	
+	
+	formdata.delete('companyId');
+	formdata.delete('invoiceLabel');
+	formdata.delete('startAt');
+	formdata.delete('endAt');
+	formdata.delete('invoiceType');
 	
   }
 }

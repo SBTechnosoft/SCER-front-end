@@ -82,18 +82,22 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,
 	vm.AccReceiptTable = [];
 	vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
 	
-	$scope.addRow = function(){
+	$scope.addRow = function(index){
+		
+		var plusOne = index+1;
 		var data = {};	
 		data.ledgerId='';
 		data.ledgerName ='';
 		data.amount ='';
 		data.amountType = 'credit';
-		vm.AccReceiptTable.push(data);
+		//vm.AccReceiptTable.push(data);
+		vm.AccReceiptTable.splice(plusOne, 0, data);
 		
 		var balance = {};
 		balance.currentBalance = '';
 		balance.amountType = '';
-		vm.multiCurrentBalance.push(balance);
+		//vm.multiCurrentBalance.push(balance);
+		vm.multiCurrentBalance.splice(plusOne, 0, balance);
     };
 	
 	$scope.settabledata = function(item,index)

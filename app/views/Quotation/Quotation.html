@@ -23,7 +23,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Quotation Label</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-model="addquotation.quotationLabel" type="text" placeholder="Quotation Label" class="form-control" ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-minlength="1" ng-maxlength="35" ng-required="true"  auto-focus />
+						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-model="addquotation.quotationLabel" type="text" placeholder="Quotation Label" class="form-control" ng-pattern="/^[a-zA-Z &_`#().\'-/\\\]*$/" ng-minlength="1" ng-maxlength="35" ng-required="true"  auto-focus />
 						 
 						 <span ng-messages="formQuotation.invoiceLabel.$error" ng-if="formQuotation.invoiceLabel.$dirty || formQuotation.invoiceLabel.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>

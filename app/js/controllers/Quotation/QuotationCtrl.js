@@ -243,6 +243,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	 formdata.append('companyId',addquotation.companyDrop.companyId);
 	 formdata.append('quotationLabel',addquotation.quotationLabel);
 	 formdata.append('startAt',addquotation.startAt);
+	  formdata.append('endAt',addquotation.startAt);
 	 formdata.append('quotationType',addquotation.quotationType);
 	 
 	 apiCall.postCall(apiPath.getAllQuotation,formdata).then(function(response5){
@@ -263,6 +264,12 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 					console.log(data);
 					vm.tableParams.reload();
 				});
+				
+				$scope.addquotation.companyDrop.companyId='';
+				$scope.addquotation.quotationLabel = '';
+				$scope.addquotation.startAt = '';
+				$scope.addquotation.quotationType = 'prefix';
+				 
 			}
 			else{
 			
@@ -270,12 +277,14 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			}
 			//toaster.pop('success', 'Title', 'Message');
 		
+			formdata.delete('companyId');
+			formdata.delete('quotationLabel');
+			formdata.delete('startAt');
+			formdata.delete('endAt');
+			formdata.delete('quotationType');
 	});
 	
-	$scope.addquotation.companyDrop.companyId='';
-	$scope.addquotation.quotationLabel = '';
-	$scope.addquotation.startAt = '';
-	$scope.addquotation.quotationType = 'prefix';
+	
 	
   }
 }

@@ -72,7 +72,9 @@
                <div class="form-group">
                   <label class="col-sm-3 control-label">Measurement Unit</label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addInvProduct.measureUnit" data-ng-options="s for s in form.measureUnitDrop" ng-change="changeInvProductData('measurementUnit',addInvProduct.measureUnit)" class="form-control chosen-select" ng-required="true"></select>
+                     <select chosen="" data-ng-model="addInvProduct.measureUnit" data-ng-options="s for s in form.measureUnitDrop" ng-change="changeInvProductData('measurementUnit',addInvProduct.measureUnit)" class="form-control chosen-select" ng-required="true">
+					 <option value=""></option>
+					 </select>
                   </div>
                </div>
 			</fieldset>	

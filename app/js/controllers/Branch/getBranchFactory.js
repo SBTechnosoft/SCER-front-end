@@ -1,4 +1,4 @@
-App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function ($http,$q,apiPath,$rootScope,$state) {
+App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiResponse", function ($http,$q,apiPath,$rootScope,$state,apiResponse) {
 	
 	//if($rootScope.$storage.authToken != 'undefined'){
 		
@@ -21,8 +21,13 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function (
 				url: url,
 				method: 'get',
 				processData: false,
+				crossDomain:true,
+				cache:false,
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken}
 			}).success(function(data, status, headers, config) {
+				if(apiResponse.noMatch == data){
+					$state.go('page.login');
+				}
 				deferred.resolve(data);
 			});
 
@@ -36,9 +41,14 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function (
 				url: url,
 				method: 'post',
 				processData: false,
+				crossDomain:true,
+				cache:false,
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 				data:formdata
 			}).success(function(data, status, headers, config) {
+				if(apiResponse.noMatch == data){
+					$state.go('page.login');
+				}
 				deferred.resolve(data);
 			});
 			
@@ -55,8 +65,13 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function (
 				url: url,
 				method: 'get',
 				processData: false,
+				crossDomain:true,
+				cache:false,
 			   headers: headerData
 			}).success(function(data, status, headers, config) {
+				if(apiResponse.noMatch == data){
+					$state.go('page.login');
+				}
 				deferred.resolve(data);
 			});
 
@@ -73,9 +88,15 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function (
 				url: url,
 				method: 'post',
 				processData: false,
+				crossDomain:true,
+				cache:false,
 			   headers: headerData,
 				data:formdata
 			}).success(function(data, status, headers, config) {
+				if(apiResponse.noMatch == data){
+					$state.go('page.login');
+					
+				}
 				deferred.resolve(data);
 			});
 			
@@ -92,6 +113,9 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function (
 				headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
+				if(apiResponse.noMatch == data){
+					$state.go('page.login');
+				}
 				deferred.resolve(data);
 				
 			});
@@ -107,14 +131,21 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function (
 				url: apiPath.getAllCompany,
 				method: 'get',
 				processData: false,
+				crossDomain:true,
+				cache:false,
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
+				if(apiResponse.noMatch == data){
+					$state.go('page.login');
+				}
+				
 				for(var i=0;i<data.length;i++){
+					
 					if(data[i].isDefault == 'ok')
 					{
 						deferred.resolve(data[i]);
-						
+						//return false;
 					}
 				}
 			});
@@ -130,8 +161,14 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state", function (
 				url: apiPath.getAllBranch,
 				method: 'get',
 				processData: false,
+				crossDomain:true,
+				cache:false,
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
+				
+				if(apiResponse.noMatch == data){
+					$state.go('page.login');
+				}
 				
 				for(var i=0;i<data.length;i++){
 					if(data[i].isDefault == 'ok')

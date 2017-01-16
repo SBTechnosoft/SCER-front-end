@@ -111,13 +111,17 @@ App
 	'getLedgerJrnl':   'http://api.siliconbrain.co.in/accounting/ledgers/company/',
 	'getAllStaff': 'http://api.siliconbrain.co.in/users',
 	'getOneStaff': 'http://api.siliconbrain.co.in/users/',
-	'loginAuth': 'http://api.siliconbrain.co.in/authenticate'
+	'loginAuth': 'http://api.siliconbrain.co.in/authenticate',
+	'deleteToken': 'http://api.siliconbrain.co.in/logout/user/',
+	'getBill': 'http://api.siliconbrain.co.in/accounting/bills/company/'
   })
   //Api Path
   .constant('apiResponse', {
     'ok': '200: OK',
 	'noContent': '204: No Content',
-	'notFound': '404: Not Found'
+	'notFound': '404: Not Found',
+	'noMatch': 'NoMatch: Token Not Matched',
+	'tokenExpired': 'Expired: Token Expired'
   })
   //Validation Pattern
   .constant('validationPattern', {

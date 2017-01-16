@@ -3,25 +3,20 @@
  * Module: AddStaffController.js
  * Controller for input components
  =========================================================*/
-App.filter('sumOfValue', function () {
-    return function (data, key) {        
-        if (angular.isUndefined(data) && angular.isUndefined(key))
-            return 0;        
-        var sum = 0;        
-        angular.forEach(data,function(value){
-            sum = sum + parseInt(value[key]);
-        });        
-        return sum;
-    }
-});
+
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage) {
+function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage,saleType,productArrayFactory) {
   'use strict';
  
+	
 	var vm = this;
 	var formdata = new FormData();
 	$scope.quickBill = [];
+	
+	$scope.saleType = saleType;
+	
+	
 	//Invoice Number 
 	$scope.quickBill.invoiceNumber;
 	$scope.quickBill.invoiceEndAt;
@@ -37,30 +32,65 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
   
   /* Table */
 	vm.AccBillTable = [];
-	vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
+	vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+	vm.productTax = [{"tax":0}];
 	
-	$scope.addRow = function(){
-		 
+	$scope.addRow = function(index){
+		
+		var plusOne = index+1;
+		
 		var data = {};	
 		data.productId = '';
 		data.productName ='';
 		data.discountType ='flat';
 		data.discount ='';
-		data.price = '500';
+		data.price = 0;
 		data.qty =1;
 		data.amount = '';
-		vm.AccBillTable.push(data);
+		//vm.AccBillTable.push(data);
+		vm.AccBillTable.splice(plusOne,0,data);
+		
+		var varTax = {};
+		varTax.tax = 0;
+		
+		vm.productTax.splice(plusOne, 0, varTax);
 		
     };
 	
 	$scope.setProductData = function(item,index)
 	{
 		vm.AccBillTable[index].productId = item.productId;
+	
+		var grandPrice;
+		var tax;
+		
+		if($scope.saleType == 'WholesaleBill'){
+			
+			grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.wholesaleMargin);
+			tax = productArrayFactory.calculateTax(item.purchasePrice,0,item.margin);
+		}
+		else if($scope.saleType == 'RetailsaleBill'){
+			
+			grandPrice = productArrayFactory.calculate(item.purchasePrice,item.vat,item.margin);
+			
+			tax = productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
+			
+			if(grandPrice == 0){
+				
+				grandPrice = parseInt(item.mrp);
+			}
+		}
+		
+		vm.AccBillTable[index].price = grandPrice;
+		
+		vm.productTax[index].tax = tax; //Product Tax
+		
 		console.log(vm.AccBillTable);
 	}
 	
 	$scope.removeRow = function (idx) {
 		vm.AccBillTable.splice(idx,1);
+		vm.productTax.splice(idx, 1);
 	};
 	
 	
@@ -264,10 +294,23 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	
 	  formdata.append('remark',$scope.quickBill.remark);
 	 
-	 formdata.append('billNumber','');
+	 //formdata.append('billNumber','');
 	 formdata.append('isDisplay','yes');
 	 
-	var headerData = {'Content-Type': undefined,'type':'sales'};
+	 if($scope.saleType == 'RetailsaleBill'){
+		 
+		$scope.salesTypeHeader = 'retail_sales';
+		
+	 }
+	 else if($scope.saleType == 'WholesaleBill'){
+		 
+		$scope.salesTypeHeader = 'whole_sales';
+
+	 }
+	 
+	// alert($scope.salesTypeHeader);
+	 
+	var headerData = {'Content-Type': undefined,'salesType':$scope.salesTypeHeader};
 	   
 			
 		apiCall.postCallHeader(apiPath.postBill,headerData,formdata).then(function(data){
@@ -314,8 +357,8 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			
 			$scope.quickBill = [];
 			vm.dt1 = new Date();
-			vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":"1000","discount":"","qty":1,"amount":""}];
-			
+			vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+			vm.productTax = [{"tax":0}];
 			
 			formdata.delete('companyId');
 			formdata.delete('entryDate');
@@ -605,4 +648,4 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
   Product Model End
   **/
 }
-RetailsaleBillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage"];
+RetailsaleBillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage","saleType","productArrayFactory"];

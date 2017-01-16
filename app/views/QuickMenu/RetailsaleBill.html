@@ -2,15 +2,15 @@
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
    Quickmenu >> 
-   Retailsale Bill</small>
+   {{saleType}}</small>
 </h3>
 
 <!-- START panel-->
-<div data-ng-controller="RetailsaleBillController as form" class="container-fluid">
+<div class="container-fluid">
 	<form  action="#" name="formBill" class="form-validate form-horizontal">
 	<div class="panel panel-default">
 		 <h4 class="panel-heading" >
-		 Retailsale Bill
+		 {{saleType}}
 		 </h4>
 		<div class="panel-body" style="padding:0px">
 			
@@ -227,9 +227,9 @@
 			<table  class="table table-bordered table-striped" >
 				<thead>
 					<tr>
-						<th class="header" style="width:40%">Name of Item</th>
+						<th class="header" style="width:38%">Name of Item</th>
 						<th class="header" style="width:25%">Discount</th>
-						<th style="width:8%" >Rate</th>
+						<th style="width:10%" >Rate</th>
 						<th style="width:9%" >Quantity</th>
 						<th style="width:10%" >Amount</th>
 						<th style="width:8%">Action</th>
@@ -253,7 +253,8 @@
 							<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="width:50%;" dir="rtl" ng-pattern="/^[0-9]*$/" /> 
 						</td>
 						<td>
-							<span style="float:right">{{item.price}}</span>
+							<!--span style="float:right">{{item.price}}</span-->
+							<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 \.]+$/" /> 
 						</td>
 						<td>
 							<input id="input-id-1" type="number" ng-model="item.qty"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^(0|[1-9]\d{0,8})$/" /> 
@@ -264,9 +265,13 @@
 						</td>
 						<td style="">
 						<center>
-							<i ng-click="addRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"></i>
+							<a href="#" ng-click="addRow($index)"> 
+								<i ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;" title="Add"></i>
+							</a>
 							&nbsp;
-							<i ng-click="removeRow($index)" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0"> </i>
+							<a  class="text-danger" href="#" ng-click="removeRow($index)" ng-if="$index!=0">
+								<i ui-sref=""  class="fa fa-times" style="font-size:20px;" title="Delete"> </i>
+							</a>
 						</center>
 						</td>
 					</tr>
@@ -291,12 +296,13 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td>
+						<!--td>
 							<input id="input-id-1" name="tax" type="text" ng-model="quickBill.tax"  class="form-control"  dir="rtl" ng-pattern="/^[0-9]*$/" /> 
 							<span ng-messages="formBill.tax.$error" ng-if="formBill.tax.$dirty || formBill.tax.$touched"  role="alert">
 								<span ng-messages-include="errorPatternNumber"></span>
 							</span>
-						</td>
+						</td-->
+						<td style="text-align:right">{{form.productTax | sumOfValue:'tax'}}</td>
 						<td></td>
 					</tr>
 					<tr>
@@ -304,7 +310,7 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td style="text-align:right">{{grandTotalTable = totalTable -- quickBill.tax}}</td>
+						<td style="text-align:right">{{grandTotalTable = totalTable}}</td>
 						<td></td>
 					</tr>
 					<tr colspan="5">

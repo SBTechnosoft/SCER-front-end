@@ -37,7 +37,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
 			if(angular.isObject(response)){
 				
 				$rootScope.$storage.authToken = response.authenticationToken;
-				$state.go("app.dashboard");
+				$state.go("app.Company");
 			}
 			else{
 				

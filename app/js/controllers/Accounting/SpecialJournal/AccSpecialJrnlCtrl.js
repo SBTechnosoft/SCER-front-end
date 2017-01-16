@@ -13,6 +13,10 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
    var formdata  = new FormData();
    $scope.addAccJrnl = [];
    $scope.addAccJrnl.jfid;
+   
+	$scope.totalDebit; // sum of Debit Amount
+	$scope.totalCredit;  // sum of Credit Amount
+  
    $scope.changeInArray = false;
    vm.AccSpecialJrnlTable = []; //Table Array
    vm.multiCurrentBalance = [];
@@ -183,20 +187,24 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
   
   /* Table */
 	
-	$scope.addRow = function(){
+	$scope.addRow = function(index){
 		 
+		  var plusOne = index+1;
+		  
 		 var data = {};
 		data.amountType ='debit';
 		data.ledgerId='';
 		data.ledgerName ='';
 		data.amount ='';
-		vm.AccSpecialJrnlTable.push(data);
+		//vm.AccSpecialJrnlTable.push(data);
+		vm.AccSpecialJrnlTable.splice(plusOne, 0, data);
 		
 		var balance = {};
 		balance.currentBalance = '';
 		balance.amountType = '';
-		vm.multiCurrentBalance.push(balance);
-			
+		//vm.multiCurrentBalance.push(balance);
+		vm.multiCurrentBalance.splice(plusOne, 0, balance);
+		
 		$scope.changeInArray = true;
 
     };
@@ -278,6 +286,12 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 	
   $scope.pop = function()
   {
+	 if($scope.totalDebit != $scope.totalCredit){
+	
+		toaster.pop('alert', 'Opps!!', 'Credit/Debit Amount is Not Equal');
+		return false;
+	}
+	
 	//console.log($scope.addAccJrnl.jfid);
 						var  date = new Date(vm.dt1);
 						var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();

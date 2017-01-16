@@ -26,14 +26,14 @@ function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,view
 			
 			$scope.accViewSales.companyDropDown = response;
 			
-			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			//vm.branchDrop = [];
+			//var getAllBranch = apiPath.getOneBranch+response.companyId;
 			//Get Branch
-			apiCall.getCall(getAllBranch).then(function(response4){
+			// apiCall.getCall(getAllBranch).then(function(response4){
 				
-				vm.branchDrop = response4;
+				// vm.branchDrop = response4;
 					
-			});
+			// });
 		});
 	
 	});
@@ -41,13 +41,13 @@ function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,view
   //Get All Branch on Company Change
   $scope.changeCompany = function(id)
   {
-	  vm.branchDrop = [];
-		var getAllBranch = apiPath.getOneBranch+id;
+	  // vm.branchDrop = [];
+		// var getAllBranch = apiPath.getOneBranch+id;
 		//Get Branch
-		apiCall.getCall(getAllBranch).then(function(response4){
-			vm.branchDrop = response4;
+		// apiCall.getCall(getAllBranch).then(function(response4){
+			// vm.branchDrop = response4;
 				
-		});
+		// });
   }
 	
 	$scope.redirectToData = function(){

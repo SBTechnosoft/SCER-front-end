@@ -115,9 +115,13 @@
 						</td>
 						<td style="">
 							<center>
-								<i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add" ></i>
+								<a href="#" ng-click="addClientRow($index)">
+									<i  ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;" title="Add" ></i>
+								</a>
 								&nbsp;
-								<i ng-click="removeClientRow($index)" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0&&$index!=0"></i>
+								<a href="#" ng-click="removeClientRow($index)" ng-if="$index!=0&&$index!=0" class="text-danger"> 
+									<i  ui-sref=""  class="fa fa-times" style="font-size:20px;" title="Delete" ></i>
+								</a>
 							</center>
 						</td>
 					</tr>
@@ -125,10 +129,10 @@
 						<td></td>
 						<td>Total</td>
 						<td >
-							<span style="float:right">{{form.AccClientMultiTable | sumOfDebit:'amount'}}</span>
+							<span style="float:right">{{totalDebit  = (form.AccClientMultiTable | sumOfDebit:'amount')}}</span>
 						</td>
 						<td >
-							<span style="float:right">{{form.AccClientMultiTable | sumOfCredit:'amount'}}</span>
+							<span style="float:right">{{totalCredit = (form.AccClientMultiTable | sumOfCredit:'amount')}}</span>
 						</td>
 						<td ></td>
 					</tr>
@@ -150,7 +154,7 @@
 						   <dd>3595400</dd>
 						</dl>
 						
-						<button type="button" ng-click="openHistoryModal('lg')" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
+						<button type="button" tabindex="-1" ng-click="openHistoryModal('lg')" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
 						
 						<dl class="dl-horizontal" style="visibility:hidden">
 							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
@@ -167,9 +171,9 @@
 				<table  class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th class="header" style="width:40%">Name of Item</th>
+							<th class="header" style="width:38%">Name of Item</th>
 							<th class="header" style="width:25%">Discount</th>
-							<th style="width:8%" >Rate</th>
+							<th style="width:10%" >Rate</th>
 							<th style="width:9%" >Quantity</th>
 							<th style="width:10%" >Amount</th>
 							<th style="width:8%">Action</th>
@@ -207,9 +211,13 @@
 							</td>
 							<td style="">
 							<center>
-								<i ng-click="addRow()" tabindex="1" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"></i>
+								<a href="#"  ng-click="addRow($index)">
+									<i  ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;" title="Add"></i>
+								</a>
 								&nbsp;
-								<i ng-click="removeRow($index)" tabindex="1" ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete" ng-if="$index!=0"> </i>
+								<a href="#" class="text-danger"  ng-click="removeRow($index)" ng-if="$index!=0">
+									<i   ui-sref=""  class="fa fa-times" style="font-size:20px;" title="Delete" > </i>
+								</a>
 							</center>
 							</td>
 						</tr>
@@ -234,13 +242,14 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<td><input id="input-id-1" name="tax" type="text" ng-model="accPurchase.tax" ng-change="changeAccPurchase('tax',accPurchase.tax)"  class="form-control"  dir="rtl" ng-pattern="/^[0-9]*$/" />
+							<!--td><input id="input-id-1" name="tax" type="text" ng-model="accPurchase.tax" ng-change="changeAccPurchase('tax',accPurchase.tax)"  class="form-control"  dir="rtl" ng-pattern="/^[0-9]*$/" />
 								
 								<span ng-messages="formPurchase.tax.$error" ng-if="formPurchase.tax.$dirty || formPurchase.tax.$touched"  role="alert">
 									<span ng-messages-include="errorPatternNumber"></span>
 								</span>
 							
-							</td>
+							</td-->
+							<td style="text-align:right">{{form.productTax | sumOfValue:'tax'}}</td>
 							<td></td>
 						</tr>
 						<tr>
@@ -267,7 +276,7 @@
 	</div>
 	
 	<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" ng-disabled="formPurchase.$invalid" >Save</button>
+	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" >Save</button>
 	</form>
    <!-- END panel-->
 </div>

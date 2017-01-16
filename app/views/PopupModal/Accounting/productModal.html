@@ -6,7 +6,7 @@
 		<center>
 			<form action="#" name="formProduct" class="form-validate form-horizontal">
 				
-			<fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">Company</label>
                   <div class="col-sm-6">
@@ -14,7 +14,7 @@
                   </div>
                </div>
 			</fieldset>
-			<fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">Branch</label>
                   <div class="col-sm-6">
@@ -22,7 +22,7 @@
                   </div>
                </div>
 			</fieldset>
-            <fieldset>
+            <fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Product Name</label>
                   <div class="col-sm-6">
@@ -37,7 +37,7 @@
                   </div>
                </div>
             </fieldset>
-			<fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">Categoy</label>
                   <div class="col-sm-6">
@@ -45,7 +45,7 @@
                   </div>
                </div>
 			</fieldset>
-			<fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">Group</label>
                   <div class="col-sm-6">
@@ -53,15 +53,106 @@
                   </div>
                </div>
 			</fieldset>	
-			<fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">Measurement Unit</label>
                   <div class="col-sm-6">
-                     <select chosen="" data-ng-model="addModelProduct.measureUnit" data-ng-options="s for s in measureUnitDrop" class="form-control chosen-select" ng-required="true"></select>
+                     <select chosen="" data-ng-model="addModelProduct.measureUnit" data-ng-options="s for s in measureUnitDrop" class="form-control chosen-select" ng-required="true">
+						<option value=""></option>
+					 </select>
                   </div>
                </div>
 			</fieldset>	
-			
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Purchase Price</label>
+                  <div class="col-sm-6">
+                     <input id="input-id-1" name="purchasePrice" dir="rtl" ng-model="addModelProduct.purchasePrice" type="text" placeholder="Purchase Price" class="form-control" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="10" />
+					 
+					<span ng-messages="formProduct.purchasePrice.$error" ng-if="formProduct.purchasePrice.$dirty || formProduct.purchasePrice.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Wholesale Margin</label>
+                  <div class="col-sm-6">
+                     <input id="input-id-1" name="wholesaleMargin"  ng-model="addModelProduct.wholesaleMargin" type="text" placeholder="Wholesale Margin" class="form-control" ng-required="true" ng-pattern="/^[0-9]{1,3}(\.[0-9]{1,2})?$|^100$/" style="direction:RTL;" ng-maxlength="6" />
+					 
+					<span ng-messages="formProduct.wholesaleMargin.$error" ng-if="formProduct.wholesaleMargin.$dirty || formProduct.wholesaleMargin.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Semi-Wholesale Margin</label>
+                  <div class="col-sm-6">
+                     <input id="input-id-1" name="semiWholesaleMargin" dir="rtl" ng-model="addModelProduct.semiWholesaleMargin" type="text" placeholder="Semi-Wholesale Margin" class="form-control" ng-required="true" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$|^100$/" ng-maxlength="6" />
+					 
+					<span ng-messages="formProduct.semiWholesaleMargin.$error" ng-if="formProduct.semiWholesaleMargin.$dirty || formProduct.semiWholesaleMargin.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">VAT(%)</label>
+                  <div class="col-sm-6">
+                     <input id="input-id-1" name="vat" dir="rtl" ng-model="addModelProduct.vat" type="text" placeholder="VAT(%)" class="form-control" ng-required="true" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$|^100$/" ng-maxlength="6" />
+					 
+					<span ng-messages="formProduct.vat.$error" ng-if="formProduct.vat.$dirty || formProduct.vat.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Margin</label>
+                  <div class="col-sm-6">
+                     <input id="input-id-1" name="margin" dir="rtl" ng-model="addModelProduct.margin" type="text" placeholder="Margin" class="form-control" ng-required="true" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$|^100$/" ng-maxlength="6" />
+					 
+					<span ng-messages="formProduct.margin.$error" ng-if="formProduct.margin.$dirty || formProduct.margin.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">MRP</label>
+                  <div class="col-sm-6">
+                     <input id="input-id-1" name="mrp" dir="rtl" ng-model="addModelProduct.mrp" type="text" placeholder="MRP" class="form-control" ng-required="true" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$|^100$/" ng-maxlength="10" />
+					 
+					<span ng-messages="formProduct.mrp.$error" ng-if="formProduct.mrp.$dirty || formProduct.mrp.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
 				<button type="button" class="mr mb-sm btn btn-danger pull-right" ng-click="cancel()">Cancel</button>
 				<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()"  ng-disabled="formProduct.$invalid" >Save</button>
 			</form>

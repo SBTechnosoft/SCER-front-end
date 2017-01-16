@@ -88,6 +88,12 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		formdata.append('productCategoryId',$scope.addModelProduct.category.productCategoryId);
 		formdata.append('productGroupId',$scope.addModelProduct.group.productGroupId);
 		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
+		formdata.append('purchasePrice',$scope.addModelProduct.purchasePrice);
+		formdata.append('wholesaleMargin',$scope.addModelProduct.wholesaleMargin);
+		formdata.append('semiWholesaleMargin',$scope.addModelProduct.semiWholesaleMargin);
+		formdata.append('vat',$scope.addModelProduct.vat);
+		formdata.append('margin',$scope.addModelProduct.margin);
+		formdata.append('mrp',$scope.addModelProduct.mrp);
 		
 		//formdata.append('branchId',1);
 		formdata.append('isDisplay','yes');

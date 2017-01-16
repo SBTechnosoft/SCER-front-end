@@ -36,6 +36,12 @@ function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$statePa
 	
 	});
 	
+	//User Type 
+	vm.userTypeDrop = ['Admin','Staff'];
+	
+	$scope.addStaff.userType = 'Staff';
+	formdata.append('userType','staff');
+	
 	 //Update Set
 	if(Object.keys(getSetFactory.get()).length){
 		
@@ -82,6 +88,8 @@ function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$statePa
 			$scope.addStaff.address = response.address;
 			//Staff Pincode
 			$scope.addStaff.pincode = response.pincode;
+			// user Type
+			//$scope.addStaff.userType = response.userType;
 			
 			//State DropDown Selection
 			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;

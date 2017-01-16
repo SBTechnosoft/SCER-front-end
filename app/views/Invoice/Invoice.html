@@ -24,7 +24,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">Invoice Label</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-minlength="1" ng-maxlength="35" ng-required="true" ng-model="addInvoice.invoiceLabel" type="text" placeholder="Invoice Label" class="form-control" auto-focus/>
+						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-pattern="/^[a-zA-Z &_`#().\'-/\\\]*$/" ng-minlength="1" ng-maxlength="35" ng-required="true" ng-model="addInvoice.invoiceLabel" type="text" placeholder="Invoice Label" class="form-control" auto-focus/>
 						 
 						 <span ng-messages="formInvoice.invoiceLabel.$error" ng-if="formInvoice.invoiceLabel.$dirty || formInvoice.invoiceLabel.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
