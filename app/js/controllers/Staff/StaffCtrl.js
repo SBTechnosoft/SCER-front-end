@@ -6,10 +6,13 @@
 
 App.controller('StaffController', StaffController);
 
-function StaffController($scope, $filter, ngTableParams,$http,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory) {
+function StaffController($scope,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory) {
   'use strict';
   var vm = this;
 	var data = [];
+	
+	$scope.allowedAdd = $rootScope.$storage.authUser.userType;
+	$scope.allowedId = $rootScope.$storage.authUser.userId;
 	
  // Chosen data
   // ----------------------------------- 
@@ -110,10 +113,9 @@ $scope.branchF = [
 	  }, {
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
-			  console.log(params.$params);
-			 
+			  
 			  // use build-in angular filter
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.userName) != "undefined" && params.$params.filter.userName != "") || (typeof(params.$params.filter.emailId) != "undefined" && params.$params.filter.emailId != "") || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.userType) != "undefined" && params.$params.filter.userName != "") || (typeof(params.$params.filter.userType) != "undefined" && params.$params.filter.userName != "") || (typeof(params.$params.filter.emailId) != "undefined" && params.$params.filter.emailId != "") || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -129,8 +131,6 @@ $scope.branchF = [
 			 
 			 if(!$.isEmptyObject(params.$params.sorting))
 			  {
-				
-				 //alert('ggg');
 				  var orderedData = params.sorting() ?
 						  $filter('orderBy')(data, params.orderBy()) :
 						  data;
@@ -234,7 +234,7 @@ $scope.branchF = [
 	  
 	 $scope.deleteStaff = function(id)
 	 {
-		return false;
+		
 		
 		var deletePath = apiPath.getAllStaff+'/'+parseInt(id);
 		  
@@ -269,4 +269,4 @@ $scope.branchF = [
 	}
 
 }
-StaffController.$inject = ["$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory"];
+StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","$http","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory"];

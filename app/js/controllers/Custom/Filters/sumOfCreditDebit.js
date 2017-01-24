@@ -6,7 +6,7 @@ App.filter('sumOfDebit', function () {
         angular.forEach(data,function(value){
 			
 			if(value['amountType'] == 'debit'){
-				sum = sum + parseInt(value[key]);
+				sum = sum + parseFloat(value[key]);
 			}
         });        
         return sum;
@@ -20,7 +20,7 @@ App.filter('sumOfCredit', function () {
         angular.forEach(data,function(value){
 			
 			if(value['amountType'] == 'credit'){
-				sum = sum + parseInt(value[key]);
+				sum = sum + parseFloat(value[key]);
 			}
         });        
         return sum;

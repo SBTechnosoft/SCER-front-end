@@ -1,126 +1,104 @@
 
 /**=========================================================
- * Module: AddInvStockCtrl.js
+ * Module: FormPriceListRetailSalesController.js
  * Controller for input components
  =========================================================*/
 
-App.controller('AccViewController', AccViewController);
+App.controller('FormPriceListRetailSalesController', FormPriceListRetailSalesController);
 
-function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,viewDataType) {
+function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory,$state) {
   'use strict';
   
-  var vm = this; 
-  $scope.accViewSales = [];
+  var vm = this;
+  $scope.PriceRetailSales = [];
   
-  $scope.viewDataTypePath = viewDataType;
- 
-	this.salesTypeDrop = [
-	'All',
-	'Retailsales',
-	'Wholesales'
-  ];
-  
-	$scope.accViewSales.salesType = 'All';
-	
-  //Company Dropdown data
-	vm.companyDrop = [];
-	
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+	//Get Company
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response){
 		
-		vm.companyDrop = responseCompanyDrop;
+		vm.companyDrop = response;
 		
 		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		apiCall.getDefaultCompany().then(function(response2){
 			
-			$scope.accViewSales.companyDropDown = response;
+			$scope.PriceRetailSales.companyDropDown = response2;
 			
-			//vm.branchDrop = [];
-			//var getAllBranch = apiPath.getOneBranch+response.companyId;
-			//Get Branch
-			// apiCall.getCall(getAllBranch).then(function(response4){
+			//Auto Suggest Product Dropdown data
+			vm.productDrop = [];
+			
+			apiCall.getCall(apiPath.getProductByCompany+response2.companyId+'/branch').then(function(responseDrop){
 				
-				// vm.branchDrop = response4;
-					
-			// });
+				vm.productDrop = responseDrop;
+				
+			});
+			
 		});
 	
 	});
 	
-  //Get All Branch on Company Change
-  $scope.changeCompany = function(id)
-  {
-	  // vm.branchDrop = [];
-		// var getAllBranch = apiPath.getOneBranch+id;
-		//Get Branch
-		// apiCall.getCall(getAllBranch).then(function(response4){
-			// vm.branchDrop = response4;
-				
-		// });
-  }
 	
-	$scope.redirectToData = function(){
+	//Category Dropdown data
+	vm.categoryDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCategory).then(function(responseDrop){
 		
-		//var viewDataTypePath = viewDataType;
-		var  fromdate = new Date(vm.dt1);
-		var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
+		vm.categoryDrop = responseDrop;
+	
+	});
+	
+	//Group Dropdown data
+	vm.groupDrop = [];
+	
+	apiCall.getCall(apiPath.getAllGroup).then(function(responseDrop){
 		
-		var  todate = new Date(vm.dt2);
-		var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
+		vm.groupDrop = responseDrop;
+	
+	});
+	
+	var dataSet = {'Content-Type': undefined};
+	
+	//Changed Data When Update
+	$scope.changeStockData = function(Fname,value){
 		
-		$rootScope.accView.companyId = $scope.accViewSales.companyDropDown.companyId;
-		$rootScope.accView.fromDate = modifyFromDate; // FromDate
-		$rootScope.accView.toDate = modifyToDate; // TODate
+		dataSet[Fname] = value;
 		
-		if($scope.viewDataTypePath == 'sales'){
+		var Path = apiPath.getProductByCompany+$scope.PriceRetailSales.companyDropDown.companyId;
 			
-			if($scope.accViewSales.salesType == 'Retailsales'){
-				
-				$rootScope.accView.salesType = 'retail_sales';
-			}
-			else if($scope.accViewSales.salesType == 'Wholesales'){
-				
-				$rootScope.accView.salesType = 'whole_sales';
-			}
-			else{
-				
-				$rootScope.accView.salesType = 'all';
-			}
+		delete dataSet.companyId;
+		delete dataSet.productId;
+		
+		vm.productDrop = [];
+		
+		apiCall.getCallHeader(Path,dataSet).then(function(response){
 			
+			vm.productDrop = response;
+			
+		});
+		
+		delete dataSet.authenticationToken;
+		console.log(dataSet);
+	}
+
+	$scope.generate = function(){
+		
+		dataSet["type"] = "retailsales";
+		
+		dataSet["companyId"] = $scope.PriceRetailSales.companyDropDown.companyId;
+		
+		if($scope.PriceRetailSales.productDropDown){
+			
+			dataSet["productId"] = $scope.PriceRetailSales.productDropDown.productId;
+		
 		}
 		
-		if($scope.viewDataTypePath == 'sales'){
-			
-			$state.go("app.AccDataSales");
-			
-		}
-		else if($scope.viewDataTypePath == 'Retailsales'){
-			
-			$state.go("app.AccDataRetailSales");
-		}
-		else if($scope.viewDataTypePath == 'Wholesales'){
-			
-			$state.go("app.AccDataWholeSales");
-		}
-		else if($scope.viewDataTypePath == 'purchase'){
-			
-			$state.go("app.AccDataPurchase");
-		}
-		else if($scope.viewDataTypePath == 'payment'){
-			
-			$state.go("app.AccDataPayment");
-		}
-		else if($scope.viewDataTypePath == 'receipt'){
-			
-			$state.go("app.AccDataReceipt");
-		}
-		else if($scope.viewDataTypePath == 'specialJournal'){
-			
-			$state.go("app.AccDataSpecialJrnl");
-		}
-		 //$state.go("app.AccDataSales");
+		getSetFactory.set(dataSet);
+		console.log(dataSet);
+		console.log(getSetFactory.get());
+		$state.go("app.PriceListRetailSales");
+		//getSetFactory.blank();
+		
 		
 	}
-	
   // Datepicker
   // ----------------------------------- 
 	this.minStart = new Date(0,0,1);
@@ -284,4 +262,4 @@ function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,view
   
   
 }
-AccViewController.$inject = ["$rootScope","$scope","toaster","apiCall","apiPath","$state","viewDataType"];
+FormPriceListRetailSalesController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$state"];

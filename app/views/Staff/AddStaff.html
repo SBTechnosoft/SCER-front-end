@@ -163,8 +163,8 @@
 				</div>
 			</fieldset>
 			
-			 <button type="button" tabindex="3" class="mr mb-sm btn btn-danger pull-right" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()">Cancel</button>
-			 <button type="button" tabindex="2" class="mr mb-sm btn btn-success pull-right" ng-click="addUpStaff()" ng-disabled="formStaff.$invalid" >Save</button>
+			 <button type="button" tabindex="3" class="mr mb-sm btn btn-danger pull-right" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" ng-if="allowedType == 'admin' || allowedId == updatedId">Cancel</button>
+			 <button type="button" tabindex="2" class="mr mb-sm btn btn-success pull-right" ng-click="addUpStaff()" ng-disabled="formStaff.$invalid" ng-if="allowedType == 'admin' || allowedId == updatedId">Save</button>
 			</div>
 			
         </form>

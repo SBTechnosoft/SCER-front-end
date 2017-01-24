@@ -71,7 +71,7 @@
 			</a>
         </li>
 		<li>
-            <a ui-sref="." title="Price List">
+            <a ui-sref="." ng-click="getPriceList()" title="Price List">
 			<center><em class="fa fa-list" style="font-size:28px;" ></em></center>
               Price List
 			</a>
@@ -317,9 +317,9 @@
 		 
 		<!--Start -->
 		<li dropdown="" class="dropdown dropdown-list my-topNav-padding">
-            <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle">
+            <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle" style="text-transform:capitalize">
 			 <img data-ng-src="{{user.picture}}" alt="" class="center-block img-circle img-responsive thumb32" />
-			   Siliconbrain
+			  {{::userName}}
                <div class="point-pin">
                   <em class="fa fa-caret-down"></em>
                </div>
@@ -327,7 +327,7 @@
             <!-- START Dropdown menu-->
             <ul offcanvas-dropdown="" class="dropdown-menu fadeInLeft2 animated">
                <!-- START list item-->
-               <li data-ng-init="offcontent1 = true" data-ng-click="cancel($event)">
+               <li >
                   <a href="#" data-ng-click="offcontent1 = false" class="p">
                      <!-- START media preview-->
                     <div class="media">
@@ -343,7 +343,7 @@
                   </a>
                </li>
                <!-- START list item-->
-               <li data-ng-init="offcontent2 = true"  class="bt">
+               <li   class="bt">
                   <a href="#"  ng-click="configuration()" class="p">
                      <!-- START media preview-->
                     <div class="media">
@@ -359,9 +359,10 @@
                   </a>
                </li>
                <!-- START list item-->
-               <li data-ng-init="offcontent3 = true" data-ng-click="cancel($event)" class="bt">
+               <!--li data-ng-init="offcontent3 = true" data-ng-click="cancel($event)" class="bt"-->
+               <li  class="bt">
                   <!--a class="p" ui-sref="page.login"-->
-                  <a class="p" ng-click="logout()">
+                  <a href="#" class="p" ng-click="logout()">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">

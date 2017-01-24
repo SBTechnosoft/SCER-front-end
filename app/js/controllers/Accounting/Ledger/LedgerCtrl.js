@@ -263,7 +263,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
   this.invAffectDrop = [
 	'yes',
 	'no'
-  ]
+  ];
   
   this.amountTypeDrop = [
 	'debit',

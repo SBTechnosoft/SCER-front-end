@@ -280,17 +280,33 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 				toaster.pop('warning', 'Opps!!', response5);
 			}
 			//toaster.pop('success', 'Title', 'Message');
+			
+			formdata.delete('companyId');
+			formdata.delete('invoiceLabel');
+			formdata.delete('startAt');
+			formdata.delete('endAt');
+			formdata.delete('invoiceType');
 		
 	});
 	
 	
 	
-	formdata.delete('companyId');
-	formdata.delete('invoiceLabel');
-	formdata.delete('startAt');
-	formdata.delete('endAt');
-	formdata.delete('invoiceType');
+	
 	
   }
+  
+	$scope.cancel = function(){
+		
+		$scope.addInvoice.companyDrop.companyId='';
+		$scope.addInvoice.invoiceLabel = '';
+		$scope.addInvoice.startAt = '';
+		$scope.addInvoice.invoiceType = 'prefix';
+		
+		formdata.delete('companyId');
+		formdata.delete('invoiceLabel');
+		formdata.delete('startAt');
+		formdata.delete('endAt');
+		formdata.delete('invoiceType');
+	}
 }
 InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath","$location","toaster","apiResponse","validationMessage"];

@@ -287,5 +287,20 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	
 	
   }
+  
+	$scope.cancel = function(){
+		
+		$scope.addquotation.companyDrop.companyId='';
+		$scope.addquotation.quotationLabel = '';
+		$scope.addquotation.startAt = '';
+		$scope.addquotation.quotationType = 'prefix';
+				
+		formdata.delete('companyId');
+		formdata.delete('quotationLabel');
+		formdata.delete('startAt');
+		formdata.delete('endAt');
+		formdata.delete('quotationType');
+		
+	}
 }
 QuotationController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage"];

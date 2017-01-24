@@ -256,7 +256,7 @@
 					<div class="form-group">
 						 <label class="col-sm-3 control-label">Currency Symbol</label>
 						 <div class="col-sm-5">
-							<select chosen="" tabindex="2" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" class="form-control chosen-select">
+							<select chosen="" tabindex="2" data-ng-model="addCompany.curSymbol" data-ng-options="s for s in form.cursymbolDrop" ng-change="changeCompanyData('currencySymbol',addCompany.curSymbol)" class="form-control chosen-select">
 								<option value=""></option>
 							</select>
 						</div>

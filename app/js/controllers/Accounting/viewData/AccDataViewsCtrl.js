@@ -6,7 +6,7 @@
 
 App.controller('AccViewDataController', AccViewDataController);
 
-function AccViewDataController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,headerType) {
+function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,headerType) {
   'use strict';
   var vm = this;
   var data = [];
@@ -27,7 +27,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,$http,a
 		
 		var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
 		console.log(getJrnlPath);
-		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'sales'};
+		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':$rootScope.accView.salesType};
 	}
 	else if($scope.headerType == 'Wholesales'){
 		
@@ -414,4 +414,4 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,$http,a
 	
 	
 }
-AccViewDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","headerType"];
+AccViewDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","headerType"];

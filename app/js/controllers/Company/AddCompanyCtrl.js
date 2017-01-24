@@ -78,7 +78,7 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 				
 		});
 		
-		if(formdata.get(Fname))
+		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
@@ -296,7 +296,7 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 	
 	$scope.changeCompanyData = function(Fname,value){
 		console.log(Fname+'..'+value);
-		if(formdata.get(Fname))
+		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
@@ -362,7 +362,10 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 				toaster.pop('warning', 'Opps!!', response5);
 			}
 			
+			formdata.delete('isDefault');
+			formdata.delete('isDisplay');
 		});
+		
 	}
 	
   }

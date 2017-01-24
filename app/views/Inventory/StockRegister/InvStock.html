@@ -11,39 +11,56 @@
          <div class="panel-title">Stock</div>
     </div>
       
-      <table data-ng-table="table.tableParams" export-csv="csv" show-filter="true" class="table table-bordered table-striped">
+     <table data-ng-table="table.tableParams" export-csv="csv"  class="table table-bordered table-striped">
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 	  <thead>
 		<tr>
-			<th  colspan="3" >Inward</th>
-			<th  colspan="3" >Outward</th>
+			<th  colspan="4" >Inward/Outward</th>
+			
 			<th  colspan="3" >Balance</th>
 		</tr>
 		<tr>
 			<th >Dt.</th>
+			<th >Sale/purchase</th>
 			<th>Qty</th>
 			<th >Amount</th>
-			<th >Dt.</th>
-			<th>Qty</th>
-			<th >Amount</th>
+			
 			<th >Dt.</th>
 			<th>Qty</th>
 			<th >Amount</th>
 		</tr>
 	  </thead>
-         <tbody>
-            <tr data-ng-repeat="user in $data">
-				<td>{{user.name}}</td>
-				<td>{{user.category}}</td>
-			    <td>{{user.group}}</td>
-				<td>{{user.name}}</td>
-				<td>{{user.category}}</td>
-			    <td>{{user.group}}</td>
-				<td>{{user.name}}</td>
-				<td>{{user.category}}</td>
-			    <td>{{user.group}}</td>
+         <tbody data-ng-repeat="user in $data">
+            <!-- tr data-ng-repeat="user in $data" -->
+            <tr style="background-color: white;">
+				
+				<td rowspan="{{user.balance.length == 0?1:user.balance.length}}"  sortable="'date'" ng-if="$index != 0"> {{user.transactionDate}}</td>
+				<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="user.transactionType == 'Inward' && $index != 0">Purchase</td>
+				<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="user.transactionType == 'Outward' && $index != 0">Sales</td>
+				<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="$index != 0">{{user.qty}} </td>
+				<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="$index != 0" >{{user.price}}</td>
+				
+				<td rowspan="{{user.balance.length}}"  sortable="'date'"   ng-if="$index == 0"> {{user.transactionDate}}</td>
+				<td rowspan="{{user.balance.length}}" ng-if="user.transactionType == 'Inward' && $index == 0">Purchase</td>
+				<td rowspan="{{user.balance.length}}" ng-if="user.transactionType == 'Outward' && $index == 0">Sales</td>
+				<td rowspan="{{user.balance.length}}" ng-if="$index == 0">{{user.qty}} </td>
+				<td rowspan="{{user.balance.length}}" ng-if="$index == 0">{{user.price}}</td>
+				
+				
+				<td>{{user.balance[0].transactionDate}} </td>
+				<td>{{user.balance[0].qty}}</td>
+				<td>{{user.balance[0].price}}</td>
+				
             </tr>
-         </tbody>
+			<tr ng-repeat="bal in user.balance" ng-if="$index > 0" style="background-color: white;">
+					<td>{{bal.date}} </td>
+					<td>{{bal.qty}}</td>
+					<td>{{bal.price}}</td>
+			</tr >
+				
+			
+		</tbody>
+		
       </table>
    </div>
 </div>

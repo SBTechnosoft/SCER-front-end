@@ -66,7 +66,7 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 	  
 	  //console.log(getJrnlPath);
 	  
-	  var headerData = {'Content-Type': undefined,'type':'sales'};
+	  var headerData = {'Content-Type': undefined,'type':'all'};
 	   
 			
 		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){

@@ -62,7 +62,8 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	
 	/** Authentication Token & UserName **/
 		
-		$rootScope.authenticate = [];
+		//$rootScope.loggedUser = [];
+		
 		
 	/** END **/
 	

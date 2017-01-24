@@ -77,10 +77,10 @@
 							<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" />
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" only-number />
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='credit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" />
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='credit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" only-number />
 						</td>
 						<td style="">
 							<center>

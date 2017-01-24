@@ -14,7 +14,7 @@ App.factory('productArrayFactory', function() {
         },
 		calculateTax: function(mainPrice,vat,margin) {
 			
-            var purchasePrice = parseFloat(mainPrice);
+            var purchasePrice = mainPrice;
 		   
 			var percent = parseFloat(vat)+parseFloat(margin);
 		

@@ -1,0 +1,33 @@
+<style>
+.chosen-container .chosen-results {
+    max-height:130px;
+}
+</style>
+<h3>
+	
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+	<a ui-sref="app.FormPriceListRetailSales" > Form RetailSales </a> >>
+   Data RetailSales</small>
+</h3>
+<div data-ng-controller="PriceListRetailSalesController as table" class="container-fluid">
+	
+   <div class="panel panel-default">
+    <div class="panel-heading"><a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary">Export to CSV</a>
+         <div class="panel-title">RetailSales</div>
+    </div>
+      
+     <table data-ng-table="table.tableParams" export-csv="csv"  class="table table-bordered table-striped">
+	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+	   <tbody>
+            <tr data-ng-repeat="user in $data">
+			
+				<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
+				<td data-title="'Retail Price'" sortable="'retailPrice'" filter="{ 'retailPrice': 'text' }" >{{user.retailPrice}}</td>
+			    <td data-title="'Vat'" sortable="'vat'" filter="{ 'vat': 'text' }" >{{user.vat}}</td>
+				<td data-title="'Final Amount'" sortable="'finalAmount'" filter="{ 'finalAmount': 'text' }" >{{user.finalAmount}}</td>
+				
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>

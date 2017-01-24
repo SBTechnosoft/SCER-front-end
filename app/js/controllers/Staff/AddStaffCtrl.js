@@ -6,27 +6,23 @@
 
 App.controller('AddStaffController', AddStaffController);
 
-function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location,apiResponse,validationMessage,getSetFactory) {
+function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,apiResponse,validationMessage,getSetFactory) {
   'use strict';
  
 	var vm = this;
 	$scope.addStaff = [];
 	var formdata = new FormData();
 	
+	$scope.allowedType = $rootScope.$storage.authUser.userType; //Logged user Type (Admin/Staff)
+	$scope.allowedId = $rootScope.$storage.authUser.userId; //Logged user Type (Admin/Staff)
+	$scope.updatedId;
 	/* VALIDATION */
 	
 		$scope.errorMessage = validationMessage; //Error Messages In Constant
 	
 	/* VALIDATION END */
 	
-	//Company Dropdown data
-	vm.companyDrop = [];
 	
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-		
-		vm.companyDrop = responseCompanyDrop;
-	
-	});
 	
 	//Get State
 	vm.statesDrop=[];
@@ -37,10 +33,9 @@ function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$statePa
 	});
 	
 	//User Type 
-	vm.userTypeDrop = ['Admin','Staff'];
+	vm.userTypeDrop = ['admin','staff'];
 	
-	$scope.addStaff.userType = 'Staff';
-	formdata.append('userType','staff');
+	
 	
 	 //Update Set
 	if(Object.keys(getSetFactory.get()).length){
@@ -48,14 +43,25 @@ function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$statePa
 		$scope.addStaff.getSetStaffId = getSetFactory.get();
 		getSetFactory.blank();
 		
+		$scope.updatedId = $scope.addStaff.getSetStaffId;
+		
 		var getOneStaff = apiPath.getOneStaff+$scope.addStaff.getSetStaffId;
 		
 		apiCall.getCall(getOneStaff).then(function(response){
+		
+			//Company Dropdown data
+			vm.companyDrop = [];
+			
+			apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+				
+				vm.companyDrop = responseCompanyDrop;
+			});
 		
 			//Company DropDown Selection
 			var companyDropPath = apiPath.getAllCompany+'/'+response.company.companyId;
 			apiCall.getCall(companyDropPath).then(function(res2){
 			
+				
 				$scope.addStaff.company = res2;
 			});
 			
@@ -89,7 +95,7 @@ function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$statePa
 			//Staff Pincode
 			$scope.addStaff.pincode = response.pincode;
 			// user Type
-			//$scope.addStaff.userType = response.userType;
+			$scope.addStaff.userType = response.userType;
 			
 			//State DropDown Selection
 			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;
@@ -109,6 +115,38 @@ function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$statePa
 				$scope.addStaff.cityDropDown = res4;
 			});
 			
+		});
+	}
+	else{
+		
+		$scope.addStaff.userType = 'staff';
+		formdata.append('userType','staff');
+		
+		//Company Dropdown data
+		vm.companyDrop = [];
+		
+		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+			
+			vm.companyDrop = responseCompanyDrop;
+			
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
+				
+				$scope.addStaff.company = response;
+				
+				formdata.append('companyId',response.companyId);
+				
+				vm.branchDrop = [];
+				var getAllBranch = apiPath.getOneBranch+response.companyId;
+				//Get Branch
+				apiCall.getCall(getAllBranch).then(function(response4){
+					
+					vm.branchDrop = response4;
+						
+				});
+			});
+			
+		
 		});
 	}
 	
@@ -332,4 +370,4 @@ function AddStaffController($scope,toaster,$http,apiCall,apiPath,$state,$statePa
     {value: 5, name: 'Huge'}
   ];
 }
-AddStaffController.$inject = ["$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location","apiResponse","validationMessage","getSetFactory"];
+AddStaffController.$inject = ["$scope","$rootScope","toaster","apiCall","apiPath","$state","apiResponse","validationMessage","getSetFactory"];

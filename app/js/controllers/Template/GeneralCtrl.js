@@ -364,8 +364,14 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 	
 	$scope.cancel = function()
 	{
+		$scope.tempID = '';
 		$scope.generalTemp.tempName = '';
 		tinyMCE.get('textdesc').setContent('');
+		
+		formdata.delete('companyId');
+		formdata.delete('templateName');
+		formdata.delete('templateType');
+		formdata.delete('templateBody');
 	}
 	
   // Datepicker

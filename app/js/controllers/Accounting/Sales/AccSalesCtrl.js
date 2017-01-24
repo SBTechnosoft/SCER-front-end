@@ -7,7 +7,7 @@
 
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
+function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
   'use strict';
   
  // $templateCache.remove($state.current.templateUrl);
@@ -17,10 +17,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   var formdata = new FormData();
   $scope.totalTable;
   $scope.grandTotalTable;
- // $scope.accSales.tax = 0;
+ $scope.accSales.demotax;
+ $scope.accSales.tax = 0;
   
   $scope.totalDebit; // sum of Debit Amount
   $scope.totalCredit;  // sum of Credit Amount
+  
+  $scope.productArrayFactory = productArrayFactory;
   
   $scope.accSales.jfid; // JFID
   
@@ -29,6 +32,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
   $scope.changeJrnlArray = false; // Change When Update in Journal Table Array
   
   vm.AccSalesTable = []; // Product Table Array
+  vm.productTax = []; //product Tax
   $scope.changeProductArray = false; // Change When Update in Product Table Array
   
 	/* VALIDATION */
@@ -63,6 +67,73 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		vm.companyDrop = responseCompanyDrop;
 	
 	});
+	
+	$scope.defaultCompany = function(){
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+		
+			$scope.accSales.companyDropDown = response;
+			
+			if(formdata.has('companyId')){
+				
+				formdata.delete('companyId');
+			}
+			
+			formdata.append('companyId',response.companyId);
+			
+			vm.clientNameDropDr=[];
+			vm.clientNameDropCr=[];
+			
+			//Auto suggest Client Name For Debit
+			var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+			
+			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
+				
+				console.log(response3);
+				if(response3 != apiResponse.notFound){
+					
+					for(var t=0;t<response3.length;t++){
+						
+						for(var k=0;k<response3[t].length;k++){
+							
+							vm.clientNameDropDr.push(response3[t][k]);
+						}
+						
+					}
+					
+				}
+			
+			});
+			
+			apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+				
+				if(response3 != apiResponse.notFound){
+					
+					for(var t=0;t<response3.length;t++){
+						
+						for(var k=0;k<response3[t].length;k++){
+							
+							vm.clientNameDropCr.push(response3[t][k]);
+						}
+						
+					}
+				}
+			
+			});
+			
+			//Auto Suggest Product Dropdown data
+			vm.productNameDrop = [];
+			
+			apiCall.getCall(apiPath.getProductByCompany+response.companyId+'/branch').then(function(responseDrop){
+				
+				vm.productNameDrop = responseDrop;
+			
+			});
+		
+		});
+		
+	}
 	
 	// Datepicker
   // ----------------------------------- 
@@ -182,6 +253,15 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 					}
 				
 				});
+				
+			//Auto Suggest Product Dropdown data
+			vm.productNameDrop = [];
+			
+			apiCall.getCall(apiPath.getProductByCompany+data.journal[0].company.companyId+'/branch').then(function(responseDrop){
+				
+				vm.productNameDrop = responseDrop;
+			
+			});
 			/**
 				End
 			**/
@@ -227,10 +307,15 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				//tempProData.amount = parseInt(data.productTransaction[j].amount);
 				
 				vm.AccSalesTable.push(tempProData);
+				
+				var varTax = {};
+				varTax.tax = data.productTransaction[j].product.vat;
+				
+				vm.productTax.push(varTax);
 				//console.log();
 			}
 			
-			$scope.accSales.tax = parseInt(data.productTransaction[0].tax);
+			//$scope.accSales.tax = parseInt(data.productTransaction[0].tax);
 			//console.log(vm.AccClientMultiTable);
 			//console.log(vm.AccSalesTable);
 		});
@@ -245,63 +330,8 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	
 		});
 		
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		$scope.defaultCompany();
 		
-			$scope.accSales.companyDropDown = response;
-			
-			formdata.append('companyId',response.companyId);
-			
-			vm.clientNameDropDr=[];
-			vm.clientNameDropCr=[];
-			
-			//Auto suggest Client Name For Debit
-			var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
-			
-			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
-				
-				console.log(response3);
-				if(response3 != apiResponse.notFound){
-					
-					for(var t=0;t<response3.length;t++){
-						
-						for(var k=0;k<response3[t].length;k++){
-							
-							vm.clientNameDropDr.push(response3[t][k]);
-						}
-						
-					}
-					
-				}
-			
-			});
-			
-			apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
-				
-				if(response3 != apiResponse.notFound){
-					
-					for(var t=0;t<response3.length;t++){
-						
-						for(var k=0;k<response3[t].length;k++){
-							
-							vm.clientNameDropCr.push(response3[t][k]);
-						}
-						
-					}
-				}
-			
-			});
-			
-			//Auto Suggest Product Dropdown data
-			vm.productNameDrop = [];
-			
-			apiCall.getCall(apiPath.getProductByCompany+response.companyId+'/branch').then(function(responseDrop){
-				
-				vm.productNameDrop = responseDrop;
-			
-			});
-		
-		});
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		
@@ -312,6 +342,7 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 	}
 	//End Update Set
+	
 	
 	
 	
@@ -404,17 +435,18 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		var grandPrice;
 
-		grandPrice = productArrayFactory.calculate(item.purchasePrice,item.vat,item.margin);
+		grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.margin);
 			
 		if(grandPrice == 0){
 			
-			grandPrice = parseInt(item.mrp);
+			grandPrice = productArrayFactory.calculate(item.mrp,0,item.margin);
 		}
 		
 		vm.AccSalesTable[index].price = grandPrice;
 		
-		vm.productTax[index].tax = productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
-		
+		//vm.productTax[index].tax = productArrayFactory.calculateTax(grandPrice,item.vat,0);
+		vm.productTax[index].tax = parseFloat(item.vat);
+		console.log(vm.productTax);
 		//$scope.accSales.tax = $scope.accSales.tax + productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
 		
 		
@@ -428,6 +460,18 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		for(var i = 0; i < vm.AccSalesTable.length; i++){
 			var product = vm.AccSalesTable[i];
 			total += product.amount;
+		}
+		return total;
+	}
+	
+	//Total Tax For Product Table
+	$scope.getTotalTax = function(){
+		
+		var total = 0;
+		for(var i = 0; i < vm.AccSalesTable.length; i++){
+			var product = vm.AccSalesTable[i];
+			var vartax = vm.productTax[i];
+			total += productArrayFactory.calculateTax(product.amount,vartax.tax,0);
 		}
 		return total;
 	}
@@ -502,6 +546,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		
 		//For Model
 		$rootScope.accView.companyId = value;
+		
+		//Clear Journal Array And Product Array When Company Change
+		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+		
+		vm.AccSalesTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+		vm.productTax = [{"tax":0}];
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 		
 	}
 	
@@ -635,6 +686,12 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				});
 				
 			}
+			
+			if(formdata.has('tax')){
+			
+				formdata.delete('tax');
+			}
+			formdata.append('tax',$scope.accSales.tax);
 			// formdata.append('transactionDate',$scope.totalTable);
 			// formdata.append('transactionDate',$scope.grandTotalTable);
 			
@@ -705,7 +762,13 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 		}
 		
 		formdata.append('transactionDate',fdate);
-		formdata.append('billNumber','');
+		
+		if(!formdata.has('tax')){
+			
+			formdata.append('billNumber','');
+		}
+		
+		formdata.append('tax',$scope.accSales.tax);
 		
 		if(!formdata.has('tax')){
 			
@@ -755,9 +818,9 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 				else{
 					
 					// Delete formdata  keys
-					for (var key of formdata.keys()) {
-					   formdata.delete(key); 
-					}
+					// for (var key of formdata.keys()) {
+					   // formdata.delete(key); 
+					// }
 					formdata.delete('tax');
 					formdata.delete('jfId');
 					$scope.deleteArray();
@@ -831,6 +894,8 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 					$scope.accSales.jfid = response.nextValue;
 		
 				});
+				
+				$scope.defaultCompany();
 			}
 	
 		});
@@ -901,6 +966,8 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			$scope.accSales.jfid = response.nextValue;
 
 		});
+		
+		$scope.defaultCompany();
 	   
 	}
   
@@ -1146,8 +1213,10 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 			apiCall.getCallHeader(apiPath.getProductByCompany+data.companyId,headerSearch).then(function(response){
 				
 				console.log(response);
-				vm.AccSalesTable[data.index].productName = response.productName;
-				vm.AccSalesTable[data.index].productId = response.productId;
+				vm.AccSalesTable[data.index].productName = response[0].productName;
+				//vm.AccSalesTable[data.index].productId = response.productId;
+				
+				$scope.settabledata(response[0],data.index);
 				
 			});
 		
@@ -1202,4 +1271,4 @@ function AccSalesController($scope,apiCall,apiPath,$http,$modal,$log,$rootScope,
 	**/
   
 }
-AccSalesController.$inject = ["$scope","apiCall","apiPath","$http","$modal", "$log","$rootScope","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory"];
+AccSalesController.$inject = ["$scope","apiCall","apiPath","$modal","$rootScope","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory"];

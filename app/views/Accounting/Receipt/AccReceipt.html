@@ -108,7 +108,7 @@
 							<h5>Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 						</td>
 						<td >
-							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" />
+							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" only-number />
 							<h5 class="text-center" style="visibility:hidden">Current Balance 205000 Dr/Cr</h5>
 						</td>
 						<td style="">

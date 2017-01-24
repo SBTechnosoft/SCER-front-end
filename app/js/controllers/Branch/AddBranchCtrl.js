@@ -288,7 +288,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		vm.cityDrop = response4;
 			
 	});
-		if(formdata.get(Fname))
+		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
@@ -347,6 +347,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		
 		formdata.append('isDefault','not');
 		formdata.append('isDisplay','yes');
+		
 		apiCall.postCall(apiPath.getAllBranch,formdata).then(function(response5){
 		
 			//console.log(response5);
@@ -360,6 +361,9 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 				
 				toaster.pop('warning', 'Opps!!', response5);
 			}
+			
+			formdata.delete('isDefault');
+			formdata.delete('isDisplay');
 		
 		});
 		

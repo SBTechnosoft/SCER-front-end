@@ -251,6 +251,10 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		}
 		formdata.append(Fname,value);
 		
+		vm.AccSpecialJrnlTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
+		
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
+		
 	}
 	
 	 //Changed Data When Update
@@ -292,41 +296,20 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		return false;
 	}
 	
-	//console.log($scope.addAccJrnl.jfid);
-						var  date = new Date(vm.dt1);
-						var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-	//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+	
+	var  date = new Date(vm.dt1);
+	var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 
-	// formdata.append('companyId',$scope.addAccJrnl.companyDropDown.companyId);
-	
-					if(formdata.has('entryDate'))
-					{
-						formdata.delete('entryDate');
-					}
-						formdata.append('entryDate',fdate);
-						
-	// if($scope.changeInArray){
-		
-		// var json = angular.copy(vm.AccSpecialJrnlTable);
-		 
-		// for(var i=0;i<json.length;i++){
-			 
-			// angular.forEach(json[i], function (value,key) {
-				
-				// formdata.append('data['+i+']['+key+']',value);
-			// });
-			
-		// }
-	// }
-	
-	
+	if(formdata.has('entryDate'))
+	{
+		formdata.delete('entryDate');
+	}
+	formdata.append('entryDate',fdate);
+
 	if($scope.addAccJrnl.getSetJrnlId){
 		
 		
 		var SpecialJtnlPath = apiPath.postJrnl+'/'+$scope.addAccJrnl.jfid;
-		
-		console.log(SpecialJtnlPath);
-		console.log($scope.addAccJrnl.jfid);
 		
 		if($scope.changeInArray){
 			
@@ -384,6 +367,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				}
 				else{
 					
+					$scope.deleteArray();
 					toaster.pop('warning', 'Opps!!', response);
 				}
 				
@@ -396,6 +380,8 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				}
 				else{
 					
+					formdata.delete('jfId');
+					$scope.deleteArray();
 					toaster.pop('warning', 'Opps!!', response);
 				}
 				
@@ -410,7 +396,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				if($scope.changeInArray){
 					
 					var json = angular.copy(vm.AccSpecialJrnlTable);
-					console.log('Delete Array');
+					
 					for(var i=0;i<json.length;i++){
 						 
 						angular.forEach(json[i], function (value,key) {
@@ -439,7 +425,9 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 				apiCall.getDefaultCompany().then(function(response){
 				
 					$scope.addAccJrnl.companyDropDown = response;
-
+					
+					formdata.append('companyId',response.companyId);
+					
 					//Auto suggest Client Name
 					var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
 					var headerData = {'Content-Type': undefined};
@@ -526,6 +514,20 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
   }
  
 
+	$scope.deleteArray = function(){
+		
+		var json = angular.copy(vm.AccSpecialJrnlTable);
+			
+			console.log('Delete Array');
+			for(var i=0;i<json.length;i++){
+				 
+				angular.forEach(json[i], function (value,key) {
+					
+					formdata.delete('data['+i+']['+key+']',value);
+				});
+				
+			}
+	}
  
   // Timepicker
   // ----------------------------------- 

@@ -1,16 +1,5 @@
 App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiResponse", function ($http,$q,apiPath,$rootScope,$state,apiResponse) {
 	
-	//if($rootScope.$storage.authToken != 'undefined'){
-		
-		//var authToken = $rootScope.$storage.authToken;
-		//console.log(authToken);
-	// }
-	// else{
-		
-		// $state.go("page.login");
-		// console.log('else');
-	// }
-	
 	
 	return {
 		 getCall : function(url){
@@ -23,6 +12,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				processData: false,
 				crossDomain:true,
 				cache:false,
+				// dataType: 'jsonp',
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken}
 			}).success(function(data, status, headers, config) {
 				if(apiResponse.noMatch == data){

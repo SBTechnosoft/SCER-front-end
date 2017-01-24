@@ -6,69 +6,107 @@
 
 App.controller('AddInvStockController', AddInvStockController);
 
-function AddInvStockController($scope,toaster) {
+function AddInvStockController($scope,apiCall,apiPath,getSetFactory,$state) {
   'use strict';
   
+  var vm = this;
+  $scope.invStock = [];
   
-  // Chosen data
-  // ----------------------------------- 
+  
+	//Get Company
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response){
+		
+		vm.companyDrop = response;
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response2){
+			
+			$scope.invStock.companyDropDown = response2;
+			
+			//Auto Suggest Product Dropdown data
+			vm.productDrop = [];
+			
+			apiCall.getCall(apiPath.getProductByCompany+response2.companyId+'/branch').then(function(responseDrop){
+				
+				vm.productDrop = responseDrop;
+				
+			});
+			
+		});
+	
+	});
+	
+	
+	//Category Dropdown data
+	vm.categoryDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCategory).then(function(responseDrop){
+		
+		vm.categoryDrop = responseDrop;
+	
+	});
+	
+	//Group Dropdown data
+	vm.groupDrop = [];
+	
+	apiCall.getCall(apiPath.getAllGroup).then(function(responseDrop){
+		
+		vm.groupDrop = responseDrop;
+	
+	});
+	
+	var dataSet = {'Content-Type': undefined};
+	//Changed Data When Update
+	$scope.changeStockData = function(Fname,value){
+		
+		dataSet[Fname] = value;
+		
+		var Path = apiPath.getProductByCompany+$scope.invStock.companyDropDown.companyId;
+			
+		delete dataSet.companyId;
+		delete dataSet.productId;
+		
+		vm.productDrop = [];
+		
+		apiCall.getCallHeader(Path,dataSet).then(function(response){
+			
+			vm.productDrop = response;
+			
+		});
+		
+		delete dataSet.authenticationToken;
+		console.log(dataSet);
+	}
 
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
-
+	$scope.generate = function(){
+		
+		var  fromdate = new Date(vm.dt1);
+		var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
+		
+		var  todate = new Date(vm.dt2);
+		var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
+		
+		dataSet["fromDate"] = modifyFromDate;
+		dataSet["toDate"] = modifyToDate;
+		dataSet["companyId"] = $scope.invStock.companyDropDown.companyId;
+		if($scope.invStock.productDropDown.productId){
+			
+			dataSet["productId"] = $scope.invStock.productDropDown.productId;
+			
+		}
+		
+		getSetFactory.set(dataSet);
+		console.log(dataSet);
+		console.log(getSetFactory.get());
+		$state.go("app.InvStock");
+		//getSetFactory.blank();
+		
+		
+	}
   // Datepicker
   // ----------------------------------- 
-	this.minStart = new Date();
+	this.minStart = new Date(0,0,1);
 	this.maxStart = new Date();
   this.today = function() {
     this.dt1 = new Date();
@@ -122,7 +160,7 @@ function AddInvStockController($scope,toaster) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
   this.format = this.formats[0];
 
   // Timepicker
@@ -229,4 +267,4 @@ function AddInvStockController($scope,toaster) {
   
   
 }
-AddInvStockController.$inject = ["$scope","toaster"];
+AddInvStockController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$state"];

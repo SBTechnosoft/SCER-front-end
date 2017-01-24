@@ -7,7 +7,10 @@
 App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse) {
   'use strict';
   
+  $scope.userName = $rootScope.$storage.authUser.userName;
+  
   $scope.headerMenuCollapsed = false;
+	
 
   $scope.toggleHeaderMenu = function() {
     $scope.headerMenuCollapsed = !$scope.headerMenuCollapsed;
@@ -86,25 +89,43 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			  alert('Failure loading menu');
 			});
 	  };
+	  
+	  // GET Price List Sidebar
+	  $scope.getPriceList = function(){
+		 
+		var menuJson = 'server/sidebar/PriceList.json',
+		  menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
+		
+		  $http.get(menuURL)
+			.success(function(items) {
+				//$rootScope.menuItems=[];
+			   $rootScope.menuItems = items;
+			   
+			})
+			.error(function(data, status, headers, config) {
+			  alert('Failure loading menu');
+			});
+	  };
   
 	  $scope.logout = function(){
 		  
-		//alert('in');
-		$rootScope.$storage.$reset();
+		//alert('in');2e7719b36240c051e694a88cc511d4a6  d29ac73b666a3be3fc463448fdc5d9fc
+		
 		    
-		// apiCall.deleteCall(apiPath.deleteToken+14).then(function(deleteres){
+		apiCall.deleteCall(apiPath.deleteToken+$rootScope.$storage.authUser.userId).then(function(deleteres){
 			
-			// if(apiResponse.ok == deleteres){
+			if(apiResponse.ok == deleteres){
 				
-				// $state.go("page.login");
+				$rootScope.$storage.$reset();
+				$state.go("page.login");
 				
-			// }
-			// else{
+			}
+			else{
 				
-				// alert('Opps!, Problem Occure');
-			// }
+				alert('Opps!, Problem Occure');
+			}
 		 
-		// });
+		});
 		
 		$state.go("page.login");
 		  

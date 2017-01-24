@@ -16,6 +16,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	
 	$scope.saleType = saleType;
 	
+	$scope.quickBill.tax = 0; //Tax
 	
 	//Invoice Number 
 	$scope.quickBill.invoiceNumber;
@@ -28,7 +29,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	
 	/* VALIDATION END */
 	
-	vm.paymentModeDrop =['cash','credit','bank','card'];
+	vm.paymentModeDrop =['cash','bank','card'];
   
   /* Table */
 	vm.AccBillTable = [];
@@ -66,24 +67,31 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		
 		if($scope.saleType == 'WholesaleBill'){
 			
+			
 			grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.wholesaleMargin);
-			tax = productArrayFactory.calculateTax(item.purchasePrice,0,item.margin);
+					//tax = productArrayFactory.calculateTax(item.purchasePrice,0,item.margin);
+			vm.productTax[index].tax = 0;
+			//vm.productTax[index].margin = item.wholesaleMargin;
 		}
 		else if($scope.saleType == 'RetailsaleBill'){
 			
-			grandPrice = productArrayFactory.calculate(item.purchasePrice,item.vat,item.margin);
+			grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.margin);
 			
-			tax = productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
+					//tax = productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
 			
-			if(grandPrice == 0){
+			vm.productTax[index].tax = item.vat;
+			//vm.productTax[index].margin = item.margin;
+			
+			if(item.purchasePrice == 0 || grandPrice == 0){
 				
-				grandPrice = parseInt(item.mrp);
+				
+				grandPrice = productArrayFactory.calculate(item.mrp,0,item.margin);
 			}
 		}
 		
 		vm.AccBillTable[index].price = grandPrice;
 		
-		vm.productTax[index].tax = tax; //Product Tax
+		//vm.productTax[index].tax = tax; //Product Tax
 		
 		console.log(vm.AccBillTable);
 	}
@@ -93,7 +101,42 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		vm.productTax.splice(idx, 1);
 	};
 	
+	//Total Tax For Product Table
+	// $scope.getTotalAmount = function(){
+		
+		// var total = 0;
+		// for(var i = 0; i < vm.AccBillTable.length; i++){
+			// var product = vm.AccBillTable[i];
+			// var varMargin= vm.productTax[i];
+			// var finalAmount = product.price * product.qty;
+			// console.log(finalAmount);
+			// total += productArrayFactory.calculate(finalAmount,0,varMargin.margin);
+		// }
+		// return total;
+	// }
 	
+	//Total Tax For Product Table
+	$scope.getTotalTax = function(){
+		
+		var total = 0;
+		for(var i = 0; i < vm.AccBillTable.length; i++){
+			var product = vm.AccBillTable[i];
+			var vartax = vm.productTax[i];
+			total += productArrayFactory.calculateTax(product.amount,vartax.tax,0);
+		}
+		return total;
+	}
+	
+	$scope.getTotal = function(){
+		
+		var total = 0;
+		for(var i = 0; i < vm.AccBillTable.length; i++){
+			var product = vm.AccBillTable[i];
+			total += product.amount;
+		}
+		return total;
+		
+	}
 	
 	//Get State
 	vm.statesDrop=[];
@@ -123,49 +166,61 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	
   /* End */
   
+	$scope.defaultComapny = function(){
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response2){
+			
+			$scope.quickBill.companyDropDown = response2;
+			
+			if(formdata.has('companyId')){
+				
+				formdata.delete('companyId');
+			}
+			
+			formdata.append('companyId',response2.companyId);
+			
+			var id = response2.companyId;
+			var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
+
+			//Get City
+			apiCall.getCall(getLatest).then(function(response4){
+				console.log(response4);
+				var label = response4.invoiceLabel;
+				$scope.quickBill.invoiceEndAt = response4.endAt;
+				$scope.quickBill.invoiceId = response4.invoiceId;
+				
+				if(response4.invoiceType=='postfix'){
+					
+					$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
+					//console.log($scope.quickBill.invoiceNumber);
+				}
+				else{
+					$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
+					//console.log($scope.quickBill.invoiceNumber);
+				}
+					
+			});
+			
+			//Auto Suggest Product Dropdown data
+			vm.productNameDrop = [];
+			
+			apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(responseDrop){
+				
+				vm.productNameDrop = responseDrop;
+			
+			});
+			
+		});
+	}
+  
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 			//console.log(response2);
 			vm.companyDrop = response2;
 			
-			for(var i=0;i<response2.length;i++){
-				
-				if(response2[i].isDefault == 'ok')
-				{
-					$scope.quickBill.companyDropDown = response2[i];
-					var id = response2[i].companyId;
-					var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
-		
-					//Get City
-					apiCall.getCall(getLatest).then(function(response4){
-						console.log(response4);
-						var label = response4.invoiceLabel;
-						$scope.quickBill.invoiceEndAt = response4.endAt;
-						$scope.quickBill.invoiceId = response4.invoiceId;
-						
-						if(response4.invoiceType=='postfix'){
-							
-							$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
-							//console.log($scope.quickBill.invoiceNumber);
-						}
-						else{
-							$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
-							//console.log($scope.quickBill.invoiceNumber);
-						}
-							
-					});
-					
-					//Auto Suggest Product Dropdown data
-					vm.productNameDrop = [];
-					
-					apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(responseDrop){
-						
-						vm.productNameDrop = responseDrop;
-					
-					});
-				}
-			}
+			$scope.defaultComapny();
 			
 	});
 	
@@ -205,17 +260,13 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		
 		});
 		
+		vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+		vm.productTax = [{"tax":0}];
+		$scope.quickBill.advance = 0;
 	}
   
   
-  $scope.getTotal = function(){
-    var total = 0;
-    for(var i = 0; i < vm.AccBillTable.length; i++){
-        var product = vm.AccBillTable[i];
-        total += product.amount;
-    }
-    return total;
-}
+  
 	$scope.totalTable;
 	$scope.grandTotalTable;
 	$scope.balanceTable;
@@ -226,44 +277,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		//alert(generate);
 		var  date = new Date(vm.dt1);
 		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-		
-	  // console.log($scope.quickBill.companyDropDown.companyId);
-	   
-	   // console.log(fdate);
-	  // console.log($scope.quickBill.BillContact);
-	  // console.log($scope.quickBill.WorkNo);
-	  // console.log($scope.quickBill.companyName);
-	  // console.log($scope.quickBill.clientName);
-	  // console.log($scope.quickBill.emailId);
-	  // console.log($scope.quickBill.fisrtAddress);
-	  // console.log($scope.quickBill.secondAddress);
-	  // console.log($scope.quickBill.stateAbb.stateAbb);
-	  // console.log($scope.quickBill.cityId.cityId);
-	   // console.log($scope.quickBill.invoiceNumber);	
-	   // console.log(fdate); // transactionDate
-	    // console.log($scope.totalTable);
-		// console.log($scope.quickBill.tax);
-		// console.log($scope.grandTotalTable);
-		 // console.log($scope.quickBill.advance);
-		  // console.log($scope.balanceTable);
-	  // console.log($scope.quickBill.paymentMode);
-	  // console.log($scope.quickBill.BankName.bankId);
-	  // console.log($scope.quickBill.chequeNo);
-	  // console.log($scope.quickBill.remark);
-	  // console.log(vm.AccBillTable);
-	  
-	  //Inventory
-	  var json2 = angular.copy(vm.AccBillTable);
-	 
-	 for(var i=0;i<json2.length;i++){
-		 
-		angular.forEach(json2[i], function (value,key) {
-			
-			formdata.append('inventory['+i+']['+key+']',value);
-		});
-				
-	 }
-	  
+	
 	  //formdata.append();
 	  
 	  formdata.append('companyId',$scope.quickBill.companyDropDown.companyId);
@@ -286,6 +300,18 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	 formdata.append('balance',$scope.balanceTable);
 	  formdata.append('paymentMode',$scope.quickBill.paymentMode);
 	  
+	 //Inventory
+	  var json2 = angular.copy(vm.AccBillTable);
+	 
+	 for(var i=0;i<json2.length;i++){
+		 
+		angular.forEach(json2[i], function (value,key) {
+			
+			formdata.append('inventory['+i+']['+key+']',value);
+		});
+				
+	 }
+	 
 	  if($scope.quickBill.paymentMode == 'bank'){
 		  
 		 formdata.append('bankName',$scope.quickBill.BankName.bankName);
@@ -321,21 +347,35 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			console.log(data);
 			angular.element("input[type='file']").val(null);
 			formdata.delete('file');
-			// apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
-		
-				// console.log(response3);
-				// formdataNew.delete('endAt');
-	
-			// });
 			
-			if(generate == 'generate'){
-				console.log('generate');
-				console.log(data.documentPath);
-				var pdfPath = 'http://api.siliconbrain.co.in/'+data.documentPath;
-				$window.open(pdfPath, '_blank');
-			}
-			else{
-				console.log('Not');
+			if(angular.isObject(data)){
+				
+				
+				
+				// apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
+			
+					// console.log(response3);
+					// formdataNew.delete('endAt');
+		
+				// });
+				
+				if(generate == 'generate'){
+					console.log('generate');
+					console.log(data.documentPath);
+					var pdfPath = 'http://api.siliconbrain.co.in/'+data.documentPath;
+					$window.open(pdfPath, '_blank');
+				}
+				else{
+					console.log('Not');
+				}
+			
+				$scope.quickBill = [];
+				vm.dt1 = new Date();
+				vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+				vm.productTax = [{"tax":0}];
+				
+				$scope.defaultComapny();
+			
 			}
 			
 			// Delete formdata  keys
@@ -355,10 +395,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 					
 			}
 			
-			$scope.quickBill = [];
-			vm.dt1 = new Date();
-			vm.AccBillTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
-			vm.productTax = [{"tax":0}];
+			
 			
 			formdata.delete('companyId');
 			formdata.delete('entryDate');
@@ -383,6 +420,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			formdata.delete('checkNumber');
 			formdata.delete('remark');
 			formdata.delete('inventory');
+			formdata.delete('isDisplay');
 			
 	
 		}).error(function(data, status, headers, config) {
@@ -631,8 +669,10 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			apiCall.getCallHeader(apiPath.getProductByCompany+data.companyId,headerSearch).then(function(response){
 				
 				console.log(response);
-				vm.AccBillTable[data.index].productName = response.productName;
-				vm.AccBillTable[data.index].productId = response.productId;
+				vm.AccBillTable[data.index].productName = response[0].productName;
+				//vm.AccBillTable[data.index].productId = response.productId;
+				
+				$scope.setProductData(response[0],data.index);
 				
 			});
 		

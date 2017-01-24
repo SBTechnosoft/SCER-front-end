@@ -177,7 +177,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AddInvStock', {
             url: '/AddInvStock',
             templateUrl: basepath('Inventory/StockRegister/AddInvStock.html'),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv')
         })
 		//Show Inventory Stock
 		.state('app.InvStock', {
@@ -460,6 +460,22 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 			})
         })
 		/*** End Quick Menu ***/
+		
+		/*** PriceList ***/
+		//Form RetailSales
+		.state('app.FormPriceListRetailSales', {
+            url: '/FormPriceListRetailSales',
+            templateUrl: basepath('PriceList/RetailSales/FormPriceListRetailSales.html'),
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv')
+        })
+		//Show RetailSales
+		.state('app.PriceListRetailSales', {
+            url: '/PriceListRetailSales',
+            templateUrl: basepath('PriceList/RetailSales/PriceListRetailSales.html'),
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+        })
+		/*** End PriceList ***/
+		
         .state('app.form-validation', {
             url: '/form-validation',
             templateUrl: basepath('form-validation.html')

@@ -36,7 +36,11 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
 			//if($rootScope.$storage.authToken){
 			if(angular.isObject(response)){
 				
-				$rootScope.$storage.authToken = response.authenticationToken;
+				//$rootScope.$storage.authToken = response.authenticationToken;
+				$rootScope.$storage.authToken = response.token;
+				$rootScope.$storage.authUser = response.user;
+				//$rootScope.loggedUser = $rootScope.$storage.authUser;
+				console.log($rootScope.loggedUser);
 				$state.go("app.Company");
 			}
 			else{

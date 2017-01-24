@@ -39,46 +39,51 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
   
  // console.log($rootScope.defaultCompany());
  
-	//Set default Company
-	apiCall.getDefaultCompany().then(function(response){
+	$scope.defaultCompany = function(){
+		
 	
-		$scope.accPayment.companyDropDown = response;
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
 		
-		//Auto suggest Account
-		vm.accountDrop=[];
-		vm.tableNameDrop=[];
-		
-		//Auto suggest Client Name For Debit
-		var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
-		
-		apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+			$scope.accPayment.companyDropDown = response;
 			
-			for(var t=0;t<response3.length;t++){
+			formdata.append('companyId',response.companyId);
+			
+			//Auto suggest Account
+			vm.accountDrop=[];
+			vm.tableNameDrop=[];
+			
+			//Auto suggest Client Name For Debit
+			var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+			
+			apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
 				
-				for(var k=0;k<response3[t].length;k++){
+				for(var t=0;t<response3.length;t++){
 					
-					vm.accountDrop.push(response3[t][k]);
+					for(var k=0;k<response3[t].length;k++){
+						
+						vm.accountDrop.push(response3[t][k]);
+					}
+					
 				}
+			
+			});
+			
+			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
 				
-			}
+				for(var t=0;t<response3.length;t++){
+					
+					for(var k=0;k<response3[t].length;k++){
+						
+						vm.tableNameDrop.push(response3[t][k]);
+					}
+					
+				}
+			
+			});
 		
 		});
-		
-		apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
-			
-			for(var t=0;t<response3.length;t++){
-				
-				for(var k=0;k<response3[t].length;k++){
-					
-					vm.tableNameDrop.push(response3[t][k]);
-				}
-				
-			}
-		
-		});
-	
-	});
-  
+	}
   /* Table */
   
 	vm.AccPaymentTable = [];
@@ -128,6 +133,8 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
 		vm.companyDrop = responseCompanyDrop;
+		
+		$scope.defaultCompany();
 	
 	});
 	
@@ -179,7 +186,13 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 		}
 		formdata.append(Fname,value);
 		
+		vm.AccPaymentTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"debit"}];
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
 		
+		account = {};
+		account.amountType = 'credit';
+		$scope.accPayment.account = '';
+		 vm.accountCurrentBalance = {};
 	}
 	
 	$scope.setAccPayment = function(item) {
@@ -233,14 +246,19 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 				});
 				
 			}
+		
+		if(!formdata.has('companyId')){
 			
+			formdata.append('companyId',$scope.accPayment.companyDropDown.companyId);
+		}
+		
 		var  date = new Date(vm.dt1);
 		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 		console.log(fdate);
 		
 		if(formdata.has('entryDate')){
 			
-			formdata.delete('entryDate',fdate);
+			formdata.delete('entryDate');
 		}
 		formdata.append('entryDate',fdate);
 		formdata.append('jfId',$scope.accPayment.jfid);
@@ -294,10 +312,30 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 					$scope.accPayment.jfid = response.nextValue;
 
 				});
+				
+				$scope.defaultCompany();
+				
 			}
 			else{
 				
 				toaster.pop('warning', 'Opps!!', data);
+				
+				var jsonDel = angular.copy(vm.tempAccPaymentTable);
+				 
+				for(var j=0;j<jsonDel.length;j++){
+					 
+					angular.forEach(jsonDel[j], function (value,key) {
+						
+						formdata.delete('data['+j+']['+key+']',value);
+						
+					});
+					
+				}
+				
+				// Delete formdata  keys
+				for (var key of formdata.keys()) {
+				   formdata.delete(key); 
+				}
 			}
 			
 		});

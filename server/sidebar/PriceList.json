@@ -1,0 +1,12 @@
+[
+  {
+    "text": "RetailSales",
+    "sref": "app.FormPriceListRetailSales",
+    "icon": "icon-stack"
+  },
+  {
+    "text": "WholeSales",
+    "sref": "app.FormPriceListWholeSales",
+    "icon": "icon-stack"
+  }
+]
