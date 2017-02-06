@@ -3,41 +3,206 @@
  * Module: InvStockCtrl.js
  * Controller for ngTables
  =========================================================*/
-
+	
 App.controller('PriceListRetailSalesController', PriceListRetailSalesController);
 
-function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath) {
+function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,saleType,$window,productArrayFactory) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
 	
-	 
+	$scope.saleType = saleType;
+	
  var data = [];
  
 	var getData = getSetFactory.get();
-	// console.log(getData);
+	console.log(getData);
 	// return false;
 	
 	//var getData = { "Content-Type": undefined, "fromDate": "14-01-2017", "toDate": "30-03-2017", "companyId": "46", "productId": "908" };
 	//var CompanyID = getData.companyId;
 	var CompanyID = getData.companyId;
 	
+	var noOfDecimalPoints = parseInt(getData.noOfDecimalPoints);
+	
 	delete getData.companyId;
+	delete getData.noOfDecimalPoints;
 	
 	
+	/*****  Tree Data  *****/
 	
-	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
+	
+	var tree;
+	
+	
+	var rawTreeData2=[{"categoryId":"","productParentCategoryId":"","categoryName":"","productName":"","groupName":"","price":"","vat":"","amount":""}];
+
+        var myTreeData = getTree(rawTreeData2, 'categoryId', 'productParentCategoryId');
+		$scope.tree_data = myTreeData;
+        $scope.my_tree = tree = {};
 		
-		data = responseDrop;
-		$scope.TableData();
+	 $scope.expanding_property = {
+            field: "categoryName",
+            displayName: "Category Name",
+            sortable: false,
+            filterable: false,
+            cellTemplate: "<i>{{row.branch[expandingProperty.field]}}</i>"
+        };
+		
+        $scope.col_defs = [
+			{
+                field: "groupName",
+				displayName: "Group Name"
+            },
+			{
+                field: "price",
+				displayName: "Price"
+            },
+			{
+                field: "vat",
+				displayName: "Vat"
+            },
+			{
+                field: "amount",
+				displayName: "Amount"
+            }
+        ];
+	
+	/*****  End   *****/
+	
+	
+	
+	var treeArrayData = [];
+	
+	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID,getData).then(function(responseDrop){
+		
+		
+		console.log(responseDrop);
+		
+		var cnt= responseDrop.length;
+		var categoryArray = [];
+		var csvArray = [];
+		
+		for(var i=0;i<cnt;i++){
+			
+			var objectData = {};
+			var flag=0;
+			var apiData = responseDrop[i];
+			
+			if($scope.saleType == "retail_sales"){
+					
+				var purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.margin),noOfDecimalPoints);
+				
+				if(purchaseprice == 0){
+		
+					purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.mrp,0,item.margin),noOfDecimalPoints);
+				}
+				
+				var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+				
+				var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+				
+			}
+			else if($scope.saleType == "whole_sales"){
+				
+				var purchaseprice = $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.wholesaleMargin),noOfDecimalPoints);
+				
+				var vat =0;
+				
+				var finalAmount = $filter('setDecimal')(purchaseprice,noOfDecimalPoints);
+			}
+				
+			
+			for(var arrayData=0;arrayData<categoryArray.length;arrayData++)
+			{
+				
+				
+				
+				if(apiData.productCategory.productCategoryId == categoryArray[arrayData])
+				{
+					flag=1;
+					
+					objectData.categoryId = Math.random();
+					objectData.productParentCategoryId = apiData.productCategory.productCategoryId;
+					objectData.categoryName =  apiData.productName;
+					
+					objectData.groupName = apiData.productGroup.productGroupName;
+					
+					objectData.price = purchaseprice;
+					objectData.vat = vat;
+					objectData.amount = finalAmount;
+					
+					treeArrayData.push(objectData);
+				
+					break;
+				}
+			}
+			if(flag==0)
+			{
+				categoryArray.push(apiData.productCategory.productCategoryId);
+				
+				
+				
+				
+				var demo = {};
+				demo.categoryId = apiData.productCategory.productCategoryId;
+				demo.categoryName = apiData.productCategory.productCategoryName;
+				demo.productParentCategoryId = apiData.productCategory.productParentCategoryId;
+				treeArrayData.push(demo);
+				
+				objectData.categoryId = Math.random();
+				objectData.productParentCategoryId = apiData.productCategory.productCategoryId;
+				objectData.categoryName = apiData.productName;
+				
+				objectData.groupName = apiData.productGroup.productGroupName;
+				
+				objectData.price = purchaseprice;
+				objectData.vat = vat;
+				objectData.amount = finalAmount;
+				
+				treeArrayData.push(objectData);
+			}
+			
+			/** CSV Data **/
+			
+			var csvObject = {};
+			
+			
+			
+			csvObject.productName = apiData.productName;
+			csvObject.categoryName = apiData.productCategory.productCategoryName;
+			csvObject.groupName = apiData.productGroup.productGroupName;
+			
+			csvObject.price = purchaseprice;
+			csvObject.vat = vat;
+			csvObject.amount = finalAmount;
+			
+			csvArray.push(csvObject);
+			
+			/** End **/
+		
+		}
+		
+		// console.log(categoryArray);
+		console.log(treeArrayData);
+		
+		$scope.getArray = csvArray;
+		
+		var myTreeData2 = getTree(treeArrayData, 'categoryId', 'productParentCategoryId');
+				$scope.tree_data = myTreeData2;
+		
+		
+			
+			
+		//data = responseDrop;
+		
+		//$scope.TableData();
 	
 	});
 	
 	getSetFactory.blank();
  
 	
- 
- 
 
   // SORTING
   // ----------------------------------- 
@@ -190,15 +355,69 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
       }
   });
   
-  $scope.edit_comp = function()
-  {
-	  alert('Edit');
-  }
+	$scope.generatePdf = function(){
+	 
+		getData.operation = 'pdf';
+		getData.salesType = $scope.saleType;
+		
+		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/priceList',getData).then(function(responseDrop){
+		
+			console.log(responseDrop);
+			
+			if(angular.isObject(responseDrop)){
+				
+				var pdfPath = 'http://api.siliconbrain.co.in/'+responseDrop.documentPath;
+				$window.open(pdfPath, '_blank');
+			}
+			else{
+				
+				alert('Something Wrong');
+			}
+		
+		});
+	}
+	
+	function getTree(data, primaryIdName, parentIdName) {
+            if (!data || data.length == 0 || !primaryIdName || !parentIdName)
+                return [];
+
+            var tree = [],
+                rootIds = [],
+                item = data[0],
+                primaryKey = item[primaryIdName],
+                treeObjs = {},
+                parentId,
+                parent,
+                len = data.length,
+                i = 0;
+
+            while (i < len) {
+                item = data[i++];
+                primaryKey = item[primaryIdName];
+                treeObjs[primaryKey] = item;
+                parentId = item[parentIdName];
+
+                if (parentId) {
+                    parent = treeObjs[parentId];
+
+                    if (parent.children) {
+                        parent.children.push(item);
+                    } else {
+                        parent.children = [item];
+                    }
+                } else {
+                    rootIds.push(primaryKey);
+                }
+            }
+
+            for (var i = 0; i < rootIds.length; i++) {
+                tree.push(treeObjs[rootIds[i]]);
+            }
+            ;
+
+            return tree;
+        }
   
-  $scope.delete_comp = function()
-  {
-	  alert('Delete');
-  }
 
 }
-PriceListRetailSalesController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath"];
+PriceListRetailSalesController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","saleType","$window","productArrayFactory"];

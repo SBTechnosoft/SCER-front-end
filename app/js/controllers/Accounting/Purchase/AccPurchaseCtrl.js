@@ -16,6 +16,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.grandTotalTable;
 	$scope.accPurchase.tax = 0;
 	
+	 $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
+	 
+	$scope.productArrayFactory = productArrayFactory; //tax Calculation Factory
+	
 	$scope.totalDebit; // sum of Debit Amount
 	$scope.totalCredit;  // sum of Credit Amount
   
@@ -40,10 +44,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	**/
 		//Auto suggest Client Name
 		vm.clientNameDropDr=[];
-		var headerDr = {'Content-Type': undefined,'ledgerGroup':[26]};
+		var headerDr = {'Content-Type': undefined,'ledgerGroup':[26,16,19]};
 		
 		vm.clientNameDropCr=[];
-		var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12,31,16,17]};
+		var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12,31,17]};
 	/**
 		End
 	**/
@@ -70,7 +74,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				
 				formdata.delete('companyId');
 			}
+			
 			formdata.append('companyId',response.companyId);
+			
+			$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
 			
 			vm.clientNameDropDr=[];
 			vm.clientNameDropCr=[];
@@ -194,12 +201,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				//Set Invoice Number
 				$scope.accPurchase.billNo = data.productTransaction[0].billNumber;
 				
-				//Company DropDown Selection
-				var companyDropPath = apiPath.getAllCompany+'/'+data.journal[0].company.companyId;
-				apiCall.getCall(companyDropPath).then(function(res2){
+				$scope.accPurchase.companyDropDown = data.journal[0].company;
 				
-					$scope.accPurchase.companyDropDown = res2;
-				});
+				//set Decimal Number
+				$scope.noOfDecimalPoints = parseInt(data.productTransaction[0].company.noOfDecimalPoints);
 				
 				/** 
 				Jsuggest OF Credit/Debit
@@ -260,7 +265,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					tempData.amountType = data.journal[i].amountType;
 					tempData.ledgerId= data.journal[i].ledger.ledgerId;
 					tempData.ledgerName = data.journal[i].ledger.ledgerName;
-					tempData.amount = parseInt(data.journal[i].amount);
+					tempData.amount = parseFloat(data.journal[i].amount);
 					
 					vm.AccClientMultiTable.push(tempData);
 					
@@ -280,32 +285,27 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					tempProData.productId = data.productTransaction[j].product.productId;
 					tempProData.productName= data.productTransaction[j].product.productName;
 					tempProData.discountType = data.productTransaction[j].discountType;
-					tempProData.price = parseInt(data.productTransaction[j].price);
-					tempProData.discount = parseInt(data.productTransaction[j].discount);
+					tempProData.price = parseFloat(data.productTransaction[j].price);
+					tempProData.discount = parseFloat(data.productTransaction[j].discount);
 					tempProData.qty = parseInt(data.productTransaction[j].qty);
 					//tempProData.amount = parseInt(data.productTransaction[j].amount);
 					
 					vm.AccPurchaseTable.push(tempProData);
 					
 					var varTax = {};
-					varTax.tax = data.productTransaction[j].product.vat;
+					//varTax.tax = data.productTransaction[j].product.vat;
+					varTax.tax = 0;
 					
 					vm.productTax.push(varTax);
 					//console.log();
 				}
-				//$scope.accPurchase.tax = parseInt(data.productTransaction[0].tax);
+				$scope.accPurchase.tax = parseFloat(data.productTransaction[0].tax);
 				//console.log(vm.AccClientMultiTable);
 			});
 			
 		}
 		else{
 			
-			//console.log('Not');
-			apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-			
-				$scope.accPurchase.jfid = response.nextValue;
-		
-			});
 			
 			$scope.defaultCompany();
 			
@@ -464,11 +464,13 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
 		
+		$scope.noOfDecimalPoints = parseInt(value.noOfDecimalPoints);
+		
 		vm.clientNameDropDr=[];
 		vm.clientNameDropCr=[];
 		
 		//Auto suggest Client Name
-		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		var jsuggestPath = apiPath.getLedgerJrnl+value.companyId;
 		apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
 			
 			for(var t=0;t<response3.length;t++){
@@ -498,7 +500,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		//Auto Suggest Product Dropdown data
 		vm.productNameDrop = [];
 		
-		apiCall.getCall(apiPath.getProductByCompany+value+'/branch').then(function(responseDrop){
+		apiCall.getCall(apiPath.getProductByCompany+value.companyId+'/branch').then(function(responseDrop){
 			
 			vm.productNameDrop = responseDrop;
 		
@@ -508,7 +510,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value);
+		formdata.append(Fname,value.companyId);
 		
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
@@ -699,7 +701,6 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	}
 	else{
 		
-		formdata.append('jfId',$scope.accPurchase.jfid);
 		
 		var accPurchasePath = apiPath.postJrnl;
 		
@@ -740,6 +741,9 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			formdata.delete('transactionDate',fdate);
 		}
 		
+		if(formdata.has('tax')){
+			formdata.delete('tax');
+		}
 		formdata.append('tax',$scope.accPurchase.tax);
 		
 		if(!formdata.has('tax')){
@@ -754,142 +758,140 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		$scope.changeProductArray = true; // For Delete Array In Product FormData After Success
 		
 		
+		
 	}
-		 
-	// var  date = new Date(vm.dt1);
-	// var entrydate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-	// var  date = new Date();
-	// var transactionDate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 	
 	
-   
-	// formdata.append('jfId',jfid);
-	 // formdata.append('companyId',$scope.accPurchase.companyDropDown.companyId);
-	
-	// formdata.append('entryDate',entrydate);
-	// formdata.append('transactionDate',transactionDate);
-	// formdata.append('invoiceNumber','');
-	 //formdata.append('billNumber',$scope.accPurchase.billNo);
-	   
-			
 	var headerData = {'Content-Type': undefined,'type':'purchase'};
 	   
-			
-		apiCall.postCallHeader(accPurchasePath,headerData,formdata).then(function(data){
-			
-			console.log(data);
-			
-			//vm.maxStart = new Date();
-			
-			//Display Toaster Message
-			if($scope.accPurchase.getSetJrnlId){
+		 
+		apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+		
+			if(!$scope.accPurchase.getSetJrnlId){
 				
-				if(apiResponse.ok == data){
+				$scope.accPurchase.jfid = response.nextValue;
+				
+				if(formdata.has('jfId')){
 					
-					toaster.pop('success', 'Title', 'Update Successfully');
+					formdata.delete('jfId');
+					
 				}
-				else{
-					$scope.deleteArray();
-					toaster.pop('warning', 'Opps!!', data);
-				}
-				
+				formdata.append('jfId',$scope.accPurchase.jfid);
 			}
-			else{
+			
+			apiCall.postCallHeader(accPurchasePath,headerData,formdata).then(function(data){
+				
+				console.log(data);
+				
+				//vm.maxStart = new Date();
+				
+				//Display Toaster Message
+				if($scope.accPurchase.getSetJrnlId){
+					
+					if(apiResponse.ok == data){
+						
+						toaster.pop('success', 'Title', 'Update Successfully');
+					}
+					else{
+						$scope.deleteArray();
+						toaster.pop('warning', 'Opps!!', data);
+					}
+					
+				}
+				else{
+					
+					if(apiResponse.ok == data){
+						
+						toaster.pop('success', 'Title', 'Insert Successfully');
+					}
+					else{
+						
+						// Delete formdata  keys
+						// for (var key of formdata.keys()) {
+						   // formdata.delete(key); 
+						// }
+						formdata.delete('tax');
+						formdata.delete('jfId');
+						$scope.deleteArray();
+						toaster.pop('warning', 'Opps!!', data);
+					}
+					
+					
+					
+				}
 				
 				if(apiResponse.ok == data){
 					
-					toaster.pop('success', 'Title', 'Insert Successfully');
-				}
-				else{
+					//Delete Journal Data From formdata Object
+					if($scope.changeJrnlArray){
+						
+						var jsonJrnlDelete = angular.copy(vm.AccClientMultiTable);
+						
+						for(var i=0;i<jsonJrnlDelete.length;i++){
+							 
+							angular.forEach(jsonJrnlDelete[i], function (value,key) {
+								
+								formdata.delete('data['+i+']['+key+']',value);
+							});
+							
+						}
+						
+						$scope.changeJrnlArray = false;
+						
+					}
+					
+					//Delete Product Data From formdata Object
+					if($scope.changeProductArray){
+						
+						var jsonProductDelete = angular.copy(vm.AccPurchaseTable);
+						
+						for(var i=0;i<jsonProductDelete.length;i++){
+							 
+							angular.forEach(jsonProductDelete[i], function (value,key) {
+								
+								formdata.delete('inventory['+i+']['+key+']',value);
+							});
+							
+						}
+						
+						$scope.changeProductArray = false;
+						
+					}
 					
 					// Delete formdata  keys
-					// for (var key of formdata.keys()) {
-					   // formdata.delete(key); 
-					// }
+					for (var key of formdata.keys()) {
+					   formdata.delete(key);
+					}
 					formdata.delete('tax');
-					formdata.delete('jfId');
-					$scope.deleteArray();
-					toaster.pop('warning', 'Opps!!', data);
-				}
 				
+					vm.dt1 = new Date();
+					vm.minStart = new Date();
+					
+					$scope.accPurchase = [];
+					vm.clientNameDropDr=[]; // Debit Jsuggest Blank
+					vm.clientNameDropCr=[]; // Credit Jsuggest Blank
+					
+					angular.element("input[type='file']").val(null);
+					
+					vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
+					vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
+					
+					vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":"1000","qty":1,"amount":""}];
+					vm.productTax = [{"tax":0}];
+					
+					apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 				
-				
-			}
+						$scope.accPurchase.jfid = response.nextValue;
 			
-			if(apiResponse.ok == data){
-				
-				//Delete Journal Data From formdata Object
-				if($scope.changeJrnlArray){
+					});
 					
-					var jsonJrnlDelete = angular.copy(vm.AccClientMultiTable);
-					
-					for(var i=0;i<jsonJrnlDelete.length;i++){
-						 
-						angular.forEach(jsonJrnlDelete[i], function (value,key) {
-							
-							formdata.delete('data['+i+']['+key+']',value);
-						});
-						
-					}
-					
-					$scope.changeJrnlArray = false;
-					
+					$scope.defaultCompany();
 				}
 				
-				//Delete Product Data From formdata Object
-				if($scope.changeProductArray){
-					
-					var jsonProductDelete = angular.copy(vm.AccPurchaseTable);
-					
-					for(var i=0;i<jsonProductDelete.length;i++){
-						 
-						angular.forEach(jsonProductDelete[i], function (value,key) {
-							
-							formdata.delete('inventory['+i+']['+key+']',value);
-						});
-						
-					}
-					
-					$scope.changeProductArray = false;
-					
-				}
 				
-				// Delete formdata  keys
-				for (var key of formdata.keys()) {
-				   formdata.delete(key);
-				}
-				formdata.delete('tax');
-			
-				vm.dt1 = new Date();
-				vm.minStart = new Date();
-				
-				$scope.accPurchase = [];
-				vm.clientNameDropDr=[]; // Debit Jsuggest Blank
-				vm.clientNameDropCr=[]; // Credit Jsuggest Blank
-				
-				angular.element("input[type='file']").val(null);
-				
-				vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
-				vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
-				
-				vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":"1000","qty":1,"amount":""}];
-				vm.productTax = [{"tax":0}];
-				
-				apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-			
-					$scope.accPurchase.jfid = response.nextValue;
 		
-				});
-				
-				$scope.defaultCompany();
-			}
-			
-			
-	
-		}).error(function(data, status, headers, config) {
-			
+			});
 		});
-	  
   }
   
 	//Cancel Button 

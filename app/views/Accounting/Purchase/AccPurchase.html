@@ -14,12 +14,12 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="accPurchase.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accPurchase.companyDropDown.companyId)" class="form-control chosen-select" ng-required="true"></select>
+						<select chosen="" data-ng-model="accPurchase.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accPurchase.companyDropDown)" class="form-control chosen-select" ng-required="true"></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
-							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" ng-change="changePurchaseDate('entryDate')" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart"  max-date="false" ng-change="changePurchaseDate('entryDate')" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 							class="form-control"  readonly/>
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -43,12 +43,12 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Bill#</label>
 						  <div class="col-sm-6">
-							 <input id="input-id-1" name="billNo" ng-model="accPurchase.billNo" ng-change="changeAccPurchase('billNumber',accPurchase.billNo)" type="text" placeholder="Bill Number" class="form-control" dir="rtl" ng-minlength="2" ng-required="true"  ng-pattern="/^[0-9]*$/" auto-focus/>
+							 <input id="input-id-1" name="billNo" ng-model="accPurchase.billNo" ng-change="changeAccPurchase('billNumber',accPurchase.billNo)" type="text" placeholder="Bill Number" class="form-control" dir="rtl" ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" auto-focus/>
 							 
 							 <span ng-messages="formPurchase.billNo.$error" ng-if="formPurchase.billNo.$dirty || formPurchase.billNo.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
 								<span ng-messages-include="shortLength"></span>
-								<span ng-messages-include="errorPatternNumber"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
 							</span>
 							
 						  </div>
@@ -129,10 +129,10 @@
 						<td></td>
 						<td>Total</td>
 						<td >
-							<span style="float:right">{{totalDebit  = ((form.AccClientMultiTable | sumOfDebit:'amount') | setDecimal:2)}}</span>
+							<span style="float:right">{{totalDebit  = ((form.AccClientMultiTable | sumOfDebit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
 						</td>
 						<td >
-							<span style="float:right">{{totalCredit = ((form.AccClientMultiTable | sumOfCredit:'amount') | setDecimal:2)}}</span>
+							<span style="float:right">{{totalCredit = ((form.AccClientMultiTable | sumOfCredit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
 						</td>
 						<td ></td>
 					</tr>
@@ -171,12 +171,14 @@
 				<table  class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th  style="width:36%">Name of Item</th>
-							<th  style="width:25%">Discount</th>
+							<th  style="width:33%">Name of Item</th>
+							<th class="header" style="width:15%">Discount Type</th>
+							<th class="header" style="width:10%">Discount</th>
 							<th style="width:12%" >Rate</th>
 							<th style="width:9%" >Quantity</th>
+							<th style="width:5%" >VAT</th>
 							<th style="width:10%" >Amount</th>
-							<th style="width:8%">Action</th>
+							<th style="width:6%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -192,22 +194,26 @@
 								</div>
 							</td>
 							<td>
-								<select  ng-model="item.discountType"  class="form-control" style="width:50%;float:left;" ng-change="changeProductTable()">
+								<select  ng-model="item.discountType"  class="form-control" style="float:left;" ng-change="changeProductTable()">
 									<option value="flat" selected="selected">Flat</option>
 									<option value="percentage">Percentage</option>
 								</select>
-								<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" style="width:50%;" dir="rtl" ng-pattern="/^[0-9]*$/" only-number /> 
+								
 							</td>
 							<td>
-								<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" placeholder="Price" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" only-number />
+								<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" dir="rtl" ng-pattern="/^[0-9 .]*$/" only-number /> 
 							</td>
 							<td>
-								<input id="input-id-1" type="text" ng-model="item.qty" ng-change="changeProductTable()" class="form-control" dir="rtl"  ng-required="true" ng-minlength="1" ng-maxlength="7" ng-pattern="/^(0|[1-9]\d{0,8})$/" only-number />
+								<input id="input-id-1" type="text" ng-model="item.price"  ng-change="changeProductTable()" class="form-control" placeholder="Price" dir="rtl" ng-required="true" ng-pattern="/^[0-9 \.]*$/" only-number />
 							</td>
+							<td>
+								<input id="input-id-1" type="text" ng-model="item.qty" ng-change="changeProductTable()" class="form-control" dir="rtl"  ng-required="true" ng-minlength="1" ng-maxlength="7" ng-pattern="/^[0-9]*$/" only-number />
+							</td>
+							<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
 							<td >
 								<!--span style="float:right">4500</span-->
-								<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = (item.price*item.qty) - item.discount}}</span>
-								<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = (item.price*item.qty)-((item.price*item.qty)*item.discount/100)}}</span>
+								<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints)}}</span>
+								<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints)}}</span>
 							</td>
 							<td style="">
 							<center>
@@ -228,13 +234,17 @@
 							<td></td>
 							<td></td>
 							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 						<tr>
 							<td>Total</td>
 							<td></td>
 							<td></td>
 							<td></td>
-							<td style="text-align:right">{{totalTable = getTotal()}}</td>
+							<td></td>
+							<td></td>
+							<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
 							<td></td>
 						</tr>
 						<tr>
@@ -242,15 +252,18 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<!--td><input id="input-id-1" name="tax" type="text" ng-model="accPurchase.tax" ng-change="changeAccPurchase('tax',accPurchase.tax)"  class="form-control"  dir="rtl" ng-pattern="/^[0-9]*$/" />
+							<td></td>
+							<td></td>
+							<td>
+							<input id="input-id-1" name="tax" type="text" ng-model="accPurchase.tax"  ng-change="changeAccPurchase('tax',accPurchase.tax)"  class="form-control"  dir="rtl" ng-pattern="/^[0-9 .]*$/" only-number />
 								
 								<span ng-messages="formPurchase.tax.$error" ng-if="formPurchase.tax.$dirty || formPurchase.tax.$touched"  role="alert">
 									<span ng-messages-include="errorPatternNumber"></span>
 								</span>
 							
-							</td-->
+							</td>
 							<!--td style="text-align:right">{{accPurchase.tax = (form.productTax | sumOfValue:'tax')}}</td-->
-							<td style="text-align:right">{{accPurchase.tax = getTotalTax() | setDecimal:2}}</td>
+							<!--td style="text-align:right">{{accPurchase.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td-->
 							<td></td>
 						</tr>
 						<tr>
@@ -258,7 +271,9 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<td style="text-align:right">{{grandTotalTable = totalTable -- accPurchase.tax | setDecimal:2}}</td>
+							<td></td>
+							<td></td>
+							<td style="text-align:right">{{grandTotalTable = (totalTable -- accPurchase.tax | setDecimal: noOfDecimalPoints)}}</td>
 							<td></td>
 						</tr>
 					</tbody>

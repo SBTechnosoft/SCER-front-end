@@ -16,6 +16,7 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
   $scope.accPayment.totalAmount;
   $scope.accPayment.jfid; // JFID
   
+  $scope.noOfDecimalPoints;
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -48,6 +49,8 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 			$scope.accPayment.companyDropDown = response;
 			
 			formdata.append('companyId',response.companyId);
+			
+			$scope.noOfDecimalPoints = response.noOfDecimalPoints;
 			
 			//Auto suggest Account
 			vm.accountDrop=[];
@@ -138,21 +141,18 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 	
 	});
 	
-	//Set JfId on Load 
-	apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-		
-			$scope.accPayment.jfid = response.nextValue;
-	
-	});
-	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
+		
+		
+		$scope.noOfDecimalPoints = value.noOfDecimalPoints;
+		
 		//Auto suggest Account
 		vm.accountDrop=[];
 		vm.tableNameDrop=[];
 		
 		//Auto suggest Client Name For Debit
-		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		var jsuggestPath = apiPath.getLedgerJrnl+value.companyId;
 		
 		apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
 			
@@ -184,7 +184,7 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value);
+		formdata.append(Fname,value.companyId);
 		
 		vm.AccPaymentTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"debit"}];
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
@@ -214,7 +214,7 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 		for(var i = 0; i < vm.AccPaymentTable.length; i++){
 			
 			var product = vm.AccPaymentTable[i];
-			total += parseInt(product.amount);
+			total += parseFloat(product.amount);
 			
 		}
 		return total;
@@ -247,6 +247,7 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 				
 			}
 		
+		
 		if(!formdata.has('companyId')){
 			
 			formdata.append('companyId',$scope.accPayment.companyDropDown.companyId);
@@ -261,83 +262,93 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
 			formdata.delete('entryDate');
 		}
 		formdata.append('entryDate',fdate);
-		formdata.append('jfId',$scope.accPayment.jfid);
 		
 		
 		var accPaymentPath = apiPath.postJrnl;
 		
 		var headerData = {'Content-Type': undefined,'type':'payment'};
 		
-		apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
-				
-			console.log(data);
-			if(apiResponse.ok == data){
-				
-				vm.dt1 = new Date();
-				vm.minStart = new Date();
-				vm.maxStart = new Date();
-			
-				var jsonDel = angular.copy(vm.tempAccPaymentTable);
-				 
-				for(var j=0;j<jsonDel.length;j++){
-					 
-					angular.forEach(jsonDel[j], function (value,key) {
-						
-						formdata.delete('data['+j+']['+key+']',value);
-						
-					});
-					
-				}
-				
-				// Delete formdata  keys
-				for (var key of formdata.keys()) {
-				   formdata.delete(key); 
-				}
-				
-				$scope.accPayment = [];
-				$scope.accPayment.totalAmount;
-				vm.tableNameDrop = [];
-				vm.accountDrop = [];
-				var account = {};
-				account.amountType = 'credit';
-	  
-				toaster.pop('success', 'Title', 'Successfull');
-				
-				vm.AccPaymentTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"debit"}];
-				vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
-				
-				//Next JfId
-				apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 		
-					$scope.accPayment.jfid = response.nextValue;
-
-				});
+		apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+			
+			
 				
-				$scope.defaultCompany();
+				$scope.accPayment.jfid = response.nextValue;
 				
-			}
-			else{
-				
-				toaster.pop('warning', 'Opps!!', data);
-				
-				var jsonDel = angular.copy(vm.tempAccPaymentTable);
-				 
-				for(var j=0;j<jsonDel.length;j++){
-					 
-					angular.forEach(jsonDel[j], function (value,key) {
-						
-						formdata.delete('data['+j+']['+key+']',value);
-						
-					});
+				if(formdata.has('jfId')){
+					
+					formdata.delete('jfId');
 					
 				}
 				
-				// Delete formdata  keys
-				for (var key of formdata.keys()) {
-				   formdata.delete(key); 
-				}
-			}
+				formdata.append('jfId',$scope.accPayment.jfid);
+				
 			
+			apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
+					
+				console.log(data);
+				if(apiResponse.ok == data){
+					
+					vm.dt1 = new Date();
+					vm.minStart = new Date();
+					vm.maxStart = new Date();
+				
+					var jsonDel = angular.copy(vm.tempAccPaymentTable);
+					 
+					for(var j=0;j<jsonDel.length;j++){
+						 
+						angular.forEach(jsonDel[j], function (value,key) {
+							
+							formdata.delete('data['+j+']['+key+']',value);
+							
+						});
+						
+					}
+					
+					// Delete formdata  keys
+					for (var key of formdata.keys()) {
+					   formdata.delete(key); 
+					}
+					
+					$scope.accPayment = [];
+					$scope.accPayment.totalAmount;
+					vm.tableNameDrop = [];
+					vm.accountDrop = [];
+					var account = {};
+					account.amountType = 'credit';
+		  
+					toaster.pop('success', 'Title', 'Successfull');
+					
+					vm.AccPaymentTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"debit"}];
+					vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
+					
+					
+					$scope.defaultCompany();
+					
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', data);
+					
+					var jsonDel = angular.copy(vm.tempAccPaymentTable);
+					 
+					for(var j=0;j<jsonDel.length;j++){
+						 
+						angular.forEach(jsonDel[j], function (value,key) {
+							
+							formdata.delete('data['+j+']['+key+']',value);
+							
+						});
+						
+					}
+					
+					// Delete formdata  keys
+					for (var key of formdata.keys()) {
+					   formdata.delete(key); 
+					}
+				}
+				
+			});
 		});
 		
 	}

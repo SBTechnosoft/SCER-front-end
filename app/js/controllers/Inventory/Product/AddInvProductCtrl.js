@@ -6,12 +6,13 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse,validationMessage) {
+function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse,validationMessage,getSetFactory) {
   'use strict';
   var vm = this;
   $scope.addInvProduct = [];
   var formdata = new FormData();
   
+
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -54,51 +55,37 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 	});
 	
 	//Edit Product
-	if($stateParams.id){
+	if(Object.keys(getSetFactory.get()).length){
 		
-		var editProduct = apiPath.getAllProduct+'/'+$stateParams.id;
+		$scope.addInvProduct.getSetProductId = getSetFactory.get();
+		getSetFactory.blank();
+		
+		
+		var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
 	
 		apiCall.getCall(editProduct).then(function(res){
 			
 			$scope.addInvProduct.name = res.productName;
+			$scope.addInvProduct.productDescription = res.productDescription;
 			
-			//Company DropDown Selection
-			var companyDropPath = apiPath.getAllCompany+'/'+res.company.companyId;
-			apiCall.getCall(companyDropPath).then(function(res2){
-				
-				$scope.addInvProduct.company = res2;
-			});
+			
+			
+			$scope.addInvProduct.company = res.company;
 			
 			//Get Branch
 			vm.branchDrop = [];
 			var getAllBranch = apiPath.getOneBranch+res.company.companyId;
 			console.log('here...'+getAllBranch);
 			apiCall.getCall(getAllBranch).then(function(response4){
+				
 				vm.branchDrop = response4;
-					
-			});
-			
-			//Branch DropDown Selection
-			var branchDropPath = apiPath.getAllBranch+'/'+res.branch.branchId;
-			
-			apiCall.getCall(branchDropPath).then(function(res2){
+				$scope.addInvProduct.branch = res.branch;
 				
-				$scope.addInvProduct.branch = res2;
 			});
 			
-			//Category DropDown Selection
-			var categoryDropPath = apiPath.getAllCategory+'/'+res.productCategory.productCategoryId;
-			apiCall.getCall(categoryDropPath).then(function(res2){
-				
-				$scope.addInvProduct.category = res2;
-			});
+			$scope.addInvProduct.category = res.productCategory;
+			$scope.addInvProduct.group = res.productGroup;
 			
-			//Group DropDown Selection
-			var groupDropPath = apiPath.getAllGroup+'/'+res.productGroup.productGroupId;
-			apiCall.getCall(groupDropPath).then(function(res2){
-				
-				$scope.addInvProduct.group = res2;
-			});
 			
 			//Measure DropDown Selection
 			
@@ -110,6 +97,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 			$scope.addInvProduct.semiWholesaleMargin = res.semiWholesaleMargin;
 			$scope.addInvProduct.vat = res.vat;
 			$scope.addInvProduct.mrp = res.mrp;
+			$scope.addInvProduct.additionalTax = res.additionalTax;
 			$scope.addInvProduct.margin = res.margin;
 			
 		});
@@ -294,11 +282,11 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 
 	$scope.pop = function() {
 	
-		if($stateParams.id){
+		if($scope.addInvProduct.getSetProductId){
 			
 			//formdata.append('branchId',1);
 			formdata.append('isDisplay','yes');
-			var editProduct = apiPath.getAllProduct+'/'+$stateParams.id;
+			var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
 			apiCall.postCall(editProduct,formdata).then(function(response5){
 			
 				//console.log(response5);
@@ -308,7 +296,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 					toaster.pop('success', 'Title', 'SuccessFull');
 				}
 				else{
-					
+					formdata.delete('isDisplay');
 					toaster.pop('warning', 'Opps!!', response5);
 				}
 			
@@ -332,7 +320,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 					$location.path('app/InvProduct');
 				}
 				else{
-					
+					formdata.delete('isDisplay');
 					toaster.pop('warning', 'Opps!!', response5);
 				}
 				
@@ -343,9 +331,17 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 	};
   
   $scope.cancel = function() {
-    toaster.pop('info', 'Form Reset', 'Message');
+	  
+		$scope.addInvProduct = [];
+	  
+		// Delete formdata  keys
+		for (var key of formdata.keys()) {
+		   formdata.delete(key); 
+		}
+		
+		toaster.pop('info', 'Form Reset', 'Message');
   };
   
   
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse","validationMessage"];
+AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse","validationMessage","getSetFactory"];

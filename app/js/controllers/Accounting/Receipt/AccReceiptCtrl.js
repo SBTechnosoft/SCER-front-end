@@ -16,6 +16,8 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,
    $scope.accReceipt.totalAmount;
   $scope.accReceipt.jfid; // JFID
   
+   $scope.noOfDecimalPoints;
+  
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -45,6 +47,8 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,
 			$scope.accReceipt.companyDropDown = response;
 			
 			formdata.append('companyId',response.companyId);
+			
+			$scope.noOfDecimalPoints = response.noOfDecimalPoints;
 			
 			//Auto suggest Account
 			vm.accountDrop=[];
@@ -139,18 +143,12 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,
 		for(var i = 0; i < vm.AccReceiptTable.length; i++){
 			
 			var product = vm.AccReceiptTable[i];
-			total += parseInt(product.amount);
+			total += parseFloat(product.amount);
 			
 		}
 		return total;
 	}
 	
-	//Set JfId on Load 
-	apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-		
-			$scope.accReceipt.jfid = response.nextValue;
-	
-	});
  
   // Chosen data
   // ----------------------------------- 
@@ -166,12 +164,16 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,
 	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
+		
+		$scope.noOfDecimalPoints = value.noOfDecimalPoints;
+		
+		
 		//Auto suggest Account
 		vm.accountDrop=[];
 		vm.tableNameDrop=[];
 		
 		//Auto suggest Client Name For Debit
-		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		var jsuggestPath = apiPath.getLedgerJrnl+value.companyId;
 		
 		apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
 			
@@ -203,7 +205,7 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value);
+		formdata.append(Fname,value.companyId);
 		
 		vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
@@ -254,84 +256,96 @@ function AccReceiptController($scope,apiCall,apiPath,toaster,$modal,apiResponse,
 			formdata.delete('entryDate',fdate);
 		}
 		formdata.append('entryDate',fdate);
-		formdata.append('jfId',$scope.accReceipt.jfid);
 		
-		
+	
 		var accPaymentPath = apiPath.postJrnl;
 		
 		var headerData = {'Content-Type': undefined,'type':'receipt'};
 		
-		apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
-				
-			console.log(data);
-			if(apiResponse.ok == data){
-				
-				vm.dt1 = new Date();
-				vm.minStart = new Date();
-				vm.maxStart = new Date();
+		apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 			
-				var jsonDel = angular.copy(vm.tempAccReceiptTable);
-				 
-				for(var j=0;j<jsonDel.length;j++){
-					 
-					angular.forEach(jsonDel[j], function (value,key) {
-						
-						formdata.delete('data['+j+']['+key+']',value);
-						
-					});
+			$scope.accReceipt.jfid = response.nextValue;
+			
+			if(formdata.has('jfId')){
+				
+				formdata.delete('jfId');
+				
+			}
+			
+			formdata.append('jfId',$scope.accReceipt.jfid);
+				
+			apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
 					
-				}
+				console.log(data);
+				if(apiResponse.ok == data){
+					
+					vm.dt1 = new Date();
+					vm.minStart = new Date();
+					vm.maxStart = new Date();
 				
-				// Delete formdata  keys
-				for (var key of formdata.keys()) {
-				   formdata.delete(key); 
-				}
-				
-				$scope.accReceipt = [];
-				$scope.accReceipt.totalAmount;
-				vm.tableNameDrop = [];
-				vm.accountDrop = [];
-				var account = {};
-				account.amountType = 'credit';
-	  
-				toaster.pop('success', 'Title', 'Insert Successfully');
-				
-				vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
-				vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
-				
-				//Next JfId
-				apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-		
-					$scope.accReceipt.jfid = response.nextValue;
+					var jsonDel = angular.copy(vm.tempAccReceiptTable);
+					 
+					for(var j=0;j<jsonDel.length;j++){
+						 
+						angular.forEach(jsonDel[j], function (value,key) {
+							
+							formdata.delete('data['+j+']['+key+']',value);
+							
+						});
+						
+					}
+					
+					// Delete formdata  keys
+					for (var key of formdata.keys()) {
+					   formdata.delete(key); 
+					}
+					
+					$scope.accReceipt = [];
+					$scope.accReceipt.totalAmount;
+					vm.tableNameDrop = [];
+					vm.accountDrop = [];
+					var account = {};
+					account.amountType = 'credit';
+		  
+					toaster.pop('success', 'Title', 'Insert Successfully');
+					
+					vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
+					vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
+					
+					//Next JfId
+					apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+			
+						$scope.accReceipt.jfid = response.nextValue;
 
-				});
-				
-				$scope.defaultCompany();
-				
-			}
-			else{
-				
-				toaster.pop('warning', 'Opps!!', data);
-				
-				var jsonDel = angular.copy(vm.tempAccReceiptTable);
-				 
-				for(var j=0;j<jsonDel.length;j++){
-					 
-					angular.forEach(jsonDel[j], function (value,key) {
-						
-						formdata.delete('data['+j+']['+key+']',value);
-						
 					});
+					
+					$scope.defaultCompany();
+					
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', data);
+					
+					var jsonDel = angular.copy(vm.tempAccReceiptTable);
+					 
+					for(var j=0;j<jsonDel.length;j++){
+						 
+						angular.forEach(jsonDel[j], function (value,key) {
+							
+							formdata.delete('data['+j+']['+key+']',value);
+							
+						});
+						
+					}
+					
+					// Delete formdata  keys
+					for (var key of formdata.keys()) {
+					   formdata.delete(key); 
+					}
 					
 				}
 				
-				// Delete formdata  keys
-				for (var key of formdata.keys()) {
-				   formdata.delete(key); 
-				}
-				
-			}
-			
+			});
 		});
 	}
 

@@ -18,13 +18,13 @@
 				
 				<label class="col-sm-2 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="quickBill.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(quickBill.companyDropDown.companyId)" class="form-control chosen-select" ng-required="true"></select>
+						<select chosen="" data-ng-model="quickBill.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(quickBill.companyDropDown)" class="form-control chosen-select" ng-required="true"></select>
 					</div>
 				
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
-							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close" class="form-control" readonly/>
+							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="false" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close" class="form-control" readonly/>
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
 								  <em class="fa fa-calendar"></em>
@@ -48,7 +48,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Contact</label>
 						  <div class="col-sm-8">
-							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"  ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10" auto-focus />
+							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"  ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10" auto-focus only-number />
 							 
 							<span ng-messages="formBill.contactNo.$error" ng-if="formBill.contactNo.$dirty || formBill.contactNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -126,7 +126,7 @@
 							<div class="col-sm-8">
 								<div class="input-group m-b">
 									<span class="input-group-addon">@</span>
-									<input ng-model="quickBill.emailId" name="emailId" type="email" placeholder="Email ID" class="form-control" ng-required="true" />
+									<input ng-model="quickBill.emailId" name="emailId" type="email" placeholder="Email ID" class="form-control" ng-required="true" ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
 									
 								</div>
 								
@@ -144,7 +144,7 @@
 						<div class="form-group">
 							<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
 							<div class="col-sm-8">
-								<textarea  name="firstAddress" ng-model="quickBill.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/"></textarea>
+								<textarea rows="1" name="firstAddress" ng-model="quickBill.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"   ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/"></textarea>
 								
 								<span ng-messages="formBill.firstAddress.$error" ng-if="formBill.firstAddress.$dirty || formBill.firstAddress.$touched" role="alert">
 										<span ng-messages-include="errorRequired"></span>
@@ -164,7 +164,7 @@
 						<div class="form-group">
 							<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
 							<div class="col-sm-8">
-								<textarea  name="secondAddress" ng-model="quickBill.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
+								<textarea rows="1" name="secondAddress" ng-model="quickBill.secondAddress" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"   ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
 								
 								<span ng-messages="formBill.secondAddress.$error" ng-if="formBill.secondAddress.$dirty || formBill.secondAddress.$touched" role="alert">
 										<span ng-messages-include="errorRequired"></span>
@@ -197,14 +197,10 @@
 				</div>
 			</div>
 			
-			
-			 
-		
 			<!--div class="col-md-3">
 				 <button type="button" class="mr mb-sm btn btn-turquoise">View History</button>
 			</div-->
 			
-         
       </div>
    </div>
    
@@ -214,43 +210,59 @@
 		<table  class="table table-bordered table-striped" >
 			<thead>
 				<tr>
-					<th class="header" style="width:30%">Name of Item</th>
-					<th class="header" style="width:25%">Discount</th>
-					<th style="width:13%" >Rate</th>
-					<th style="width:9%" >Quantity</th>
+					<th class="header" style="width:28%">Name of Item</th>
+					<th class="header" style="width:7%">Color</th>
+					<th class="header" style="width:8%">Frame No.</th>
+					<th class="header" style="width:11%">Discount Type</th>
+					<th class="header" style="width:5%">Discount</th>
+					<th style="width:10%" >Rate</th>
+					<th style="width:5%" >Quantity</th>
 					<th style="width:5%" >VAT</th>
+					<th style="width:5%" >A.Tax</th>
 					<th style="width:10%" >Amount</th>
-					<th style="width:8%">Action</th>
+					<th style="width:6%">Action</th>
 				</tr>
 			</thead>
 			<tbody >
 				<tr id="addAfter" ng-repeat="item in form.AccBillTable">
 					<td>
 						<div class="input-group">
-							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | limitTo:10" ng-model="item.productName" typeahead-on-select="setProductData($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)"  typeahead-editable="false" ng-required="true" />
+							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | limitTo:10" ng-model="item.productName" typeahead-on-select="setProductData($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" />
 							<span class="input-group-btn">
 							   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 							</span>
 						</div>
 					</td>
 					<td>
-						<select  ng-model="item.discountType"  class="form-control" style="width:50%;float:left;">
+						
+						<input id="input-id-1" type="text" ng-model="item.color"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"    ng-pattern="/^[a-z-A-Z]*$/"  /> 
+					</td>
+					<td>
+						
+						<input id="input-id-1" type="text" ng-model="item.frameNo"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/"  /> 
+					</td>
+					<td>
+						<select  ng-model="item.discountType"  class="form-control" style="padding-left: 5px;padding-right: 5px;" >
 							<option value="flat" selected="selected">Flat</option>
 							<option value="percentage">Percentage</option>
 						</select>
-						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="width:50%;" dir="rtl" ng-pattern="/^[0-9]*$/" only-number /> 
+						
+					</td>
+					<td>
+						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="padding-left: 6px;padding-right: 6px;" dir="rtl" ng-pattern="/^[0-9 .]*$/" only-number /> 
 					</td>
 					<td>
 						<!--span style="float:right">{{item.price}}</span-->
-						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 \.]+$/" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" only-number /> 
 					</td>
 					<td>
-						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^(0|[1-9]\d{0,8})$/" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[0-9]*$/" only-number /> 
 					</td>
-					<td style="text-align:right">{{form.productTax[$index].tax}}</td>
+					<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
+					<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
 					<td >
-						<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = (item.price*item.qty) - item.discount}}</span>
-						<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = (item.price*item.qty)-((item.price*item.qty)*item.discount/100)}}</span>
+						<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints)}}</span>
+						<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints)}}</span>
 						
 						<!--span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = getTotalAmount() - item.discount}}</span>
 						<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = getTotalAmount()-(getTotalAmount() * item.discount/100)}}</span-->
@@ -275,6 +287,10 @@
 					<td></td>
 					<td></td>
 					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
 				</tr>
 				<tr>
 					<td>Total</td>
@@ -282,12 +298,21 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td style="text-align:right">{{totalTable = getTotal() | setDecimal:2}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
 					<td></td>
 				</tr>
 				<tr>
 					<td>Tax</td>
 					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				
 					<td></td>
 					<td></td>
 					<td></td>
@@ -297,7 +322,7 @@
 							<span ng-messages-include="errorPatternNumber"></span>
 						</span>
 					</td-->
-					<td style="text-align:right">{{quickBill.tax = getTotalTax() | setDecimal:2}}</td>
+					<td style="text-align:right">{{quickBill.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
 					<td></td>
 				</tr>
 				<tr>
@@ -306,11 +331,19 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td style="text-align:right">{{grandTotalTable = totalTable -- quickBill.tax | setDecimal:2}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td style="text-align:right">{{grandTotalTable = (totalTable -- quickBill.tax | setDecimal: noOfDecimalPoints)}}</td>
 					<td></td>
 				</tr>
 				<tr colspan="5">
 					<td>Advance</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -329,7 +362,11 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td style="text-align:right">{{balanceTable = grandTotalTable-quickBill.advance | setDecimal:2}}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td style="text-align:right">{{balanceTable = (grandTotalTable-quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
 					<td></td>
 				</tr>
 			</tbody>
@@ -356,7 +393,7 @@
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label"> Bank Name </label>
 							<div class="col-sm-8">
-								<select chosen="" data-ng-model="quickBill.BankName" data-ng-options="s.bankName for s in form.bankDrop track by s.bankId" class="form-control chosen-select" size="5"></select>
+								<select chosen="" data-ng-model="quickBill.BankName" data-ng-options="s.bankName for s in form.bankDrop track by s.bankId" class="form-control chosen-select" size="5" ng-required="true"></select>
 							</div>
 					   </div>
 					</fieldset>
@@ -379,7 +416,7 @@
 						<div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">cheque#</label>
 						  <div class="col-sm-8">
-							 <input ng-model="quickBill.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" />
+							 <input ng-model="quickBill.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" ng-required="true" />
 							 <span ng-messages="formBill.chequeNo.$error" ng-if="formBill.chequeNo.$dirty || formBill.chequeNo.$touched"  role="alert">
 								<span ng-messages-include="errorPatternNumber"></span>
 							</span>
@@ -421,6 +458,10 @@
 
 <script type="text/ng-template" id="errorShortlength">
 	<span class="text-danger" ng-message="minlength">{{errorMessage.shortLength}}</span>
+</script>
+
+<script type="text/ng-template" id="errorEmail">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.email}}</span>
 </script>
 
 <script type="text/ng-template" id="errorPatternAlpha">

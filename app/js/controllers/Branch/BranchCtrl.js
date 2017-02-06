@@ -6,7 +6,7 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,$state,apiResponse,toaster) {
+function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster) {
   'use strict';
   var vm = this;
   var data = [];
@@ -16,32 +16,95 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,$http,apiCal
   $scope.GoToAddBranch = function(){
 	  
 	 $rootScope.AddBranchModify = false;
-	 $location.path('app/AddBranch/'); 
+	 $location.path('app/AddBranch/');
+	// $state.go('app.AddBranch'); 
   }
-  //Company
+  
+	$scope.showBranches = function(){
+		
+		if($scope.stateCheck){
+			
+			apiCall.getCall(apiPath.getOneBranch+$scope.stateCheck.companyId).then(function(response){
+			//console.log(response);
+			data = response;
+			
+			for (var i = 0; i < data.length; i++) {
+			  data[i].cityName = ""; //initialization of new property 
+			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+			}
+			
+			 vm.tableParams.reload();
+
+			});
+			
+		}
+		else{
+			
+			
+			
+			apiCall.getCall(apiPath.getAllBranch).then(function(response){
+				
+				//console.log(response);
+				data = response;
+				
+				for (var i = 0; i < data.length; i++) {
+				  data[i].cityName = ""; //initialization of new property 
+				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				}
+				
+				 vm.tableParams.reload();
+
+			});
+		}
+		
+		
+	}
+	
+	//Company
 	$scope.init = function (){
 			
-			vm.states=[];
+		vm.states=[];
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			
 			vm.states = response2;
+			
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
+				
+				$scope.stateCheck = response;
+				
+				$scope.getBranch(response.companyId);
+				
+			});
 		 
 		});
 		 
 	}
-$scope.init();
-  //End
+	$scope.init();
+	
+	//End
   
-	apiCall.getCall(apiPath.getAllBranch).then(function(response){
-		//console.log(response);
-		data = response;
+	$scope.getBranch = function(id){
 		
-		for (var i = 0; i < data.length; i++) {
-		  data[i].cityName = ""; //initialization of new property 
-		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-		}
+	
+		apiCall.getCall(apiPath.getOneBranch+id).then(function(response){
+			//console.log(response);
+			data = response;
+			
+			for (var i = 0; i < data.length; i++) {
+			  data[i].cityName = ""; //initialization of new property 
+			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+			}
+			
+			
+			 $scope.TableData();
+			
+
+		});
 		
-		 $scope.TableData();
-	});
+		// vm.tableParams.reload();
+		
+	}
 	
   $scope.TableData = function(){
 	
@@ -98,6 +161,8 @@ $scope.init();
 			
 		  }
 	  });
+	  
+	 
 	  
   }
 
@@ -244,4 +309,4 @@ $scope.init();
   }
 
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","$state","apiResponse","toaster"];
+BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster"];

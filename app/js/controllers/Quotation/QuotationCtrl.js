@@ -88,6 +88,14 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	  });
   }
 	  
+	$scope.defaultCompany = function(){
+		 
+		 //Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.addquotation.companyDrop = response;
+		});
+	}
  //End Table
   // Chosen data
   // ----------------------------------- 
@@ -97,12 +105,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		
 		vm.quotationCompanyDrop = responseCompanyDrop;
 		
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
-			
-			$scope.addquotation.companyDrop = response;
-		});
-	
+		$scope.defaultCompany();
 	});
 
   // Datepicker
@@ -269,7 +272,8 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 				$scope.addquotation.quotationLabel = '';
 				$scope.addquotation.startAt = '';
 				$scope.addquotation.quotationType = 'prefix';
-				 
+				
+				$scope.defaultCompany();
 			}
 			else{
 			
@@ -294,7 +298,9 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		$scope.addquotation.quotationLabel = '';
 		$scope.addquotation.startAt = '';
 		$scope.addquotation.quotationType = 'prefix';
-				
+		
+		$scope.defaultCompany();
+		
 		formdata.delete('companyId');
 		formdata.delete('quotationLabel');
 		formdata.delete('startAt');

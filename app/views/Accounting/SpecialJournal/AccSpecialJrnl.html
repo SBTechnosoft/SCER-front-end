@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addAccJrnl.companyDropDown.companyId)" class="form-control chosen-select" ng-required="true"></select>
+						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addAccJrnl.companyDropDown)" class="form-control chosen-select" ng-required="true"></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 				<div class="col-sm-4">
@@ -77,10 +77,10 @@
 							<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" only-number />
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='debit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='credit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" only-number />
+							<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeSpecialJrnlTable()" ng-if="item.amountType=='credit'"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 						</td>
 						<td style="">
 							<center>
@@ -98,10 +98,10 @@
 						<td></td>
 						<td>Total</td>
 						<td >
-							<span style="float:right">{{totalDebit  = (form.AccSpecialJrnlTable | sumOfDebit:'amount')}}</span>
+							<span style="float:right">{{totalDebit  = ((form.AccSpecialJrnlTable | sumOfDebit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
 						</td>
 						<td >
-							<span style="float:right">{{totalCredit = (form.AccSpecialJrnlTable | sumOfCredit:'amount')}}</span>
+							<span style="float:right">{{totalCredit = ((form.AccSpecialJrnlTable | sumOfCredit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
 						</td>
 						<td ></td>
 					</tr>

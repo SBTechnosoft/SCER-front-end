@@ -6,7 +6,7 @@
 
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$location,toaster,getSetFactory,$state,apiResponse,validationMessage) {
+function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage) {
   'use strict';
   
 	var vm = this;
@@ -40,6 +40,13 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		$scope.ledgerEditId = [];
 		$scope.trueData = true;
 		$scope.alertData = false;
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.ledgerForm.companyDropDown = response;
+			
+		});
 	}
 	
 	//View Single Ledger In Readonly Mode
@@ -65,48 +72,28 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			$scope.ledgerForm.amountType = response.openingBalanceType;
 			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);
 			
-			//Under textbox Selection
-			apiCall.getCall(apiPath.getAllLedgerGroup+'/'+response.ledgerGroup.ledgerGroupId).then(function(response3){
-				$scope.ledgerForm.under = response3;
-			});
+			$scope.ledgerForm.under = response.ledgerGroup;
 			
-			//Company DropDown Selection
-			var companyDropPath = apiPath.getAllCompany+'/'+response.company.companyId;
-			apiCall.getCall(companyDropPath).then(function(res3){
-				$scope.ledgerForm.companyDropDown = res3;
-			});
-	
-			//State DropDown Selection
-			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;
-			apiCall.getCall(stateDropPath).then(function(res3){
-				$scope.ledgerForm.stateDropDown = res3;
-			});
+			$scope.ledgerForm.companyDropDown = response.company;
+			
+			$scope.ledgerForm.stateDropDown = response.state;
 			
 			//City DropDown
 			vm.cityDrop = [];
 			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
 			apiCall.getCall(cityAllDropPath).then(function(res5){
 				vm.cityDrop = res5;
-			});
-			
-			//City DropDown Selection
-			var cityDropPath = apiPath.getOneCity+'/'+response.city.cityId;
-			apiCall.getCall(cityDropPath).then(function(res4){
-				$scope.ledgerForm.cityDrop = res4;
+				
+				$scope.ledgerForm.cityDrop = response.city;
 				vm.disableValue = true;
+				
 			});
 			
 		});
 		//vm.disableValue = true;
 	}
 	
-	
-	vm.allLedgerData = [];
-	// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
-		
-		// vm.allLedgerData = response3;
-	
-	// });
+
 	
 	$scope.editLedgerData = function(id)
 	{
@@ -131,35 +118,21 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			$scope.ledgerForm.amountType = response.openingBalanceType;
 			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);
 			
-			//Under textbox Selection
-			apiCall.getCall(apiPath.getAllLedgerGroup+'/'+response.ledgerGroup.ledgerGroupId).then(function(response3){
-				$scope.ledgerForm.under = response3;
-			});
+			$scope.ledgerForm.under = response.ledgerGroup;
 			
-			//Company DropDown Selection
-			var companyDropPath = apiPath.getAllCompany+'/'+response.company.companyId;
-			apiCall.getCall(companyDropPath).then(function(res3){
-				$scope.ledgerForm.companyDropDown = res3;
-			});
+			$scope.ledgerForm.companyDropDown = response.company;
 			
-			//State DropDown Selection
-			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;
-			apiCall.getCall(stateDropPath).then(function(res3){
-				$scope.ledgerForm.stateDropDown = res3;
-			});
+			$scope.ledgerForm.stateDropDown = response.state;
 			
 			//City DropDown
 			vm.cityDrop = [];
 			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
 			apiCall.getCall(cityAllDropPath).then(function(res5){
 				vm.cityDrop = res5;
+				$scope.ledgerForm.cityDrop = response.city;
 			});
 			
-			//City DropDown Selection
-			var cityDropPath = apiPath.getOneCity+'/'+response.city.cityId;
-			apiCall.getCall(cityDropPath).then(function(res4){
-				$scope.ledgerForm.cityDrop = res4;
-			});
+			
 			
 			// $scope.ledgerForm.ledgerName = response.ledgerName;
 			// $scope.ledgerForm.ledgerName = response.ledgerName;
@@ -339,6 +312,8 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 	
 	$scope.getLegderCompany = [];
 	
+	vm.allLedgerData = [];
+	
 	//Set default Company
 	apiCall.getDefaultCompany().then(function(response){
 	
@@ -387,7 +362,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 		if($scope.ledgerEditId.id)
 		{
 			var ledgerPath = apiPath.getAllLedger+'/'+$scope.ledgerEditId.id;
-			$scope.ledgerEditId = [];
+			
 			
 		}
 		else{
@@ -403,56 +378,47 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
 			console.log(response5);
 			
 				
-				toaster.pop('success', 'Title', 'Successfull');
-				
-				
-				//Auto suggest Client Name For Debit
-				var jsuggestPath = apiPath.getLedgerJrnl+$scope.ledgerForm.companyDropDown.companyId;
-				
-				apiCall.getCall(jsuggestPath).then(function(response3){
 					
-					if(apiResponse.noContent == response3){
-			
-						vm.allLedgerData = [];
+				
+					if(angular.isArray(response5) || apiResponse.ok == response5){
+						
+						toaster.pop('success', 'Title', 'Successfull');
+						
+						$scope.changeCompanyToGetList($scope.getLegderCompany.companyDropDown.companyId);
+					
+						$scope.ledgerForm = [];
+						
+						// Delete formdata  keys
+						for (var key of formdata.keys()) {
+						   formdata.delete(key); 
+						}
+						
+						formdata.delete('balanceFlag');
+						formdata.delete('ledgerName');
+						formdata.delete('alias');
+						formdata.delete('emailId');
+						formdata.delete('inventoryAffected');
+						formdata.delete('amountType');
+						formdata.delete('amount');
+						formdata.delete('stateAbb');
+						formdata.delete('cityId');
+						formdata.delete('contactNo');
+						formdata.delete('address1');
+						formdata.delete('address2');
+					
+				
+						$scope.trueData = false;
+						$scope.alertData = true;
+						
+						$scope.ledgerEditId = []; // update ID
 					}
 					else{
 						
-						vm.allLedgerData = response3;
+						formdata.delete('balanceFlag');
+						
+						toaster.pop('warning', 'Opps!!', response5);
 					}
 				
-				});
-				
-			
-				$scope.ledgerForm = [];
-				
-				// Delete formdata  keys
-				for (var key of formdata.keys()) {
-				   formdata.delete(key); 
-				}
-				
-				formdata.delete('balanceFlag');
-				formdata.delete('ledgerName');
-				formdata.delete('alias');
-				formdata.delete('emailId');
-				formdata.delete('inventoryAffected');
-				formdata.delete('amountType');
-				formdata.delete('amount');
-				formdata.delete('stateAbb');
-				formdata.delete('cityId');
-				formdata.delete('contactNo');
-				formdata.delete('address1');
-				formdata.delete('address2');
-				
-				//var formdata = new FormData();
-				// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
-			
-					// vm.allLedgerData = response3;
-		
-				// });	
-				$scope.trueData = false;
-				$scope.alertData = true;
-			
-			
 			
 		});
 	}
@@ -587,4 +553,4 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,$loca
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","$location","toaster","getSetFactory","$state","apiResponse","validationMessage"];
+AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","getSetFactory","$state","apiResponse","validationMessage"];

@@ -37,7 +37,7 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   var GetTransationPath = apiPath.getAllLedger+'/'+ledgerId+'/transactions';
   
 	apiCall.getCall(GetTransationPath).then(function(response){
-		//console.log(response);
+		console.log(response);
 		data = response;
 		vm.pieChartData = [{ "color" : "#6cc539",
 							"data" : "0",

@@ -88,7 +88,17 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 	  });
 	}
 	  
-	  
+	
+	$scope.defaultCompany = function(){
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.addInvoice.companyDrop = response;
+			
+		});
+		
+	}
 	  
  //End Table
   // Chosen data
@@ -99,13 +109,8 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 		
 		vm.invoiceCompanyDrop = responseCompanyDrop;
 		
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
-			
-			$scope.addInvoice.companyDrop = response;
-			
-		});
-			
+		$scope.defaultCompany();
+		
 	});
 	
   
@@ -274,6 +279,8 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 				$scope.addInvoice.invoiceLabel = '';
 				$scope.addInvoice.startAt = '';
 				$scope.addInvoice.invoiceType = 'prefix';
+				
+				$scope.defaultCompany();
 			}
 			else{
 			
@@ -301,6 +308,8 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,$locatio
 		$scope.addInvoice.invoiceLabel = '';
 		$scope.addInvoice.startAt = '';
 		$scope.addInvoice.invoiceType = 'prefix';
+		
+		$scope.defaultCompany();
 		
 		formdata.delete('companyId');
 		formdata.delete('invoiceLabel');

@@ -3,32 +3,21 @@
  * Module: InvStockCtrl.js
  * Controller for ngTables
  =========================================================*/
-App.factory('tableCal', function() {
-	
-    return {
-        calculate: function(index) {
-			var row = {};
-           
-			
-		
-			return row;
-        }
-    };
-});
+
 
 App.controller('InvStockController', InvStockController);
 
-function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,tableCal) {
+function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,$window) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
 	
  var data = [];
-	//var getData = getSetFactory.get();
-	//console.log(getData);
+	var getData = getSetFactory.get();
+	console.log(getData);
 	//return false;
 	
-	var getData = { "Content-Type": undefined, "fromDate": "14-01-2017", "toDate": "30-03-2017", "companyId": "46", "productId": "908" };
+	//var getData = { "Content-Type": undefined, "fromDate": "24-02-2016", "toDate": "25-06-2016", "companyId": "50", "productId": "915" };
 	//var CompanyID = getData.companyId;
 	var CompanyID = getData.companyId;
 	
@@ -47,10 +36,9 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
  
 	$scope.calculation = function(responseDrop){
 		
-		var finalData = [];
+	
 		var balance = [];
 		var balanceArray = [];
-		var array1 =[]
 		
 		for(var i=0;i<responseDrop.length;i++)
 		{
@@ -62,13 +50,75 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 			
 			if(transData.transactionType == 'Inward'){
 				
+				if(balanceArray.length == 0){
+					
+					
 				
-				inward.qty = parseInt(transData.qty);
-				inward.price = transData.price * transData.qty;
-				inward.date = transData.transactionDate;
 				
-				balanceArray.push(inward);
+					inward.qty = parseInt(transData.qty);
+					inward.price = transData.price * transData.qty;
+					inward.date = transData.transactionDate;
+					
+					balanceArray.push(inward);
+				}
+				else{
+					 
+					if(balanceArray[0].qty < 0)
+					{	
+						var outward1 = {};
+						outward1.qty = 0;  //4
+						outward1.date = transData.transactionDate;
 				
+						inward.qty = parseInt(transData.qty);
+						
+						var balanceLength = balanceArray.length;
+						var index=0;
+						for(var j=0;j<balanceLength;j++)
+						{
+							var diff = inward.qty + balanceArray[index].qty;
+							
+							if(diff==0 || diff>0)
+							{
+								inward.qty = diff;
+								
+								if(j == (balanceLength - 1) && inward.qty > 0)
+								{
+									balanceArray[0] = inward;
+								}
+								else{
+									
+									balanceArray.splice(index,1);
+								
+								}
+								
+							}
+							else if(diff<0)
+							{
+								//var purchasePrice=balanceArray[index].price/balanceArray[index].qty;
+								outward1.qty = balanceArray[index].qty + inward.qty;
+								outward1.price = 1000;
+								var demo = {};
+								demo = angular.copy(outward1);
+								balanceArray[index] = demo;
+								inward.qty = 0;
+								index++;
+							}
+							else
+							{
+								
+							}
+							
+						}
+					}
+					else{
+						
+						inward.qty = parseInt(transData.qty);
+						inward.price = transData.price * transData.qty;
+						inward.date = transData.transactionDate;
+						
+						balanceArray.push(inward);
+					}
+				}
 				
 			}
 			else if(transData.transactionType == 'Outward')
@@ -78,49 +128,94 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 				outward1.price = transData.price;
 				outward1.date = transData.transactionDate;
 				
+				console.log(transData.qty);
+				console.log(balanceArray);
+				
 				outward.qty = parseInt(transData.qty);  //4
 				outward.price = transData.price;
 				outward.date = transData.transactionDate;
 				
+				console.log(balanceArray);
+				if(balanceArray.length == 0){
+					
+					
+					var minusObject = {};
+					minusObject.qty = -Math.abs(transData.qty);  //4
+					minusObject.price = transData.price;
+					minusObject.date = transData.transactionDate;
 				
-				if(balanceArray[0].qty > outward.qty)
-				{
-					var purchasePrice=balanceArray[0].price/balanceArray[0].qty;
-					outward.qty = balanceArray[0].qty - outward.qty;
-					outward.price = outward.qty * purchasePrice;
-					balanceArray[0] = outward;
+					balanceArray.push(minusObject);
+				
 				}
-				else if(balanceArray[0].qty == outward.qty)
-				{
-					balanceArray.splice(0,1);
-				}
-				else if(balanceArray[0].qty < outward.qty)
-				{
-					var balanceLength = balanceArray.length;
-					var index=0;
-					for(var j=0;j<balanceLength;j++)
+				else{
+					
+				
+					if(balanceArray[0].qty > outward.qty)
 					{
-						var diff = outward.qty - balanceArray[index].qty;
-						if(diff==0 || diff>0)
-						{
-							outward.qty = diff;
-							balanceArray.splice(index,1);
-						}
-						else if(diff<0)
-						{
-							var purchasePrice=balanceArray[index].price/balanceArray[index].qty;
-							outward1.qty = balanceArray[index].qty - outward.qty;
-							outward1.price = outward1.qty * purchasePrice;
-							var demo = {};
-							demo = angular.copy(outward1);
-							balanceArray[index] = demo;
-							outward.qty = 0;
-							index++;
-						}
-						else
-						{
+						var purchasePrice=balanceArray[0].price/balanceArray[0].qty;
+						outward.qty = balanceArray[0].qty - outward.qty;
+						outward.price = outward.qty * purchasePrice;
+						balanceArray[0] = outward;
+					}
+					else if(balanceArray[0].qty == outward.qty)
+					{
+						balanceArray.splice(0,1);
+					}
+					else if(balanceArray[0].qty < outward.qty)
+					{
+						
+						if(balanceArray[0].qty < 0){
+							
+							var minusObject = {};
+							minusObject.qty = -Math.abs(outward.qty);  //4
+							minusObject.price = outward.price;
+							minusObject.date = outward.transactionDate;
+						
+							balanceArray.push(minusObject);
 							
 						}
+						else{
+							
+							var balanceLength = balanceArray.length;
+							var index=0;
+							for(var j=0;j<balanceLength;j++)
+							{
+						
+								var diff = outward.qty - balanceArray[index].qty;
+								if(diff==0 || diff>0)
+								{
+									outward.qty = diff;
+									
+									if(j == (balanceLength - 1) && outward.qty > 0)
+									{
+											outward1.qty =  -Math.abs(outward.qty);
+										balanceArray[0] = outward1;
+									}
+									else{
+										
+										balanceArray.splice(index,1);
+									
+									}
+								
+								}
+								else if(diff<0)
+								{
+									var purchasePrice=balanceArray[index].price/balanceArray[index].qty;
+									outward1.qty = balanceArray[index].qty - outward.qty;
+									outward1.price = outward1.qty * purchasePrice;
+									var demo = {};
+									demo = angular.copy(outward1);
+									balanceArray[index] = demo;
+									outward.qty = 0;
+									index++;
+								}
+								else
+								{
+									
+								}
+							}
+						}
+						
 					}
 				}
 				 
@@ -134,6 +229,7 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 		
 		
 		$scope.contents = responseDrop;
+		$scope.getArray = responseDrop; // CSV Export
 		
 		$scope.contents.sort(function(a, b){
 			var dateA=new Date(a.transactionDate), dateB=new Date(b.transactionDate);
@@ -211,43 +307,7 @@ $scope.TableData = function(){
   });
 
 }
-	
-	$scope.rowspan1;
-	$scope.tableCal = tableCal;
-	$scope.getRowspan = function(index){
-		
-		var row;
-	
-		if(index == 0){
-			row = 1;
-		}
-		else{
-			
-			row = 2;
-			
-		}
-		
-		return row;
-		
-	}
-	
-	$scope.get = function(index){
-		
-		var row;
-		
-		if(index == 0){
-			row = 1;
-		}
-		else{
-			
-			row = 2;
-			
-		}
-		
-		return row;
-		
-	}
-	
+
   // FILTERS
   // ----------------------------------- 
 
@@ -342,6 +402,27 @@ $scope.TableData = function(){
   {
 	  alert('Delete');
   }
+  
+	$scope.generatePdf = function(){
+	 
+		getData.operation = 'pdf';
+		
+		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction/details',getData).then(function(responseDrop){
+		
+			console.log(responseDrop);
+			
+			if(angular.isObject(responseDrop)){
+				
+				var pdfPath = 'http://api.siliconbrain.co.in/'+responseDrop.documentPath;
+				$window.open(pdfPath, '_blank');
+			}
+			else{
+				
+				alert('Something Wrong');
+			}
+		
+		});
+	}
 
 }
-InvStockController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","tableCal"];
+InvStockController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","$window"];

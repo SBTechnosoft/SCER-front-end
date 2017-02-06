@@ -26,7 +26,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
         format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
         table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
         tools  : {title : 'Tools' , items : 'spellchecker code'},
-        newmenu: {title : 'Setting', items : 'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item11 item12 item13 item14 item15 item16 item17 item18 item19 item20 item21 item22 item23 item24 item25 item26'}
+        newmenu: {title : 'Setting', items : 'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item27 item28 item29 item11 item12 item13 item14 item15 item16 item17 item18 item19 item20 item21 item22 item23 item24 item25 item26'}
        },
 	   menubar: 'file edit insert view format table tools newmenu',
 	   setup: function(editor) {
@@ -102,12 +102,36 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
           editor.insertContent('[TaxAmt]');
          }
         });
+		 editor.addMenuItem('item29', {
+         text: 'TotalInWord',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[TotalInWord]');
+         }
+        });
         editor.addMenuItem('item10', {
          text: 'Total',
          context: 'newmenu',
          onclick: function (){ 
            
           editor.insertContent('[Total]');
+         }
+        });
+		 editor.addMenuItem('item27', {
+         text: 'TotalTax',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[TotalTax]');
+         }
+        });
+		 editor.addMenuItem('item28', {
+         text: 'TotalQty',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[TotalQty]');
          }
         });
         editor.addMenuItem('item11', {
@@ -256,19 +280,25 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 	
 	});
 	
-	//get Company
-	vm.companyDrop=[];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+	$scope.defaultCompany = function(){
 		
-		//console.log(response2);
-		vm.companyDrop = response2;
-			
 		//Set default Company
 		apiCall.getDefaultCompany().then(function(response){
 			
 			$scope.generalTemp.companyDropDown = response;
 		});
 			
+		
+	}
+	
+	//get Company
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+		
+		//console.log(response2);
+		vm.companyDrop = response2;
+		
+		$scope.defaultCompany();
 	});
 		
 	//Save Tempalte ID For Update
@@ -281,7 +311,6 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 		$scope.tempID = id;
 		apiCall.getCall(apiPath.getAllTemplate+'/'+id).then(function(responseTemp){
 		
-			console.log(responseTemp.company);
 			$scope.generalTemp.companyDropDown = responseTemp.company;
 			$scope.generalTemp.tempName = responseTemp.templateName;
 			tinyMCE.get('textdesc').setContent(responseTemp.templateBody);
@@ -317,6 +346,8 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 						vm.AllTempRight = responseTemp;
 		
 					});
+					
+					$scope.defaultCompany();
 				}
 				else{
 			
@@ -351,6 +382,8 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 						vm.AllTempRight = responseTemp;
 		
 					});
+					
+					$scope.defaultCompany();
 				}
 				else{
 			
@@ -367,6 +400,8 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 		$scope.tempID = '';
 		$scope.generalTemp.tempName = '';
 		tinyMCE.get('textdesc').setContent('');
+		
+		$scope.defaultCompany();
 		
 		formdata.delete('companyId');
 		formdata.delete('templateName');

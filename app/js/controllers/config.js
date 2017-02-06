@@ -163,7 +163,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		/*** End Template ***/
 		//Add Inventory Product
 		.state('app.AddInvProduct', {
-            url: '/AddInvProduct/:id',
+            url: '/AddInvProduct',
             templateUrl: basepath('Inventory/Product/AddInvProduct.html'),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
         })
@@ -466,13 +466,49 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.FormPriceListRetailSales', {
             url: '/FormPriceListRetailSales',
             templateUrl: basepath('PriceList/RetailSales/FormPriceListRetailSales.html'),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv')
+			controller: 'FormPriceListRetailSalesController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				saleType: function(){
+					
+					return 'retail_sales';
+				}
+			})
         })
 		//Show RetailSales
 		.state('app.PriceListRetailSales', {
             url: '/PriceListRetailSales',
             templateUrl: basepath('PriceList/RetailSales/PriceListRetailSales.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+			controller: 'PriceListRetailSalesController as table',
+			 resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','PriceListTreeGrid','angular-chosen','getBranchSrv'),{
+				saleType: function(){
+					
+					return 'retail_sales';
+				}
+			})
+        })
+		//Form WholeSales
+		.state('app.FormPriceListWholeSales', {
+            url: '/FormPriceListWholeSales',
+            templateUrl: basepath('PriceList/RetailSales/FormPriceListRetailSales.html'),
+			controller: 'FormPriceListRetailSalesController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				saleType: function(){
+					
+					return 'whole_sales';
+				}
+			})
+        })
+		//Show WholeSales
+		.state('app.PriceListWholeSales', {
+            url: '/PriceListWholeSales',
+            templateUrl: basepath('PriceList/RetailSales/PriceListRetailSales.html'),
+			controller: 'PriceListRetailSalesController as table',
+			 resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv'),{
+				saleType: function(){
+					
+					return 'whole_sales';
+				}
+			})
         })
 		/*** End PriceList ***/
 		

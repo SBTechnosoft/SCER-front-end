@@ -6,7 +6,7 @@
 
 App.controller('AddCompanyController', AddCompanyController);
 
-function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,apiPath,$location,$stateParams,toaster,apiResponse,validationMessage,validationPattern) {
+function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$stateParams,toaster,apiResponse,validationMessage,validationPattern) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -27,11 +27,12 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 	/* Hide/Show Company Panel */
 
 	$scope.$on('$locationChangeStart', function (event) {
+		
 		$rootScope.AddCompanyModify = true;
+		
 	});
 		
 	/* End */
-	
 	
 	//Edit Data On Change Company
 	$scope.changeCompany = function()
@@ -44,20 +45,26 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 	$scope.gotoModify = function(){
 		
 		var id = $scope.addCompany.companyDropDown2.companyId;
-		 $location.path('app/AddCompany/'+id);
+		// $location.path('app/AddCompany/'+id);
+		$state.go('app.AddCompany',{'id':id});
 	}
+	
 	//get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 			//console.log(response2);
 			vm.companyDrop = response2;
 			
-			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
+			if(!$stateParams.id){
 				
-				$scope.addCompany.companyDropDown2 = response;
-				vm.selectCompany = false;
-			});
+				//Set default Company
+				apiCall.getDefaultCompany().then(function(response){
+					
+					$scope.addCompany.companyDropDown2 = response;
+					vm.selectCompany = false;
+				});
+			
+			}
 	});
 		
 	//Get State
@@ -89,11 +96,15 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		if($stateParams.id){
 	  
 		//Edit Branch
-	var editCompany = apiPath.getAllCompany+'/'+$stateParams.id;
+		var editCompany = apiPath.getAllCompany+'/'+$stateParams.id;
 	
-	apiCall.getCall(editCompany).then(function(res){
+		apiCall.getCall(editCompany).then(function(res){
 		
+		console.log(res);
 		vm.sdfg = res.companyId;
+		
+		$scope.addCompany.companyDropDown2 = res;
+		
 		//console.log(vm.sdfg);
 		$scope.addCompany.Name = res.companyName;
 		$scope.addCompany.displayName = res.companyDisplayName;
@@ -108,26 +119,26 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 		$scope.addCompany.formalName = res.formalName;
 		$scope.addCompany.decimal = res.noOfDecimalPoints;
 		$scope.addCompany.curSymbol = res.currencySymbol;
-		$scope.addCompany.documentUrl = res.logo.documentUrl;
-		$scope.addCompany.documentName = res.logo.documentName;
 		
-		//State DropDown Selection
-		var stateDropPath = apiPath.getAllState+'/'+res.state.stateAbb;
-		apiCall.getCall(stateDropPath).then(function(res3){
-			$scope.addCompany.statesDropDown = res3;
-		});
+		if(res.logo.documentName){
+			
+			$scope.addCompany.documentUrl = res.logo.documentUrl;
+			$scope.addCompany.documentName = res.logo.documentName;
+		}
+		
+		$scope.addCompany.statesDropDown = res.state;
+		
 		
 		//City DropDown
 		var cityAllDropPath = apiPath.getAllCity+res.state.stateAbb;
 		apiCall.getCall(cityAllDropPath).then(function(res5){
+			
 			vm.cityDrop = res5;
+			
+			$scope.addCompany.cityDropDown = res.city;
 		});
 		
-		//City DropDown Selection
-		var cityDropPath = apiPath.getOneCity+'/'+res.city.cityId;
-		apiCall.getCall(cityDropPath).then(function(res4){
-			$scope.addCompany.cityDropDown = res4;
-		});
+	
 	
 	});
   
@@ -272,25 +283,22 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
       return ["[1-]AAA-999", "[1-]999-AAA"];
   }};
 
-  // Bootstrap Wysiwyg
-  // ----------------------------------- 
- 
-  this.editorFontFamilyList = [
-    'Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
-    'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact',
-    'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
-    'Times New Roman', 'Verdana'
-  ];
   
-  this.editorFontSizeList = [
-    {value: 1, name: 'Small'},
-    {value: 3, name: 'Normal'},
-    {value: 5, name: 'Huge'}
-  ];
   
   $scope.uploadFile = function(files) {
+	  
 		//console.log(files);
 		formdata.append("file[]", files[0]);
+		
+		var reader = new FileReader();
+
+		reader.onload = function(event) {
+			$scope.image_source = event.target.result
+			$scope.$apply()
+
+		}
+		// when the file is read it triggers the onload event above.
+		reader.readAsDataURL(files[0]);
 
 	};
 	
@@ -335,7 +343,8 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 			if(apiResponse.ok == response5){
 				
 				toaster.pop('success', 'Title', 'Insert Successfully');
-				$location.path('app/Company');
+				//$location.path('app/Company');
+				$state.go('app.Company');
 			}
 			else{
 				
@@ -355,7 +364,8 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 			if(apiResponse.ok == response5){
 				
 				toaster.pop('success', 'Title', 'Insert Successfully');
-				$location.path('app/Company');
+				//$location.path('app/Company');
+				$state.go('app.Company');
 			}
 			else{
 				
@@ -370,11 +380,22 @@ function AddCompanyController($rootScope,$scope,$http,$filter,$window,apiCall,ap
 	
   }
   
-  $scope.cancel = function(){
-	 
-	 $scope.addCompany = [];
-	 //$scope.formCompany.$setPristine();
-  }
+	$scope.cancel = function(){
+	
+		$scope.addCompany = [];
+		 
+		angular.element("input[type='file']").val(null);
+		
+		formdata.delete("file[]");
+		 
+		formdata.delete('isDefault');
+		formdata.delete('isDisplay');
+		 // Delete formdata  keys
+		for (var key of formdata.keys()) {
+		   formdata.delete(key); 
+		}
+		 //$scope.formCompany.$setPristine();
+	}
   
 }
-AddCompanyController.$inject = ["$rootScope","$scope","$http","$filter","$window","apiCall","apiPath","$location","$stateParams","toaster","apiResponse","validationMessage","validationPattern"];
+AddCompanyController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","$state","$stateParams","toaster","apiResponse","validationMessage","validationPattern"];

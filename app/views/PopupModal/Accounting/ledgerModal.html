@@ -18,7 +18,7 @@
 				   <div class="form-group">
 					  <label class="col-sm-3 control-label">Name</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="ledgerName" ng-model="ledgerForm.ledgerName" ng-change="changeLedgerData('ledgerName',ledgerForm.ledgerName)"  type="text" placeholder="Ledger Name" class="form-control"  ng-required="true" ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-maxlength="35" ng-minlength="1" auto-focus/>
+						 <input id="input-id-1" tabindex="2" name="ledgerName" ng-model="ledgerForm.ledgerName" ng-change="changeLedgerData('ledgerName',ledgerForm.ledgerName)"  type="text" placeholder="Ledger Name" class="form-control"  ng-required="true" ng-pattern="/^[a-zA-Z &_`#().\'-\/]*$/" ng-maxlength="35" ng-minlength="1" auto-focus/>
 						 
 						 <span ng-messages="formLedger.ledgerName.$error" ng-if="formLedger.ledgerName.$dirty || formLedger.ledgerName.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -35,7 +35,7 @@
 						<div class="col-sm-8">
 							<div class="input-group m-b">
 								<span class="input-group-addon">@</span>
-								<input type="email" tabindex="2" name="emailId" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" placeholder="Email ID" class="form-control" ng-required="true" />
+								<input type="email" tabindex="2" name="emailId" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" placeholder="Email ID" class="form-control" ng-required="true" ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
 							</div>
 							
 							<span ng-messages="formLedger.emailId.$error" ng-if="formLedger.emailId.$dirty || formLedger.emailId.$touched"  role="alert">
@@ -50,7 +50,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-3 control-label">Alias</label>
 					  <div class="col-sm-8">
-						 <input ng-model="ledgerForm.alias" name="alias" tabindex="2" ng-change="changeLedgerData('alias',ledgerForm.alias)"  id="input-id-1" type="text"  placeholder="Alias" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-maxlength="35" ng-minlength="1" />
+						 <input ng-model="ledgerForm.alias" name="alias" tabindex="2" ng-change="changeLedgerData('alias',ledgerForm.alias)"  id="input-id-1" type="text"  placeholder="Alias" class="form-control"  ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-maxlength="35" ng-minlength="1" />
 						 
 						 <span ng-messages="formLedger.alias.$error" ng-if="formLedger.alias.$dirty || formLedger.alias.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -103,7 +103,7 @@
 			   <div class="form-group">
 				  <label class="col-sm-3 control-label">Inventory Affected</label>
 				  <div class="col-sm-8">
-					 <select chosen data-ng-model="ledgerForm.invAffect" tabindex="2" ng-change="changeLedgerData('inventoryAffected',ledgerForm.invAffect)" data-ng-options="s for s in invAffectDrop"  class="form-control chosen-select" ng-required="true">
+					 <select chosen data-ng-model="ledgerForm.invAffect" tabindex="2" ng-change="changeLedgerData('inventoryAffected',ledgerForm.invAffect)" data-ng-options="s for s in invAffectDrop"  class="form-control chosen-select" >
 						 <option value=""></option>
 					 </select>
 				  </div>
@@ -113,7 +113,7 @@
 			   <div class="form-group">
 				  <label class="col-sm-3 control-label">Contact#</label>
 				  <div class="col-sm-8">
-					 <input id="input-id-1" tabindex="2" name="contactNo" ng-model="ledgerForm.contact" ng-change="changeLedgerData('contactNo',ledgerForm.contact)" type="text" placeholder="Contact Number" class="form-control" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" />
+					 <input id="input-id-1" tabindex="2" name="contactNo" ng-model="ledgerForm.contact" ng-change="changeLedgerData('contactNo',ledgerForm.contact)" type="text" placeholder="Contact Number" class="form-control"  ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" only-number />
 					 
 					 <span ng-messages="formLedger.contactNo.$error" ng-if="formLedger.contactNo.$dirty || formLedger.contactNo.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -129,7 +129,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
 					<div class="col-sm-8">
-						<textarea ng-model="ledgerForm.address1" name="firstAddress" tabindex="2" ng-change="changeLedgerData('address1',ledgerForm.address1)"  name="address"  placeholder="Your First address" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="35" ng-minlength="1"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea ng-model="ledgerForm.address1" name="firstAddress" tabindex="2" ng-change="changeLedgerData('address1',ledgerForm.address1)"  name="address"  placeholder="Your First address"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="35" ng-minlength="1"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
 						
 						<span ng-messages="formLedger.firstAddress.$error" ng-if="formLedger.firstAddress.$dirty || formLedger.firstAddress.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -144,7 +144,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
 					<div class="col-sm-8">
-						<textarea ng-model="ledgerForm.address2" name="secondAddress" tabindex="2" ng-change="changeLedgerData('address2',ledgerForm.address2)" name="address" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="35" ng-minlength="1"></textarea>
+						<textarea ng-model="ledgerForm.address2" name="secondAddress" tabindex="2" ng-change="changeLedgerData('address2',ledgerForm.address2)" name="address" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="35" ng-minlength="1"></textarea>
 						
 						<span ng-messages="formLedger.secondAddress.$error" ng-if="formLedger.secondAddress.$dirty || formLedger.secondAddress.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -223,7 +223,7 @@
 </script>
 
 <script type="text/ng-template" id="errorEmail">
-	<span class="text-danger" ng-message="email">{{errorMessage.email}}</span>
+	<span class="text-danger" ng-message="pattern">{{errorMessage.email}}</span>
 </script>
 
 <script type="text/ng-template" id="errorLonglength">

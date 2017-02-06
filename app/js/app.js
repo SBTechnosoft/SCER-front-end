@@ -12,7 +12,7 @@ if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript 
 
 
 
-var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages'])
+var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages','ngTableToCsv',"ngSanitize", "ngCsv"])
     .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','apiPath', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,apiPath) {
 		
 		

@@ -260,6 +260,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 		vm.categoryDrop = [];
 		apiCall.getCall(apiPath.getAllCategory).then(function(response){
 			
+			console.log(response);
 			vm.categoryDrop = response;
 			var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
 			$scope.tree_data = myTreeData2;

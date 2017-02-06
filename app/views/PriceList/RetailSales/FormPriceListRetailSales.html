@@ -6,11 +6,12 @@
 <h3>
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
-   Form RetailSales</small>
+	<span ng-if="saleType == 'retail_sales'"> Form RetailSales </span> 
+	<span ng-if="saleType == 'whole_sales'"> Form WholeSales </span> </small>
 </h3>
 <!-- START panel-->
 
-<div data-ng-controller="FormPriceListRetailSalesController as form" class="container-fluid panel-body">
+<div  class="container-fluid panel-body">
  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	
    <div class="panel panel-default">
@@ -31,7 +32,7 @@
 						   </div>
 						</fieldset>
 					</div>
-					<div class="col-sm-6">
+					<!--div class="col-sm-6">
 						 <fieldset >
 						   <div class="form-group">
 							  <label class="col-sm-3 control-label">Product</label>
@@ -41,10 +42,7 @@
 						   </div>
 						</fieldset>
 				
-					</div>
-				</div>
-				
-				<div class="col-sm-12">
+					</div-->
 					<div class="col-sm-6">
 						<fieldset >
 						   <div class="form-group">
@@ -55,6 +53,10 @@
 						   </div>
 						</fieldset>
 					</div>
+				</div>
+				
+				<div class="col-sm-12">
+					
 					<div class="col-sm-6">
 						<fieldset>
 						   <div class="form-group">

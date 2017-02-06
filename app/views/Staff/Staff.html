@@ -11,15 +11,19 @@
 			
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="state" data-ng-options="s for s in table.states" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="showStaff.companyDropDown" data-ng-options="s.companyName for s in table.companyDrop track by s.companyId" ng-change="changeCompany(showStaff.companyDropDown.companyId)" class="form-control chosen-select">
+							<option value="">All</option>
+						</select>
 					</div>
 					
 				<label class="col-sm-1 control-label"> Branch </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="state" data-ng-options="s for s in table.states" class="form-control chosen-select"></select>
+						<select chosen="" data-ng-model="showStaff.branchDropDown" data-ng-options="s.branchName for s in table.branchDrop track by s.branchId"  class="form-control chosen-select" >
+							<option value="">All</option>
+						</select>
 					</div>
 					
-				<button type="button" class="mr mb-sm btn btn-primary">Go</button>
+				<button type="button" class="mr mb-sm btn btn-primary" ng-click="showFilterStaff()" >Go</button>
 				
 			</div>
 		</div>

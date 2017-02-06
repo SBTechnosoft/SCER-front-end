@@ -37,6 +37,21 @@
                   </div>
                </div>
             </fieldset>
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Product Description</label>
+                  <div class="col-sm-5">
+                     <textarea id="input-id-1" name="productDescription" ng-model="addModelProduct.productDescription" type="text" placeholder="Product Description" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" ></textarea>
+					 
+					<span ng-messages="formProduct.productDescription.$error" ng-if="formProduct.productDescription.$dirty || formProduct.productDescription.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label class="col-sm-3 control-label">Categoy</label>
@@ -130,6 +145,21 @@
                      <input id="input-id-1" name="margin" dir="rtl" ng-model="addModelProduct.margin" type="text" placeholder="Margin" class="form-control" ng-required="true" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$|^100$/" ng-maxlength="6" />
 					 
 					<span ng-messages="formProduct.margin.$error" ng-if="formProduct.margin.$dirty || formProduct.margin.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Additional Tax(%)</label>
+                  <div class="col-sm-5">
+                     <input id="input-id-1" name="additionalTax" dir="rtl" ng-model="addModelProduct.additionalTax" type="text" placeholder="Additional Tax" class="form-control" ng-required="true" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" />
+					 
+					<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
 						<span ng-messages-include="errorLonglength"></span>
 						<span ng-messages-include="errorPatternThisSpecial"></span>

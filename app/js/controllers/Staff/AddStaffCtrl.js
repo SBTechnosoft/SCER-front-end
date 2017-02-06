@@ -56,14 +56,8 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 				
 				vm.companyDrop = responseCompanyDrop;
 			});
-		
-			//Company DropDown Selection
-			var companyDropPath = apiPath.getAllCompany+'/'+response.company.companyId;
-			apiCall.getCall(companyDropPath).then(function(res2){
 			
-				
-				$scope.addStaff.company = res2;
-			});
+			$scope.addStaff.company = response.company;
 			
 			vm.branchDrop = [];
 			var getAllBranch = apiPath.getOneBranch+response.company.companyId;
@@ -71,16 +65,12 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 			apiCall.getCall(getAllBranch).then(function(response4){
 				
 				vm.branchDrop = response4;
-			
-			});
-			
-			//Branch DropDown Selection
-			var branchDropPath = apiPath.getAllBranch+'/'+response.branch.branchId;
-			
-			apiCall.getCall(branchDropPath).then(function(res2){
 				
-				$scope.addStaff.branch = res2;
+				$scope.addStaff.branch = response.branch;
+			
 			});
+			
+			
 			
 			//Staff Name
 			$scope.addStaff.name = response.userName;
@@ -97,23 +87,17 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 			// user Type
 			$scope.addStaff.userType = response.userType;
 			
-			//State DropDown Selection
-			var stateDropPath = apiPath.getAllState+'/'+response.state.stateAbb;
-			apiCall.getCall(stateDropPath).then(function(res3){
-				$scope.addStaff.stateDropDown = res3;
-			});
+			$scope.addStaff.stateDropDown = response.state;
 			
 			//City DropDown
 			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
 			apiCall.getCall(cityAllDropPath).then(function(res5){
+				
 				vm.cityDrop = res5;
+				
+				$scope.addStaff.cityDropDown = response.city;
 			});
-			
-			//City DropDown Selection
-			var cityDropPath = apiPath.getOneCity+'/'+response.city.cityId;
-			apiCall.getCall(cityDropPath).then(function(res4){
-				$scope.addStaff.cityDropDown = res4;
-			});
+
 			
 		});
 	}

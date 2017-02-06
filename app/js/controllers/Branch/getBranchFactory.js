@@ -15,7 +15,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				// dataType: 'jsonp',
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken}
 			}).success(function(data, status, headers, config) {
-				if(apiResponse.noMatch == data){
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 				}
 				deferred.resolve(data);
@@ -36,7 +36,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 				data:formdata
 			}).success(function(data, status, headers, config) {
-				if(apiResponse.noMatch == data){
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 				}
 				deferred.resolve(data);
@@ -59,7 +59,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				cache:false,
 			   headers: headerData
 			}).success(function(data, status, headers, config) {
-				if(apiResponse.noMatch == data){
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 				}
 				deferred.resolve(data);
@@ -83,7 +83,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			   headers: headerData,
 				data:formdata
 			}).success(function(data, status, headers, config) {
-				if(apiResponse.noMatch == data){
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 					
 				}
@@ -103,7 +103,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
-				if(apiResponse.noMatch == data){
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 				}
 				deferred.resolve(data);
@@ -126,7 +126,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
-				if(apiResponse.noMatch == data){
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 				}
 				
@@ -156,7 +156,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).success(function(data, status, headers, config) {
 				
-				if(apiResponse.noMatch == data){
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 				}
 				

@@ -61,7 +61,7 @@
 					<div class="col-sm-5">
 						<div class="input-group m-b">
 							<span class="input-group-addon">@</span>
-							<input type="email" tabindex="2" name="emailId" ng-model="addStaff.emailId" ng-change="changeStaffData('emailId',addStaff.emailId)" placeholder="Email ID" class="form-control" ng-required="true" />
+							<input type="email" tabindex="2" name="emailId" ng-model="addStaff.emailId" ng-change="changeStaffData('emailId',addStaff.emailId)" placeholder="Email ID" class="form-control" ng-required="true" ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
 						</div>
 						
 						<span ng-messages="formStaff.emailId.$error" ng-if="formStaff.emailId.$dirty || formStaff.emailId.$touched"  role="alert">
@@ -77,7 +77,7 @@
 				<div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">Password</label>
                   <div class="col-sm-5">
-                    <input id="input-id-1" tabindex="2" name="staffPassword" ng-model="addStaff.password" ng-change="changeStaffData('password',addStaff.password)" type="text" placeholder="Password" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="24" ng-minlength="6" />
+                    <input id="input-id-1" tabindex="2" name="staffPassword" ng-model="addStaff.password" ng-change="changeStaffData('password',addStaff.password)" type="password" placeholder="Password" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="24" ng-minlength="6" />
 					 
 					<span ng-messages="formStaff.staffPassword.$error" ng-if="formStaff.staffPassword.$dirty || formStaff.staffPassword.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -179,7 +179,7 @@
 </script>
 
 <script type="text/ng-template" id="errorEmail">
-	<span class="text-danger" ng-message="email">{{errorMessage.email}}</span>
+	<span class="text-danger" ng-message="pattern">{{errorMessage.email}}</span>
 </script>
 
 <script type="text/ng-template" id="errorLonglength">

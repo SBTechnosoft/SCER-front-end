@@ -55,7 +55,11 @@
 								<td data-title="'Client Name'" sortable="'clientName'" filter="{ 'clientName': 'text' }" >{{user.client.clientName}}</td>
 								<td data-title="'Company'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.company.companyName}}</td>
 								<td data-title="'File'" >
-								<a href="http://api.siliconbrain.co.in/{{userFile.documentUrl}}/{{userFile.documentName}}" ng-repeat="userFile in user.file" target="_blank" ><i ui-sref="" class="fa fa-file" style="font-size:17px;color:#10709f"> </i></a> </td>
+									<a href="http://api.siliconbrain.co.in/{{userFile.documentUrl}}{{userFile.documentName}}" ng-repeat="userFile in user.file" target="_blank" >
+										<i ui-sref="" class="fa fa-file" style="font-size:17px;color:#10709f" ng-if="userFile.documentFormat == 'pdf'" > </i>
+										<i ui-sref="" class="fa fa-picture-o" style="font-size:17px;color:#10709f" ng-if="userFile.documentFormat == 'jpg' || userFile.documentFormat == 'jpeg' || userFile.documentFormat == 'png'"> </i>
+									</a> 
+								</td>
 								
 								<td data-title="'Action'" sortable="'action'">
 									<center>

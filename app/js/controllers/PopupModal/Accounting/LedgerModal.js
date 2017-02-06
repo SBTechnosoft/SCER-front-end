@@ -114,19 +114,28 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 		
 			console.log(response5);
 			
-			
-			//Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
+			if(angular.isArray(response5)){
+				
+				//Delete formdata  keys
+				for (var key of formdata.keys()) {
+				   formdata.delete(key); 
+				}
+				
+				filterArray.index = $scope.ledgerIndex;
+				filterArray.companyId = $scope.ledgerForm.companyDropDown.companyId;
+				filterArray.ledgerName = $scope.ledgerForm.ledgerName;
+				
+				$modalInstance.close(filterArray);
+				
+				$scope.ledgerForm = [];
 			}
-			
-			filterArray.index = $scope.ledgerIndex;
-			filterArray.companyId = $scope.ledgerForm.companyDropDown.companyId;
-			filterArray.ledgerName = $scope.ledgerForm.ledgerName;
-			
-			$modalInstance.close(filterArray);
-			
-			$scope.ledgerForm = [];
+			else{
+				
+				formdata.delete('balanceFlag');
+				formdata.delete('companyId');
+		
+				alert(response5);
+			}
 		});
 		
     };

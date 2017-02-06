@@ -6,12 +6,14 @@
 
 App.controller('FormPriceListRetailSalesController', FormPriceListRetailSalesController);
 
-function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory,$state) {
+function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory,$state,saleType) {
   'use strict';
   
   var vm = this;
   $scope.PriceRetailSales = [];
-  
+  $scope.saleType = saleType;
+ 
+	
 	//Get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response){
@@ -22,6 +24,8 @@ function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory
 		apiCall.getDefaultCompany().then(function(response2){
 			
 			$scope.PriceRetailSales.companyDropDown = response2;
+			
+			
 			
 			//Auto Suggest Product Dropdown data
 			vm.productDrop = [];
@@ -63,17 +67,17 @@ function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory
 		dataSet[Fname] = value;
 		
 		var Path = apiPath.getProductByCompany+$scope.PriceRetailSales.companyDropDown.companyId;
-			
+		
 		delete dataSet.companyId;
-		delete dataSet.productId;
+		//delete dataSet.productId;
 		
-		vm.productDrop = [];
+		// vm.productDrop = [];
 		
-		apiCall.getCallHeader(Path,dataSet).then(function(response){
+		// apiCall.getCallHeader(Path,dataSet).then(function(response){
 			
-			vm.productDrop = response;
+			// vm.productDrop = response;
 			
-		});
+		// });
 		
 		delete dataSet.authenticationToken;
 		console.log(dataSet);
@@ -81,20 +85,38 @@ function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory
 
 	$scope.generate = function(){
 		
-		dataSet["type"] = "retailsales";
+		// if($scope.saleType == 'retail_sales'){
+			
+			// dataSet["salesType"] = "retail_sales";
+		// }
+		// else if($scope.saleType == 'whole_sales'){
+			
+			// dataSet["salesType"] = "whole_sales";
+		// }
 		
 		dataSet["companyId"] = $scope.PriceRetailSales.companyDropDown.companyId;
+		dataSet["noOfDecimalPoints"] = $scope.PriceRetailSales.companyDropDown.noOfDecimalPoints;
 		
-		if($scope.PriceRetailSales.productDropDown){
+		// if($scope.PriceRetailSales.productDropDown){
 			
-			dataSet["productId"] = $scope.PriceRetailSales.productDropDown.productId;
+			// dataSet["productId"] = $scope.PriceRetailSales.productDropDown.productId;
 		
-		}
+		// }
 		
 		getSetFactory.set(dataSet);
 		console.log(dataSet);
 		console.log(getSetFactory.get());
-		$state.go("app.PriceListRetailSales");
+		
+		
+		if($scope.saleType == 'retail_sales'){
+			
+			$state.go("app.PriceListRetailSales");
+		}
+		else if($scope.saleType == 'whole_sales'){
+			
+			$state.go("app.PriceListWholeSales");
+		}
+		
 		//getSetFactory.blank();
 		
 		
@@ -262,4 +284,4 @@ function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory
   
   
 }
-FormPriceListRetailSalesController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$state"];
+FormPriceListRetailSalesController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$state","saleType"];

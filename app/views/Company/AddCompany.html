@@ -137,7 +137,9 @@
 				</div>
 				<div class="col-md-3">
 				<img src="http://api.siliconbrain.co.in/{{addCompany.documentUrl}}{{addCompany.documentName}}" height="100" width="80%" class="brand-logo-collapsed"/>
-				<input id="input-id-1" type="file" tabindex="1" onchange="angular.element(this).scope().uploadFile(this.files)"  />
+				<img ng-src="{{image_source}}" height="100" width="80%" class="brand-logo-collapsed" />
+				<input id="input-id-1" type="file" tabindex="1" onchange="angular.element(this).scope().uploadFile(this.files)"  accept="image/png,image/gif,image/jpeg,image/jpg" />
+				
 				</div>
 		   
 		  </div>

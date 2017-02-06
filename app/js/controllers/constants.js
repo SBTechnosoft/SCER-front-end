@@ -39,6 +39,8 @@ App
       'gcal':               ['app/vendor/fullcalendar/dist/gcal.js'],
 	  'treeGrid':          ['app/vendor/tree-grid/treeGrid.css',
 							 'app/vendor/tree-grid/tree-grid-directive.js'],
+	'PriceListTreeGrid':          ['app/vendor/PriceListTreeGrid/treeGrid.css',
+							 'app/vendor/PriceListTreeGrid/tree-grid-directive.js'],
 	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js'],
 	'tinymce':				['app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js',
 							'app/vendor/tinymce/js/tinymce/tinymce.min.js']

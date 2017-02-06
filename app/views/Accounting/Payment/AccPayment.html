@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="accPayment.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accPayment.companyDropDown.companyId)" class="form-control chosen-select" ng-required="true" ></select>
+						<select chosen="" data-ng-model="accPayment.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accPayment.companyDropDown)" class="form-control chosen-select" ng-required="true" ></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 				<div class="col-sm-4">
@@ -114,7 +114,7 @@
 							<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 						</td>
 						<td>
-							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]*$/" only-number />
+							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 							<h5 class="text-center" style="visibility:hidden">Current Balance 205000 Dr/Cr</h5>
 						</td>
 						<td style="">

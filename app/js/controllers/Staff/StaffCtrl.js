@@ -6,100 +6,146 @@
 
 App.controller('StaffController', StaffController);
 
-function StaffController($scope,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory) {
+function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory) {
   'use strict';
   var vm = this;
 	var data = [];
-	
+	$scope.showStaff = [];
+	vm.tableParams;
 	$scope.allowedAdd = $rootScope.$storage.authUser.userType;
 	$scope.allowedId = $rootScope.$storage.authUser.userId;
 	
- // Chosen data
-  // ----------------------------------- 
-
-  this.states = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming'
-  ];
-
-  
+	var flag = 0;
+	
+	vm.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+		
+		
+		vm.companyDrop = response2;
+		
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+			
+			$scope.showStaff.companyDropDown = response;
+			
+			var headerDataOnLoad = {'Content-Type': undefined,'companyId':response.companyId};
+			
+			apiCall.getCallHeader(apiPath.getAllStaff,headerDataOnLoad).then(function(response){
+		
+				console.log(response);
+				if(apiResponse.noContent == response){
+					
+					data = [];
+					toaster.pop('alert', 'Opps!!', 'No Staff Available');
+					
+				}
+				else{
+					
+					data = response;
+				
+					for (var i = 0; i < data.length; i++) {
+					  data[i].cityName = ""; //initialization of new property 
+					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					}
+					
+					 $scope.TableData();
+					 
+					 flag = 1;
+				}
+				
+			});
+	
+	
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			//Get Branch
+			apiCall.getCall(getAllBranch).then(function(response4){
+				
+				vm.branchDrop = response4;
+					
+			});
+		});
+		
+		
+	});
+	
+	//Change Branch On Select Company
+	$scope.changeCompany = function(state)
+	{
+		 vm.branchDrop = [];
+		var getAllBranch = apiPath.getOneBranch+state;
+		//Get Branch
+		apiCall.getCall(getAllBranch).then(function(response4){
+			vm.branchDrop = response4;
+				
+		});
+	}
+	
+	$scope.showFilterStaff = function(){
+		
+		var headerData = {'Content-Type': undefined};
+		
+		if($scope.showStaff.companyDropDown){
+			
+			headerData.companyId = $scope.showStaff.companyDropDown.companyId;
+			
+		}
+		
+		
+		if($scope.showStaff.branchDropDown){
+			
+			headerData.branchId = $scope.showStaff.branchDropDown.branchId;
+		}
+	
+		
+			
+			apiCall.getCallHeader(apiPath.getAllStaff,headerData).then(function(response){
+		
+				console.log(response);
+				if(apiResponse.noContent == response){
+					
+					data = [];
+					toaster.pop('alert', 'Opps!!', 'No Staff Available');
+				}
+				else{
+					
+					
+					data = response;
+			
+					for (var i = 0; i < data.length; i++) {
+					  data[i].cityName = ""; //initialization of new property 
+					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					}
+					
+					
+				}
+				
+				if(flag == 0){
+					
+					$scope.TableData();
+					
+					flag = 1;
+				}
+				else{
+					
+					vm.tableParams.reload();
+				}
+				
+				
+			});
+	
+		
+	}
   
   // SORTING
   // ----------------------------------- 
-$scope.branchF = [
-      {pop: "Branch1" },
-      {pop: "Branch2" }
-  ];
-  
-  // var data = [
-      // {userName: "Staff1",   address: "1/3227 , GokulDham Society", contactNo: "9564587458", cityName: "Surat"  },
-      // {userName: "Staff2", address: "1/3227 , GokulDham Society", contactNo: "857456987", cityName: "Surat"  },
-      // {userName: "Staff3",   address: "1/3227 , GokulDham Society", contactNo: "9996587221", cityName: "Surat"  },
-      // {userName: "Staff4",   address: "1/3227 , GokulDham Society", contactNo: "9745222222", cityName: "Surat"  },
-      // {userName: "Staff5",    address: "1/3227 , GokulDham Society", contactNo: "8885964754", cityName: "Surat" }
-  // ];
+	$scope.branchF = [
+	  {pop: "Branch1" },
+	  {pop: "Branch2" }
+	];
   
  
-	apiCall.getCall(apiPath.getAllStaff).then(function(response){
-		
-		console.log(response);
-		data = response;
-		
-		for (var i = 0; i < data.length; i++) {
-		  data[i].cityName = ""; //initialization of new property 
-		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-		}
-		
-		 $scope.TableData();
-	});
+	
   
   //alert(branchF);
 	$scope.TableData = function(){
@@ -269,4 +315,4 @@ $scope.branchF = [
 	}
 
 }
-StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","$http","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory"];
+StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory"];
