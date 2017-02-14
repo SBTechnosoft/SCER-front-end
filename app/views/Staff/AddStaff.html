@@ -103,7 +103,7 @@
 			   <div class="form-group">
 				  <label class="col-sm-2 control-label">Contact#</label>
 				  <div class="col-sm-5">
-					 <input id="input-id-1"  tabindex="2" name="contactNo" ng-model="addStaff.contact" ng-change="changeStaffData('contactNo',addStaff.contact)" type="text" placeholder="Contact Number" class="form-control" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" />
+					 <input id="input-id-1"  tabindex="2" name="contactNo" ng-model="addStaff.contact" ng-change="changeStaffData('contactNo',addStaff.contact)" type="text" placeholder="Contact Number" class="form-control" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" only-number />
 					 
 					<span ng-messages="formStaff.contactNo.$error" ng-if="formStaff.contactNo.$dirty || formStaff.contactNo.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>

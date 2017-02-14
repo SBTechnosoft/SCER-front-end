@@ -4,58 +4,30 @@
  * Controller for ngTables
  =========================================================*/
 
-App.controller('BranchController', BranchController);
+App.controller('AccTrailBalanceController', AccTrailBalanceController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster) {
+function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,$window) {
   'use strict';
   var vm = this;
   var data = [];
   var formdata = new FormData();
-  
-  //Go To AddBranch
-  $scope.GoToAddBranch = function(){
-	  
-	 $rootScope.AddBranchModify = false;
-	 $location.path('app/AddBranch/');
-	// $state.go('app.AddBranch'); 
-  }
+  var flag = 0;
+  $scope.noOfDecimalPoints;
+  $scope.displayCompany;
+   $scope.displayDate = new Date();
   
 	$scope.showBranches = function(){
 		
-		if($scope.stateCheck){
-			
-			apiCall.getCall(apiPath.getOneBranch+$scope.stateCheck.companyId).then(function(response){
-			//console.log(response);
-			data = response;
-			
-			for (var i = 0; i < data.length; i++) {
-			  data[i].cityName = ""; //initialization of new property 
-			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-			}
-			
-			 vm.tableParams.reload();
-
-			});
-			
-		}
-		else{
-			
-			
-			
-			apiCall.getCall(apiPath.getAllBranch).then(function(response){
-				
-				//console.log(response);
-				data = response;
-				
-				for (var i = 0; i < data.length; i++) {
-				  data[i].cityName = ""; //initialization of new property 
-				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-				}
-				
-				 vm.tableParams.reload();
-
-			});
-		}
+		$scope.TotalofDebit = 0;
+		$scope.TotalofCredit = 0;
+		
+		$scope.noOfDecimalPoints = parseInt($scope.stateCheck.noOfDecimalPoints);
+	
+		$scope.getBranch($scope.stateCheck.companyId);
+		
+		$scope.displayCompany = $scope.stateCheck.companyName;
+		
+		
 		
 		
 	}
@@ -73,6 +45,10 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 				
 				$scope.stateCheck = response;
 				
+				$scope.displayCompany = response.companyName;
+				
+				$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
+				
 				$scope.getBranch(response.companyId);
 				
 			});
@@ -80,25 +56,73 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 		});
 		 
 	}
-	
 	$scope.init();
 	
 	//End
+	
+	$scope.TotalofDebit = 0;
+	$scope.TotalofCredit = 0;
   
 	$scope.getBranch = function(id){
 		
 	
-		apiCall.getCall(apiPath.getOneBranch+id).then(function(response){
-			//console.log(response);
-			data = response;
+		apiCall.getCall(apiPath.getTrailBalance+id).then(function(response){
 			
-			for (var i = 0; i < data.length; i++) {
-			  data[i].cityName = ""; //initialization of new property 
-			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+			console.log(response);
+			//data = response;
+			
+			var trialBalanceArray = [];
+			var totaldebit = 0;
+			var totalcredit = 0;
+			var dataLength = response.length-1;
+			
+			for (var i = 0; i < response.length; i++) {
+			  
+			  var dataOfTrial = response[i];
+			  
+			  var trailObject = {};
+			  trailObject.ledgerName = dataOfTrial.ledger.ledgerName;
+				//  trailObject.amountType = data[i].amountType;
+			  
+			  if(dataOfTrial.amountType == 'debit'){
+				 
+				 
+				 trailObject.debitAmount = dataOfTrial.amount;
+				  trailObject.creditAmount = "-";
+				totaldebit += parseFloat(dataOfTrial.amount);
+			  }
+			  else{
+				   trailObject.debitAmount = "-";
+				  trailObject.creditAmount = dataOfTrial.amount;
+				 totalcredit += parseFloat(dataOfTrial.amount);
+			  }
+			  
+			  trialBalanceArray.push(trailObject);
+			  
+				if(i==dataLength)
+				{
+					// var totalObject = {};
+					// totalObject.ledgerName = "Total";
+					// totalObject.debitAmount = totaldebit;
+					// totalObject.creditAmount = totalcredit;
+					
+					// trialBalanceArray.push(totalObject);
+					$scope.TotalofDebit = totaldebit;
+					$scope.TotalofCredit = totalcredit;
+				}
 			}
 			
+			data = trialBalanceArray;
 			
-			 $scope.TableData();
+			if(flag == 0){
+				$scope.TableData();
+				flag =1;
+			}
+			else{
+				
+				vm.tableParams.reload();
+			}
+			
 			
 
 		});
@@ -112,9 +136,10 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
-		  count: 10,          // count per page
+		  count: 10000,          // count per page
+		  // noPager: true // hides pager
 		  sorting: {
-			  branchName: 'asc'     // initial sorting
+			   ledgerfName: 'asc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
@@ -130,7 +155,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 			  // use build-in angular filter
 			 // console.log("Length: .."+params.$params.filter.city);
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.branchName) != "undefined" && params.$params.filter.branchName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.debitAmount) != "undefined" && params.$params.filter.debitAmount != "") || (typeof(params.$params.filter.creditAmount) != "undefined" && params.$params.filter.creditAmount != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -252,62 +277,29 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
       }
   });
   
-  $scope.isDefault_branch = function(id)
-  {
+	/*** Pdf ***/
 	
-	formdata.append('isDefault','ok');
-	var editBranch2 = apiPath.getAllBranch+'/'+id;
-		
-		apiCall.postCall(editBranch2,formdata).then(function(response5){
-		
-			formdata.delete('isDefault');
-			//$location.path('app/Branch');
-			//toaster.pop('success', 'Title', 'Message');
-		
-		});
-  }
-  
-  $scope.editBranch= function(branch_id)
-  {
-	  
-	  //$location.path('app/AddBranch/'+branch_id);
-	   $state.go("app.AddBranch", { id: branch_id });
-  }
-  
-  $scope.deleteBranch = function(branch_id)
-  {
-	
-	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
-	  
-	apiCall.deleteCall(deletePath).then(function(deleteres){
-		
-		console.log(deleteres);
-		
-		if(apiResponse.ok == deleteres){
-				
-			toaster.pop('success', 'Title', 'Delete Successfully');
+		$scope.generatePdf = function(){
+		 
 			
-			apiCall.getCall(apiPath.getAllBranch).then(function(response){
+			
+			apiCall.getCall(apiPath.getTrailBalance+$scope.stateCheck.companyId+'/export').then(function(responseDrop){
+			
+				console.log(responseDrop);
 				
-				//console.log(response);
-				data = response;
-				
-				for (var i = 0; i < data.length; i++) {
-				  data[i].cityName = ""; //initialization of new property 
-				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				if(angular.isObject(responseDrop)){
+					
+					var pdfPath = 'http://api.siliconbrain.co.in/'+responseDrop.documentPath;
+					$window.open(pdfPath, '_blank');
 				}
-				
-				vm.tableParams.reload();
-				 
+				else{
+					
+					alert('Something Wrong');
+				}
+			
 			});
 		}
-		else{
-			
-			toaster.pop('warning', 'Opps!!', deleteres);
-		}
-	 
-	});
-  }
-
+	
+	/*** End Pdf ***/
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster"];
+AccTrailBalanceController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","$window"];

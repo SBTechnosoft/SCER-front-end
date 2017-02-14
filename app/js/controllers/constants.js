@@ -115,7 +115,10 @@ App
 	'getOneStaff': 'http://api.siliconbrain.co.in/users/',
 	'loginAuth': 'http://api.siliconbrain.co.in/authenticate',
 	'deleteToken': 'http://api.siliconbrain.co.in/logout/user/',
-	'getBill': 'http://api.siliconbrain.co.in/accounting/bills/company/'
+	'getBill': 'http://api.siliconbrain.co.in/accounting/bills/company/',
+	'getTrailBalance': 'http://api.siliconbrain.co.in/accounting/trial-balance/company/',
+	'reGeneratePdf': 'http://api.siliconbrain.co.in/documents/bill',
+	'billPaymentRefund': 'http://api.siliconbrain.co.in/accounting/bills/',
   })
   //Api Path
   .constant('apiResponse', {

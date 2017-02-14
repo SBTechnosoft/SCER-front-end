@@ -5,6 +5,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
   'use strict';
   var vm = this;
   $scope.generalTemp = [];
+  $scope.generalTempList = [];
   var formdata = new FormData();
   
 	/* VALIDATION */
@@ -26,7 +27,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
         format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
         table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
         tools  : {title : 'Tools' , items : 'spellchecker code'},
-        newmenu: {title : 'Setting', items : 'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item27 item28 item29 item11 item12 item13 item14 item15 item16 item17 item18 item19 item20 item21 item22 item23 item24 item25 item26'}
+        newmenu: {title : 'Setting', items : 'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item27 item28 item29 item11 item30 item12 item13 item14 item15 item16 item17 item18 item19 item20 item21 item22 item23 item24 item25 item26'}
        },
 	   menubar: 'file edit insert view format table tools newmenu',
 	   setup: function(editor) {
@@ -140,6 +141,14 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
          onclick: function (){ 
            
           editor.insertContent('[TaxRate]');
+         }
+        });
+		editor.addMenuItem('item30', {
+         text: 'Transaction Type',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[TransType]');
          }
         });
         editor.addMenuItem('item12', {
@@ -271,14 +280,18 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 	        }
       });	
      
-	
-	//All Template In Right
-	vm.AllTempRight = [];
-	apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+	$scope.getCompanyWiseTemplate = function(id){
 		
-		vm.AllTempRight = responseTemp;
+		//All Template In Right
+		vm.AllTempRight = [];
+		apiCall.getCall(apiPath.getAllTemplate+'/company/'+id).then(function(responseTemp){
+			
+			vm.AllTempRight = responseTemp;
+		
+		});
 	
-	});
+	}
+	
 	
 	$scope.defaultCompany = function(){
 		
@@ -286,9 +299,19 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 		apiCall.getDefaultCompany().then(function(response){
 			
 			$scope.generalTemp.companyDropDown = response;
-		});
+			$scope.generalTempList.companyDropDownList = response;
 			
+			$scope.getCompanyWiseTemplate(response.companyId);
+			
+			console.log(response.companyId);
+		});
+	
 		
+	}
+	
+	$scope.changeTemplateList = function(id){
+		
+		$scope.getCompanyWiseTemplate(id);
 	}
 	
 	//get Company
@@ -361,7 +384,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 			
 			formdata.append('companyId',$scope.generalTemp.companyDropDown.companyId);
 			formdata.append('templateName',$scope.generalTemp.tempName);
-			formdata.append('templateType','invoice');
+			formdata.append('templateType','payment');
 			formdata.append('templateBody',tinyMCE.get('textdesc').getContent());
 			//formdata.append('templateType',addBranch.branchName);
 	

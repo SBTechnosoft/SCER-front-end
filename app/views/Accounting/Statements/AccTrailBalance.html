@@ -1,0 +1,53 @@
+<h3>
+	
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Trial Balance</small>
+  
+</h3>
+<div   class="container-fluid" >
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-sm-1 control-label"> Company </label>
+					<div class="col-sm-7">
+						<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states track by s.companyId" class="form-control chosen-select" >
+						
+						</select>
+					</div>
+				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showBranches()" >Go</button>
+			</div>
+		</div>
+	</div>
+   <div class="panel panel-default">
+      <div class="panel-heading" >
+         <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
+		 <a ng-click="generatePdf()" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
+		 <a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a>
+		 
+         <div class="panel-title">Trial Balance of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date:'dd-MMM-yyyy'}} </b></div>
+      </div>
+      <table data-ng-table="table.tableParams" export-csv="csv"   show-filter="true" class="table table-bordered table-striped" >
+	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+		<thead>
+			<th>Ledger Name</th>
+			<th>Debit</th>
+			<th>Credit</th>
+		</thead>
+         <tbody  >
+            <tr data-ng-repeat="user in $data" >
+			
+				<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  >{{user.ledgerName}}</td>
+				<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:center" header-class="text-center">{{user.debitAmount  | setDecimal: noOfDecimalPoints}}</td>
+			    <td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:center" header-class="text-center">{{user.creditAmount  | setDecimal: noOfDecimalPoints}}</td>
+				
+            </tr>
+         </tbody>
+		 <tfoot>
+			<td><b>Total</b></td>
+			<td style="text-align:center"><b>{{TotalofDebit | setDecimal: noOfDecimalPoints}}</b></td>
+			<td style="text-align:center"><b>{{TotalofCredit | setDecimal: noOfDecimalPoints}}</b></td>
+		 </tfoot>
+      </table>
+	  
+   </div>
+</div>

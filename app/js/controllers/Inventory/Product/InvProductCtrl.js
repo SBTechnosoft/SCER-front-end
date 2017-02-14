@@ -12,18 +12,109 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 	//$scope.brandradio="";
 
   var data = [];
-  apiCall.getCall(apiPath.getAllProduct).then(function(response){
-		data = response;
-		for (var i = 0; i < data.length; i++) {
-		  data[i].productCategoryName = ""; //initialization of new property 
-		  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-		  data[i].productGroupName = ""; //initialization of new property 
-		  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+	var flag = 0;
+	
+	$scope.showProduct = function(){
+		
+		if($scope.stateCheck){
+			
+			flag = 1;
+			$scope.getProduct($scope.stateCheck.companyId);
+			
+			
 		}
-		 $scope.TableData();
-	});
-
-	 $scope.TableData = function(){
+		else{
+			
+			apiCall.getCall(apiPath.getAllProduct).then(function(response){
+				
+				if(apiResponse.noContent == response){
+					
+					data = [];
+					toaster.pop('alert', 'Opps!!', 'No Product Available');
+					
+				}
+				else{
+					
+					data = response;
+					for (var i = 0; i < data.length; i++) {
+					  data[i].productCategoryName = ""; //initialization of new property 
+					  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
+					  data[i].productGroupName = ""; //initialization of new property 
+					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+					}
+					
+					
+				}
+				
+				 vm.tableParams.reload();
+				
+			});
+			
+			
+		}
+		
+		
+	}
+	
+	$scope.init = function (){
+			
+		vm.states=[];
+		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			
+			vm.states = response2;
+			
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
+				
+				$scope.stateCheck = response;
+				
+				$scope.getProduct(response.companyId);
+				
+			});
+		 
+		});
+		 
+	}
+	$scope.init();
+	
+	$scope.getProduct = function(id){
+		
+		apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
+			
+			if(apiResponse.noContent == response){
+					
+				data = [];
+				toaster.pop('alert', 'Opps!!', 'No Product Available');
+				
+			}
+			else{
+				//console.log('else');
+				data = response;
+				for (var i = 0; i < data.length; i++) {
+				  data[i].productCategoryName = ""; //initialization of new property 
+				  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
+				  data[i].productGroupName = ""; //initialization of new property 
+				  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+				}
+				
+				
+			}
+			
+			if(flag == 0){
+					
+				//console.log('zero');
+				$scope.TableData();
+			}
+			else{
+				//console.log('one');
+				 vm.tableParams.reload();
+			}
+			
+			 
+		});
+	}
+	
+	$scope.TableData = function(){
 		 
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page

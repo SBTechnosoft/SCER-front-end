@@ -6,6 +6,19 @@
 </h3>
 <div data-ng-controller="InvProductController as table" class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-sm-1 control-label"> Company </label>
+					<div class="col-sm-7">
+						<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states track by s.companyId" class="form-control chosen-select" >
+						<option value=""> All </option>
+						</select>
+					</div>
+				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showProduct()" >Go</button>
+			</div>
+		</div>
+	</div>
    <div class="panel panel-default">
       <div class="panel-heading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->

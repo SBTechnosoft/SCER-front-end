@@ -33,7 +33,7 @@
 				   <div class="form-group">
 					  <label class="col-sm-3 control-label">Company</label>
 					  <div class="col-sm-8">
-						 <select chosen="" ng-model="ledgerForm.companyDropDown" tabindex="2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeLedgerData('companyId',ledgerForm.companyDropDown.companyId)" ng-disabled="form.disableValue"  class="form-control chosen-select" ng-required="true" ></select>
+						 <select chosen="" ng-model="ledgerForm.companyDropDown" tabindex="2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeLedgerData('companyId',ledgerForm.companyDropDown.companyId)" ng-disabled="form.disableCompanyValue"  class="form-control chosen-select" ng-required="true" ></select>
 					  </div>
 				   </div>
 				</fieldset>
@@ -58,7 +58,7 @@
 						<div class="col-sm-8">
 							<div class="input-group m-b">
 								<span class="input-group-addon">@</span>
-								<input type="email" tabindex="2" name="emailId" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" ng-disabled="form.disableValue" placeholder="Email ID" class="form-control" ng-required="true" ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
+								<input type="email" tabindex="2" name="emailId" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" ng-disabled="form.disableValue" placeholder="Email ID" class="form-control"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
 							</div>
 							
 							<span ng-messages="formLedger.emailId.$error" ng-if="formLedger.emailId.$dirty || formLedger.emailId.$touched"  role="alert">
@@ -99,7 +99,7 @@
 						
 						</div>
 						<div class="col-sm-6">
-							 <input ng-model="ledgerForm.openingBal" name="amount" tabindex="2" ng-change="changeLedgerData('amount',ledgerForm.openingBal)" ng-disabled="form.disableValue" id="input-id-1" ng-disabled="form.disableValue" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" ng-required="true" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="10" />
+							 <input ng-model="ledgerForm.openingBal" name="amount" tabindex="2" ng-change="changeLedgerData('amount',ledgerForm.openingBal)" ng-disabled="form.disableValue" id="input-id-1" ng-disabled="form.disableValue" type="text" placeholder="Opening B/L" class="form-control" dir="rtl" ng-required="true" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="10" only-number />
 							 
 							<span ng-messages="formLedger.amount.$error" ng-if="formLedger.amount.$dirty || formLedger.amount.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -250,7 +250,7 @@
             </fieldset>
 			
 			<fieldset class="my-fieldset-paddingBottom">
-				<button type="button" ng-disabled="form.disableValue" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="clickSave()" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id">Cancel</button>
+				<button type="button" ng-disabled="form.disableValue" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="showInput()" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id">Cancel</button>
 				<button type="button" ng-disabled="form.disableValue || formLedger.$invalid" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addUpLedger()" >Save</button>
 			</fieldset>
 		

@@ -209,7 +209,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewSales',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'sales';
 				}
@@ -220,7 +220,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataSales',
             templateUrl: basepath('Accounting/viewData/AccDataViews.html'),
 			controller: 'AccViewDataController as table',
-            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins','toaster'),{
 				headerType: function(){
 					return 'sales';
 				}
@@ -231,7 +231,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewRetailSales',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'Retailsales';
 				}
@@ -242,7 +242,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataRetailSales',
             templateUrl: basepath('Accounting/viewData/AccDataViews.html'),
 			controller: 'AccViewDataController as table',
-            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster'),{
 				headerType: function(){
 					return 'Retailsales';
 				}
@@ -253,7 +253,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewWholeSales',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'Wholesales';
 				}
@@ -264,7 +264,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataWholeSales',
             templateUrl: basepath('Accounting/viewData/AccDataViews.html'),
 			controller: 'AccViewDataController as table',
-            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster'),{
 				headerType: function(){
 					return 'Wholesales';
 				}
@@ -281,7 +281,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewPurchase',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'purchase';
 				}
@@ -292,7 +292,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataPurchase',
              templateUrl: basepath('Accounting/viewData/AccDataViews.html'),
 			controller: 'AccViewDataController as table',
-            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins','toaster'),{
 				headerType: function(){
 					return 'purchase';
 				}
@@ -335,7 +335,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewSpecialJrnl',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'specialJournal';
 				}
@@ -346,7 +346,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataSpecialJrnl',
              templateUrl: basepath('Accounting/viewData/AccDataViews.html'),
 			controller: 'AccViewDataController as table',
-            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins','toaster'),{
 				headerType: function(){
 					return 'specialJournal';
 				}
@@ -374,7 +374,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataPayment',
              templateUrl: basepath('Accounting/viewData/AccDataViews.html'),
 			controller: 'AccViewDataController as table',
-            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins','toaster'),{
 				headerType: function(){
 					return 'payment';
 				}
@@ -391,7 +391,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewReceipt',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'receipt';
 				}
@@ -402,11 +402,18 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataReceipt',
              templateUrl: basepath('Accounting/viewData/AccDataViews.html'),
 			controller: 'AccViewDataController as table',
-            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins'),{
+            resolve: angular.extend(requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins','toaster'),{
 				headerType: function(){
 					return 'receipt';
 				}
 			})
+        })
+		//Accounting Trail Balance
+		.state('app.AccTrailBalance', {
+            url: '/AccTrailBalance',
+            templateUrl: basepath('Accounting/Statements/AccTrailBalance.html'),
+			controller: 'AccTrailBalanceController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
 		//Accounting View Taxation
 		.state('app.AccViewTaxation', {
@@ -440,7 +447,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/RetailsaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
 				saleType: function(){
 					
 					return 'RetailsaleBill';
@@ -452,7 +459,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/WholesaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
 				saleType: function(){
 					
 					return 'WholesaleBill';

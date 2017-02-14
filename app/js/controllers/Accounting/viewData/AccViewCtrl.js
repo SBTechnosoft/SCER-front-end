@@ -6,7 +6,7 @@
 
 App.controller('AccViewController', AccViewController);
 
-function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,viewDataType) {
+function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType) {
   'use strict';
   
   var vm = this; 
@@ -274,14 +274,7 @@ function AccViewController($rootScope,$scope,toaster,apiCall,apiPath,$state,view
   
   
 
-  $scope.pop = function() {
-    toaster.pop('success', 'Title', 'Message');
-  };
-  
-  $scope.cancel = function() {
-    toaster.pop('info', 'Form Reset', 'Message');
-  };
-  
+ 
   
 }
-AccViewController.$inject = ["$rootScope","$scope","toaster","apiCall","apiPath","$state","viewDataType"];
+AccViewController.$inject = ["$rootScope","$scope","apiCall","apiPath","$state","viewDataType"];

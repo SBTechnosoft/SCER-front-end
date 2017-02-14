@@ -6,13 +6,22 @@
 
 App.controller('AccViewDataController', AccViewDataController);
 
-function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,headerType) {
+function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,headerType,$modal,$window,toaster) {
   'use strict';
   var vm = this;
   var data = [];
   var formdata = new FormData();
+  $scope.billData = [];
   
-  
+	/** Display Company and date **/
+		apiCall.getCall(apiPath.getAllCompany+'/'+$rootScope.accView.companyId).then(function(res){
+			
+			$scope.displayCompany = res.companyName;
+		});
+		// $scope.displayCompany = $rootScope.accView.companyId;
+		  $scope.displayfromDate = $rootScope.accView.fromDate;
+		  $scope.displaytoDate = $rootScope.accView.toDate;
+	/** End **/
   // An array of boolean to tell the directive which series we want to show
   $scope.areaSeries = [true, true];
   vm.chartAreaFlotChart  = flotOptions['area'];
@@ -76,8 +85,72 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			console.log(response);
 			data = response;
 			
+			
 			if($scope.headerType == 'Wholesales' || $scope.headerType == 'Retailsales'){
 				
+				$scope.billData = response;
+				
+				var cnt = data.length;
+				for(var p=0;p<cnt;p++){
+					
+					data[p].repeatIcon = false;
+					data[p].imageIcon = false;
+					data[p].pdfIcon = false;
+					data[p].singlePdfIcon = false;
+					
+					var fileCnt = data[p].file.length;
+					
+					var flag = 0;
+					var imageFlag = 0;
+					
+					for(var k=0;k<fileCnt;k++){
+					
+						if(data[p].file[k].documentFormat == 'pdf' && data[p].file[k].documentType == 'bill')
+						{
+							flag++;
+						}
+						
+						if(data[p].file[k].documentFormat == 'jpg' || data[p].file[k].documentFormat == 'jpeg' || data[p].file[k].documentFormat == 'png'){
+							
+							imageFlag = 1;
+						}
+					}
+					
+					if(flag == 0){
+						
+						data[p].repeatIcon = true;
+						
+					}
+					else if(flag == 1){
+						
+						data[p].singlePdfIcon = true;
+					}
+					else{
+						
+						data[p].pdfIcon = true;
+					}
+					
+					if(imageFlag == 1){
+						
+						
+						data[p].imageIcon = true;
+						
+					}
+
+					
+				}
+				
+				$scope.contents = data;
+				
+				
+				$scope.contents.sort(function(a, b){
+					var dateA=new Date(a.entryDate), dateB=new Date(b.entryDate);
+					return dateB-dateA; 
+				});
+				
+				data= $scope.contents;
+				//data.slice().reverse();
+		
 				$scope.saleTableData();
 			}
 			else{
@@ -131,26 +204,26 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 					
 					if(data[i].amountType=='debit'){
 					  
-						vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseInt(data[i].amount);
+						vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseFloat(data[i].amount);
 						var date = data[i].entryDate;
 						var splitedate = date.split("-").reverse().join("-");
 						var getdate = new Date(splitedate);
 						var month = getdate.getMonth();
 						
-							vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseInt(data[i].amount);
+							vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseFloat(data[i].amount);
 							
 						//console.log(vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount));
 					
 					}
 					else{
-						vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseInt(data[i].amount);
+						vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseFloat(data[i].amount);
 						
 						var date = data[i].entryDate;
 						var splitedate = date.split("-").reverse().join("-");
 						var getdate = new Date(splitedate);
 						var month = getdate.getMonth();
 						
-							vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseInt(data[i].amount);
+							vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseFloat(data[i].amount);
 						   
 						//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
 					}
@@ -224,147 +297,82 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  entryDate: 'asc'     // initial sorting
+			  date: 'desc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
+			  var orderedData;
+
+			if(params.sorting().date === 'asc'){
+
+			  data.sort(function (a, b) {
+				var dateA = new Date(a.date), dateB = new Date(b.date);
+				return dateA - dateB; //sort by date descending
+			  });
+			  orderedData = data;
+
+			} else if(params.sorting().date === 'desc') {
+
+			  data.sort(function (a, b) {
+				var dateA = new Date(a.date), dateB = new Date(b.date);
+				return dateB - dateA; //sort by date descending
+			  });
+			  orderedData = data;
+
+			} else if(!params.sorting().date){
+
+			  if (params.filter().term) {
+				orderedData = params.filter() ? $filter('filter')(data, params.filter().term) : data;
+			  } else {
+				orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+			  }
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "")  || (typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "") || (typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")))
-			  {
-					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
+			}
 
-					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        
+			  /** NgTable **/
+				  // if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "")  || (typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "") || (typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "") || (typeof(params.$params.filter.total) != "undefined" && params.$params.filter.total != "") || (typeof(params.$params.filter.advance) != "undefined" && params.$params.filter.advace != "") || (typeof(params.$params.filter.balance) != "undefined" && params.$params.filter.balance != "")))
+				  // {
+						 // var orderedData = params.filter() ?
+						 // $filter('filter')(data, params.filter()) :
+						 // data;
 
-					  params.total(orderedData.length); // set total for recalc pagination
-					  $defer.resolve(vm.users);
+						  // vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+						  // params.total(orderedData.length); // set total for recalc pagination
+						  // $defer.resolve(vm.users);
+				  
+
+				  // }
+				  // else{
+					  
+					   // params.total(data.length);
+					  
+				  // }
+				 
+				 // if(!$.isEmptyObject(params.$params.sorting))
+				  // {
+					
+					  // var orderedData = params.sorting() ?
+							  // $filter('orderBy')(data, params.orderBy()) :
+							  // data;
 			  
-
-			  }
-			  else{
-				  
-				   params.total(data.length);
-				  
-			  }
-			 
-			 if(!$.isEmptyObject(params.$params.sorting))
-			  {
-				
-				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
-		  
-				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			  }
-			
+					  // $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+				  // }
+			/** End **/
 		  }
 	  });
 	  
   }
   
-  // FILTERS
-  // ----------------------------------- 
-
-  vm.tableParams2 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      filter: {
-          name: '',
-          age: ''
-          // name: 'M'       // initial filter
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-          // use build-in angular filter
-          var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-          vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(vm.users);
-      }
-  });
-
-  // SELECT ROWS
-  // ----------------------------------- 
-
-  vm.data = data;
-
-  vm.tableParams3 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10          // count per page
-  }, {
-      total: data.length, // length of data
-      getData: function ($defer, params) {
-          // use build-in angular filter
-          var filteredData = params.filter() ?
-                  $filter('filter')(data, params.filter()) :
-                  data;
-          var orderedData = params.sorting() ?
-                  $filter('orderBy')(filteredData, params.orderBy()) :
-                  data;
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-
-  vm.changeSelection = function(user) {
-      // console.info(user);
-  };
-
-  // EXPORT CSV
-  // -----------------------------------  
-
-  var data4 = [{name: "Moroni", age: 50},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34}];
-
-  vm.tableParams4 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-  }, {
-      total: data4.length, // length of data4
-      getData: function($defer, params) {
-          $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
+ 
+ 
+ 
   
-	$scope.isDefault_branch = function(id)
-	{
 	
-		formdata.append('isDefault','ok');
-		var editBranch2 = apiPath.getAllBranch+'/'+id;
-		
-		apiCall.postCall(editBranch2,formdata).then(function(response5){
-		
-			formdata.delete('isDefault');
-		
-			//$location.path('app/Branch');
-			//toaster.pop('success', 'Title', 'Message');
-		
-		});
-	}
   
 	$scope.editDataView= function(id)
 	{
@@ -394,12 +402,38 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	
 	}
 	
-	$scope.editDataViewSales = function(id){
+	/** Edit Bill **/
+	
+	if($scope.headerType == 'Wholesales' || $scope.headerType == 'Retailsales'){
 		
-		alert(id);
-		
+		$scope.editDataViewSales = function(id){
+			
+			//alert(id);
+			
+			// $scope.singleBillData = $scope.returnSingleData(id);
+			
+			// console.log($scope.singleBillData);
+			
+			getSetFactory.set($scope.returnSingleData(id));
+			
+			//console.log(getSetFactory.get());
+			
+			if($scope.headerType == 'Retailsales'){
+			
+				$state.go("app.RetailsaleBill");
+			
+			}
+			else if($scope.headerType == 'Wholesales'){
+				
+				$state.go("app.WholesaleBill");
+			}
+			
+			//getSetFactory.blank();
+			
+		}
 	}
-  
+	/** End Edit Bill **/
+	
   $scope.deleteDataView = function(id)
   {
 	
@@ -412,6 +446,273 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	// });
   }
 	
+	$scope.returnSingleData = function(saleId){
+		
+		var tempObject = {};
+		
+		for(var i=0;i<$scope.billData.length;i++){
+			
+			var billdata = $scope.billData[i];
+			if(billdata.saleId == saleId){
+				
+				tempObject = billdata;
+			}
+			
+		}
+		
+		return tempObject;
+	}
+	
+	/** Reload Load Data **/
+		$scope.reLoadPdfData = function(){
+			
+			apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
+				
+				console.log('in Success');
+				console.log(response);
+				data = response;
+				
+				$scope.billData = response;
+				
+				var cnt = data.length;
+				for(var p=0;p<cnt;p++){
+					
+					data[p].repeatIcon = false;
+					data[p].imageIcon = false;
+					data[p].pdfIcon = false;
+					data[p].singlePdfIcon = false;
+					
+					var fileCnt = data[p].file.length;
+					
+					var flag = 0;
+					var imageFlag = 0;
+					
+					for(var k=0;k<fileCnt;k++){
+					
+						if(data[p].file[k].documentFormat == 'pdf' && data[p].file[k].documentType == 'bill')
+						{
+							flag++;
+						}
+						
+						if(data[p].file[k].documentFormat == 'jpg' || data[p].file[k].documentFormat == 'jpeg' || data[p].file[k].documentFormat == 'png'){
+							
+							imageFlag = 1;
+						}
+					}
+					
+					if(flag == 0){
+						
+						data[p].repeatIcon = true;
+						
+					}
+					else if(flag == 1){
+						
+						data[p].singlePdfIcon = true;
+					}
+					else{
+						
+						data[p].pdfIcon = true;
+					}
+					
+					if(imageFlag == 1){
+						
+						
+						data[p].imageIcon = true;
+						
+					}
+
+					
+				}
+				
+				vm.tableParams.reload();
+				
+		
+			});
+		}
+	/** End Reaload Pdf Data **/
+	
+	/** Regenerate Pdf **/
+		
+		$scope.reGeneratePdf = function(sId){
+			
+			//alert(sId);
+			var reFormData = new FormData();
+			reFormData.append('saleId',sId);
+			
+			apiCall.postCall(apiPath.reGeneratePdf,reFormData).then(function(response){
+			
+				console.log(response);
+				
+				if(angular.isObject(response)){
+					
+					toaster.pop('success', 'Title', 'Generate Pdf Successfully');
+					
+					var pdfPath = 'http://api.siliconbrain.co.in/'+response.documentPath;
+					$window.open(pdfPath, '_blank');
+					
+					$scope.reLoadPdfData();
+				}
+				else{
+					
+					alert(response);
+				}
+				
+			});
+			
+		}
+		
+	/** End Regenerate Pdf **/
+	
+	/**
+	Image Gallery  Modal 
+	**/
+	
+	$scope.openImageGallery = function (size,saleId) {
+
+		
+		$scope.singleBillData = $scope.returnSingleData(saleId);
+		
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Accounting/imageGalleryModal/imageGalleryModalContent.html',
+		  controller: imageGalleryModalCtrl,
+		  size: size,
+		  resolve:{
+			  billData: function(){
+				 
+				return $scope.singleBillData;
+			  },
+			  formatType: function(){
+				  
+				 return 'image';
+			  },
+			  transType: function(){
+				  
+				  return 'none';
+			  }
+		  }
+		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+	
+	};
+	
+	/**
+	End Image Gallery  Modal 
+	**/
+	
+	/**
+	Pdf  Modal 
+	**/
+	
+	$scope.openPdf = function (size,saleId) {
+
+		
+		$scope.singleBillData = $scope.returnSingleData(saleId);
+		
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Accounting/imageGalleryModal/imageGalleryModalContent.html',
+		  controller: imageGalleryModalCtrl,
+		  size: size,
+		  resolve:{
+			  billData: function(){
+				 
+				return $scope.singleBillData;
+			  },
+			  formatType: function(){
+				  
+				 return 'pdf';
+			  },
+			  transType: function(){
+				  
+				  return 'none';
+			  }
+		  }
+		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+	
+	};
+	
+	/**
+	End Pdf  Modal 
+	**/
+	
+	
+	/**
+	Payment  Modal 
+	**/
+	
+	$scope.openPayment = function (size,saleId,transaction) {
+
+		
+		$scope.singleBillData = $scope.returnSingleData(saleId);
+		
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Accounting/imageGalleryModal/imageGalleryModalContent.html',
+		  controller: 'imageGalleryModalCtrl as fromData',
+		  size: size,
+		  resolve:{
+			  billData: function(){
+				 
+				return $scope.singleBillData;
+			  },
+			  formatType: function(){
+				  
+				 return 'payment';
+			  },
+			  transType: function(){
+				  
+				  return transaction;
+			  }
+		  }
+		});
+
+	   
+		modalInstance.result.then(function (msg) {
+		 
+			if(msg == 'payment'){
+				msg = 'Payment';
+			}
+			else{
+				msg = 'Refund';
+			}
+			
+			toaster.pop('success', 'Title', msg+' Successfully Done');
+			/** Reload Load Data **/
+				$scope.reLoadPdfData();
+			/** End **/
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+	
+	};
+	
+	/**
+	End Payment  Modal 
+	**/
+	
+	$scope.sortComment = function(comment) {
+		var getResdate = comment.entryDate;
+			var splitedate = getResdate.split("-").reverse().join("-");
+    var date = new Date(splitedate);
+    return date;
+};
 	
 }
-AccViewDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","headerType"];
+AccViewDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","headerType","$modal","$window","toaster"];

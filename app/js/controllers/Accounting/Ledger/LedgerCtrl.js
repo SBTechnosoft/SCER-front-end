@@ -14,6 +14,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	$scope.ledgerEditId = [];
 	var formdata = new FormData();
 	vm.disableValue = false;
+	vm.disableCompanyValue = false;
   
 	$scope.trueData = false;
 	$scope.alertData = true;
@@ -36,6 +37,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	$scope.showInput = function()
 	{	
 		vm.disableValue = false;
+		vm.disableCompanyValue = false;
 		$scope.ledgerForm = [];
 		$scope.ledgerEditId = [];
 		$scope.trueData = true;
@@ -45,6 +47,11 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		apiCall.getDefaultCompany().then(function(response){
 			
 			$scope.ledgerForm.companyDropDown = response;
+			if(formdata.has('companyId')){
+				
+				formdata.delete('companyId');
+			}
+			formdata.append('companyId',response.companyId);
 			
 		});
 	}
@@ -86,6 +93,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 				
 				$scope.ledgerForm.cityDrop = response.city;
 				vm.disableValue = true;
+				vm.disableCompanyValue = true;
 				
 			});
 			
@@ -98,6 +106,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	$scope.editLedgerData = function(id)
 	{
 		vm.disableValue = false;
+		vm.disableCompanyValue = true;
 		$scope.trueData = true;
 		$scope.alertData = false;
 		$scope.ledgerEditId.id = id;
@@ -409,6 +418,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 				
 						$scope.trueData = false;
 						$scope.alertData = true;
+						vm.disableCompanyValue = false;
 						
 						$scope.ledgerEditId = []; // update ID
 					}

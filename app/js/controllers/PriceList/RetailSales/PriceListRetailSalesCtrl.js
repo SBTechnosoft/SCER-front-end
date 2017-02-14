@@ -107,9 +107,10 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 				
 				var purchaseprice = $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.wholesaleMargin),noOfDecimalPoints);
 				
-				var vat =0;
+				//var vat =0;
+				var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
 				
-				var finalAmount = $filter('setDecimal')(purchaseprice,noOfDecimalPoints);
+				var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
 			}
 				
 			

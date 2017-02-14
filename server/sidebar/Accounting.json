@@ -78,7 +78,7 @@
     "sref": "#",
     "icon": "icon-ribbon",
     "subnav": [
-      { "text": "Trail Balance",  "sref": "#", "translate": "" },
+      { "text": "Trail Balance",  "sref": "app.AccTrailBalance", "translate": "" },
       { "text": "P&L", "sref": "#", "translate": "" },
       { "text": "Balance Sheet", "sref": "#", "translate": "" }
     ]
