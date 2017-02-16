@@ -21,6 +21,9 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 	
 	//var getData = { "Content-Type": undefined, "fromDate": "14-01-2017", "toDate": "30-03-2017", "companyId": "46", "productId": "908" };
 	//var CompanyID = getData.companyId;
+	
+	
+	
 	var CompanyID = getData.companyId;
 	
 	var noOfDecimalPoints = parseInt(getData.noOfDecimalPoints);
@@ -78,6 +81,8 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 		
 		
 		console.log(responseDrop);
+		
+		$scope.displayCompany = responseDrop[0].company.companyName;
 		
 		var cnt= responseDrop.length;
 		var categoryArray = [];

@@ -6,7 +6,7 @@
 
 App.controller('AccViewDataController', AccViewDataController);
 
-function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,headerType,$modal,$window,toaster) {
+function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,headerType,$modal,$window,toaster,apiResponse) {
   'use strict';
   var vm = this;
   var data = [];
@@ -283,6 +283,13 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		  
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			  }
+			  
+			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			
+			$scope.totalData = data.length;
+			$scope.pageNumber = params.page();
+            $scope.itemsPerPage = params.count();
+            $scope.totalPages = Math.ceil($scope.totalData/params.count());
 			
 		  }
 	  });
@@ -292,6 +299,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	
 	$scope.saleTableData = function(){
 	
+		
 
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
@@ -332,6 +340,12 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			}
 
 			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			
+			$scope.totalData = data.length;
+			$scope.pageNumber = params.page();
+            $scope.itemsPerPage = params.count();
+            $scope.totalPages = Math.ceil($scope.totalData/params.count());
+					
         
 			  /** NgTable **/
 				  // if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "")  || (typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "") || (typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "") || (typeof(params.$params.filter.total) != "undefined" && params.$params.filter.total != "") || (typeof(params.$params.filter.advance) != "undefined" && params.$params.filter.advace != "") || (typeof(params.$params.filter.balance) != "undefined" && params.$params.filter.balance != "")))
@@ -445,6 +459,20 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	 
 	// });
   }
+  
+	$scope.deleteBill = function(id)
+	{
+		var deletePath = apiPath.postBill+'/'+id;
+		  
+		apiCall.deleteCall(deletePath).then(function(deleteres){
+			
+			console.log(deleteres);
+			toaster.pop('success', 'Title', 'Data Successfully Deleted');
+			$scope.reLoadPdfData();
+		 
+		});
+	}
+  
 	
 	$scope.returnSingleData = function(saleId){
 		
@@ -470,6 +498,9 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 				
 				console.log('in Success');
 				console.log(response);
+				if(apiResponse.notFound != response){
+					
+				
 				data = response;
 				
 				$scope.billData = response;
@@ -524,6 +555,11 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 					
 				}
 				
+			}
+			else{
+				
+				data = [];
+			}
 				vm.tableParams.reload();
 				
 		
@@ -685,6 +721,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		modalInstance.result.then(function (msg) {
 		 
 			if(msg == 'payment'){
+				
 				msg = 'Payment';
 			}
 			else{
@@ -695,9 +732,13 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			/** Reload Load Data **/
 				$scope.reLoadPdfData();
 			/** End **/
+			
+			console.log('success');
 		
 		}, function () {
-		  console.log('Cancel');	
+			
+			console.log('Cancel');
+		  
 		});
 		
 	
@@ -715,4 +756,4 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 };
 	
 }
-AccViewDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","headerType","$modal","$window","toaster"];
+AccViewDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","headerType","$modal","$window","toaster","apiResponse"];

@@ -288,6 +288,8 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
   $scope.uploadFile = function(files) {
 	  
 		//console.log(files);
+		formdata.delete('file[]');
+		
 		formdata.append("file[]", files[0]);
 		
 		var reader = new FileReader();

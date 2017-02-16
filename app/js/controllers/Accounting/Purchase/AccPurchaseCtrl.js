@@ -525,8 +525,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.uploadFile = function(files) {
 		//console.log(files);
 		//formdata.append("file[]", files[0]);
+		formdata.delete('file[]');
 		angular.forEach(files, function (value,key) {
-			console.log(value);
 			formdata.append('file[]',value);
 		});
 
@@ -872,6 +872,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 					
 					angular.element("input[type='file']").val(null);
+					formdata.delete('file[]');
 					
 					vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
 					vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
@@ -946,7 +947,9 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		vm.clientNameDropDr=[]; // Debit Jsuggest Blank
 		vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 		
+		
 		angular.element("input[type='file']").val(null);
+					formdata.delete('file[]');
 		
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
 		

@@ -21,12 +21,14 @@
 		<table class="table table-bordered table-striped" ng-if="formatType == 'pdf'" >
 			<thead>
 				<th>Sr No.</th>
+				<th>Doc ID</th>
 				<th>FileName</th>
 				<th>Action</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="user in billData.file"   ng-if="user.documentFormat == 'pdf'" ng-init="startIndex = $index" >
+				<tr ng-repeat="user in billData.file | orderBy:'documentId':true"   ng-if="user.documentFormat == 'pdf'" ng-init="startIndex = $index" >
 					<td>{{startIndex+1}}</td>
+					<td>{{user.documentId}}</td>
 					<td>{{user.documentName}}</td>
 					<td> 
 						<a  href="http://api.siliconbrain.co.in/{{user.documentUrl}}/{{user.documentName}}" class="mr btn btn-labeled btn-default" target="_blank">Open

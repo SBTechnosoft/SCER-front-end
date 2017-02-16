@@ -11,7 +11,7 @@
 	<a ng-click="generatePdf()" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
 	
 	<a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a>
-         <div class="panel-title">Stock</div>
+         <div class="panel-title">Stock of <b>{{displayCompany}}</b> Company Between <b>{{displayFromDate}}</b> To <b>{{displayToDate}}</b> </div>
     </div>
       
      <table data-ng-table="table.tableParams" export-csv="csv"  class="table table-bordered table-striped">
@@ -65,5 +65,6 @@
 		</tbody>
 		
       </table>
+	   <span ng-include="'app/views/partials/tableFooter/tableFooter.html'" >  </span>
    </div>
 </div>

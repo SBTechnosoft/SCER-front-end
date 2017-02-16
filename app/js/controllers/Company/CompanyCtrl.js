@@ -36,6 +36,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	$scope.TableData = function()
 	{
 		
+		
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
@@ -77,6 +78,10 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		  
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			  }
+			$scope.totalData = data.length;
+			$scope.pageNumber = params.page();
+            $scope.itemsPerPage = params.count();
+            $scope.totalPages = Math.ceil($scope.totalData/params.count());
 		  }
 	  });
 	}
@@ -189,6 +194,8 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
   $scope.delete_comp = function(id)
   {
 	  //alert(id);
+	  
+	  return false;
 	var deletePath = apiPath.getAllCompany+'/'+id;
 	  
 	apiCall.deleteCall(deletePath).then(function(deleteres){

@@ -19,6 +19,11 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 	
 	//var getData = { "Content-Type": undefined, "fromDate": "24-02-2016", "toDate": "25-06-2016", "companyId": "50", "productId": "915" };
 	//var CompanyID = getData.companyId;
+	
+	
+	$scope.displayFromDate = getData.fromDate;
+	$scope.displayToDate = getData.toDate;
+	
 	var CompanyID = getData.companyId;
 	
 	delete getData.companyId;
@@ -27,7 +32,8 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 	
 	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
 		
-		
+		console.log(responseDrop[0].company.companyName);
+		$scope.displayCompany = responseDrop[0].company.companyName;
 		$scope.calculation(responseDrop);
 	
 	});
@@ -302,6 +308,11 @@ $scope.TableData = function(){
         }
 
         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+		
+		 $scope.totalData = data.length;
+		$scope.pageNumber = params.page();
+		$scope.itemsPerPage = params.count();
+		$scope.totalPages = Math.ceil($scope.totalData/params.count());
         
       }
   });

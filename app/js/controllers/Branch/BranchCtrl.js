@@ -109,7 +109,8 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	
   $scope.TableData = function(){
 	
-
+	
+	
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
@@ -159,6 +160,10 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 		  
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			  }
+			$scope.totalData = data.length;
+			$scope.pageNumber = params.page();
+            $scope.itemsPerPage = params.count();
+            $scope.totalPages = Math.ceil($scope.totalData/params.count());
 			
 		  }
 	  });

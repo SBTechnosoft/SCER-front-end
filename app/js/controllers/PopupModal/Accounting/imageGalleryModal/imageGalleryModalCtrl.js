@@ -212,7 +212,7 @@ function imageGalleryModalCtrl($scope, $modalInstance,$rootScope,$http,apiCall,a
 				if($scope.paymentForm.paymentMode == 'bank'){
 					
 					payFormData.append('bankName',$scope.paymentForm.BankName.bankName);
-					payFormData.append('chequeNumber',$scope.paymentForm.chequeNo);
+					payFormData.append('checkNumber',$scope.paymentForm.chequeNo);
 				}
 				
 				payFormData.append('paymentTransaction',$scope.paymentForm.paymentTrn);
@@ -222,10 +222,14 @@ function imageGalleryModalCtrl($scope, $modalInstance,$rootScope,$http,apiCall,a
 				apiCall.postCall(apiPath.billPaymentRefund+$scope.billData.saleId+'/payment',payFormData).then(function(response){
 					
 					console.log(response);
-					if(apiResponse.ok == response){
+					if(angular.isObject(response) && response.hasOwnProperty('documentPath')){
 						
 						$modalInstance.close($scope.paymentForm.paymentTrn);
 						
+					}
+					else{
+						
+						alert(response);
 					}
 					
 				});

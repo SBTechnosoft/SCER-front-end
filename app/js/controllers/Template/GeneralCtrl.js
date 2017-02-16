@@ -16,7 +16,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
  
       tinymce.init({
        selector: "#textdesc",
-	    height : "280",
+	    height : "350",
 	   theme: 'modern',
 	    paste_data_images: true,
 	    menu : {

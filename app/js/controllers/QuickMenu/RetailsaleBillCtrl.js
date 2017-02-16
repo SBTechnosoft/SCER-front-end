@@ -6,7 +6,7 @@
 
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage,saleType,productArrayFactory,getSetFactory,toaster) {
+function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse) {
   'use strict';
  
 	
@@ -430,7 +430,27 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		}
 		formdata.append(Fname,value);
 		
-		console.log(Fname+'..'+value);
+		if(Fname == 'contactNo')
+		{
+			formdata.delete('workNo');
+			formdata.delete('companyName');
+			formdata.delete('clientName');
+			formdata.delete('emailId');
+			formdata.delete('address1');
+			formdata.delete('address2');
+			formdata.delete('stateAbb');
+			formdata.delete('cityId');
+			
+			$scope.quickBill.WorkNo = '';
+			$scope.quickBill.companyName = ''
+			$scope.quickBill.clientName = '';
+			$scope.quickBill.emailId = '';
+			$scope.quickBill.fisrtAddress = '';
+			$scope.quickBill.secondAddress = '';
+			$scope.quickBill.cityId = {};
+			$scope.quickBill.stateAbb = {};
+			
+		}
   	}
 	
 	$scope.changePaymentInBill = function(Fname,value) {
@@ -738,8 +758,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			 //var newEndAt = parseInt($scope.quickBill.invoiceEndAt)+1;
 			//formdataNew.append('endAt',newEndAt);
 			console.log(data);
-			angular.element("input[type='file']").val(null);
-			formdata.delete('file');
+			
 			
 			// Delete formdata  keys
 			// for (var key of formdata.keys()) {
@@ -787,6 +806,8 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 					// formdataNew.delete('endAt');
 		
 				// });
+				angular.element("input[type='file']").val(null);
+				formdata.delete('file[]');
 				formdata.delete('companyId');
 				formdata.delete('contactNo');
 				formdata.delete('workNo');
@@ -845,6 +866,15 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 				});
 			
 			}
+			else{
+				
+				if(apiResponse.noContent == data){
+					
+					toaster.pop('warning', 'Opps!!', 'Field Not Change');
+				}
+				
+				
+			}
 			
 			
 			
@@ -861,7 +891,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	$scope.cancel = function(){
 		
 		angular.element("input[type='file']").val(null);
-		formdata.delete('file');
+		formdata.delete('file[]');
 		
 	
 		//Delete Inventory Data From Formdata Object
@@ -1028,6 +1058,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		
 		//console.log(files);
 		//formdata.append("file[]", files[0]);
+		formdata.delete('file[]');
 		angular.forEach(files, function (value,key) {
 			//console.log(value);
 			formdata.append('file[]',value);
@@ -1236,4 +1267,4 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
   Product Model End
   **/
 }
-RetailsaleBillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage","saleType","productArrayFactory","getSetFactory","toaster"];
+RetailsaleBillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse"];
