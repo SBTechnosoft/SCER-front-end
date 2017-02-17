@@ -98,7 +98,7 @@
 									</span>
 									
 								</div>
-								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
+								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance'] |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 							</td>
 							<td ng-if="item.amountType=='credit'">
 								<div class="input-group" >
@@ -108,7 +108,7 @@
 									</span>
 								</div>
 								
-								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
+								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance'] |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 							</td>
 							<td>
 								<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
@@ -156,13 +156,20 @@
 		<div class="panel panel-default">
 			<h4 class="panel-heading">History</h4>
 				<div class="panel-body">
+				<h4> Retail Sales </h4>
 					<dl class="dl-horizontal">
-					   <dt>Opening Balance:</dt>
-					   <dd>250000</dd>
-					   <dt>Current Balance:</dt>
-					   <dd>3595400</dd>
-					</dl>
-					
+						   <dt style="width: 115px;" >Opening Balance:</dt>
+						   <dd style="margin-left: 122px;">{{displayOpeningBal |  currency:"&#8377; ": noOfDecimalPoints }} <span style="text-transform: capitalize;">{{displayOpeningBalType}} </span> </dd>
+						   <dt style="width: 115px;" >Current Balance:</dt>
+						   <dd style="margin-left: 122px;">{{displayCurrentBal |  currency:"&#8377; ": noOfDecimalPoints }} <span style="text-transform: capitalize;">{{displayCurrentBalType}} <span> </dd>
+						</dl>
+				<h4> Whole Sales </h4>
+					<dl class="dl-horizontal">
+						   <dt style="width: 115px;" >Opening Balance:</dt>
+						   <dd style="margin-left: 122px;">{{displayWholeSaleOpeningBal |  currency:"&#8377; ": noOfDecimalPoints }} <span style="text-transform: capitalize;">{{displayWholeSaleOpeningBalType}} </span> </dd>
+						   <dt style="width: 115px;" >Current Balance:</dt>
+						   <dd style="margin-left: 122px;">{{displayWholeSaleCurrentBal |  currency:"&#8377; ": noOfDecimalPoints }} <span style="text-transform: capitalize;">{{displayWholeSaleCurrentBalType}} <span> </dd>
+						</dl>
 					 
 					<button type="button" ng-click="openHistoryModal('lg')" tabindex="-1" class="mr mb-sm btn btn-turquoise" style="float:right">View History</button>
 					
@@ -326,6 +333,21 @@
 		
 		<textarea ng-model="accSales.remark" name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 		<br />
+		<br />
+		<div class="form-group">
+			<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
+			<div class="col-sm-6">
+				<input type="file" ng-model="accSales.attach" onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
+			</div>
+			<div class="col-sm-10">
+				<a href="http://api.siliconbrain.co.in/{{item.documentUrl}}{{item.documentName}}" target="_blank" ng-repeat="item in accSales.documentData" >
+				
+					<img src="http://api.siliconbrain.co.in/{{item.documentUrl}}{{item.documentName}}" height="130" width="150" class="brand-logo-collapsed" style="margin-bottom: 5px;margin-right:5px"  />
+					
+				</a>
+			</div>
+		</div>
+	
 		<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
 		<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" ng-disabled="formSales.$invalid" >Save</button>
 		

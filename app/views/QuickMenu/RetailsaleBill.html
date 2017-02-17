@@ -67,7 +67,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Work#</label>
 						  <div class="col-sm-8">
-							 <input ng-model="quickBill.WorkNo" name="WorkNo" id="input-id-1" type="tel" placeholder="Work Number" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" ng-change="changeInBill('workNo',quickBill.WorkNo)" />
+							 <input ng-model="quickBill.WorkNo" name="WorkNo" id="input-id-1" type="tel" placeholder="Work Number" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" ng-change="changeInBill('workNo',quickBill.WorkNo)" only-number />
 							 
 							<span ng-messages="formBill.WorkNo.$error" ng-if="formBill.WorkNo.$dirty || formBill.WorkNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>

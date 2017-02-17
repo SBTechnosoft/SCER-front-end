@@ -70,6 +70,31 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	
 	});
 	
+	$scope.currentAndOpeningBal = function(companyID,Name,secondName){
+		
+		var headerSearch = {'Content-Type': undefined,'ledgerName':Name};
+		apiCall.getCallHeader(apiPath.getLedgerJrnl+companyID,headerSearch).then(function(response){
+			
+			//console.log(response);
+			$scope.displayOpeningBal = response.openingBalance;
+			$scope.displayOpeningBalType = response.openingBalanceType;
+			$scope.displayCurrentBal = response.currentBalance;
+			$scope.displayCurrentBalType = response.currentBalanceType;
+
+		});
+		
+		var headerSearch = {'Content-Type': undefined,'ledgerName':secondName};
+		apiCall.getCallHeader(apiPath.getLedgerJrnl+companyID,headerSearch).then(function(response){
+			
+			$scope.displayWholeSaleOpeningBal = response.openingBalance;
+			$scope.displayWholeSaleOpeningBalType = response.openingBalanceType;
+			$scope.displayWholeSaleCurrentBal = response.currentBalance;
+			$scope.displayWholeSaleCurrentBalType = response.currentBalanceType;
+
+		});
+		
+	}
+	
 	$scope.defaultCompany = function(){
 		
 		//Set default Company
@@ -83,6 +108,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 			}
 			
 			formdata.append('companyId',response.companyId);
+			
+			$scope.currentAndOpeningBal(response.companyId,'retail_sales','whole_sales');
 			
 			$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
 			
@@ -138,6 +165,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		});
 		
 	}
+	
+	
 	
 	// Datepicker
   // ----------------------------------- 
@@ -207,7 +236,7 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		
 			console.log(data);
 			
-			
+			$scope.currentAndOpeningBal(data.journal[0].company.companyId,'retail_sales','whole_sales');
 			//Set JFID
 			$scope.accSales.jfid = data.journal[0].jfId;
 			
@@ -217,6 +246,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 			
 			//set Decimal Number
 			$scope.noOfDecimalPoints = parseInt(data.productTransaction[0].company.noOfDecimalPoints);
+			
+			$scope.accSales.documentData = data.document;
 			
 			$scope.accSales.companyDropDown = data.journal[0].company;
 			
@@ -504,6 +535,7 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		console.log(value.noOfDecimalPoints);
 		
 		$scope.noOfDecimalPoints = parseInt(value.noOfDecimalPoints);
+		$scope.currentAndOpeningBal(value.companyId,'retail_sales','whole_sales');
 		
 		vm.clientNameDropDr=[];
 		vm.clientNameDropCr=[];
@@ -563,6 +595,17 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 		
 	}
+	
+	 //Set Multiple File In Formdata On Change
+	$scope.uploadFile = function(files) {
+		//console.log(files);
+		//formdata.append("file[]", files[0]);
+		formdata.delete('file[]');
+		angular.forEach(files, function (value,key) {
+			formdata.append('file[]',value);
+		});
+
+	};
 	
 	$scope.changeAccSales = function(Fname,value) {
 		if(formdata.has(Fname))
@@ -908,6 +951,9 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 					vm.minStart = new Date();
 					vm.maxStart = new Date();
 					
+					angular.element("input[type='file']").val(null);
+					formdata.delete('file[]');
+					
 					$scope.accSales = []; //Blank Data
 					vm.clientNameDropDr=[]; //Blank Debit Jsuggest Legder Data 
 					vm.clientNameDropCr=[]; //Blank Debit Jsuggest Legder Data 
@@ -986,6 +1032,9 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		vm.clientNameDropDr=[]; // Debit Jsuggest Blank
 		vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 		
+		angular.element("input[type='file']").val(null);
+		formdata.delete('file[]');
+					
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		vm.productTax = [{"tax":0,"additionalTax":0}];
 		

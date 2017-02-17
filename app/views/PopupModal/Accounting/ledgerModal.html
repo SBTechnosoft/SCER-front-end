@@ -10,7 +10,7 @@
 				   <div class="form-group">
 					  <label class="col-sm-3 control-label">Company</label>
 					  <div class="col-sm-8">
-						 <select  chosen="" ng-model="ledgerForm.companyDropDown" tabindex="2" data-ng-options="s.companyName for s in companyDrop track by s.companyId"  class="form-control chosen-select"  ng-required="true" ></select>
+						 <select  chosen="" ng-model="ledgerForm.companyDropDown" tabindex="2" data-ng-options="s.companyName for s in companyDrop track by s.companyId"  class="form-control chosen-select" ng-disabled="disableCompany"  ng-required="true" ></select>
 					  </div>
 				   </div>
 				</fieldset>
@@ -75,7 +75,7 @@
 							
 						</div>
 						<div class="col-sm-5">
-						 <input ng-model="ledgerForm.openingBal" name="amount" tabindex="2" ng-change="changeLedgerData('amount',ledgerForm.openingBal)" id="input-id-1"  type="text" placeholder="Opening B/L" class="form-control" dir="rtl" ng-required="true" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="10" only-number />
+						 <input ng-model="ledgerForm.openingBal" name="amount" tabindex="2" ng-change="changeLedgerData('amount',ledgerForm.openingBal)" id="input-id-1"  type="text" placeholder="Opening B/L" class="form-control" dir="rtl" ng-required="true" ng-required="true" ng-pattern="/^[0-9 .]+$/" ng-maxlength="10" only-number />
 						 
 						 <span ng-messages="formLedger.amount.$error" ng-if="formLedger.amount.$dirty || formLedger.amount.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>

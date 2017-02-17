@@ -6,7 +6,7 @@
 
 App.controller('AccProductModalController', AccProductModalController);
 
-function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId,validationMessage) {
+function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId,validationMessage,apiResponse) {
   'use strict';
   
   $scope.stockModel=[];
@@ -30,6 +30,7 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		
 		$scope.companyDrop = responseCompanyDrop;
 		$scope.addModelProduct.company = $scope.defaultCompany;
+		$scope.disableCompany = true;
 		
 		$scope.branchDrop = [];
 		var getAllBranch = apiPath.getOneBranch+$scope.defaultCompany.companyId;
@@ -101,19 +102,26 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		formdata.append('isDisplay','yes');
 		apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
 		
-			//console.log(response5);
+			console.log(response5);
 			
-			
-			// Delete formdata  keys
-			for (var key of formdata.keys()) {
-			   formdata.delete(key); 
-			}
+			if(apiResponse.ok == response5)
+			{
+				
 			
 			filterArray.index = $scope.productIndex;
 			filterArray.companyId = $scope.addModelProduct.company.companyId;
 			filterArray.productName = $scope.addModelProduct.productName;
 			
 			$modalInstance.close(filterArray);
+			}
+			else{
+				
+				alert(response5);
+			}
+			// Delete formdata  keys
+			for (var key of formdata.keys()) {
+			   formdata.delete(key); 
+			}
 			
 		});
 		
@@ -151,4 +159,4 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
     };
   
 }
-AccProductModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId","validationMessage"];
+AccProductModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId","validationMessage","apiResponse"];

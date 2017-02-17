@@ -30,6 +30,7 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 		
 		$scope.companyDrop = response3;
 		$scope.ledgerForm.companyDropDown = $scope.defaultCompany;
+		$scope.disableCompany = true;
 	
 	});
 	

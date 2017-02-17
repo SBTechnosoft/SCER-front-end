@@ -757,6 +757,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			//var formdataNew = new FormData();
 			 //var newEndAt = parseInt($scope.quickBill.invoiceEndAt)+1;
 			//formdataNew.append('endAt',newEndAt);
+			
 			console.log(data);
 			
 			
@@ -879,11 +880,13 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			
 			
 	
-		},function(){
-			
-		alert('Error');
-		$scope.cancel();
-		
+		}).catch(function (reason) {
+			 // err
+			 if (reason.status === 500) {
+				// do something
+				
+				console.log('Encountered server error');
+			 }
 		});
   }
  

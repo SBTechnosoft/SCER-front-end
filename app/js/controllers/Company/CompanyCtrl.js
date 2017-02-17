@@ -195,7 +195,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
   {
 	  //alert(id);
 	  
-	  return false;
+	  //return false;
 	var deletePath = apiPath.getAllCompany+'/'+id;
 	  
 	apiCall.deleteCall(deletePath).then(function(deleteres){

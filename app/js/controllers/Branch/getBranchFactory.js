@@ -18,6 +18,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data){
 					$state.go('page.login');
 				}
+				
 				deferred.resolve(data);
 			});
 
@@ -87,8 +88,13 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 					$state.go('page.login');
 					
 				}
+				
 				deferred.resolve(data);
-			});
+			}).catch(function (reason) {
+				
+			  deferred.resolve(reason);
+			  
+		   });
 			
 			return deferred.promise;
 		},

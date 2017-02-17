@@ -62,6 +62,20 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	
 	});
 	
+	$scope.currentAndOpeningBal = function(companyID,Name){
+		
+		var headerSearch = {'Content-Type': undefined,'ledgerName':Name};
+		apiCall.getCallHeader(apiPath.getLedgerJrnl+companyID,headerSearch).then(function(response){
+			
+			//console.log(response);
+			$scope.displayOpeningBal = response.openingBalance;
+			$scope.displayOpeningBalType = response.openingBalanceType;
+			$scope.displayCurrentBal = response.currentBalance;
+			$scope.displayCurrentBalType = response.currentBalanceType;
+
+		});
+	}
+	
 	$scope.defaultCompany = function(){
 		
 		
@@ -76,6 +90,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			}
 			
 			formdata.append('companyId',response.companyId);
+			
+			$scope.currentAndOpeningBal(response.companyId,'purchase');
 			
 			$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
 			
@@ -131,6 +147,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			
 		
 	}
+	
+	
 
   // Datepicker
   // ----------------------------------- 
@@ -189,7 +207,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			
 			var getOneJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
 			//console.log(getOneJrnlPath);
-		  
+			
 			var headerDataEdit = {'Content-Type': undefined,'type':'purchase','jfId':parseInt($scope.accPurchase.getSetJrnlId)};
 	   
 			
@@ -198,6 +216,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				//Set JFID
 				$scope.accPurchase.jfid = data.journal[0].jfId;
 				
+				$scope.currentAndOpeningBal(data.journal[0].company.companyId,'purchase');
+				
 				//Set Invoice Number
 				$scope.accPurchase.billNo = data.productTransaction[0].billNumber;
 				
@@ -205,6 +225,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				
 				//set Decimal Number
 				$scope.noOfDecimalPoints = parseInt(data.productTransaction[0].company.noOfDecimalPoints);
+				
+				//Set Invoice Number
+				$scope.accPurchase.documentData = data.document;
+				
 				
 				/** 
 				Jsuggest OF Credit/Debit
@@ -465,6 +489,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.changeCompany = function(Fname,value){
 		
 		$scope.noOfDecimalPoints = parseInt(value.noOfDecimalPoints);
+		$scope.currentAndOpeningBal(value.companyId,'purchase');
 		
 		vm.clientNameDropDr=[];
 		vm.clientNameDropCr=[];

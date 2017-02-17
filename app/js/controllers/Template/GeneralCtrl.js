@@ -335,8 +335,15 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 		apiCall.getCall(apiPath.getAllTemplate+'/'+id).then(function(responseTemp){
 		
 			$scope.generalTemp.companyDropDown = responseTemp.company;
-			$scope.generalTemp.tempName = responseTemp.templateName;
-			tinyMCE.get('textdesc').setContent(responseTemp.templateBody);
+			$scope.generalTemp.tempName = responseTemp.templateName;  // mystring.replace(/"/g, '\'');
+			//console.log(responseTemp.templateBody);
+			var templateData = responseTemp.templateBody;
+			var tempData = templateData.replace(/'/g, '"');
+			var tempData = tempData.replace("url(\"", "url(\'", 'g');
+			var tempData = tempData.replace("\");", "\');", 'g');
+		//	var tempData = templateData.replace(/'/g, '"');
+			console.log(tempData);
+			tinyMCE.get('textdesc').setContent(tempData);
 	
 		});
 	}
