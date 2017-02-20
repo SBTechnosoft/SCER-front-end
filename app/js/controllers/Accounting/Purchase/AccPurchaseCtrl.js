@@ -16,7 +16,13 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.grandTotalTable;
 	$scope.accPurchase.tax = 0;
 	
+	$scope.disableCompany = false;
+	
 	 $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
+	 
+	 // Current and Opening Balance
+	 $scope.displayOpeningBal = 0.00;
+	$scope.displayCurrentBal = 0.00;
 	 
 	$scope.productArrayFactory = productArrayFactory; //tax Calculation Factory
 	
@@ -222,6 +228,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				$scope.accPurchase.billNo = data.productTransaction[0].billNumber;
 				
 				$scope.accPurchase.companyDropDown = data.journal[0].company;
+				$scope.disableCompany = true;
 				
 				//set Decimal Number
 				$scope.noOfDecimalPoints = parseInt(data.productTransaction[0].company.noOfDecimalPoints);
@@ -651,9 +658,13 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		}
 	}
 	
+	$scope.disableButton = false;
 	
   $scope.pop = function()
   {
+	  $scope.disableButton = true; //Disbale Button
+	  
+	  toaster.pop('wait', 'Please Wait', 'Data Inserting....');
 	  
 	if($scope.totalDebit != $scope.totalCredit){
 	
@@ -808,6 +819,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				
 				console.log(data);
 				
+				toaster.clear();
+				
 				//vm.maxStart = new Date();
 				
 				//Display Toaster Message
@@ -816,6 +829,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					if(apiResponse.ok == data){
 						
 						toaster.pop('success', 'Title', 'Update Successfully');
+						$scope.disableCompany = false;
 					}
 					else{
 						$scope.deleteArray();
@@ -846,6 +860,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				}
 				
 				if(apiResponse.ok == data){
+					
+					$scope.disableButton = false;
 					
 					//Delete Journal Data From formdata Object
 					if($scope.changeJrnlArray){
@@ -913,7 +929,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					
 					$scope.defaultCompany();
 				}
-				
+				else{
+					
+					$scope.disableButton = false;
+				}
 				
 		
 			});
@@ -926,6 +945,9 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		vm.dt1 = new Date();
 		vm.minStart = new Date();
 		//vm.maxStart = new Date();
+		
+		$scope.disableCompany = false;
+		$scope.disableButton = false;
 		
 		//Delete Journal Data From formdata Object
 		if($scope.changeJrnlArray){

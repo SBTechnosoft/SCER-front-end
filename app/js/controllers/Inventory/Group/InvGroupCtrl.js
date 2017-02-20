@@ -48,8 +48,26 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 				deleteCat: function(data) {         // this works too: $scope.someMethod;
 					console.log(data);
 					apiCall.deleteCall(apiPath.getAllGroup+'/'+data).then(function(response){
-			
-						console.log(response);
+						
+						if(apiResponse.ok == response){
+							
+							console.log(response);
+							toaster.pop('success', 'Title', 'Delete SuccessFully');
+							
+							vm.groupDrop = [];
+							apiCall.getCall(apiPath.getAllGroup).then(function(response){
+								
+								vm.groupDrop = response;
+								var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+								$scope.tree_data = myTreeData2;
+								
+							});
+						
+						}
+						else{
+				
+							toaster.pop('warning', 'Opps!!', response);
+						}
 			
 					});
 				},

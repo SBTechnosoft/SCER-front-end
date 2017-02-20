@@ -126,7 +126,8 @@ App
 	'noContent': '204: No Content',
 	'notFound': '404: Not Found',
 	'noMatch': 'NoMatch: Token Not Matched',
-	'tokenExpired': 'Expired: Token Expired'
+	'tokenExpired': 'Expired: Token Expired',
+	'contentNotProper': 'content: not proper content'
   })
   //Validation Pattern
   .constant('validationPattern', {

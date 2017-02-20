@@ -205,7 +205,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 						if(apiResponse.ok == response){
 							
 							toaster.pop('success', 'Title', 'Delete SuccessFully');
-				
+							vm.categoryDrop = [];
 							apiCall.getCall(apiPath.getAllCategory).then(function(response){
 							
 								vm.categoryDrop = response;

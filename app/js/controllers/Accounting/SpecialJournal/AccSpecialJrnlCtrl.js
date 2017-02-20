@@ -17,6 +17,8 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 	$scope.totalDebit; // sum of Debit Amount
 	$scope.totalCredit;  // sum of Credit Amount
   
+	$scope.disableCompany = false;
+	
 	 $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
 	 
 	 
@@ -133,7 +135,11 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 			
 			$scope.addAccJrnl.companyDropDown = response[0].company;
 			
+			//Disable Company
+			$scope.disableCompany = true;
+			
 			//set Decimal Number
+			
 				$scope.noOfDecimalPoints = parseInt(response[0].company.noOfDecimalPoints);
 			
 			//Auto suggest Client Name
@@ -386,6 +392,7 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 					if(apiResponse.ok == response){
 						
 						toaster.pop('success', 'Title', 'Update Successfully');
+						$scope.disableCompany = false;
 					}
 					else{
 						
@@ -465,6 +472,8 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		vm.minStart = new Date();
 		vm.maxStart = new Date();
 		
+		$scope.disableCompany = false;
+		
 		if($scope.changeInArray){
 			
 			var json = angular.copy(vm.AccSpecialJrnlTable);
@@ -495,21 +504,23 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 		
 		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		// apiCall.getDefaultCompany().then(function(response){
 		
-			$scope.addAccJrnl.companyDropDown = response;
+			// $scope.addAccJrnl.companyDropDown = response;
 
 			//Auto suggest Client Name
-			var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
-			var headerData = {'Content-Type': undefined};
+			// var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
+			// var headerData = {'Content-Type': undefined};
 			
-			apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
+			// apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
 				
-				vm.clientNameDrop = response3;
+				// vm.clientNameDrop = response3;
 			
-			});
+			// });
 		
-		});
+		// });
+		
+		$scope.defaultCompany();
 		
 		 apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 		

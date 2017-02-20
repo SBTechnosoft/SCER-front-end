@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Company </label>
 					<div class="col-sm-4">
-						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addAccJrnl.companyDropDown)" class="form-control chosen-select" ng-required="true"></select>
+						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addAccJrnl.companyDropDown)" ng-disabled="disableCompany" class="form-control chosen-select" ng-required="true"></select>
 					</div>
 				<label class="col-sm-1 control-label"> Date </label>
 				<div class="col-sm-4">
@@ -98,10 +98,10 @@
 						<td></td>
 						<td>Total</td>
 						<td >
-							<span style="float:right">{{totalDebit  = ((form.AccSpecialJrnlTable | sumOfDebit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
+							<span style="float:right">{{totalDebit  = ((form.AccSpecialJrnlTable | sumOfDebit:'amount') | setDecimal: noOfDecimalPoints) }}</span>
 						</td>
 						<td >
-							<span style="float:right">{{totalCredit = ((form.AccSpecialJrnlTable | sumOfCredit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
+							<span style="float:right">{{totalCredit = ((form.AccSpecialJrnlTable | sumOfCredit:'amount') | setDecimal: noOfDecimalPoints) }}</span>
 						</td>
 						<td ></td>
 					</tr>

@@ -6,7 +6,7 @@
 	
 App.controller('PriceListRetailSalesController', PriceListRetailSalesController);
 
-function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,saleType,$window,productArrayFactory) {
+function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,saleType,$window,productArrayFactory,toaster,apiResponse) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -81,56 +81,90 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 		
 		
 		console.log(responseDrop);
+		if(apiResponse.notFound == responseDrop){
+				
+			toaster.pop('info', 'Message', 'No Data Found Go To Search');
 		
-		$scope.displayCompany = responseDrop[0].company.companyName;
-		
-		var cnt= responseDrop.length;
-		var categoryArray = [];
-		var csvArray = [];
-		
-		for(var i=0;i<cnt;i++){
+		}
+		else{
+
+			$scope.displayCompany = responseDrop[0].company.companyName;
 			
-			var objectData = {};
-			var flag=0;
-			var apiData = responseDrop[i];
+			var cnt= responseDrop.length;
+			var categoryArray = [];
+			var csvArray = [];
 			
-			if($scope.saleType == "retail_sales"){
+			for(var i=0;i<cnt;i++){
+				
+				var objectData = {};
+				var flag=0;
+				var apiData = responseDrop[i];
+				
+				if($scope.saleType == "retail_sales"){
+						
+					var purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.margin),noOfDecimalPoints);
 					
-				var purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.margin),noOfDecimalPoints);
-				
-				if(purchaseprice == 0){
-		
-					purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.mrp,0,item.margin),noOfDecimalPoints);
-				}
-				
-				var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
-				
-				var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
-				
-			}
-			else if($scope.saleType == "whole_sales"){
-				
-				var purchaseprice = $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.wholesaleMargin),noOfDecimalPoints);
-				
-				//var vat =0;
-				var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
-				
-				var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
-			}
-				
+					if(purchaseprice == 0){
 			
-			for(var arrayData=0;arrayData<categoryArray.length;arrayData++)
-			{
+						purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.mrp,0,apiData.margin),noOfDecimalPoints);
+					}
+					
+					var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+					
+					var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+					
+				}
+				else if($scope.saleType == "whole_sales"){
+					
+					var purchaseprice = $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.wholesaleMargin),noOfDecimalPoints);
+					
+					//var vat =0;
+					var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+					
+					var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+				}
+					
 				
-				
-				
-				if(apiData.productCategory.productCategoryId == categoryArray[arrayData])
+				for(var arrayData=0;arrayData<categoryArray.length;arrayData++)
 				{
-					flag=1;
+					
+					
+					
+					if(apiData.productCategory.productCategoryId == categoryArray[arrayData])
+					{
+						flag=1;
+						
+						objectData.categoryId = Math.random();
+						objectData.productParentCategoryId = apiData.productCategory.productCategoryId;
+						objectData.categoryName =  apiData.productName;
+						
+						objectData.groupName = apiData.productGroup.productGroupName;
+						
+						objectData.price = purchaseprice;
+						objectData.vat = vat;
+						objectData.amount = finalAmount;
+						
+						treeArrayData.push(objectData);
+					
+						break;
+					}
+				}
+				if(flag==0)
+				{
+					categoryArray.push(apiData.productCategory.productCategoryId);
+					
+					
+					
+					
+					var demo = {};
+					demo.categoryId = apiData.productCategory.productCategoryId;
+					demo.categoryName = apiData.productCategory.productCategoryName;
+					demo.productParentCategoryId = apiData.productCategory.productParentCategoryId;
+					treeArrayData.push(demo);
 					
 					objectData.categoryId = Math.random();
 					objectData.productParentCategoryId = apiData.productCategory.productCategoryId;
-					objectData.categoryName =  apiData.productName;
+					objectData.categoryName = apiData.productName;
 					
 					objectData.groupName = apiData.productGroup.productGroupName;
 					
@@ -139,71 +173,43 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 					objectData.amount = finalAmount;
 					
 					treeArrayData.push(objectData);
-				
-					break;
 				}
-			}
-			if(flag==0)
-			{
-				categoryArray.push(apiData.productCategory.productCategoryId);
+				
+				/** CSV Data **/
+				
+				var csvObject = {};
 				
 				
 				
+				csvObject.productName = apiData.productName;
+				csvObject.categoryName = apiData.productCategory.productCategoryName;
+				csvObject.groupName = apiData.productGroup.productGroupName;
 				
-				var demo = {};
-				demo.categoryId = apiData.productCategory.productCategoryId;
-				demo.categoryName = apiData.productCategory.productCategoryName;
-				demo.productParentCategoryId = apiData.productCategory.productParentCategoryId;
-				treeArrayData.push(demo);
+				csvObject.price = purchaseprice;
+				csvObject.vat = vat;
+				csvObject.amount = finalAmount;
 				
-				objectData.categoryId = Math.random();
-				objectData.productParentCategoryId = apiData.productCategory.productCategoryId;
-				objectData.categoryName = apiData.productName;
+				csvArray.push(csvObject);
 				
-				objectData.groupName = apiData.productGroup.productGroupName;
-				
-				objectData.price = purchaseprice;
-				objectData.vat = vat;
-				objectData.amount = finalAmount;
-				
-				treeArrayData.push(objectData);
+				/** End **/
+			
 			}
 			
-			/** CSV Data **/
+			// console.log(categoryArray);
+			console.log(treeArrayData);
 			
-			var csvObject = {};
+			$scope.getArray = csvArray;
+			
+			var myTreeData2 = getTree(treeArrayData, 'categoryId', 'productParentCategoryId');
+					$scope.tree_data = myTreeData2;
 			
 			
+				
+				
+			//data = responseDrop;
 			
-			csvObject.productName = apiData.productName;
-			csvObject.categoryName = apiData.productCategory.productCategoryName;
-			csvObject.groupName = apiData.productGroup.productGroupName;
-			
-			csvObject.price = purchaseprice;
-			csvObject.vat = vat;
-			csvObject.amount = finalAmount;
-			
-			csvArray.push(csvObject);
-			
-			/** End **/
-		
+			//$scope.TableData();
 		}
-		
-		// console.log(categoryArray);
-		console.log(treeArrayData);
-		
-		$scope.getArray = csvArray;
-		
-		var myTreeData2 = getTree(treeArrayData, 'categoryId', 'productParentCategoryId');
-				$scope.tree_data = myTreeData2;
-		
-		
-			
-			
-		//data = responseDrop;
-		
-		//$scope.TableData();
-	
 	});
 	
 	getSetFactory.blank();
@@ -426,4 +432,4 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
   
 
 }
-PriceListRetailSalesController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","saleType","$window","productArrayFactory"];
+PriceListRetailSalesController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","saleType","$window","productArrayFactory","toaster","apiResponse"];

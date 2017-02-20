@@ -11240,7 +11240,7 @@ body .toast-info {
   background-color: #8293b9;
 }
 body .toast-wait {
-  background-color: #c29eff;
+  background-color: #17A1E5;  /**  #c29eff **/
 }
 body .toast-warning {
   background-color: #fdaf40;

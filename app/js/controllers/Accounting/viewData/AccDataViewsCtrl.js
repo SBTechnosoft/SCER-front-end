@@ -83,161 +83,190 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 			
 			console.log(response);
-			data = response;
 			
-			
-			if($scope.headerType == 'Wholesales' || $scope.headerType == 'Retailsales'){
+			if(apiResponse.notFound == response){
 				
-				$scope.billData = response;
+				//data = [];
 				
-				var cnt = data.length;
-				for(var p=0;p<cnt;p++){
-					
-					data[p].repeatIcon = false;
-					data[p].imageIcon = false;
-					data[p].pdfIcon = false;
-					data[p].singlePdfIcon = false;
-					
-					var fileCnt = data[p].file.length;
-					
-					var flag = 0;
-					var imageFlag = 0;
-					
-					for(var k=0;k<fileCnt;k++){
-					
-						if(data[p].file[k].documentFormat == 'pdf' && data[p].file[k].documentType == 'bill')
-						{
-							flag++;
-						}
-						
-						if(data[p].file[k].documentFormat == 'jpg' || data[p].file[k].documentFormat == 'jpeg' || data[p].file[k].documentFormat == 'png'){
-							
-							imageFlag = 1;
-						}
-					}
-					
-					if(flag == 0){
-						
-						data[p].repeatIcon = true;
-						
-					}
-					else if(flag == 1){
-						
-						data[p].singlePdfIcon = true;
-					}
-					else{
-						
-						data[p].pdfIcon = true;
-					}
-					
-					if(imageFlag == 1){
-						
-						
-						data[p].imageIcon = true;
-						
-					}
-
-					
-				}
-				
-				$scope.contents = data;
-				
-				
-				$scope.contents.sort(function(a, b){
-					var dateA=new Date(a.entryDate), dateB=new Date(b.entryDate);
-					return dateB-dateA; 
-				});
-				
-				data= $scope.contents;
-				//data.slice().reverse();
-		
-				$scope.saleTableData();
+				toaster.pop('alert', 'Opps!!', 'No Data Found');
 			}
 			else{
 				
+				data = response;
 			
-				vm.pieChartData = [{ "color" : "#6cc539",
-								"data" : "0",
-								"label" : "Debit"
-							  },
-							  { "color" : "#00b4ff",
-								"data" : "0",
-								"label" : "Credit"
-							  }];
-				vm.pieFlotCharts = [{
-							  "label": "Debit",
-							  "color": "#6cc539",
-							  "data": [
-								["Jan", "0"],
-								["Feb", "0"],
-								["Mar", "0"],
-								["Apr", "0"],
-								["May", "0"],
-								["Jun", "0"],
-								["Jul", "0"],
-								["Aug", "0"],
-								["Sep", "0"],
-								["Oct", "0"],
-								["Nov", "0"],
-								["Dec", "0"]
-							  ]
-							},{
-							  "label": "Credit",
-							  "color": "#00b4ff",
-							  "data": [
-								["Jan", "0"],
-								["Feb", "0"],
-								["Mar", "0"],
-								["Apr", "0"],
-								["May", "0"],
-								["Jun", "0"],
-								["Jul", "0"],
-								["Aug", "0"],
-								["Sep", "0"],
-								["Oct", "0"],
-								["Nov", "0"],
-								["Dec", "0"]
-							  ]
-							}];
-	  
-				for (var i = 0; i < data.length; i++) {
+				if($scope.headerType == 'Wholesales' || $scope.headerType == 'Retailsales'){
 					
-					if(data[i].amountType=='debit'){
-					  
-						vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseFloat(data[i].amount);
-						var date = data[i].entryDate;
-						var splitedate = date.split("-").reverse().join("-");
-						var getdate = new Date(splitedate);
-						var month = getdate.getMonth();
+					$scope.billData = response;
+					
+					var cnt = data.length;
+					for(var p=0;p<cnt;p++){
 						
-							vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseFloat(data[i].amount);
+						data[p].repeatIcon = false;
+						data[p].imageIcon = false;
+						data[p].pdfIcon = false;
+						data[p].singlePdfIcon = false;
+						
+						var fileCnt = data[p].file.length;
+						
+						var flag = 0;
+						var imageFlag = 0;
+						
+						for(var k=0;k<fileCnt;k++){
+						
+							if(data[p].file[k].documentFormat == 'pdf' && data[p].file[k].documentType == 'bill')
+							{
+								flag++;
+							}
 							
-						//console.log(vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount));
+							if(data[p].file[k].documentFormat == 'jpg' || data[p].file[k].documentFormat == 'jpeg' || data[p].file[k].documentFormat == 'png'){
+								
+								imageFlag = 1;
+							}
+						}
+						
+						if(flag == 0){
+							
+							data[p].repeatIcon = true;
+							
+						}
+						else if(flag == 1){
+							
+							data[p].singlePdfIcon = true;
+						}
+						else{
+							
+							data[p].pdfIcon = true;
+						}
+						
+						if(imageFlag == 1){
+							
+							
+							data[p].imageIcon = true;
+							
+						}
+
+						
+					}
 					
-					}
-					else{
-						vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseFloat(data[i].amount);
-						
-						var date = data[i].entryDate;
-						var splitedate = date.split("-").reverse().join("-");
-						var getdate = new Date(splitedate);
-						var month = getdate.getMonth();
-						
-							vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseFloat(data[i].amount);
-						   
-						//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
-					}
+					$scope.contents = data;
+					
+					
+					$scope.contents.sort(function(a, b){
+						var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						return dateB-dateA; 
+					});
+					
+					data= $scope.contents;
+					//data.slice().reverse();
+			
+					$scope.saleTableData();
 				}
-				console.log(vm.pieFlotCharts);
-						 
-				$scope.TableData();
-				// for (var i = 0; i < data.length; i++) {
-				  // data[i].cityName = ""; //initialization of new property 
-				  // data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-				// }
-			}
+				else{
+					
+				
+					vm.pieChartData = [{ "color" : "#6cc539",
+									"data" : "0",
+									"label" : "Debit"
+								  },
+								  { "color" : "#00b4ff",
+									"data" : "0",
+									"label" : "Credit"
+								  }];
+					vm.pieFlotCharts = [{
+								  "label": "Debit",
+								  "color": "#6cc539",
+								  "data": [
+									["Jan", "0"],
+									["Feb", "0"],
+									["Mar", "0"],
+									["Apr", "0"],
+									["May", "0"],
+									["Jun", "0"],
+									["Jul", "0"],
+									["Aug", "0"],
+									["Sep", "0"],
+									["Oct", "0"],
+									["Nov", "0"],
+									["Dec", "0"]
+								  ]
+								},{
+								  "label": "Credit",
+								  "color": "#00b4ff",
+								  "data": [
+									["Jan", "0"],
+									["Feb", "0"],
+									["Mar", "0"],
+									["Apr", "0"],
+									["May", "0"],
+									["Jun", "0"],
+									["Jul", "0"],
+									["Aug", "0"],
+									["Sep", "0"],
+									["Oct", "0"],
+									["Nov", "0"],
+									["Dec", "0"]
+								  ]
+								}];
+		  
+					for (var i = 0; i < data.length; i++) {
+						
+						if(data[i].amountType=='debit'){
+						  
+							vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseFloat(data[i].amount);
+							var date = data[i].entryDate;
+							var splitedate = date.split("-").reverse().join("-");
+							var getdate = new Date(splitedate);
+							var month = getdate.getMonth();
+							
+								vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseFloat(data[i].amount);
+								
+							//console.log(vm.pieFlotCharts[0]["data"][0][1] = parseInt(vm.pieFlotCharts[0]["data"][0][1]) + parseInt(data[i].amount));
+						
+						}
+						else{
+							vm.pieChartData[1]["data"] = parseInt(vm.pieChartData[1]["data"]) + parseFloat(data[i].amount);
+							
+							var date = data[i].entryDate;
+							var splitedate = date.split("-").reverse().join("-");
+							var getdate = new Date(splitedate);
+							var month = getdate.getMonth();
+							
+								vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseFloat(data[i].amount);
+							   
+							//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
+						}
+					}
+					console.log(vm.pieFlotCharts);
+					
+					$scope.contents = data;
+					
+					
+					$scope.contents.sort(function(a, b){
+						var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						return dateB-dateA; 
+					});
+					
+					data= $scope.contents;
+					
+					$scope.TableData();
+					// for (var i = 0; i < data.length; i++) {
+					  // data[i].cityName = ""; //initialization of new property 
+					  // data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					// }
+				}
 			 
-		 
+			}
+		}).catch(function (reason) {
+			 // err
+			 if (reason.status === 500) {
+				// do something
+				
+				alert('Encountered server error');
+			 }
 		});
 	
 	
@@ -254,36 +283,76 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
+			  /** NgTable **/
+			  // if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")|| (typeof(params.$params.filter.amountTypeCredit) != "undefined" && params.$params.filter.amountTypeCredit != "")|| (typeof(params.$params.filter.amountTypeDebit) != "undefined" && params.$params.filter.amountTypeDebit != "")))
+			  // {
+					 // var orderedData = params.filter() ?
+					 // $filter('filter')(data, params.filter()) :
+					 // data;
+
+					  // vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+					  // params.total(orderedData.length); // set total for recalc pagination
+					  // $defer.resolve(vm.users);
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")|| (typeof(params.$params.filter.amountTypeCredit) != "undefined" && params.$params.filter.amountTypeCredit != "")|| (typeof(params.$params.filter.amountTypeDebit) != "undefined" && params.$params.filter.amountTypeDebit != "")))
-			  {
-					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
 
-					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-					  params.total(orderedData.length); // set total for recalc pagination
-					  $defer.resolve(vm.users);
-			  
-
-			  }
-			  else{
+			  // }
+			  // else{
 				  
-				   params.total(data.length);
+				   // params.total(data.length);
 				  
-			  }
+			  // }
 			 
-			 if(!$.isEmptyObject(params.$params.sorting))
-			  {
+			 // if(!$.isEmptyObject(params.$params.sorting))
+			  // {
 				
-				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
+				  // var orderedData = params.sorting() ?
+						  // $filter('orderBy')(data, params.orderBy()) :
+						  // data;
 		  
-				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+				  // $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			  // }
+			  
+			// $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			/** ngTable **/
+			
+			  var orderedData;
+
+			if(params.sorting().date === 'asc'){
+
+			  data.sort(function (a, b) {
+				  
+				  var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						
+				//var dateA = new Date(a.date), dateB = new Date(b.date);
+				return dateA - dateB; //sort by date descending
+			  });
+			  orderedData = data;
+
+			} else if(params.sorting().date === 'desc') {
+
+			  data.sort(function (a, b) {
+				  var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						
+				//var dateA = new Date(a.date), dateB = new Date(b.date);
+				return dateB - dateA; //sort by date descending
+			  });
+			  orderedData = data;
+
+			} else if(!params.sorting().date){
+
+			  if (params.filter().term) {
+				orderedData = params.filter() ? $filter('filter')(data, params.filter().term) : data;
+			  } else {
+				orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
 			  }
 			  
+			}
+
 			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			
 			$scope.totalData = data.length;
@@ -316,7 +385,11 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			if(params.sorting().date === 'asc'){
 
 			  data.sort(function (a, b) {
-				var dateA = new Date(a.date), dateB = new Date(b.date);
+				  
+			 var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						
 				return dateA - dateB; //sort by date descending
 			  });
 			  orderedData = data;
@@ -324,7 +397,10 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			} else if(params.sorting().date === 'desc') {
 
 			  data.sort(function (a, b) {
-				var dateA = new Date(a.date), dateB = new Date(b.date);
+				  
+				 var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
 				return dateB - dateA; //sort by date descending
 			  });
 			  orderedData = data;
@@ -559,6 +635,8 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			else{
 				
 				data = [];
+				
+				toaster.pop('alert', 'Opps!!', 'No Data Found');
 			}
 				vm.tableParams.reload();
 				

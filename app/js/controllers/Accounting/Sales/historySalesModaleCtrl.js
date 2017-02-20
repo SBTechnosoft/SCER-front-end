@@ -21,6 +21,8 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 	 var data = [];
 	 
 	 $scope.CompanyID = companyId;
+	 
+	 $scope.displayCompany = $scope.CompanyID.companyName;
 		$scope.stockModel=[];
  
 	if($rootScope.ArraystockModel)
@@ -126,6 +128,11 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 		  
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			  }
+			
+			$scope.totalData = data.length;
+			$scope.pageNumber = params.page();
+            $scope.itemsPerPage = params.count();
+            $scope.totalPages = Math.ceil($scope.totalData/params.count());
 			
 		  }
 	  });

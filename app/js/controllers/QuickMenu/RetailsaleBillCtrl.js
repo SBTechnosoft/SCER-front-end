@@ -585,14 +585,18 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	}
   
   
-  
+  $scope.disableButton = false;
 
 	//alert($scope.getTotal());
 
   $scope.pop = function(generate)
   {
 		//alert(generate);
+		$scope.disableButton = true;
 		
+		toaster.pop('wait', 'Please Wait', 'Data Inserting....');
+							
+		 //$scope.disableButton = true;
 	
 		if($scope.quickBill.EditBillData){
 			
@@ -799,7 +803,9 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			
 			if(angular.isObject(data) && data.hasOwnProperty('documentPath')){
 				
+				toaster.clear();
 				
+				$scope.disableButton = false;
 				
 				// apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
 			
@@ -873,8 +879,11 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 					
 					toaster.pop('warning', 'Opps!!', 'Field Not Change');
 				}
+				else{
+					toaster.pop('warning', 'Something Wrong', data);
+				}
 				
-				
+				 $scope.disableButton = false;
 			}
 			
 			
@@ -892,6 +901,8 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
  
 	
 	$scope.cancel = function(){
+		
+		$scope.disableButton = false; 
 		
 		angular.element("input[type='file']").val(null);
 		formdata.delete('file[]');

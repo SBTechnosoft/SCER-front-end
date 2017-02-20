@@ -7,12 +7,12 @@
 
 App.controller('InvStockController', InvStockController);
 
-function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,$window) {
+function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,$window,apiResponse,toaster) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
-	
- var data = [];
+	$scope.getArray;
+	var data = [];
 	var getData = getSetFactory.get();
 	console.log(getData);
 	//return false;
@@ -28,14 +28,27 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 	
 	delete getData.companyId;
 	
-	
-	
 	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
 		
-		console.log(responseDrop[0].company.companyName);
-		$scope.displayCompany = responseDrop[0].company.companyName;
-		$scope.calculation(responseDrop);
-	
+		console.log(responseDrop);
+		
+			if(apiResponse.noContent == responseDrop){
+				
+				toaster.pop('info', 'Message', 'No Data Found');
+			
+			}
+			else if(apiResponse.contentNotProper == responseDrop){
+				
+				toaster.pop('info', 'Message', 'Please Fill Go to Search');
+				
+			}
+			else{
+				
+				console.log(responseDrop[0].company.companyName);
+				$scope.displayCompany = responseDrop[0].company.companyName;
+				$scope.calculation(responseDrop);
+			}
+		
 	});
 	
 	getSetFactory.blank();
@@ -229,21 +242,29 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 	
 			 balance[i] = balanceArray.slice(0);
 			
-			
 			 responseDrop[i]["balance"] = balance[i];
 		}
 		
 		
 		$scope.contents = responseDrop;
-		$scope.getArray = responseDrop; // CSV Export
+		
 		
 		$scope.contents.sort(function(a, b){
-			var dateA=new Date(a.transactionDate), dateB=new Date(b.transactionDate);
+			
+			var entDate = a.transactionDate.split("-").reverse().join("-");
+						var toDate = b.transactionDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						
+			//var dateA=new Date(a.transactionDate), dateB=new Date(b.transactionDate);
 			return dateB-dateA; 
 		});
 		
 		data= $scope.contents;
+		//$scope.getArray = $scope.contents; // CSV Export
+		
 		$scope.TableData();
+		
+		//$scope.getArray = data;
 	}
  
  
@@ -284,7 +305,10 @@ $scope.TableData = function(){
         if(params.sorting().date === 'asc'){
 
           data.sort(function (a, b) {
-            var dateA = new Date(a.date), dateB = new Date(b.date);
+			  var entDate = a.transactionDate.split("-").reverse().join("-");
+						var toDate = b.transactionDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+          //  var dateA = new Date(a.date), dateB = new Date(b.date);
             return dateA - dateB; //sort by date descending
           });
           orderedData = data;
@@ -292,7 +316,10 @@ $scope.TableData = function(){
         } else if(params.sorting().date === 'desc') {
 
           data.sort(function (a, b) {
-            var dateA = new Date(a.date), dateB = new Date(b.date);
+			  var entDate = a.transactionDate.split("-").reverse().join("-");
+						var toDate = b.transactionDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+          //  var dateA = new Date(a.date), dateB = new Date(b.date);
             return dateB - dateA; //sort by date descending
           });
           orderedData = data;
@@ -317,6 +344,7 @@ $scope.TableData = function(){
       }
   });
 
+  //$scope.getArray = data;
 }
 
   // FILTERS
@@ -429,11 +457,12 @@ $scope.TableData = function(){
 			}
 			else{
 				
-				alert('Something Wrong');
+				toaster.clear();
+				toaster.pop('warning', 'Opps!!', responseDrop);
 			}
 		
 		});
 	}
 
 }
-InvStockController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","$window"];
+InvStockController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","$window","apiResponse","toaster"];

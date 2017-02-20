@@ -20,7 +20,15 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
  $scope.accSales.demotax;
  $scope.accSales.tax = 0;
   
+  $scope.disableCompany = false;
+  
   $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
+  
+	//Current And OPening Balance...
+	$scope.displayOpeningBal = 0.00;
+	$scope.displayCurrentBal = 0.00;
+	$scope.displayWholeSaleOpeningBal = 0.00;
+	$scope.displayWholeSaleCurrentBal = 0.00;
   
   $scope.totalDebit; // sum of Debit Amount
   $scope.totalCredit;  // sum of Credit Amount
@@ -250,6 +258,7 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 			$scope.accSales.documentData = data.document;
 			
 			$scope.accSales.companyDropDown = data.journal[0].company;
+			$scope.disableCompany = true;
 			
 			/** 
 				Jsuggest OF Credit/Debit
@@ -692,10 +701,13 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		}
 	}
 	
+	$scope.disableButton = false;
 	
   $scope.pop = function()
   {
-		 
+		$scope.disableButton = true;
+		toaster.pop('wait', 'Please Wait', 'Data Inserting....');
+		
 	if($scope.totalDebit != $scope.totalCredit){
 	
 		toaster.pop('alert', 'Opps!!', 'Credit/Debit Amount is Not Equal');
@@ -867,6 +879,7 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 				
 				console.log(data);	
 				
+				toaster.clear();
 				
 				//Display Toaster Message
 				if($scope.accSales.getSetJrnlId){
@@ -874,6 +887,7 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 					if(apiResponse.ok == data){
 						
 						toaster.pop('success', 'Title', 'Update Successfully');
+						$scope.disableCompany = false;
 					}
 					else{
 						
@@ -973,7 +987,9 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 					
 					$scope.defaultCompany();
 				}
-		
+				
+				$scope.disableButton = false;
+				
 			});
 			
 		});
@@ -985,6 +1001,9 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	   vm.dt1 = new Date();
 		vm.minStart = new Date();
 		vm.maxStart = new Date();
+		
+		$scope.disableCompany = false;
+		$scope.disableButton = false;
 		
 		//Delete Journal Data From formdata Object
 		if($scope.changeJrnlArray){

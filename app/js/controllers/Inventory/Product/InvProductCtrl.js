@@ -190,8 +190,10 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 			
 			if(apiResponse.ok == response){
 				
+				
+				$scope.showProduct();
 				toaster.pop('success', 'Title', 'Delete SuccessFully');
-				vm.tableParams.reload();
+				//vm.tableParams.reload();
 				
 			}
 			else{

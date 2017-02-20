@@ -183,7 +183,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.InvStock', {
             url: '/InvStock',
             templateUrl: basepath('Inventory/StockRegister/InvStock.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
 		//Show Inventory Category
 		.state('app.InvCategory', {
@@ -474,7 +474,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/FormPriceListRetailSales',
             templateUrl: basepath('PriceList/RetailSales/FormPriceListRetailSales.html'),
 			controller: 'FormPriceListRetailSalesController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
 				saleType: function(){
 					
 					return 'retail_sales';
@@ -498,7 +498,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/FormPriceListWholeSales',
             templateUrl: basepath('PriceList/RetailSales/FormPriceListRetailSales.html'),
 			controller: 'FormPriceListRetailSalesController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
 				saleType: function(){
 					
 					return 'whole_sales';
