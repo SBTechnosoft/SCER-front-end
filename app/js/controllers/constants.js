@@ -118,7 +118,7 @@ App
 	'getBill': 'http://api.siliconbrain.co.in/accounting/bills/company/',
 	'getTrailBalance': 'http://api.siliconbrain.co.in/accounting/trial-balance/company/',
 	'reGeneratePdf': 'http://api.siliconbrain.co.in/documents/bill',
-	'billPaymentRefund': 'http://api.siliconbrain.co.in/accounting/bills/',
+	'billPaymentRefund': 'http://api.siliconbrain.co.in/accounting/bills/'
   })
   //Api Path
   .constant('apiResponse', {
@@ -127,6 +127,7 @@ App
 	'notFound': '404: Not Found',
 	'noMatch': 'NoMatch: Token Not Matched',
 	'tokenExpired': 'Expired: Token Expired',
+	'notExists': 'NotExists: Token Not Exists',
 	'contentNotProper': 'content: not proper content'
   })
   //Validation Pattern

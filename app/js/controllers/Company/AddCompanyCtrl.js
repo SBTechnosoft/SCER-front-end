@@ -15,6 +15,8 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 	vm.sdfg;
 	$scope.addCompany = [];
 	
+	vm.disableDecimal = false; // disable decimal when Update
+	
 	//$rootScope.focusFunction('txtdata');
 	
 	/* VALIDATION */
@@ -117,7 +119,9 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 		$scope.addCompany.serviceTax = res.serviceTaxNo;
 		$scope.addCompany.currency = res.basicCurrencySymbol;
 		$scope.addCompany.formalName = res.formalName;
+		
 		$scope.addCompany.decimal = res.noOfDecimalPoints;
+		vm.disableDecimal = true;
 		$scope.addCompany.curSymbol = res.currencySymbol;
 		
 		if(res.logo.documentName){
@@ -145,6 +149,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
   }
   else{
 	  
+	  vm.disableDecimal = false;
 	  console.log('Not');
   }
 	//End
@@ -379,12 +384,14 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 		});
 		
 	}
-	
+	vm.disableDecimal = false;
   }
   
 	$scope.cancel = function(){
 	
 		$scope.addCompany = [];
+		 
+		 vm.disableDecimal = false;
 		 
 		angular.element("input[type='file']").val(null);
 		

@@ -21,7 +21,7 @@
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
 							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="false" max-date="false" ng-change="changeSalesDate('entryDate')" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
-							class="form-control" readonly/>
+							class="form-control" ng-required="true" readonly/>
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
 								  <em class="fa fa-calendar"></em>

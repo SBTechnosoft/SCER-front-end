@@ -248,7 +248,7 @@
 					<div class="form-group">
 					  <label class="col-sm-3 control-label">Number of Decimal Points</label>
 					  <div class="col-sm-5">
-						 <select chosen="" tabindex="2" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select">
+						 <select chosen="" tabindex="2" data-ng-model="addCompany.decimal" data-ng-options="s for s in form.states2" ng-change="changeCompanyData('noOfDecimalPoints',addCompany.decimal)" class="form-control chosen-select" ng-disabled="form.disableDecimal">
 							<option value=""></option>
 						 </select>
 					  </div>

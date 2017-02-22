@@ -1,3 +1,4 @@
+
 <h3>
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
@@ -25,7 +26,7 @@
 				<label class="col-sm-1 control-label"> Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
-							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="false" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" ng-change="changeBillDate('entryDate')" close-text="Close" class="form-control" readonly/>
+							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="false" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" ng-change="changeBillDate('entryDate')" close-text="Close" class="form-control" ng-required="true" readonly/>
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
 								  <em class="fa fa-calendar"></em>
@@ -49,7 +50,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Contact</label>
 						  <div class="col-sm-8">
-							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"  ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10" auto-focus only-number />
+							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"   ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10" ng-required="true" auto-focus only-number />
 							 
 							<span ng-messages="formBill.contactNo.$error" ng-if="formBill.contactNo.$dirty || formBill.contactNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -448,7 +449,9 @@
 			 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generate')" ng-disabled="formBill.$invalid || disableButton" > <span ng-if="quickBill.EditBillData">Update & Generate </span> <span ng-if="!quickBill.EditBillData">Save & Generate </span> </button>
 			 
 			 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('not')" ng-disabled="formBill.$invalid || disableButton" > <span ng-if="quickBill.EditBillData">Update</span> <span ng-if="!quickBill.EditBillData">Save</span> </button>
-		
+			
+			 <button type="button" class="mr mb-sm btn btn-primary pull-ledt" ng-click="goToNextPrevious('next')" ng-disabled="!quickBill.EditBillData"> <span > Next </span> </button>
+			 <button type="button" class="mr mb-sm btn btn-primary pull-left" ng-click="goToNextPrevious('previous')" > <span > previous </span> </button>
 		
 		
       </div>

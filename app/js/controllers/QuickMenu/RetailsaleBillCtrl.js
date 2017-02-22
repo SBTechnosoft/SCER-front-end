@@ -222,10 +222,13 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	
 	/** Check Update Or Insert Bill **/
 	
+	$scope.EditAddBill = function(){
+	
 		if(Object.keys(getSetFactory.get()).length){
 			
 			$scope.quickBill.EditBillData = getSetFactory.get();
-	
+			
+			console.log($scope.quickBill.EditBillData);
 			getSetFactory.blank();
 			
 			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
@@ -387,10 +390,13 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			vm.productTax = [{"tax":0,"additionalTax":0}];
 			
 			$scope.defaultComapny();
+			
+			
 		}
-		
+	}	
 	/** End **/
 	
+	$scope.EditAddBill();
   
   
 	
@@ -647,6 +653,13 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			
 			 formdata.append('transactionDate',fdate);
 			 
+			if(!formdata.has('contactNo')){
+				
+				
+		
+				formdata.append('contactNo','');
+			}
+			 
 			formdata.append('invoiceNumber',$scope.quickBill.invoiceNumber);
 			
 			formdata.append('total',$scope.totalTable);
@@ -879,6 +892,9 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 					
 					toaster.pop('warning', 'Opps!!', 'Field Not Change');
 				}
+				else if(data.status == 500){
+					toaster.pop('warning', 'Something Wrong', data.statusText);
+				}
 				else{
 					toaster.pop('warning', 'Something Wrong', data);
 				}
@@ -901,6 +917,8 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
  
 	
 	$scope.cancel = function(){
+		
+		$scope.quickBill = [];
 		
 		$scope.disableButton = false; 
 		
@@ -948,7 +966,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		formdata.delete('checkNumber');
 		formdata.delete('remark');
 		
-		$scope.quickBill = [];
+		
 		vm.dt1 = new Date();
 		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
 		vm.productTax = [{"tax":0,"additionalTax":0}];
@@ -1080,6 +1098,64 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 
 	};
 
+	
+	/** Next Previews **/
+	
+		$scope.goToNextPrevious = function(nextPre){
+			
+				var preHeaderData = {'Content-Type': undefined};
+				
+				if($scope.saleType == 'RetailsaleBill'){
+		 
+					
+					preHeaderData.salesType = 'retail_sales';
+					
+				 }
+				 else if($scope.saleType == 'WholesaleBill'){
+					 
+					preHeaderData.salesType = 'whole_sales';
+
+				 }
+	 
+				if($scope.quickBill.EditBillData){
+					
+					if(nextPre == 'next'){
+					
+					preHeaderData.nextSaleId = $scope.quickBill.EditBillData.saleId;
+					
+					}
+					else{
+						preHeaderData.previousSaleId = $scope.quickBill.EditBillData.saleId;
+					}
+					
+				}
+				else{
+					
+					if(nextPre == 'next'){
+					
+					preHeaderData.nextSaleId = 0;
+					
+					}
+					else{
+						preHeaderData.previousSaleId = 0;
+					}
+					
+				}
+			
+				//var preHeaderData = {'Content-Type': undefined,'sale_id':sale_id,'salesType':$scope.saleType};
+				
+				apiCall.getCallHeader(apiPath.postBill,preHeaderData).then(function(response){
+					
+					console.log(response);
+					getSetFactory.set(response[0]);
+					$scope.EditAddBill();
+				})
+			
+		}
+	
+	/** End **/
+	
+	
   // Datepicker
   // ----------------------------------- 
 	this.minStart = new Date();
@@ -1094,7 +1170,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	}
 
   this.clear = function () {
-    this.dt1 = null;
+    //this.dt1 = null;
   };
 
   // Disable weekend selection
@@ -1160,7 +1236,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
   };
 
   this.clear = function() {
-    this.mytime = null;
+    //this.mytime = null;
   };
 
   // Input mask

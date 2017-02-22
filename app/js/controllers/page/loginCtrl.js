@@ -9,12 +9,12 @@ App.controller('loginController', loginController);
 function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
   'use strict';
   var vm = this;
-  var formdata = new FormData();
+ 
 	$scope.loginData = [];
 	$scope.notMatch = false; // True when Email or password will Be Wrong.
 	
 	$scope.login = function(){
-		
+		 var formdata = new FormData();
 		formdata.append('emailId',$scope.loginData.emailId);
 		formdata.append('password',$scope.loginData.password);
 		
@@ -30,8 +30,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
 			//$rootScope.authenticate.authToken = response.authenticationToken;
 			
 			//console.log(response.authenticationToken);
-			formdata.delete('emailId');
-			formdata.delete('password');
+			
 			
 			//if($rootScope.$storage.authToken){
 			if(angular.isObject(response)){

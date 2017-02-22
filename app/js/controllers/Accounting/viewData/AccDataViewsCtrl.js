@@ -543,8 +543,10 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		apiCall.deleteCall(deletePath).then(function(deleteres){
 			
 			console.log(deleteres);
-			toaster.pop('success', 'Title', 'Data Successfully Deleted');
+			
 			$scope.reLoadPdfData();
+			
+			toaster.pop('success', 'Title', 'Data Successfully Deleted');
 		 
 		});
 	}
