@@ -919,6 +919,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 				
 				if(apiResponse.ok == data){
 					
+					
+					
 					//Delete Journal Data From formdata Object
 					if($scope.changeJrnlArray){
 						
@@ -997,6 +999,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
   
 	//Cancel Button 
 	$scope.cancel = function () {
+	   
+	   toaster.clear();
 	   
 	   vm.dt1 = new Date();
 		vm.minStart = new Date();

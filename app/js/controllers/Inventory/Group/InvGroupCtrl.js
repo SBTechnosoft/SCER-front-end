@@ -30,7 +30,7 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 
         $scope.expanding_property = {
             field: "productGroupName",
-            displayName: "Group Name",
+            displayName: "Category Name",
             sortable: true,
             filterable: true,
             cellTemplate: "<i>{{row.branch[expandingProperty.field]}}</i>"

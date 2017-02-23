@@ -24,9 +24,9 @@
 							  <div class="col-sm-9">
 								 <p class="input-group">
 									<input type="text" datepicker-popup="{{form.format}}" ng-change="form.check()" data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
-									class="form-control" />
+									class="form-control" tabindex="2" auto-focus readonly />
 									<span class="input-group-btn">
-									   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
+									   <button type="button" tabindex="2" data-ng-click="form.openStart($event)" class="btn btn-default" >
 										  <em class="fa fa-calendar"></em>
 									   </button>
 									</span>
@@ -43,9 +43,9 @@
 								  <div class="col-sm-9">
 									 <p class="input-group">
 										<input type="text" datepicker-popup="{{form.format}}" data-ng-model="form.dt2" is-open="form.openedEnd" min-date="form.dt1" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
-										class="form-control" />
+										class="form-control" tabindex="2" readonly />
 										<span class="input-group-btn">
-										   <button type="button" data-ng-click="form.openEnd($event)" class="btn btn-default">
+										   <button type="button" tabindex="2" data-ng-click="form.openEnd($event)" class="btn btn-default">
 											  <em class="fa fa-calendar"></em>
 										   </button>
 										</span>
@@ -71,9 +71,9 @@
 					<div class="col-sm-6">
 						 <fieldset >
 						   <div class="form-group">
-							  <label class="col-sm-3 control-label">Product</label>
+							  <label class="col-sm-3 control-label">Brand</label>
 							  <div class="col-sm-9">
-								 <select chosen="" ng-model="invStock.productDropDown" data-ng-options="s.productName for s in form.productDrop track by s.productId"   class="form-control chosen-select"  ></select>
+								 <select chosen="" data-ng-model="invStock.category" tabindex="2" data-ng-options="s.productCategoryName for s in form.categoryDrop track by s.productCategoryId" ng-change="changeStockData('productCategoryId',invStock.category.productCategoryId)" class="form-control chosen-select" ></select>
 							  </div>
 						   </div>
 						</fieldset>
@@ -83,24 +83,26 @@
 				
 				<div class="col-sm-12">
 					<div class="col-sm-6">
-						<fieldset >
-						   <div class="form-group">
-							  <label class="col-sm-3 control-label">Categoy</label>
-							  <div class="col-sm-9">
-								 <select chosen="" data-ng-model="invStock.category" data-ng-options="s.productCategoryName for s in form.categoryDrop track by s.productCategoryId" ng-change="changeStockData('productCategoryId',invStock.category.productCategoryId)" class="form-control chosen-select" ></select>
-							  </div>
-						   </div>
-						</fieldset>
-					</div>
-					<div class="col-sm-6">
 						<fieldset>
 						   <div class="form-group">
-							  <label class="col-sm-3 control-label">Group</label>
+							  <label class="col-sm-3 control-label">Category</label>
 							  <div class="col-sm-9">
-								<select chosen="" data-ng-model="invStock.group" data-ng-options="s.productGroupName for s in form.groupDrop track by s.productGroupId" ng-change="changeStockData('productGroupId',invStock.group.productGroupId)" class="form-control chosen-select" size='5' ></select>
+								<select chosen="" data-ng-model="invStock.group" data-ng-options="s.productGroupName for s in form.groupDrop track by s.productGroupId" ng-change="changeStockData('productGroupId',invStock.group.productGroupId)" class="form-control chosen-select" size='5' tabindex="2" ></select>
 							  </div>
 						   </div>
 						</fieldset>	
+						
+					</div>
+					<div class="col-sm-6">
+						
+						<fieldset >
+						   <div class="form-group">
+							  <label class="col-sm-3 control-label">Product</label>
+							  <div class="col-sm-9">
+								 <select chosen="" ng-model="invStock.productDropDown" data-ng-options="s.productName for s in form.productDrop track by s.productId"   class="form-control chosen-select" tabindex="2" ></select>
+							  </div>
+						   </div>
+						</fieldset>
 				
 					</div>
 				</div>
@@ -123,7 +125,7 @@
 							  <label class="col-sm-3 control-label"></label>
 							  <div class="col-sm-9">
 								  <!--button type="button" class="mr mb-sm btn btn-success pull-right" ui-sref="app.InvStock" >Generate</button-->
-								  <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="generate()" >Generate</button>
+								  <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="generate()" tabindex="3" >Generate</button>
 							  </div>
 						   </div>
 						</fieldset>	

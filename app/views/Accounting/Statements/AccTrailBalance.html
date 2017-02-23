@@ -36,7 +36,7 @@
          <tbody  >
             <tr data-ng-repeat="user in $data" >
 			
-				<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  >{{user.ledgerName}}</td>
+				<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a ng-click="goToLedgerTransaction(user.ledgerId)" ui-sref="">{{user.ledgerName}}</a></td>
 				<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:center" header-class="text-center">{{user.debitAmount  | setDecimal: noOfDecimalPoints}}</td>
 			    <td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:center" header-class="text-center">{{user.creditAmount  | setDecimal: noOfDecimalPoints}}</td>
 				

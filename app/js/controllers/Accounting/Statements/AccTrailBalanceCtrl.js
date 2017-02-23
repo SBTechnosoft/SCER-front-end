@@ -6,7 +6,7 @@
 
 App.controller('AccTrailBalanceController', AccTrailBalanceController);
 
-function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,$window) {
+function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,$window,getSetFactory) {
   'use strict';
   var vm = this;
   var data = [];
@@ -81,6 +81,7 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 			  var dataOfTrial = response[i];
 			  
 			  var trailObject = {};
+			  trailObject.ledgerId = dataOfTrial.ledger.ledgerId;
 			  trailObject.ledgerName = dataOfTrial.ledger.ledgerName;
 				//  trailObject.amountType = data[i].amountType;
 			  
@@ -191,6 +192,18 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 	 
 	  
   }
+  
+  
+	$scope.goToLedgerTransaction = function(ledgerId){
+		
+		//alert(ledgerId);
+		
+		getSetFactory.set(ledgerId);
+		
+		$state.go("app.AccDataLedger");
+		
+	  
+	}
 
   // FILTERS
   // ----------------------------------- 
@@ -302,4 +315,4 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 	
 	/*** End Pdf ***/
 }
-AccTrailBalanceController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","$window"];
+AccTrailBalanceController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","$window","getSetFactory"];

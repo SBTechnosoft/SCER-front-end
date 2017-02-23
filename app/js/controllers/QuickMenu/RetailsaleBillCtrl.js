@@ -233,12 +233,14 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			
 			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
 			
-			
+			vm.disableCompany = false;
 			//get Company
 			vm.companyDrop=[];
 			apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 					//console.log(response2);
+					
 					vm.companyDrop = response2;
+					$scope.quickBill.companyDropDown =  $scope.quickBill.EditBillData.company;		//Company
 					
 					vm.disableCompany = true;
 			});
@@ -247,7 +249,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			//var demo = angular.fromJson(jsonProduct);
 			
 			//console.log(jsonProduct.inventory);
-			console.log($scope.quickBill.EditBillData);
+			//console.log($scope.quickBill.EditBillData);
 			$scope.quickBill.documentData = $scope.quickBill.EditBillData.file;
 			
 			
@@ -267,7 +269,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 			console.log($scope.quickBill.documentData);
 			
 			$scope.quickBill.invoiceNumber = $scope.quickBill.EditBillData.invoiceNumber;  //Invoice Number
-			$scope.quickBill.companyDropDown =  $scope.quickBill.EditBillData.company;		//Company
+			
 			
 			
 			$scope.noOfDecimalPoints = parseInt($scope.quickBill.EditBillData.company.noOfDecimalPoints);//decimal points
@@ -545,6 +547,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	//Change Invoice Number When Company Changed
 	$scope.changeCompany = function(item)
 	 {
+		
 		$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
 		
 		var getLatest = apiPath.getLatestInvoice1+item.companyId+apiPath.getLatestInvoice2;
@@ -1147,14 +1150,88 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 				apiCall.getCallHeader(apiPath.postBill,preHeaderData).then(function(response){
 					
 					console.log(response);
+					$scope.quickBill = [];
 					getSetFactory.set(response[0]);
+					
 					$scope.EditAddBill();
+					
+					
+					//$scope.quickBill.companyDropDown = response[0].company;
 				})
 			
 		}
 	
 	/** End **/
 	
+	/** Preview Bill **/
+	
+		$scope.previewBill = function(size){
+			
+			if($scope.quickBill.companyDropDown){
+		
+			var modalInstance = $modal.open({
+			  templateUrl: 'app/views/PopupModal/QuickMenu/PreviewBillModal.html',
+			  controller: previewBillModalController,
+			  size: size,
+			  resolve:{
+				  companyId: function(){
+					 
+					return $scope.quickBill.companyDropDown;
+				  },
+				  entryDate: function(){
+					 
+					return vm.dt1;
+				  },
+				  billData: function(){
+					 
+					return $scope.quickBill;
+				  },
+				  inventoryData: function(){
+					  
+					 return vm.AccBillTable;
+				  },
+				  taxData: function(){
+					  
+					  return vm.productTax;
+				  },
+				  total: function(){
+					  
+					 return $scope.totalTable;
+				  },
+				  totalTax: function(){
+					  
+					 return $scope.quickBill.tax;
+				  },
+				  grandTotal: function(){
+					  
+					 return $scope.grandTotalTable;
+				  },
+				  advance: function(){
+					  
+					 return $scope.quickBill.advance;
+				  },
+				  balance: function(){
+					  
+					 return $scope.balanceTable;
+				  }
+			  }
+			});
+
+		   
+			modalInstance.result.then(function (data) {
+			
+			
+				}, function () {
+				  console.log('Cancel');	
+				});
+			}
+			else{
+				alert('Please Select Company');
+			}
+			
+		}
+		
+	/** End **/
 	
   // Datepicker
   // ----------------------------------- 

@@ -171,8 +171,8 @@
 				<table  class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th  style="width:35%">Name of Item</th>
-							<th class="header" style="width:13%">Discount Type</th>
+							<th  style="width:38%">Name of Item</th>
+							<th class="header" style="width:10%">Discount Type</th>
 							<th class="header" style="width:10%">Discount</th>
 							<th style="width:12%" >Rate</th>
 							<th style="width:9%" >Quantity</th>
@@ -196,7 +196,7 @@
 							<td>
 								<select  ng-model="item.discountType"  class="form-control" style="float:left;" ng-change="changeProductTable()">
 									<option value="flat" selected="selected">Flat</option>
-									<option value="percentage">Percentage</option>
+									<option value="percentage">%</option>
 								</select>
 								
 							</td>
@@ -238,7 +238,7 @@
 							<td></td>
 						</tr>
 						<tr>
-							<td>Total</td>
+							<td >Total</td>
 							<td></td>
 							<td></td>
 							<td></td>

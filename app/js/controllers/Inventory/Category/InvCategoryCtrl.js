@@ -180,7 +180,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 
         $scope.expanding_property = {
             field: "productCategoryName",
-            displayName: "Category Name",
+            displayName: "Brand Name",
             sortable: true,
             filterable: true,
             cellTemplate: "<i>{{row.branch[expandingProperty.field]}}</i>"

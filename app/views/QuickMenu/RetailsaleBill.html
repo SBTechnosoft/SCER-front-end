@@ -12,7 +12,7 @@
 	<form  action="#" name="formBill" class="form-validate form-horizontal">
 	<div class="panel panel-default">
 		 <h4 class="panel-heading" >
-		 {{saleType}} <span style="float:right"> Invoice# : {{quickBill.invoiceNumber}}</span>
+		 {{saleType}} <span style="float:right">  Invoice# : {{quickBill.invoiceNumber}}</span>
 		 </h4>
 		<div class="panel-body" style="padding:0px">
 			
@@ -212,10 +212,10 @@
 		<table  class="table table-bordered table-striped" >
 			<thead>
 				<tr>
-					<th class="header" style="width:28%">Name of Item</th>
+					<th class="header" style="width:34%">Name of Item</th>
 					<th class="header" style="width:7%">Color</th>
 					<th class="header" style="width:8%">Frame No.</th>
-					<th class="header" style="width:11%">Discount Type</th>
+					<th class="header" style="width:5%">Discount Type</th>
 					<th class="header" style="width:5%">Discount</th>
 					<th style="width:10%" >Rate</th>
 					<th style="width:5%" >Quantity</th>
@@ -246,7 +246,7 @@
 					<td>
 						<select  ng-model="item.discountType"  class="form-control" style="padding-left: 5px;padding-right: 5px;" ng-change="changeProductTable()" >
 							<option value="flat" selected="selected">Flat</option>
-							<option value="percentage">Percentage</option>
+							<option value="percentage">%</option>
 						</select>
 						
 					</td>
@@ -444,15 +444,29 @@
 				</div>
 			</fieldset>
 		
-			<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
+			
 			
 			 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generate')" ng-disabled="formBill.$invalid || disableButton" > <span ng-if="quickBill.EditBillData">Update & Generate </span> <span ng-if="!quickBill.EditBillData">Save & Generate </span> </button>
 			 
 			 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('not')" ng-disabled="formBill.$invalid || disableButton" > <span ng-if="quickBill.EditBillData">Update</span> <span ng-if="!quickBill.EditBillData">Save</span> </button>
 			
-			 <button type="button" class="mr mb-sm btn btn-primary pull-ledt" ng-click="goToNextPrevious('next')" ng-disabled="!quickBill.EditBillData"> <span > Next </span> </button>
-			 <button type="button" class="mr mb-sm btn btn-primary pull-left" ng-click="goToNextPrevious('previous')" > <span > previous </span> </button>
-		
+			 <button type="button" class="mr mb-sm btn btn-primary pull-right" ng-click="previewBill('lg')"  > Preview </button>
+			 
+			
+			 <!--button type="button" class="mr mb-sm btn btn-primary pull-left" ng-click="goToNextPrevious('previous')" > <span > Previous </span> </button>
+			 <button type="button" class="mr mb-sm btn btn-primary pull-left" ng-click="goToNextPrevious('next')" ng-disabled="!quickBill.EditBillData"> <span > Next </span> </button-->
+			 
+			  <button type="button" class="mr mb-sm btn btn-labeled btn-default pull-left" ng-click="goToNextPrevious('previous')">
+               <span class="btn-label"><i class="fa fa-arrow-left"></i>
+               </span>Previous</button>
+          
+            <button type="button" class="mr mb-sm btn btn-labeled btn-default pull-left"  ng-click="goToNextPrevious('next')" ng-disabled="!quickBill.EditBillData">Next
+               <span class="btn-label btn-label-right"><i class="fa fa-arrow-right"></i>
+               </span>
+            </button>
+			
+			
+			 <button type="button" class="mr mb-sm btn btn-success pull-left" data-ng-click="cancel()" >New</button>
 		
       </div>
 	</div>

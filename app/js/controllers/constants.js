@@ -95,6 +95,7 @@ App
 	'getAllInvoice':     'http://api.siliconbrain.co.in/settings/invoice-numbers',
 	'getAllQuotation':     'http://api.siliconbrain.co.in/settings/quotation-numbers',
 	'getAllTemplate':     'http://api.siliconbrain.co.in/settings/templates',
+	'getTemplateByCompany': 'http://api.siliconbrain.co.in/settings/templates/company/',
 	'getAllLedgerGroup':     'http://api.siliconbrain.co.in/accounting/ledger-groups',
 	'getAllLedger':     'http://api.siliconbrain.co.in/accounting/ledgers',
 	'getAllProduct':     'http://api.siliconbrain.co.in/products',

@@ -1,6 +1,6 @@
 <h3>
 	
-   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Group</small>
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Category</small>
 </h3>
 <div data-ng-controller="InvGroupController as table" class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
@@ -9,14 +9,14 @@
 		<form  action="#" name="formGroup" class="form-validate form-horizontal">
 			<div class="panel-body">
 				<div class="form-group">
-					<label class="col-sm-1 control-label"> Group </label>
+					<label class="col-sm-1 control-label"> Category </label>
 						<div class="col-sm-4">
 							<select chosen="" data-ng-model="invGroupData.groupDropDown" data-ng-options="s.productGroupName for s in table.groupDrop track by s.productGroupId" class="form-control chosen-select"></select>
 						</div>
 						
 					<label class="col-sm-1 control-label"> Name </label>
 						<div class="col-sm-4">
-							<input ng-model="invGroupData.groupName" name="groupName" id="input-id-1" type="text" placeholder="Group Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
+							<input ng-model="invGroupData.groupName" name="groupName" id="input-id-1" type="text" placeholder="Category Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
 							
 							 <span ng-messages="formGroup.groupName.$error" ng-if="formGroup.groupName.$dirty || formGroup.groupName.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -30,7 +30,7 @@
 				<div class="form-group">
 					<label class="col-sm-1 control-label"> Description </label>
 						<div class="col-sm-10">
-							<textarea ng-model="invGroupData.groupDesc" name="desc" id="input-id-1" type="text" placeholder="Group Description"  class="form-control" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
+							<textarea ng-model="invGroupData.groupDesc" name="desc" id="input-id-1" type="text" placeholder="Category Description"  class="form-control" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
 							
 							<span ng-messages="formGroup.desc.$error" ng-if="formGroup.desc.$dirty || formGroup.desc.$touched"  role="alert">
 								<span ng-messages-include="errorPatternThisSpecial"></span>
@@ -47,7 +47,7 @@
 		 <!--button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="#" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 		Add Group</button-->
-         <div class="panel-title">Group</div>
+         <div class="panel-title">Category</div>
       </div>
       
 	  <tree-grid col-defs="col_defs" expand-on="expanding_property" on-click="my_tree_handler(branch)" tree-data="tree_data"></tree-grid>

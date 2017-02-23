@@ -1,6 +1,6 @@
 <h3>
 	
-   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Category</small>
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Brand</small>
 </h3>
 <div data-ng-controller="InvCategoryController as table" class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
@@ -10,14 +10,14 @@
 			<div class="panel-body">
 				<div class="form-group">
 				
-					<label class="col-sm-1 control-label"> Category </label>
+					<label class="col-sm-1 control-label"> Brand </label>
 						<div class="col-sm-4">
 							<select chosen="" data-ng-model="invCategoryData.categoryDropDown" data-ng-options="s.productCategoryName for s in table.categoryDrop track by s.productCategoryId" class="form-control chosen-select"></select>
 						</div>
 						
 					<label class="col-sm-1 control-label"> Name </label>
 						<div class="col-sm-4">
-							<input ng-model="invCategoryData.categoryName" name="categoryName" id="input-id-1" type="text" placeholder="Category Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
+							<input ng-model="invCategoryData.categoryName" name="categoryName" id="input-id-1" type="text" placeholder="Brand Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
 							
 							<span ng-messages="formCategory.categoryName.$error" ng-if="formCategory.categoryName.$dirty || formCategory.categoryName.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -34,7 +34,7 @@
 				<div class="form-group">
 					<label class="col-sm-1 control-label"> Description </label>
 						<div class="col-sm-10">
-							<textarea ng-model="invCategoryData.categoryDesc" name="desc" id="input-id-1" type="text" placeholder="Category Description" class="form-control" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
+							<textarea ng-model="invCategoryData.categoryDesc" name="desc" id="input-id-1" type="text" placeholder="Brand Description" class="form-control" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
 							
 							<span ng-messages="formCategory.desc.$error" ng-if="formCategory.desc.$dirty || formCategory.desc.$touched"  role="alert">
 								<span ng-messages-include="errorPatternThisSpecial"></span>
@@ -55,7 +55,7 @@
 		<!--button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="#" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 		Add Sub Category</button-->
-         <div class="panel-title">Category</div>
+         <div class="panel-title">Brand</div>
       </div>
       
 	  <tree-grid  col-defs="col_defs" expand-on="expanding_property" on-click="my_tree_handler(branch)" tree-data="tree_data"></tree-grid>

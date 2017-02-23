@@ -31,9 +31,10 @@
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
          <tbody>
             <tr data-ng-repeat="user in $data">
+				<td data-title="'Brand'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategory.productCategoryName}}</td>
+				 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroup.productGroupName}}</td>
 				<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
-				<td data-title="'Category'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategory.productCategoryName}}</td>
-			    <td data-title="'Group'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroup.productGroupName}}</td>
+			   
 				<td data-title="'Measurement'" sortable="'measurementUnit'" filter="{ 'measurementUnit': 'text' }" >{{user.measurementUnit}}</td>
 		
 			   <td data-title="'Action'" > 
