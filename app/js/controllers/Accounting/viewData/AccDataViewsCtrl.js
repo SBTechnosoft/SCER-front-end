@@ -641,6 +641,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 				toaster.pop('alert', 'Opps!!', 'No Data Found');
 			}
 				vm.tableParams.reload();
+				vm.tableParams.page(1);
 				
 		
 			});

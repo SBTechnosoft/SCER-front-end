@@ -47,6 +47,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 				}
 				
 				 vm.tableParams.reload();
+				  vm.tableParams.page(1);
 				
 			});
 			
@@ -108,6 +109,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 			else{
 				//console.log('one');
 				 vm.tableParams.reload();
+				 vm.tableParams.page(1);
 			}
 			
 			 

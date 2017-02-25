@@ -102,11 +102,11 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 				
 				if($scope.saleType == "retail_sales"){
 						
-					var purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.margin),noOfDecimalPoints);
+					var purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.margin) + parseFloat(apiData.marginFlat),noOfDecimalPoints);
 					
 					if(purchaseprice == 0){
 			
-						purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.mrp,0,apiData.margin),noOfDecimalPoints);
+						purchaseprice =  $filter('setDecimal')(productArrayFactory.calculate(apiData.mrp,0,apiData.margin) + parseFloat(apiData.marginFlat),noOfDecimalPoints);
 					}
 					
 					var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
@@ -116,7 +116,7 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 				}
 				else if($scope.saleType == "whole_sales"){
 					
-					var purchaseprice = $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.wholesaleMargin),noOfDecimalPoints);
+					var purchaseprice = $filter('setDecimal')(productArrayFactory.calculate(apiData.purchasePrice,0,apiData.wholesaleMargin) + parseFloat(apiData.wholesaleMarginFlat),noOfDecimalPoints);
 					
 					//var vat =0;
 					var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);

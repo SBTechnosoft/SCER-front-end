@@ -9,7 +9,7 @@
     ]
   },
   {
-    "text": "Category",
+    "text": "Brand",
     "sref": "app.InvCategory",
     "icon": "icon-box"
   },
@@ -17,7 +17,7 @@
     "type": "separator"
   },
   {
-    "text": "Group",
+    "text": "Category",
     "sref": "app.InvGroup",
     "icon": "icon-book"
   },

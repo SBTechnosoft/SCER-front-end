@@ -77,6 +77,11 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
     'litre'
   ];
  
+	$scope.displayParseFloat=function(val) {
+		
+		return isNaN(parseFloat(val)) ? 0: parseFloat(val);
+	}
+	
 	$scope.clickSave = function(){
 		
 		var formdata = new FormData();
@@ -91,12 +96,39 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		formdata.append('productGroupId',$scope.addModelProduct.group.productGroupId);
 		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
 		formdata.append('purchasePrice',$scope.addModelProduct.purchasePrice);
-		formdata.append('wholesaleMargin',$scope.addModelProduct.wholesaleMargin);
-		formdata.append('semiWholesaleMargin',$scope.addModelProduct.semiWholesaleMargin);
-		formdata.append('vat',$scope.addModelProduct.vat);
-		formdata.append('additionalTax',$scope.addModelProduct.additionalTax);
-		formdata.append('margin',$scope.addModelProduct.margin);
-		formdata.append('mrp',$scope.addModelProduct.mrp);
+		
+		if($scope.addModelProduct.wholesaleMarginFlat){
+			formdata.append('wholesaleMarginFlat',$scope.addModelProduct.wholesaleMarginFlat);
+		}
+	
+		// formdata.append('wholesaleMarginFlat',$scope.addModelProduct.wholesaleMarginFlat);
+		if($scope.addModelProduct.wholesaleMargin){
+			formdata.append('wholesaleMargin',$scope.addModelProduct.wholesaleMargin);
+		}
+		if($scope.addModelProduct.semiWholesaleMargin){
+			formdata.append('semiWholesaleMargin',$scope.addModelProduct.semiWholesaleMargin);
+		}
+		
+		if($scope.addModelProduct.vat){
+			formdata.append('vat',$scope.addModelProduct.vat);
+		}
+		if($scope.addModelProduct.additionalTax){
+			formdata.append('additionalTax',$scope.addModelProduct.additionalTax);
+		}
+		if($scope.addModelProduct.marginFlat){
+			formdata.append('marginFlat',$scope.addModelProduct.marginFlat);
+		}
+		if($scope.addModelProduct.margin){
+			formdata.append('margin',$scope.addModelProduct.margin);
+		}
+		if($scope.addModelProduct.mrp){
+			formdata.append('mrp',$scope.addModelProduct.mrp);
+		}
+		// formdata.append('vat',$scope.addModelProduct.vat);
+		// formdata.append('additionalTax',$scope.addModelProduct.additionalTax);
+		// formdata.append('marginFlat',$scope.addModelProduct.marginFlat);
+		// formdata.append('margin',$scope.addModelProduct.margin);
+		// formdata.append('mrp',$scope.addModelProduct.mrp);
 		
 		//formdata.append('branchId',1);
 		formdata.append('isDisplay','yes');

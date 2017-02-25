@@ -26,13 +26,35 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
     'kilo',
     'litre'
   ];
-  
+
+	$scope.defaultCompany  = function(){
+			
+		//Set default Company
+		apiCall.getDefaultCompany().then(function(response){
+		
+			$scope.addInvProduct.company = response;
+			
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			//Get Branch
+			apiCall.getCall(getAllBranch).then(function(response4){
+				
+				vm.branchDrop = response4;
+					
+			});
+			
+			formdata.append('companyId',$scope.addInvProduct.company.companyId);
+			
+		});
+	}
+		
 	//Company Dropdown data
 	vm.companyDrop = [];
 	
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 		
 		vm.companyDrop = responseCompanyDrop;
+		
 	
 	});
 	
@@ -67,6 +89,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 			
 			$scope.addInvProduct.name = res.productName;
 			$scope.addInvProduct.productDescription = res.productDescription;
+			$scope.addInvProduct.color = res.color;
+			$scope.addInvProduct.size = res.size;
 			
 			
 			
@@ -93,35 +117,20 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 			
 			
 			$scope.addInvProduct.purchasePrice = res.purchasePrice;
+			$scope.addInvProduct.wholesaleMarginFlat = res.wholesaleMarginFlat;
 			$scope.addInvProduct.wholesaleMargin = res.wholesaleMargin;
 			$scope.addInvProduct.semiWholesaleMargin = res.semiWholesaleMargin;
 			$scope.addInvProduct.vat = res.vat;
 			$scope.addInvProduct.mrp = res.mrp;
 			$scope.addInvProduct.additionalTax = res.additionalTax;
+			$scope.addInvProduct.marginFlat = res.marginFlat;
 			$scope.addInvProduct.margin = res.margin;
 			
 		});
 	}
 	else{
 		
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
-		
-			$scope.addInvProduct.company = response;
-			
-			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+response.companyId;
-			//Get Branch
-			apiCall.getCall(getAllBranch).then(function(response4){
-				
-				vm.branchDrop = response4;
-					
-			});
-			
-			formdata.append('companyId',$scope.addInvProduct.company.companyId);
-			
-		});
-		
+		$scope.defaultCompany();
 	}
 
   // Datepicker
@@ -280,6 +289,11 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 		formdata.append(Fname,value);
 	}
 
+	$scope.displayParseFloat=function(val) {
+		
+		return isNaN(parseFloat(val)) ? 0: parseFloat(val);
+	}
+
 	$scope.pop = function() {
 	
 		if($scope.addInvProduct.getSetProductId){
@@ -333,11 +347,15 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
   $scope.cancel = function() {
 	  
 		$scope.addInvProduct = [];
-	  
+		
+		
 		// Delete formdata  keys
-		for (var key of formdata.keys()) {
-		   formdata.delete(key); 
-		}
+		// for (var key of formdata.keys()) {
+		   // formdata.delete(key); 
+		// }
+		  var formdata = new FormData();
+		
+		$scope.defaultCompany();
 		
 		toaster.pop('info', 'Form Reset', 'Message');
   };

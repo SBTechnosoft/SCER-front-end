@@ -25,17 +25,30 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 		if($scope.stateCheck){
 			
 			apiCall.getCall(apiPath.getOneBranch+$scope.stateCheck.companyId).then(function(response){
-			//console.log(response);
-			data = response;
-			
-			for (var i = 0; i < data.length; i++) {
-			  data[i].cityName = ""; //initialization of new property 
-			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-			}
-			
-			 vm.tableParams.reload();
-
+				
+				//console.log(response);
+				if(apiResponse.noContent == response)
+				{
+					data = [];
+					vm.tableParams.reload();
+					toaster.pop('info', 'Message', 'Data Not Available');
+				}
+				else{
+					
+					data = response;
+				
+					for (var i = 0; i < data.length; i++) {
+					  data[i].cityName = ""; //initialization of new property 
+					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					}
+					
+					 vm.tableParams.reload();
+					  vm.tableParams.page(1);
+				}
+				
 			});
+			
+			
 			
 		}
 		else{
@@ -45,15 +58,23 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 			apiCall.getCall(apiPath.getAllBranch).then(function(response){
 				
 				//console.log(response);
-				data = response;
-				
-				for (var i = 0; i < data.length; i++) {
-				  data[i].cityName = ""; //initialization of new property 
-				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				if(apiResponse.noContent == response)
+				{
+					data = [];
+					vm.tableParams.reload();
+					toaster.pop('info', 'Message', 'Data Not Available');
 				}
-				
-				 vm.tableParams.reload();
-
+				else{
+					data = response;
+					
+					for (var i = 0; i < data.length; i++) {
+					  data[i].cityName = ""; //initialization of new property 
+					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					}
+					
+					 vm.tableParams.reload();
+					  vm.tableParams.page(1);
+				}
 			});
 		}
 		
@@ -90,16 +111,24 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	
 		apiCall.getCall(apiPath.getOneBranch+id).then(function(response){
 			//console.log(response);
-			data = response;
-			
-			for (var i = 0; i < data.length; i++) {
-			  data[i].cityName = ""; //initialization of new property 
-			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+			if(apiResponse.noContent == response)
+			{
+				data = [];
+				$scope.TableData();
+				toaster.pop('info', 'Message', 'Data Not Available');
 			}
-			
-			
-			 $scope.TableData();
-			
+			else{
+				
+				data = response;
+				
+				for (var i = 0; i < data.length; i++) {
+				  data[i].cityName = ""; //initialization of new property 
+				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				}
+				
+				
+				 $scope.TableData();
+			}
 
 		});
 		

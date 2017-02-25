@@ -319,6 +319,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					tempProData.price = parseFloat(data.productTransaction[j].price);
 					tempProData.discount = parseFloat(data.productTransaction[j].discount);
 					tempProData.qty = parseInt(data.productTransaction[j].qty);
+					tempProData.color = data.productTransaction[j].product.color;
+					tempProData.size = data.productTransaction[j].product.size;
 					//tempProData.amount = parseInt(data.productTransaction[j].amount);
 					
 					vm.AccPurchaseTable.push(tempProData);
@@ -344,7 +346,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 			vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 			
-			vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+			vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","color":"","size":""}];
 			vm.productTax = [{"tax":0}];
 			
 			
@@ -413,6 +415,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		data.discount ='';
 		data.qty = 1;
 		data.amount = '';
+		data.color = '';
+		data.size = '';
 		//vm.AccPurchaseTable.push(data);
 		vm.AccPurchaseTable.splice(plusOne,0,data);
 		
@@ -431,11 +435,11 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		
 		var grandPrice;
 
-		grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.margin);
+		grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.margin) + parseFloat(item.marginFlat);
 			
 		if(grandPrice == 0){
 			
-			grandPrice = productArrayFactory.calculate(item.mrp,0,item.margin);
+			grandPrice = productArrayFactory.calculate(item.mrp,0,item.margin) + parseFloat(item.marginFlat);
 		}
 		
 		vm.AccPurchaseTable[index].price = grandPrice;
@@ -443,6 +447,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		//vm.productTax[index].tax = productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
 		vm.productTax[index].tax = parseFloat(item.vat);
 		
+		/** Color/Size **/
+		vm.AccPurchaseTable[index].color = item.color;
+		vm.AccPurchaseTable[index].size = item.size;
+		/** End **/
 		console.log(vm.AccPurchaseTable);
 		$scope.changeProductArray = true;
 	}
@@ -548,7 +556,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""}];
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 		
-		vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":""}];
+		vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","color":"","size":""}];
 		vm.productTax = [{"tax":0}];
 		
 	}
@@ -664,7 +672,15 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
   {
 	  $scope.disableButton = true; //Disbale Button
 	  
-	  toaster.pop('wait', 'Please Wait', 'Data Inserting....');
+	  if($scope.accPurchase.getSetJrnlId){
+		  
+		 toaster.pop('wait', 'Please Wait', 'Data Updating....');
+	  }
+	  else{
+		
+		toaster.pop('wait', 'Please Wait', 'Data Inserting....');
+	  }
+	  
 	  
 	if($scope.totalDebit != $scope.totalCredit){
 	
@@ -918,7 +934,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					vm.AccClientMultiTable = [{"amountType":"debit","ledgerId":"","ledgerName":"","amount":""},{"amountType":"credit","ledgerId":"","ledgerName":"","amount":""}];
 					vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 					
-					vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":"1000","qty":1,"amount":""}];
+					vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":0,"qty":1,"amount":"","color":"","size":""}];
 					vm.productTax = [{"tax":0}];
 					
 					apiCall.getCall(apiPath.getJrnlNext).then(function(response){
@@ -1002,7 +1018,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		
 		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""},{"currentBalance":"","amountType":""}];
 		
-		vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":"1000","qty":1,"amount":""}];
+		vm.AccPurchaseTable = [{"productId":"","productName":"","discountType":"flat","discount":"","price":0,"qty":1,"amount":"","color":"","size":""}];
 		vm.productTax = [{"tax":0}];
 		
 		apiCall.getCall(apiPath.getJrnlNext).then(function(response){

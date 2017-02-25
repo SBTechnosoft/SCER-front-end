@@ -90,7 +90,7 @@ function AddInvStockController($scope,apiCall,apiPath,getSetFactory,$state) {
 		dataSet["fromDate"] = modifyFromDate;
 		dataSet["toDate"] = modifyToDate;
 		dataSet["companyId"] = $scope.invStock.companyDropDown.companyId;
-		if($scope.invStock.productDropDown.productId){
+		if($scope.invStock.productDropDown){
 			
 			dataSet["productId"] = $scope.invStock.productDropDown.productId;
 			

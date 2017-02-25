@@ -147,7 +147,9 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
 					}
 					
+					
 					vm.tableParams.reload();
+					  vm.tableParams.page(1);
 				});
 				
 				$scope.addInvoice.companyDrop.companyId='';

@@ -141,8 +141,9 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 					  data[i].companyName = ""; //initialization of new property 
 					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
 					}
-					console.log(data);
+					
 					vm.tableParams.reload();
+					  vm.tableParams.page(1);
 				});
 				
 				$scope.addquotation.companyDrop.companyId='';

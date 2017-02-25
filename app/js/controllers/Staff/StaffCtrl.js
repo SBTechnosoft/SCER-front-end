@@ -37,6 +37,8 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 					
 					data = [];
 					toaster.pop('alert', 'Opps!!', 'No Staff Available');
+					// vm.tableParams.reload();
+					  // vm.tableParams.page(1);
 					
 				}
 				else{
@@ -48,10 +50,12 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
 					}
 					
-					 $scope.TableData();
 					 
-					 flag = 1;
+					 
+					 
 				}
+				flag = 1;
+				$scope.TableData();
 				
 			});
 	
@@ -129,6 +133,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 				else{
 					
 					vm.tableParams.reload();
+					  vm.tableParams.page(1);
 				}
 				
 				

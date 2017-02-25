@@ -20,7 +20,6 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 	//var getData = { "Content-Type": undefined, "fromDate": "24-02-2016", "toDate": "25-06-2016", "companyId": "50", "productId": "915" };
 	//var CompanyID = getData.companyId;
 	
-	
 	$scope.displayFromDate = getData.fromDate;
 	$scope.displayToDate = getData.toDate;
 	
@@ -28,11 +27,25 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 	
 	delete getData.companyId;
 	
+	
+	var dataSet = angular.copy(getData);
+	 var Path = apiPath.getProductByCompany+CompanyID;
+	 
+	vm.states = [];
+	apiCall.getCallHeader(Path,dataSet).then(function(response){
+			
+		
+		vm.states = response;
+			
+	});
+	
+	
+	
 	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
 		
 		console.log(responseDrop);
 		
-			if(apiResponse.noContent == responseDrop){
+			if(apiResponse.noContent == responseDrop || responseDrop == ""){
 				
 				toaster.pop('info', 'Message', 'No Data Found');
 			
