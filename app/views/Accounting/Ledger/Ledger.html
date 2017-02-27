@@ -251,7 +251,9 @@
 			
 			<fieldset class="my-fieldset-paddingBottom">
 				<button type="button" ng-disabled="form.disableValue" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="showInput()" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id">Cancel</button>
-				<button type="button" ng-disabled="form.disableValue || formLedger.$invalid" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addUpLedger()" >Save</button>
+				<button type="button" ng-disabled="form.disableValue || formLedger.$invalid" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addUpLedger()" >
+					<span ng-if="!ledgerEditId.id" > Insert </span> <span ng-if="ledgerEditId.id" > Update </span>
+				</button>
 			</fieldset>
 		
 	  </div>

@@ -16,6 +16,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.grandTotalTable;
 	$scope.accPurchase.tax = 0;
 	
+	$scope.erpPath = $rootScope.erpPath; // Erp Path
+	
 	$scope.disableCompany = false;
 	
 	 $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....

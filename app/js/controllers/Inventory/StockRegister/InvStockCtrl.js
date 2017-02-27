@@ -7,17 +7,22 @@
 
 App.controller('InvStockController', InvStockController);
 
-function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,$window,apiResponse,toaster) {
+function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,$window,apiResponse,toaster) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
+	 var erpPath = $rootScope.erpPath; //Erp Path
+	 var flag = 0;
+	 $scope.AllTransactionData;
+	 vm.tableParams;
 	$scope.getArray;
 	var data = [];
 	var getData = getSetFactory.get();
-	console.log(getData);
+	//console.log(getData);
 	//return false;
 	
-	//var getData = { "Content-Type": undefined, "fromDate": "24-02-2016", "toDate": "25-06-2016", "companyId": "50", "productId": "915" };
+	//var getData = { "Content-Type": undefined, "fromDate": "1-02-2017", "toDate": "25-02-2017", "companyId": "45", "productId": "1108" };
+	// var getData = { "Content-Type": undefined, "fromDate": "1-02-2017", "toDate": "25-02-2017", "companyId": "45"};
 	//var CompanyID = getData.companyId;
 	
 	$scope.displayFromDate = getData.fromDate;
@@ -29,22 +34,91 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 	
 	
 	var dataSet = angular.copy(getData);
-	 var Path = apiPath.getProductByCompany+CompanyID;
-	 
 	vm.states = [];
-	apiCall.getCallHeader(Path,dataSet).then(function(response){
+	
+	if(dataSet.productId){
+		
+		var Path = apiPath.getAllProduct+'/'+dataSet.productId;
+		
+		apiCall.getCall(Path).then(function(response){
+			
+		//console.log(response);
+		vm.states.push(response);
+		$scope.allProductModel = response;
+		console.log(vm.states);
+		$scope.displayCompany = response.company.companyName;
+			
+		});
+	}
+	else{
+		
+		var Path = apiPath.getProductByCompany+CompanyID;
+		
+		apiCall.getCallHeader(Path,dataSet).then(function(response){
+			
+		console.log(response);
+			vm.states = response;
+			
+			$scope.allProductModel = response[0];
+			
+			console.log(vm.states);
+			$scope.displayCompany = response[0].company.companyName;
+			
+		});
+	}
+	 
+	 
+	$scope.showProduct = function(){
+		
+		toaster.clear();
+		
+		
+		var subFlag = 0;
+		//alert($scope.allProductModel.productId);
+		data = [];
+		var productLength = $scope.AllTransactionData.length;
+		for(var allProductIndex=0;allProductIndex<productLength;allProductIndex++){
+			
+			var singleProductArray = $scope.AllTransactionData[allProductIndex];
 			
 		
-		vm.states = response;
+			if(singleProductArray.length != 0){
+				
+				if(singleProductArray[0].product.productId == $scope.allProductModel.productId)
+				{
+					subFlag = 1;
+					var singleTransactionDataDrop = singleProductArray;
+					
+					//$scope.allProductModel = singleProductArray[0].product;
+					
+					//console.log(singleTransactionData);
+					$scope.calculation(singleTransactionDataDrop);
+					
+					break;
+					
+				}
+			}
 			
-	});
+		}
+		
+		if(subFlag == 0){
+			
+			toaster.pop('info', 'Message', 'No Data Found');
+			vm.tableParams.reload();
+			vm.tableParams.total(data.length);
+			 vm.tableParams.page(1);
+			
+		}
+		
+	}
+	
 	
 	
 	
 	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
 		
 		console.log(responseDrop);
-		
+			
 			if(apiResponse.noContent == responseDrop || responseDrop == ""){
 				
 				toaster.pop('info', 'Message', 'No Data Found');
@@ -57,9 +131,22 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 			}
 			else{
 				
-				console.log(responseDrop[0].company.companyName);
-				$scope.displayCompany = responseDrop[0].company.companyName;
-				$scope.calculation(responseDrop);
+				$scope.AllTransactionData = responseDrop;
+				
+				if(responseDrop[0].length != 0){
+					
+					var singleTransactionData = responseDrop[0];
+					$scope.calculation(singleTransactionData);
+					
+				}
+				else{
+					
+					toaster.pop('info', 'Message', 'No Data Found');
+				}
+				
+				
+				
+				
 			}
 		
 	});
@@ -68,7 +155,7 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
  
 	$scope.calculation = function(responseDrop){
 		
-	
+		console.log('in');
 		var balance = [];
 		var balanceArray = [];
 		
@@ -160,14 +247,14 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 				outward1.price = transData.price;
 				outward1.date = transData.transactionDate;
 				
-				console.log(transData.qty);
-				console.log(balanceArray);
+				//console.log(transData.qty);
+				//console.log(balanceArray);
 				
 				outward.qty = parseInt(transData.qty);  //4
 				outward.price = transData.price;
 				outward.date = transData.transactionDate;
 				
-				console.log(balanceArray);
+				//console.log(balanceArray);
 				if(balanceArray.length == 0){
 					
 					
@@ -259,47 +346,43 @@ function InvStockController($scope, $filter, ngTableParams,getSetFactory,apiCall
 		}
 		
 		
-		$scope.contents = responseDrop;
 		
 		
-		$scope.contents.sort(function(a, b){
+		if(flag == 0){
 			
-			var entDate = a.transactionDate.split("-").reverse().join("-");
-						var toDate = b.transactionDate.split("-").reverse().join("-");
-						var dateA=new Date(entDate), dateB=new Date(toDate);
-						
-			//var dateA=new Date(a.transactionDate), dateB=new Date(b.transactionDate);
-			return dateB-dateA; 
-		});
+			$scope.contents = responseDrop;
+			
+			$scope.contents.sort(function(a, b){
+				
+				var entDate = a.transactionDate.split("-").reverse().join("-");
+							var toDate = b.transactionDate.split("-").reverse().join("-");
+							var dateA=new Date(entDate), dateB=new Date(toDate);
+							
+				//var dateA=new Date(a.transactionDate), dateB=new Date(b.transactionDate);
+				return dateB-dateA; 
+			});
+			
+			data= $scope.contents;
+			
+			console.log('if');
+			$scope.TableData();
+			flag = 1;
+		}
+		else{
+			
+			data= responseDrop;
+			console.log('else');
+			vm.tableParams.reload();
+			vm.tableParams.total(data.length);
+			 vm.tableParams.page(1);
+		}
 		
-		data= $scope.contents;
 		//$scope.getArray = $scope.contents; // CSV Export
-		
-		$scope.TableData();
 		
 		//$scope.getArray = data;
 	}
  
  
-
-  // SORTING
-  // ----------------------------------- 
-
-  // var data = [
-      // {name: "Product1",  category: "Glass", group: "Cup"  },
-	  // {name: "Product2",  category: "Glass", group: "Cup" },
-	  // {name: "Product3",  category: "Glass", group: "Cup" },
-	  // {name: "Product4",  category: "Glass", group: "Cup" },
-	  // {name: "Product5",  category: "Glass", group: "Cup" },
-	  // {name: "Product6",  category: "Glass", group: "Cup" },
-	  // {name: "Product7",  category: "Glass", group: "Cup"},
-	  // {name: "Product8",  category: "Glass", group: "Cup"},
-	  // {name: "Product9",  category: "Glass", group: "Cup" },
-	  // {name: "Product10",  category: "Glass", group: "Cup" },
-	  // {name: "Product11",  category: "Glass", group: "Cup" },
-	  // {name: "Product12",  category: "Glass", group: "Cup" }
-      
-  // ];
 $scope.TableData = function(){
 	
 
@@ -321,7 +404,7 @@ $scope.TableData = function(){
 			  var entDate = a.transactionDate.split("-").reverse().join("-");
 						var toDate = b.transactionDate.split("-").reverse().join("-");
 						var dateA=new Date(entDate), dateB=new Date(toDate);
-          //  var dateA = new Date(a.date), dateB = new Date(b.date);
+         // var dateA = new Date(a.date), dateB = new Date(b.date);
             return dateA - dateB; //sort by date descending
           });
           orderedData = data;
@@ -332,7 +415,7 @@ $scope.TableData = function(){
 			  var entDate = a.transactionDate.split("-").reverse().join("-");
 						var toDate = b.transactionDate.split("-").reverse().join("-");
 						var dateA=new Date(entDate), dateB=new Date(toDate);
-          //  var dateA = new Date(a.date), dateB = new Date(b.date);
+          //var dateA = new Date(a.date), dateB = new Date(b.date);
             return dateB - dateA; //sort by date descending
           });
           orderedData = data;
@@ -360,90 +443,7 @@ $scope.TableData = function(){
   //$scope.getArray = data;
 }
 
-  // FILTERS
-  // ----------------------------------- 
-
-  vm.tableParams2 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      filter: {
-          name: '',
-          age: ''
-          // name: 'M'       // initial filter
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-          // use build-in angular filter
-          var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-          vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(vm.users);
-      }
-  });
-
-  // SELECT ROWS
-  // ----------------------------------- 
-
-  vm.data = data;
-
-  vm.tableParams3 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10          // count per page
-  }, {
-      total: data.length, // length of data
-      getData: function ($defer, params) {
-          // use build-in angular filter
-          var filteredData = params.filter() ?
-                  $filter('filter')(data, params.filter()) :
-                  data;
-          var orderedData = params.sorting() ?
-                  $filter('orderBy')(filteredData, params.orderBy()) :
-                  data;
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-
-  vm.changeSelection = function(user) {
-      // console.info(user);
-  };
-
-  // EXPORT CSV
-  // -----------------------------------  
-
-  var data4 = [{name: "Moroni", age: 50},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34}];
-
-  vm.tableParams4 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-  }, {
-      total: data4.length, // length of data4
-      getData: function($defer, params) {
-          $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
+  
   
   $scope.edit_comp = function()
   {
@@ -458,14 +458,18 @@ $scope.TableData = function(){
 	$scope.generatePdf = function(){
 	 
 		getData.operation = 'pdf';
+		delete getData.authenticationToken;
 		
+		getData.productId = $scope.allProductModel.productId;
+		console.log(getData);
+		//return false;
 		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction/details',getData).then(function(responseDrop){
 		
 			console.log(responseDrop);
 			
 			if(angular.isObject(responseDrop)){
 				
-				var pdfPath = 'http://api.siliconbrain.co.in/'+responseDrop.documentPath;
+				var pdfPath = erpPath+responseDrop.documentPath;
 				$window.open(pdfPath, '_blank');
 			}
 			else{
@@ -478,4 +482,4 @@ $scope.TableData = function(){
 	}
 
 }
-InvStockController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","$window","apiResponse","toaster"];
+InvStockController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","$window","apiResponse","toaster"];

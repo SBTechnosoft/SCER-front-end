@@ -60,6 +60,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       picture:  'app/img/user/08.jpg'
     };
 	
+	$rootScope.erpPath = "http://api.siliconbrain.co.in/";
 	/** Authentication Token & UserName **/
 		
 		//$rootScope.loggedUser = [];

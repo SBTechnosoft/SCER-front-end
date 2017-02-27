@@ -16,7 +16,7 @@
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
         <tbody>
             <tr data-ng-repeat="user in $data">
-				<td   data-title="'Image'"  filter="{ 'companyName': '' }" ><img ng-if="user.logo.documentName" src="http://api.siliconbrain.co.in/{{user.logo.documentUrl}}{{user.logo.documentName}}" height="50" width="70" title="{{user.logo.documentName}}" /> 
+				<td   data-title="'Image'"  filter="{ 'companyName': '' }" ><img ng-if="user.logo.documentName" src="{{erpPath}}{{user.logo.documentUrl}}{{user.logo.documentName}}" height="50" width="70" title="{{user.logo.documentName}}" /> 
 					<img ng-if="!user.logo.documentName" src="app/img/noImage.jpg" height="50" width="70"  />
 				</td>
 				<td data-title="'Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.companyName}}</td>

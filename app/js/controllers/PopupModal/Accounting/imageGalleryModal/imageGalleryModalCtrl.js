@@ -18,7 +18,7 @@ function imageGalleryModalCtrl($scope, $modalInstance,$rootScope,$http,apiCall,a
 	 $scope.formatType = formatType;
 	 $scope.transType = transType;
 	 
-	
+	$scope.erpPath = $rootScope.erpPath; // Erp Path
 	
 		$scope.stockModel=[];
  

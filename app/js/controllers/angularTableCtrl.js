@@ -17,10 +17,10 @@ function AngularTableController($rootScope,$scope, $filter,$http, ngTableParams,
 	 $location.path('app/form-inputs'); 
   }
 	 var data = [];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response){
-		 data = response;
-		 $scope.TableData();
-	});
+	// apiCall.getCall(apiPath.getAllCompany).then(function(response){
+		 // data = response;
+		 // $scope.TableData();
+	// });
  
 	$scope.TableData = function()
 	{

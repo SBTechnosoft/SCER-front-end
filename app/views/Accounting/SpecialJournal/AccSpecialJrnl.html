@@ -114,7 +114,9 @@
 	<textarea  name="address" ng-model="remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
 	<br />
 	<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" ng-disabled="formSpecialJrnl.$invalid" >Save</button>
+	<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" ng-disabled="formSpecialJrnl.$invalid" >
+		<span ng-if="!addAccJrnl.getSetJrnlId" > Insert </span> <span ng-if="addAccJrnl.getSetJrnlId" > Update </span>
+	</button>
 			
     </form>
    <!-- END panel-->

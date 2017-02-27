@@ -11,7 +11,9 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
   var vm = this;
    var formdata = new FormData();
    
- 
+	
+	 $scope.erpPath = $rootScope.erpPath; // Erp Path
+	 
   //Go To AddCompany
 	$scope.GoToAddCompany = function(){
 	  

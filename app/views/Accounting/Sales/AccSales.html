@@ -147,26 +147,24 @@
 						<td></td>
 					</tr>
 					<tr>
-						<td>Total</td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
+						<td colspan="2" style="text-align:left"  > <strong> Total </strong></td>
 						<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
 						<td></td>
 					</tr>
 					<tr>
-						<td>Tax</td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
+						<td colspan="2" style="text-align:left"  > <strong> Tax </strong></td>
 						<!--td>	<input id="input-id-1" name="tax" type="text" ng-model="accSales.tax" ng-change="changeAccSales('tax',accSales.tax)" class="form-control"  dir="rtl"  ng-pattern="/^[0-9]*$/" /> 
 						
 							<span ng-messages="formSales.tax.$error" ng-if="formSales.tax.$dirty || formSales.tax.$touched"  role="alert">
@@ -179,14 +177,13 @@
 						<td></td>
 					</tr>
 					<tr>
-						<td>Grand Total</td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>
-						<td></td>
+						<td colspan="2" style="text-align:left"  > <strong> Grand Total </strong></td>
 						<td style="text-align:right">{{grandTotalTable = (totalTable -- accSales.tax | setDecimal: noOfDecimalPoints)}}</td>
 						<td></td>
 					</tr>
@@ -358,9 +355,9 @@
 				<input type="file" ng-model="accSales.attach" onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
 			</div>
 			<div class="col-sm-10">
-				<a href="http://api.siliconbrain.co.in/{{item.documentUrl}}{{item.documentName}}" target="_blank" ng-repeat="item in accSales.documentData" >
+				<a href="{{erpPath}}{{item.documentUrl}}{{item.documentName}}" target="_blank" ng-repeat="item in accSales.documentData" >
 				
-					<img src="http://api.siliconbrain.co.in/{{item.documentUrl}}{{item.documentName}}" height="130" width="150" class="brand-logo-collapsed" style="margin-bottom: 5px;margin-right:5px"  />
+					<img src="{{erpPath}}{{item.documentUrl}}{{item.documentName}}" height="130" width="150" class="brand-logo-collapsed" style="margin-bottom: 5px;margin-right:5px"  />
 					
 				</a>
 			</div>

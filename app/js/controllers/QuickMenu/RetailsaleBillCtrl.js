@@ -6,12 +6,15 @@
 
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$log,$rootScope,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse) {
+function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse) {
   'use strict';
  
 	
 	var vm = this;
 	var formdata = new FormData();
+	
+	 $scope.erpPath = $rootScope.erpPath; //Erp Path
+	 
 	$scope.quickBill = [];
 	
 	vm.disableCompany = false;
@@ -441,10 +444,15 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value);
+		if(value != "" && value != undefined){
+			
+			formdata.append(Fname,value);
+		}
+		
 		
 		if(Fname == 'contactNo')
 		{
+			console.log(Fname+'..'+value);
 			formdata.delete('workNo');
 			formdata.delete('companyName');
 			formdata.delete('clientName');
@@ -868,7 +876,7 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 				
 				if(generate == 'generate'){
 					
-					var pdfPath = 'http://api.siliconbrain.co.in/'+data.documentPath;
+					var pdfPath = $scope.erpPath+data.documentPath;
 					$window.open(pdfPath, '_blank');
 				}
 				else{
@@ -1072,12 +1080,22 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 				formdata.delete('address2');
 				
 				
-			
+				 if($scope.quickBill.WorkNo){
+					 
 				  formdata.append('workNo',$scope.quickBill.WorkNo);
-				  formdata.append('companyName',$scope.quickBill.companyName);
-				  formdata.append('clientName',$scope.quickBill.clientName);
+				 }
 				 
+				  if($scope.quickBill.companyName){
+					  
+					formdata.append('companyName',$scope.quickBill.companyName);
+				  }
+				  
+				  formdata.append('clientName',$scope.quickBill.clientName);
+				  
+				 if($scope.quickBill.emailId){
+					 
 				  formdata.append('emailId',$scope.quickBill.emailId);
+				 }
 				  
 				  if($scope.quickBill.fisrtAddress){
 					 
@@ -1115,6 +1133,8 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
 	
 		$scope.goToNextPrevious = function(nextPre){
 			
+				toaster.clear();
+				
 				var preHeaderData = {'Content-Type': undefined,'companyId':$scope.quickBill.companyDropDown.companyId};
 				
 				if($scope.saleType == 'RetailsaleBill'){
@@ -1475,4 +1495,4 @@ function RetailsaleBillController($scope,apiCall,apiPath,$http,$window,$modal,$l
   Product Model End
   **/
 }
-RetailsaleBillController.$inject = ["$scope","apiCall","apiPath","$http","$window","$modal", "$log","$rootScope","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse"];
+RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse"];

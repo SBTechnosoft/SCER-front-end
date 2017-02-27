@@ -14,6 +14,9 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
    //alert($state.current.templateUrl);
   var vm = this;   
   $scope.accSales = [];
+  
+  $scope.erpPath = $rootScope.erpPath; // Erp Path
+  
   var formdata = new FormData();
   $scope.totalTable;
   $scope.grandTotalTable;

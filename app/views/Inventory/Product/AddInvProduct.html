@@ -101,7 +101,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Product Description</label>
                   <div class="col-sm-5">
-                     <textarea id="input-id-1" name="productDescription" ng-model="addInvProduct.productDescription" ng-change="changeInvProductData('productDescription',addInvProduct.productDescription)" type="text" placeholder="Product Description" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" ></textarea>
+                     <textarea id="input-id-1" name="productDescription" ng-model="addInvProduct.productDescription" ng-change="changeInvProductData('productDescription',addInvProduct.productDescription)" type="text" placeholder="Product Description" class="form-control" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" ></textarea>
 					 
 					<span ng-messages="formProduct.productDescription.$error" ng-if="formProduct.productDescription.$dirty || formProduct.productDescription.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -256,7 +256,10 @@
             </fieldset>
 			
 			 <button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
-			 <button type="button" class="mr mb-sm btn btn-success pull-right" data-ng-click="pop()" ng-disabled="formProduct.$invalid" >Save</button>
+			 <button type="button" class="mr mb-sm btn btn-success pull-right" data-ng-click="pop()" ng-disabled="formProduct.$invalid" >
+				 <span ng-if="!addInvProduct.getSetProductId" >Insert</span> 
+				 <span ng-if="addInvProduct.getSetProductId" >Update</span>
+			 </button>
          </form>
       </div>
    </div>

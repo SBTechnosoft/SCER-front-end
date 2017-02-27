@@ -7,9 +7,9 @@
 		<div class="row-masonry row-masonry-xl-3 row-masonry-lg-4 row-masonry-md-3 row-masonry-sm-2" ng-if="formatType == 'image'">
 			
 			<div class="col-masonry" ng-repeat="user in billData.file"   ng-if="user.documentFormat == 'png' || user.documentFormat == 'jpg' || user.documentFormat == 'jpeg'" >
-				<a href="http://api.siliconbrain.co.in/{{user.documentUrl}}/{{user.documentName}}" target="_blank" >
+				<a href="{{erpPath}}{{user.documentUrl}}/{{user.documentName}}" target="_blank" >
 				
-					<img src="http://api.siliconbrain.co.in/{{user.documentUrl}}/{{user.documentName}}" alt="" class="img-thumbnail img-responsive" />
+					<img src="{{erpPath}}{{user.documentUrl}}/{{user.documentName}}" alt="" class="img-thumbnail img-responsive" />
 				
 				</a>
 			</div>
@@ -31,7 +31,7 @@
 					<td>{{user.documentId}}</td>
 					<td>{{user.documentName}}</td>
 					<td> 
-						<a  href="http://api.siliconbrain.co.in/{{user.documentUrl}}/{{user.documentName}}" class="mr btn btn-labeled btn-default" target="_blank">Open
+						<a  href="{{erpPath}}{{user.documentUrl}}/{{user.documentName}}" class="mr btn btn-labeled btn-default" target="_blank">Open
 						   <span class="btn-label btn-label-right"><i class="fa fa-arrow-right"></i>
 						   </span>
 						</a>

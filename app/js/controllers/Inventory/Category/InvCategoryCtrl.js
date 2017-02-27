@@ -273,7 +273,11 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 		if($scope.invCategoryData.categoryDropDown)
 		{
 			formdata.append('productCategoryName',$scope.invCategoryData.categoryName);
-			formdata.append('productCategoryDescription',$scope.invCategoryData.categoryDesc);
+			
+			if($scope.invCategoryData.categoryDesc){
+				formdata.append('productCategoryDescription',$scope.invCategoryData.categoryDesc);
+			}
+			
 			formdata.append('productParentCategoryId',$scope.invCategoryData.categoryDropDown.productCategoryId);
 			formdata.append('isDisplay','yes');
 			
@@ -281,7 +285,11 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 		else{
 			
 			formdata.append('productCategoryName',$scope.invCategoryData.categoryName);
-			formdata.append('productCategoryDescription',$scope.invCategoryData.categoryDesc);
+			
+			if($scope.invCategoryData.categoryDesc){
+				formdata.append('productCategoryDescription',$scope.invCategoryData.categoryDesc);
+			}
+			
 			formdata.append('productParentCategoryId','');
 			formdata.append('isDisplay','yes');
 		}
@@ -324,6 +332,20 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 		
 	 }
  
+	$scope.cancel = function(){
+		
+		$scope.invCategoryData = [];
+		
+		apiCall.getCall(apiPath.getAllCategory).then(function(response){
+				
+			vm.categoryDrop = response;
+			var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+			$scope.tree_data = myTreeData2;
+		
+		});
+		
+		var formdata = new FormData();
+	}
  
 
   // SORTING

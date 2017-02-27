@@ -57,7 +57,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Product Description</label>
                   <div class="col-sm-6">
-                     <textarea id="input-id-1" name="productDescription" ng-model="addModelProduct.productDescription" type="text" tabindex="2" placeholder="Product Description" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" ></textarea>
+                     <textarea id="input-id-1" name="productDescription" ng-model="addModelProduct.productDescription" type="text" tabindex="2" placeholder="Product Description" class="form-control" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" ></textarea>
 					 
 					<span ng-messages="formProduct.productDescription.$error" ng-if="formProduct.productDescription.$dirty || formProduct.productDescription.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>

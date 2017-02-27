@@ -6,11 +6,12 @@
 	
 App.controller('PriceListRetailSalesController', PriceListRetailSalesController);
 
-function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,saleType,$window,productArrayFactory,toaster,apiResponse) {
+function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParams,getSetFactory,apiCall,apiPath,saleType,$window,productArrayFactory,toaster,apiResponse) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
-	
+	 var erpPath = $rootScope.erpPath; //Erp Path
+	 
 	$scope.saleType = saleType;
 	
  var data = [];
@@ -378,7 +379,7 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
 			
 			if(angular.isObject(responseDrop)){
 				
-				var pdfPath = 'http://api.siliconbrain.co.in/'+responseDrop.documentPath;
+				var pdfPath = erpPath+responseDrop.documentPath;
 				$window.open(pdfPath, '_blank');
 			}
 			else{
@@ -432,4 +433,4 @@ function PriceListRetailSalesController($scope, $filter, ngTableParams,getSetFac
   
 
 }
-PriceListRetailSalesController.$inject = ["$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","saleType","$window","productArrayFactory","toaster","apiResponse"];
+PriceListRetailSalesController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","getSetFactory","apiCall","apiPath","saleType","$window","productArrayFactory","toaster","apiResponse"];

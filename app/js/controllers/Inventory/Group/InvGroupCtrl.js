@@ -19,6 +19,29 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
 	
 	/* VALIDATION END */
+	// apiCall.deleteCall(apiPath.getAllGroup+'/'+62).then(function(response){
+						
+						// if(apiResponse.ok == response){
+							
+							// console.log(response);
+							// toaster.pop('success', 'Title', 'Delete SuccessFully');
+							
+							// vm.groupDrop = [];
+							// apiCall.getCall(apiPath.getAllGroup).then(function(response){
+								
+								// vm.groupDrop = response;
+								// var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+								// $scope.tree_data = myTreeData2;
+								
+							// });
+						
+						// }
+						// else{
+				
+							// toaster.pop('warning', 'Opps!!', response);
+						// }
+			
+					// });
 	
 	var tree;
 
@@ -105,6 +128,7 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 		vm.groupDrop = [];
 		apiCall.getCall(apiPath.getAllGroup).then(function(response){
 			
+			console.log(response);
 			vm.groupDrop = response;
 			var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
 			$scope.tree_data = myTreeData2;
@@ -118,7 +142,9 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 			{
 				console.log('yes');
 				formdata.append('productGroupName',$scope.invGroupData.groupName);
-				formdata.append('productGroupDescription',$scope.invGroupData.groupDesc);
+				if($scope.invGroupData.groupDesc){
+					formdata.append('productGroupDescription',$scope.invGroupData.groupDesc);
+				}
 				formdata.append('productGroupParentId',$scope.invGroupData.groupDropDown.productGroupId);
 				formdata.append('isDisplay','yes');
 				
@@ -126,7 +152,10 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 			else{
 				console.log('no');
 				formdata.append('productGroupName',$scope.invGroupData.groupName);
-				formdata.append('productGroupDescription',$scope.invGroupData.groupDesc);
+				if($scope.invGroupData.groupDesc){
+					formdata.append('productGroupDescription',$scope.invGroupData.groupDesc);
+				}
+				
 				formdata.append('productGroupParentId','');
 				formdata.append('isDisplay','yes');
 			}
@@ -167,7 +196,21 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 			});
 		
 	 }
+	
+	$scope.cancel = function(){
 		
+		$scope.invGroupData = [];
+		
+		apiCall.getCall(apiPath.getAllGroup).then(function(response){
+					
+			vm.groupDrop = response;
+			var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+			$scope.tree_data = myTreeData2;
+		
+		});
+					
+		var formdata = new FormData();
+	}
 
   // SORTING
   // ----------------------------------- 

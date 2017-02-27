@@ -50,7 +50,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Contact</label>
 						  <div class="col-sm-8">
-							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"   ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10" ng-required="true" auto-focus only-number />
+							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Contact(JS)" class="form-control" dir="rtl" name="contactNo"   ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10"  auto-focus only-number />
 							 
 							<span ng-messages="formBill.contactNo.$error" ng-if="formBill.contactNo.$dirty || formBill.contactNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -68,7 +68,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Work#</label>
 						  <div class="col-sm-8">
-							 <input ng-model="quickBill.WorkNo" name="WorkNo" id="input-id-1" type="tel" placeholder="Work Number" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" ng-change="changeInBill('workNo',quickBill.WorkNo)" only-number />
+							 <input ng-model="quickBill.WorkNo" name="WorkNo" id="input-id-1" type="tel" placeholder="Work Number" class="form-control" dir="rtl"  ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" ng-change="changeInBill('workNo',quickBill.WorkNo)" only-number />
 							 
 							<span ng-messages="formBill.WorkNo.$error" ng-if="formBill.WorkNo.$dirty || formBill.WorkNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -86,7 +86,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">Company Name</label>
 						  <div class="col-sm-8">
-							 <input ng-model="quickBill.companyName" name="companyName" id="input-id-1" type="text" placeholder="Company Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" ng-change="changeInBill('companyName',quickBill.companyName)" />
+							 <input ng-model="quickBill.companyName" name="companyName" id="input-id-1" type="text" placeholder="Company Name" class="form-control" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" ng-change="changeInBill('companyName',quickBill.companyName)" />
 							 
 							 <span ng-messages="formBill.companyName.$error" ng-if="formBill.companyName.$dirty || formBill.companyName.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -128,7 +128,7 @@
 							<div class="col-sm-8">
 								<div class="input-group m-b">
 									<span class="input-group-addon">@</span>
-									<input ng-model="quickBill.emailId" name="emailId" type="email" placeholder="Email ID" class="form-control" ng-required="true" ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" ng-change="changeInBill('emailId',quickBill.emailId)" />
+									<input ng-model="quickBill.emailId" name="emailId" type="email" placeholder="Email ID" class="form-control"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" ng-change="changeInBill('emailId',quickBill.emailId)" />
 									
 								</div>
 								
@@ -299,7 +299,6 @@
 					<td></td>
 				</tr>
 				<tr>
-					<td>Total</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -307,12 +306,13 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
+					
+					<td colspan="2" style="text-align:left"  > <strong>Total </strong></td>
 					<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
 					<td></td>
 				</tr>
 				<tr>
-					<td>Tax</td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -320,8 +320,8 @@
 					<td></td>
 				
 					<td></td>
-					<td></td>
-					<td></td>
+					
+					<td colspan="2" style="text-align:left"  > <strong>Tax </strong></td>
 					<!--td>
 						<input id="input-id-1" name="tax" type="text" ng-model="quickBill.tax"  class="form-control"  dir="rtl" ng-pattern="/^[0-9]*$/" /> 
 						<span ng-messages="formBill.tax.$error" ng-if="formBill.tax.$dirty || formBill.tax.$touched"  role="alert">
@@ -332,7 +332,6 @@
 					<td></td>
 				</tr>
 				<tr>
-					<td>Grand Total</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -340,12 +339,11 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
+					<td colspan="2" style="text-align:left"  > <strong> Grand Total </strong></td>
 					<td style="text-align:right">{{grandTotalTable = (totalTable -- quickBill.tax | setDecimal: noOfDecimalPoints)}}</td>
 					<td></td>
 				</tr>
 				<tr colspan="5">
-					<td>Advance</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -353,8 +351,8 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
-					<td>
+					<td colspan="2" style="text-align:left"  > <strong> Advance </strong></td>
+					<td >
 						<input id="input-id-1" type="text" name="advance" ng-model="quickBill.advance"  class="form-control"  dir="rtl" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductAdvance()" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">
 							<span ng-messages-include="errorPatternNumber"></span>
@@ -363,7 +361,6 @@
 					<td></td>
 				</tr>
 				<tr colspan="5">
-					<td>Balance</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -371,7 +368,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
+					<td colspan="2" style="text-align:left"  > <strong> Balance </strong></td>
 					<td style="text-align:right">{{balanceTable = (grandTotalTable-quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
 					<td></td>
 				</tr>
@@ -395,6 +392,20 @@
 					</fieldset>
 				</div>
 				<div class="col-sm-6">
+					
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group">
+							<label for="input-id-1" class="col-sm-3 control-label">Remark</label>
+							<div class="col-sm-8">
+								<textarea rows="1" ng-model="quickBill.remark" name="address"  placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched" ng-change="changeInBill('remark',quickBill.remark)"></textarea>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			
+			<div class="col-sm-12">
+				<div class="col-sm-6">
 					<fieldset class="my-fieldset-paddingBottom" ng-if="quickBill.paymentMode=='bank'">
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label"> Bank Name </label>
@@ -402,19 +413,6 @@
 								<select chosen="" data-ng-model="quickBill.BankName" data-ng-options="s for s in form.bankDrop" class="form-control chosen-select" size="5" ng-required="true" ng-change="changeInBill('bankName',quickBill.BankName)"></select>
 							</div>
 					   </div>
-					</fieldset>
-				</div>
-			</div>
-			
-			<div class="col-sm-12">
-				<div class="col-sm-6">
-					<fieldset class="my-fieldset-paddingBottom">
-						<div class="form-group">
-							<label for="input-id-1" class="col-sm-3 control-label">Remark</label>
-							<div class="col-sm-8">
-								<textarea ng-model="quickBill.remark" name="address"  placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched" ng-change="changeInBill('remark',quickBill.remark)"></textarea>
-							</div>
-						</div>
 					</fieldset>
 				</div>
 				<div class="col-sm-6">
@@ -440,7 +438,7 @@
 					</div>
 					
 					<div class="col-sm-10">
-							<img src="http://api.siliconbrain.co.in/{{item.documentUrl}}{{item.documentName}}" ng-repeat="item in quickBill.documentData" ng-if="item.documentType != 'bill'" height="130" width="150" class="brand-logo-collapsed" />
+							<img src="{{erpPath}}{{item.documentUrl}}{{item.documentName}}" ng-repeat="item in quickBill.documentData" ng-if="item.documentType != 'bill'" height="130" width="150" class="brand-logo-collapsed" />
 							&nbsp;
 					</div>
 					

@@ -14,6 +14,8 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
   var flag = 0;
   $scope.noOfDecimalPoints;
   $scope.displayCompany;
+  
+  var erpPath = $rootScope.erpPath;
    $scope.displayDate = new Date();
   
 	$scope.showBranches = function(){
@@ -65,11 +67,13 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
   
 	$scope.getBranch = function(id){
 		
+	toaster.pop('wait', 'Please Wait', 'Data Loading....');
 	
 		apiCall.getCall(apiPath.getTrailBalance+id).then(function(response){
 			
 			console.log(response);
 			//data = response;
+			toaster.clear();
 			
 			var trialBalanceArray = [];
 			var totaldebit = 0;
@@ -302,7 +306,7 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 				
 				if(angular.isObject(responseDrop)){
 					
-					var pdfPath = 'http://api.siliconbrain.co.in/'+responseDrop.documentPath;
+					var pdfPath = erpPath+responseDrop.documentPath;
 					$window.open(pdfPath, '_blank');
 				}
 				else{

@@ -13,6 +13,8 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
   var formdata = new FormData();
   $scope.billData = [];
   
+   var erpPath = $rootScope.erpPath; //Erp Path
+   
 	/** Display Company and date **/
 		apiCall.getCall(apiPath.getAllCompany+'/'+$rootScope.accView.companyId).then(function(res){
 			
@@ -664,7 +666,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 					
 					toaster.pop('success', 'Title', 'Generate Pdf Successfully');
 					
-					var pdfPath = 'http://api.siliconbrain.co.in/'+response.documentPath;
+					var pdfPath = erpPath+response.documentPath;
 					$window.open(pdfPath, '_blank');
 					
 					$scope.reLoadPdfData();

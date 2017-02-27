@@ -23,8 +23,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
   // ----------------------------------- 
 		
   this.measureUnitDrop = [
-    'kilo',
-    'litre'
+    'piece',
+    'pair'
   ];
 
 	$scope.defaultCompany  = function(){
