@@ -87,6 +87,12 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 		'credit'
 	  ];
 	  
+	  $scope.ledgerForm.amountType = 'debit';
+	  $scope.ledgerForm.openingBal = 0;
+	  
+	  formdata.append('amountType',$scope.ledgerForm.amountType);
+		formdata.appned('amount',$scope.ledgerForm.openingBal);
+		
 	//Changed Data When Update
 	$scope.changeLedgerData = function(Fname,value){
 		//console.log(Fname+'..'+value);

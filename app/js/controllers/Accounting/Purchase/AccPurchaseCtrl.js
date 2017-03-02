@@ -3,7 +3,17 @@
  * Module: AccPurchaseController.js
  * Controller for input components
  =========================================================*/
+// function filterByName(item, typedValue) {
+	// console.log(item);
+    // return item.filter(function(patient) {
+        // matches_productName = patient.productName.indexOf(typedValue) != -1;
+        // matches_color = patient.color.indexOf(typedValue) != -1;
 
+        // return matches_productName || matches_color;
+    // });
+// }
+
+	
 App.controller('AccPurchaseController', AccPurchaseController);
 
 function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
@@ -59,6 +69,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	/**
 		End
 	**/
+	
+	//$scope.filterByName = filterByName;
 	
 	// ----------------------------------- 
 
@@ -1223,7 +1235,6 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
   *
   **/
   
-  
   /**
   Product Model Start
   **/
@@ -1232,8 +1243,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	if($scope.accPurchase.companyDropDown){
 		
 		var modalInstance = $modal.open({
-		  templateUrl: 'app/views/PopupModal/Accounting/productModal.html',
-		  controller: AccProductModalController,
+		  templateUrl: 'app/views/PopupModal/Delete/deleteModal.html',
+		  controller: deleteDataModalController,
 		  size: size,
 		  resolve:{
 			  productIndex: function(){

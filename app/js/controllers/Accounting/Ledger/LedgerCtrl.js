@@ -54,6 +54,16 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			formdata.append('companyId',response.companyId);
 			
 		});
+		
+		formdata.delete('amountType');
+		formdata.delete('amount');
+		
+		$scope.ledgerForm.amountType = 'debit';
+		$scope.ledgerForm.openingBal = 0;
+		
+		formdata.append('amountType',$scope.ledgerForm.amountType);
+		formdata.appned('amount',$scope.ledgerForm.openingBal);
+		
 	}
 	
 	//View Single Ledger In Readonly Mode
@@ -252,7 +262,8 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	'credit'
   ];
   
-  $scope.ledgerForm.amountType = 'Credit';
+  
+	 
 	//Get Company
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response3){

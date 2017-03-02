@@ -6,11 +6,12 @@
 
 App.controller('CompanyController', CompanyController);
 
-function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster) {
+function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,$modal) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
    
+   $scope.companyradio='ok';
 	
 	 $scope.erpPath = $rootScope.erpPath; // Erp Path
 	 
@@ -173,18 +174,50 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
       }
   });
   
-  $scope.isDefault_comp = function(id)
+  $scope.isDefault_comp = function(id,companyStatus)
   {
-	formdata.append('isDefault','ok');
-	var editCompany2 = apiPath.getAllCompany+'/'+id;
-		
-		apiCall.postCall(editCompany2,formdata).then(function(response5){
-		
-			formdata.delete('isDefault');
-			//$location.path('app/Company');
-			//toaster.pop('success', 'Title', 'Message');
-		
-		});
+	
+	  toaster.clear();
+	  
+	  if(companyStatus == 'not'){
+		  
+	 
+			formdata.append('isDefault','ok');
+			var editCompany2 = apiPath.getAllCompany+'/'+id;
+			
+			apiCall.postCall(editCompany2,formdata).then(function(response5){
+			
+				console.log(response5);
+				
+				//$location.path('app/Company');
+				if(apiResponse.ok == response5){
+					
+					toaster.pop('success', '', 'Default Company Successfully Changed');
+					
+					apiCall.getCall(apiPath.getAllCompany).then(function(response){
+				
+						data = [];
+						data = response;
+						for (var i = 0; i < data.length; i++) {
+						  data[i].cityName = ""; //initialization of new property 
+						  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+						}
+						vm.tableParams.reload();
+					});
+				}
+				else{
+					
+					toaster.pop('warning', 'Opps!!', response5);
+				}
+				
+				formdata.delete('isDefault');
+				
+			});
+	  }
+	  else{
+		  
+		  toaster.pop('info', '', 'Company Already Seleted');
+	  }
   }
   
   $scope.edit_comp = function(id)
@@ -193,39 +226,62 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	  $location.path('app/AddCompany/'+id);
   }
   
-  $scope.delete_comp = function(id)
+  $scope.delete_comp = function(size,id)
   {
 	  //alert(id);
 	  
 	  //return false;
-	var deletePath = apiPath.getAllCompany+'/'+id;
 	  
-	apiCall.deleteCall(deletePath).then(function(deleteres){
-		
-		console.log(deleteres);
-		
-		if(apiResponse.ok == deleteres){
+	  toaster.clear();
+	
+	var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+		  controller: deleteDataModalController,
+		  size: size
+		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		 console.log('ok');
+		 
+		// return false;
+		 /**Delete Code **/
+			var deletePath = apiPath.getAllCompany+'/'+id;
+	  
+			apiCall.deleteCall(deletePath).then(function(deleteres){
 				
-			toaster.pop('success', 'Title', 'Delete Successfully');
-			
-			apiCall.getCall(apiPath.getAllCompany).then(function(response){
+				console.log(deleteres);
 				
-				data = [];
-				data = response;
-				for (var i = 0; i < data.length; i++) {
-				  data[i].cityName = ""; //initialization of new property 
-				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				if(apiResponse.ok == deleteres){
+						
+					toaster.pop('success', 'Title', 'Delete Successfully');
+					
+					apiCall.getCall(apiPath.getAllCompany).then(function(response){
+						
+						data = [];
+						data = response;
+						for (var i = 0; i < data.length; i++) {
+						  data[i].cityName = ""; //initialization of new property 
+						  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+						}
+						vm.tableParams.reload();
+					});
 				}
-				vm.tableParams.reload();
+				else{
+					
+					toaster.pop('warning', 'Opps!!', deleteres);
+				}
+			 
 			});
-		}
-		else{
-			
-			toaster.pop('warning', 'Opps!!', deleteres);
-		}
-	 
-	});
+		 /** End **/
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+	
   }
 
 }
-CompanyController.$inject = ["$rootScope","$scope", "$filter","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster"];
+CompanyController.$inject = ["$rootScope","$scope", "$filter","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","$modal"];

@@ -35,11 +35,10 @@
 						<div class="col-sm-8">
 							<div class="input-group m-b">
 								<span class="input-group-addon">@</span>
-								<input type="email" tabindex="2" name="emailId" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" placeholder="Email ID" class="form-control" ng-required="true" ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
+								<input type="email" tabindex="2" name="emailId" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" placeholder="Email ID" class="form-control"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
 							</div>
 							
 							<span ng-messages="formLedger.emailId.$error" ng-if="formLedger.emailId.$dirty || formLedger.emailId.$touched"  role="alert">
-								<span ng-messages-include="errorRequired"></span>
 								<span ng-messages-include="errorEmail"></span>
 							</span>
 							

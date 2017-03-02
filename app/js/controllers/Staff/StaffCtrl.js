@@ -6,7 +6,7 @@
 
 App.controller('StaffController', StaffController);
 
-function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory) {
+function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory,$modal) {
   'use strict';
   var vm = this;
 	var data = [];
@@ -211,11 +211,25 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		$state.go("app.AddStaff");
 	}
 	  
-	 $scope.deleteStaff = function(id)
+	 $scope.deleteStaff = function(size,id)
 	 {
 		
-		
-		var deletePath = apiPath.getAllStaff+'/'+parseInt(id);
+		toaster.clear();
+	
+	var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+		  controller: deleteDataModalController,
+		  size: size
+		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		 console.log('ok');
+		 
+		// return false;
+		 /**Delete Code **/
+			var deletePath = apiPath.getAllStaff+'/'+parseInt(id);
 		  
 		apiCall.deleteCall(deletePath).then(function(deleteres){
 			
@@ -225,19 +239,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 					
 				toaster.pop('success', 'Title', 'Delete Successfully');
 				
-				apiCall.getCall(apiPath.getAllStaff).then(function(response){
-					
-					//console.log(response);
-					data = response;
-					
-					for (var i = 0; i < data.length; i++) {
-					  data[i].cityName = ""; //initialization of new property 
-					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-					}
-					
-					vm.tableParams.reload();
-					 
-				});
+				$scope.showFilterStaff();
 			}
 			else{
 				
@@ -245,7 +247,14 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 			}
 		 
 		});
+		 /** End **/
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+		
 	}
 
 }
-StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory"];
+StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal"];

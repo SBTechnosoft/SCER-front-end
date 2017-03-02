@@ -6,7 +6,7 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster) {
+function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster,$modal) {
   'use strict';
   var vm = this;
   var data = [];
@@ -308,40 +308,51 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	   $state.go("app.AddBranch", { id: branch_id });
   }
   
-  $scope.deleteBranch = function(branch_id)
+  $scope.deleteBranch = function(size,branch_id)
   {
 	
-	var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
+	toaster.clear();
+	
+	var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+		  controller: deleteDataModalController,
+		  size: size
+		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		 console.log('ok');
+		 
+		// return false;
+		 /**Delete Code **/
+			var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
 	  
-	apiCall.deleteCall(deletePath).then(function(deleteres){
-		
-		console.log(deleteres);
-		
-		if(apiResponse.ok == deleteres){
+			apiCall.deleteCall(deletePath).then(function(deleteres){
 				
-			toaster.pop('success', 'Title', 'Delete Successfully');
-			
-			apiCall.getCall(apiPath.getAllBranch).then(function(response){
+				console.log(deleteres);
 				
-				//console.log(response);
-				data = response;
-				
-				for (var i = 0; i < data.length; i++) {
-				  data[i].cityName = ""; //initialization of new property 
-				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				if(apiResponse.ok == deleteres){
+						
+					toaster.pop('success', 'Title', 'Delete Successfully');
+					
+					$scope.showBranches();
 				}
-				
-				vm.tableParams.reload();
-				 
+				else{
+					
+					toaster.pop('warning', 'Opps!!', deleteres);
+				}
+			 
 			});
-		}
-		else{
-			
-			toaster.pop('warning', 'Opps!!', deleteres);
-		}
-	 
-	});
+		 /** End **/
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+	
   }
+  
 
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster"];
+BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster","$modal"];

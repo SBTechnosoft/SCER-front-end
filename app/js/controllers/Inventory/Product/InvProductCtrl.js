@@ -6,7 +6,7 @@
 
 App.controller('InvProductController', InvProductController);
 
-function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory) {
+function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -182,29 +182,50 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 	 $location.path('app/AddInvProduct');
   }
   
-  $scope.deleteProduct = function(id)
+  $scope.deleteProduct = function(size,id)
   {
 		//alert(id);
-	  
-		apiCall.deleteCall(apiPath.getAllProduct+'/'+id).then(function(response){
-		
-			console.log(response);
-			
-			if(apiResponse.ok == response){
-				
-				
-				$scope.showProduct();
-				toaster.pop('success', 'Title', 'Delete SuccessFully');
-				//vm.tableParams.reload();
-				
-			}
-			else{
-
-				toaster.pop('warning', 'Opps!!', response);
-			}
-
+		toaster.clear();
+	
+	var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+		  controller: deleteDataModalController,
+		  size: size
 		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		 console.log('ok');
+		 
+		// return false;
+		 /**Delete Code **/
+			apiCall.deleteCall(apiPath.getAllProduct+'/'+id).then(function(response){
+		
+				console.log(response);
+				
+				if(apiResponse.ok == response){
+					
+					
+					$scope.showProduct();
+					toaster.pop('success', 'Title', 'Delete SuccessFully');
+					//vm.tableParams.reload();
+					
+				}
+				else{
+
+					toaster.pop('warning', 'Opps!!', response);
+				}
+
+			});
+		 /** End **/
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+		
   }
 
 }
-InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory"];
+InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];

@@ -21,6 +21,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	 $scope.inventoryData = inventoryData;
 	 $scope.taxData = taxData;
 	 $scope.total = total;
+	 $scope.grandTotal = grandTotal;
 	 $scope.totalTax = totalTax;
 	 $scope.advance = advance;
 	 $scope.balance = balance;
@@ -94,19 +95,32 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			{
 			 output = output+trClose;
 			}
+			
+			var mainPrice = parseFloat(productData.price)*parseInt(productData.qty);
+			
+			var vat = $filter('setDecimal')(productArrayFactory.calculateTax(productData.amount,$scope.taxData[productArray].tax,0),$scope.noOfDecimalPoints);
+			
+			var aTax = $filter('setDecimal')(productArrayFactory.calculateTax(productData.amount,$scope.taxData[productArray].additionalTax,0),$scope.noOfDecimalPoints);
+			
 			if(productData.discountType == 'percentage'){
 				
-				var mainPrice = parseFloat(productData.price)*parseInt(productData.qty);
+				
 				
 				var discount = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,productData.discount,0),$scope.noOfDecimalPoints);
+				
+				var productTotal = (mainPrice - discount) + vat + aTax;
 			}
 			else{
 				
-				var discount = productData.discount;
+				var discount =  $filter('setDecimal')(productData.discount,$scope.noOfDecimalPoints);
+				
+				var productTotal = (mainPrice - discount) + vat + aTax;
+				
+				
 			}
 			
 			output = output+
-			 "<tr class='trhw' style='font-family: Calibri; text-align: left; height: 25px; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 25px; text-align:center; padding:0 0 0 0;'>"+ productArray+1 +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.color +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 25px; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 25px; text-align: center; padding:0 0 0 0;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ discount +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 12px; height: 25px; text-align: center; padding:0 0 0 0;'>"+  $filter('setDecimal')(productArrayFactory.calculateTax(productData.amount,$scope.taxData[productArray].tax,0),$scope.noOfDecimalPoints) +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 25px; text-align: center; padding:0 0 0 0;'>"+ $filter('setDecimal')(productArrayFactory.calculateTax(productData.amount,$scope.taxData[productArray].additionalTax,0),$scope.noOfDecimalPoints)+"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ productData.amount;
+			 "<tr class='trhw' style='font-family: Calibri; text-align: left; height: 25px; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 25px; text-align:center; padding:0 0 0 0;'>"+ productArray+1 +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.color +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 25px; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 25px; text-align: center; padding:0 0 0 0;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ discount +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 12px; height: 25px; text-align: center; padding:0 0 0 0;'>"+  vat +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 25px; text-align: center; padding:0 0 0 0;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ productTotal;
 			   
 			if(productArray != inventoryCount-1)
 			{
@@ -129,7 +143,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	billArrayTag.CLIENTADD = $scope.billData.fisrtAddress+','+$scope.billData.secondAddress;
 	billArrayTag.OrderDate = fdate;
 	billArrayTag.Mobile = $scope.billData.BillContact;
-	billArrayTag.Total = $scope.total;
+	billArrayTag.Total = $scope.grandTotal;
 	billArrayTag.TotalTax = $scope.billData.tax;
 	billArrayTag.TotalQty = totalQty;
 	billArrayTag.TotalInWord = "Five Thousand";

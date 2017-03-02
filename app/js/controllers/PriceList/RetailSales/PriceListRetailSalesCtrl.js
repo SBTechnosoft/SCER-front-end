@@ -17,6 +17,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
  var data = [];
  
 	var getData = getSetFactory.get();
+	getSetFactory.blank();
 	console.log(getData);
 	// return false;
 	
@@ -39,7 +40,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 	var tree;
 	
 	
-	var rawTreeData2=[{"categoryId":"","productParentCategoryId":"","categoryName":"","productName":"","groupName":"","price":"","vat":"","amount":""}];
+	var rawTreeData2=[{"categoryId":"","productParentCategoryId":"","categoryName":"","productName":"","groupName":"","price":"","vat":"","additionalTax":"","amount":""}];
 
         var myTreeData = getTree(rawTreeData2, 'categoryId', 'productParentCategoryId');
 		$scope.tree_data = myTreeData;
@@ -67,12 +68,17 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 				displayName: "Vat"
             },
 			{
+                field: "additionalTax",
+				displayName: "A.Vat"
+            },
+			{
                 field: "amount",
 				displayName: "Amount"
             }
         ];
 	
 	/*****  End   *****/
+	
 	
 	
 	
@@ -112,7 +118,9 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 					
 					var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
 					
-					var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+					var additionalTax =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.additionalTax,0),noOfDecimalPoints);
+					
+					var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0) + additionalTax ,noOfDecimalPoints);
 					
 				}
 				else if($scope.saleType == "whole_sales"){
@@ -122,14 +130,14 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 					//var vat =0;
 					var vat =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.vat,0),noOfDecimalPoints);
 					
-					var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0),noOfDecimalPoints);
+					var additionalTax =  $filter('setDecimal')(productArrayFactory.calculateTax(purchaseprice,apiData.additionalTax,0),noOfDecimalPoints);
+					
+					var finalAmount =  $filter('setDecimal')(productArrayFactory.calculate(purchaseprice,apiData.vat,0) + additionalTax,noOfDecimalPoints);
 				}
 					
 				
 				for(var arrayData=0;arrayData<categoryArray.length;arrayData++)
 				{
-					
-					
 					
 					if(apiData.productCategory.productCategoryId == categoryArray[arrayData])
 					{
@@ -143,6 +151,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 						
 						objectData.price = purchaseprice;
 						objectData.vat = vat;
+						objectData.additionalTax = additionalTax;
 						objectData.amount = finalAmount;
 						
 						treeArrayData.push(objectData);
@@ -171,6 +180,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 					
 					objectData.price = purchaseprice;
 					objectData.vat = vat;
+					objectData.additionalTax = additionalTax;
 					objectData.amount = finalAmount;
 					
 					treeArrayData.push(objectData);
@@ -188,6 +198,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 				
 				csvObject.price = purchaseprice;
 				csvObject.vat = vat;
+				csvObject.additionalTax = additionalTax;
 				csvObject.amount = finalAmount;
 				
 				csvArray.push(csvObject);
@@ -202,9 +213,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 			$scope.getArray = csvArray;
 			
 			var myTreeData2 = getTree(treeArrayData, 'categoryId', 'productParentCategoryId');
-					$scope.tree_data = myTreeData2;
-			
-			
+			$scope.tree_data = myTreeData2;
 				
 				
 			//data = responseDrop;
@@ -213,7 +222,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 		}
 	});
 	
-	getSetFactory.blank();
+	
  
 	
 

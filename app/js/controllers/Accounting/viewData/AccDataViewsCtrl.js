@@ -13,7 +13,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
   var formdata = new FormData();
   $scope.billData = [];
   
-   var erpPath = $rootScope.erpPath; //Erp Path
+	$scope.erpPath = $rootScope.erpPath; //Erp Path
    
 	/** Display Company and date **/
 		apiCall.getCall(apiPath.getAllCompany+'/'+$rootScope.accView.companyId).then(function(res){
@@ -538,19 +538,47 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	// });
   }
   
-	$scope.deleteBill = function(id)
+	$scope.deleteBill = function(size,id)
 	{
-		var deletePath = apiPath.postBill+'/'+id;
-		  
-		apiCall.deleteCall(deletePath).then(function(deleteres){
-			
-			console.log(deleteres);
-			
-			$scope.reLoadPdfData();
-			
-			toaster.pop('success', 'Title', 'Data Successfully Deleted');
-		 
+		
+		toaster.clear();
+	
+	var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+		  controller: deleteDataModalController,
+		  size: size
 		});
+
+	   
+		modalInstance.result.then(function () {
+		 
+		 console.log('ok');
+		 
+		// return false;
+		 /**Delete Code **/
+			var deletePath = apiPath.postBill+'/'+id;
+		  
+			apiCall.deleteCall(deletePath).then(function(deleteres){
+				
+				console.log(deleteres);
+				if(apiResponse.ok == deleteres){
+					
+					$scope.reLoadPdfData();
+				
+					toaster.pop('success', 'Title', 'Data Successfully Deleted');
+				}
+				else{
+					toaster.pop('warning', '', deleteres);
+				}
+			 
+			});
+		 /** End **/
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
+		
+		
 	}
   
 	
@@ -666,7 +694,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 					
 					toaster.pop('success', 'Title', 'Generate Pdf Successfully');
 					
-					var pdfPath = erpPath+response.documentPath;
+					var pdfPath = $scope.erpPath+response.documentPath;
 					$window.open(pdfPath, '_blank');
 					
 					$scope.reLoadPdfData();

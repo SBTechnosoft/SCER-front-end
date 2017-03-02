@@ -5,7 +5,7 @@
     "icon": "icon-stack"
   },
   {
-    "text": "WholeSales",
+    "text": "Tax",
     "sref": "app.FormPriceListWholeSales",
     "icon": "icon-stack"
   }

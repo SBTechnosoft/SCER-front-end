@@ -6,7 +6,7 @@
 
 App.controller('InvGroupController', InvGroupController);
 
-function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll,toaster,apiResponse,validationMessage) {
+function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll,toaster,apiResponse,validationMessage,$modal) {
 	
   'use strict';
   var vm = this;
@@ -66,33 +66,55 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 			{
 			field: "productGroupId",
 			displayName: "Action",
-			cellTemplate: "<i ui-sref=\"\" ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ui-sref=\"\" ng-click=\"cellTemplateScope.deleteCat(row.branch[col.field])\" class=\"fa fa-times-circle\" style=\"font-size:17px;color:red\"></i>",
+			cellTemplate: "<i ui-sref=\"\" ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ui-sref=\"\" ng-click=\"cellTemplateScope.deleteCat(\'sm\',row.branch[col.field])\" class=\"fa fa-times-circle\" style=\"font-size:17px;color:red\"></i>",
 			cellTemplateScope: {
-				deleteCat: function(data) {         // this works too: $scope.someMethod;
+				deleteCat: function(size,data) {         // this works too: $scope.someMethod;
 					console.log(data);
-					apiCall.deleteCall(apiPath.getAllGroup+'/'+data).then(function(response){
+					toaster.clear();
+	
+					var modalInstance = $modal.open({
+						  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+						  controller: deleteDataModalController,
+						  size: size
+						});
+
+					   
+						modalInstance.result.then(function () {
+						 
+						 console.log('ok');
+						 
+						// return false;
+						 /**Delete Code **/
+							apiCall.deleteCall(apiPath.getAllGroup+'/'+data).then(function(response){
 						
-						if(apiResponse.ok == response){
-							
-							console.log(response);
-							toaster.pop('success', 'Title', 'Delete SuccessFully');
-							
-							vm.groupDrop = [];
-							apiCall.getCall(apiPath.getAllGroup).then(function(response){
+								if(apiResponse.ok == response){
+									
+									console.log(response);
+									toaster.pop('success', 'Title', 'Delete SuccessFully');
+									
+									vm.groupDrop = [];
+									apiCall.getCall(apiPath.getAllGroup).then(function(response){
+										
+										vm.groupDrop = response;
+										var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+										$scope.tree_data = myTreeData2;
+										
+									});
 								
-								vm.groupDrop = response;
-								var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
-								$scope.tree_data = myTreeData2;
-								
+								}
+								else{
+						
+									toaster.pop('warning', 'Opps!!', response);
+								}
+					
 							});
+						 /** End **/
 						
-						}
-						else{
-				
-							toaster.pop('warning', 'Opps!!', response);
-						}
-			
-					});
+						}, function () {
+						  console.log('Cancel');	
+						});
+		
+					
 				},
 				editCat: function(data){
 					
@@ -416,4 +438,4 @@ $scope.branchF = [
   
 
 }
-InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll","toaster","apiResponse","validationMessage"];
+InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll","toaster","apiResponse","validationMessage","$modal"];

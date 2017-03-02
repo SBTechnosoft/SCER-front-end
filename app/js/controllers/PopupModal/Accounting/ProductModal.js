@@ -38,6 +38,7 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		apiCall.getCall(getAllBranch).then(function(response4){
 			
 			$scope.branchDrop = response4;
+			$scope.addModelProduct.branch = response4[0];
 		
 		});
 	
@@ -60,6 +61,17 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 	apiCall.getCall(apiPath.getAllCategory).then(function(responseDrop){
 		
 		$scope.categoryDrop = responseDrop;
+		//console.log(responseDrop);
+		var lengthCount = responseDrop.length;
+		
+		for(var k=0;k<lengthCount;k++){
+			
+			if(responseDrop[k].productCategoryName == "AVON"){
+				$scope.addModelProduct.category = responseDrop[k];
+			}
+		
+		}
+		
 	
 	});
 	
@@ -73,10 +85,16 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 	});
 	
 	$scope.measureUnitDrop = [
-    'kilo',
-    'litre'
+    'piece',
+    'pair'
   ];
  
+	$scope.addModelProduct.measureUnit = 'piece';
+	
+	$scope.addModelProduct.vat = 4;
+	$scope.addModelProduct.additionalTax = 1;
+	//$scope.addModelProduct.mrp = $scope.addModelProduct.purchasePrice + 100;
+	
 	$scope.displayParseFloat=function(val) {
 		
 		return isNaN(parseFloat(val)) ? 0: parseFloat(val);
@@ -91,7 +109,13 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		formdata.append('companyId',$scope.addModelProduct.company.companyId);
 		formdata.append('branchId',$scope.addModelProduct.branch.branchId);
 		formdata.append('productName',$scope.addModelProduct.productName);
-		formdata.append('productDescription',$scope.addModelProduct.productDescription);
+		formdata.append('color',$scope.addModelProduct.color);
+		formdata.append('size',$scope.addModelProduct.size);
+		if($scope.addModelProduct.productDescription){
+			
+			formdata.append('productDescription',$scope.addModelProduct.productDescription);
+		}
+		
 		formdata.append('productCategoryId',$scope.addModelProduct.category.productCategoryId);
 		formdata.append('productGroupId',$scope.addModelProduct.group.productGroupId);
 		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
@@ -175,6 +199,8 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
     $scope.cancel = function () {
 	
 		$scope.addModelProduct = [];
+		
+		$scope.addModelProduct.measureUnit = 'piece';
 		// if($scope.stockModel)
 		 // {
 			// $rootScope.ArraystockModel=[];

@@ -26,7 +26,9 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
     'piece',
     'pair'
   ];
-
+	
+	$scope.addInvProduct.measureUnit = 'piece';
+	
 	$scope.defaultCompany  = function(){
 			
 		//Set default Company

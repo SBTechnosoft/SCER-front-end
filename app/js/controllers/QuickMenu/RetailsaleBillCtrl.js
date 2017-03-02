@@ -59,12 +59,14 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			$scope.quickBill.companyDropDown = response2;
 			
-			if(formdata.has('companyId')){
+			
 				
 				formdata.delete('companyId');
-			}
+			
 			
 			formdata.append('companyId',response2.companyId);
+			
+			console.log('default');
 			
 			$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
 			
@@ -598,11 +600,11 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		vm.productTax = [{"tax":0,"additionalTax":0}];
 		$scope.quickBill.advance = 0;
 		
-		if(formdata.has('companyId')){
+		// if(formdata.has('companyId')){
 	
 			formdata.delete('companyId');
 			
-		}
+		//}
 		formdata.append('companyId',item.companyId);
 	}
   
@@ -621,6 +623,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		 //$scope.disableButton = true;
 	
 		if($scope.quickBill.EditBillData){
+			
+			formdata.delete('companyId');
 			
 			toaster.pop('wait', 'Please Wait', 'Data Updating....');
 			
@@ -1133,6 +1137,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 		$scope.goToNextPrevious = function(nextPre){
 			
+				var formdata = new FormData();
+				
 				toaster.clear();
 				
 				var preHeaderData = {'Content-Type': undefined,'companyId':$scope.quickBill.companyDropDown.companyId};

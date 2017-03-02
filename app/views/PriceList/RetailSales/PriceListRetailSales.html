@@ -7,10 +7,10 @@
 	
    <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
 	<a ui-sref="app.FormPriceListRetailSales" ng-if="saleType == 'retail_sales'" > Form RetailSales </a>
-	<a ui-sref="app.FormPriceListWholeSales" ng-if="saleType == 'whole_sales'" > Form WholeSales </a> >>
+	<a ui-sref="app.FormPriceListWholeSales" ng-if="saleType == 'whole_sales'" > Form Tax </a> >>
 	
 	<span ng-if="saleType == 'retail_sales'" >Data RetailSales </span>
-	<span ng-if="saleType == 'whole_sales'" >Data WholeSales </span></small>
+	<span ng-if="saleType == 'whole_sales'" >Data Tax </span></small>
    
 </h3>
 <div class="container-fluid">
@@ -20,7 +20,7 @@
 	<a ng-click="generatePdf()" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
 	<a ng-csv="getArray" filename="test.csv" csv-header="['Product Name', 'Category Name', 'Group Name','Price','Vat','Amount']" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" >Export to CSV</a>
          <div class="panel-title" ng-if="saleType == 'retail_sales'">RetailSales PriceList of <b>{{displayCompany}}</b> Company</div>
-         <div class="panel-title" ng-if="saleType == 'whole_sales'" >WholeSales PriceList of <b>{{displayCompany}}</b> Company</div>
+         <div class="panel-title" ng-if="saleType == 'whole_sales'" >Tax PriceList of <b>{{displayCompany}}</b> Company</div>
     </div>
       
 	   <tree-grid  col-defs="col_defs" expand-on="expanding_property"  tree-data="tree_data"   ></tree-grid>

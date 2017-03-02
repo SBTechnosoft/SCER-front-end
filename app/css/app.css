@@ -13266,6 +13266,11 @@ body .jvectormap-zoomout {
 {
     width: 100% !important;
 }
+.mytypeDrop .dropdown-menu {
+  max-height: 300px;
+  overflow: auto;
+}
+
 /* End */
 
 /* ========================================================================
