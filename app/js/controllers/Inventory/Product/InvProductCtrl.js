@@ -80,7 +80,12 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 	
 	$scope.getProduct = function(id){
 		
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....');
+			
 		apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
+			
+			toaster.clear();
 			
 			if(apiResponse.noContent == response){
 					
@@ -122,7 +127,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  name: 'asc'     // initial sorting
+			  productCategoryName: 'asc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
@@ -136,7 +141,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 				  // alert('no');
 			  // }
 			  // use build-in angular filter
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.measurementUnit) != "undefined" && params.$params.filter.measurementUnit != "") ))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") ))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :

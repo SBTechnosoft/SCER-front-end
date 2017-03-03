@@ -35,9 +35,10 @@
 				 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroup.productGroupName}}</td>
 				<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
 			   
-				<td data-title="'Measurement'" sortable="'measurementUnit'" filter="{ 'measurementUnit': 'text' }" >{{user.measurementUnit}}</td>
+				<td data-title="'Color'"  filter="{ 'color': 'text' }" >{{user.color}}</td>
+				<td data-title="'Size'"  filter="{ 'size': 'text' }" >{{user.size}}</td>
 		
-			   <td data-title="'Action'" > 
+			   <td data-title="'Action'" style="width:8%"> 
 					<center>
 						<i ui-sref="" ng-click="editProduct(user.productId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
 						<i ui-sref="" ng-click="deleteProduct('sm',user.productId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>

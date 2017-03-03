@@ -167,6 +167,8 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 			filterArray.index = $scope.productIndex;
 			filterArray.companyId = $scope.addModelProduct.company.companyId;
 			filterArray.productName = $scope.addModelProduct.productName;
+			filterArray.color = $scope.addModelProduct.color;
+			filterArray.size = $scope.addModelProduct.size;
 			
 			$modalInstance.close(filterArray);
 			}

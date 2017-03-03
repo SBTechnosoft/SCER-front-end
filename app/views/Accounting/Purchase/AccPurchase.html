@@ -59,7 +59,7 @@
 								<!--input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Item Name(JS)" style="width:95%;float:left"/>
 								<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;float:right" title="Add"> </i-->
 								<div class="input-group mytypeDrop">
-									<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)" typeahead-editable="false" ng-required="true" typeahead-template-url="customTemplate.html" auto-focus />
+									<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)" typeahead-editable="false" ng-required="true" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" auto-focus />
 									<span class="input-group-btn">
 									   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 									</span>

@@ -12,7 +12,7 @@
 			<div class="form-group">
 				<label class="col-sm-1 control-label"> Product </label>
 					<div class="col-sm-7">
-						<select chosen=""  ng-model="allProductModel" ng-options="s.productName for s in table.states track by s.productId" class="form-control chosen-select" >
+						<select chosen=""  ng-model="allProductModel" ng-options="s as s.productName+' ('+s.color+' | '+s.size+')' for s in table.states track by s.productId" class="form-control chosen-select" >
 						</select>
 					</div>
 				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showProduct()" >Go</button>
@@ -22,9 +22,10 @@
 	
    <div class="panel panel-default">
     <div class="panel-heading">
-	<a ng-click="generatePdf()" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
+	<a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary" ng-if="disableButton" >Generate Pdf</a> 
 	
-	<a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a>
+	<!--a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a-->
+	<a ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" ng-if="disableButton" >Export to Excel</a>
 	<!--a ng-csv="getArray" filename="test.csv" csv-header="['Date', 'Sale/Purchase', 'Qty','Amount','Date','Qty','Amount']" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" >Export to CSV</a-->
          <div class="panel-title">Stock of <b>{{displayCompany}}</b> Company Between <b>{{displayFromDate}}</b> To <b>{{displayToDate}}</b> </div>
     </div>
@@ -48,7 +49,7 @@
 			<th >Amount</th>
 		</tr>
 	  </thead>
-         <tbody data-ng-repeat="user in $data">
+         <tbody data-ng-repeat="user in $data" style="text-align:center">
             <!-- tr data-ng-repeat="user in $data" -->
             <tr style="background-color: white;">
 				
@@ -65,7 +66,7 @@
 				<td rowspan="{{user.balance.length}}" ng-if="$index == 0">{{user.price}}</td>
 				
 				
-				<td>{{user.balance[0].transactionDate}} </td>
+				<td>{{user.balance[0].date}} </td>
 				<td>{{user.balance[0].qty}}</td>
 				<td>{{user.balance[0].price}}</td>
 				

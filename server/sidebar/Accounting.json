@@ -7,7 +7,7 @@
       { "text": "View",  "sref": "app.AccViewSales", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccSales", "translate": "" },
 	  { "text": "Retail Sales",  "sref": "app.AccViewRetailSales", "translate": "" },
-      { "text": "Whole Sales", "sref": "app.AccViewWholeSales", "translate": "" }
+      { "text": "Tax Sales", "sref": "app.AccViewWholeSales", "translate": "" }
     ]
   },
   {

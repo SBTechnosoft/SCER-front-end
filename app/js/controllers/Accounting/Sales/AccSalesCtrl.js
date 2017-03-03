@@ -108,6 +108,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	
 	$scope.defaultCompany = function(){
 		
+		vm.loadData = true;
+		
 		//Set default Company
 		apiCall.getDefaultCompany().then(function(response){
 		
@@ -123,6 +125,9 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 			$scope.currentAndOpeningBal(response.companyId,'retail_sales','whole_sales');
 			
 			$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
+			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....');
 			
 			vm.clientNameDropDr=[];
 			vm.clientNameDropCr=[];
@@ -170,7 +175,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 			apiCall.getCall(apiPath.getProductByCompany+response.companyId+'/branch').then(function(responseDrop){
 				
 				vm.productNameDrop = responseDrop;
-			
+				toaster.clear();
+				vm.loadData = false;
 			});
 		
 		});
@@ -553,11 +559,16 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
 		
+		vm.loadData = true;
+		
 		console.log(value.noOfDecimalPoints);
 		
 		$scope.noOfDecimalPoints = parseInt(value.noOfDecimalPoints);
 		$scope.currentAndOpeningBal(value.companyId,'retail_sales','whole_sales');
 		
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....');
+			
 		vm.clientNameDropDr=[];
 		vm.clientNameDropCr=[];
 		
@@ -596,7 +607,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		apiCall.getCall(apiPath.getProductByCompany+value.companyId+'/branch').then(function(responseDrop){
 			
 			vm.productNameDrop = responseDrop;
-		
+			toaster.clear();
+			vm.loadData = false;
 		});
 		
 		if(formdata.has(Fname))
@@ -856,8 +868,9 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		
 		formdata.append('tax',$scope.accSales.tax);
 		
-		if(!formdata.has('tax')){
+		if(!formdata.has('tax') || formdata.get('tax') == 'undefined'){
 			
+			formdata.delete('tax');
 			formdata.append('tax','');
 		}
 		
@@ -1319,19 +1332,21 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	   
 		modalInstance.result.then(function (data) {
 		 
-			console.log(data);
+			//console.log(data);
 			
-			apiCall.getCall(apiPath.getProductByCompany+data.companyId+'/branch').then(function(responseDrop){
+			var UrlPath = apiPath.getProductByCompany+data.companyId;
+			
+			apiCall.getCall(UrlPath+'/branch').then(function(responseDrop){
 			
 				vm.productNameDrop = responseDrop;
 		
 			});
 			
-			var headerSearch = {'Content-Type': undefined,'productName':data.productName};
+			var headerSearch = {'Content-Type': undefined,'productName':data.productName,'color':data.color,'size':data.size};
 			
-			apiCall.getCallHeader(apiPath.getProductByCompany+data.companyId,headerSearch).then(function(response){
+			apiCall.getCallHeader(UrlPath,headerSearch).then(function(response){
 				
-				console.log(response);
+				//console.log(response);
 				vm.AccSalesTable[data.index].productName = response[0].productName;
 				//vm.AccSalesTable[data.index].productId = response.productId;
 				

@@ -14,6 +14,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 	 
 	$scope.saleType = saleType;
 	
+	$scope.disableButton = true;
  var data = [];
  
 	var getData = getSetFactory.get();
@@ -91,6 +92,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 		if(apiResponse.notFound == responseDrop){
 				
 			toaster.pop('info', 'Message', 'No Data Found Go To Search');
+			$scope.disableButton = false;
 		
 		}
 		else{
@@ -174,7 +176,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 					
 					objectData.categoryId = Math.random();
 					objectData.productParentCategoryId = apiData.productCategory.productCategoryId;
-					objectData.categoryName = apiData.productName;
+					objectData.categoryName = apiData.productName+' ('+apiData.color+' | '+apiData.size+')';
 					
 					objectData.groupName = apiData.productGroup.productGroupName;
 					
@@ -377,23 +379,41 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
       }
   });
   
-	$scope.generatePdf = function(){
+	$scope.generatePdf = function(operation){
 	 
-		getData.operation = 'pdf';
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...');
+		
+		getData.operation = operation;
 		getData.salesType = $scope.saleType;
 		
 		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/priceList',getData).then(function(responseDrop){
 		
 			console.log(responseDrop);
+			toaster.clear();
 			
-			if(angular.isObject(responseDrop)){
+			if(angular.isObject(responseDrop) && responseDrop.hasOwnProperty('documentPath')){
 				
 				var pdfPath = erpPath+responseDrop.documentPath;
-				$window.open(pdfPath, '_blank');
+				if(operation == 'pdf'){
+					$window.open(pdfPath, '_blank');
+				}
+				else{
+					$window.open(pdfPath);
+				}
+				
 			}
 			else{
 				
-				alert('Something Wrong');
+				if(responseDrop.status == 500){
+					
+					toaster.pop('warning', 'Opps!', responseDrop.statusText);
+				}
+				else{
+					toaster.pop('warning', 'Opps!', responseDrop);
+				}
+				
+				//alert('Something Wrong');
 			}
 		
 		});

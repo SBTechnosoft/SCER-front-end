@@ -27,11 +27,11 @@
 							<td data-title="'Date'" sortable="'date'" filter="{ 'entryDate': 'text' }" >{{user.entryDate}}</td>
 							<td data-title="'Perticular'"  filter="{ 'ledgerName': 'text' }" >{{user.ledger.ledgerName}}</td>
 							
-							<td data-title="'Debit'" filter="{ 'amountTypeDebit': 'text' }"  ><span ng-if="user.amountType=='debit'">{{user.amountType}}</span></td>
+							<td data-title="'Debit'" filter="{ 'amountTypeDebit': 'text' }" style="text-align:right" ><span ng-if="user.amountType=='debit'">{{user.amount}}</span></td>
 							
-							<td data-title="'Credit'"  filter="{ 'amountTypeCredit': 'text' }"  ><span ng-if="user.amountType=='credit'">{{user.amountType}}</span></td>
+							<td data-title="'Credit'"  filter="{ 'amountTypeCredit': 'text' }" style="text-align:right"  ><span ng-if="user.amountType=='credit'">{{user.amount}}</span></td>
 							
-							<td data-title="'Amount'"  filter="{ 'amount': 'text' }" >{{user.amount}}</td>
+							<!--td data-title="'Amount'"  filter="{ 'amount': 'text' }" >{{user.amount}}</td-->
 						   <td data-title="'Action'" >
 								<center ng-if="headerType != 'specialJournal'" >
 									<i ui-sref="" ng-if="user.ledger.ledgerName != 'sales' && user.ledger.ledgerName != 'purchase'" ng-click="editDataView(user.jfId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;

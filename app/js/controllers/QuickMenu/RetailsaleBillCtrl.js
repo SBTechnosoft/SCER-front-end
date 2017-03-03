@@ -6,7 +6,7 @@
 
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse) {
+function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll) {
   'use strict';
  
 	
@@ -54,6 +54,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	//Default Company Function
 	$scope.defaultComapny = function(){
 		
+		vm.loadData = true;
+		
 		//Set default Company
 		apiCall.getDefaultCompany().then(function(response2){
 			
@@ -69,6 +71,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			console.log('default');
 			
 			$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
+			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....');
 			
 			var id = response2.companyId;
 			var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
@@ -97,9 +102,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(responseDrop){
 				
-				console.log(responseDrop);
+				//console.log(responseDrop);
 				vm.productNameDrop = responseDrop;
-			
+				toaster.clear();
+				vm.loadData = false;
 			});
 			
 		});
@@ -562,6 +568,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	//Change Invoice Number When Company Changed
 	$scope.changeCompany = function(item)
 	 {
+		vm.loadData = true;
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....');
 		
 		$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
 		
@@ -593,6 +602,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		apiCall.getCall(apiPath.getProductByCompany+item.companyId+'/branch').then(function(responseDrop){
 			
 			vm.productNameDrop = responseDrop;
+			
+			toaster.clear();
+			vm.loadData = false;
 		
 		});
 		
@@ -908,6 +920,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					vm.statesDrop = response3;
 				
 				});
+				
+				$anchorScroll();
 			
 			}
 			else{
@@ -1011,6 +1025,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			vm.statesDrop = response3;
 		
 		});
+		
+		$anchorScroll();
+		
+		$("#contactNo").focus();
 	}
 		
 	
@@ -1189,6 +1207,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 						getSetFactory.set(response[0]);
 						
 						$scope.EditAddBill();
+						
+						$anchorScroll();
+						
 					}
 					else{
 						
@@ -1209,6 +1230,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					//$scope.quickBill.companyDropDown = response[0].company;
 				})
 			
+			
 		}
 	
 	/** End **/
@@ -1217,6 +1239,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 		$scope.previewBill = function(size){
 		
+			toaster.clear();
 			
 			if($scope.quickBill.companyDropDown){
 		
@@ -1470,18 +1493,19 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		modalInstance.result.then(function (data) {
 		 
 			//console.log(data);
+			var UrlPath = apiPath.getProductByCompany+data.companyId;
 			
-			apiCall.getCall(apiPath.getProductByCompany+data.companyId+'/branch').then(function(responseDrop){
+			apiCall.getCall(UrlPath+'/branch').then(function(responseDrop){
 			
 				vm.productNameDrop = responseDrop;
 		
 			});
 			
-			var headerSearch = {'Content-Type': undefined,'productName':data.productName};
+			var headerSearch = {'Content-Type': undefined,'productName':data.productName,'color':data.color,'size':data.size};
 			
-			apiCall.getCallHeader(apiPath.getProductByCompany+data.companyId,headerSearch).then(function(response){
+			apiCall.getCallHeader(UrlPath,headerSearch).then(function(response){
 				
-				console.log(response);
+				//console.log(response);
 				vm.AccBillTable[data.index].productName = response[0].productName;
 				//vm.AccBillTable[data.index].productId = response.productId;
 				
@@ -1501,4 +1525,4 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   Product Model End
   **/
 }
-RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse"];
+RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll"];

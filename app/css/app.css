@@ -11225,7 +11225,7 @@ scrollable {
    Component: toaster.less
  ========================================================================== */
 body #toast-container {
-  top: 125px !important; /* 65px - 85px */
+  top:  85px !important; /* 85px - 125px*/
 }
 body .toast {
   background-color: #43a8eb;

@@ -12,12 +12,16 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
   var vm = this;
 	//$scope.brandradio="";
 	 var erpPath = $rootScope.erpPath; //Erp Path
+	 
+	 $scope.disableButton = false;
+	 
 	 var flag = 0;
 	 $scope.AllTransactionData;
 	 vm.tableParams;
 	$scope.getArray;
 	var data = [];
 	var getData = getSetFactory.get();
+	getSetFactory.blank();
 	//console.log(getData);
 	//return false;
 	
@@ -38,31 +42,52 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 	
 	if(dataSet.productId){
 		
+		
+		
+		
 		var Path = apiPath.getAllProduct+'/'+dataSet.productId;
 		
 		apiCall.getCall(Path).then(function(response){
+			
+			toaster.pop('wait', 'Please Wait', 'Data Loading....');
 			
 		//console.log(response);
 		vm.states.push(response);
 		$scope.allProductModel = response;
 		console.log(vm.states);
 		$scope.displayCompany = response.company.companyName;
+		
+		$scope.apiCallStock();
 			
 		});
+		
 	}
 	else{
+		
+		
 		
 		var Path = apiPath.getProductByCompany+CompanyID;
 		
 		apiCall.getCallHeader(Path,dataSet).then(function(response){
 			
-		console.log(response);
-			vm.states = response;
+			toaster.pop('wait', 'Please Wait', 'Data Loading....');
 			
-			$scope.allProductModel = response[0];
+			console.log(response);
+			if(apiResponse.notFound != response){
+				
+				vm.states = response;
+				
+				$scope.allProductModel = response[0];
+				$scope.displayCompany = response[0].company.companyName;
+				
+				$scope.apiCallStock();
+				
+			}
+			else{
+				toaster.clear();
+				toaster.pop('info', 'Message', 'No Product Available');		
+			}
 			
-			console.log(vm.states);
-			$scope.displayCompany = response[0].company.companyName;
 			
 		});
 	}
@@ -71,7 +96,9 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 	$scope.showProduct = function(){
 		
 		toaster.clear();
+		$scope.disableButton = false;
 		
+		var dropProductId = $scope.allProductModel.productId;
 		
 		var subFlag = 0;
 		//alert($scope.allProductModel.productId);
@@ -84,7 +111,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 		
 			if(singleProductArray.length != 0){
 				
-				if(singleProductArray[0].product.productId == $scope.allProductModel.productId)
+				if(singleProductArray[0].product.productId == dropProductId)
 				{
 					subFlag = 1;
 					var singleTransactionDataDrop = singleProductArray;
@@ -113,49 +140,68 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 	}
 	
 	
-	
-	
-	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
+	$scope.apiCallStock = function(){
 		
-		console.log(responseDrop);
-			
-			if(apiResponse.noContent == responseDrop || responseDrop == ""){
+		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
+		
+			console.log(responseDrop);
 				
-				toaster.pop('info', 'Message', 'No Data Found');
-			
-			}
-			else if(apiResponse.contentNotProper == responseDrop){
-				
-				toaster.pop('info', 'Message', 'Please Fill Go to Search');
-				
-			}
-			else{
-				
-				$scope.AllTransactionData = responseDrop;
-				
-				if(responseDrop[0].length != 0){
+				if(apiResponse.noContent == responseDrop || responseDrop == ""){
 					
-					var singleTransactionData = responseDrop[0];
-					$scope.calculation(singleTransactionData);
+					toaster.clear();
+					
+					toaster.pop('info', 'Message', 'No Data Found');
+					 
+				
+				}
+				else if(apiResponse.contentNotProper == responseDrop){
+					
+					toaster.clear();
+					toaster.pop('info', 'Message', 'Please Fill Go to Search');
+					
 					
 				}
 				else{
 					
-					toaster.pop('info', 'Message', 'No Data Found');
+					toaster.clear();
+					
+					$scope.AllTransactionData = responseDrop;
+					
+					// if(responseDrop[0].length != 0){
+						
+						
+						
+						// var singleTransactionData = responseDrop[0];
+						
+						// $scope.allProductModel = responseDrop[0][0].product;
+						// $scope.displayCompany = responseDrop[0][0].company.companyName;
+						
+						// $scope.calculation(singleTransactionData);
+						
+					// }
+					// else{
+						
+						
+						// toaster.pop('info', 'Message', 'No Data Found');
+					// }
+					$scope.showProduct();
+					
+					
+					
 				}
-				
-				
-				
-				
-			}
-		
-	});
+			
+		});
 	
-	getSetFactory.blank();
+	}
+	
+	
+	
+	
  
 	$scope.calculation = function(responseDrop){
 		
-		console.log('in');
+		$scope.disableButton = true;
+		
 		var balance = [];
 		var balanceArray = [];
 		
@@ -171,9 +217,6 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 				
 				if(balanceArray.length == 0){
 					
-					
-				
-				
 					inward.qty = parseInt(transData.qty);
 					inward.price = transData.price * transData.qty;
 					inward.date = transData.transactionDate;
@@ -190,6 +233,8 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 				
 						inward.qty = parseInt(transData.qty);
 						
+						inward.date = transData.transactionDate;
+						
 						var balanceLength = balanceArray.length;
 						var index=0;
 						for(var j=0;j<balanceLength;j++)
@@ -202,6 +247,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 								
 								if(j == (balanceLength - 1) && inward.qty > 0)
 								{
+									inward.price = inward.qty * transData.price;
 									balanceArray[0] = inward;
 								}
 								else{
@@ -288,7 +334,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 							var minusObject = {};
 							minusObject.qty = -Math.abs(outward.qty);  //4
 							minusObject.price = outward.price;
-							minusObject.date = outward.transactionDate;
+							minusObject.date = transData.transactionDate;
 						
 							balanceArray.push(minusObject);
 							
@@ -346,7 +392,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 		}
 		
 		
-		
+		console.log(responseDrop);
 		
 		if(flag == 0){
 			
@@ -455,9 +501,12 @@ $scope.TableData = function(){
 	  alert('Delete');
   }
   
-	$scope.generatePdf = function(){
+	$scope.generatePdf = function(operation){
 	 
-		getData.operation = 'pdf';
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...');
+		
+		getData.operation = operation;
 		delete getData.authenticationToken;
 		
 		getData.productId = $scope.allProductModel.productId;
@@ -466,15 +515,17 @@ $scope.TableData = function(){
 		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction/details',getData).then(function(responseDrop){
 		
 			console.log(responseDrop);
+			toaster.clear();
 			
 			if(angular.isObject(responseDrop)){
+				
+				
 				
 				var pdfPath = erpPath+responseDrop.documentPath;
 				$window.open(pdfPath, '_blank');
 			}
 			else{
-				
-				toaster.clear();
+			
 				toaster.pop('warning', 'Opps!!', responseDrop);
 			}
 		
