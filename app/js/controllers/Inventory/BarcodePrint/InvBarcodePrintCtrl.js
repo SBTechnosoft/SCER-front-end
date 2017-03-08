@@ -4,17 +4,26 @@
  * Controller for ngTables
  =========================================================*/
 
-App.controller('InvProductController', InvProductController);
+App.controller('InvBarcodePrintController', InvBarcodePrintController);
 
-function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
+function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
 
   var data = [];
+  $scope.erpPath = $rootScope.erpPath; // Erp Path
+  
 	var flag = 0;
+	$scope.filteredItems;
+	
+	$scope.barcodePrintData = [];
+	
+	$scope.CheckBox = "<div data-toggle='tooltip' data-title='Check All' class='checkbox c-checkbox'><label><input type='checkbox' checked='true' /><span class='fa fa-check'></span></label></div>";
 	
 	$scope.showProduct = function(){
+		
+		$scope.selectedBoxArray = []; //Selected Checkbox Array Null
 		
 		if($scope.stateCheck){
 			
@@ -179,58 +188,196 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 		  }
 	  });
 	}
-
-
-  $scope.editProduct = function(id)
-  {
-	getSetFactory.set(id);
-	 $location.path('app/AddInvProduct');
-  }
-  
-  $scope.deleteProduct = function(size,id)
-  {
-		//alert(id);
-		toaster.clear();
+	$scope.parentCheckBox;
+	$scope.selectedBoxArray = [];
+	$scope.barcodeFlag = 0;
 	
-	var modalInstance = $modal.open({
-		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
-		  controller: deleteDataModalController,
-		  size: size
-		});
-
-	   
-		modalInstance.result.then(function () {
-		 
-		 console.log('ok');
-		 
-		// return false;
-		 /**Delete Code **/
-			apiCall.deleteCall(apiPath.getAllProduct+'/'+id).then(function(response){
+	$scope.changeBox = function(box,pData){
 		
-				console.log(response);
+		console.log(box+'...'+pData);
+		if(box == true){
+			
+			$scope.selectedBoxArray.push(pData);
+			
+		}
+		else{
+			
+			var index = $scope.selectedBoxArray.indexOf(pData);
+			$scope.selectedBoxArray.splice(index,1);
+		}
+	
+		console.log($scope.selectedBoxArray);
+	}
+	
+	$scope.changeAllBox = function(box){
+		
+		if(box == false){
+			
+			var count = data.length;
+			$scope.barcodeFlag=0;
+			
+			for(var sat=0;sat<count;sat++){
 				
-				if(apiResponse.ok == response){
+				var dataSet = data[sat];
+				
+				dataSet.selected = false;
+				
+			}
+			
+			$scope.selectedBoxArray = [];
+			
+		}
+		else{
+			
+			$scope.barcodeFlag=1;
+			
+		}
+		
+	}
+	
+	$scope.singleBarcodePrint = function(qty,pData){
+		
+		console.log(pData);
+		
+		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
+
+
+        mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+
+        mywindow.document.write("</head><body style='height:29.7cm;width:21cm;'>");
+		mywindow.document.write('<h1>' + document.title  + '</h1>');
+		mywindow.document.write("<div style='width:100%;'><center>");
+		
+		for(var n=0;n<qty;n++){
+
+			mywindow.document.write("<div style='position:relative;float:left; width: 50%;'> ");
+			mywindow.document.write($scope.stateCheck.companyName+"<br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
+			mywindow.document.write("</div>");
+		}
+		
+		mywindow.document.write("</div>");
+		
+		 mywindow.document.write('</body></html>');
+
+      // mywindow.document.close(); // necessary for IE >= 10
+		
+       // mywindow.focus(); // necessary for IE >= 10*/
+      // mywindow.print();
+   //  mywindow.close();
+
+        return true;
+	  
+	}
+	
+	$scope.multipleBarcodePrint = function(){
+		
+		
+		console.log($scope.selectedBoxArray);
+	
+		
+		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
+
+
+        mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+
+        mywindow.document.write("</head><body style='height:29.7cm;width:21cm;'>");
+		mywindow.document.write('<center> <h1> Barcode of ' +  $scope.selectedBoxArray[0].company.companyName + ' Company </h1> </center>');
+		
+		
+		var dataArrayLength = $scope.selectedBoxArray.length;
+		
+		for(var dataIndex=0;dataIndex<dataArrayLength;dataIndex++){
+			
+			mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
+			
+			var arrayProductData = $scope.selectedBoxArray[dataIndex];
+			mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </h2> </td></tr> 	<tr>");
+			if($scope.barcodePrintData.multiQuantity > 0){
+				
+				var qtyLength = $scope.barcodePrintData.multiQuantity;
+			}
+			else{
+				var qtyLength = arrayProductData.barcodeQuantity;
+			}
+			
+			
+			if(qtyLength%2==0){
+				
+				var space = "";
+			}
+			else{
+				
+				var space = "<td></td>";
+			}
+			
+			
+			for(var qtyIndex=0;qtyIndex<qtyLength;qtyIndex++){
+				
+				
+				
+				mywindow.document.write("<td style='position:relative;float:left; width: 48%;padding-bottom:5px;display: inline-block;'> ");
+				mywindow.document.write(arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ") <br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' />");
+				
+				if(qtyIndex == qtyLength-1){
 					
 					
-					$scope.showProduct();
-					toaster.pop('success', 'Title', 'Delete SuccessFully');
-					//vm.tableParams.reload();
-					
+					mywindow.document.write("</td> "+ space );
 				}
 				else{
-
-					toaster.pop('warning', 'Opps!!', response);
+					mywindow.document.write("</td>");
 				}
+				
+			
+			}
+			mywindow.document.write("</tr></table>");
+		}
+		
+		
+		
+		 mywindow.document.write('</body></html>');
 
+		  mywindow.document.close(); // necessary for IE >= 10
+			
+		    mywindow.focus(); // necessary for IE >= 10*/
+		  mywindow.print();
+	    mywindow.close();
+
+        return true;
+		
+	}
+	
+	
+	$scope.hideQtyArray = [];
+	
+	$scope.hideMiltiQuantity = function(qty,pId){
+		
+		$scope.hideQtyFlag = 0;
+		
+		if(qty > 0){
+			
+			// $scope.hideQtyFlag = 1;
+			angular.forEach($scope.hideQtyArray, function (value) {
+				
+				if(value == pId){
+					$scope.hideQtyFlag=1;
+				}
 			});
-		 /** End **/
+			
+			if($scope.hideQtyFlag==0)
+			{
+				$scope.hideQtyArray.push(pId);
+			}
+			
+		}
+		else{
+			
+			// $scope.hideQtyFlag = 0;
+			var index = $scope.hideQtyArray.indexOf(pId);
+			$scope.hideQtyArray.splice(index,1);
+		}
 		
-		}, function () {
-		  console.log('Cancel');	
-		});
-		
-		
-  }
+		console.log($scope.hideQtyArray);
+	}
   
   /** Barcode **/
   
@@ -238,9 +385,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 	{
 		//alert(id);
 		
-		// $('#allPro').print(2);
-		
-		// return false;
+		//return false;
 		toaster.clear();
 		
 		var modalInstance = $modal.open({
@@ -283,4 +428,4 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
   /** End **/
 
 }
-InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];
+InvBarcodePrintController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];

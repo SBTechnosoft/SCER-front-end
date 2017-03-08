@@ -517,16 +517,27 @@ $scope.TableData = function(){
 			console.log(responseDrop);
 			toaster.clear();
 			
-			if(angular.isObject(responseDrop)){
-				
-				
+			if(angular.isObject(responseDrop)  && responseDrop.hasOwnProperty('documentPath')){
 				
 				var pdfPath = erpPath+responseDrop.documentPath;
-				$window.open(pdfPath, '_blank');
+				if(operation == 'pdf'){
+					$window.open(pdfPath, '_blank');
+				}
+				else{
+					$window.open(pdfPath,"_self");
+				}
 			}
 			else{
-			
-				toaster.pop('warning', 'Opps!!', responseDrop);
+				
+				if(responseDrop.status == 500){
+					
+					toaster.pop('warning', 'Opps!', responseDrop.statusText);
+				}
+				else{
+					toaster.pop('warning', 'Opps!', responseDrop);
+				}
+				
+				//alert('Something Wrong');
 			}
 		
 		});

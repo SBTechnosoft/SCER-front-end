@@ -344,7 +344,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 	{
 		var editCompany2 = apiPath.getAllCompany+'/'+$stateParams.id;
 		
-		apiCall.postCall(editCompany2,formdata).then(function(response5){
+		apiCall.patchCall(editCompany2,formdata).then(function(response5){
 		
 			
 			if(apiResponse.ok == response5){

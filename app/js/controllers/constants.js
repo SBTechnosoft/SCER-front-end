@@ -43,7 +43,8 @@ App
 							 'app/vendor/PriceListTreeGrid/tree-grid-directive.js'],
 	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js'],
 	'tinymce':				['app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js',
-							'app/vendor/tinymce/js/tinymce/tinymce.min.js']
+							'app/vendor/tinymce/js/tinymce/tinymce.min.js'],
+	'printJS':     ['app/js/jQuery.print.js']
     },
     // Angular based script (use the right module name)
     modules: [

@@ -148,6 +148,10 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		if($scope.addModelProduct.mrp){
 			formdata.append('mrp',$scope.addModelProduct.mrp);
 		}
+		
+		if($scope.addModelProduct.minimumStockLevel){
+			formdata.append('minimumStockLevel',$scope.addModelProduct.minimumStockLevel);
+		}
 		// formdata.append('vat',$scope.addModelProduct.vat);
 		// formdata.append('additionalTax',$scope.addModelProduct.additionalTax);
 		// formdata.append('marginFlat',$scope.addModelProduct.marginFlat);

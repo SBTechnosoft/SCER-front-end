@@ -127,6 +127,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 			$scope.addInvProduct.additionalTax = res.additionalTax;
 			$scope.addInvProduct.marginFlat = res.marginFlat;
 			$scope.addInvProduct.margin = res.margin;
+			$scope.addInvProduct.minimumStockLevel = res.minimumStockLevel;
 			
 		});
 	}

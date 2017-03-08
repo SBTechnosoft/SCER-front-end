@@ -147,7 +147,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 						
 						objectData.categoryId = Math.random();
 						objectData.productParentCategoryId = apiData.productCategory.productCategoryId;
-						objectData.categoryName =  apiData.productName;
+						objectData.categoryName =  apiData.productName+' ('+apiData.color+' | '+apiData.size+')';
 						
 						objectData.groupName = apiData.productGroup.productGroupName;
 						
@@ -399,7 +399,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 					$window.open(pdfPath, '_blank');
 				}
 				else{
-					$window.open(pdfPath);
+					$window.open(pdfPath,"_self");
 				}
 				
 			}

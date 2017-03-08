@@ -49,9 +49,6 @@
     "icon": "icon-stack"
   },
   {
-    "type": "separator"
-  },
-  {
     "text": "Template",
     "sref": "#",
     "icon": "fa fa-text-height",
@@ -59,6 +56,18 @@
       {"text": "General", "sref": "app.tempGeneral", "translate": "" },
       {"text": "Email", "sref": "app.tempEmail", "translate": "" },
 	  {"text": "SMS", "sref": "app.tempSMS", "translate": "" }
+    ],
+    "translate": ""
+  },
+  {
+    "type": "separator"
+  },
+  {
+    "text": "Setting",
+    "sref": "#",
+    "icon": "fa fa-cog",
+    "subnav": [
+      {"text": "Option", "sref": "app.SettingOption", "icon": "fa fa-barcode", "translate": "" }
     ],
     "translate": ""
   }

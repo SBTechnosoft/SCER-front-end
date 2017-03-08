@@ -45,6 +45,26 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			return deferred.promise;
 		},
+		patchCall : function(url,formdata){
+			 var deferred = $q.defer();
+			 
+			$http({
+				url: url,
+				method: 'patch',
+				processData: false,
+				crossDomain:true,
+				cache:false,
+			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
+				data:formdata
+			}).success(function(data, status, headers, config) {
+				if(apiResponse.noMatch == data || apiResponse.tokenExpired == data || apiResponse.notExists == data){
+					$state.go('page.login');
+				}
+				deferred.resolve(data);
+			});
+			
+			return deferred.promise;
+		},
 		getCallHeader : function(url,headerData){
 			
 			//var headerDataIn = headerData;

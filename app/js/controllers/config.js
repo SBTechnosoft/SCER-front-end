@@ -161,6 +161,14 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		/*** End Template ***/
+		/*** Setting ***/
+			//Option
+			.state('app.SettingOption', {
+				url: '/SettingOption',
+				templateUrl: basepath('Setting/SettingOption/SettingOption.html'),
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
+			})
+		/*** End Setting ***/
 		//Add Inventory Product
 		.state('app.AddInvProduct', {
             url: '/AddInvProduct',
@@ -171,6 +179,12 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.InvProduct', {
             url: '/InvProduct',
             templateUrl: basepath('Inventory/Product/InvProduct.html'),
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
+        })
+		//Inventory Barcode Print Product
+		.state('app.InvBarcodePrint', {
+            url: '/InvBarcodePrint',
+            templateUrl: basepath('Inventory/BarcodePrint/InvBarcodePrint.html'),
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
 		//Add Inventory Stock

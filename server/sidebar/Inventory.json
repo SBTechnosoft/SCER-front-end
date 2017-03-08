@@ -1,4 +1,14 @@
 [
+ {
+    "text": "Brand",
+    "sref": "app.InvCategory",
+    "icon": "icon-box"
+  },
+  {
+    "text": "Category",
+    "sref": "app.InvGroup",
+    "icon": "icon-book"
+  },
   {
     "text": "Product",
     "sref": "#",
@@ -9,17 +19,15 @@
     ]
   },
   {
-    "text": "Brand",
-    "sref": "app.InvCategory",
-    "icon": "icon-box"
-  },
-  {
     "type": "separator"
   },
   {
-    "text": "Category",
-    "sref": "app.InvGroup",
-    "icon": "icon-book"
+    "text": "Barcode Print",
+    "sref": "app.InvBarcodePrint",
+    "icon": "fa fa-barcode"
+  },
+  {
+    "type": "separator"
   },
   {
     "text": "Order/Notes",
