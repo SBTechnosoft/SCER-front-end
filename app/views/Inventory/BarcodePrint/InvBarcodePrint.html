@@ -28,7 +28,7 @@
          <div class="panel-title" > All Product   </div>
 		 
       </div>
-      <table data-ng-table="table.tableParams" show-filter="false" class="table table-bordered table-striped">
+      <table data-ng-table="table.tableParams"  class="table table-bordered table-striped">
 	
 	 
 		<thead>
@@ -65,11 +65,28 @@
 		  
          <tbody>
 			<tr>
-				<td colspan="8">
-					<input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL" />
+				<td>
+				</td>
+				<td>
+					<input type="text" class="input-filter form-control fa fa-search" ng-model="query.productCategoryName"  />
+				</td>
+				<td>
+					<input type="text" class="input-filter form-control fa fa-search" ng-model="query.productGroupName"  />
+				</td>
+				<td>
+					<input type="text" class="input-filter form-control fa fa-search" ng-model="query.productName"  />
+				</td>
+				<td>
+					<input type="text" class="input-filter form-control fa fa-search" ng-model="query.color"  />
+				</td>
+				<td>
+					<input type="text" class="input-filter form-control fa fa-search" ng-model="query.size"  />
+				</td>
+				<td colspan="2">
 				</td>
 			</tr>
-            <tr data-ng-repeat="user in ($parent.filteredItems = ($data | filter:query))">
+            <!--tr data-ng-repeat="user in ($parent.filteredItems = ($data | filter:query))" -->
+            <tr data-ng-repeat="user in $data">
 				<td >
 				   <div class="checkbox c-checkbox">
 					  <label>
@@ -78,9 +95,9 @@
 					  </label>
 				   </div>
 				</td>
-				<td  sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategory.productCategoryName}}</td>
-				 <td   sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroup.productGroupName}}</td>
-				<td   sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
+				<td  sortable="'productCategoryName'"  >{{user.productCategory.productCategoryName}}</td>
+				 <td   sortable="'productGroupName'"  >{{user.productGroup.productGroupName}}</td>
+				<td   sortable="'productName'"  >{{user.productName}}</td>
 			   
 				<td   filter="{ 'color': 'text' }" >{{user.color}}</td>
 				<td    filter="{ 'size': 'text' }" >{{user.size}}</td>

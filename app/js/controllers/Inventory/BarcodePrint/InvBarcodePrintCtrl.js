@@ -11,7 +11,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
   var vm = this;
 	//$scope.brandradio="";
 
-  var data = [];
+   $scope.completedQueries = [];
   $scope.erpPath = $rootScope.erpPath; // Erp Path
   
 	var flag = 0;
@@ -38,18 +38,18 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				
 				if(apiResponse.noContent == response){
 					
-					data = [];
+					  $scope.completedQueries = [];
 					toaster.pop('alert', 'Opps!!', 'No Product Available');
 					
 				}
 				else{
 					
-					data = response;
-					for (var i = 0; i < data.length; i++) {
-					  data[i].productCategoryName = ""; //initialization of new property 
-					  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-					  data[i].productGroupName = ""; //initialization of new property 
-					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+					  $scope.completedQueries = response;
+					for (var i = 0; i <$scope.completedQueries.length; i++) {
+					    $scope.completedQueries[i].productCategoryName = ""; //initialization of new property 
+					    $scope.completedQueries[i].productCategoryName =   $scope.completedQueries[i].productCategory.productCategoryName;  //set the   $scope.completedQueries from nested obj into new property
+					    $scope.completedQueries[i].productGroupName = ""; //initialization of new property 
+					    $scope.completedQueries[i].productGroupName =   $scope.completedQueries[i].productGroup.productGroupName;  //set the   $scope.completedQueries from nested obj into new property
 					}
 					
 					
@@ -98,18 +98,18 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			
 			if(apiResponse.noContent == response){
 					
-				data = [];
+				  $scope.completedQueries = [];
 				toaster.pop('alert', 'Opps!!', 'No Product Available');
 				
 			}
 			else{
 				//console.log('else');
-				data = response;
-				for (var i = 0; i < data.length; i++) {
-				  data[i].productCategoryName = ""; //initialization of new property 
-				  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-				  data[i].productGroupName = ""; //initialization of new property 
-				  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+				  $scope.completedQueries = response;
+				for (var i = 0; i <$scope.completedQueries.length; i++) {
+				    $scope.completedQueries[i].productCategoryName = ""; //initialization of new property 
+				    $scope.completedQueries[i].productCategoryName =   $scope.completedQueries[i].productCategory.productCategoryName;  //set the   $scope.completedQueries from nested obj into new property
+				    $scope.completedQueries[i].productGroupName = ""; //initialization of new property 
+				    $scope.completedQueries[i].productGroupName =   $scope.completedQueries[i].productGroup.productGroupName;  //set the data from nested obj into new property
 				}
 				
 				
@@ -129,17 +129,25 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			 
 		});
 	}
+	$scope.query = {
+			productCategoryName: undefined,
+			productGroupName: undefined,
+			productName: undefined,
+			color: undefined,
+			size: undefined
+		};
 	
 	$scope.TableData = function(){
 		 
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
-		  sorting: {
-			  productCategoryName: 'asc'     // initial sorting
-		  }
+		  filter: $scope.query
+		  // sorting: {
+			  // productCategoryName: 'asc'     // initial sorting
+		  // }
 	  }, {
-		  total: data.length, // length of data
+		  total:   $scope.completedQueries.length, // length of data
 		  getData: function($defer, params) {
 			 
 			  // if()
@@ -150,37 +158,46 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				  // alert('no');
 			  // }
 			  // use build-in angular filter
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") ))
-			  {
-					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
+			  // if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") ))
+			  // {
+					 // var orderedData = params.filter() ?
+					 // $filter('filter')(data, params.filter()) :
+					 // data;
 
-					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+					  // vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
-					  params.total(orderedData.length); // set total for recalc pagination
-					  $defer.resolve(vm.users);
+					  // params.total(orderedData.length); // set total for recalc pagination
+					  // $defer.resolve(vm.users);
 			  
 
-			  }
-			else
-			{
-				   params.total(data.length);
+			  // }
+			// else
+			// {
+				   // params.total(data.length);
 				  
-			}
+			// }
 			 
-			 if(!$.isEmptyObject(params.$params.sorting))
-			  {
+			 // if(!$.isEmptyObject(params.$params.sorting))
+			  // {
 				
-				 //alert('ggg');
-				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
+				// alert('ggg');
+				  // var orderedData = params.sorting() ?
+						  // $filter('orderBy')(data, params.orderBy()) :
+						  // data;
 		  
-				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			  }
+				  // $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			  // }
 			
-			$scope.totalData = data.length;
+			var orderedData = params.sorting() ?
+                    $filter('orderBy')($scope.completedQueries, params.orderBy()) :
+                    data;
+			orderedData	= $filter('filter')(orderedData, params.filter());
+            
+			params.total(orderedData.length);
+			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(),
+					                                     params.page() * params.count()));
+														 
+			$scope.totalData =   $scope.completedQueries.length;
 			$scope.pageNumber = params.page();
             $scope.itemsPerPage = params.count();
             $scope.totalPages = Math.ceil($scope.totalData/params.count());
@@ -213,12 +230,12 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		if(box == false){
 			
-			var count = data.length;
+			var count =   $scope.completedQueries.length;
 			$scope.barcodeFlag=0;
 			
 			for(var sat=0;sat<count;sat++){
 				
-				var dataSet = data[sat];
+				var dataSet =   $scope.completedQueries[sat];
 				
 				dataSet.selected = false;
 				
@@ -257,14 +274,18 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		mywindow.document.write("</div>");
 		
-		 mywindow.document.write('</body></html>');
+		mywindow.document.write('</body></html>');
 
-      // mywindow.document.close(); // necessary for IE >= 10
+		mywindow.document.close(); // necessary for IE >= 10
 		
-       // mywindow.focus(); // necessary for IE >= 10*/
-      // mywindow.print();
-   //  mywindow.close();
-
+		mywindow.focus(); // necessary for IE >= 10*/
+		mywindow.print();
+		mywindow.close();
+		
+		// pData.selected = false;
+		
+		// $scope.selectedBoxArray = [];	
+		// $scope.barcodeFlag = 0;
         return true;
 	  
 	}

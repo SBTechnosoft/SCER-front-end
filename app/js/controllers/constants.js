@@ -120,7 +120,8 @@ App
 	'getBill': 'http://api.siliconbrain.co.in/accounting/bills/company/',
 	'getTrailBalance': 'http://api.siliconbrain.co.in/accounting/trial-balance/company/',
 	'reGeneratePdf': 'http://api.siliconbrain.co.in/documents/bill',
-	'billPaymentRefund': 'http://api.siliconbrain.co.in/accounting/bills/'
+	'billPaymentRefund': 'http://api.siliconbrain.co.in/accounting/bills/',
+	'settingOption': 'http://api.siliconbrain.co.in/settings'
   })
   //Api Path
   .constant('apiResponse', {

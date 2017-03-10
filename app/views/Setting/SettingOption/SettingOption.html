@@ -1,4 +1,11 @@
-
+<style>
+.chosen-container .chosen-results {
+    max-height:100px;
+}
+.chosen-container .chosen-drop{
+	display: block !imporatant;
+}
+</style>
 <h3>
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
@@ -20,8 +27,9 @@
 							   <div class="form-group">
 								  <label for="input-id-1" class="col-sm-3 control-label">Height</label>
 								  <div class="col-sm-8">
-									 <input ng-model="barcodeData.height" id="input-id-1" type="text" placeholder="Height" class="form-control" dir="rtl" name="height" id="height"   ng-maxlength="5" ng-pattern="/^[0-9]+$/"  tabIndex="2" auto-focus  only-number />
-									 
+									 <select chosen="" data-ng-model="barcodeData.barcodeHeight" data-ng-options="s for s in form.barcodeHeightDrop" class="form-control chosen-select" ng-required="true" ng-change="changeInBarcodeData('barcodeHeight',barcodeData.barcodeHeight)" name="height" id="height" tabIndex="2" auto-focus  >
+										<option value=""></option>
+									</select>
 									<span ng-messages="formBarcode.height.$error" ng-if="formBarcode.height.$dirty || formBarcode.height.$touched" role="alert">
 										<span ng-messages-include="errorRequired"></span>
 										<span ng-messages-include="errorPatternNumber"></span>
@@ -38,8 +46,9 @@
 							   <div class="form-group">
 								  <label for="input-id-1" class="col-sm-3 control-label">Width</label>
 								  <div class="col-sm-8">
-									 <input ng-model="barcodeData.width" name="width" id="input-id-1" type="tel" placeholder="Work Number" class="form-control" dir="rtl"  ng-pattern="/^[0-9]+$/" ng-maxlength="5" tabIndex="2"  only-number />
-									 
+									  <select chosen="" data-ng-model="barcodeData.barcodeWidth" data-ng-options="s for s in form.barcodeWidthDrop" class="form-control chosen-select" ng-required="true" ng-change="changeInBarcodeData('barcodeWidth',barcodeData.barcodeWidth)" name="width" id="width" tabIndex="2" auto-focus  >
+										<option value=""></option>
+									</select>
 									<span ng-messages="formBarcode.width.$error" ng-if="formBarcode.width.$dirty || formBarcode.width.$touched" role="alert">
 										<span ng-messages-include="errorRequired"></span>
 										<span ng-messages-include="errorPatternNumber"></span>
@@ -54,7 +63,7 @@
 						<div class="col-sm-4">
 							<fieldset class="my-fieldset-paddingBottom">
 							   <div class="form-group">
-								   <button type="button" class="mr mb-sm btn btn-primary" tabIndex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  >Update</button>
+								   <button type="button" class="mr mb-sm btn btn-primary" tabIndex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  ng-click="AddUpdateBarcodeSetting()" ng-disabled="formBarcode.$invalid"  >{{insertUpdateLabel}}</button>
 							   </div>
 							</fieldset>
 						</div>

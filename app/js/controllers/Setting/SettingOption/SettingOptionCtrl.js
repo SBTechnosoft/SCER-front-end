@@ -13,6 +13,114 @@ function settingOptionController($scope,apiCall,apiPath,toaster,apiResponse,vali
 	
 	/* VALIDATION END */
 	
+	/** Barcode Code **/
+	
+		//var barcodeFormData = new FormData();
+		$scope.barcodeData = [];
+		$scope.insertUpdateLabel;
+		
+		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1","1.5","2"];
+		vm.barcodeHeightDrop = ["40","50","60","70","80","90","100"];
+		
+		$scope.getOptionSettingData = function(){
+			
+			toaster.clear();
+			
+			apiCall.getCall(apiPath.settingOption).then(function(response2){
+			
+				if(apiResponse.noContent == response2){
+					
+					$scope.insertUpdateLabel = "Insert";
+				}
+				else{
+					
+					$scope.insertUpdateLabel = "Update";
+					
+					console.log(response2);
+					var cnt = response2.length;
+					for(var ind = 0;ind<cnt;ind++){
+						
+						var arrayData = response2[ind];
+						
+						if(arrayData.settingType == "barcode"){
+							
+							$scope.barcodeData.barcodeHeight = arrayData.barcodeHeight;
+							$scope.barcodeData.barcodeWidth = arrayData.barcodeWidth;
+							
+							break;
+						}
+						
+					}
+					
+				}
+			
+			});
+		
+		}
+		
+		$scope.getOptionSettingData();
+		
+		$scope.flag = 0;
+		$scope.changeInBarcodeData = function(key,value){
+			
+			$scope.flag = 1;
+			// if(barcodeFormData.has(key)){
+				
+				// barcodeFormData.delete(key);
+			// }
+			
+			// barcodeFormData.append(key,value);
+		}
+		
+		$scope.AddUpdateBarcodeSetting = function(){
+			
+			toaster.clear();
+			
+			if($scope.flag == 1){
+				
+				var barcodeFormData = new FormData();
+				
+				barcodeFormData.append('barcodeHeight',$scope.barcodeData.barcodeHeight);
+				barcodeFormData.append('barcodeWidth',$scope.barcodeData.barcodeWidth);
+				//barcodeFormData.append('settingType','barcode');
+				
+				if($scope.insertUpdateLabel == "Update"){
+					var apiPostPatchCall = apiCall.patchCall;
+				}
+				else{
+					var apiPostPatchCall = apiCall.postCall;
+				}
+				
+				apiPostPatchCall(apiPath.settingOption,barcodeFormData).then(function(response){
+				
+					if(apiResponse.ok == response){
+						
+						
+						$scope.getOptionSettingData();
+						
+						toaster.pop('success','Barcode',$scope.insertUpdateLabel+' Successfull');
+						$scope.flag = 0 ;
+						
+					}
+					else{
+						
+						toaster.pop('warning','Opps!!',response);
+					}
+				
+				});
+			}
+			else{
+				
+				toaster.pop('info','Barcode','Please Change Data');
+			}
+			
+		
+			//console.log($scope.barcodeData);
+		}
+		
+	/** End **/
+	
+	
   // Datepicker
   // ----------------------------------- 
 
