@@ -429,6 +429,27 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 			controller: 'AccTrailBalanceController as table',
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
+		//Accounting BalanceSheet
+		.state('app.AccBalanceSheet', {
+            url: '/AccBalanceSheet',
+            templateUrl: basepath('Accounting/Statements/AccBalanceSheet.html'),
+			controller: 'AccBalanceSheetController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
+        })
+		//Accounting Profit & Loss
+		.state('app.AccProfitLoss', {
+            url: '/AccProfitLoss',
+            templateUrl: basepath('Accounting/Statements/AccProfitLoss.html'),
+			controller: 'AccProfitLossController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
+        })
+		//Accounting Cash Flow
+		.state('app.AccCashFlow', {
+            url: '/AccCashFlow',
+            templateUrl: basepath('Accounting/Statements/AccCashFlow.html'),
+			controller: 'AccCashFlowController as table',
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
+        })
 		//Accounting View Taxation
 		.state('app.AccViewTaxation', {
             url: '/AccViewTaxation',
@@ -461,7 +482,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/RetailsaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner'),{
 				saleType: function(){
 					
 					return 'RetailsaleBill';
@@ -473,7 +494,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/WholesaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner'),{
 				saleType: function(){
 					
 					return 'WholesaleBill';

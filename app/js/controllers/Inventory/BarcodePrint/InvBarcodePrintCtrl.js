@@ -262,17 +262,29 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
         mywindow.document.write('<html><head><title>' + document.title  + '</title>');
 
         mywindow.document.write("</head><body style='height:29.7cm;width:21cm;'>");
-		mywindow.document.write('<h1>' + document.title  + '</h1>');
-		mywindow.document.write("<div style='width:100%;'><center>");
+		mywindow.document.write('<center> <h1> Barcode of ' +  pData.company.companyName + ' Company </h1> </center>');
+		mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
+		mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2>" + pData.productName +' ('+ pData.color +' | '+ pData.size + ") </h2> </td></tr> 	<tr>");
 		
 		for(var n=0;n<qty;n++){
 
-			mywindow.document.write("<div style='position:relative;float:left; width: 50%;'> ");
-			mywindow.document.write($scope.stateCheck.companyName+"<br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
-			mywindow.document.write("</div>");
+			mywindow.document.write("<td style='position:relative;float:left; width: 48%;padding-bottom:5px;display: inline-block;'> ");
+			mywindow.document.write(pData.productName +" ("+ pData.color +" | "+ pData.size + ") <br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
+			
+			if(n == qty-1){
+				
+				
+				mywindow.document.write("</td> "+ space );
+			}
+			else{
+				mywindow.document.write("</td>");
+			}
+			// mywindow.document.write("<div style='position:relative;float:left; width: 50%;'> ");
+			// mywindow.document.write($scope.stateCheck.companyName+"<br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
+			// mywindow.document.write("</div>");
 		}
 		
-		mywindow.document.write("</div>");
+		mywindow.document.write("</tr></table>");
 		
 		mywindow.document.write('</body></html>');
 
@@ -312,7 +324,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
 			
 			var arrayProductData = $scope.selectedBoxArray[dataIndex];
-			mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </h2> </td></tr> 	<tr>");
+			mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </td></tr> 	<tr>");
 			if($scope.barcodePrintData.multiQuantity > 0){
 				
 				var qtyLength = $scope.barcodePrintData.multiQuantity;

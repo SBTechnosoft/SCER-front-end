@@ -9,6 +9,7 @@ App.controller('RetailsaleBillController', RetailsaleBillController);
 function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll) {
   'use strict';
  
+ 
 	
 	var vm = this;
 	var formdata = new FormData();
@@ -151,6 +152,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	/* Table */
 	
 	$scope.addRow = function(index){
+		
+		console.log('Row Added..'+index);
 		
 		var plusOne = index+1;
 		
@@ -1524,5 +1527,74 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   /**
   Product Model End
   **/
+  	  var arg = {
+                resultFunction: function(result) {
+				console.log(result);
+				console.log(vm.AccBillTable.length);
+				//console.log(index);
+				var proBarcode = "JIO_EXE_MT_PROCT1_RDRD_244T";
+				
+				var barcodeflag = 0;
+				var cnt = vm.AccBillTable.length;
+					for(var m=0;m<cnt;m++){
+						
+						var arrayData = vm.AccBillTable[m];
+						
+						if(arrayData.productId == ""){
+							
+							
+							var headerSearch = {'Content-Type': undefined,'productCode':proBarcode};
+			
+							apiCall.getCallHeader(apiPath.getAllProduct,headerSearch).then(function(response){
+								
+								console.log(response);
+								vm.AccBillTable[m].productName = response.productName;
+								//vm.AccBillTable[data.index].productId = response.productId;
+								
+								$scope.setProductData(response,m);
+								//$scope.$apply();
+								
+							});
+			
+							barcodeflag = 1;
+							//console.log(arrayData);
+							break;
+						}
+						else{
+							continue;
+						}
+						
+					}
+					var nextindex = parseInt(cnt)-1;
+					if(barcodeflag == 0){
+						
+						$scope.addRow(nextindex);
+						
+						var fatIndex = nextindex+1;
+						
+						var headerSearch = {'Content-Type': undefined,'productCode':proBarcode};
+			
+							apiCall.getCallHeader(apiPath.getAllProduct,headerSearch).then(function(response){
+								
+								console.log(response);
+								vm.AccBillTable[fatIndex].productName = response.productName;
+								//vm.AccBillTable[data.index].productId = response.productId;
+								
+								$scope.setProductData(response,fatIndex);
+								//$scope.$apply();
+								
+							});
+						$scope.$apply();
+					}
+                   
+                }
+            };
+			
+  $scope.focusbarcode = function(index){
+	  
+	 // console.log(arg.resultFunction());
+  }
+  
+            $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.play();
 }
 RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll"];

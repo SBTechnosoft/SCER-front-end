@@ -44,7 +44,9 @@ App
 	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js'],
 	'tinymce':				['app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js',
 							'app/vendor/tinymce/js/tinymce/tinymce.min.js'],
-	'printJS':     ['app/js/jQuery.print.js']
+	'printJS':     ['app/js/jQuery.print.js'],
+	'barcodeScanner' :                 ['app/js/customeJS/qrCodeLib.js',
+							'app/js/customeJS/webcodecamjquery.js']
     },
     // Angular based script (use the right module name)
     modules: [
@@ -121,7 +123,10 @@ App
 	'getTrailBalance': 'http://api.siliconbrain.co.in/accounting/trial-balance/company/',
 	'reGeneratePdf': 'http://api.siliconbrain.co.in/documents/bill',
 	'billPaymentRefund': 'http://api.siliconbrain.co.in/accounting/bills/',
-	'settingOption': 'http://api.siliconbrain.co.in/settings'
+	'settingOption': 'http://api.siliconbrain.co.in/settings',
+	'getBalanceSheet': 'http://api.siliconbrain.co.in/accounting/balance-sheet/company/',
+	'getProfitLoss': 'http://api.siliconbrain.co.in/accounting/profit-loss/company/',
+	'getCashFlow': 'http://api.siliconbrain.co.in/accounting/cash-flow/company/'
   })
   //Api Path
   .constant('apiResponse', {
