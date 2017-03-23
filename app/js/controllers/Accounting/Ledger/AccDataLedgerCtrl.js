@@ -6,7 +6,7 @@
 
 App.controller('AccDataLedgerController', AccDataLedgerController);
 
-function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,getSetFactory,flotOptions, colors,$timeout) {
+function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,getSetFactory,flotOptions, colors,$timeout,toaster) {
   'use strict';
   var vm = this;
   var data = [];
@@ -18,8 +18,12 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
    
   //vm.pieChartData = [];
   vm.headingName;
-
+  
+	
+	
   apiCall.getCall(apiPath.getAllLedger+'/'+ledgerId).then(function(responseDrop){
+	  
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
 		vm.headingName = responseDrop.ledgerName;
 	
@@ -38,6 +42,7 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   
 	apiCall.getCall(GetTransationPath).then(function(response){
 		console.log(response);
+		toaster.clear();
 		data = response;
 		
 		vm.pieChartData = [{ "color" : "#6cc539",
@@ -348,4 +353,4 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   }
 
 }
-AccDataLedgerController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","getSetFactory","flotOptions","colors","$timeout"];
+AccDataLedgerController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","getSetFactory","flotOptions","colors","$timeout","toaster"];

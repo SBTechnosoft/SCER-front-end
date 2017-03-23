@@ -48,8 +48,8 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 		var Path = apiPath.getAllProduct+'/'+dataSet.productId;
 		
 		apiCall.getCall(Path).then(function(response){
-			
-			toaster.pop('wait', 'Please Wait', 'Data Loading....');
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 		//console.log(response);
 		vm.states.push(response);
@@ -70,7 +70,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 		
 		apiCall.getCallHeader(Path,dataSet).then(function(response){
 			
-			toaster.pop('wait', 'Please Wait', 'Data Loading....');
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 			console.log(response);
 			if(apiResponse.notFound != response){
@@ -504,7 +504,7 @@ $scope.TableData = function(){
 	$scope.generatePdf = function(operation){
 	 
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...');
+		toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...',60000);
 		
 		getData.operation = operation;
 		delete getData.authenticationToken;

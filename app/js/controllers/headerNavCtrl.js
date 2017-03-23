@@ -16,12 +16,23 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
     $scope.headerMenuCollapsed = !$scope.headerMenuCollapsed;
   };
   
+  $scope.accountSelected;
+  $scope.invetorySelected;
+  $scope.priceListSelected;
+ 
+  $scope.getClass = function(){
+	  
+	  return 'active';
+  }
+  
   $scope.getsidebar = function(){
 	  // $templateCache.removeAll();
 	   // $templateCache.remove('/front-end/#/app/form-inputs');
 	    //$templateCache.removeAll();
 		 //location.reload();
-		
+		$scope.accountSelected = true;
+	  $scope.invetorySelected = false;
+	  $scope.priceListSelected = false;
 	   
 	var menuJson = 'server/sidebar/Accounting.json',
       menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
@@ -49,7 +60,9 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	   // $templateCache.remove('/front-end/#/app/form-inputs');
 	    //$templateCache.removeAll();
 		 //location.reload();
-		
+		$scope.accountSelected = false;
+	  $scope.invetorySelected = false;
+	  $scope.priceListSelected = false;
 	   
 	var menuJson = 'server/sidebar/sidebar-items.json',
       menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
@@ -76,6 +89,10 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	  // GET Inventory Sidebar
 	  $scope.getInventory = function(){
 		 
+		 $scope.accountSelected = false;
+	  $scope.invetorySelected = true;
+	  $scope.priceListSelected = false;
+	  
 		var menuJson = 'server/sidebar/Inventory.json',
 		  menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
 		
@@ -93,6 +110,10 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	  // GET Price List Sidebar
 	  $scope.getPriceList = function(){
 		 
+		 $scope.accountSelected = false;
+	  $scope.invetorySelected = false;
+	  $scope.priceListSelected = true;
+	  
 		var menuJson = 'server/sidebar/PriceList.json',
 		  menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
 		

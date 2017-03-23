@@ -34,7 +34,12 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		}
 		else{
 			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
+		
 			apiCall.getCall(apiPath.getAllProduct).then(function(response){
+				
+				toaster.clear();
 				
 				if(apiResponse.noContent == response){
 					
@@ -90,7 +95,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 	$scope.getProduct = function(id){
 		
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....');
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
 			
 		apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
 			
@@ -258,6 +263,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
 
+		var is_chrome = Boolean(mywindow.chrome);
 
         mywindow.document.write('<html><head><title>' + document.title  + '</title>');
 
@@ -288,12 +294,26 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		mywindow.document.write('</body></html>');
 
-		mywindow.document.close(); // necessary for IE >= 10
+		//mywindow.document.close(); // necessary for IE >= 10
 		
-		mywindow.focus(); // necessary for IE >= 10*/
-		mywindow.print();
-		mywindow.close();
+		// mywindow.focus(); // necessary for IE >= 10*/
+		// mywindow.print();
+		// mywindow.close();
 		
+		if (is_chrome) {
+        setTimeout(function () { // wait until all resources loaded 
+            mywindow.focus(); // necessary for IE >= 10
+            mywindow.print();  // change window to mywindow
+            mywindow.close();// change window to mywindow
+			 }, 1000);
+		}
+		else {
+			mywindow.document.close(); // necessary for IE >= 10
+			mywindow.focus(); // necessary for IE >= 10
+			mywindow.print();
+			mywindow.close();
+		}
+	
 		// pData.selected = false;
 		
 		// $scope.selectedBoxArray = [];	
@@ -309,7 +329,8 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 	
 		
 		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
-
+	
+		 var is_chrome = Boolean(mywindow.chrome);
 
         mywindow.document.write('<html><head><title>' + document.title  + '</title>');
 
@@ -369,11 +390,27 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		 mywindow.document.write('</body></html>');
 
-		  mywindow.document.close(); // necessary for IE >= 10
+		 // mywindow.document.close(); // necessary for IE >= 10
 			
-		    mywindow.focus(); // necessary for IE >= 10*/
-		  mywindow.print();
-	    mywindow.close();
+			
+			if (is_chrome) {
+           setTimeout(function () { // wait until all resources loaded 
+				mywindow.focus(); // necessary for IE >= 10
+				mywindow.print();  // change window to mywindow
+				mywindow.close();// change window to mywindow
+			 }, 1000);
+    }
+    else {
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10
+        mywindow.print();
+        mywindow.close();
+    }
+	
+	
+		    // mywindow.focus(); // necessary for IE >= 10*/
+		  // mywindow.print();
+	    // mywindow.close();
 
         return true;
 		

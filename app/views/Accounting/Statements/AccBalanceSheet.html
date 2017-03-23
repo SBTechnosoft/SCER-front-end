@@ -21,9 +21,9 @@
    <div class="panel panel-default">
       <div class="panel-heading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
-		 <a ng-click="generatePdf()" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
-		 <a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a>
-		 
+		 <a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
+		 <a  ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to Excel</a>
+		 <!--a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a-->
          <div class="panel-title">Balance Sheet of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date:'dd-MMM-yyyy'}} </b></div>
       </div>
       <table data-ng-table="table.tableParams" export-csv="csv"   show-filter="false" class="table table-bordered table-striped" >
@@ -35,19 +35,20 @@
 			<th style="width:15%">Amount</th>
 		</thead>
          <tbody  >
-            <tr data-ng-repeat="user in $data" ng-if="user.length > 0" >
-				<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a ng-click="goToLedgerTransaction(user[0].ledgerId)" ui-sref="" style="text-transform:capitalize">{{user[0].ledgerName}}</a></td>
-				<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-right"><span>{{user[0].creditAmount  | setDecimal: noOfDecimalPoints}}</span></td>
-				<td   sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a  ng-click="goToLedgerTransaction(user[1].ledgerId)" ui-sref="" style="text-transform:capitalize">{{user[1].ledgerName}}</a></td>
-			    <td   sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:right" header-class="text-right"><span>{{user[1].debitAmount  | setDecimal: noOfDecimalPoints}}</span></td>
+            <!--tr data-ng-repeat="user in $data" ng-if="user.length > 0" -->
+            <tr data-ng-repeat="user in $data"  >
+				<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a ng-click="user[0].ledgerId =='0.9999'? openCreditorDebitorModal('creditor'):goToLedgerTransaction(user[0].ledgerId)"  style="text-transform:capitalize;cursor: pointer"><span ng-if="user[0].ledgerName" >{{user[0].ledgerName}}</span></a></td>
+				<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-right"><span ng-if="user[0].ledgerId !='0.9999'">{{user[0].creditAmount  | number: noOfDecimalPoints}}</span> <span ng-if="user[0].ledgerId =='0.9999'">{{totalSundryCreditor  | number: noOfDecimalPoints}}</span></td>
+				<td   sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a  ng-click="user[1].ledgerId =='0.9999'? openCreditorDebitorModal('debitor'):goToLedgerTransaction(user[1].ledgerId)"  style="text-transform:capitalize;cursor: pointer">{{user[1].ledgerName}}</a></td>
+			    <td   sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:right;" header-class="text-right"><span ng-if="user[1].ledgerId !='0.9999'">{{user[1].debitAmount  | number: noOfDecimalPoints}}</span> <span ng-if="user[1].ledgerId =='0.9999'">{{totalSundaryDebitor  | number: noOfDecimalPoints}}</span></td>
 				
             </tr>
          </tbody>
 		 <tfoot>
 			<td><b>Total Assets</b></td>
-			<td style="text-align:center"><b>{{TotalofDebit | setDecimal: noOfDecimalPoints}}</b></td>
+			<td style="text-align:right"><b>{{TotalofCredit| number: noOfDecimalPoints}}</b></td>
 			<td><b>Total Liabilities & Equity</b></td>
-			<td style="text-align:center"><b>{{TotalofCredit | setDecimal: noOfDecimalPoints}}</b></td>
+			<td style="text-align:right"><b>{{TotalofDebit | number: noOfDecimalPoints}}</b></td>
 		 </tfoot>
       </table>
 	  

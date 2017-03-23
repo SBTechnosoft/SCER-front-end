@@ -296,25 +296,45 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
   
 	/*** Pdf ***/
 	
-		$scope.generatePdf = function(){
-		 
+		$scope.generatePdf = function(operation){
 			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...');
+			var getData = {"Content-Type": undefined};
+			getData.operation = operation;
 			
-			apiCall.getCall(apiPath.getTrailBalance+$scope.stateCheck.companyId+'/export').then(function(responseDrop){
+			apiCall.getCallHeader(apiPath.getTrailBalance+$scope.stateCheck.companyId+'/export',getData).then(function(responseDrop){
 			
 				console.log(responseDrop);
+				toaster.clear();
 				
-				if(angular.isObject(responseDrop)){
-					
+				if(angular.isObject(responseDrop)  && responseDrop.hasOwnProperty('documentPath')){
+				
 					var pdfPath = erpPath+responseDrop.documentPath;
-					$window.open(pdfPath, '_blank');
+					if(operation == 'pdf'){
+						$window.open(pdfPath, '_blank');
+					}
+					else{
+						$window.open(pdfPath,"_self");
+					}
+					
 				}
 				else{
 					
-					alert('Something Wrong');
+					if(responseDrop.status == 500){
+						
+						toaster.pop('warning', 'Opps!', responseDrop.statusText);
+					}
+					else{
+						
+						toaster.pop('warning', 'Opps!', responseDrop);
+					}
+					
+					//alert('Something Wrong');
 				}
 			
 			});
+			
 		}
 	
 	/*** End Pdf ***/

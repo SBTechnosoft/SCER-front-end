@@ -6,15 +6,28 @@
       </div>
       <div class="panel-body">
          <p class="text-center pv text-bold">LOGIN</p>
-         <form role="form" name="loginForm" class="mb-lg">
+         <form novalidate="" name="loginForm" class="mb-lg form-validate">
+		 
             <div class="form-group has-feedback">
-               <input id="exampleInputEmail1" type="email" ng-model="loginData.emailId" placeholder="Your email" autocomplete="off" class="form-control" ng-required="true" />
+               <input id="exampleInputEmail1" type="email" name="emailId" ng-model="loginData.emailId" ng-change="changeIt()" placeholder="Your email" autocomplete="off" class="form-control" ng-required="true"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
                <span class="fa fa-envelope form-control-feedback text-muted"></span>
             </div>
+			
+			<span ng-messages="loginForm.emailId.$error" ng-if="loginForm.emailId.$dirty || loginForm.emailId.$touched"  role="alert">
+				<span ng-messages-include="errorRequired"></span>
+				<span ng-messages-include="errorEmail"></span>
+			</span>
+			
             <div class="form-group has-feedback">
-               <input id="exampleInputPassword1" type="password" ng-model="loginData.password" placeholder="Your password" class="form-control" ng-required="true" />
+               <input id="exampleInputPassword1" type="password" ng-model="loginData.password" ng-change="changeIt()" placeholder="Your password"  class="form-control" ng-required="true" ng-minlength="6" ng-maxlength="28" />
                <span class="fa fa-lock form-control-feedback text-muted"></span>
             </div>
+			
+			<span ng-messages="loginForm.emailId.$error" ng-if="loginForm.emailId.$dirty || loginForm.emailId.$touched"  role="alert">
+				<span ng-messages-include="errorRequired"></span>
+				<span ng-messages-include="errorEmail"></span>
+			</span>
+			
 			<span class="text-danger" ng-if="notMatch">EmailId or Password is Wrong.</span>
             <!--div class="checkbox c-checkbox pull-left mt0">
                <label>
@@ -23,7 +36,7 @@
             </div-->
             <!--br/-->
             <!--button type="submit" class="btn btn-block btn-primary mt-lg" ui-sref="app.dashboard">Login</button-->
-            <button type="submit" class="btn btn-block btn-primary mt-lg" ng-click="login()" >Login</button>
+            <button type="submit" class="btn btn-block btn-primary mt-lg" ng-click="login()" ng-disabled="disableValue || loginForm.$invalid" >Login</button>
          </form>
         <!-- <p class="text-center text-muted">Or</p>
          <a ui-sref="page.register" class="btn btn-block btn-default">

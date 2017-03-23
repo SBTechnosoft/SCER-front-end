@@ -6,7 +6,7 @@
 
 App.controller('AccBalanceSheetController', AccBalanceSheetController);
 
-function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,$window,getSetFactory) {
+function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,$window,getSetFactory,$modal) {
   'use strict';
   var vm = this;
   var data = [];
@@ -15,6 +15,16 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
   $scope.noOfDecimalPoints;
   $scope.displayCompany;
   
+  /** Sundry debitor and creditor **/
+  
+		$scope.totalSundaryDebitor = 0;
+		$scope.totalSundryCreditor = 0;
+			
+		var sundryDebitorArray = [];
+		var sundryCreditorArray = [];
+		
+	/** End **/
+			
   var erpPath = $rootScope.erpPath;
    $scope.displayDate = new Date();
   
@@ -67,7 +77,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
   
 	$scope.getBranch = function(id){
 		
-	toaster.pop('wait', 'Please Wait', 'Data Loading....');
+	toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
 	
 		apiCall.getCall(apiPath.getBalanceSheet+id).then(function(response){
 			
@@ -76,9 +86,25 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 			toaster.clear();
 			
 			var trialBalanceArray = [];
+			
+			/** Sundry debitor and creditor **/
+			
+				$scope.totalSundaryDebitor = 0;
+				$scope.totalSundryCreditor = 0;
+		
+				sundryDebitorArray = [];
+				sundryCreditorArray = [];
+				
+			/** End **/
+			
 			var totaldebit = 0;
 			var totalcredit = 0;
+			
+		
+			
 			var dataLength = response.length-1;
+			var debitorFlag = 0;
+			var creditorFlag = 0;
 			
 			for (var i = 0; i < response.length; i++) {
 			  
@@ -92,84 +118,167 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 			 trailObject.amountType = dataOfTrial.amountType;
 			  
 			  if(dataOfTrial.amountType == 'debit'){
-				 
-				 
+				  
 				 trailObject.debitAmount = dataOfTrial.amount;
 				  trailObject.creditAmount = "-";
 				totaldebit += parseFloat(dataOfTrial.amount);
-				var cntLen = trialBalanceArray.length;
-				if(cntLen > 0){
-					var inFlag = 0;
-					for(var p=0;p<cntLen;p++){
+				
+				if(dataOfTrial.ledger.ledgerGroupId == 32){
+					console.log('in');
 					
-						var trailArrayData = trialBalanceArray[p];
+					$scope.totalSundaryDebitor += parseFloat(dataOfTrial.amount);
+					
+					sundryDebitorArray.push(dataOfTrial);
+					
+					if(debitorFlag == 0){
+						console.log('Flag IF');
+						debitorFlag = 1;
 						
-						//console.log(trailArrayData[0]);
-						if(trailArrayData[1] == undefined){
-							inFlag = 1;
-							trailArrayData[1] = trailObject;
-							break;
-						}
+						 var trailObjectDebtors = {};
+						 trailObjectDebtors.ledgerId = "0.9999";
+						 trailObjectDebtors.ledgerName = "Sundry Debtors";
+						 trailObjectDebtors.amountType = "debit";
+						 trailObjectDebtors.debitAmount = "-";
+						trailObjectDebtors.creditAmount = "-";
+						
+						var cntLendebtors = trialBalanceArray.length;
+						var inFlagDebtor = 0;
+						
+						for(var varDebtors=0;varDebtors<cntLendebtors;varDebtors++){
 					
-					}
-					if(inFlag == 0){
-						innerArray[1] = trailObject;
+							var trailArrayData = trialBalanceArray[varDebtors];
+								console.log('Push');
+							//console.log(trailArrayData[0]);
+							if(trailArrayData[1] == undefined){
+								inFlagDebtor = 1;
+								trailArrayData[1] = trailObjectDebtors;
+								break;
+							}
+					
+						}
+						
+						if(inFlagDebtor == 0){
+							var innerArrayDebtors = [];
+							innerArrayDebtors[1] = trailObjectDebtors;
+							trialBalanceArray.push(innerArrayDebtors);
+						}
 					}
 				}
 				else{
-					
-					innerArray[1] = trailObject;
-					
+					console.log('Else Debit');
+					var cntLen = trialBalanceArray.length;
+					if(cntLen > 0){
+						var inFlag = 0;
+						for(var p=0;p<cntLen;p++){
+						
+							var trailArrayData = trialBalanceArray[p];
+							
+							//console.log(trailArrayData[0]);
+							if(trailArrayData[1] == undefined){
+								inFlag = 1;
+								trailArrayData[1] = trailObject;
+								break;
+							}
+						
+						}
+						if(inFlag == 0){
+							innerArray[1] = trailObject;
+							trialBalanceArray.push(innerArray);
+						}
+					}
+					else{
+						
+						innerArray[1] = trailObject;
+						trialBalanceArray.push(innerArray);
+					}
 				}
-				 trialBalanceArray.push(innerArray);
 			  }
 			  else{
 				   trailObject.debitAmount = "-";
 				  trailObject.creditAmount = dataOfTrial.amount;
 				 totalcredit += parseFloat(dataOfTrial.amount);
 				 
-				 var cntLen = trialBalanceArray.length;
-				if(cntLen > 0){
-					var inFlag = 0;
-					for(var p=0;p<cntLen;p++){
+				 if(dataOfTrial.ledger.ledgerGroupId == 31){
+				
+					$scope.totalSundryCreditor += parseFloat(dataOfTrial.amount);
 					
-						var trailArrayData = trialBalanceArray[p];
+					sundryCreditorArray.push(dataOfTrial);
+					
+					if(creditorFlag == 0){
 						
-						if(trailArrayData[0] == undefined){
-							inFlag = 1;
-							trailArrayData[0] = trailObject;
-							break;
+						creditorFlag = 1;
+						
+						 var trailObjectCreditor = {};
+						 trailObjectCreditor.ledgerId = "0.9999";
+						 trailObjectCreditor.ledgerName = "Sundry Creditor";
+						 trailObjectCreditor.amountType = "Credit";
+						 trailObjectCreditor.debitAmount = "-";
+						trailObjectCreditor.creditAmount = "-";
+						
+						var cntLenCreditor = trialBalanceArray.length;
+						var inFlagCreditor = 0;
+						
+						for(var varCreditor=0;varCreditor<cntLenCreditor;varCreditor++){
+					
+							var trailArrayData = trialBalanceArray[varCreditor];
+							//console.log(trailArrayData[0]);
+							if(trailArrayData[0] == undefined){
+								inFlagCreditor = 1;
+								trailArrayData[0] = trailObjectCreditor;
+								break;
+							}
+					
 						}
-					
-					}
-					
-					if(inFlag == 0){
-						innerArray[0] = trailObject;
+						
+						if(inFlagCreditor == 0){
+							var innerArrayCreditor = [];
+							innerArrayCreditor[0] = trailObjectCreditor;
+							trialBalanceArray.push(innerArrayCreditor);
+						}
 					}
 				}
 				else{
-					
-					innerArray[0] = trailObject;
-					
-				}
-				 trialBalanceArray.push(innerArray);
+					 
+					 var cntLen = trialBalanceArray.length;
+					if(cntLen > 0){
+						var inFlag = 0;
+						for(var p=0;p<cntLen;p++){
+						
+							var trailArrayData = trialBalanceArray[p];
+							
+							if(trailArrayData[0] == undefined){
+								inFlag = 1;
+								trailArrayData[0] = trailObject;
+								break;
+							}
+						
+						}
+						
+						if(inFlag == 0){
+							innerArray[0] = trailObject;
+							trialBalanceArray.push(innerArray);
+						}
+					}
+					else{
+						
+						innerArray[0] = trailObject;
+						trialBalanceArray.push(innerArray);
+					}
+				 }
 			  }
-			  console.log(innerArray);
+			  //console.log(innerArray);
 			 
 			  //innerArray = [];
 				if(i==dataLength)
 				{
-					// var totalObject = {};
-					// totalObject.ledgerName = "Total";
-					// totalObject.debitAmount = totaldebit;
-					// totalObject.creditAmount = totalcredit;
 					
+				
 					// trialBalanceArray.push(totalObject);
 					$scope.TotalofDebit = totaldebit;
 					$scope.TotalofCredit = totalcredit;
 				}
 				
-				console.log(trialBalanceArray);
+				//console.log(trialBalanceArray);
 			}
 			
 			//console.log(trialBalanceArray);
@@ -351,24 +460,106 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
       }
   });
   
-	/*** Pdf ***/
+	/** Creditor Debitor Modal**/
 	
-		$scope.generatePdf = function(){
+	$scope.openCreditorDebitorModal = function(personType){
+		
+		toaster.clear();
+		
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Accounting/Statements/balanceSheetModal.html',
+		  controller: AccBalanceSheetModalController,
+		  size: 'lg',
+		  resolve:{
+			  ledgerGroupData: function(){
+				  
+					if(personType == 'creditor'){
+			
+						return sundryCreditorArray;
+					}
+					else{
+						return sundryDebitorArray;
+					}
+			  },
+			  ledgerGroupType: function(){
+				  
+					if(personType == 'creditor'){
+			
+						return 'Creditors';
+					}
+					else{
+						return 'Debtors';
+					}
+			  },
+			  totalDebitorCreditor: function(){
+				  
+				  if(personType == 'creditor'){
+			
+						return $scope.totalSundryCreditor;
+					}
+					else{
+						 return $scope.totalSundaryDebitor;
+					}
+					
+				 
+			  },
+			  noOfDecimalPoints: function(){
+				  
+				  return $scope.noOfDecimalPoints;
+			  }
+		  }
+		});
+
+	   
+		modalInstance.result.then(function () {
 		 
 			
+		
+		}, function () {
+		  console.log('Cancel');	
+		});
 			
-			apiCall.getCall(apiPath.getBalanceSheet+$scope.stateCheck.companyId+'/export').then(function(responseDrop){
+	}
+	
+	/** End **/
+	
+	/*** Pdf ***/
+	
+		$scope.generatePdf = function(operation){
+		 
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...');
+			var getData = {"Content-Type": undefined};
+			getData.operation = operation;
+			
+			apiCall.getCallHeader(apiPath.getBalanceSheet+$scope.stateCheck.companyId+'/export',getData).then(function(responseDrop){
 			
 				console.log(responseDrop);
+				toaster.clear();
 				
-				if(angular.isObject(responseDrop)){
-					
+				if(angular.isObject(responseDrop)  && responseDrop.hasOwnProperty('documentPath')){
+				
 					var pdfPath = erpPath+responseDrop.documentPath;
-					$window.open(pdfPath, '_blank');
+					if(operation == 'pdf'){
+						$window.open(pdfPath, '_blank');
+					}
+					else{
+						$window.open(pdfPath,"_self");
+					}
+					
 				}
 				else{
 					
-					alert('Something Wrong');
+					if(responseDrop.status == 500){
+						
+						toaster.pop('warning', 'Opps!', responseDrop.statusText);
+					}
+					else{
+						
+						toaster.pop('warning', 'Opps!', responseDrop);
+					}
+					
+					//alert('Something Wrong');
 				}
 			
 			});
@@ -376,4 +567,4 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 	
 	/*** End Pdf ***/
 }
-AccBalanceSheetController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","$window","getSetFactory"];
+AccBalanceSheetController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","$window","getSetFactory","$modal"];

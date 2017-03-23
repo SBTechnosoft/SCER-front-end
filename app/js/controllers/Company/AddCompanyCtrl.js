@@ -19,6 +19,9 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 	
 	//$rootScope.focusFunction('txtdata');
 	
+	 $scope.erpPath = $rootScope.erpPath; //Erp Path
+	 
+	
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant

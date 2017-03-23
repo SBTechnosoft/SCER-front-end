@@ -4,7 +4,7 @@
   
 </h3>
 <div   class="container-fluid" >
-	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
@@ -21,8 +21,8 @@
    <div class="panel panel-default">
       <div class="panel-heading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
-		 <a ng-click="generatePdf()" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
-		 <a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a>
+		 <a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
+		 <a  ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to Excel</a>
 		 
          <div class="panel-title">Profit & Loss of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date:'dd-MMM-yyyy'}} </b></div>
       </div>
@@ -37,21 +37,21 @@
             <tr data-ng-repeat="user in $data" >
 			
 				<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a ng-click="goToLedgerTransaction(user.ledgerId)" ui-sref="" style="text-transform:capitalize">{{user.ledgerName}}</a></td>
-				<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:center" header-class="text-center">{{user.debitAmount  | setDecimal: noOfDecimalPoints}}</td>
-			    <td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:center" header-class="text-center">{{user.creditAmount  | setDecimal: noOfDecimalPoints}}</td>
+				<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-center">{{user.debitAmount  | number: noOfDecimalPoints}}</td>
+			    <td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:right" header-class="text-center">{{user.creditAmount  | number: noOfDecimalPoints}}</td>
 				
             </tr>
          </tbody>
 		 <tfoot>
 			<tr>
 				<td><b>Total</b></td>
-				<td style="text-align:center"><b>{{TotalofDebit | setDecimal: noOfDecimalPoints}}</b></td>
-				<td style="text-align:center"><b>{{TotalofCredit | setDecimal: noOfDecimalPoints}}</b></td>
+				<td style="text-align:right"><b>{{TotalofDebit | number: noOfDecimalPoints}}</b></td>
+				<td style="text-align:right"><b>{{TotalofCredit | number: noOfDecimalPoints}}</b></td>
 			</tr>
 			<tr>
 				<td><b>Diffrence</b></td>
-				<td style="text-align:center" ><b ng-if="TotalofDebit > TotalofCredit">{{TotalofDebit - TotalofCredit | setDecimal: noOfDecimalPoints}}</b></td>
-				<td style="text-align:center"><b ng-if="TotalofDebit < TotalofCredit" >{{TotalofCredit - TotalofDebit | setDecimal: noOfDecimalPoints}}</b></td>
+				<td style="text-align:right" ><b ng-if="TotalofDebit > TotalofCredit">{{TotalofDebit - TotalofCredit | number: noOfDecimalPoints}}</b></td>
+				<td style="text-align:right"><b ng-if="TotalofDebit < TotalofCredit" >{{TotalofCredit - TotalofDebit | number: noOfDecimalPoints}}</b></td>
 			</tr>
 		 </tfoot>
       </table>

@@ -27,10 +27,10 @@
    <!-- START Nav wrapper-->
    <div collapse="headerMenuCollapsed" class="nav-wrapper collapse navbar-collapse" style="background-color: #5F7076 !important;">
       <!-- START Left navbar-->
-      <ul class="nav navbar-nav">
-         <li>
+      <ul class="nav navbar-nav" style="height:81px">
+         <li class="my-topbar-select">
             <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
-            <a href="#" data-ng-click="app.sidebar.isCollapsed = !app.sidebar.isCollapsed" class="hidden-xs">
+            <a href="#" data-ng-click="app.sidebar.isCollapsed = !app.sidebar.isCollapsed" class="hidden-xs my-topbar-select my-ancher-topbar-select">
                <em data-ng-class="app.sidebar.isCollapsed ? 'fa-caret-right':'fa-caret-left'" class="fa"></em>
             </a>
          </li>
@@ -38,40 +38,41 @@
       <!-- END Left navbar-->
       <!-- START Top navbar search form-->
       <!-- Header Link Start -->
-	  <ul class="nav navbar-nav navbar-left">
-		<li >
-            <a ui-sref="app.dashboard" title="Dashboard">
-			<center><em class="fa fa-dashboard" style="font-size:28px;" ></em></center>
-              Dashboard
+	  <ul class="nav navbar-nav navbar-left" style="height:81px">
+		<li class="my-topbar-select" >
+            <a ui-sref="app.dashboard" title="Dashboard"  class="my-ancher-topbar-select" >
+				<center><em class="fa fa-dashboard" style="font-size:28px;" ></em></center>
+				Dashboard
 			</a>
         </li>
-		<li >
+		<li  class="my-topbar-select"  ng-class="{'set-my-topbar-select':accountSelected}" >
 		 <!--a ng-click="getsidebar()" ui-sref="app.table-ngtable" href="/app/table-ngtable" -->
-            <a ui-sref="." ng-click="getsidebar()"  title="Accounting" >
-			<center><em class="fa fa-inr" style="font-size:28px;" ></em></center>
-              Accounting
+            <a ui-sref="." ng-click="getsidebar()"  title="Accounting"   class="my-ancher-topbar-select"  >
+				<center><em class="fa fa-inr" style="font-size:28px;" ></em></center>
+				  Accounting
 			</a>
         </li>
-		<li>
-            <a ui-sref="." ng-click="getInventory()" title="Inventory">
+		<!--li  class="my-topbar-select {{invetorySelected?'set-my-topbar-select':''}}"  -->
+		<li  class="my-topbar-select "  ng-class="{'set-my-topbar-select':invetorySelected}" >
+            <a ui-sref="." ng-click="getInventory()" title="Inventory" class="my-ancher-topbar-select" >
 			<center><em class="fa fa-file-text-o" style="font-size:28px;" ></em></center>
               Inventory
 			</a>
         </li>
-		<li>
-            <a ui-sref="." title="CRM">
+		<li  class="my-topbar-select"  ng-class="{'set-my-topbar-select':crmSelected}" >
+            <a ui-sref="." title="CRM" class="my-ancher-topbar-select" >
 			<center><em class="fa fa-users" style="font-size:28px;" ></em></center>
               CRM
 			</a>
         </li>
-		<li>
-            <a ui-sref="." title="Analyzer">
+		<li  class="my-topbar-select" ng-class="{'set-my-topbar-select':analyzerSelected}" >
+            <a ui-sref="." title="Analyzer" class="my-ancher-topbar-select"  >
 			<center><em class="fa icon-bar-graph-2" style="font-size:28px;" ></em></center>
               Analyzer
 			</a>
         </li>
-		<li>
-            <a ui-sref="." ng-click="getPriceList()" title="Price List">
+		<li  class="my-topbar-select" ng-class="{'set-my-topbar-select':priceListSelected}" >
+            <a ui-sref="." ng-click="getPriceList()" title="Price List" class="my-ancher-topbar-select"  >
 			<center><em class="fa fa-list" style="font-size:28px;" ></em></center>
               Price List
 			</a>
@@ -234,7 +235,7 @@
          </li-->
 		 <!--Quick Menu -->
 		 <li dropdown="" class="dropdown dropdown-list my-topNav-padding" style="padding-top:10px">
-            <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle" title="Quick Access">
+            <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle my-ancher-topbar-select" title="Quick Access"  >
                <div class="point-pin">
                   <em class="fa fa-ellipsis-h"></em>
                   <div class=""></div>
@@ -257,7 +258,7 @@
 				  
                </li-->
 			   <li data-ng-init="offcontent1 = true" data-ng-click="cancel($event)">
-                  <a ui-sref="app.RetailsaleBill" data-ng-click="offcontent1 = false" class="p">
+                  <a ui-sref="app.RetailsaleBill" data-ng-click="offcontent1 = false" class="p ">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">
@@ -305,7 +306,7 @@
 		 <!--Quick Menu End -->
          <!-- Fullscreen (only desktops)-->
          <li class="visible-lg my-topNav-padding">
-            <a href="#" toggle-fullscreen="toggle-fullscreen">
+            <a href="#" toggle-fullscreen="toggle-fullscreen" class="my-ancher-topbar-select">
                <em class="fa fa-expand"></em>
             </a>
          </li>
@@ -319,9 +320,9 @@
 		 
 		<!--Start -->
 		<li dropdown="" class="dropdown dropdown-list my-topNav-padding">
-            <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle" style="text-transform:capitalize">
+            <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle my-ancher-topbar-select" style="text-transform:capitalize">
 			 <img data-ng-src="{{user.picture}}" alt="" class="center-block img-circle img-responsive thumb32" />
-			  {{::userName}}
+			  <span ng-if="userName" >{{::userName}}</span>
                <div class="point-pin">
                   <em class="fa fa-caret-down"></em>
                </div>
@@ -330,7 +331,7 @@
             <ul offcanvas-dropdown="" class="dropdown-menu fadeInLeft2 animated">
                <!-- START list item-->
                <li >
-                  <a href="#" data-ng-click="offcontent1 = false" class="p">
+                  <a href="#" data-ng-click="offcontent1 = false" class="p ">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">
@@ -346,7 +347,7 @@
                </li>
                <!-- START list item-->
                <li   class="bt">
-                  <a href="#"  ng-click="configuration()" class="p">
+                  <a href="#"  ng-click="configuration()" class="p ">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">

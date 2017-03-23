@@ -136,8 +136,8 @@
 				</fieldset>
 				</div>
 				<div class="col-md-3">
-				<img src="http://api.siliconbrain.co.in/{{addCompany.documentUrl}}{{addCompany.documentName}}" height="100" width="80%" class="brand-logo-collapsed"/>
-				<img ng-src="{{image_source}}" height="100" width="80%" class="brand-logo-collapsed" />
+				<img src="{{erpPath}}{{addCompany.documentUrl}}{{addCompany.documentName}}"  onerror="this.style.display='none'" height="100" width="80%" class="brand-logo-collapsed"/>
+				<img ng-src="{{image_source}}" height="100" width="80%"  onerror="this.style.display='none'" class="brand-logo-collapsed" />
 				<input id="input-id-1" type="file" tabindex="1" onchange="angular.element(this).scope().uploadFile(this.files)"  accept="image/png,image/gif,image/jpeg,image/jpg" />
 				
 				</div>
@@ -264,7 +264,7 @@
 						</div>
 					</div>
 				</fieldset>
-				<button type="button" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="cancel()" >Cancel</button>
+				<button type="button" style="visibility:hidden" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="cancel()" >Cancel</button>
 				<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addCompanyForm(addCompany)" ng-disabled="formCompany.$invalid" >Save</button>
 				
 			

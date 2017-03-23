@@ -24,8 +24,11 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 			
 		}
 		else{
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 			apiCall.getCall(apiPath.getAllProduct).then(function(response){
+				
+				toaster.clear();
 				
 				if(apiResponse.noContent == response){
 					
@@ -81,7 +84,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 	$scope.getProduct = function(id){
 		
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....');
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 		apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
 			

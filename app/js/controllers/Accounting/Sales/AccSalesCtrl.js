@@ -736,6 +736,7 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	if($scope.totalDebit != $scope.totalCredit){
 	
 		toaster.pop('alert', 'Opps!!', 'Credit/Debit Amount is Not Equal');
+		$scope.disableButton = false;
 		return false;
 	}
 		

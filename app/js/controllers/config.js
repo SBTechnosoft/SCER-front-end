@@ -474,7 +474,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccDataLedger',
             templateUrl: basepath('Accounting/Ledger/AccDataLedger.html'),
 			controller: 'AccDataLedgerController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins','toaster')
         })
 		/*** Quick Menu ***/
 		//Retailsale Bill

@@ -6,7 +6,7 @@
 </h3>
 <!-- START panel-->
 <div data-ng-controller="AccPurchaseController as form" class="container-fluid">
-	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
 	<form  action="#" name="formPurchase" class="form-validate form-horizontal">
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
@@ -335,11 +335,10 @@
 					<td data-title="'Date'" sortable="'entryDate'" filter="{ 'entryDate': 'text' }" >{{user.entryDate}}</td>
 					<td data-title="'Perticular'" sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }" >{{user.ledger.ledgerName}}</td>
 					
-					<td data-title="'Debit'" sortable="'amountTypeDebit'" filter="{ 'amountTypeDebit': 'text' }"  ><span ng-if="user.amountType=='debit'">{{user.amountType}}</span></td>
+					<td data-title="'Debit'" sortable="'amountTypeDebit'" filter="{ 'amountTypeDebit': 'text' }"  ><span ng-if="user.amountType=='debit'">{{user.amount}}</span></td>
 					
-					<td data-title="'Credit'" sortable="'amountTypeCredit'" filter="{ 'amountTypeCredit': 'text' }"  ><span ng-if="user.amountType=='credit'">{{user.amountType}}</span></td>
+					<td data-title="'Credit'" sortable="'amountTypeCredit'" filter="{ 'amountTypeCredit': 'text' }"  ><span ng-if="user.amountType=='credit'">{{user.amount}}</span></td>
 					
-					<td data-title="'Amount'" sortable="'amount'" filter="{ 'amount': 'text' }" >{{user.amount}}</td>
 				   <!--td data-title="'Action'" sortable="'action'">
 						<center>
 							<i ui-sref="" ng-click="editSales(user.jfId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;

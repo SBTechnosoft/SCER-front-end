@@ -93,58 +93,78 @@
 					</div>
 				</div>
 				
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					  <label class="col-sm-3 control-label">Payment Mode</label>
-					  <div class="col-sm-6">
-						 <select chosen data-ng-model="paymentForm.paymentMode"  name="paymentMode" tabindex="2"  data-ng-options="s for s in paymentModeDrop"  class="form-control chosen-select" ng-required="true" >
-							 <option value=""></option>
-						 </select>
-					  </div>
-				   </div>
-				</fieldset>
+				<div class="col-sm-12">
 				
-				<fieldset class="my-fieldset-paddingBottom" ng-if="paymentForm.paymentMode=='bank'">
-				   <div class="form-group">
-					  <label class="col-sm-3 control-label"> Bank Name </label>
-						<div class="col-sm-6">
-							<select chosen="" data-ng-model="paymentForm.BankName" data-ng-options="s.bankName for s in fromData.bankDrop track by s.bankId" class="form-control chosen-select" size="5" ng-required="true"></select>
-						</div>
-				   </div>
-				</fieldset>
-				
-				<fieldset class="my-fieldset-paddingBottom" ng-if="paymentForm.paymentMode=='bank'">
-					<div class="form-group">
-					  <label for="input-id-1" class="col-sm-3 control-label">cheque#</label>
-					  <div class="col-sm-6">
-						 <input ng-model="paymentForm.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" ng-required="true" />
-						 <span ng-messages="formPayment.chequeNo.$error" ng-if="formPayment.chequeNo.$dirty || formPayment.chequeNo.$touched"  role="alert">
-							<span ng-messages-include="errorPatternNumber"></span>
-						</span>
-						 
-					  </div>
-				   </div>
-				</fieldset>
+					<fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Payment Mode</label>
+						  <div class="col-sm-6">
+							 <select chosen data-ng-model="paymentForm.paymentMode"  name="paymentMode" tabindex="2"  data-ng-options="s for s in paymentModeDrop"  class="form-control chosen-select" ng-required="true" >
+								 <option value=""></option>
+							 </select>
+						  </div>
+					   </div>
+					</fieldset>
 					
-				<fieldset class="my-fieldset-paddingBottom">
-				   <div class="form-group">
-					  <label class="col-sm-3 control-label">Payment Trn</label>
-					  <div class="col-sm-6">
-						 <select chosen data-ng-model="paymentForm.paymentTrn" tabindex="2" name="paymentTrn" ng-change="changeAmountLimit()" data-ng-options="s for s in paymentTrasDrop"  class="form-control chosen-select" ng-required="true" >
-							 <option value=""></option>
-						 </select>
-					  </div>
-				   </div>
-				</fieldset>
+				</div>
 				
+				<div class="col-sm-12">
+					
+					
+					<fieldset class="my-fieldset-paddingBottom" ng-if="paymentForm.paymentMode=='bank'">
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label"> Bank Name </label>
+							<div class="col-sm-6">
+								<select chosen="" data-ng-model="paymentForm.BankName" data-ng-options="s.bankName for s in fromData.bankDrop track by s.bankId" class="form-control chosen-select" size="5" ng-required="true"></select>
+							</div>
+					   </div>
+					</fieldset>
+					
+				</div>
 				
-				<fieldset >
-					<div class="form-group">
-						<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" tabindex="3"  >Cancel</button>
-						<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="insertPayment()" ng-disabled="formPayment.$invalid"  tabindex="2" >Save</button>
-					</div>
-				</fieldset>
-		
+				<div class="col-sm-12">
+				
+					<fieldset class="my-fieldset-paddingBottom" ng-if="paymentForm.paymentMode=='bank'">
+						<div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">cheque#</label>
+						  <div class="col-sm-6">
+							 <input ng-model="paymentForm.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" ng-required="true" />
+							 <span ng-messages="formPayment.chequeNo.$error" ng-if="formPayment.chequeNo.$dirty || formPayment.chequeNo.$touched"  role="alert">
+								<span ng-messages-include="errorPatternNumber"></span>
+							</span>
+							 
+						  </div>
+					   </div>
+					</fieldset>
+				
+				</div>
+				
+				<div class="col-sm-12">
+				
+					<fieldset class="my-fieldset-paddingBottom">
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Payment Trn</label>
+						  <div class="col-sm-6">
+							 <select chosen data-ng-model="paymentForm.paymentTrn" tabindex="2" name="paymentTrn" ng-change="changeAmountLimit()" data-ng-options="s for s in paymentTrasDrop"  class="form-control chosen-select" ng-required="true" >
+								 <option value=""></option>
+							 </select>
+						  </div>
+					   </div>
+					</fieldset>
+				
+				</div>
+				
+				<div class="col-sm-12">
+				
+					<fieldset >
+						<div class="form-group">
+							<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" tabindex="3"  >Cancel</button>
+							<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="insertPayment()" ng-disabled="formPayment.$invalid"  tabindex="2" >Save</button>
+						</div>
+					</fieldset>
+					
+				</div>
+				
 			</form>
 		</center>
 		

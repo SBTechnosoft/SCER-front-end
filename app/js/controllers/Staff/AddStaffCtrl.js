@@ -9,12 +9,20 @@ App.controller('AddStaffController', AddStaffController);
 function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,apiResponse,validationMessage,getSetFactory) {
   'use strict';
  
+	
+	
 	var vm = this;
 	$scope.addStaff = [];
 	var formdata = new FormData();
 	
 	$scope.allowedType = $rootScope.$storage.authUser.userType; //Logged user Type (Admin/Staff)
 	$scope.allowedId = $rootScope.$storage.authUser.userId; //Logged user Type (Admin/Staff)
+	
+		if($scope.allowedType == 'staff'){
+			
+			$state.go('app.Staff');
+		}
+	
 	$scope.updatedId;
 	/* VALIDATION */
 	

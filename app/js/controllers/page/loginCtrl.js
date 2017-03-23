@@ -10,10 +10,15 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
   'use strict';
   var vm = this;
  
+	$scope.disableValue = false;
+	
 	$scope.loginData = [];
 	$scope.notMatch = false; // True when Email or password will Be Wrong.
 	
 	$scope.login = function(){
+		
+		$scope.disableValue = true;
+		
 		 var formdata = new FormData();
 		formdata.append('emailId',$scope.loginData.emailId);
 		formdata.append('password',$scope.loginData.password);
@@ -31,6 +36,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
 			
 			//console.log(response.authenticationToken);
 			
+			$scope.disableValue = false;
 			
 			//if($rootScope.$storage.authToken){
 			if(angular.isObject(response)){
@@ -44,6 +50,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
 			}
 			else{
 				
+				$scope.disableValue = false;
 				$scope.notMatch = true;
 			}
 		
@@ -52,7 +59,10 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse) {
 		
 	}
 	
-  
+	$scope.changeIt = function(){
+		
+		$scope.notMatch = false;
+	}
 
 
 }

@@ -6,11 +6,9 @@
 
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll) {
+function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location) {
   'use strict';
  
- 
-	
 	var vm = this;
 	var formdata = new FormData();
 	
@@ -23,7 +21,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.saleType = saleType;
 	
 	vm.AccBillTable = [];
-			vm.productTax = [];
+	vm.productTax = [];
 			
 	$scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
 	
@@ -74,7 +72,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
 			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Loading....');
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 			var id = response2.companyId;
 			var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
@@ -391,7 +389,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			
 			console.log('true');
-			
+			toaster.clear();
 			//vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":1000,"discount":"","qty":3,"amount":""}];
 			
 		}
@@ -573,7 +571,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	 {
 		vm.loadData = true;
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....');
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
 		$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
 		
@@ -641,7 +639,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			formdata.delete('companyId');
 			
-			toaster.pop('wait', 'Please Wait', 'Data Updating....');
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Updating....',60000);
 			
 			var BillPath = apiPath.postBill+'/'+$scope.quickBill.EditBillData.saleId;
 			
@@ -677,8 +676,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 		}
 		else{
-			
-			toaster.pop('wait', 'Please Wait', 'Data Inserting....');
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Inserting....',60000);
 			
 			var  date = new Date(vm.dt1);
 			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
@@ -1158,9 +1157,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 		$scope.goToNextPrevious = function(nextPre){
 			
+				toaster.clear();
+				toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+				
 				var formdata = new FormData();
 				
-				toaster.clear();
+				
 				
 				var preHeaderData = {'Content-Type': undefined,'companyId':$scope.quickBill.companyDropDown.companyId};
 				
@@ -1217,13 +1219,15 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					else{
 						
 						if(apiResponse.noContent == response){
-					
+							toaster.clear();
 							toaster.pop('warning', 'Opps!!', 'Data Not Available');
 						}
 						else if(response.status == 500){
+							toaster.clear();
 							toaster.pop('warning', 'Something Wrong', response.statusText);
 						}
 						else{
+							toaster.clear();
 							toaster.pop('warning', 'Something Wrong', response);
 						}
 						
@@ -1243,6 +1247,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$scope.previewBill = function(size){
 		
 			toaster.clear();
+			
 			
 			if($scope.quickBill.companyDropDown){
 		
@@ -1590,11 +1595,16 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
                 }
             };
 			
-  $scope.focusbarcode = function(index){
-	  
+  $scope.focusbarcode = function(){
+
+	$("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.stop();
 	 // console.log(arg.resultFunction());
   }
   
             $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.play();
+			
+			// $scope.getClass = function (path) {
+  // return ($location.path().substr(0, path.length) === path) ? 'active' : '';
+// }
 }
-RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll"];
+RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location"];

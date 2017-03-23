@@ -645,6 +645,7 @@ a.text-danger:hover,
 a.text-danger:focus {
   color: #e53432;
 }
+
 .bg-primary {
   color: #fff;
   background-color: #43a8eb;
@@ -11673,8 +11674,12 @@ body .jvectormap-zoomout {
   }
 }
 .bg-primary {
-  background-color: #43a8eb !important;
+  background-color: #43a8eb;
   color: #ffffff;
+}
+.bg-my-primary {
+  color: #fff;
+  background-color: rgb(95, 112, 118) !important;
 }
 .bg-primary a {
   color: #c7e5f9;
@@ -13270,7 +13275,35 @@ body .jvectormap-zoomout {
   max-height: 300px;
   overflow: auto;
 }
-
+.my-topbar-select{
+	/* background-color:#43a8eb; 
+	opacity:0.8; */
+	height:inherit;
+}
+.my-topbar-select:active{
+	background-color:#17A1E5 !important; 
+}
+.set-my-topbar-select{
+	background-color:#17A1E5 !important; 
+}
+.my-ancher-topbar-select{
+	
+	color: #f2f2f2 !important;
+	height:inherit;
+}
+.my-ancher-topbar-select:hover{
+	
+	color: #ffffff !important;
+}
+.my-topbar-select! .my-ancher-topbar-select:active{
+	
+	background-color:#17A1E5 !important; 
+}
+.ancherWhite{
+	
+	color:white !important;
+	height:inherit;
+}
 /* End */
 
 /* ========================================================================

@@ -49,7 +49,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       theme: {
         sidebar: 'bg-white br',
         brand:   'bg-primary',
-        topbar:  'bg-primary'
+        topbar:  'bg-my-primary'
       }
     };
     
