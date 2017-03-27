@@ -6,7 +6,7 @@
 
 App.controller('CompanyController', CompanyController);
 
-function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,$modal) {
+function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,$modal,getSetFactory) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -19,7 +19,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	$scope.GoToAddCompany = function(){
 	  
 	 $rootScope.AddCompanyModify = false;
-	 $location.path('app/AddCompany/'); 
+	 $location.path('app/AddCompany'); 
 	}
 	
 	
@@ -222,8 +222,9 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
   
   $scope.edit_comp = function(id)
   {
-	  
-	  $location.path('app/AddCompany/'+id);
+	  getSetFactory.set(id);
+	  $location.path('app/AddCompany');
+	  $rootScope.AddCompanyModify = true;
   }
   
   $scope.delete_comp = function(size,id)
@@ -232,7 +233,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	  
 	  //return false;
 	  
-	  toaster.clear();
+	 
 	
 	var modalInstance = $modal.open({
 		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
@@ -244,7 +245,8 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		modalInstance.result.then(function () {
 		 
 		 console.log('ok');
-		 
+		 toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Company Deleting....',60000);
 		// return false;
 		 /**Delete Code **/
 			var deletePath = apiPath.getAllCompany+'/'+id;
@@ -252,7 +254,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			apiCall.deleteCall(deletePath).then(function(deleteres){
 				
 				console.log(deleteres);
-				
+				 toaster.clear();
 				if(apiResponse.ok == deleteres){
 						
 					toaster.pop('success', 'Title', 'Delete Successfully');
@@ -278,10 +280,11 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		
 		}, function () {
 		  console.log('Cancel');	
+		   toaster.clear();
 		});
 		
 	
   }
 
 }
-CompanyController.$inject = ["$rootScope","$scope", "$filter","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","$modal"];
+CompanyController.$inject = ["$rootScope","$scope", "$filter","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","$modal","getSetFactory"];

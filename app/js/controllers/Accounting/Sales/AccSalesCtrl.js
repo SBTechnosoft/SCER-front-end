@@ -7,7 +7,7 @@
 
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
+function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
   'use strict';
   
  // $templateCache.remove($state.current.templateUrl);
@@ -16,6 +16,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
   $scope.accSales = [];
   
   $scope.erpPath = $rootScope.erpPath; // Erp Path
+  var dateFormats = $rootScope.dateFormats; //Date Format
+  
   
   var formdata = new FormData();
   $scope.totalTable;
@@ -229,8 +231,8 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
+  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
   
   //DatePicker End
 
@@ -1373,7 +1375,13 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	
 	$scope.openHistoryModal = function (size) {
 
+		
+		
 		if($scope.accSales.companyDropDown){
+			
+			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Modal Data Loading....',60000);
 			
 			var modalInstance = $modal.open({
 			  templateUrl: '/myHistorySalesModalContent.html',
@@ -1390,9 +1398,11 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 		   
 			modalInstance.result.then(function () {
 			 
-			
+				toaster.clear();
 			}, function () {
-			  console.log('Cancel');	
+			  console.log('Cancel');
+				toaster.clear();			  
+			  
 			});
 		}
 		else{
@@ -1406,4 +1416,4 @@ function AccSalesController($scope,apiCall,apiPath,$modal,$rootScope,getSetFacto
 	**/
   
 }
-AccSalesController.$inject = ["$scope","apiCall","apiPath","$modal","$rootScope","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory"];
+AccSalesController.$inject = ["$rootScope","$scope","apiCall","apiPath","$modal","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory"];

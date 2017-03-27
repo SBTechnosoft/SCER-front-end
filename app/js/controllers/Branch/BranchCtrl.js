@@ -6,7 +6,7 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster,$modal) {
+function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster,$modal,getSetFactory) {
   'use strict';
   var vm = this;
   var data = [];
@@ -16,7 +16,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
   $scope.GoToAddBranch = function(){
 	  
 	 $rootScope.AddBranchModify = false;
-	 $location.path('app/AddBranch/');
+	 $location.path('app/AddBranch');
 	// $state.go('app.AddBranch'); 
   }
   
@@ -305,7 +305,9 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
   {
 	  
 	  //$location.path('app/AddBranch/'+branch_id);
-	   $state.go("app.AddBranch", { id: branch_id });
+	   getSetFactory.set(branch_id);
+	    $rootScope.AddBranchModify = true;
+	   $state.go("app.AddBranch");
   }
   
   $scope.deleteBranch = function(size,branch_id)
@@ -323,7 +325,9 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 		modalInstance.result.then(function () {
 		 
 		 console.log('ok');
-		 
+		 toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Branch Deleting....',60000);
+		
 		// return false;
 		 /**Delete Code **/
 			var deletePath = apiPath.getAllBranch+'/'+parseInt(branch_id);
@@ -331,7 +335,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 			apiCall.deleteCall(deletePath).then(function(deleteres){
 				
 				console.log(deleteres);
-				
+				toaster.clear();
 				if(apiResponse.ok == deleteres){
 						
 					toaster.pop('success', 'Title', 'Delete Successfully');
@@ -347,7 +351,8 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 		 /** End **/
 		
 		}, function () {
-		  console.log('Cancel');	
+		  console.log('Cancel');
+			toaster.clear();		  
 		});
 		
 	
@@ -355,4 +360,4 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
   
 
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster","$modal"];
+BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster","$modal","getSetFactory"];

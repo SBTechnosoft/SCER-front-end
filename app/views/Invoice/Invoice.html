@@ -13,7 +13,7 @@
 			<div class="col-md-9">
 				<fieldset>
 				   <div class="form-group">
-					  <label class="col-sm-2 control-label">Company</label>
+					  <label class="col-sm-2 control-label">*Company</label>
 					  <div class="col-sm-8">
 						 <select chosen="" tabindex="2" data-ng-model="addInvoice.companyDrop"  data-ng-options="s.companyName for s in form.invoiceCompanyDrop track by s.companyId" class="form-control chosen-select" ng-required="true"></select>
 						 
@@ -22,7 +22,7 @@
 				</fieldset>
 				<fieldset>
 				   <div class="form-group">
-					  <label for="input-id-1" class="col-sm-2 control-label">Invoice Label</label>
+					  <label for="input-id-1" class="col-sm-2 control-label">*Invoice Label</label>
 					  <div class="col-sm-8">
 						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-pattern="/^[a-zA-Z &_`#().\'-\/]*$/" ng-minlength="1" ng-maxlength="35" ng-required="true" ng-model="addInvoice.invoiceLabel" type="text" placeholder="Invoice Label" class="form-control" auto-focus/>
 						 
@@ -38,9 +38,9 @@
 				</fieldset>
 				<fieldset>
 					<div class="form-group">
-					  <label for="input-id-1" class="col-sm-2 control-label">Started At</label>
+					  <label for="input-id-1" class="col-sm-2 control-label">*Started At</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="startAt" ng-model="addInvoice.startAt" ng-pattern="/^[0-9]*$/" ng-required="true" type="text" placeholder="Started At" class="form-control" />
+						 <input id="input-id-1" tabindex="2" name="startAt" ng-model="addInvoice.startAt" ng-pattern="/^[0-9]*$/" ng-required="true" type="text" placeholder="Started At" class="form-control" only-number />
 						 
 						 <span ng-messages="formInvoice.startAt.$error" ng-if="formInvoice.startAt.$dirty || formInvoice.startAt.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -110,7 +110,7 @@
 				<td data-title="'Company Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.company.companyName}}</td>
 				<td data-title="'Label'" sortable="'invoiceLabel'" filter="{ 'invoiceLabel': 'text' }" >{{user.invoiceLabel}}</td>
 			    <td data-title="'Prefix/Postfix'" sortable="'invoiceType'" filter="{ 'invoiceType': 'text' }" >{{user.invoiceType}}</td>
-				<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" >{{user.startAt}}</td>
+				<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" style="text-align:right" >{{user.startAt}}</td>
 				<!--td data-title="'created_at'" sortable="'created_at'" filter="{ 'created_at': 'text' }" >{{user.created_at}}</td-->
 		
 			   <!--td data-title="'Action'" filter="{ '': 'text' }">

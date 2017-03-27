@@ -91,7 +91,7 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 	  $scope.ledgerForm.openingBal = 0;
 	  
 	  formdata.append('amountType',$scope.ledgerForm.amountType);
-		formdata.appned('amount',$scope.ledgerForm.openingBal);
+		formdata.append('amount',$scope.ledgerForm.openingBal);
 		
 	//Changed Data When Update
 	$scope.changeLedgerData = function(Fname,value){

@@ -16,7 +16,7 @@
 			 <form action="#" name="formGeneral" class="form-validate form-horizontal">
 					<fieldset>
 					   <div class="form-group">
-						  <label class="col-sm-2 control-label">Company</label>
+						  <label class="col-sm-2 control-label">*Company</label>
 						  <div class="col-sm-5">
 							 <select chosen="" tabindex="1"  ng-model="generalTemp.companyDropDown"  ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ng-required="true" ></select>
 						  </div>
@@ -24,7 +24,7 @@
 					</fieldset>
 					<fieldset>
 					   <div class="form-group">
-						  <label for="input-id-1" class="col-sm-2 control-label">Template Name</label>
+						  <label for="input-id-1" class="col-sm-2 control-label">*Template Name</label>
 						  <div class="col-sm-5">
 							 <input id="input-id-1"  type="text" name="tempName" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-minlength="1" ng-maxlength="35" auto-focus/>
 							 
@@ -38,7 +38,7 @@
 					   </div>
 					</fieldset>
 					<fieldset>
-					 <label for="input-id-1" class="col-sm-2 control-label">Template Design</label>
+					 <label for="input-id-1" class="col-sm-2 control-label">*Template Design</label>
 					 
 					   <div class="form-group">
 						 
@@ -53,8 +53,8 @@
 					   </div>
 					</fieldset>
 					
-					 <button type="button" class="mr mb-sm btn btn-danger pull-right" style="margin-right:0px !important" ng-click="cancel()" >Cancel</button>
-					 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpTemplate()" ng-disabled="formGeneral.$invalid" >Save</button>
+					 <button type="button" class="mr mb-sm btn btn-danger pull-right" style="margin-right:0px !important;visibility:hidden" ng-click="cancel()" >Cancel</button>
+					 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpTemplate()" ng-disabled="formGeneral.$invalid" ng-if="tempID">Update</button>
 				 </form>
 			</div>
 				

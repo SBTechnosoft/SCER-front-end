@@ -15,6 +15,8 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
   $scope.noOfDecimalPoints;
   $scope.displayCompany;
   
+  $scope.dateFormat =  $rootScope.dateFormats; //Date Format
+  
   /** Sundry debitor and creditor **/
   
 		$scope.totalSundaryDebitor = 0;
@@ -123,7 +125,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 				  trailObject.creditAmount = "-";
 				totaldebit += parseFloat(dataOfTrial.amount);
 				
-				if(dataOfTrial.ledger.ledgerGroupId == 32){
+				if(dataOfTrial.ledger.ledgerGroupId == 31){
 					console.log('in');
 					
 					$scope.totalSundaryDebitor += parseFloat(dataOfTrial.amount);
@@ -136,7 +138,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 						
 						 var trailObjectDebtors = {};
 						 trailObjectDebtors.ledgerId = "0.9999";
-						 trailObjectDebtors.ledgerName = "Sundry Debtors";
+						 trailObjectDebtors.ledgerName = "Sundry Creditors";
 						 trailObjectDebtors.amountType = "debit";
 						 trailObjectDebtors.debitAmount = "-";
 						trailObjectDebtors.creditAmount = "-";
@@ -198,7 +200,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 				  trailObject.creditAmount = dataOfTrial.amount;
 				 totalcredit += parseFloat(dataOfTrial.amount);
 				 
-				 if(dataOfTrial.ledger.ledgerGroupId == 31){
+				 if(dataOfTrial.ledger.ledgerGroupId == 32){
 				
 					$scope.totalSundryCreditor += parseFloat(dataOfTrial.amount);
 					
@@ -210,7 +212,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 						
 						 var trailObjectCreditor = {};
 						 trailObjectCreditor.ledgerId = "0.9999";
-						 trailObjectCreditor.ledgerName = "Sundry Creditor";
+						 trailObjectCreditor.ledgerName = "Sundry Debitor";
 						 trailObjectCreditor.amountType = "Credit";
 						 trailObjectCreditor.debitAmount = "-";
 						trailObjectCreditor.creditAmount = "-";

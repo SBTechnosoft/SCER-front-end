@@ -31,7 +31,7 @@
 		
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
-					  <label class="col-sm-3 control-label">Company</label>
+					  <label class="col-sm-3 control-label">*Company</label>
 					  <div class="col-sm-8">
 						 <select chosen="" ng-model="ledgerForm.companyDropDown" tabindex="2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeLedgerData('companyId',ledgerForm.companyDropDown.companyId)" ng-disabled="form.disableCompanyValue"  class="form-control chosen-select" ng-required="true" ></select>
 					  </div>
@@ -39,7 +39,7 @@
 				</fieldset>
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
-					  <label class="col-sm-3 control-label">Name</label>
+					  <label class="col-sm-3 control-label">*Name</label>
 					  <div class="col-sm-8">
 						 <input id="input-id-1" tabindex="2" name="ledgerName" ng-model="ledgerForm.ledgerName" ng-change="changeLedgerData('ledgerName',ledgerForm.ledgerName)" ng-disabled="form.disableValue" type="text" placeholder="Ledger Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" ng-maxlength="35" ng-minlength="1" auto-focus/>
 						 
@@ -87,7 +87,7 @@
 				</fieldset>
 				<fieldset class="my-fieldset-paddingBottom">
 					<div class="form-group">
-					  <label for="input-id-1" class="col-sm-3 control-label">Opening B/L</label>
+					  <label for="input-id-1" class="col-sm-3 control-label">*Opening B/L</label>
 					  <div class="col-sm-2">
 							<select chosen data-ng-model="ledgerForm.amountType" name="openBal" tabindex="2" data-ng-options="s for s in form.amountTypeDrop" ng-change="changeLedgerData('amountType',ledgerForm.amountType)" ng-disabled="form.disableValue"  class="form-control chosen-select" ng-required="true" >
 								<option value=""></option>
@@ -117,9 +117,14 @@
 		
 			<fieldset class="my-fieldset-paddingBottom">
 			   <div class="form-group">
-				  <label for="input-id-1" class="col-sm-3 control-label">Under</label>
+				  <label for="input-id-1" class="col-sm-3 control-label">*Under</label>
 				  <div class="col-sm-8">
-					 <input ng-model="ledgerForm.under" name="under" tabindex="2"  typeahead="state.ledgerGroupName for state in form.underWhat | filter:$viewValue | limitTo:10" typeahead-on-select="setPcode('ledgerGroupId',$item)" ng-model="selected" typeahead-editable="false" ng-disabled="form.disableValue" id="input-id-1" type="text" placeholder="Under" class="form-control autocomplete" ng-required="true"  />
+				  
+				  <script type="text/ng-template" id="underCustomTemplate.html">
+					<a><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span> ( {{match.model.underWhat}} ) </a>
+				</script>
+				
+					 <input ng-model="ledgerForm.under" name="under" tabindex="2"  typeahead="state.ledgerGroupName for state in form.underWhat | filter:$viewValue | limitTo:10" typeahead-on-select="setPcode('ledgerGroupId',$item)" ng-model="selected" typeahead-editable="false" typeahead-template-url="underCustomTemplate.html" ng-disabled="form.disableValue" id="input-id-1" type="text" placeholder="Under" class="form-control autocomplete" ng-required="true"  />
 					 
 					<span ng-messages="formLedger.under.$error" ng-if="formLedger.under.$dirty || formLedger.under.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -192,7 +197,7 @@
 			</fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label class="col-sm-3 control-label">State</label>
+                  <label class="col-sm-3 control-label">*State</label>
                   <div class="col-sm-8">
                      <select chosen="" ng-model="ledgerForm.stateDropDown" tabindex="2" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',ledgerForm.stateDropDown.stateAbb)" ng-disabled="form.disableValue"  class="form-control chosen-select" ng-required="true" ></select>
                   </div>
@@ -200,7 +205,7 @@
 			</fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label class="col-sm-3 control-label">City</label>
+                  <label class="col-sm-3 control-label">*City</label>
                   <div class="col-sm-8">
                      <select chosen="" ng-model="ledgerForm.cityDrop" tabindex="2" ng-change="changeLedgerData('cityId',ledgerForm.cityDrop.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" ng-disabled="form.disableValue" class="form-control chosen-select" ng-required="true" ></select>
                   </div>

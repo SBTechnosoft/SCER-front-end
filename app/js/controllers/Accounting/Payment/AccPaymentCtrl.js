@@ -6,7 +6,7 @@
 
 App.controller('AccPaymentController', AccPaymentController);
 
-function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,apiResponse,validationMessage) {
+function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,apiResponse,validationMessage) {
   'use strict';
   
   var vm = this;
@@ -16,6 +16,8 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
   $scope.accPayment.totalAmount;
   $scope.accPayment.jfid; // JFID
   
+   var dateFormats = $rootScope.dateFormats; //Date Format
+   
   $scope.noOfDecimalPoints;
 	/* VALIDATION */
 	
@@ -398,8 +400,8 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
+  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
 
   // Timepicker
   // ----------------------------------- 
@@ -610,4 +612,4 @@ function AccPaymentController($scope,apiCall,apiPath,$rootScope,toaster,$modal,a
   **/
   
 }
-AccPaymentController.$inject = ["$scope","apiCall","apiPath","$rootScope","toaster","$modal","apiResponse","validationMessage"];
+AccPaymentController.$inject = ["$rootScope","$scope","apiCall","apiPath","toaster","$modal","apiResponse","validationMessage"];

@@ -66,7 +66,7 @@
 						<fieldset class="my-fieldset-paddingBottom">
 						   <div class="form-group">
 						   
-							  <label class="col-sm-3 control-label">Amount</label>
+							  <label class="col-sm-3 control-label">*Amount</label>
 							  <div class="col-sm-9" style="padding-right: 0px;padding-left: 30px;">
 								 <input id="input-id-1" tabindex="2" name="amount" ng-model="paymentForm.amount"  type="text" placeholder="Amount" class="form-control"  ng-required="true" ng-pattern="/^[0-9 .]*$/" dir="rtl"  max="{{LimitAmount}}" min="1" auto-focus only-number />
 								 
@@ -97,7 +97,7 @@
 				
 					<fieldset class="my-fieldset-paddingBottom">
 					   <div class="form-group">
-						  <label class="col-sm-3 control-label">Payment Mode</label>
+						  <label class="col-sm-3 control-label">*Payment Mode</label>
 						  <div class="col-sm-6">
 							 <select chosen data-ng-model="paymentForm.paymentMode"  name="paymentMode" tabindex="2"  data-ng-options="s for s in paymentModeDrop"  class="form-control chosen-select" ng-required="true" >
 								 <option value=""></option>
@@ -113,7 +113,7 @@
 					
 					<fieldset class="my-fieldset-paddingBottom" ng-if="paymentForm.paymentMode=='bank'">
 					   <div class="form-group">
-						  <label class="col-sm-3 control-label"> Bank Name </label>
+						  <label class="col-sm-3 control-label">*Bank Name </label>
 							<div class="col-sm-6">
 								<select chosen="" data-ng-model="paymentForm.BankName" data-ng-options="s.bankName for s in fromData.bankDrop track by s.bankId" class="form-control chosen-select" size="5" ng-required="true"></select>
 							</div>
@@ -126,7 +126,7 @@
 				
 					<fieldset class="my-fieldset-paddingBottom" ng-if="paymentForm.paymentMode=='bank'">
 						<div class="form-group">
-						  <label for="input-id-1" class="col-sm-3 control-label">cheque#</label>
+						  <label for="input-id-1" class="col-sm-3 control-label">*cheque#</label>
 						  <div class="col-sm-6">
 							 <input ng-model="paymentForm.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" ng-required="true" />
 							 <span ng-messages="formPayment.chequeNo.$error" ng-if="formPayment.chequeNo.$dirty || formPayment.chequeNo.$touched"  role="alert">
@@ -143,7 +143,7 @@
 				
 					<fieldset class="my-fieldset-paddingBottom">
 					   <div class="form-group">
-						  <label class="col-sm-3 control-label">Payment Trn</label>
+						  <label class="col-sm-3 control-label">*Payment Trn</label>
 						  <div class="col-sm-6">
 							 <select chosen data-ng-model="paymentForm.paymentTrn" tabindex="2" name="paymentTrn" ng-change="changeAmountLimit()" data-ng-options="s for s in paymentTrasDrop"  class="form-control chosen-select" ng-required="true" >
 								 <option value=""></option>

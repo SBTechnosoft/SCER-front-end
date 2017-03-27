@@ -82,24 +82,27 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 						modalInstance.result.then(function () {
 						 
 						 console.log('ok');
-						 
+						  toaster.clear();
+						toaster.pop('wait', 'Please Wait', 'Data Deleting....',60000);
 						// return false;
 						 /**Delete Code **/
 							apiCall.deleteCall(apiPath.getAllGroup+'/'+data).then(function(response){
-						
+								
+								toaster.clear();
 								if(apiResponse.ok == response){
 									
 									console.log(response);
 									toaster.pop('success', 'Title', 'Delete SuccessFully');
 									
 									vm.groupDrop = [];
-									apiCall.getCall(apiPath.getAllGroup).then(function(response){
+									// apiCall.getCall(apiPath.getAllGroup).then(function(response){
 										
-										vm.groupDrop = response;
-										var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
-										$scope.tree_data = myTreeData2;
+										// vm.groupDrop = response;
+										// var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+										// $scope.tree_data = myTreeData2;
 										
-									});
+									// });
+									$scope.init();
 								
 								}
 								else{
@@ -117,9 +120,13 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 					
 				},
 				editCat: function(data){
-					
+					 toaster.clear();
+					toaster.pop('wait', 'Please Wait', 'Data Fetching....',60000);
+						
 					$scope.invGroupID.id = data;
 					apiCall.getCall(apiPath.getAllGroup+'/'+data).then(function(response){
+						
+						toaster.clear();
 						
 						$scope.invGroupData.groupName = response.productGroupName;
 						$scope.invGroupData.groupDesc = response.productGroupDescription;
@@ -147,18 +154,25 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
             console.log('you clicked on', branch);
         }
 		
-		vm.groupDrop = [];
-		apiCall.getCall(apiPath.getAllGroup).then(function(response){
+		$scope.init = function(){
 			
-			console.log(response);
-			vm.groupDrop = response;
-			var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
-			$scope.tree_data = myTreeData2;
-			
-		});
+			vm.groupDrop = [];
+			apiCall.getCall(apiPath.getAllGroup).then(function(response){
+				
+				console.log(response);
+				vm.groupDrop = response;
+				var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+				$scope.tree_data = myTreeData2;
+				
+			});
+		
+		}
+		$scope.init();
 		
 		$scope.addUpGroup = function(){
-		 
+			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Loading....',60000);
 		 
 			if($scope.invGroupData.groupDropDown)
 			{
@@ -196,19 +210,20 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 				formdata.delete('productGroupDescription');
 				formdata.delete('productGroupParentId');
 				formdata.delete('isDisplay');
-				
+				toaster.clear();
 				if(apiResponse.ok == response){
 				
 					toaster.pop('success', 'Title', 'SuccessFull');
 				
 					$scope.invGroupData = [];
-					apiCall.getCall(apiPath.getAllGroup).then(function(response){
+					// apiCall.getCall(apiPath.getAllGroup).then(function(response){
 					
-						vm.groupDrop = response;
-						var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
-						$scope.tree_data = myTreeData2;
+						// vm.groupDrop = response;
+						// var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+						// $scope.tree_data = myTreeData2;
 					
-					});
+					// });
+					$scope.init();
 				}
 				else{
 					
@@ -223,14 +238,14 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 		
 		$scope.invGroupData = [];
 		
-		apiCall.getCall(apiPath.getAllGroup).then(function(response){
+		// apiCall.getCall(apiPath.getAllGroup).then(function(response){
 					
-			vm.groupDrop = response;
-			var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
-			$scope.tree_data = myTreeData2;
+			// vm.groupDrop = response;
+			// var myTreeData2 = getTree(response, 'productGroupId', 'productGroupParentId');
+			// $scope.tree_data = myTreeData2;
 		
-		});
-					
+		// });
+			$scope.init();	
 		var formdata = new FormData();
 	}
 

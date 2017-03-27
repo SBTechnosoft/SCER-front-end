@@ -35,17 +35,17 @@
 			
             <fieldset>
                <div class="form-group">
-                  <label class="col-sm-2 control-label">Company</label>
+                  <label class="col-sm-2 control-label">*Company</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="1"  ng-model="addBranch.companyDropDown2" ng-change="changeBranchData('companyId',addBranch.companyDropDown2.companyId)" ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ></select>
+                     <select chosen="" tabindex="-1"  ng-model="addBranch.companyDropDown2" ng-change="changeBranchData('companyId',addBranch.companyDropDown2.companyId)" ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ></select>
                   </div>
                </div>
 			</fieldset>
 			<fieldset>
 				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Branch Name</label>
+                  <label for="input-id-1" class="col-sm-2 control-label">*Branch Name</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="theInput" tabindex="1" type="text" ng-model="addBranch.branchName" ng-change="changeBranchData('branchName',addBranch.branchName)" placeholder="Branch Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus />
+                     <input id="input-id-1" name="theInput" tabindex="2" type="text" ng-model="addBranch.branchName" ng-change="changeBranchData('branchName',addBranch.branchName)" placeholder="Branch Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus />
 					 
 					<span ng-messages="formBranch.theInput.$error" ng-if="formBranch.theInput.$dirty || formBranch.theInput.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -58,9 +58,9 @@
 			</fieldset>
 			<fieldset>
 				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
+					<label for="input-id-1" class="col-sm-2 control-label">*First Address</label>
 					<div class="col-sm-7">
-						<textarea tabindex="1" name="firstAddress" ng-model="addBranch.fisrtAddress" ng-change="changeBranchData('address1',addBranch.fisrtAddress)" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35"  ></textarea>
+						<textarea tabindex="2" name="firstAddress" ng-model="addBranch.fisrtAddress" ng-change="changeBranchData('address1',addBranch.fisrtAddress)" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35"  ></textarea>
 						
 						<span ng-messages="formBranch.firstAddress.$error" ng-if="formBranch.firstAddress.$dirty || formBranch.firstAddress.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -75,9 +75,9 @@
 			</fieldset>
 			<fieldset>
 				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
+					<label for="input-id-1" class="col-sm-2 control-label">*Second Address</label>
 					<div class="col-sm-7">
-						<textarea tabindex="1" name="secondAddress" ng-model="addBranch.secondAddress" ng-change="changeBranchData('address2',addBranch.secondAddress)" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35" ></textarea>
+						<textarea tabindex="2" name="secondAddress" ng-model="addBranch.secondAddress" ng-change="changeBranchData('address2',addBranch.secondAddress)" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35" ></textarea>
 						
 						<span ng-messages="formBranch.secondAddress.$error" ng-if="formBranch.secondAddress.$dirty || formBranch.secondAddress.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -91,9 +91,9 @@
 			</fieldset>
 			<fieldset>
                <div class="form-group">
-                  <label class="col-sm-2 control-label">State</label>
+                  <label class="col-sm-2 control-label">*State</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="1" name="stateAbb" ng-model="addBranch.stateDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" class="form-control chosen-select" ng-change="ChangeCity('stateAbb',addBranch.stateDropDown.stateAbb)" ng-required="true" ></select>
+                     <select chosen="" tabindex="2" name="stateAbb" ng-model="addBranch.stateDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" class="form-control chosen-select" ng-change="ChangeCity('stateAbb',addBranch.stateDropDown.stateAbb)" ng-required="true" ></select>
 					 
 					 <span ng-messages="formBranch.stateAbb.$error" ng-if="formBranch.stateAbb.$dirty || formBranch.stateAbb.$touched" role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -104,9 +104,9 @@
 			</fieldset>
 			<fieldset>
                <div class="form-group">
-                  <label class="col-sm-2 control-label">City</label>
+                  <label class="col-sm-2 control-label">*City</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="1" name="city" ng-model="addBranch.cityDropDown" ng-change="changeBranchData('cityId',addBranch.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select" ng-required="true"></select>
+                     <select chosen="" tabindex="2" name="city" ng-model="addBranch.cityDropDown" ng-change="changeBranchData('cityId',addBranch.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select" ng-required="true"></select>
 					 
 					<span ng-messages="formBranch.city.$error" ng-if="formBranch.city.$dirty || formBranch.city.$touched" role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -117,9 +117,9 @@
 			</fieldset>
 			<fieldset>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">PIN Code</label>
+					<label class="col-sm-2 control-label">*PIN Code</label>
 					<div class="col-sm-3">
-					   <input type="text" tabindex="1" name="pincode" ng-model="addBranch.pincode" ng-change="changeBranchData('pincode',addBranch.pincode)" masked="999999" placeholder="PIN Code" class="form-control" ng-required="true" ng-minlength="6" />
+					   <input type="text" tabindex="2" name="pincode" ng-model="addBranch.pincode" ng-change="changeBranchData('pincode',addBranch.pincode)"  placeholder="PIN Code" class="form-control" ng-required="true" ng-minlength="6" ng-maxlength="6"  only-number />
 					   <span class="help-block">Masked="395001"</span>
 					   
 					    <span ng-messages="formBranch.pincode.$error" ng-if="formBranch.pincode.$dirty || formBranch.pincode.$touched" role="alert">
@@ -131,8 +131,11 @@
 				</div>
 			</fieldset>
 			
-			 <button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="2" data-ng-click="cancel()" >Cancel</button>
-			 <button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="1" ng-click="pop(addBranch)" ng-disabled="formBranch.$invalid" >Save</button>
+			 <button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="2" data-ng-click="cancel()" style="visibility:hidden" >Cancel</button>
+			 <button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="pop(addBranch)" ng-disabled="formBranch.$invalid" >
+				<span ng-if="!addBranch.bId" >Insert</span>
+				<span ng-if="addBranch.bId" >Update</span>
+			 </button>
          </form>
       </div>
    </div>

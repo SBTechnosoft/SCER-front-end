@@ -151,5 +151,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 		$state.go("page.login");
 		  
 	  }
+	  
+	  
 
 }]);

@@ -110,8 +110,15 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/icons-climacon',
             templateUrl: basepath('icons-climacon.html')
         })
+		//Show Company
+        .state('app.Company', {
+            url: '/Company',
+            templateUrl: basepath('Company/Company.html'),
+            resolve: requireDeps('ngTable', 'ngTableExport','getBranchSrv','toaster')
+        })
+		//Add Company
         .state('app.AddCompany', {
-            url: '/AddCompany/:id',
+            url: '/AddCompany',
             templateUrl: basepath('Company/AddCompany.html'),
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
@@ -124,7 +131,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         })
 		//Add Branch
 		.state('app.AddBranch', {
-            url: '/AddBranch/:id',
+            url: '/AddBranch',
             templateUrl: basepath('Branch/AddBranch.html'),
 			//controller: 'AddBranchController as form',
             resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
@@ -191,7 +198,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AddInvStock', {
             url: '/AddInvStock',
             templateUrl: basepath('Inventory/StockRegister/AddInvStock.html'),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv')
+            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
 		//Show Inventory Stock
 		.state('app.InvStock', {
@@ -570,11 +577,6 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.table-responsive', {
             url: '/table-responsive',
             templateUrl: basepath('table-responsive.html')
-        })
-        .state('app.Company', {
-            url: '/Company',
-            templateUrl: basepath('Company/Company.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','getBranchSrv','toaster')
         })
         .state('app.calendar', {
             url: '/calendar',

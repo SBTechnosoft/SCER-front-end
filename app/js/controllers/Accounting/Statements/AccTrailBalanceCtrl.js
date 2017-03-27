@@ -15,6 +15,8 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
   $scope.noOfDecimalPoints;
   $scope.displayCompany;
   
+  $scope.dateFormat =  $rootScope.dateFormats; //Date Format
+  
   var erpPath = $rootScope.erpPath;
    $scope.displayDate = new Date();
   
@@ -24,7 +26,9 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 		$scope.TotalofCredit = 0;
 		
 		$scope.noOfDecimalPoints = parseInt($scope.stateCheck.noOfDecimalPoints);
-	
+		
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		
 		$scope.getBranch($scope.stateCheck.companyId);
 		
 		$scope.displayCompany = $scope.stateCheck.companyName;
@@ -41,6 +45,8 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 			
 			vm.states = response2;
+			
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 			//Set default Company
 			apiCall.getDefaultCompany().then(function(response){
@@ -67,7 +73,7 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
   
 	$scope.getBranch = function(id){
 		
-	toaster.pop('wait', 'Please Wait', 'Data Loading....');
+	
 	
 		apiCall.getCall(apiPath.getTrailBalance+id).then(function(response){
 			

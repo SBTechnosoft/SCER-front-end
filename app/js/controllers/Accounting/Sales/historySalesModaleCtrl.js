@@ -5,6 +5,8 @@
  =========================================================*/
 $.getScript('app/vendor/ng-table/ng-table.min.js');
 $.getScript('app/vendor/ng-table/ng-table.min.css');
+$.getScript('app/vendor/angularjs-toaster/toaster.js');
+$.getScript('app/vendor/angularjs-toaster/toaster.css');
 // $.getScript('app/vendor/Flot/jquery.flot.js');
 // $.getScript('app/vendor/flot.tooltip/js/jquery.flot.tooltip.min.js');
 // $.getScript('app/vendor/Flot/jquery.flot.resize.js');
@@ -15,7 +17,7 @@ $.getScript('app/vendor/ng-table/ng-table.min.css');
 
 App.controller('historySalesModaleCtrl',historySalesModaleCtrl);
 
-function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,companyId) {
+function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,getSetFactory,$state,companyId,toaster) {
   'use strict';
   
 	 var data = [];
@@ -73,14 +75,25 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 			
 		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 			
-			console.log(response);
-			data = response;
-						  
+			//console.log(response);
+			
+					toaster.clear();	  
 			// for (var i = 0; i < data.length; i++) {
 			  // data[i].cityName = ""; //initialization of new property 
 			  // data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
 			// }
-			
+			$scope.contents = response;
+					
+					
+					$scope.contents.sort(function(a, b){
+						var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						return dateB-dateA; 
+					});
+					
+			data= $scope.contents;
+					
 			 $scope.TableData();
 		 
 		});
@@ -93,41 +106,49 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  ledgerName: 'asc'     // initial sorting
+			  date: 'desc'     // initial sorting
 		  }
 	  }, {
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
 			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.entryDate) != "undefined" && params.$params.filter.entryDate != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")|| (typeof(params.$params.filter.amountTypeCredit) != "undefined" && params.$params.filter.amountTypeCredit != "")|| (typeof(params.$params.filter.amountTypeDebit) != "undefined" && params.$params.filter.amountTypeDebit != "")))
-			  {
-					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
+			  var orderedData;
 
-					  $scope.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+			if(params.sorting().date === 'asc'){
 
-					  params.total(orderedData.length); // set total for recalc pagination
-					  $defer.resolve($scope.users);
+			  data.sort(function (a, b) {
+				  
+			 var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+						
+				return dateA - dateB; //sort by date descending
+			  });
+			  orderedData = data;
+
+			} else if(params.sorting().date === 'desc') {
+
+			  data.sort(function (a, b) {
+				  
+				 var entDate = a.entryDate.split("-").reverse().join("-");
+						var toDate = b.entryDate.split("-").reverse().join("-");
+						var dateA=new Date(entDate), dateB=new Date(toDate);
+				return dateB - dateA; //sort by date descending
+			  });
+			  orderedData = data;
+
+			} else if(!params.sorting().date){
+
+			  if (params.filter().term) {
+				orderedData = params.filter() ? $filter('filter')(data, params.filter().term) : data;
+			  } else {
+				orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+			  }
 			  
+			}
 
-			  }
-			  else{
-				  
-				   params.total(data.length);
-				  
-			  }
-			 
-			 if(!$.isEmptyObject(params.$params.sorting))
-			  {
-				
-				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
-		  
-				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			  }
+			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			
 			$scope.totalData = data.length;
 			$scope.pageNumber = params.page();
@@ -143,4 +164,4 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 	**/
 }
 
-historySalesModaleCtrl.$inject = ["$scope", "$modalInstance","$rootScope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","companyId"];
+historySalesModaleCtrl.$inject = ["$scope", "$modalInstance","$rootScope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","getSetFactory","$state","companyId","toaster"];

@@ -210,24 +210,26 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 				modalInstance.result.then(function () {
 				 
 				 console.log('ok');
-				 
+				 toaster.clear();
+				toaster.pop('wait', 'Please Wait', 'Data Deleting....',60000);
 				// return false;
 				 /**Delete Code **/
 					apiCall.deleteCall(apiPath.getAllCategory+'/'+data).then(function(response){
 						
 						console.log(response);
-						
+						toaster.clear();
 						if(apiResponse.ok == response){
 							
 							toaster.pop('success', 'Title', 'Delete SuccessFully');
-							vm.categoryDrop = [];
-							apiCall.getCall(apiPath.getAllCategory).then(function(response){
+							// vm.categoryDrop = [];
+							// apiCall.getCall(apiPath.getAllCategory).then(function(response){
 							
-								vm.categoryDrop = response;
-								var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
-								$scope.tree_data = myTreeData2;
+								// vm.categoryDrop = response;
+								// var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+								// $scope.tree_data = myTreeData2;
 							
-							});
+							// });
+							$scope.init();
 							
 						}
 						else{
@@ -246,8 +248,13 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 				},
 				editCat: function(data){
 					
+					toaster.clear();
+					toaster.pop('wait', 'Please Wait', 'Data Fetching....',60000);
+					
 					$scope.invCategoryID.id = data;
 					apiCall.getCall(apiPath.getAllCategory+'/'+data).then(function(response){
+						
+						toaster.clear();
 						
 						$scope.invCategoryData.categoryName = response.productCategoryName;
 						$scope.invCategoryData.categoryDesc = response.productCategoryDescription;
@@ -279,15 +286,23 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 			//console.log('Here',branch);
 		}
 		
-		vm.categoryDrop = [];
-		apiCall.getCall(apiPath.getAllCategory).then(function(response){
+		$scope.init = function(){
 			
-			console.log(response);
-			vm.categoryDrop = response;
-			var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
-			$scope.tree_data = myTreeData2;
 			
-		});
+			
+			vm.categoryDrop = [];
+			apiCall.getCall(apiPath.getAllCategory).then(function(response){
+				
+				console.log(response);
+				vm.categoryDrop = response;
+				var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+				$scope.tree_data = myTreeData2;
+				toaster.clear();
+			});
+		
+		}
+		
+		$scope.init();
 		
      $scope.addUpCategory = function(){
 		 
@@ -319,11 +334,14 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 		if($scope.invCategoryID.id){
 			
 			var categoryPath = apiPath.getAllCategory+'/'+$scope.invCategoryID.id;
+			var updateToaster = "Update";
 			$scope.invCategoryID = [];
 		}
 		else{
 			var categoryPath = apiPath.getAllCategory;
+			var updateToaster = "Insert";
 		}
+		
 		apiCall.postCall(categoryPath,formdata).then(function(response){
 			
 			
@@ -334,16 +352,17 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 			
 			if(apiResponse.ok == response){
 				
-				toaster.pop('success', 'Title', 'SuccessFull');
+				toaster.pop('success', 'Title', updateToaster+' SuccessFull');
 				
 				$scope.invCategoryData = [];
-				apiCall.getCall(apiPath.getAllCategory).then(function(response){
+				// apiCall.getCall(apiPath.getAllCategory).then(function(response){
 				
-					vm.categoryDrop = response;
-					var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
-					$scope.tree_data = myTreeData2;
+					// vm.categoryDrop = response;
+					// var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+					// $scope.tree_data = myTreeData2;
 				
-				});
+				// });
+				$scope.init();
 			}
 			else{
 				
@@ -358,13 +377,14 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 		
 		$scope.invCategoryData = [];
 		
-		apiCall.getCall(apiPath.getAllCategory).then(function(response){
+		// apiCall.getCall(apiPath.getAllCategory).then(function(response){
 				
-			vm.categoryDrop = response;
-			var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
-			$scope.tree_data = myTreeData2;
+			// vm.categoryDrop = response;
+			// var myTreeData2 = getTree(response, 'productCategoryId', 'productParentCategoryId');
+			// $scope.tree_data = myTreeData2;
 		
-		});
+		// });
+		$scope.init();
 		
 		var formdata = new FormData();
 	}

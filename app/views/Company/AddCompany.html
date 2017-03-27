@@ -27,12 +27,13 @@
 	<form  action="#" name="formCompany" class="form-validate form-horizontal">
 	   <div class="panel panel-default">
 		  <h4 class="panel-heading">Basic Details</h4>
+		 
 		  <div class="panel-body">
 			
 				<div class="col-md-9">
 				<fieldset>
 				   <div class="form-group">
-					  <label for="input-id-1" class="col-sm-2 control-label">Name</label>
+					  <label for="input-id-1" class="col-sm-2 control-label">*Name</label>
 					  <div class="col-sm-8">
 						 <!--input id="input-id-1" tabindex="1" ng-model="addCompany.Name" type="text" placeholder="Name" class="form-control" ng-change="changeCompanyData('companyName',addCompany.Name)" focus-me="shouldBeOpen" /-->
 						 <input id="input-id-1" name="theInput" tabindex="1" ng-model="addCompany.Name" type="text" placeholder="Name" class="form-control" ng-change="changeCompanyData('companyName',addCompany.Name)"  ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35"  auto-focus/>
@@ -53,7 +54,7 @@
 				</fieldset>
 				<fieldset>
 					<div class="form-group">
-					  <label for="input-id-1" class="col-sm-2 control-label">Display Name</label>
+					  <label for="input-id-1" class="col-sm-2 control-label">*Display Name</label>
 					  <div class="col-sm-8">
 						 <input id="input-id-1" name="displayName" tabindex="2" ng-model="addCompany.displayName" ng-change="changeCompanyData('companyDisplayName',addCompany.displayName)" required="" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="50" type="text" placeholder="Display Name" class="form-control" />
 						 
@@ -69,7 +70,7 @@
 				
 				<fieldset>
 					<div class="form-group">
-						<label for="input-id-1" class="col-sm-2 control-label">First Address</label>
+						<label for="input-id-1" class="col-sm-2 control-label">*First Address</label>
 						<div class="col-sm-8">
 							<textarea style="" tabindex="2" name="firstAddress"   placeholder="Your First address" data-ng-model="addCompany.address1" ng-change="changeCompanyData('address1',addCompany.address1)" class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
 							
@@ -83,7 +84,7 @@
 				</fieldset>
 				<fieldset>
 					<div class="form-group">
-						<label for="input-id-1" class="col-sm-2 control-label">Second Address</label>
+						<label for="input-id-1" class="col-sm-2 control-label">*Second Address</label>
 						<div class="col-sm-8">
 							<textarea style="" tabindex="2" name="secondAddress"  placeholder="Your Second address" data-ng-model="addCompany.address2" ng-change="changeCompanyData('address2',addCompany.address2)" class="form-control ng-pristine ng-valid ng-touched" required="" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
 							
@@ -97,7 +98,7 @@
 				</fieldset>
 				<fieldset>
 				   <div class="form-group">
-					  <label class="col-sm-2 control-label">State</label>
+					  <label class="col-sm-2 control-label">*State</label>
 					  <div class="col-sm-5">
 						 <select name="stateAbb" chosen="" tabindex="2" data-ng-model="addCompany.statesDropDown" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',addCompany.statesDropDown.stateAbb)" class="form-control chosen-select ng-pristine ng-valid ng-touched" required></select>
 						 
@@ -110,7 +111,7 @@
 				</fieldset>
 				<fieldset>
 				   <div class="form-group">
-					  <label class="col-sm-2 control-label">City</label>
+					  <label class="col-sm-2 control-label">*City</label>
 					  <div class="col-sm-5">
 						 <select name="city" chosen="" tabindex="2" data-ng-model="addCompany.cityDropDown" ng-change="changeCompanyData('cityId',addCompany.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId" class="form-control chosen-select" required=""></select>
 						 
@@ -123,9 +124,9 @@
 				</fieldset>
 				<fieldset>
 					<div class="form-group">
-						<label class="col-sm-2 control-label">PIN Code</label>
+						<label class="col-sm-2 control-label">*PIN Code</label>
 						<div class="col-sm-3">
-						   <input type="text" name="pincode" tabindex="2" ng-model="addCompany.pincode" ng-change="changeCompanyData('pincode',addCompany.pincode)"  masked="999999" placeholder="PIN Code" class="form-control" required="" />
+						   <input type="text" name="pincode" tabindex="2" ng-model="addCompany.pincode" ng-change="changeCompanyData('pincode',addCompany.pincode)"   placeholder="PIN Code" class="form-control" ng-required="true" ng-minlength="6" ng-maxlength="6" only-number  />
 						   <span class="help-block">Masked="395001"</span>
 						   
 						   <span ng-messages="formCompany.pincode.$error" ng-if="formCompany.pincode.$dirty || formCompany.pincode.$touched" role="alert">
@@ -264,8 +265,13 @@
 						</div>
 					</div>
 				</fieldset>
+				
 				<button type="button" style="visibility:hidden" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="cancel()" >Cancel</button>
-				<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="addCompanyForm(addCompany)" ng-disabled="formCompany.$invalid" >Save</button>
+				
+				<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="addCompanyForm(addCompany)" ng-disabled="formCompany.$invalid" >
+				<span ng-if="!addCompany.cId">Insert</span>
+				<span ng-if="addCompany.cId">Update</span>
+				</button>
 				
 			
 		  </div>

@@ -12,11 +12,11 @@
 		 <!--h4 class="panel-heading"></h4-->
 		<div class="panel-body">
 			<div class="form-group">
-				<label class="col-sm-1 control-label"> Company </label>
+				<label class="col-sm-1 control-label"> *Company </label>
 					<div class="col-sm-4">
 						<select chosen="" data-ng-model="addAccJrnl.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addAccJrnl.companyDropDown)" ng-disabled="disableCompany" class="form-control chosen-select" ng-required="true"></select>
 					</div>
-				<label class="col-sm-1 control-label"> Date </label>
+				<label class="col-sm-1 control-label"> *Date </label>
 				<div class="col-sm-4">
 					 <p class="input-group"style="float:right">
 						<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false"  datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
@@ -69,7 +69,7 @@
 						</td>
 						<td>
 							<div class="input-group" >
-								<input typeahead="s.ledgerName for s in form.clientNameDrop | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Name(JS)" typeahead-editable="false" ng-required="true" />
+								<input typeahead="s.ledgerName for s in form.clientNameDrop | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="*Enter Name(JS)" typeahead-editable="false" ng-required="true" />
 								<span class="input-group-btn"  >
 								   <button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i  class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 								</span>

@@ -14,7 +14,7 @@
 							<select chosen="" data-ng-model="invGroupData.groupDropDown" data-ng-options="s.productGroupName for s in table.groupDrop track by s.productGroupId" class="form-control chosen-select"></select>
 						</div>
 						
-					<label class="col-sm-1 control-label"> Name </label>
+					<label class="col-sm-1 control-label"> *Name </label>
 						<div class="col-sm-4">
 							<input ng-model="invGroupData.groupName" name="groupName" id="input-id-1" type="text" placeholder="Category Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
 							
@@ -25,8 +25,11 @@
 							  </span>
 							  
 						</div>
-					<button type="button" class="btn btn-primary" ng-click="addUpGroup()" ng-disabled="formGroup.$invalid" >Save</button>
-					<button type="button" class="btn btn-danger" ng-click="cancel()"  >Cancel</button>
+					<button type="button" class="btn btn-success my-small-button" ng-click="addUpGroup()" ng-disabled="formGroup.$invalid" >
+						<span ng-if="!invGroupID.id">Insert </span>
+						<span ng-if="invGroupID.id">Update </span>
+					</button>
+					<button type="button" class="btn btn-danger my-small-button" ng-click="cancel()"  >Cancel</button>
 				</div>
 				<div class="form-group">
 					<label class="col-sm-1 control-label"> Description </label>

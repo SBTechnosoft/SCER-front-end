@@ -6,7 +6,7 @@
       </div>
       <div class="panel-body">
          <p class="text-center pv text-bold">LOGIN</p>
-         <form novalidate="" name="loginForm" class="mb-lg form-validate">
+         <form novalidate="" name="loginForm" class="mb-lg form-validate" ng-submit="login()">
 		 
             <div class="form-group has-feedback">
                <input id="exampleInputEmail1" type="email" name="emailId" ng-model="loginData.emailId" ng-change="changeIt()" placeholder="Your email" autocomplete="off" class="form-control" ng-required="true"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
@@ -28,7 +28,19 @@
 				<span ng-messages-include="errorEmail"></span>
 			</span>
 			
+			
+			
+			
+			<!--div class="g-recaptcha" data-sitekey="6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C"></div--> <!-- swaminarayan --> 
+			<!--div class="g-recaptcha" data-sitekey="6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C"></div-->  <!-- siliconbrain --> 
+			<div class="form-group has-feedback">
+				<div vc-recaptcha key="loginCtrl.localSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" ></div> <!-- local --> 
+				<!-- div vc-recaptcha key="loginCtrl.swaminarayanSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" ></div-->  <!-- swaminarayan --> 
+				<!-- div vc-recaptcha key="loginCtrl.siliconSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" ></div -->  <!-- siliconbrain --> 
+			</div>
+			
 			<span class="text-danger" ng-if="notMatch">EmailId or Password is Wrong.</span>
+			<span class="text-danger" ng-if="errorCaptcha">Please resolve the captcha and submit!</span>
             <!--div class="checkbox c-checkbox pull-left mt0">
                <label>
                   <input type="checkbox" value="" />
@@ -36,7 +48,7 @@
             </div-->
             <!--br/-->
             <!--button type="submit" class="btn btn-block btn-primary mt-lg" ui-sref="app.dashboard">Login</button-->
-            <button type="submit" class="btn btn-block btn-primary mt-lg" ng-click="login()" ng-disabled="disableValue || loginForm.$invalid" >Login</button>
+            <button type="submit" class="btn btn-block btn-primary mt-lg"  ng-disabled="disableValue || loginForm.$invalid" >Login</button>
          </form>
         <!-- <p class="text-center text-muted">Or</p>
          <a ui-sref="page.register" class="btn btn-block btn-default">
@@ -49,3 +61,9 @@
    <!-- END panel-->
    <div data-ng-include="'app/pages/page-footer.html'" class="p-lg text-center"></div>
 </div>
+
+<!--script src='https://www.google.com/recaptcha/api.js'></script-->
+<!--script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script-->
+	<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script> 

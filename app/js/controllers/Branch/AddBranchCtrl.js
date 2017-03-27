@@ -6,13 +6,13 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$stateParams,$location,apiResponse,validationMessage) {
+function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$location,apiResponse,validationMessage,getSetFactory) {
   'use strict';
   var vm = this;
   var formdata = new FormData();
   vm.selectBranch;
   vm.selectBranch = true;
-  
+  $scope.addBranch=[];
 	/* VALIDATION */
 	
 		$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -50,10 +50,12 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	{
 		
 		var id = $scope.addBranch.branchDropDown.branchId;
-		$location.path('app/AddBranch/'+id); 
+		  getSetFactory.set(id);
+		$scope.AddEditFunction();
+		//$location.path('app/AddBranch'); 
 	}
 	
-   $scope.addBranch=[];
+   
  
 	vm.cityDrop=[];
 	//get Company
@@ -63,7 +65,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		//console.log(response2);
 		vm.companyDrop = response2;
 		
-		if(!$stateParams.id){
+		if(!$scope.addBranch.bId){
 			
 		//Set default Company
 		apiCall.getDefaultCompany().then(function(response){
@@ -102,62 +104,68 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	});
 	
 	vm.sdfg;
-	if($stateParams.id){
+	$scope.AddEditFunction = function(){
+		
+	if(Object.keys(getSetFactory.get()).length){
 	  
-	//Edit Branch
-	var editBranch = apiPath.getAllBranch+'/'+$stateParams.id;
-	
-	apiCall.getCall(editBranch).then(function(res){
+	  $scope.addBranch.bId = getSetFactory.get();
+	  getSetFactory.blank();
+	  
+		//Edit Branch
+		var editBranch = apiPath.getAllBranch+'/'+$scope.addBranch.bId;
 		
-		
-		vm.sdfg = res.companyId;
-		//console.log(vm.sdfg);
-		$scope.addBranch.branchName = res.branchName;
-		$scope.addBranch.fisrtAddress = res.address1;
-		$scope.addBranch.secondAddress = res.address2;
-		//$scope.addBranch.stateDropDown = res.state_abb;
-		//$scope.addBranch.cityDropDown = res.city_id;
-		
-		$scope.addBranch.pincode = res.pincode;
-		
-		$scope.addBranch.companyDropDown = res.company;
+		apiCall.getCall(editBranch).then(function(res){
 			
-		$scope.addBranch.companyDropDown2 = res.company;
-		
-		//Branch
-		vm.branchDrop = [];
-		var getAllBranch = apiPath.getOneBranch+res.company.companyId;
-		//Get Branch
-		apiCall.getCall(getAllBranch).then(function(response4){
 			
-			vm.branchDrop = response4;
+			vm.sdfg = res.companyId;
+			//console.log(vm.sdfg);
+			$scope.addBranch.branchName = res.branchName;
+			$scope.addBranch.fisrtAddress = res.address1;
+			$scope.addBranch.secondAddress = res.address2;
+			//$scope.addBranch.stateDropDown = res.state_abb;
+			//$scope.addBranch.cityDropDown = res.city_id;
+			
+			$scope.addBranch.pincode = res.pincode;
+			
+			$scope.addBranch.companyDropDown = res.company;
 				
-			$scope.addBranch.branchDropDown = res;
+			$scope.addBranch.companyDropDown2 = res.company;
+			
+			//Branch
+			vm.branchDrop = [];
+			var getAllBranch = apiPath.getOneBranch+res.company.companyId;
+			//Get Branch
+			apiCall.getCall(getAllBranch).then(function(response4){
+				
+				vm.branchDrop = response4;
+					
+				$scope.addBranch.branchDropDown = res;
+			});
+				
+				
+			$scope.addBranch.stateDropDown = res.state;
+			
+			//City DropDown
+			var cityAllDropPath = apiPath.getAllCity+res.state.stateAbb;
+			apiCall.getCall(cityAllDropPath).then(function(res5){
+				
+				vm.cityDrop = res5;
+				$scope.addBranch.cityDropDown = res.city;
+			});
+			
+			
+			
+		
 		});
-			
-			
-		$scope.addBranch.stateDropDown = res.state;
-		
-		//City DropDown
-		var cityAllDropPath = apiPath.getAllCity+res.state.stateAbb;
-		apiCall.getCall(cityAllDropPath).then(function(res5){
-			
-			vm.cityDrop = res5;
-			$scope.addBranch.cityDropDown = res.city;
-		});
-		
-		
-		
-	
-	});
-  
-  }
-  else if($rootScope.AddBranchModify){
 	  
-	  console.log('Not');
-  }
+	  }
+	  else{
+		  
+		  console.log('Not');
+	  }
+	}
   
-  
+  $scope.AddEditFunction();
   
   // Datepicker
   // ----------------------------------- 
@@ -332,9 +340,9 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	// formdata.append('companyId',addBranch.companyDropDown2.companyId);
 	
 	
-	if($stateParams.id)
+	if($scope.addBranch.bId)
 	{
-		var editBranch = apiPath.getAllBranch+'/'+$stateParams.id;
+		var editBranch = apiPath.getAllBranch+'/'+$scope.addBranch.bId;
 		
 		apiCall.postCall(editBranch,formdata).then(function(response5){
 		
@@ -343,7 +351,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 			
 			if(apiResponse.ok == response5){
 				
-				toaster.pop('success', 'Title', 'Insert Successfully');
+				toaster.pop('success', 'Title', 'Update Successfully');
 				$location.path('app/Branch');
 			}
 			else{
@@ -396,4 +404,4 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   
 }
-AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$stateParams","$location","apiResponse","validationMessage"];
+AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$location","apiResponse","validationMessage","getSetFactory"];

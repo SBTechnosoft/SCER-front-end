@@ -13304,6 +13304,11 @@ body .jvectormap-zoomout {
 	color:white !important;
 	height:inherit;
 }
+.my-small-button{
+	
+	padding: 6px 21px !important;
+	font-size: 13px !important;
+}
 /* End */
 
 /* ========================================================================

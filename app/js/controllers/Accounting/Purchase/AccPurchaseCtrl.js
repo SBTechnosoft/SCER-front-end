@@ -27,7 +27,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.accPurchase.tax = 0;
 	
 	$scope.erpPath = $rootScope.erpPath; // Erp Path
-	
+	 var dateFormats = $rootScope.dateFormats; //Date Format
+	 
 	$scope.disableCompany = false;
 	$scope.disableCompanyPoint = 0;
 	
@@ -220,8 +221,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
+  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
 	
 	//Update Set
 	  if(Object.keys(getSetFactory.get()).length){

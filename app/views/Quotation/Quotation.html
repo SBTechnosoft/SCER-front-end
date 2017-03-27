@@ -13,7 +13,7 @@
 			<div class="col-md-9">
 				<fieldset>
 				   <div class="form-group">
-					  <label class="col-sm-2 control-label">Company</label>
+					  <label class="col-sm-2 control-label">*Company</label>
 					  <div class="col-sm-8">
 						 <select chosen="" tabindex="2"  data-ng-model="addquotation.companyDrop" data-ng-options="s.companyName for s in form.quotationCompanyDrop track by s.companyId" class="form-control chosen-select" ng-required="true"></select>
 					  </div>
@@ -21,7 +21,7 @@
 				</fieldset>
 				<fieldset>
 				   <div class="form-group">
-					  <label for="input-id-1" class="col-sm-2 control-label">Quotation Label</label>
+					  <label for="input-id-1" class="col-sm-2 control-label">*Quotation Label</label>
 					  <div class="col-sm-8">
 						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-model="addquotation.quotationLabel" type="text" placeholder="Quotation Label" class="form-control" ng-pattern="/^[a-zA-Z &_`#().\'-\/]*$/" ng-minlength="1" ng-maxlength="35" ng-required="true"  auto-focus />
 						 
@@ -37,9 +37,9 @@
 				</fieldset>
 				<fieldset>
 					<div class="form-group">
-					  <label for="input-id-1" class="col-sm-2 control-label">Started At</label>
+					  <label for="input-id-1" class="col-sm-2 control-label">*Started At</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="startAt" ng-model="addquotation.startAt" type="text" placeholder="Started At" class="form-control" ng-pattern="/^[0-9]*$/" ng-required="true" />
+						 <input id="input-id-1" tabindex="2" name="startAt" ng-model="addquotation.startAt" type="text" placeholder="Started At" class="form-control" ng-pattern="/^[0-9]*$/" ng-required="true" only-number />
 						 
 						 <span ng-messages="formQuotation.startAt.$error" ng-if="formQuotation.startAt.$dirty || formQuotation.startAt.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -106,7 +106,7 @@
 				<td data-title="'Company Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.company.companyName}}</td>
 				<td data-title="'Label'" sortable="'quotationLabel'" filter="{ 'quotationLabel': 'text' }" >{{user.quotationLabel}}</td>
 			    <td data-title="'Prefix/Postfix'" sortable="'quotationType'" filter="{ 'quotationType': 'text' }" >{{user.quotationType}}</td>
-				<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" >{{user.startAt}}</td>
+				<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" style="text-align:right" >{{user.startAt}}</td>
 				<!--td data-title="'created_at'" sortable="'created_at'" filter="{ 'created_at': 'text' }" >{{user.created_at}}</td-->
 		
 			   <!--td data-title="'Action'" filter="{ '': 'text' }">

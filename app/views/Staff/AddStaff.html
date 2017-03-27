@@ -14,26 +14,26 @@
 			<div class="col-md-12">
 			<fieldset>
                <div class="form-group">
-                  <label class="col-sm-2 control-label">Company</label>
+                  <label class="col-sm-2 control-label">*Company</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="2" data-ng-model="addStaff.company" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addStaff.company.companyId)" class="form-control chosen-select" ng-required="true" ></select>
+                     <select chosen="" tabindex="2" data-ng-model="addStaff.company" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',addStaff.company.companyId)" class="form-control chosen-select" ng-required="true"  ></select>
                   </div>
                </div>
 			</fieldset>
 			<fieldset>
                <div class="form-group">
-                  <label class="col-sm-2 control-label">Branch</label>
+                  <label class="col-sm-2 control-label">*Branch</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="2" data-ng-model="addStaff.branch" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" ng-change="changeStaffData('branchId',addStaff.branch.branchId)" class="form-control chosen-select" ng-required="true" ></select>
+                     <select chosen="" tabindex="2" data-ng-model="addStaff.branch" data-ng-options="s.branchName for s in form.branchDrop track by s.branchId" ng-change="changeStaffData('branchId',addStaff.branch.branchId)" class="form-control chosen-select" ng-required="true"   ></select>
                   </div>
                </div>
 			</fieldset>
 			
 			<fieldset >
                <div class="form-group">
-                  <label class="col-sm-2 control-label"> Type </label>
+                  <label class="col-sm-2 control-label"> *Type </label>
                   <div class="col-sm-5">
-                     <select chosen="" data-ng-model="addStaff.userType" data-ng-options="s for s in form.userTypeDrop" ng-change="changeStaffData('userType',addStaff.userType)" class="form-control chosen-select" ng-required="true">
+                     <select chosen="" data-ng-model="addStaff.userType" data-ng-options="s for s in form.userTypeDrop" ng-change="changeStaffData('userType',addStaff.userType)" class="form-control chosen-select" ng-required="true" tabindex="2" >
 						<option value=""></option>
 					 </select>
                   </div>
@@ -42,7 +42,7 @@
 			
             <fieldset>
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Name</label>
+                  <label for="input-id-1" class="col-sm-2 control-label">*Name</label>
                   <div class="col-sm-5">
                      <input id="input-id-1" tabindex="2" name="staffName" ng-model="addStaff.name" ng-change="changeStaffData('userName',addStaff.name)" type="text" placeholder="Staff Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-maxlength="50" auto-focus/>
 					 
@@ -57,7 +57,7 @@
             </fieldset>
 			<fieldset >
 			   <div class="form-group">
-				  <label for="input-id-1" class="col-sm-2 control-label">Email ID</label>
+				  <label for="input-id-1" class="col-sm-2 control-label">*Email ID</label>
 					<div class="col-sm-5">
 						<div class="input-group m-b">
 							<span class="input-group-addon">@</span>
@@ -75,7 +75,7 @@
 			</fieldset>
 			<fieldset>
 				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Password</label>
+                  <label for="input-id-1" class="col-sm-2 control-label">*Password</label>
                   <div class="col-sm-5">
                     <input id="input-id-1" tabindex="2" name="staffPassword" ng-model="addStaff.password" ng-change="changeStaffData('password',addStaff.password)" type="password" placeholder="Password" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="24" ng-minlength="6" />
 					 
@@ -90,9 +90,9 @@
 			</fieldset>
 			<fieldset>
 				<div class="form-group">
-                  <label for="input-id-1" class="col-sm-2 control-label">Re-Enter Password</label>
+                  <label for="input-id-1" class="col-sm-2 control-label">*Re-Enter Password</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" tabindex="2" ng-model="addStaff.repassword" ui-validate="'$value==addStaff.password'" ui-validate-watch="'validator.password'" name="repassword" type="password" placeholder="Re-Enter Password" class="form-control" />
+                     <input id="input-id-1" tabindex="2" ng-model="addStaff.repassword" ui-validate="'$value==addStaff.password'" ui-validate-watch="'validator.password'" name="repassword" type="password" placeholder="Re-Enter Password" class="form-control" ng-required="true" />
 					 
 					 <span class="text-danger" ng-show="formStaff.repassword.$error.validator">{{errorMessage.notMatch}}</span>
 					 
@@ -101,7 +101,7 @@
 			</fieldset>
 			<fieldset >
 			   <div class="form-group">
-				  <label class="col-sm-2 control-label">Contact#</label>
+				  <label class="col-sm-2 control-label">*Contact#</label>
 				  <div class="col-sm-5">
 					 <input id="input-id-1"  tabindex="2" name="contactNo" ng-model="addStaff.contact" ng-change="changeStaffData('contactNo',addStaff.contact)" type="text" placeholder="Contact Number" class="form-control" ng-required="true" ng-pattern="/^[0-9]+$/" ng-maxlength="12" ng-minlength="10" only-number />
 					 
@@ -117,9 +117,9 @@
 			</fieldset >
 			<fieldset>
 				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">Address</label>
+					<label for="input-id-1" class="col-sm-2 control-label">*Address</label>
 					<div class="col-sm-5">
-						<textarea tabindex="1" tabindex="2" name="address" ng-model="addStaff.address" ng-change="changeStaffData('address',addStaff.address)" placeholder="Your Address"  class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35"  ></textarea>
+						<textarea  tabindex="2" name="address" ng-model="addStaff.address" ng-change="changeStaffData('address',addStaff.address)" placeholder="Your Address"  class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35"  ></textarea>
 					
 						<span ng-messages="formStaff.address.$error" ng-if="formStaff.address.$dirty || formStaff.address.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -133,25 +133,25 @@
 			</fieldset>
 			<fieldset>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">State</label>
+                  <label class="col-sm-2 control-label">*State</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="2" ng-model="addStaff.stateDropDown" tabindex="2" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',addStaff.stateDropDown.stateAbb)"  class="form-control chosen-select" ng-required="true" ></select>
+                     <select chosen="" ng-model="addStaff.stateDropDown" tabindex="2" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',addStaff.stateDropDown.stateAbb)"  class="form-control chosen-select" ng-required="true" ></select>
                   </div>
                </div>
 			</fieldset>
 			<fieldset>
                <div class="form-group">
-                  <label class="col-sm-2 control-label">City</label>
+                  <label class="col-sm-2 control-label">*City</label>
                   <div class="col-sm-5">
-                     <select chosen="" tabindex="2" ng-model="addStaff.cityDropDown" tabindex="2" ng-change="changeStaffData('cityId',addStaff.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId"  class="form-control chosen-select" ng-required="true" ></select>
+                     <select chosen=""  ng-model="addStaff.cityDropDown" tabindex="2" ng-change="changeStaffData('cityId',addStaff.cityDropDown.cityId)" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId"  class="form-control chosen-select" ng-required="true" ></select>
                   </div>
                </div>
 			</fieldset>
 			<fieldset>
 				<div class="form-group">
-					<label class="col-sm-2 control-label">PIN Code</label>
+					<label class="col-sm-2 control-label">*PIN Code</label>
 					<div class="col-sm-3">
-					   <input type="text" tabindex="2" name="pincode" ng-model="addStaff.pincode" ng-change="changeStaffData('pincode',addStaff.pincode)" masked="999999" placeholder="PIN Code" class="form-control" ng-required="true" ng-minlength="6" />
+					   <input type="text" tabindex="2" name="pincode" ng-model="addStaff.pincode" ng-change="changeStaffData('pincode',addStaff.pincode)" placeholder="PIN Code" class="form-control" ng-required="true" ng-minlength="6" ng-maxlength="6" only-number />
 					   <span class="help-block">Masked="395001"</span>
 					   
 					    <span ng-messages="formStaff.pincode.$error" ng-if="formStaff.pincode.$dirty || formStaff.pincode.$touched" role="alert">

@@ -13,6 +13,7 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   $scope.accViewSales = [];
   
   $scope.viewDataTypePath = viewDataType;
+  var dateFormats = $rootScope.dateFormats; //Date Format
  
 	this.salesTypeDrop = [
 	'All',
@@ -177,8 +178,8 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
+  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
 
   // Timepicker
   // ----------------------------------- 

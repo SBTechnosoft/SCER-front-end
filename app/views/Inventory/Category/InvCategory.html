@@ -15,7 +15,7 @@
 							<select chosen="" data-ng-model="invCategoryData.categoryDropDown" data-ng-options="s.productCategoryName for s in table.categoryDrop track by s.productCategoryId" class="form-control chosen-select"></select>
 						</div>
 						
-					<label class="col-sm-1 control-label"> Name </label>
+					<label class="col-sm-1 control-label"> *Name </label>
 						<div class="col-sm-4">
 							<input ng-model="invCategoryData.categoryName" name="categoryName" id="input-id-1" type="text" placeholder="Brand Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
 							
@@ -28,8 +28,11 @@
 						</div>
 						
 						
-					<button type="button" class="btn btn-primary" ng-click="addUpCategory()" ng-disabled="formCategory.$invalid" >Save</button>
-					<button type="button" class="btn btn-danger" ng-click="cancel()"  >Cancel</button>
+					<button type="button" class="btn btn-success my-small-button" ng-click="addUpCategory()" ng-disabled="formCategory.$invalid" >
+						<span ng-if="!invCategoryID.id">Insert </span>
+						<span ng-if="invCategoryID.id">Update </span>
+					</button>
+					<button type="button" class="btn btn-danger my-small-button" ng-click="cancel()"  >Cancel</button>
 					
 				</div>
 				<div class="form-group">

@@ -13,6 +13,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	var formdata = new FormData();
 	
 	 $scope.erpPath = $rootScope.erpPath; //Erp Path
+	 var dateFormats = $rootScope.dateFormats; //Date Format
 	 
 	$scope.quickBill = [];
 	
@@ -181,7 +182,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	$scope.setProductData = function(item,index)
 	{
-		// console.log(item);
+		
+		 console.log(item);
 		// console.log(index);
 		vm.AccBillTable[index].productId = item.productId;
 	
@@ -1379,8 +1381,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
+  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
 
   // Timepicker
   // ----------------------------------- 
@@ -1535,69 +1537,113 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   	  var arg = {
                 resultFunction: function(result) {
 				console.log(result);
-				console.log(vm.AccBillTable.length);
+				//console.log(vm.AccBillTable.length);
 				//console.log(index);
-				var proBarcode = "JIO_EXE_MT_PROCT1_RDRD_244T";
-				
-				var barcodeflag = 0;
-				var cnt = vm.AccBillTable.length;
-					for(var m=0;m<cnt;m++){
-						
-						var arrayData = vm.AccBillTable[m];
-						
-						if(arrayData.productId == ""){
-							
-							
-							var headerSearch = {'Content-Type': undefined,'productCode':proBarcode};
-			
-							apiCall.getCallHeader(apiPath.getAllProduct,headerSearch).then(function(response){
-								
-								console.log(response);
-								vm.AccBillTable[m].productName = response.productName;
-								//vm.AccBillTable[data.index].productId = response.productId;
-								
-								$scope.setProductData(response,m);
-								//$scope.$apply();
-								
-							});
-			
-							barcodeflag = 1;
-							//console.log(arrayData);
-							break;
-						}
-						else{
-							continue;
-						}
-						
-					}
-					var nextindex = parseInt(cnt)-1;
-					if(barcodeflag == 0){
-						
-						$scope.addRow(nextindex);
-						
-						var fatIndex = nextindex+1;
+				if(result.format == "Code128"){
+					
+					console.log('Code 128');
+					
+					//var proBarcode = result.code;
+					var proBarcode = "JIO_EXE_MT_PROCT1_RDRD_244T";
+					
+					//Api
 						
 						var headerSearch = {'Content-Type': undefined,'productCode':proBarcode};
-			
-							apiCall.getCallHeader(apiPath.getAllProduct,headerSearch).then(function(response){
+				
+						apiCall.getCallHeader(apiPath.getAllProduct,headerSearch).then(function(response){
+							
+							var companyId = $scope.quickBill.companyDropDown.companyId;
+							
+							/** Inner Loop **/
+								/** Check Product is Already in Array or not **/
+								var checkFlag = 0;
+									var cnt = vm.AccBillTable.length;
+									for(var m=0;m<cnt;m++){
+										
+										var arrayData = vm.AccBillTable[m];
+										
+										if(companyId == response.company.companyId){
+											
+											if(arrayData.productId == response.productId){
+												
+												
+												toaster.clear();
+												toaster.pop('info', 'Product Already Selected', '');
 								
-								console.log(response);
-								vm.AccBillTable[fatIndex].productName = response.productName;
-								//vm.AccBillTable[data.index].productId = response.productId;
+												checkFlag = 1;
+												//console.log(arrayData);
+												break;
+											}
+										}
+										else{
+											
+											toaster.clear();
+											toaster.pop('info', 'Product has Diffrent Company', '');
+											checkFlag = 1;
+											break;
+										}
+										
+									}
+								/** End Check Product **/
+								if(checkFlag == 0){
+									
+									var barcodeflag = 0;
+									var checkCnt = vm.AccBillTable.length;
+										for(var cVar=0;cVar<checkCnt;cVar++){
+											
+											var arrayData = vm.AccBillTable[cVar];
+											
+											if(arrayData.productId == ""){
+												
+												vm.AccBillTable[cVar].productName = response.productName;
+												//vm.AccBillTable[data.index].productId = response.productId;
+												
+												$scope.setProductData(response,cVar);
+												toaster.clear();
+												toaster.pop('success', 'Barcode Scanned', '');
 								
-								$scope.setProductData(response,fatIndex);
-								//$scope.$apply();
+												barcodeflag = 1;
+												//console.log(arrayData);
+												break;
+											}
+
+											
+										}
+										
+										var nextindex = parseInt(cnt)-1;
+										if(barcodeflag == 0){
+											
+											$scope.addRow(nextindex);
+											
+											var fatIndex = nextindex+1;
+											
+											//console.log(response);
+											vm.AccBillTable[fatIndex].productName = response.productName;
+											//vm.AccBillTable[data.index].productId = response.productId;
+											
+											$scope.setProductData(response,fatIndex);
+											//$scope.$apply();
+											toaster.clear();
+											toaster.pop('success', 'Barcode Scanned', '');	
+											
+											$scope.$apply();
+										}
+								}
+							/** End loop **/
+							
+						});
 								
-							});
-						$scope.$apply();
-					}
-                   
+					//End Api
+					
+					
+					} //IF
                 }
             };
 			
   $scope.focusbarcode = function(){
 
 	$("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.stop();
+	console.log('done');
 	 // console.log(arg.resultFunction());
   }
   

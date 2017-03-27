@@ -14,11 +14,17 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
   $scope.billData = [];
   
 	$scope.erpPath = $rootScope.erpPath; //Erp Path
+	
+	$scope.dateFormat =  $rootScope.dateFormats; //Date Format
    
 	/** Display Company and date **/
 		apiCall.getCall(apiPath.getAllCompany+'/'+$rootScope.accView.companyId).then(function(res){
 			
 			$scope.displayCompany = res.companyName;
+			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',30000);
+			
 		});
 		// $scope.displayCompany = $rootScope.accView.companyId;
 		  $scope.displayfromDate = $rootScope.accView.fromDate;
@@ -84,7 +90,9 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	  
 		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 			
-			console.log(response);
+			//console.log(response);
+			
+			toaster.clear();
 			
 			if(apiResponse.notFound == response){
 				
@@ -597,6 +605,15 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		}
 		
 		return tempObject;
+	}
+	
+	//Date Convert
+	
+	$scope.dateConvert = function(entryDate){
+		
+		var entDate = entryDate.split("-").reverse().join("-");
+		
+		return entDate; 
 	}
 	
 	/** Reload Load Data **/

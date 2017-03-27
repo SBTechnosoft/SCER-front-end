@@ -8,7 +8,7 @@
 				
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label class="col-sm-3 control-label">Company</label>
+                  <label class="col-sm-3 control-label">*Company</label>
                   <div class="col-sm-7">
                      <select chosen="" data-ng-model="addModelProduct.company" tabindex="2" data-ng-options="s.companyName for s in companyDrop track by s.companyId" ng-change="changeCompany(addModelProduct.company.companyId)" ng-disabled="disableCompany"  class="form-control chosen-select" ng-required="true"></select>
                   </div>
@@ -16,7 +16,7 @@
 			</fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label class="col-sm-3 control-label">Branch</label>
+                  <label class="col-sm-3 control-label">*Branch</label>
                   <div class="col-sm-7">
                      <select chosen="" data-ng-model="addModelProduct.branch" tabindex="2" data-ng-options="s.branchName for s in branchDrop track by s.branchId" class="form-control chosen-select" ng-required="true"></select>
                   </div>
@@ -24,7 +24,7 @@
 			</fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label class="col-sm-3 control-label">Brand</label>
+                  <label class="col-sm-3 control-label">*Brand</label>
                   <div class="col-sm-7">
                      <select chosen="" data-ng-model="addModelProduct.category" tabindex="2" data-ng-options="s.productCategoryName for s in categoryDrop track by s.productCategoryId" class="form-control chosen-select" ng-required="true"></select>
                   </div>
@@ -32,7 +32,7 @@
 			</fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label class="col-sm-3 control-label">Category</label>
+                  <label class="col-sm-3 control-label">*Category</label>
                   <div class="col-sm-7">
                      <select chosen="" data-ng-model="addModelProduct.group" tabindex="2" data-ng-options="s.productGroupName for s in groupDrop track by s.productGroupId" class="form-control chosen-select" ng-required="true"></select>
                   </div>
@@ -40,7 +40,7 @@
 			</fieldset>	
             <fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Product Name</label>
+                  <label for="input-id-1" class="col-sm-3 control-label">*Product Name</label>
                   <div class="col-sm-7">
                      <input id="input-id-1" name="productName" ng-model="addModelProduct.productName" type="text" placeholder="Product Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" tabindex="2" auto-focus />
 					 
@@ -55,7 +55,7 @@
             </fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Color</label>
+                  <label for="input-id-1" class="col-sm-3 control-label">*Color</label>
                   <div class="col-sm-3">
                      <input id="input-id-1" name="productColor" ng-model="addModelProduct.color" type="text" placeholder="Color" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z .\-\/]+$/" ng-maxlength="30" />
 					 
@@ -68,7 +68,7 @@
                   </div>
               
 
-                  <label for="input-id-1" class="col-sm-1 control-label">Size</label>
+                  <label for="input-id-1" class="col-sm-1 control-label">*Size</label>
                   <div class="col-sm-3">
                      <input id="input-id-1" name="productSize" ng-model="addModelProduct.size" type="text" placeholder="Size" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 .()]+$/" ng-maxlength="15"/>
 					 
@@ -99,7 +99,7 @@
 			
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label class="col-sm-3 control-label">Measurement Unit</label>
+                  <label class="col-sm-3 control-label">*Measurement Unit</label>
                   <div class="col-sm-7">
                      <select chosen="" data-ng-model="addModelProduct.measureUnit" data-ng-options="s for s in measureUnitDrop" class="form-control chosen-select" ng-required="true" tabindex="2" >
 						<option value=""></option>
@@ -109,9 +109,9 @@
 			</fieldset>	
 			 <fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Purchase Price</label>
+                  <label for="input-id-1" class="col-sm-3 control-label">*Purchase Price</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="purchasePrice" dir="rtl" ng-model="addModelProduct.purchasePrice" type="text" placeholder="Purchase Price" class="form-control" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="10" tabindex="2" only-number  />
+                     <input id="input-id-1" name="purchasePrice" dir="rtl" ng-model="addModelProduct.purchasePrice" type="text" placeholder="Purchase Price" class="form-control" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20" tabindex="2" only-number  />
 					 
 					<span ng-messages="formProduct.purchasePrice.$error" ng-if="formProduct.purchasePrice.$dirty || formProduct.purchasePrice.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -224,9 +224,9 @@
             </fieldset>
 			 <fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">MRP</label>
+                  <label for="input-id-1" class="col-sm-3 control-label">*MRP</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="mrp" dir="rtl" ng-model="addModelProduct.mrp = addModelProduct.purchasePrice" type="text" placeholder="MRP" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-required="true" ng-maxlength="10" tabindex="2" only-number />
+                     <input id="input-id-1" name="mrp" dir="rtl" ng-model="addModelProduct.mrp = addModelProduct.purchasePrice" type="text" placeholder="MRP" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-required="true" ng-maxlength="20" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.mrp.$error" ng-if="formProduct.mrp.$dirty || formProduct.mrp.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>

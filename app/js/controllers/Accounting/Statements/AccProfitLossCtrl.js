@@ -15,6 +15,8 @@ function AccProfitLossController($rootScope,$scope, $filter, ngTableParams,apiCa
   $scope.noOfDecimalPoints;
   $scope.displayCompany;
   
+  $scope.dateFormat =  $rootScope.dateFormats; //Date Format
+  
   var erpPath = $rootScope.erpPath;
    $scope.displayDate = new Date();
   

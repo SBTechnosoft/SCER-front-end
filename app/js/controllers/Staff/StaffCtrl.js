@@ -20,7 +20,9 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 	vm.companyDrop=[];
 	apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 		
-		
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+			
 		vm.companyDrop = response2;
 		
 		//Set default Company
@@ -31,7 +33,9 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 			var headerDataOnLoad = {'Content-Type': undefined,'companyId':response.companyId};
 			
 			apiCall.getCallHeader(apiPath.getAllStaff,headerDataOnLoad).then(function(response){
-		
+			
+				toaster.clear();
+				
 				console.log(response);
 				if(apiResponse.noContent == response){
 					
@@ -87,6 +91,9 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 	
 	$scope.showFilterStaff = function(){
 		
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		
 		var headerData = {'Content-Type': undefined};
 		
 		if($scope.showStaff.companyDropDown){
@@ -104,11 +111,14 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		
 			
 			apiCall.getCallHeader(apiPath.getAllStaff,headerData).then(function(response){
-		
+				
+					toaster.clear();
+					
 				console.log(response);
 				if(apiResponse.noContent == response){
 					
 					data = [];
+					
 					toaster.pop('alert', 'Opps!!', 'No Staff Available');
 				}
 				else{
@@ -166,7 +176,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		  getData: function($defer, params) {
 			  
 			  // use build-in angular filter
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.userType) != "undefined" && params.$params.filter.userName != "") || (typeof(params.$params.filter.userType) != "undefined" && params.$params.filter.userName != "") || (typeof(params.$params.filter.emailId) != "undefined" && params.$params.filter.emailId != "") || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.userType) != "undefined" && params.$params.filter.userType != "") || (typeof(params.$params.filter.userName) != "undefined" && params.$params.filter.userName != "") || (typeof(params.$params.filter.emailId) != "undefined" && params.$params.filter.emailId != "") || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :
@@ -226,7 +236,9 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		modalInstance.result.then(function () {
 		 
 		 console.log('ok');
-		 
+		 toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Staff Deleting....',60000);
+			
 		// return false;
 		 /**Delete Code **/
 			var deletePath = apiPath.getAllStaff+'/'+parseInt(id);
@@ -234,7 +246,8 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		apiCall.deleteCall(deletePath).then(function(deleteres){
 			
 			console.log(deleteres);
-			
+			 toaster.clear();
+			 
 			if(apiResponse.ok == deleteres){
 					
 				toaster.pop('success', 'Title', 'Delete Successfully');
@@ -250,7 +263,8 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		 /** End **/
 		
 		}, function () {
-		  console.log('Cancel');	
+		  console.log('Cancel');
+			 toaster.clear();
 		});
 		
 		

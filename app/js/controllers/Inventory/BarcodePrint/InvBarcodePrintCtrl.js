@@ -263,7 +263,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
 
-		var is_chrome = Boolean(mywindow.chrome);
+		 var is_chrome = Boolean(mywindow.chrome);
 
         mywindow.document.write('<html><head><title>' + document.title  + '</title>');
 
@@ -272,6 +272,15 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
 		mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2>" + pData.productName +' ('+ pData.color +' | '+ pData.size + ") </h2> </td></tr> 	<tr>");
 		
+		if(qty%2==0){
+				
+			var space = "";
+		}
+		else{
+			
+			var space = "<td></td>";
+		}
+			
 		for(var n=0;n<qty;n++){
 
 			mywindow.document.write("<td style='position:relative;float:left; width: 48%;padding-bottom:5px;display: inline-block;'> ");
@@ -281,6 +290,41 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				
 				
 				mywindow.document.write("</td> "+ space );
+				
+				/** Next Code **/
+				
+					mywindow.document.write("</tr></table>");
+		
+					mywindow.document.write('</body></html>');
+
+					//mywindow.document.close(); // necessary for IE >= 10
+					
+					// mywindow.focus(); // necessary for IE >= 10*/
+					// mywindow.print();
+					// mywindow.close();
+					
+					if (is_chrome) {
+						
+					   setTimeout(function () { // wait until all resources loaded 
+							mywindow.focus(); // necessary for IE >= 10
+							mywindow.print();  // change window to mywindow
+							mywindow.close();// change window to mywindow
+						 }, 2000);
+					}
+					else {
+						mywindow.document.close(); // necessary for IE >= 10
+						mywindow.focus(); // necessary for IE >= 10
+						mywindow.print();
+						mywindow.close();
+					}
+				
+					// pData.selected = false;
+					
+					// $scope.selectedBoxArray = [];	
+					// $scope.barcodeFlag = 0;
+					return true;
+		
+				/** End **/
 			}
 			else{
 				mywindow.document.write("</td>");
@@ -290,43 +334,30 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			// mywindow.document.write("</div>");
 		}
 		
-		mywindow.document.write("</tr></table>");
 		
-		mywindow.document.write('</body></html>');
-
-		//mywindow.document.close(); // necessary for IE >= 10
-		
-		// mywindow.focus(); // necessary for IE >= 10*/
-		// mywindow.print();
-		// mywindow.close();
-		
-		if (is_chrome) {
-        setTimeout(function () { // wait until all resources loaded 
-            mywindow.focus(); // necessary for IE >= 10
-            mywindow.print();  // change window to mywindow
-            mywindow.close();// change window to mywindow
-			 }, 1000);
-		}
-		else {
-			mywindow.document.close(); // necessary for IE >= 10
-			mywindow.focus(); // necessary for IE >= 10
-			mywindow.print();
-			mywindow.close();
-		}
-	
-		// pData.selected = false;
-		
-		// $scope.selectedBoxArray = [];	
-		// $scope.barcodeFlag = 0;
-        return true;
 	  
 	}
 	
 	$scope.multipleBarcodePrint = function(){
 		
 		
-		console.log($scope.selectedBoxArray);
+		// console.log($scope.selectedBoxArray);
+		console.log($scope.filteredItems);
 	
+		if($scope.barcodeFlag == 1){
+			
+				var dataArrayLength = $scope.filteredItems.length;
+				
+				var CompanyNamePrint = $scope.filteredItems[0].company.companyName;
+				
+		}
+		else{
+			
+			var dataArrayLength = $scope.selectedBoxArray.length;
+			
+			var CompanyNamePrint = $scope.selectedBoxArray[0].company.companyName;
+		}
+		
 		
 		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
 	
@@ -335,17 +366,27 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
         mywindow.document.write('<html><head><title>' + document.title  + '</title>');
 
         mywindow.document.write("</head><body style='height:29.7cm;width:21cm;'>");
-		mywindow.document.write('<center> <h1> Barcode of ' +  $scope.selectedBoxArray[0].company.companyName + ' Company </h1> </center>');
+		mywindow.document.write('<center> <h1> Barcode of ' + CompanyNamePrint  + ' Company </h1> </center>');
 		
 		
-		var dataArrayLength = $scope.selectedBoxArray.length;
+		
+		
 		
 		for(var dataIndex=0;dataIndex<dataArrayLength;dataIndex++){
 			
 			mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
 			
-			var arrayProductData = $scope.selectedBoxArray[dataIndex];
+			if($scope.barcodeFlag == 1){
+				
+				var arrayProductData = $scope.filteredItems[dataIndex];
+			}
+			else{
+				var arrayProductData = $scope.selectedBoxArray[dataIndex];
+			 }
+			
+			
 			mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </td></tr> 	<tr>");
+			
 			if($scope.barcodePrintData.multiQuantity > 0){
 				
 				var qtyLength = $scope.barcodePrintData.multiQuantity;
@@ -384,35 +425,40 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			
 			}
 			mywindow.document.write("</tr></table>");
+			
+			if(dataIndex == dataArrayLength-1)
+			{
+				 mywindow.document.write('</body></html>');
+
+				 // mywindow.document.close(); // necessary for IE >= 10
+					
+					
+					if (is_chrome) {
+					   setTimeout(function () { // wait until all resources loaded 
+							mywindow.focus(); // necessary for IE >= 10
+							mywindow.print();  // change window to mywindow
+							mywindow.close();// change window to mywindow
+						 }, 5000);
+					}
+					else {
+						mywindow.document.close(); // necessary for IE >= 10
+						mywindow.focus(); // necessary for IE >= 10
+						mywindow.print();
+						mywindow.close();
+					}
+			
+			
+					// mywindow.focus(); // necessary for IE >= 10*/
+				  // mywindow.print();
+				// mywindow.close();
+
+				return true;
+			}
 		}
 		
 		
 		
-		 mywindow.document.write('</body></html>');
-
-		 // mywindow.document.close(); // necessary for IE >= 10
-			
-			
-			if (is_chrome) {
-           setTimeout(function () { // wait until all resources loaded 
-				mywindow.focus(); // necessary for IE >= 10
-				mywindow.print();  // change window to mywindow
-				mywindow.close();// change window to mywindow
-			 }, 1000);
-    }
-    else {
-        mywindow.document.close(); // necessary for IE >= 10
-        mywindow.focus(); // necessary for IE >= 10
-        mywindow.print();
-        mywindow.close();
-    }
-	
-	
-		    // mywindow.focus(); // necessary for IE >= 10*/
-		  // mywindow.print();
-	    // mywindow.close();
-
-        return true;
+		
 		
 	}
 	

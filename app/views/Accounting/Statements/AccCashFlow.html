@@ -24,7 +24,7 @@
 		 <a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary">Generate Pdf</a> 
 		 <a ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to Excel</a>
 		 
-         <div class="panel-title">Cash Flow of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date:'dd-MMM-yyyy'}} </b></div>
+         <div class="panel-title">Cash Flow of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date: dateFormat}} </b></div>
       </div>
       <table data-ng-table="table.tableParams" export-csv="csv"   show-filter="true" class="table table-bordered table-striped" >
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->

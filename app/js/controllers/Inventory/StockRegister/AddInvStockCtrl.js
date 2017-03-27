@@ -6,12 +6,13 @@
 
 App.controller('AddInvStockController', AddInvStockController);
 
-function AddInvStockController($scope,apiCall,apiPath,getSetFactory,$state) {
+function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$state,toaster) {
   'use strict';
   
   var vm = this;
   $scope.invStock = [];
   
+  var dateFormats = $rootScope.dateFormats;
   
 	//Get Company
 	vm.companyDrop=[];
@@ -29,7 +30,13 @@ function AddInvStockController($scope,apiCall,apiPath,getSetFactory,$state) {
 			
 			apiCall.getCall(apiPath.getProductByCompany+response2.companyId+'/branch').then(function(responseDrop){
 				
-				vm.productDrop = responseDrop;
+				if(angular.isArray(responseDrop)){
+					vm.productDrop = responseDrop;
+				}
+				else{
+					toaster.clear();
+					toaster.pop('info','No Product Available');
+				}
 				
 			});
 			
@@ -71,7 +78,13 @@ function AddInvStockController($scope,apiCall,apiPath,getSetFactory,$state) {
 		
 		apiCall.getCallHeader(Path,dataSet).then(function(response){
 			
-			vm.productDrop = response;
+			if(angular.isArray(response)){
+				vm.productDrop = response;
+			}
+			else{
+				toaster.clear();
+				toaster.pop('info','No Product Available');
+			}
 			
 		});
 		
@@ -160,8 +173,8 @@ function AddInvStockController($scope,apiCall,apiPath,getSetFactory,$state) {
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
+  //this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
 
   // Timepicker
   // ----------------------------------- 
@@ -267,4 +280,4 @@ function AddInvStockController($scope,apiCall,apiPath,getSetFactory,$state) {
   
   
 }
-AddInvStockController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$state"];
+AddInvStockController.$inject = ["$rootScope","$scope","apiCall","apiPath","getSetFactory","$state","toaster"];

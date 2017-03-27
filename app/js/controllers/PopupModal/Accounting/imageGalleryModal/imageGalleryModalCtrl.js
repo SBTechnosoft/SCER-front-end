@@ -9,7 +9,7 @@
 
 App.controller('imageGalleryModalCtrl',imageGalleryModalCtrl);
 
-function imageGalleryModalCtrl($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,getSetFactory,$state,billData,formatType,validationMessage,apiResponse,transType) {
+function imageGalleryModalCtrl($rootScope,$scope, $modalInstance,$http,apiCall,apiPath,$timeout,getSetFactory,$state,billData,formatType,validationMessage,apiResponse,transType) {
   'use strict';
   
 	 var data = [];
@@ -18,6 +18,8 @@ function imageGalleryModalCtrl($scope, $modalInstance,$rootScope,$http,apiCall,a
 	 $scope.formatType = formatType;
 	 $scope.transType = transType;
 	 
+	  var dateFormats = $rootScope.dateFormats; //Date Format
+	  
 	$scope.erpPath = $rootScope.erpPath; // Erp Path
 	
 		$scope.stockModel=[];
@@ -151,8 +153,8 @@ function imageGalleryModalCtrl($scope, $modalInstance,$rootScope,$http,apiCall,a
 		  };
 
 		  this.initDate = new Date('2016-15-20');
-		  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-		  this.format = this.formats[0];
+		  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		  this.format = dateFormats;
 		  
 		  //DatePicker End
 		  
@@ -249,4 +251,4 @@ function imageGalleryModalCtrl($scope, $modalInstance,$rootScope,$http,apiCall,a
 	/** End **/
 }
 
-imageGalleryModalCtrl.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","getSetFactory","$state","billData","formatType","validationMessage","apiResponse","transType"];
+imageGalleryModalCtrl.$inject = ["$rootScope","$scope", "$modalInstance","$http","apiCall","apiPath","$timeout","getSetFactory","$state","billData","formatType","validationMessage","apiResponse","transType"];

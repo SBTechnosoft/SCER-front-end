@@ -85,9 +85,9 @@
 				<td colspan="2">
 				</td>
 			</tr>
-            <!--tr data-ng-repeat="user in ($parent.filteredItems = ($data | filter:query))" -->
-            <tr data-ng-repeat="user in $data">
-				<td >
+            <tr data-ng-repeat="user in ($parent.filteredItems = $data)">
+            <!--tr data-ng-repeat="user in $data" -->
+				<td>
 				   <div class="checkbox c-checkbox">
 					  <label>
 						 <input type="checkbox" ng-model="user.selected" ng-change="changeBox(user.selected,user)" />

@@ -6,7 +6,7 @@
 
 App.controller('AddCompanyController', AddCompanyController);
 
-function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$stateParams,toaster,apiResponse,validationMessage,validationPattern) {
+function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,toaster,apiResponse,validationMessage,validationPattern,getSetFactory) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -51,7 +51,10 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 		
 		var id = $scope.addCompany.companyDropDown2.companyId;
 		// $location.path('app/AddCompany/'+id);
-		$state.go('app.AddCompany',{'id':id});
+		  getSetFactory.set(id);
+		$scope.AddEditFunction();
+		
+		//$state.go('app.AddCompany');
 	}
 	
 	//get Company
@@ -60,16 +63,24 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 			//console.log(response2);
 			vm.companyDrop = response2;
 			
-			if(!$stateParams.id){
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
 				
-				//Set default Company
-				apiCall.getDefaultCompany().then(function(response){
+				if(!$scope.addCompany.cId){
 					
 					$scope.addCompany.companyDropDown2 = response;
 					vm.selectCompany = false;
-				});
+					
+					 if($rootScope.AddCompanyModify)
+					  {
+						   $scope.gotoModify();
+					  }
+					
+					
+				}
+				
+			});
 			
-			}
 	});
 		
 	//Get State
@@ -98,10 +109,20 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 	}
 	
 	//Set Data For Edit
-		if($stateParams.id){
+	
+	// console.log(getSetFactory.get());
+	
+	// getSetFactory.blank();
+	$scope.AddEditFunction = function(){
+		
+	
+		if(Object.keys(getSetFactory.get()).length){
 	  
+		$scope.addCompany.cId = getSetFactory.get();
+		getSetFactory.blank();
+		
 		//Edit Branch
-		var editCompany = apiPath.getAllCompany+'/'+$stateParams.id;
+		var editCompany = apiPath.getAllCompany+'/'+$scope.addCompany.cId;
 	
 		apiCall.getCall(editCompany).then(function(res){
 		
@@ -146,15 +167,21 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 		});
 		
 	
-	
-	});
-  
-  }
-  else{
+		
+		});
 	  
-	  vm.disableDecimal = false;
-	  console.log('Not');
-  }
+	  }
+	  else{
+		  
+		  vm.disableDecimal = false;
+		 
+		
+		  console.log('Not');
+	  }
+  
+	}
+	
+	$scope.AddEditFunction();
 	//End
   // Chosen data
   // ----------------------------------- 
@@ -343,16 +370,16 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 	// formdata.append('isDisplay','no');
 	
 	
-	if($stateParams.id)
+	if($scope.addCompany.cId)
 	{
-		var editCompany2 = apiPath.getAllCompany+'/'+$stateParams.id;
+		var editCompany2 = apiPath.getAllCompany+'/'+$scope.addCompany.cId;
 		
-		apiCall.patchCall(editCompany2,formdata).then(function(response5){
+		apiCall.postCall(editCompany2,formdata).then(function(response5){
 		
 			
 			if(apiResponse.ok == response5){
 				
-				toaster.pop('success', 'Title', 'Insert Successfully');
+				toaster.pop('success', 'Title', 'Update Successfully');
 				//$location.path('app/Company');
 				$state.go('app.Company');
 			}
@@ -365,8 +392,8 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 	}
 	else
 	{
-		formdata.append('isDefault','not');
-			formdata.append('isDisplay','no');
+		// formdata.append('isDefault','not');
+			// formdata.append('isDisplay','no');
 			
 		apiCall.postCall(apiPath.getAllCompany,formdata).then(function(response5){
 		
@@ -410,4 +437,4 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,$
 	}
   
 }
-AddCompanyController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","$state","$stateParams","toaster","apiResponse","validationMessage","validationPattern"];
+AddCompanyController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","$state","toaster","apiResponse","validationMessage","validationPattern","getSetFactory"];

@@ -6,18 +6,19 @@
 </h3>
 <!-- START panel-->
 <div  class="container-fluid">
-	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"  ></toaster-container>
+	
 	
 	<form  action="#" name="formSales" class="form-validate form-horizontal">
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
 		<div class="panel-body">
 			<div class="form-group">
-				<label class="col-sm-1 control-label"> Company </label>
+				<label class="col-sm-1 control-label"> *Company </label>
 					<div class="col-sm-4">
 						<select chosen="" data-ng-model="accSales.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accSales.companyDropDown)" ng-disabled="disableCompany" class="form-control chosen-select" ng-required="true" ></select>
 					</div>
-				<label class="col-sm-1 control-label"> Date </label>
+				<label class="col-sm-1 control-label"> *Date </label>
 					<div class="col-sm-4">
 						 <p class="input-group"style="float:right">
 							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="false" max-date="false" ng-change="changeSalesDate('entryDate')" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
@@ -43,11 +44,11 @@
 			<table  class="table table-bordered table-striped" >
 				<thead>
 					<tr>
-						<th class="header" style="width:34%">Name of Item</th>
+						<th class="header" style="width:32%">Name of Item</th>
 						<th  class="header" style="width:7%">Color|Size</th>
 						<th class="header" style="width:10%">Discount Type</th>
 						<th class="header" style="width:7%">Discount</th>
-						<th style="width:12%" >Rate</th>
+						<th style="width:10%" >Rate</th>
 						<th style="width:5%" >Quantity</th>
 						<th style="width:5%" >VAT</th>
 						<th style="width:5%" >A.Vat</th>
@@ -59,7 +60,7 @@
 					<tr id="addAfter" ng-repeat="item in form.AccSalesTable">
 						<td>
 							<div class="input-group" id="typeDrop">
-								<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="Enter Product Name(JS)" typeahead-editable="false" ng-required="true"  typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" auto-focus />
+								<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="*Enter Product Name(JS)" typeahead-editable="false" ng-required="true"  typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" auto-focus />
 								<span class="input-group-btn" >
 								   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 								</span>
@@ -201,7 +202,7 @@
 					
 					<fieldset>
 					   <div class="form-group">
-						  <label for="input-id-1" class="col-sm-3 control-label">Invoice#</label>
+						  <label for="input-id-1" class="col-sm-3 control-label">*Invoice#</label>
 						  <div class="col-sm-6">
 							 <input ng-model="accSales.invoiceNo" name="invoice" ng-change="changeAccSales('invoiceNumber',accSales.invoiceNo)" id="input-id-1" type="text" placeholder="Invoice Number" class="form-control" dir="rtl" ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" />
 							 
@@ -254,7 +255,7 @@
 							</td>
 							<td ng-if="item.amountType=='debit'">
 								<div class="input-group mytypeDrop">
-									<input typeahead="item.ledgerName for item in form.clientNameDropDr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
+									<input typeahead="item.ledgerName for item in form.clientNameDropDr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="*Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
 									<span class="input-group-btn" >
 									<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 									</span>
@@ -264,7 +265,7 @@
 							</td>
 							<td ng-if="item.amountType=='credit'">
 								<div class="input-group mytypeDrop" >
-									<input typeahead="item.ledgerName for item in form.clientNameDropCr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
+									<input typeahead="item.ledgerName for item in form.clientNameDropCr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="*Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
 									<span class="input-group-btn" >
 									<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 									</span>
@@ -380,17 +381,17 @@
 	</div>
 	<div class="modal-body my-model-body">
 		 
-		<table data-ng-table="tableParams"  show-filter="false" class="table table-bordered table-striped">
+		<table data-ng-table="tableParams"   class="table table-bordered table-striped">
 			<!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 			 <tbody>
 				<tr data-ng-repeat="user in $data">
-				<td data-title="'Sr. No.'"  >{{$index+1}}</td>
-					<td data-title="'Date'" sortable="'entryDate'" filter="{ 'entryDate': 'text' }" >{{user.entryDate}}</td>
-					<td data-title="'Perticular'" sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }" >{{user.ledger.ledgerName}}</td>
+				<td data-title="'Sr. No.'"  >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
+					<td data-title="'Date'" sortable="'date'"  >{{user.entryDate}}</td>
+					<td data-title="'Perticular'"   >{{user.ledger.ledgerName}}</td>
 					
-					<td data-title="'Debit'" sortable="'amountTypeDebit'" filter="{ 'amountTypeDebit': 'text' }"  ><span ng-if="user.amountType=='debit'">{{user.amount}}</span></td>
+					<td data-title="'Debit'"    ><span ng-if="user.amountType=='debit'">{{user.amount}}</span></td>
 					
-					<td data-title="'Credit'" sortable="'amountTypeCredit'" filter="{ 'amountTypeCredit': 'text' }"  ><span ng-if="user.amountType=='credit'">{{user.amount}}</span></td>
+					<td data-title="'Credit'"    ><span ng-if="user.amountType=='credit'">{{user.amount}}</span></td>
 					
 				
 				   <!--td data-title="'Action'" sortable="'action'">

@@ -12,7 +12,7 @@ if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript 
 
 
 
-var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages','ngTableToCsv',"ngSanitize", "ngCsv"])
+var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages','ngTableToCsv',"ngSanitize", "ngCsv","vcRecaptcha"])
     .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','apiPath', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,apiPath) {
 		
 		
@@ -61,6 +61,15 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
     };
 	
 	$rootScope.erpPath = "http://api.siliconbrain.co.in/";
+	// $rootScope.erpPath = "http://api.swaminarayancycles.com/";
+
+	
+	/** date Format **/
+		 // $rootScope.dateFormats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		 $rootScope.dateFormats = 'dd-MMM-yyyy';
+		 // $rootScope.dateFormats = 'yyyy/MM/dd';
+	/** End **/
+	
 	/** Authentication Token & UserName **/
 		
 		//$rootScope.loggedUser = [];

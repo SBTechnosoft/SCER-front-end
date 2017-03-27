@@ -6,13 +6,15 @@
 
 App.controller('AccSpecialJrnlController', AccSpecialJrnlController);
 
-function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$log,$rootScope,toaster,apiResponse,validationMessage) {
+function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactory,$modal,$log,toaster,apiResponse,validationMessage) {
   'use strict';
   
    var vm = this;
    var formdata  = new FormData();
    $scope.addAccJrnl = [];
    $scope.addAccJrnl.jfid;
+   
+    var dateFormats = $rootScope.dateFormats; //Date Format
    
 	$scope.totalDebit; // sum of Debit Amount
 	$scope.totalCredit;  // sum of Credit Amount
@@ -112,8 +114,8 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
   };
 
   this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
+  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
   
 	//Date Picker End
 	
@@ -704,4 +706,4 @@ function AccSpecialJrnlController($scope,apiCall,apiPath,getSetFactory,$modal,$l
   *
   **/
 }
-AccSpecialJrnlController.$inject = ["$scope","apiCall","apiPath","getSetFactory","$modal", "$log","$rootScope","toaster","apiResponse","validationMessage"];
+AccSpecialJrnlController.$inject = ["$rootScope","$scope","apiCall","apiPath","getSetFactory","$modal", "$log","toaster","apiResponse","validationMessage"];
