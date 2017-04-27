@@ -375,13 +375,15 @@ a {
 }
 a:hover,
 a:focus {
-  color: #1683cc;
-  text-decoration: underline;
+  color: #1683cc; /* #1683cc */
+  text-decoration: underline ;
+  
 }
-a:focus {
+a:focus  {
   outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
+  text-decoration: underline !important;
 }
 figure {
   margin: 0;
@@ -656,6 +658,7 @@ a.bg-primary:focus {
 }
 .bg-success {
   background-color: #dff0d8;
+  border-color: #dff0d8 !important;
 }
 a.bg-success:hover,
 a.bg-success:focus {
@@ -663,6 +666,7 @@ a.bg-success:focus {
 }
 .bg-info {
   background-color: #d9edf7;
+  border-color: #d9edf7 !important;
 }
 a.bg-info:hover,
 a.bg-info:focus {
@@ -2879,7 +2883,7 @@ tbody.collapse.in {
   clear: both;
   font-weight: normal;
   line-height: 1.52857143;
-  color: #5f5f5f;
+  color: #5f5f5f !important;
   white-space: nowrap;
 }
 
@@ -5306,6 +5310,9 @@ button.close {
 @media (min-width: 992px) {
   .modal-lg {
     width: 50%; /* 900px */
+  }
+  .modal-flg {
+    width: 75%; /* 900px */
   }
 }
 .tooltip {
@@ -11611,7 +11618,7 @@ body .jvectormap-zoomout {
 }
 .bg-white {
   background-color: white !important;
-  color: #585f69;
+  color: #585f69 !important;
 }
 .bg-white a {
   color: #858e9a;
@@ -11621,7 +11628,7 @@ body .jvectormap-zoomout {
   color: #515d6e;
 }
 .bg-white .nav > li > a {
-  color: #17A1E5;
+  /* color: #17A1E5; */
 }
 .bg-white .nav > li:hover > a{
 	color: #5F7076;
@@ -12156,6 +12163,7 @@ body .jvectormap-zoomout {
 .bg-purple {
   background-color: #c29eff !important;
   color: #ffffff;
+  border-color: #c29eff !important;
 }
 .bg-purple a {
   color: #ede2ff;
@@ -12224,6 +12232,7 @@ body .jvectormap-zoomout {
 .bg-inverse {
   background-color: #363c47 !important;
   color: #a1a9b7;
+   border-color: #363c47 !important;
 }
 .bg-inverse a {
   color: #9399a4;
@@ -13255,6 +13264,14 @@ body .jvectormap-zoomout {
   opacity: 1 !important;
 }
 /* My CSS */
+.my-Topbar-Color{
+	background-color: rgb(95, 112, 118) !important;
+	
+	
+}
+.my-Topbar-Color a{
+		color: #f2f2f2 !important;
+	}
 .my-topNav-padding {
 	
 	padding-top: 10px;
@@ -13267,6 +13284,28 @@ body .jvectormap-zoomout {
 .my-fieldset-paddingBottom{
 	padding-bottom:0px !important;
 }
+.my-fieldset-paddingTopBottom{
+	padding-top:5px !important;
+	padding-bottom:5px !important;
+}
+.my-fieldset-marginBottom{
+	margin-bottom:5px !important;
+}
+.my-table-paddingTopBottom{
+	/* padding-top:5px !important;
+	padding-bottom:5px !important; */
+}
+.my-button-paddingLeftRight{
+	padding-left:15px !important;
+	padding-right:15px !important;
+}
+
+.my-md-xs{
+width:8.8% !important;
+padding-left:0px !important;
+padding-right:0px !important;
+}
+
 .chosen-container
 {
     width: 100% !important;
@@ -13281,14 +13320,14 @@ body .jvectormap-zoomout {
 	height:inherit;
 }
 .my-topbar-select:active{
-	background-color:#17A1E5 !important; 
+	/* background-color:#17A1E5 !important; */
 }
 .set-my-topbar-select{
-	background-color:#17A1E5 !important; 
+	 background-color:#17A1E5 !important; 
 }
 .my-ancher-topbar-select{
 	
-	color: #f2f2f2 !important;
+	/* color: #f2f2f2 !important; */
 	height:inherit;
 }
 .my-ancher-topbar-select:hover{

@@ -49,10 +49,9 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       theme: {
         sidebar: 'bg-white br',
         brand:   'bg-primary',
-        topbar:  'bg-my-primary'
+        topbar:  'my-Topbar-Color'
       }
     };
-    
     // User information
     $rootScope.user = {
       name:     'Jimmie Stevens-7016944320',
@@ -60,9 +59,21 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       picture:  'app/img/user/08.jpg'
     };
 	
+	
+	
 	$rootScope.erpPath = "http://api.siliconbrain.co.in/";
 	// $rootScope.erpPath = "http://api.swaminarayancycles.com/";
 
+	$rootScope.templateCompanyLogo = "<img src='http://erp.siliconbrain.co.in/app/img/aksLogo.png' height='100%' width='100%' />";
+	
+	/** Silicon **/
+	$rootScope.defaultState = "IN-GJ";
+	$rootScope.defaultCity = 31;
+	
+	
+	/** Swaminarayan **/
+	//$rootScope.defaultState = "IN-GJ";
+	//$rootScope.defaultCity = 856;
 	
 	/** date Format **/
 		 // $rootScope.dateFormats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];

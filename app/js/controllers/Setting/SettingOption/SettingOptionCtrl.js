@@ -1,7 +1,7 @@
 
 App.controller('settingOptionController', settingOptionController);
 
-function settingOptionController($scope,apiCall,apiPath,toaster,apiResponse,validationMessage) {
+function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiResponse,validationMessage) {
   'use strict';
   var vm = this;
  
@@ -36,7 +36,7 @@ function settingOptionController($scope,apiCall,apiPath,toaster,apiResponse,vali
 					
 					$scope.insertUpdateLabel = "Update";
 					
-					console.log(response2);
+					//console.log(response2);
 					var cnt = response2.length;
 					for(var ind = 0;ind<cnt;ind++){
 						
@@ -120,6 +120,26 @@ function settingOptionController($scope,apiCall,apiPath,toaster,apiResponse,vali
 		
 	/** End **/
 	
+	/** Color **/
+	
+	$scope.app = $rootScope.app;
+
+		  $scope.themes = [
+			{sidebar: 'bg-inverse', brand: 'bg-info', topbar:  'bg-white'},
+			{sidebar: 'bg-inverse', brand: 'bg-inverse', topbar:  'bg-white'},
+			{sidebar: 'bg-inverse', brand: 'bg-purple', topbar:  'bg-white'},
+			{sidebar: 'bg-inverse', brand: 'bg-success', topbar:  'bg-white'},
+			{sidebar: 'bg-white br', brand: 'bg-inverse', topbar:  'bg-inverse'},
+			{sidebar: 'bg-inverse', brand: 'bg-info', topbar:  'bg-info'},
+			{sidebar: 'bg-white br', brand: 'bg-purple', topbar:  'bg-purple'},
+			{sidebar: 'bg-white br', brand: 'bg-primary', topbar:  'my-Topbar-Color'}
+		  ];
+
+		  $scope.setTheme = function($idx) {
+			$scope.app.theme = $scope.themes[$idx];
+		  };
+		  
+	/** End Color **/
 	
   // Datepicker
   // ----------------------------------- 
@@ -251,4 +271,4 @@ function settingOptionController($scope,apiCall,apiPath,toaster,apiResponse,vali
     {value: 5, name: 'Huge'}
   ];
 }
-settingOptionController.$inject = ["$scope","apiCall","apiPath","toaster","apiResponse","validationMessage"];
+settingOptionController.$inject = ["$rootScope","$scope","apiCall","apiPath","toaster","apiResponse","validationMessage"];

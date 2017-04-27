@@ -115,7 +115,7 @@
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label">*Bank Name </label>
 							<div class="col-sm-6">
-								<select chosen="" data-ng-model="paymentForm.BankName" data-ng-options="s.bankName for s in fromData.bankDrop track by s.bankId" class="form-control chosen-select" size="5" ng-required="true"></select>
+								<select chosen="" data-ng-model="paymentForm.BankName" data-ng-options="s.bankName for s in fromData.bankDrop track by s.bankId" class="form-control chosen-select" size="5" tabindex="2" ng-required="true"></select>
 							</div>
 					   </div>
 					</fieldset>
@@ -128,7 +128,7 @@
 						<div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">*cheque#</label>
 						  <div class="col-sm-6">
-							 <input ng-model="paymentForm.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" ng-required="true" />
+							 <input ng-model="paymentForm.chequeNo" name="chequeNo" id="input-id-1" type="text" placeholder="cheque Number" class="form-control" ng-pattern="/^[0-9]*$/" tabindex="2" ng-required="true" />
 							 <span ng-messages="formPayment.chequeNo.$error" ng-if="formPayment.chequeNo.$dirty || formPayment.chequeNo.$touched"  role="alert">
 								<span ng-messages-include="errorPatternNumber"></span>
 							</span>
@@ -158,7 +158,7 @@
 				
 					<fieldset >
 						<div class="form-group">
-							<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" tabindex="3"  >Cancel</button>
+							<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" >Cancel</button>
 							<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="insertPayment()" ng-disabled="formPayment.$invalid"  tabindex="2" >Save</button>
 						</div>
 					</fieldset>

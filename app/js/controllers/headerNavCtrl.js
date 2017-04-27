@@ -11,7 +11,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
   
   $scope.headerMenuCollapsed = false;
 	
-
+	$scope.myClass = $rootScope.app.theme.sidebar;
   $scope.toggleHeaderMenu = function() {
     $scope.headerMenuCollapsed = !$scope.headerMenuCollapsed;
   };

@@ -2,7 +2,7 @@
   {
     "text": "Sales",
     "sref": "#",
-    "icon": "icon-bar-graph",
+    "icon": "icon-outbox",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewSales", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccSales", "translate": "" },
@@ -13,10 +13,11 @@
   {
     "text": "Purchase",
     "sref": "#",
-    "icon": "icon-box",
+    "icon": "icon-inbox",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewPurchase", "translate": "" },
-      { "text": "Add/Edit", "sref": "app.AccPurchase", "translate": "" }
+      { "text": "Purchase", "sref": "app.AccPurchase", "translate": "" },
+      { "text": "Tax Purchase", "sref": "app.AccTaxPurchase", "translate": "" }
     ]
   },
   {
@@ -25,7 +26,7 @@
   {
     "text": "Credit Notes",
     "sref": "#",
-    "icon": "icon-book",
+    "icon": "icon-content-right",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewCreditNotes", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccCreditNotes", "translate": "" }
@@ -34,7 +35,7 @@
   {
     "text": "Debit Notes",
     "sref": "#",
-    "icon": "icon-grid",
+    "icon": "icon-content-left",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewDebitNotes", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccDebitNotes", "translate": "" }
@@ -43,7 +44,7 @@
   {
     "text": "Special Journal",
     "sref": "#",
-    "icon": "icon-pie-graph",
+    "icon": "icon-book",
     "subnav": [
       { "text": "View",  "sref": "app.AccViewSpecialJrnl", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccSpecialJrnl", "translate": "" }
@@ -89,8 +90,9 @@
     "sref": "#",
     "icon": "icon-stack",
     "subnav": [
-      { "text": "View",  "sref": "app.AccViewTaxation", "translate": "" },
-      { "text": "Add/Edit", "sref": "app.AccTaxation", "translate": "" }
+      { "text": "SalesTax",  "sref": "app.AccViewSalesTaxation", "translate": "" },
+      { "text": "PurchaseTax", "sref": "app.AccViewPurchaseTaxation", "translate": "" },
+      { "text": "Purchase Details", "sref": "app.AccViewPurchaseDetailTaxation", "translate": "" }
     ]
   },
   {

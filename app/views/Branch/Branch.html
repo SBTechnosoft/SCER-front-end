@@ -14,22 +14,24 @@
 						<option value=""> All </option>
 						</select>
 					</div>
-				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showBranches()" >Go</button>
+				<button type="button" class="mr mb-sm btn btn-primary" data-ng-class="app.theme.brand" ng-click="showBranches()" >Go</button>
 			</div>
 		</div>
 	</div>
    <div class="panel panel-default">
       <div class="panel-heading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
-		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="" ng-click="GoToAddBranch()" >
+		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="" ng-click="GoToAddBranch()" data-ng-class="app.theme.brand" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 			Add Branch</button>
          <div class="panel-title">All Branch</div>
       </div>
+	    <div class="table-responsive">
       <table data-ng-table="table.tableParams"  show-filter="true" class="table table-bordered table-striped">
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
          <tbody>
             <tr data-ng-repeat="user in $data">
+				<td data-title="'Company Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.companyName}}</td>
 				<td data-title="'Branch Name'" sortable="'branchName'" filter="{ 'branchName': 'text' }" >{{user.branchName}}</td>
 				<td data-title="'Address1'" sortable="'address1'" filter="{ 'address1': 'text' }" >{{user.address1}}</td>
 			    <td data-title="'Address2'" sortable="'address2'" filter="{ 'address2': 'text' }" >{{user.address2}}</td>
@@ -49,6 +51,7 @@
             </tr>
          </tbody>
       </table>
+	  </div>
 	   <pre style="margin-bottom:0px"> Page : {{pageNumber}} / {{totalPages}}  <span> Total Records: {{totalData}} </span> </pre>
    </div>
 </div>

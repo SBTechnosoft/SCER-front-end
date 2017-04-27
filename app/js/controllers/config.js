@@ -44,7 +44,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.dashboard', {
             url: '/dashboard',
             templateUrl: basepath('dashboard.html'),
-            resolve: requireDeps('flot-chart','flot-chart-plugins')
+            resolve: requireDeps('flot-chart','flot-chart-plugins','getBranchSrv')
         })
         .state('app.buttons', {
             url: '/buttons',
@@ -165,8 +165,31 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.tempGeneral', {
             url: '/tempGeneral',
             templateUrl: basepath('Template/General.html'),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
+			controller: 'tempGeneralController as form',
+			resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
         })
+		//Email
+		// .state('app.tempEmail', {
+            // url: '/tempEmail',
+            // templateUrl: basepath('Template/General.html'),
+			// controller: 'tempGeneralController as form',
+			// resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
+				// tempType: function(){
+					// return 'email';
+				// }
+			// })
+        // })
+		//SMS
+		// .state('app.tempSMS', {
+            // url: '/tempSMS',
+            // templateUrl: basepath('Template/General.html'),
+			// controller: 'tempGeneralController as form',
+			// resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
+				// tempType: function(){
+					// return 'sms';
+				// }
+			// })
+        // })
 		/*** End Template ***/
 		/*** Setting ***/
 			//Option
@@ -186,7 +209,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.InvProduct', {
             url: '/InvProduct',
             templateUrl: basepath('Inventory/Product/InvProduct.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster','importExcel','exportExcel')
         })
 		//Inventory Barcode Print Product
 		.state('app.InvBarcodePrint', {
@@ -210,13 +233,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.InvCategory', {
             url: '/InvCategory',
             templateUrl: basepath('Inventory/Category/InvCategory.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv','toaster')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv','toaster','importExcel','exportExcel')
         })
 		//Show Inventory Group
 		.state('app.InvGroup', {
             url: '/InvGroup',
             templateUrl: basepath('Inventory/Group/InvGroup.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv','toaster')
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv','toaster','importExcel','exportExcel')
         })
 		//Accounting Sales
 		.state('app.AccSales', {
@@ -291,11 +314,27 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				}
 			})
         })
-		//Accounting Purchase
+		//Accounting Retail Purchase
 		.state('app.AccPurchase', {
             url: '/AccPurchase',
             templateUrl: basepath('Accounting/Purchase/AccPurchase.html'),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
+			controller: 'AccPurchaseController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
+				purchaseType: function(){
+					return 'retail';
+				}
+			})
+        })
+		//Accounting Tax Purchase
+		.state('app.AccTaxPurchase', {
+            url: '/AccTaxPurchase',
+            templateUrl: basepath('Accounting/Purchase/AccPurchase.html'),
+			controller: 'AccPurchaseController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
+				purchaseType: function(){
+					return 'tax';
+				}
+			})
         })
 		//Accounting View Purchase
 		.state('app.AccViewPurchase', {
@@ -457,19 +496,78 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 			controller: 'AccCashFlowController as table',
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
         })
-		//Accounting View Taxation
-		.state('app.AccViewTaxation', {
-            url: '/AccViewTaxation',
-            templateUrl: basepath('Accounting/Taxation/AccViewTaxation.html'),
-            resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
-        })
-		//Accounting Data Taxation
-		.state('app.AccDataTaxation', {
-            url: '/AccDataTaxation',
-            templateUrl: basepath('Accounting/Taxation/AccDataTaxation.html'),
-			controller: 'AccDataTaxationController as table',
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins')
-        })
+		
+		/** Taxation **/
+		
+			//Accounting View Sales Taxation
+			.state('app.AccViewSalesTaxation', {
+				url: '/AccViewSalesTaxation',
+				templateUrl: basepath('Accounting/viewData/AccView.html'),
+				controller: 'AccViewController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+					viewDataType: function(){
+						return 'salesTaxation';
+					}
+				})
+			})
+			//Accounting Sales Taxation
+			.state('app.AccSalesTaxation', {
+				url: '/AccSalesTaxation',
+				templateUrl: basepath('Accounting/Taxation/AccSalesTaxation.html'),
+				controller: 'AccTaxationController as table',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+					headerType: function(){
+						return 'salesTaxation';
+					}
+				})
+			})
+			//Accounting View Purchase Taxation
+			.state('app.AccViewPurchaseTaxation', {
+				url: '/AccViewPurchaseTaxation',
+				templateUrl: basepath('Accounting/viewData/AccView.html'),
+				controller: 'AccViewController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+					viewDataType: function(){
+						return 'purchaseTaxation';
+					}
+				})
+			})
+			//Accounting Purchase Taxation
+			.state('app.AccPurchaseTaxation', {
+				url: '/AccPurchaseTaxation',
+				templateUrl: basepath('Accounting/Taxation/AccPurchaseTaxation.html'),
+				controller: 'AccTaxationController as table',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+					headerType: function(){
+						return 'purchaseTaxation';
+					}
+				})
+			})
+			//Accounting View Purchase Detail Taxation
+			.state('app.AccViewPurchaseDetailTaxation', {
+				url: '/AccViewPurchaseDetailTaxation',
+				templateUrl: basepath('Accounting/viewData/AccView.html'),
+				controller: 'AccViewController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+					viewDataType: function(){
+						return 'purchaseDetailTaxation';
+					}
+				})
+			})
+			//Accounting Purchase Detail Taxation
+			.state('app.AccPurchaseDetailTaxation', {
+				url: '/AccPurchaseDetailTaxation',
+				templateUrl: basepath('Accounting/Taxation/AccPurchaseDetailTaxation.html'),
+				controller: 'AccTaxationController as table',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+					headerType: function(){
+						return 'purchaseDetailTaxation';
+					}
+				})
+			})
+			
+		/** End Taxation **/
+		
 		//Accounting Ledger
 		.state('app.AccLedger', {
             url: '/AccLedger',
@@ -489,7 +587,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/RetailsaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner','twain'),{
 				saleType: function(){
 					
 					return 'RetailsaleBill';
@@ -501,7 +599,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/WholesaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner','twain'),{
 				saleType: function(){
 					
 					return 'WholesaleBill';

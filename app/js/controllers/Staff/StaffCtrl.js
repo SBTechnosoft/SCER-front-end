@@ -36,7 +36,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 			
 				toaster.clear();
 				
-				console.log(response);
+				
 				if(apiResponse.noContent == response){
 					
 					data = [];
@@ -114,7 +114,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 				
 					toaster.clear();
 					
-				console.log(response);
+				
 				if(apiResponse.noContent == response){
 					
 					data = [];
@@ -235,7 +235,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 	   
 		modalInstance.result.then(function () {
 		 
-		 console.log('ok');
+
 		 toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Staff Deleting....',60000);
 			
@@ -245,7 +245,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		  
 		apiCall.deleteCall(deletePath).then(function(deleteres){
 			
-			console.log(deleteres);
+			
 			 toaster.clear();
 			 
 			if(apiResponse.ok == deleteres){

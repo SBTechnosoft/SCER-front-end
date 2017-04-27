@@ -46,7 +46,8 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 	
 	
 	 //Update Set
-	if(Object.keys(getSetFactory.get()).length){
+	//if(Object.keys(getSetFactory.get()).length){
+	if(getSetFactory.get() > 0){
 		
 		$scope.addStaff.getSetStaffId = getSetFactory.get();
 		getSetFactory.blank();
@@ -206,7 +207,7 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 		
 		apiCall.postCall(addEditPath,formdata).then(function(response5){
 		
-			console.log(response5);
+			//console.log(response5);
 			
 			if(apiResponse.ok == response5){
 				

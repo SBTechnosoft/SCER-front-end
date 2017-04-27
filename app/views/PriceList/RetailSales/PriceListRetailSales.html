@@ -17,9 +17,9 @@
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
     <div class="panel-heading">
-		<a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary" ng-if="disableButton">Generate Pdf</a> 
+		<a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary" ng-if="disableButton" data-ng-class="app.theme.brand" >Generate Pdf</a> 
 		<!--a ng-csv="getArray" filename="test.csv" csv-header="['Product Name', 'Category Name', 'Group Name','Price','Vat','Amount']" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" >Export to CSV</a-->
-		<a ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" ng-if="disableButton" >Export to Excel</a>
+		<a ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" ng-if="disableButton" data-ng-class="app.theme.brand" >Export to Excel</a>
 		 <div class="panel-title" ng-if="saleType == 'retail_sales'">RetailSales PriceList of <b>{{displayCompany}}</b> Company</div>
 		 <div class="panel-title" ng-if="saleType == 'whole_sales'" >Tax PriceList of <b>{{displayCompany}}</b> Company</div>
     </div>

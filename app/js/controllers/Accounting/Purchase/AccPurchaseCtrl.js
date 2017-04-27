@@ -16,7 +16,7 @@
 	
 App.controller('AccPurchaseController', AccPurchaseController);
 
-function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
+function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory,purchaseType,maxImageSize) {
   'use strict';
   
    var vm = this;
@@ -25,6 +25,10 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.totalTable;
 	$scope.grandTotalTable;
 	$scope.accPurchase.tax = 0;
+	
+	$scope.purchaseType = purchaseType;
+	
+	console.log($scope.purchaseType);
 	
 	$scope.erpPath = $rootScope.erpPath; // Erp Path
 	 var dateFormats = $rootScope.dateFormats; //Date Format
@@ -119,7 +123,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			
 			$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Loading....');
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 			vm.clientNameDropDr=[];
 			vm.clientNameDropCr=[];
@@ -225,7 +229,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
   this.format = dateFormats;
 	
 	//Update Set
-	  if(Object.keys(getSetFactory.get()).length){
+	  // if(Object.keys(getSetFactory.get()).length){
+	 if(getSetFactory.get() > 0){
 			
 			$scope.accPurchase.getSetJrnlId = getSetFactory.get();
 			//$scope.accPurchase.jfid = $scope.accPurchase.getSetJrnlId;
@@ -408,7 +413,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 		
 		vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
-		console.log(vm.AccClientMultiTable);
+		//console.log(vm.AccClientMultiTable);
 		$scope.changeJrnlArray = true;
 	}
 	
@@ -472,7 +477,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		vm.AccPurchaseTable[index].color = item.color;
 		vm.AccPurchaseTable[index].size = item.size;
 		/** End **/
-		console.log(vm.AccPurchaseTable);
+		//console.log(vm.AccPurchaseTable);
 		$scope.changeProductArray = true;
 	}
 	
@@ -530,7 +535,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		$scope.currentAndOpeningBal(value.companyId,'purchase');
 		
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....');
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
 		vm.clientNameDropDr=[];
 		vm.clientNameDropCr=[];
@@ -592,10 +597,31 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.uploadFile = function(files) {
 		//console.log(files);
 		//formdata.append("file[]", files[0]);
-		formdata.delete('file[]');
-		angular.forEach(files, function (value,key) {
-			formdata.append('file[]',value);
-		});
+		var flag = 0;
+		
+		for(var m=0;m<files.length;m++){
+			
+			if(parseInt(files[m].size) > maxImageSize){
+				
+				flag = 1;
+				toaster.clear();
+				//toaster.pop('alert','Image Size is Too Long','');
+				toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+				formdata.delete('file[]');
+				angular.element("input[type='file']").val(null);
+				break;
+			}
+			
+		}
+		
+		if(flag == 0){
+			
+			formdata.delete('file[]');
+			
+			angular.forEach(files, function (value,key) {
+				formdata.append('file[]',value);
+			});
+		}
 
 	};
 	
@@ -645,7 +671,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.changeProductTable = function(){
 		
 		$scope.changeProductArray = true;
-		console.log($scope.changeInArray);
+		//console.log($scope.changeInArray);
 	}
 	
 	//Set Last JfId In jfid variable
@@ -697,20 +723,24 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	
   $scope.pop = function()
   {
+	   toaster.clear();
+	   
 	  $scope.disableButton = true; //Disbale Button
 	  
 	  if($scope.accPurchase.getSetJrnlId){
-		  
-		 toaster.pop('wait', 'Please Wait', 'Data Updating....');
+		 
+		 toaster.pop('wait', 'Please Wait', 'Data Updating....',60000);
 	  }
 	  else{
 		
-		toaster.pop('wait', 'Please Wait', 'Data Inserting....');
+		toaster.pop('wait', 'Please Wait', 'Data Inserting....',60000);
 	  }
 	  
 	  
 	if($scope.totalDebit != $scope.totalCredit){
-	
+		
+		 toaster.clear();
+		 
 		toaster.pop('alert', 'Opps!!', 'Credit/Debit Amount is Not Equal');
 		$scope.disableButton = false;
 		return false;
@@ -862,7 +892,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			
 			apiCall.postCallHeader(accPurchasePath,headerData,formdata).then(function(data){
 				
-				console.log(data);
+				//console.log(data);
 				
 				toaster.clear();
 				
@@ -1221,12 +1251,12 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				});
 				
 				//Set Last Inserted Ledger
-				console.log(data);
+				//console.log(data);
 
 				var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
 				apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
 					
-					console.log(response);
+					//console.log(response);
 					vm.AccClientMultiTable[data.index].ledgerName = response.ledgerName;
 					vm.AccClientMultiTable[data.index].ledgerId = response.ledgerId;
 					
@@ -1345,4 +1375,4 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	**/
 	
 }
-AccPurchaseController.$inject = ["$scope","apiCall","apiPath","$modal","$rootScope","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory"];
+AccPurchaseController.$inject = ["$scope","apiCall","apiPath","$modal","$rootScope","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory","purchaseType","maxImageSize"];

@@ -10,6 +10,8 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
   'use strict';
   var vm = this;
   var data = [];
+  $scope.myArrayData = [];
+  
   var formdata = new FormData();
   var flag = 0;
   $scope.noOfDecimalPoints;
@@ -73,11 +75,13 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 	
 		apiCall.getCall(apiPath.getCashFlow+id).then(function(response){
 			
-			console.log(response);
+			//console.log(response);
 			//data = response;
 			toaster.clear();
 			
 			var trialBalanceArray = [];
+			var secondLayoutArrayData = [];
+			
 			var totaldebit = 0;
 			var totalcredit = 0;
 			var dataLength = response.length-1;
@@ -86,6 +90,8 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  
 			  var dataOfTrial = response[i];
 			  
+			   var innerArray = [];
+			   
 			  var trailObject = {};
 			  trailObject.ledgerId = dataOfTrial.ledger.ledgerId;
 			  trailObject.ledgerName = dataOfTrial.ledger.ledgerName;
@@ -97,11 +103,69 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 				 trailObject.debitAmount = dataOfTrial.amount;
 				  trailObject.creditAmount = "-";
 				totaldebit += parseFloat(dataOfTrial.amount);
+				
+				/**second layout **/
+					var cntLen = secondLayoutArrayData.length;
+					if(cntLen > 0){
+						var inFlag = 0;
+						for(var p=0;p<cntLen;p++){
+						
+							var trailArrayData = secondLayoutArrayData[p];
+							
+							//console.log(trailArrayData[0]);
+							if(trailArrayData[1] == undefined){
+								inFlag = 1;
+								trailArrayData[1] = trailObject;
+								break;
+							}
+						
+						}
+						if(inFlag == 0){
+							innerArray[1] = trailObject;
+							secondLayoutArrayData.push(innerArray);
+						}
+					}
+					else{
+						
+						innerArray[1] = trailObject;
+						secondLayoutArrayData.push(innerArray);
+					}
+				/** End **/
+				
 			  }
 			  else{
 				   trailObject.debitAmount = "-";
 				  trailObject.creditAmount = dataOfTrial.amount;
 				 totalcredit += parseFloat(dataOfTrial.amount);
+				 
+				 /**second layout **/
+					 var cntLen = secondLayoutArrayData.length;
+					if(cntLen > 0){
+						var inFlag = 0;
+						for(var p=0;p<cntLen;p++){
+						
+							var trailArrayData = secondLayoutArrayData[p];
+							
+							if(trailArrayData[0] == undefined){
+								inFlag = 1;
+								trailArrayData[0] = trailObject;
+								break;
+							}
+						
+						}
+						
+						if(inFlag == 0){
+							innerArray[0] = trailObject;
+							secondLayoutArrayData.push(innerArray);
+						}
+					}
+					else{
+						
+						innerArray[0] = trailObject;
+						secondLayoutArrayData.push(innerArray);
+					}
+				/** End **/
+				
 			  }
 			  
 			  trialBalanceArray.push(trailObject);
@@ -119,7 +183,9 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 				}
 			}
 			
-			data = trialBalanceArray;
+			$scope.myArrayData = trialBalanceArray;
+			
+			$scope.mySecondArrayData = secondLayoutArrayData;
 			
 			if(flag == 0){
 				$scope.TableData();
@@ -149,7 +215,7 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 			   ledgerfName: 'asc'     // initial sorting
 		  }
 	  }, {
-		  total: data.length, // length of data
+		  total: $scope.myArrayData.length, // length of data
 		  getData: function($defer, params) {
 			  //console.log(params.$params);
 			  // if()
@@ -165,8 +231,8 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.debitAmount) != "undefined" && params.$params.filter.debitAmount != "") || (typeof(params.$params.filter.creditAmount) != "undefined" && params.$params.filter.creditAmount != "")))
 			  {
 					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
+					 $filter('filter')($scope.myArrayData, params.filter()) :
+					 $scope.myArrayData;
 
 					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
@@ -177,7 +243,7 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  }
 			  else{
 				  
-				   params.total(data.length);
+				   params.total($scope.myArrayData.length);
 				  
 			  }
 			 
@@ -186,8 +252,8 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 				
 				 //alert('ggg');
 				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
+						  $filter('orderBy')($scope.myArrayData, params.orderBy()) :
+						  $scope.myArrayData;
 		  
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			  }
@@ -211,109 +277,50 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
 	  
 	}
 
-  // FILTERS
-  // ----------------------------------- 
-
-  vm.tableParams2 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      filter: {
-          name: '',
-          age: ''
-          // name: 'M'       // initial filter
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-          // use build-in angular filter
-          var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-          vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(vm.users);
-      }
-  });
-
-  // SELECT ROWS
-  // ----------------------------------- 
-
-  vm.data = data;
-
-  vm.tableParams3 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10          // count per page
-  }, {
-      total: data.length, // length of data
-      getData: function ($defer, params) {
-          // use build-in angular filter
-          var filteredData = params.filter() ?
-                  $filter('filter')(data, params.filter()) :
-                  data;
-          var orderedData = params.sorting() ?
-                  $filter('orderBy')(filteredData, params.orderBy()) :
-                  data;
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-
-  vm.changeSelection = function(user) {
-      // console.info(user);
-  };
-
-  // EXPORT CSV
-  // -----------------------------------  
-
-  var data4 = [{name: "Moroni", age: 50},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34}];
-
-  vm.tableParams4 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-  }, {
-      total: data4.length, // length of data4
-      getData: function($defer, params) {
-          $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
+	 $scope.firstLayout = true;
+	$scope.secondLayout = false;
+  
+	$scope.oneSide = function(){
+		
+		 // if($scope.firstLayout)
+		 // {
+			 // $scope.secondLayout = true;
+			 // $scope.firstLayout = false;
+		 // }
+		 // else{
+			 // $scope.secondLayout = false;
+			 // $scope.firstLayout = true;
+		 // }
+		
+		 $scope.firstLayout = true;
+		$scope.secondLayout = false;
+	}
+	
+	$scope.twoSide = function(){
+		
+		  $scope.firstLayout = false;
+	$scope.secondLayout = true;
+		
+	}
   
 	/*** Pdf ***/
-	
 		$scope.generatePdf = function(operation){
 			
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...');
 			var getData = {"Content-Type": undefined};
 			getData.operation = operation;
+			//getData.operation = layoutType;
 			
 			apiCall.getCallHeader(apiPath.getCashFlow+$scope.stateCheck.companyId+'/export',getData).then(function(responseDrop){
 			
-				console.log(responseDrop);
+				//console.log(responseDrop);
 				toaster.clear();
 				
 				if(angular.isObject(responseDrop)  && responseDrop.hasOwnProperty('documentPath')){
 				
 					var pdfPath = erpPath+responseDrop.documentPath;
-					if(operation == 'pdf'){
+					if(operation == 'pdf' || operation == 'twoSidePdf'){
 						$window.open(pdfPath, '_blank');
 					}
 					else{

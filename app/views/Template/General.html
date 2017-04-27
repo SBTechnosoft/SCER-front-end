@@ -1,17 +1,20 @@
+
 <script src="app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 <script src="app/vendor/tinymce/js/tinymce/tinymce.min.js"></script>
+
 <h3>
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
-   Template >> 
-   General</small>
+   Templates
+   </small>
 </h3>
 <!-- START panel-->
-<div data-ng-controller="tempGeneralController as form" class="container-fluid">
+<div  class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="col-md-10" style="padding-left:0px">
 	   <div class="panel panel-default">
-		  <h4 class="panel-heading">Template Design</h4>
+		  <h4 class="panel-heading" >Template Design</h4>
+		 
 		  <div class="panel-body">
 			 <form action="#" name="formGeneral" class="form-validate form-horizontal">
 					<fieldset>
@@ -26,7 +29,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-2 control-label">*Template Name</label>
 						  <div class="col-sm-5">
-							 <input id="input-id-1"  type="text" name="tempName" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-minlength="1" ng-maxlength="35" auto-focus/>
+							 <input id="input-id-1"  type="text" name="tempName" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &_`#().\'-]*$/" ng-minlength="1" ng-maxlength="35" auto-focus/>
 							 
 							 <span ng-messages="formGeneral.tempName.$error" ng-if="formGeneral.tempName.$dirty || formGeneral.tempName.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -54,7 +57,7 @@
 					</fieldset>
 					
 					 <button type="button" class="mr mb-sm btn btn-danger pull-right" style="margin-right:0px !important;visibility:hidden" ng-click="cancel()" >Cancel</button>
-					 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpTemplate()" ng-disabled="formGeneral.$invalid" ng-if="tempID">Update</button>
+					 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpTemplate()" ng-disabled="formGeneral.$invalid" ng-if="tempID" >Update</button>
 				 </form>
 			</div>
 				
@@ -69,18 +72,43 @@
 			<br />
 			<br />
 			
-		 	<h4 style="text-align:center;">Invoice</h4>
-			<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'invoice'">
-				<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
+				<h4 style="text-align:center;">Invoice</h4>
+				<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'invoice'">
+					<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
 
-			</a>
-			<br />
+				</a>
 				<br />
-			<h4 style="text-align:center;">Payment</h4>
-			<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'payment'">
-				<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
+					<br />
+				<h4 style="text-align:center;">Payment</h4>
+				<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'payment'">
+					<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
+					
+				</a>
 				
-			</a>
+				<br />
+					<br />
+				<h4 style="text-align:center;">Email</h4>
+				<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'email'">
+					<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
+					
+				</a>
+				
+				<br />
+					<br />
+				<h4 style="text-align:center;">SMS</h4>
+				<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'sms'">
+					<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
+					
+				</a>
+				
+				<br />
+					<br />
+				<h4 style="text-align:center;">Blank</h4>
+				<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'blank'">
+					<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
+					
+				</a>
+				
 			</div>
 		</div>
    </div>
@@ -100,3 +128,4 @@
 <script type="text/ng-template" id="errorPatternThisSpecial">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacterAndNumber}}</span>
 </script>
+

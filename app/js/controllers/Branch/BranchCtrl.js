@@ -18,6 +18,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	 $rootScope.AddBranchModify = false;
 	 $location.path('app/AddBranch');
 	// $state.go('app.AddBranch'); 
+	
   }
   
 	$scope.showBranches = function(){
@@ -40,6 +41,10 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 					for (var i = 0; i < data.length; i++) {
 					  data[i].cityName = ""; //initialization of new property 
 					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					  
+					  data[i].companyName = ""; //initialization of new property 
+					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+					  
 					}
 					
 					 vm.tableParams.reload();
@@ -68,8 +73,13 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 					data = response;
 					
 					for (var i = 0; i < data.length; i++) {
+						
 					  data[i].cityName = ""; //initialization of new property 
 					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+					  
+					  data[i].companyName = ""; //initialization of new property 
+					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+					  
 					}
 					
 					 vm.tableParams.reload();
@@ -124,6 +134,10 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 				for (var i = 0; i < data.length; i++) {
 				  data[i].cityName = ""; //initialization of new property 
 				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				  
+				  data[i].companyName = ""; //initialization of new property 
+					data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
+					  
 				}
 				
 				
@@ -334,7 +348,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	  
 			apiCall.deleteCall(deletePath).then(function(deleteres){
 				
-				console.log(deleteres);
+				//console.log(deleteres);
 				toaster.clear();
 				if(apiResponse.ok == deleteres){
 						

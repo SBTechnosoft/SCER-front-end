@@ -23,7 +23,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllQuotation).then(function(response){
-		console.log(response);
+		//console.log(response);
 		data = response;
 		for (var i = 0; i < data.length; i++) {
 		  data[i].companyName = ""; //initialization of new property 
@@ -128,7 +128,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	 
 	 apiCall.postCall(apiPath.getAllQuotation,formdata).then(function(response5){
 		
-			console.log(response5);
+			//console.log(response5);
 			//$location.path('app/Invoice');
 			if(apiResponse.ok == response5){
 				

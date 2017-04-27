@@ -43,50 +43,50 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	if($scope.headerType == 'sales'){
 		
 		var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
-		console.log(getJrnlPath);
+		//console.log(getJrnlPath);
 		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':$rootScope.accView.salesType};
 	}
 	else if($scope.headerType == 'Wholesales'){
 		
 		var getJrnlPath = apiPath.getBill+$rootScope.accView.companyId;
-		console.log(getJrnlPath);
+		//console.log(getJrnlPath);
 		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'salestype':'whole_sales'};
 	}
 	else if($scope.headerType == 'Retailsales'){
 		
 		var getJrnlPath = apiPath.getBill+$rootScope.accView.companyId;
-		console.log(getJrnlPath);
+		//console.log(getJrnlPath);
 		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'salestype':'retail_sales'};
 	}
 	else if($scope.headerType == 'purchase'){
 		
 		var getJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
-		console.log(getJrnlPath);
+		//console.log(getJrnlPath);
 		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'purchase'};
 	}
 	else if($scope.headerType == 'payment'){
 		
 		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
-		console.log(getJrnlPath);
+		//console.log(getJrnlPath);
 		 var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
 	}
 	else if($scope.headerType == 'receipt'){
 		
 		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
-		console.log(getJrnlPath);
+		//console.log(getJrnlPath);
 		// var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'sales'};
 		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
 	}
 	else if($scope.headerType == 'specialJournal'){
 		
 		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
-		console.log(getJrnlPath);
+		//console.log(getJrnlPath);
 		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
 	}
   
-	  console.log($rootScope.accView.companyId);
-	  console.log($rootScope.accView.fromDate);
-	  console.log($rootScope.accView.toDate);
+	  // console.log($rootScope.accView.companyId);
+	  // console.log($rootScope.accView.fromDate);
+	  // console.log($rootScope.accView.toDate);
 	  
 		apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 			
@@ -248,7 +248,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 							//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
 						}
 					}
-					console.log(vm.pieFlotCharts);
+					//console.log(vm.pieFlotCharts);
 					
 					$scope.contents = data;
 					
@@ -568,7 +568,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		  
 			apiCall.deleteCall(deletePath).then(function(deleteres){
 				
-				console.log(deleteres);
+				//console.log(deleteres);
 				if(apiResponse.ok == deleteres){
 					
 					$scope.reLoadPdfData();
@@ -622,7 +622,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			apiCall.getCallHeader(getJrnlPath,headerData).then(function(response){
 				
 				console.log('in Success');
-				console.log(response);
+				//console.log(response);
 				if(apiResponse.notFound != response){
 					
 				
@@ -705,7 +705,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			
 			apiCall.postCall(apiPath.reGeneratePdf,reFormData).then(function(response){
 			
-				console.log(response);
+				//console.log(response);
 				
 				if(angular.isObject(response)){
 					

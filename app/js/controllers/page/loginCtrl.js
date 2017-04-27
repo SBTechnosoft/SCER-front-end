@@ -26,19 +26,19 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 	$scope.rightCaptcha = false;
 	
 	$scope.checkCaptcha = function(response){
-		console.log(response);
+		//console.log(response);
 		//$scope.successCaptcha = response;
 		if(response === ""){ //if string is empty
 			//alert("Please resolve the captcha and submit!");
 			
 			$scope.rightCaptcha = false;
-			console.log('fail');
+			//console.log('fail');
 			
         }else {
 			
 			$scope.rightCaptcha = true;
 			$scope.errorCaptcha = false;
-			console.log('suceess');
+			//console.log('suceess');
 		}
 	}
 	
@@ -64,7 +64,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 						data:formdata
 					}).success(function(response, status, headers, config) {
 						
-						console.log(response);
+						//console.log(response);
 						//$rootScope.authenticate.authToken = response.authenticationToken;
 						
 						//console.log(response.authenticationToken);
@@ -78,8 +78,9 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 							$rootScope.$storage.authToken = response.token;
 							$rootScope.$storage.authUser = response.user;
 							//$rootScope.loggedUser = $rootScope.$storage.authUser;
-							console.log($rootScope.loggedUser);
-							$state.go("app.Company");
+							//console.log($rootScope.loggedUser);
+							// $state.go("app.Company");
+							$state.go("app.dashboard");
 							
 						}
 						else{

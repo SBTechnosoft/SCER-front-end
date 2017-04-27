@@ -7,7 +7,7 @@
 
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory) {
+function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory,maxImageSize) {
   'use strict';
   
  // $templateCache.remove($state.current.templateUrl);
@@ -129,7 +129,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
 			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Loading....');
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 			vm.clientNameDropDr=[];
 			vm.clientNameDropCr=[];
@@ -139,7 +139,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			
 			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
 				
-				console.log(response3);
+				//console.log(response3);
 				if(response3 != apiResponse.notFound){
 					
 					for(var t=0;t<response3.length;t++){
@@ -237,7 +237,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
   //DatePicker End
 
   //Update Set
-  if(Object.keys(getSetFactory.get()).length){
+  //if(Object.keys(getSetFactory.get()).length){
+  if(getSetFactory.get() > 0){
 		
 		$scope.accSales.getSetJrnlId = getSetFactory.get();
 		//$scope.accSales.jfid = $scope.accSales.getSetJrnlId;
@@ -246,14 +247,14 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		
 		//var getOneJrnlPath = apiPath.getLedgerJrnl+$rootScope.accView.companyId;
 		var getOneJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
-		console.log(getOneJrnlPath);
+		//console.log(getOneJrnlPath);
 		
 		var headerDataEdit = {'Content-Type': undefined,'type':'sales','jfId':parseInt($scope.accSales.getSetJrnlId)};
 	   
 			
 		apiCall.getCallHeader(getOneJrnlPath,headerDataEdit).then(function(data){
 		
-			console.log(data);
+			//console.log(data);
 			
 			$scope.currentAndOpeningBal(data.journal[0].company.companyId,'retail_sales','whole_sales');
 			//Set JFID
@@ -426,7 +427,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		
 		$scope.setMultiTable = function(item,index)
 		{
-			console.log(item);
+			//console.log(item);
 			vm.multiCurrentBalance[index].currentBalance = item.currentBalance;
 			vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 			
@@ -434,7 +435,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			
 			vm.AccClientMultiTable[index].ledgerId = item.ledgerId;
 			$scope.changeJrnlArray = true;
-			console.log(vm.AccClientMultiTable);
+			//console.log(vm.AccClientMultiTable);
 		}
 		
 		$scope.removeClientRow = function (idx) {
@@ -504,7 +505,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		vm.productTax[index].tax = parseFloat(item.vat);
 		vm.productTax[index].additionalTax = parseFloat(item.additionalTax); // Additional Tax
 		
-		console.log(vm.productTax);
+		//console.log(vm.productTax);
 		//$scope.accSales.tax = $scope.accSales.tax + productArrayFactory.calculateTax(item.purchasePrice,item.vat,item.margin);
 		
 		/** Color/Size **/
@@ -514,7 +515,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		
 		
 		$scope.changeProductArray = true;
-		console.log(vm.AccSalesTable);
+		//console.log(vm.AccSalesTable);
 	}
 	
 	//Total For Product Table
@@ -534,7 +535,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		for(var i = 0; i < vm.AccSalesTable.length; i++){
 			var product = vm.AccSalesTable[i];
 			var vartax = vm.productTax[i];
-			var totaltax = vartax.tax + vartax.additionalTax;
+			var totaltax = parseFloat(vartax.tax) + parseFloat(vartax.additionalTax);
 			total += productArrayFactory.calculateTax(product.amount,totaltax,0);
 		}
 		return total;
@@ -563,13 +564,13 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		
 		vm.loadData = true;
 		
-		console.log(value.noOfDecimalPoints);
+		//console.log(value.noOfDecimalPoints);
 		
 		$scope.noOfDecimalPoints = parseInt(value.noOfDecimalPoints);
 		$scope.currentAndOpeningBal(value.companyId,'retail_sales','whole_sales');
 		
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....');
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 		vm.clientNameDropDr=[];
 		vm.clientNameDropCr=[];
@@ -635,11 +636,31 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 	$scope.uploadFile = function(files) {
 		//console.log(files);
 		//formdata.append("file[]", files[0]);
-		formdata.delete('file[]');
-		angular.forEach(files, function (value,key) {
-			formdata.append('file[]',value);
-		});
-
+		var flag = 0;
+		
+		for(var m=0;m<files.length;m++){
+			
+			if(parseInt(files[m].size) > maxImageSize){
+				
+				flag = 1;
+				toaster.clear();
+				//toaster.pop('alert','Image Size is Too Long','');
+				toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+				formdata.delete('file[]');
+				angular.element("input[type='file']").val(null);
+				break;
+			}
+			
+		}
+		
+		if(flag == 0){
+			
+			formdata.delete('file[]');
+			
+			angular.forEach(files, function (value,key) {
+				formdata.append('file[]',value);
+			});
+		}
 	};
 	
 	$scope.changeAccSales = function(Fname,value) {
@@ -687,7 +708,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 	$scope.changeProductTable = function(){
 		
 		$scope.changeProductArray = true;
-		console.log($scope.changeInArray);
+		//console.log($scope.changeInArray);
 	}
 	
   /* End */
@@ -744,6 +765,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		
 	
 	if($scope.accSales.getSetJrnlId){
+		
+		toaster.clear();
 		
 		toaster.pop('wait', 'Please Wait', 'Data Updating....');
 		
@@ -810,8 +833,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		
 	}
 	else{
-		
-		toaster.pop('wait', 'Please Wait', 'Data Inserting....');
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Inserting....',60000);
 		// apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 		
 			// $scope.accSales.jfid = response.nextValue;
@@ -908,7 +931,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		
 			apiCall.postCallHeader(accSalesPath,headerData,formdata).then(function(data){
 				
-				console.log(data);	
+				//console.log(data);	
 				
 				toaster.clear();
 				
@@ -1273,13 +1296,13 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 				});
 				
 				//Set Last Inserted Ledger
-				console.log(data);
+				//console.log(data);
 				
 				
 				var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
 				apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
 					
-					console.log(response);
+					//console.log(response);
 					vm.AccClientMultiTable[data.index].ledgerName = response.ledgerName;
 					vm.AccClientMultiTable[data.index].ledgerId = response.ledgerId;
 					
@@ -1416,4 +1439,4 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 	**/
   
 }
-AccSalesController.$inject = ["$rootScope","$scope","apiCall","apiPath","$modal","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory"];
+AccSalesController.$inject = ["$rootScope","$scope","apiCall","apiPath","$modal","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory","maxImageSize"];

@@ -59,7 +59,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		formdata.delete('amount');
 		
 		$scope.ledgerForm.amountType = 'debit';
-		$scope.ledgerForm.openingBal = 0;
+		$scope.ledgerForm.openingBal;
 		
 		formdata.append('amountType',$scope.ledgerForm.amountType);
 		formdata.appned('amount',$scope.ledgerForm.openingBal);
@@ -84,7 +84,8 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
 			$scope.ledgerForm.pan = response.pan;
-			$scope.ledgerForm.gstNo = response.gstNo;
+			$scope.ledgerForm.sgst = response.sgst;
+			$scope.ledgerForm.cgst = response.cgst;
 			
 			$scope.ledgerForm.amountType = response.openingBalanceType;
 			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);
@@ -132,7 +133,8 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
 			$scope.ledgerForm.pan = response.pan;
-			$scope.ledgerForm.gstNo = response.gstNo;
+			$scope.ledgerForm.sgst = response.sgst;
+			$scope.ledgerForm.cgst = response.cgst;
 			
 			$scope.ledgerForm.amountType = response.openingBalanceType;
 			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);
@@ -337,6 +339,9 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	//Set default Company
 	apiCall.getDefaultCompany().then(function(response){
 	
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		
 		$scope.getLegderCompany.companyDropDown = response;
 		$scope.ledgerForm.companyDropDown = response;
 		
@@ -346,7 +351,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		apiCall.getCall(jsuggestPath).then(function(response3){
 			
 			vm.allLedgerData = response3;
-		
+			toaster.clear();
 		});
 		
 	});
@@ -354,6 +359,8 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	//Get Data When Company Change
 	$scope.changeCompanyToGetList = function(value){
 		
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
 		//Auto suggest Client Name For Debit
 		var jsuggestPath = apiPath.getLedgerJrnl+value;
@@ -361,6 +368,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		apiCall.getCall(jsuggestPath).then(function(response3){
 			
 			//console.log(response3);
+			toaster.clear();
 			
 			if(apiResponse.noContent == response3){
 				
@@ -395,7 +403,7 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		apiCall.postCall(ledgerPath,formdata).then(function(response5){
 		
 			//$location.path('app/AccLedger');
-			console.log(response5);
+			//console.log(response5);
 			
 				
 					

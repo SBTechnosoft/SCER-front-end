@@ -9,7 +9,7 @@
 
 App.controller('previewBillModalController',previewBillModalController);
 
-function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,companyId,apiResponse,$sce,billData,inventoryData,taxData,total,totalTax,grandTotal,advance,balance,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate) {
+function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,companyId,apiResponse,$sce,billData,inventoryData,taxData,total,totalTax,grandTotal,advance,balance,remark,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate) {
   'use strict';
   
 	 var data = [];
@@ -25,19 +25,173 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	 $scope.totalTax = totalTax;
 	 $scope.advance = advance;
 	 $scope.balance = balance;
-	 
+	 $scope.remark = remark;
+	 $scope.companyLogo = $rootScope.templateCompanyLogo;
 	 /** Button Validation **/
 		
 		$scope.buttonValidation = buttonValidation;
 		$scope.insertOrUpdate = insertOrUpdate;
 	 /** End **/
 	 
-	 console.log( $scope.inventoryData);
+	 //console.log( $scope.inventoryData);
 	$scope.TemplateDisplay;
 	
 	var tags = ['Company','ClientName','INVID','CLIENTADD','OrderDate','Mobile','Description','Total','TotalInWord','TotalQty','TotalTax','REMAINAMT'];
 	
 	
+	/** Digit to Words **/
+		function test_value(secondNum) {
+    var junkVal= secondNum;
+    junkVal  = Math.floor(junkVal);
+    var obStr = new String(junkVal);
+	var numReversed= obStr.split("");
+    var actnumber=numReversed.reverse();
+    if(Number(junkVal) >=0){
+        //do nothing
+    }
+    else{
+        alert('wrong Number cannot be converted');
+        return false;
+    }
+    if(Number(junkVal)==0){
+        return obStr+''+'Rupees Zero Only';
+        return false;
+    }
+    if(actnumber.length>9){
+        alert('Oops!!!! the Number is too big to covertes');
+        return false;
+    }
+    var iWords=["Zero", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine"];
+    var ePlace=['Ten', ' Eleven', ' Twelve', ' Thirteen', ' Fourteen', ' Fifteen', ' Sixteen', ' Seventeen', ' Eighteen', ' Nineteen'];
+    var tensPlace=['dummy', ' Ten', ' Twenty', ' Thirty', ' Forty', ' Fifty', ' Sixty', ' Seventy', ' Eighty', ' Ninety' ];
+    var iWordsLength=numReversed.length;
+    var totalWords="";
+    var inWords=new Array();
+    var finalWord="";
+   var j=0;
+    for(var i=0; i<iWordsLength; i++){
+        switch(i)
+        {
+        case 0:
+            if(actnumber[i]==0 || actnumber[i+1]==1 ) {
+                inWords[j]='';
+            }
+            else {
+                inWords[j]=iWords[actnumber[i]];
+            }
+            inWords[j]=inWords[j];
+            break;
+        case 1:
+            tens_complication();
+            break;
+        case 2:
+            if(actnumber[i]==0) {
+                inWords[j]='';
+            }
+            else if(actnumber[i-1]!=0 && actnumber[i-2]!=0) {
+                inWords[j]=iWords[actnumber[i]]+' Hundred and';
+            }
+            else {
+                inWords[j]=iWords[actnumber[i]]+' Hundred';
+            }
+            break;
+        case 3:
+            if(actnumber[i]==0 || actnumber[i+1]==1) {
+                inWords[j]='';
+            }
+            else {
+                inWords[j]=iWords[actnumber[i]];
+            }
+            if(actnumber[i+1] != 0 || actnumber[i] > 0){
+                inWords[j]=inWords[j]+" Thousand";
+            }
+            break;
+        case 4:
+            tens_complication();
+            break;
+        case 5:
+            if(actnumber[i]==0 || actnumber[i+1]==1 ) {
+                inWords[j]='';
+            }
+            else {
+                inWords[j]=iWords[actnumber[i]];
+            }
+            inWords[j]=inWords[j]+" Lakh";
+            break;
+        case 6:
+            tens_complication();
+            break;
+        case 7:
+            if(actnumber[i]==0 || actnumber[i+1]==1 ){
+                inWords[j]='';
+            }
+            else {
+                inWords[j]=iWords[actnumber[i]];
+            }
+            inWords[j]=inWords[j]+" Crore";
+            break;
+        case 8:
+            tens_complication();
+            break;
+        default:
+            break;
+        }
+        j++;
+    }
+    function tens_complication() {
+        if(actnumber[i]==0) {
+            inWords[j]='';
+        }
+        else if(actnumber[i]==1) {
+            inWords[j]=ePlace[actnumber[i-1]];
+        }
+        else {
+            inWords[j]=tensPlace[actnumber[i]];
+        }
+    }
+    inWords.reverse();
+    for(var i=0; i<inWords.length; i++) {
+        finalWord+=inWords[i];
+    }
+        return finalWord;
+}
+
+	    function convert_amount_into_rupees_paisa(numbers){
+			var secondNUm = numbers;
+            var finalWord1 = test_value(secondNUm);
+            var finalWord2 = "";
+            var val = numbers.toString();
+            var actual_val  = numbers; 
+           // document.getElementById('rupees').value = val;
+            if(val.indexOf('.')!=-1)
+           {
+                  val = val.substring(val.indexOf('.')+1,val.length);
+                  if(val.length==0){
+        finalWord2 = "";
+       // document.getElementById('container').innerHTML=finalWord1 +" Rupees Only"+finalWord2;
+        return finalWord1 +" Rupees Only"+finalWord2;
+                  }
+                  else{
+                      //document.getElementById('rupees').value = val;
+                      if(val != '00'){                      
+                          finalWord2 = test_value(val) + " paisa only";
+                         // document.getElementById('container').innerHTML=finalWord1 +" Rupees and "+finalWord2;
+                          return finalWord1 +" Rupees and "+finalWord2;
+                      }else{           
+                          finalWord2 = "";
+                         // document.getElementById('container').innerHTML=finalWord1 +" Rupees only"+finalWord2;
+                          return finalWord1 +" Rupees only"+finalWord2;
+                      }
+                  }
+           }
+           else{
+                 //finalWord2 =  " Zero paisa only";
+                 //document.getElementById('container').innerHTML=finalWord1 +" Rupees Only";
+                 return finalWord1 +" Rupees Only";
+           }
+       // document.getElementById('rupees').value = actual_val;   
+    }
+	/** End **/
 	
 	//$scope.billData.splice("clientName",1);
 	
@@ -81,8 +235,10 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	// });
 	
 	var inventoryCount = $scope.inventoryData.length;
+	var descTotalCM = 10.4;
 	var output = "";
 	var totalQty = 0;
+	var srNumber = 1;
 	
 	for(var productArray=0;productArray<inventoryCount;productArray++){
 		
@@ -108,36 +264,59 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				
 				var discount = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,productData.discount,0),$scope.noOfDecimalPoints);
 				
-				var productTotal = (mainPrice - discount) + vat + aTax;
+				// var productTotal = (mainPrice - discount) + vat + aTax;
+				var productTotal = $filter('setDecimal')((mainPrice - discount) + vat + aTax,$scope.noOfDecimalPoints);
+				
 			}
 			else{
 				
 				var discount =  $filter('setDecimal')(productData.discount,$scope.noOfDecimalPoints);
 				
-				var productTotal = (mainPrice - discount) + vat + aTax;
+				// var productTotal = (mainPrice - discount) + vat + aTax;
+				var productTotal = $filter('setDecimal')((mainPrice - discount) + vat + aTax,$scope.noOfDecimalPoints);
 				
 				
 			}
 			
 			output = output+
-			 "<tr class='trhw' style='font-family: Calibri; text-align: left; height: 25px; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 25px; text-align:center; padding:0 0 0 0;'>"+ productArray+1 +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.color +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 25px; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 25px; text-align: center; padding:0 0 0 0;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ discount +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 12px; height: 25px; text-align: center; padding:0 0 0 0;'>"+  vat +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 25px; text-align: center; padding:0 0 0 0;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 25px; text-align: center; padding:0 0 0 0;'>"+ productTotal;
+			 "<tr class='trhw' style='font-family: Calibri; text-align: left; height: 0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 0.7cm; text-align:center; padding:0 0 0 0;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.color +"|"+ productData.size +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 0.7cm; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ discount +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+  vat +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productTotal;
+			   
+			
 			   
 			if(productArray != inventoryCount-1)
 			{
 				output = output+trClose;
 			}
 			
+			if(productArray == inventoryCount-1)
+			{
+				var totalProductSpace = parseInt(srNumber)*0.7;
+				var finalProductBlankSpace = parseFloat(descTotalCM) - parseFloat(totalProductSpace);
+				
+				output = output + "<tr class='trhw' style='font-family: Calibri; text-align: left; height:"+finalProductBlankSpace+"cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;'></td><td class='tg-m36b theqp' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;   height: "+finalProductBlankSpace+"cm; text-align: center; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;   height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td></tr>";
+			}
+			 srNumber++;
 			totalQty = totalQty + parseInt(productData.qty);
+			
+			
 		}
+		
+		
 	}
 	
 	
 	var  date = new Date(entryDate);
 	var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+	date.setMonth(date.getMonth() + 1);
+	var Lastdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 			
 	var billArrayTag = {};
 	
+	billArrayTag.CMPLOGO = $scope.companyLogo;
 	billArrayTag.Company = $scope.companyData.companyName;
+	billArrayTag.CompanyAdd = $scope.companyData.address1+','+$scope.companyData.address2;
+	billArrayTag.CreditCashMemo = "CASH";
+	billArrayTag.RetailOrTax = "RETAIL";
 	billArrayTag.ClientName = $scope.billData.clientName;
 	billArrayTag.INVID = $scope.billData.invoiceNumber;
 	billArrayTag.CLIENTADD = $scope.billData.fisrtAddress+','+$scope.billData.secondAddress;
@@ -146,9 +325,14 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	billArrayTag.Total = $scope.grandTotal;
 	billArrayTag.TotalTax = $scope.billData.tax;
 	billArrayTag.TotalQty = totalQty;
-	billArrayTag.TotalInWord = "Five Thousand";
+	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.grandTotal);
 	billArrayTag.REMAINAMT = $scope.balance;
+	billArrayTag.REMARK = $scope.remark;
 	billArrayTag.Description = output;
+	billArrayTag.ExpireDate = Lastdate;
+	billArrayTag.CompanySGST = $scope.companyData.sgst;
+	billArrayTag.CompanyCGST = $scope.companyData.cgst;
+	billArrayTag.CLIENTTINNO = " ";
 	
 	
 	
@@ -170,6 +354,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				});
 	
 				 
+				tempData = tempData.replace("[Total]",$scope.grandTotal,"g");
 				
 				$scope.TemplateDisplay = $sce.trustAsHtml(tempData);
 			
@@ -184,4 +369,4 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	
 }
 
-previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","companyId","apiResponse","$sce","billData","inventoryData","taxData","total","totalTax","grandTotal","advance","balance","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate"];
+previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","companyId","apiResponse","$sce","billData","inventoryData","taxData","total","totalTax","grandTotal","advance","balance","remark","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate"];

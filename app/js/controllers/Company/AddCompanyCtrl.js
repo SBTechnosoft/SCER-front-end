@@ -6,7 +6,7 @@
 
 App.controller('AddCompanyController', AddCompanyController);
 
-function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,toaster,apiResponse,validationMessage,validationPattern,getSetFactory) {
+function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,toaster,apiResponse,validationMessage,validationPattern,getSetFactory,maxImageSize) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -115,9 +115,11 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	// getSetFactory.blank();
 	$scope.AddEditFunction = function(){
 		
-	
-		if(Object.keys(getSetFactory.get()).length){
+		//console.log(Object.keys(getSetFactory.get()).length);
+		//if(Object.keys(getSetFactory.get()).length){
+		if(getSetFactory.get() > 0){
 	  
+		
 		$scope.addCompany.cId = getSetFactory.get();
 		getSetFactory.blank();
 		
@@ -126,7 +128,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	
 		apiCall.getCall(editCompany).then(function(res){
 		
-		console.log(res);
+		//console.log(res);
 		vm.sdfg = res.companyId;
 		
 		$scope.addCompany.companyDropDown2 = res;
@@ -141,6 +143,8 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 		$scope.addCompany.tin = res.tin;
 		$scope.addCompany.vat = res.vatNo;
 		$scope.addCompany.serviceTax = res.serviceTaxNo;
+		$scope.addCompany.sgst = res.sgst;
+		$scope.addCompany.cgst = res.cgst;
 		$scope.addCompany.currency = res.basicCurrencySymbol;
 		$scope.addCompany.formalName = res.formalName;
 		
@@ -322,25 +326,43 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
   
   $scope.uploadFile = function(files) {
 	  
-		//console.log(files);
-		formdata.delete('file[]');
+		if(parseInt(files[0].size) <= maxImageSize){
+			
+			angular.element("img.showImg").css("display","block");
+			
+			console.log('Small File');
+			formdata.delete('file[]');
 		
-		formdata.append("file[]", files[0]);
+			formdata.append("file[]", files[0]);
+			
+			var reader = new FileReader();
+
+			reader.onload = function(event) {
+				$scope.image_source = event.target.result
+				$scope.$apply()
+
+			}
+			// when the file is read it triggers the onload event above.
+			reader.readAsDataURL(files[0]);
 		
-		var reader = new FileReader();
-
-		reader.onload = function(event) {
-			$scope.image_source = event.target.result
-			$scope.$apply()
-
 		}
-		// when the file is read it triggers the onload event above.
-		reader.readAsDataURL(files[0]);
+		else{
+			
+			formdata.delete('file[]');
+			toaster.clear();
+			//toaster.pop('alert','Image Size is Too Long','');
+			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+			
+			angular.element("input[type='file']").val(null);
+			angular.element("img.showImg").css("display","none");
+			
+			
+		}
 
 	};
 	
 	$scope.changeCompanyData = function(Fname,value){
-		console.log(Fname+'..'+value);
+		//console.log(Fname+'..'+value);
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
@@ -437,4 +459,4 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	}
   
 }
-AddCompanyController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","$state","toaster","apiResponse","validationMessage","validationPattern","getSetFactory"];
+AddCompanyController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","$state","toaster","apiResponse","validationMessage","validationPattern","getSetFactory","maxImageSize"];

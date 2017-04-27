@@ -80,7 +80,7 @@ function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory
 		// });
 		
 		delete dataSet.authenticationToken;
-		console.log(dataSet);
+		//console.log(dataSet);
 	}
 
 	$scope.generate = function(){
@@ -104,8 +104,8 @@ function FormPriceListRetailSalesController($scope,apiCall,apiPath,getSetFactory
 		// }
 		
 		getSetFactory.set(dataSet);
-		console.log(dataSet);
-		console.log(getSetFactory.get());
+		//console.log(dataSet);
+		//console.log(getSetFactory.get());
 		
 		
 		if($scope.saleType == 'retail_sales'){

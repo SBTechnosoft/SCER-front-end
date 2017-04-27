@@ -6,7 +6,7 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse,validationMessage,getSetFactory) {
+function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse,validationMessage,getSetFactory,$modal) {
   'use strict';
   var vm = this;
   $scope.addInvProduct = [];
@@ -27,7 +27,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
     'pair'
   ];
 	
-	$scope.addInvProduct.measureUnit = 'piece';
+	
 	
 	$scope.defaultCompany  = function(){
 			
@@ -79,7 +79,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 	});
 	
 	//Edit Product
-	if(Object.keys(getSetFactory.get()).length){
+	//if(Object.keys(getSetFactory.get()).length){
+	if(getSetFactory.get() > 0){
 		
 		$scope.addInvProduct.getSetProductId = getSetFactory.get();
 		getSetFactory.blank();
@@ -88,6 +89,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 		var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
 	
 		apiCall.getCall(editProduct).then(function(res){
+			
+			console.log(res);
 			
 			$scope.addInvProduct.name = res.productName;
 			$scope.addInvProduct.productDescription = res.productDescription;
@@ -101,7 +104,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 			//Get Branch
 			vm.branchDrop = [];
 			var getAllBranch = apiPath.getOneBranch+res.company.companyId;
-			console.log('here...'+getAllBranch);
+			//console.log('here...'+getAllBranch);
 			apiCall.getCall(getAllBranch).then(function(response4){
 				
 				vm.branchDrop = response4;
@@ -134,6 +137,9 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 	else{
 		
 		$scope.defaultCompany();
+		
+		$scope.addInvProduct.measureUnit = 'piece';
+		formdata.append('measurementUnit',$scope.addInvProduct.measureUnit);
 	}
 
   // Datepicker
@@ -363,6 +369,39 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 		toaster.pop('info', 'Form Reset', 'Message');
   };
   
-  
+  $scope.openCategoryBatchModal = function(){
+		
+		var modalInstance = $modal.open({
+			
+			templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
+			controller: 'InventoryBatchModalController as vm',
+			size: 'lg',
+			resolve:{
+				inventoryType: function(){
+					
+					return "Product";
+				}
+			}
+		});
+		
+		modalInstance.result.then(function (data) {
+		 
+		  console.log('Ok');	
+		  $scope.init();
+		  
+		
+		}, function (data) {
+		  console.log('Cancel');	
+
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse","validationMessage","getSetFactory"];
+AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse","validationMessage","getSetFactory","$modal"];

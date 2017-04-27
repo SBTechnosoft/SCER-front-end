@@ -46,7 +46,14 @@ App
 							'app/vendor/tinymce/js/tinymce/tinymce.min.js'],
 	'printJS':     ['app/js/jQuery.print.js'],
 	'barcodeScanner' :                 ['app/js/customeJS/qrCodeLib.js',
-							'app/js/customeJS/webcodecamjquery.js']
+							'app/js/customeJS/webcodecamjquery.js'],
+	'twain'				:['app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.initiate.js',
+						 'app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js'],
+	'importExcel'		:    ['app/js/customeJS/excel/xlsx.full.min.js',
+							'app/js/customeJS/excel/ods.js',
+							'app/js/customeJS/excel/ui-grid.min.js',
+							'app/js/customeJS/excel/ui-grid.min.css'],
+	'exportExcel'		:   ['https://cdn.jsdelivr.net/alasql/0.3/alasql.min.js']
     },
     // Angular based script (use the right module name)
     modules: [
@@ -88,6 +95,7 @@ App
   })
   //Api Path
   .constant('apiPath', {
+	  'rootPath': 'http://api.siliconbrain.co.in',
     'getAllBranch':           'http://api.siliconbrain.co.in/branches',
 	'getOneBranch':           'http://api.siliconbrain.co.in/branches/company/',
     'getAllCompany':          'http://api.siliconbrain.co.in/companies',
@@ -126,7 +134,12 @@ App
 	'settingOption': 'http://api.siliconbrain.co.in/settings',
 	'getBalanceSheet': 'http://api.siliconbrain.co.in/accounting/balance-sheet/company/',
 	'getProfitLoss': 'http://api.siliconbrain.co.in/accounting/profit-loss/company/',
-	'getCashFlow': 'http://api.siliconbrain.co.in/accounting/cash-flow/company/'
+	'getCashFlow': 'http://api.siliconbrain.co.in/accounting/cash-flow/company/',
+	'getSalesTax': 'http://api.siliconbrain.co.in/accounting/taxation/sale-tax/company/',
+	'getPurchaseTax': 'http://api.siliconbrain.co.in/accounting/taxation/purchase-tax/company/',
+	'getPurchaseDetail': 'http://api.siliconbrain.co.in/accounting/taxation/purchase-detail/company/',
+	'batchBrand': 'http://api.siliconbrain.co.in/product-categories/batch',
+	'batchCategory': 'http://api.siliconbrain.co.in/product-groups/batch'
   })
   //Api Path
   .constant('apiResponse', {
@@ -136,8 +149,11 @@ App
 	'noMatch': 'NoMatch: Token Not Matched',
 	'tokenExpired': 'Expired: Token Expired',
 	'notExists': 'NotExists: Token Not Exists',
-	'contentNotProper': 'content: not proper content'
+	'contentNotProper': 'content: not proper content',
+	'mappingError': 'mapping field is missing'
   })
+  //Validation Pattern
+  .constant('maxImageSize',2097152)
   //Validation Pattern
   .constant('validationPattern', {
     'alphabets': '/^[a-zA-Z]*$/'

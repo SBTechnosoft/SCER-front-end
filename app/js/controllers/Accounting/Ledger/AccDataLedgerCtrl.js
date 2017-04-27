@@ -10,6 +10,9 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   'use strict';
   var vm = this;
   var data = [];
+  
+  $scope.myArrayData = [];
+  
   var formdata = new FormData();
   
    var ledgerId = getSetFactory.get();
@@ -42,8 +45,15 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
   
 	apiCall.getCall(GetTransationPath).then(function(response){
 		console.log(response);
+		
+		var secondLayoutArrayData = [];
+		var totaldebit = 0;
+		var totalcredit = 0;
+			
 		toaster.clear();
 		data = response;
+		//$scope.myArrayData = response;
+		
 		
 		vm.pieChartData = [{ "color" : "#6cc539",
 							"data" : "0",
@@ -89,10 +99,20 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 							["Dec", "0"]
 						  ]
 						}];
-  
+		var dataLength = response.length-1;
+		
 		for (var i = 0; i < data.length; i++) {
 			
+			 var dataOfTrial = response[i];
+			 
+			 var innerArray = [];
+			  var trailObject = {};
+			  trailObject.ledgerId = dataOfTrial.ledger.ledgerId;
+			  trailObject.ledgerName = dataOfTrial.ledger.ledgerName;
+			  trailObject.entryDate = dataOfTrial.entryDate;
+			  
 			if(data[i].amountType=='debit'){
+			  
 			  
 				vm.pieChartData[0]["data"] = parseInt(vm.pieChartData[0]["data"]) + parseInt(data[i].amount);
 				var date = data[i].entryDate;
@@ -100,11 +120,45 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 				var getdate = new Date(splitedate);
 				var month = getdate.getMonth();
 				
-					console.log(vm.pieFlotCharts[0]["data"][month]);
+					//console.log(vm.pieFlotCharts[0]["data"][month]);
 					vm.pieFlotCharts[0]["data"][month][1] = parseInt(vm.pieFlotCharts[0]["data"][month][1]) + parseInt(data[i].amount);
 					
-				console.log(vm.pieFlotCharts);
-			
+				//console.log(vm.pieFlotCharts);
+					
+					/**second layout **/
+					
+					trailObject.debitAmount = dataOfTrial.amount;
+					 trailObject.creditAmount = "-";
+					totaldebit += parseFloat(dataOfTrial.amount);
+				
+				
+					var cntLen = secondLayoutArrayData.length;
+					if(cntLen > 0){
+						var inFlag = 0;
+						for(var p=0;p<cntLen;p++){
+						
+							var trailArrayData = secondLayoutArrayData[p];
+							
+							//console.log(trailArrayData[0]);
+							if(trailArrayData[1] == undefined){
+								inFlag = 1;
+								trailArrayData[1] = trailObject;
+								break;
+							}
+						
+						}
+						if(inFlag == 0){
+							innerArray[1] = trailObject;
+							secondLayoutArrayData.push(innerArray);
+						}
+					}
+					else{
+						
+						innerArray[1] = trailObject;
+						secondLayoutArrayData.push(innerArray);
+					}
+				/** End **/
+				
 			}
 			else{
 				
@@ -121,7 +175,54 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 					vm.pieFlotCharts[1]["data"][month][1] = parseInt(vm.pieFlotCharts[1]["data"][month][1]) + parseInt(data[i].amount);
 				   
 				//vm.pieFlotCharts[1]["data"] = parseInt(vm.pieFlotCharts[1]["data"]) + parseInt(data[i].amount);
+				
+				/**second layout **/
+				
+				  trailObject.debitAmount = "-";
+				  trailObject.creditAmount = dataOfTrial.amount;
+				 totalcredit += parseFloat(dataOfTrial.amount);
+				 
+					 var cntLen = secondLayoutArrayData.length;
+					if(cntLen > 0){
+						var inFlag = 0;
+						for(var p=0;p<cntLen;p++){
+						
+							var trailArrayData = secondLayoutArrayData[p];
+							
+							if(trailArrayData[0] == undefined){
+								inFlag = 1;
+								trailArrayData[0] = trailObject;
+								break;
+							}
+						
+						}
+						
+						if(inFlag == 0){
+							innerArray[0] = trailObject;
+							secondLayoutArrayData.push(innerArray);
+						}
+					}
+					else{
+						
+						innerArray[0] = trailObject;
+						secondLayoutArrayData.push(innerArray);
+					}
+				/** End **/
+				
 			}
+			
+			if(i==dataLength)
+			{
+				// var totalObject = {};
+				// totalObject.ledgerName = "Total";
+				// totalObject.debitAmount = totaldebit;
+				// totalObject.creditAmount = totalcredit;
+				
+				// trialBalanceArray.push(totalObject);
+				$scope.TotalofDebit = totaldebit;
+				$scope.TotalofCredit = totalcredit;
+			}
+				
 		}
 		//console.log(vm.pieFlotCharts);
 		
@@ -135,8 +236,10 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 			return dateB-dateA; 
 		});
 		
-		data= $scope.contents;
-					
+		data = $scope.contents;
+		
+		$scope.mySecondArrayData = secondLayoutArrayData;
+		
 		$scope.TableData();
 	});
 	
@@ -154,35 +257,35 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 		  getData: function($defer, params) {
 			 
 			  /** Table **/
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.date) != "undefined" && params.$params.filter.date != "")  || (typeof(params.$params.filter.amountType) != "undefined" && params.$params.filter.amountType != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")))
-			  {
-					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
+			  // if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.date) != "undefined" && params.$params.filter.date != "")  || (typeof(params.$params.filter.amountType) != "undefined" && params.$params.filter.amountType != "") || (typeof(params.$params.filter.amount) != "undefined" && params.$params.filter.amount != "")))
+			  // {
+					 // var orderedData = params.filter() ?
+					 // $filter('filter')($scope.myArrayData, params.filter()) :
+					 // $scope.myArrayData;
 
-					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+					  // vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
-					  params.total(orderedData.length); // set total for recalc pagination
-					  $defer.resolve(vm.users);
+					  // params.total(orderedData.length); // set total for recalc pagination
+					  // $defer.resolve(vm.users);
 			  
 
-			  }
-			  else{
+			  // }
+			  // else{
 				  
-				   params.total(data.length);
+				   // params.total($scope.myArrayData.length);
 				  
-			  }
+			  // }
 			 
-			 if(!$.isEmptyObject(params.$params.sorting))
-			  {
+			 // if(!$.isEmptyObject(params.$params.sorting))
+			  // {
 				
-				 //alert('ggg');
-				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
+				//	 alert('ggg');
+				  // var orderedData = params.sorting() ?
+						  // $filter('orderBy')($scope.myArrayData, params.orderBy()) :
+						  // $scope.myArrayData;
 		  
-				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			  }
+				  // $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+			  // }
 			  /** End Table **/
 			   var orderedData;
 
@@ -233,90 +336,35 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 	  
   }
 
-  // FILTERS
-  // ----------------------------------- 
-
-  vm.tableParams2 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      filter: {
-          name: '',
-          age: ''
-          // name: 'M'       // initial filter
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-          // use build-in angular filter
-          var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-          vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(vm.users);
-      }
-  });
-
-  // SELECT ROWS
-  // ----------------------------------- 
-
-  vm.data = data;
-
-  vm.tableParams3 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10          // count per page
-  }, {
-      total: data.length, // length of data
-      getData: function ($defer, params) {
-          // use build-in angular filter
-          var filteredData = params.filter() ?
-                  $filter('filter')(data, params.filter()) :
-                  data;
-          var orderedData = params.sorting() ?
-                  $filter('orderBy')(filteredData, params.orderBy()) :
-                  data;
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-
-  vm.changeSelection = function(user) {
-      // console.info(user);
-  };
-
-  // EXPORT CSV
-  // -----------------------------------  
-
-  var data4 = [{name: "Moroni", age: 50},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34}];
-
-  vm.tableParams4 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-  }, {
-      total: data4.length, // length of data4
-      getData: function($defer, params) {
-          $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
+  
+   $scope.firstLayout = true;
+	$scope.secondLayout = false;
+  
+	$scope.oneSide = function(){
+		
+		 // if($scope.firstLayout)
+		 // {
+			 // $scope.secondLayout = true;
+			 // $scope.firstLayout = false;
+		 // }
+		 // else{
+			 // $scope.secondLayout = false;
+			 // $scope.firstLayout = true;
+		 // }
+		
+		 $scope.firstLayout = true;
+	$scope.secondLayout = false;
+	}
+	
+	$scope.twoSide = function(){
+		
+		  $scope.firstLayout = false;
+	$scope.secondLayout = true;
+		
+	}
+	
+	
+  
   
   $scope.isDefault_branch = function(id)
   {
@@ -347,7 +395,7 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 	  
 	apiCall.deleteCall(deletePath).then(function(deleteres){
 		
-		console.log(deleteres);
+		//console.log(deleteres);
 	 
 	});
   }

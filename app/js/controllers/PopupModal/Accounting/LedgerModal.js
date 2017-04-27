@@ -52,7 +52,7 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 			$scope.cityDrop = response4;
 				
 		});
-		console.log(Fname+'...'+state);
+		//console.log(Fname+'...'+state);
 			if(formdata.has(Fname))
 			{
 				formdata.delete(Fname);
@@ -119,7 +119,7 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 		formdata.append('companyId',$scope.ledgerForm.companyDropDown.companyId);
 		apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
 		
-			console.log(response5);
+			//console.log(response5);
 			
 			if(angular.isArray(response5)){
 				

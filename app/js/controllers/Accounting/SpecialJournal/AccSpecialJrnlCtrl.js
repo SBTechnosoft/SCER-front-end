@@ -44,6 +44,9 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 		
 		//Set default Company
 		apiCall.getDefaultCompany().then(function(response){
+			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
 			$scope.addAccJrnl.companyDropDown = response;
 			
@@ -58,7 +61,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 			apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
 				
 				vm.clientNameDrop = response3;
-			
+				toaster.clear();
 			});
 		
 		});
@@ -120,7 +123,8 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 	//Date Picker End
 	
 
-	if(Object.keys(getSetFactory.get()).length){
+	//if(Object.keys(getSetFactory.get()).length){
+	if(getSetFactory.get() > 0){
 		
 		$scope.addAccJrnl.getSetJrnlId = getSetFactory.get();
 		//$scope.addAccJrnl.jfid = $scope.addAccJrnl.getSetJrnlId;
@@ -131,7 +135,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 	  
 		apiCall.getCall(getOneJrnlPath).then(function(response){
 			
-			console.log(response);
+			//console.log(response);
 			//Set JFID
 			$scope.addAccJrnl.jfid = response[0].jfId;
 			
@@ -232,8 +236,8 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 			
 		vm.AccSpecialJrnlTable[index].ledgerId = item.ledgerId;
 		
-		console.log(item);
-		console.log(vm.AccSpecialJrnlTable);
+		//console.log(item);
+		//console.log(vm.AccSpecialJrnlTable);
 		$scope.changeInArray = true;
 	}
 	
@@ -251,6 +255,9 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
 		
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+			
 		$scope.noOfDecimalPoints = parseInt(value.noOfDecimalPoints);
 		
 		//Auto suggest Client Name
@@ -260,7 +267,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 		apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
 			
 			vm.clientNameDrop = response3;
-		
+			toaster.clear();
 		});
 		
 		if(formdata.has(Fname))
@@ -278,7 +285,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 	 //Changed Data When Update
 	$scope.changeSpecialJrnlData = function(Fname,value){
 		
-		console.log(Fname+'..'+value);
+		//console.log(Fname+'..'+value);
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
@@ -302,14 +309,19 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 	$scope.changeSpecialJrnlTable = function(){
 		
 		$scope.changeInArray = true;
-		console.log($scope.changeInArray);
+		//console.log($scope.changeInArray);
 	}
 	
 	
   $scope.pop = function()
   {
+	  
+	toaster.clear();
+	toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+			
 	 if($scope.totalDebit != $scope.totalCredit){
-	
+		 
+		toaster.clear();
 		toaster.pop('alert', 'Opps!!', 'Credit/Debit Amount is Not Equal');
 		return false;
 	}
@@ -350,7 +362,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 		
 		var SpecialJtnlPath = apiPath.postJrnl;
 		
-		console.log(SpecialJtnlPath);
+		//console.log(SpecialJtnlPath);
 		
 		var json = angular.copy(vm.AccSpecialJrnlTable);
 		 
@@ -385,8 +397,9 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 			//Special Journal Insert Update Call
 			apiCall.postCall(SpecialJtnlPath,formdata).then(function(response){
 				
-				console.log(response);
+				//console.log(response);
 				
+				toaster.clear();
 				
 				//Display Toaster Message
 				if($scope.addAccJrnl.getSetJrnlId){
@@ -470,6 +483,8 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
   
   $scope.cancel = function(){
 	  
+		toaster.clear();
+	  
 		vm.dt1 = new Date();
 		vm.minStart = new Date();
 		vm.maxStart = new Date();
@@ -480,7 +495,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 			
 			var json = angular.copy(vm.AccSpecialJrnlTable);
 			
-			console.log('Delete Array');
+			//console.log('Delete Array');
 			for(var i=0;i<json.length;i++){
 				 
 				angular.forEach(json[i], function (value,key) {
@@ -536,7 +551,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 		
 		var json = angular.copy(vm.AccSpecialJrnlTable);
 			
-			console.log('Delete Array');
+			//console.log('Delete Array');
 			for(var i=0;i<json.length;i++){
 				 
 				angular.forEach(json[i], function (value,key) {
@@ -676,12 +691,12 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 			
 			});
 			
-			console.log(data);
+			//console.log(data);
 			
 			var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
 			apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
 				
-				console.log(response);
+				//console.log(response);
 				vm.AccSpecialJrnlTable[data.index].ledgerName = response.ledgerName;
 				vm.AccSpecialJrnlTable[data.index].ledgerId = response.ledgerId;
 				

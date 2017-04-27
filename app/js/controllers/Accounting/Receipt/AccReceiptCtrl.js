@@ -118,7 +118,7 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		vm.multiCurrentBalance[index].currentBalance = item.currentBalance;
 		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 		
-		console.log(vm.AccReceiptTable);
+		//console.log(vm.AccReceiptTable);
 	}
 	
 	$scope.removeRow = function (idx) {
@@ -230,7 +230,7 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			vm.tempAccReceiptTable.push(vm.AccReceiptTable[i]);
 		}
 		
-		console.log(vm.tempAccReceiptTable);
+		//console.log(vm.tempAccReceiptTable);
 		
 		var json = angular.copy(vm.tempAccReceiptTable);
 			 
@@ -251,7 +251,7 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		
 		var  date = new Date(vm.dt1);
 		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-		console.log(fdate);
+		//console.log(fdate);
 		
 		if(formdata.has('entryDate')){
 			
@@ -278,7 +278,7 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 				
 			apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
 					
-				console.log(data);
+				//console.log(data);
 				if(apiResponse.ok == data){
 					
 					vm.dt1 = new Date();
@@ -553,13 +553,13 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			});
 			
 			//Set Last Inserted Ledger
-			console.log(data);
+			//console.log(data);
 			
 			
 			var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
 			apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
 				
-				console.log(response);
+				//console.log(response);
 				
 				if(data.index == null){
 					

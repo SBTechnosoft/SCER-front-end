@@ -1,7 +1,7 @@
 <h3>
    <small>
-   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
-   <a ui-sref="app.Staff" >Staff</a> >> 
+   <a ui-sref="app.dashboard"  ><i class="fa fa-home"></i>Home</a> >> 
+   <a ui-sref="app.Staff"  >Staff</a> >> 
    Add New Staff</small>
 </h3>
 <!-- START panel-->
@@ -77,13 +77,13 @@
 				<div class="form-group">
                   <label for="input-id-1" class="col-sm-2 control-label">*Password</label>
                   <div class="col-sm-5">
-                    <input id="input-id-1" tabindex="2" name="staffPassword" ng-model="addStaff.password" ng-change="changeStaffData('password',addStaff.password)" type="password" placeholder="Password" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="24" ng-minlength="6" />
+                    <input id="input-id-1" tabindex="2" name="staffPassword" ng-model="addStaff.password" ng-change="changeStaffData('password',addStaff.password)" type="password" placeholder="Password" class="form-control" ng-required="true"  ng-maxlength="24" ng-minlength="6" />
 					 
 					<span ng-messages="formStaff.staffPassword.$error" ng-if="formStaff.staffPassword.$dirty || formStaff.staffPassword.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
 						<span ng-messages-include="errorLonglength"></span>
 						<span ng-messages-include="errorShortlength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
+						
 					 </span>
                   </div>
                </div>
@@ -119,7 +119,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-2 control-label">*Address</label>
 					<div class="col-sm-5">
-						<textarea  tabindex="2" name="address" ng-model="addStaff.address" ng-change="changeStaffData('address',addStaff.address)" placeholder="Your Address"  class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="35"  ></textarea>
+						<textarea  tabindex="2" name="address" ng-model="addStaff.address" ng-change="changeStaffData('address',addStaff.address)" placeholder="Your Address"  class="form-control ng-pristine ng-valid ng-touched" ng-required="true" ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-minlength="1" ng-maxlength="50"  ></textarea>
 					
 						<span ng-messages="formStaff.address.$error" ng-if="formStaff.address.$dirty || formStaff.address.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -163,8 +163,8 @@
 				</div>
 			</fieldset>
 			
-			 <button type="button" tabindex="3" class="mr mb-sm btn btn-danger pull-right" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" ng-if="allowedType == 'admin' || allowedId == updatedId">Cancel</button>
-			 <button type="button" tabindex="2" class="mr mb-sm btn btn-success pull-right" ng-click="addUpStaff()" ng-disabled="formStaff.$invalid" ng-if="allowedType == 'admin' || allowedId == updatedId">Save</button>
+			 <button type="button" tabindex="3" class="mr mb-sm btn btn-danger pull-right" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" ng-if="allowedType == 'admin' || allowedId == updatedId || allowedType == 'superadmin'">Cancel</button>
+			 <button type="button" tabindex="2" class="mr mb-sm btn btn-success pull-right" ng-click="addUpStaff()" ng-disabled="formStaff.$invalid" ng-if="allowedType == 'admin' || allowedId == updatedId || allowedType == 'superadmin'">Save</button>
 			</div>
 			
         </form>

@@ -54,7 +54,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 		//console.log(response);
 		vm.states.push(response);
 		$scope.allProductModel = response;
-		console.log(vm.states);
+		//console.log(vm.states);
 		$scope.displayCompany = response.company.companyName;
 		
 		$scope.apiCallStock();
@@ -72,7 +72,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 			
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
-			console.log(response);
+			//console.log(response);
 			if(apiResponse.notFound != response){
 				
 				vm.states = response;
@@ -144,7 +144,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 		
 		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction',getData).then(function(responseDrop){
 		
-			console.log(responseDrop);
+			//console.log(responseDrop);
 				
 				if(apiResponse.noContent == responseDrop || responseDrop == ""){
 					
@@ -392,7 +392,7 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 		}
 		
 		
-		console.log(responseDrop);
+		//console.log(responseDrop);
 		
 		if(flag == 0){
 			
@@ -410,14 +410,14 @@ function InvStockController($rootScope,$scope, $filter, ngTableParams,getSetFact
 			
 			data= $scope.contents;
 			
-			console.log('if');
+			//console.log('if');
 			$scope.TableData();
 			flag = 1;
 		}
 		else{
 			
 			data= responseDrop;
-			console.log('else');
+			//console.log('else');
 			vm.tableParams.reload();
 			vm.tableParams.total(data.length);
 			 vm.tableParams.page(1);
@@ -510,11 +510,11 @@ $scope.TableData = function(){
 		delete getData.authenticationToken;
 		
 		getData.productId = $scope.allProductModel.productId;
-		console.log(getData);
+		//console.log(getData);
 		//return false;
 		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/transaction/details',getData).then(function(responseDrop){
 		
-			console.log(responseDrop);
+			//console.log(responseDrop);
 			toaster.clear();
 			
 			if(angular.isObject(responseDrop)  && responseDrop.hasOwnProperty('documentPath')){

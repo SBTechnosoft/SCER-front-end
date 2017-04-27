@@ -162,7 +162,7 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		formdata.append('isDisplay','yes');
 		apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
 		
-			console.log(response5);
+			//console.log(response5);
 			
 			if(apiResponse.ok == response5)
 			{

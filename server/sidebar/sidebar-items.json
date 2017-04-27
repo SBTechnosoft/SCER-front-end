@@ -1,6 +1,6 @@
 [
   {
-    "text": "Profile",
+    "text": "Dashboard",
     "sref": "app.dashboard",
     "icon": "icon-bar-graph",
     "translate": ""
@@ -11,7 +11,7 @@
     "icon": "icon-box",
     "subnav": [
       {"text": "All", "sref": "app.Company", "translate": "" },
-      {"text": "Modify/Delete", "sref": "app.AddCompany", "translate": "" }
+      {"text": "Modify", "sref": "app.AddCompany", "translate": "" }
     ],
     "translate": ""
   },
@@ -21,7 +21,7 @@
     "icon": "icon-grid",
     "subnav": [
       {"text": "All", "sref": "app.Branch", "translate": "" },
-      {"text": "Modify/Delete", "sref": "app.AddBranch", "translate": "" }
+      {"text": "Modify", "sref": "app.AddBranch", "translate": "" }
     ],
     "translate": ""
   },
@@ -31,7 +31,7 @@
     "icon": "fa fa-users",
     "subnav": [
       {"text": "All", "sref": "app.Staff", "translate": "" },
-      {"text": "Modify/Delete", "sref": "app.AddStaff", "translate": "" }
+      {"text": "Add/Modify", "sref": "app.AddStaff", "translate": "" }
     ],
     "translate": ""
   },
@@ -50,14 +50,8 @@
   },
   {
     "text": "Template",
-    "sref": "#",
-    "icon": "fa fa-text-height",
-    "subnav": [
-      {"text": "General", "sref": "app.tempGeneral", "translate": "" },
-      {"text": "Email", "sref": "app.tempEmail", "translate": "" },
-	  {"text": "SMS", "sref": "app.tempSMS", "translate": "" }
-    ],
-    "translate": ""
+    "sref": "app.tempGeneral",
+    "icon": "fa fa-text-height"
   },
   {
     "type": "separator"

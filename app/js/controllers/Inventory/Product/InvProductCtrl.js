@@ -24,6 +24,8 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 			
 		}
 		else{
+			
+			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
 			apiCall.getCall(apiPath.getAllProduct).then(function(response){
@@ -210,7 +212,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 		 /**Delete Code **/
 			apiCall.deleteCall(apiPath.getAllProduct+'/'+id).then(function(response){
 		
-				console.log(response);
+				//console.log(response);
 				
 				if(apiResponse.ok == response){
 					
@@ -235,6 +237,38 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 		
   }
   
+   /** Barcode **/
+   
+		$scope.openProductBatchModal = function(){
+			
+			var modalInstance = $modal.open({
+				
+				templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
+				controller: 'InventoryBatchModalController as vm',
+				size: 'flg',
+				resolve:{
+					inventoryType: function(){
+						
+						return "Product";
+					}
+				}
+			});
+			
+			modalInstance.result.then(function (data) {
+			 
+			  console.log('Ok');	
+			  $scope.init();
+			  
+			
+			}, function (data) {
+			  console.log('Cancel');	
+
+			});
+		}
+	
+   /** End **/
+   
+   
   /** Barcode **/
   
 	$scope.barcodePopup = function(size,id,pName,pColor,pSize)

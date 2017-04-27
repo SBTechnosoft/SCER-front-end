@@ -1,4 +1,4 @@
-App.controller('DashboardController', ['$scope', 'colors', 'flotOptions', function($scope, colors, flotOptions) {
+App.controller('DashboardController', ['$scope', 'colors', 'flotOptions','apiPath','apiCall','apiResponse', function($scope, colors, flotOptions,apiPath,apiCall,apiResponse) {
   'use strict';
   // KNOB Charts
   // ----------------------------------- 

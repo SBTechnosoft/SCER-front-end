@@ -10,7 +10,8 @@
 <div class="col-md-9" style="padding-left:0px">
 	<div class="panel panel-default" ng-show="alertData">
 		<div class="panel-body">
-			<div class="alert alert-info" style="background-color:#17A1E5 !important;">
+			<!--div class="alert alert-info" style="background-color:#17A1E5 !important;" data-ng-class="app.theme.brand" -->
+			<div class="alert alert-info"  data-ng-class="app.theme.brand" >
 				<i class="fa fa-exclamation-triangle"></i> &nbsp; <b>Select Ledger</b>
 			</div>
 			<!-- Not Visible -->
@@ -220,7 +221,7 @@
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-1 control-label">TIN</label>
-                  <div class="col-sm-4">
+                  <div class="col-sm-5">
                      <input id="input-id-1" ng-model="ledgerForm.tin" name="tin"  tabindex="2" ng-change="changeLedgerData('tin',ledgerForm.tin)" ng-disabled="form.disableValue"  type="text" placeholder="TIN Number" class="form-control" ng-pattern="/^([a-zA-Z0-9])+$/" ng-minlength="11" ng-maxlength="11"  />
 					 
 					 <span ng-messages="formLedger.tin.$error" ng-if="formLedger.tin.$dirty || formLedger.tin.$touched" role="alert">
@@ -246,9 +247,14 @@
             </fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-				   <label for="input-id-1" class="col-sm-1 control-label">GST</label>
-                  <div class="col-sm-4">
-                     <input ng-model="ledgerForm.gstNo" tabindex="2" ng-change="changeLedgerData('gstNo',ledgerForm.gstNo)" id="input-id-1" masked="" type="text" ng-disabled="form.disableValue" placeholder="GST Number" class="form-control"  dir="rtl" />
+				   <label for="input-id-1" class="col-sm-1 control-label">SGST</label>
+                  <div class="col-sm-5">
+                     <input ng-model="ledgerForm.sgst" tabindex="2" ng-change="changeLedgerData('sgst',ledgerForm.sgst)" id="input-id-1" masked="" type="text" ng-disabled="form.disableValue" placeholder="SGST Number" class="form-control"  dir="rtl" />
+                  </div>
+				  
+				   <label for="input-id-1" class="col-sm-1 control-label">CGST</label>
+                  <div class="col-sm-5">
+                     <input ng-model="ledgerForm.cgst" tabindex="2" ng-change="changeLedgerData('cgst',ledgerForm.cgst)" id="input-id-1" masked="" type="text" ng-disabled="form.disableValue" placeholder="CGST Number" class="form-control"  dir="rtl" />
                   </div>
 				  
                </div>
@@ -270,7 +276,7 @@
    <div class="panel panel-default">
       <h4 class="panel-heading">Ledger
 		<!--i ui-sref="." title="Add" ng-click="showInput()" class="fa fa-plus" style="font-size:17px;color:#17A1E5;float:right"> </i-->
-		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="."  ng-click="showInput()">
+		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="."  ng-click="showInput()" style="background-color:#17A1E5 !important;" data-ng-class="app.theme.brand" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 			Add Ledger</button>
 	  </h4>

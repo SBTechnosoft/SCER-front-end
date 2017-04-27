@@ -7,7 +7,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
   $scope.generalTemp = [];
   $scope.generalTempList = [];
   var formdata = new FormData();
-  
+  // $scope.tempType  = tempType;
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -27,7 +27,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
         format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
         table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
         tools  : {title : 'Tools' , items : 'spellchecker code'},
-        newmenu: {title : 'Setting', items : 'item1 item2 item3 item4 item5 item6 item7 item8 item9 item10 item27 item28 item29 item11 item30 item12 item13 item14 item15 item16 item17 item18 item19 item20 item21 item22 item23 item24 item25 item26'}
+        newmenu: {title : 'Setting', items : 'item1 item22 item35 item2 item31 item36 item37 item32 item33 item3 item4 item5 item6 item7 item8 item9 item10 item27 item28 item29 item11 item30 item34 item16 item17 item18 item19 item20 item21 item23 item24 item25 item27 item26'}
        },
 	   menubar: 'file edit insert view format table tools newmenu',
 	   setup: function(editor) {
@@ -39,12 +39,64 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
           editor.insertContent('[ClientName]');
          }
         });
+		 editor.addMenuItem('item22', {
+         text: 'CLIENTADD',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[CLIENTADD]');
+         }
+        });
+		 editor.addMenuItem('item35', {
+         text: 'CLIENT TIN',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[CLIENTTINNO]');
+         }
+        });
         editor.addMenuItem('item2', {
          text: 'Company',
          context: 'newmenu',
          onclick: function (){ 
            
           editor.insertContent('[Company]');
+         }
+        });
+		 editor.addMenuItem('item31', {
+         text: 'CompanyAddress',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[CompanyAdd]');
+         }
+        });
+		editor.addMenuItem('item36', {
+         text: 'Company SGST',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[CompanySGST]');
+         }
+        });
+		editor.addMenuItem('item37', {
+         text: 'Company CGST',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[CompanyCGST]');
+         }
+        });
+		 editor.addMenuItem('item32', {
+         text: 'CreditCashMemo',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[CreditCashMemo]');
+         }
+        });
+		editor.addMenuItem('item33', {
+         text: 'RetailOrTax',
+         context: 'newmenu',
+         onclick: function (){ 
+           
+          editor.insertContent('[RetailOrTax]');
          }
         });
         editor.addMenuItem('item3', {
@@ -151,32 +203,11 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
           editor.insertContent('[TransType]');
          }
         });
-        editor.addMenuItem('item12', {
-         text: 'Delivery Date',
+		 editor.addMenuItem('item34', {
+         text: 'Expire Date',
          context: 'newmenu',
          onclick: function (){           
-          editor.insertContent('[DeliveryDate]');
-         }
-        });
-        editor.addMenuItem('item13', {
-         text: 'Organization',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[Organization]');
-         }
-        });
-        editor.addMenuItem('item14', {
-         text: 'Banner_Img',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[Banner_Img]');
-         }
-        });
-        editor.addMenuItem('item15', {
-         text: 'OrderDesc',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[OrderDesc]');
+          editor.insertContent('[ExpireDate]');
          }
         });
         editor.addMenuItem('item16', {
@@ -221,13 +252,6 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
           editor.insertContent('[INVID]');
          }
         });
-        editor.addMenuItem('item22', {
-         text: 'CLIENTADD',
-         context: 'newmenu',
-         onclick: function (){           
-          editor.insertContent('[CLIENTADD]');
-         }
-        });
         editor.addMenuItem('item23', {
          text: 'CMPLOGO',
          context: 'newmenu',
@@ -247,6 +271,13 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
          context: 'newmenu',
          onclick: function (){           
           editor.insertContent('[REMAINAMT]');
+         }
+        });
+		 editor.addMenuItem('item27', {
+         text: 'REMARK',
+         context: 'newmenu',
+         onclick: function (){           
+          editor.insertContent('[REMARK]');
          }
         });
         editor.addMenuItem('item26', {
@@ -303,7 +334,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 			
 			$scope.getCompanyWiseTemplate(response.companyId);
 			
-			console.log(response.companyId);
+			//console.log(response.companyId);
 		});
 	
 		
@@ -342,7 +373,7 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 			var tempData = tempData.replace("url(\"", "url(\'", 'g');
 			var tempData = tempData.replace("\");", "\');", 'g');
 		//	var tempData = templateData.replace(/'/g, '"');
-			console.log(tempData);
+			//console.log(tempData);
 			tinyMCE.get('textdesc').setContent(tempData);
 	
 		});

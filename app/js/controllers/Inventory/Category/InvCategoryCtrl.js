@@ -197,7 +197,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 			cellTemplate: "<i ui-sref=\"\" ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ui-sref=\"\" ng-click=\"cellTemplateScope.deleteCat(\'sm\',row.branch[col.field])\" class=\"fa fa-times-circle\" style=\"font-size:17px;color:red\"></i>",
 			cellTemplateScope: {
 				deleteCat: function(size,data) {         // this works too: $scope.someMethod;
-					console.log(data);
+					//console.log(data);
 					toaster.clear();
 	
 			var modalInstance = $modal.open({
@@ -209,14 +209,14 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 			   
 				modalInstance.result.then(function () {
 				 
-				 console.log('ok');
+				 //console.log('ok');
 				 toaster.clear();
 				toaster.pop('wait', 'Please Wait', 'Data Deleting....',60000);
 				// return false;
 				 /**Delete Code **/
 					apiCall.deleteCall(apiPath.getAllCategory+'/'+data).then(function(response){
 						
-						console.log(response);
+						//console.log(response);
 						toaster.clear();
 						if(apiResponse.ok == response){
 							
@@ -279,7 +279,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
         ];
 		
         $scope.my_tree_handler = function (branch) {
-            console.log('you clicked on', branch);
+            //console.log('you clicked on', branch);
         }
 		$scope.deleteData = function(){
 			alert('Delete');
@@ -352,7 +352,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 			
 			if(apiResponse.ok == response){
 				
-				toaster.pop('success', 'Title', updateToaster+' SuccessFull');
+				toaster.pop('success', 'Title', updateToaster+' SuccessFully');
 				
 				$scope.invCategoryData = [];
 				// apiCall.getCall(apiPath.getAllCategory).then(function(response){
@@ -418,7 +418,7 @@ $scope.branchF = [
   }, {
       total: data.length, // length of data
       getData: function($defer, params) {
-		  console.log(params.$params);
+		  //console.log(params.$params);
 		  // if()
 		  // {
 			  // alert('yes');
@@ -454,101 +454,33 @@ $scope.branchF = [
       }
   });
 
-  // FILTERS
-  // ----------------------------------- 
 
-  vm.tableParams2 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      filter: {
-          name: '',
-          age: ''
-          // name: 'M'       // initial filter
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-          // use build-in angular filter
-          var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
+	$scope.openCategoryBatchModal = function(){
+		
+		var modalInstance = $modal.open({
+			
+			templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
+			controller: 'InventoryBatchModalController as vm',
+			size: 'lg',
+			resolve:{
+				inventoryType: function(){
+					
+					return "Brand";
+				}
+			}
+		});
+		
+		modalInstance.result.then(function (data) {
+		 
+		  console.log('Ok');	
+		  $scope.init();
+		  
+		
+		}, function (data) {
+		  console.log('Cancel');	
 
-          vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(vm.users);
-      }
-  });
-
-  // SELECT ROWS
-  // ----------------------------------- 
-
-  vm.data = data;
-
-  vm.tableParams3 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10          // count per page
-  }, {
-      total: data.length, // length of data
-      getData: function ($defer, params) {
-          // use build-in angular filter
-          var filteredData = params.filter() ?
-                  $filter('filter')(data, params.filter()) :
-                  data;
-          var orderedData = params.sorting() ?
-                  $filter('orderBy')(filteredData, params.orderBy()) :
-                  data;
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-
-  vm.changeSelection = function(user) {
-      // console.info(user);
-  };
-
-  // EXPORT CSV
-  // -----------------------------------  
-
-  var data4 = [{name: "Moroni", age: 50},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34}];
-
-  vm.tableParams4 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-  }, {
-      total: data4.length, // length of data4
-      getData: function($defer, params) {
-          $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-  
-   $scope.edit_comp = function()
-  {
-	  alert('Edit');
-  }
-  
-  $scope.delete_comp = function()
-  {
-	  alert('Delete');
-  }
-  
+		});
+	}
   
 
         function getTree(data, primaryIdName, parentIdName) {

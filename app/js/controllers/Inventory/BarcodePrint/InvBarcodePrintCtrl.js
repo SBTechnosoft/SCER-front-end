@@ -216,7 +216,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 	
 	$scope.changeBox = function(box,pData){
 		
-		console.log(box+'...'+pData);
+		//console.log(box+'...'+pData);
 		if(box == true){
 			
 			$scope.selectedBoxArray.push(pData);
@@ -228,7 +228,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			$scope.selectedBoxArray.splice(index,1);
 		}
 	
-		console.log($scope.selectedBoxArray);
+		//console.log($scope.selectedBoxArray);
 	}
 	
 	$scope.changeAllBox = function(box){
@@ -258,19 +258,19 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 	}
 	
 	$scope.singleBarcodePrint = function(qty,pData){
+	
+		//console.log(pData);
 		
-		console.log(pData);
-		
-		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
+		var mywindow = window.open('', 'PRINT', 'height=27cm,width=21cm');
 
 		 var is_chrome = Boolean(mywindow.chrome);
 
-        mywindow.document.write('<html><head><title>' + document.title  + '</title>');
-
-        mywindow.document.write("</head><body style='height:29.7cm;width:21cm;'>");
-		mywindow.document.write('<center> <h1> Barcode of ' +  pData.company.companyName + ' Company </h1> </center>');
+        mywindow.document.write('<html><!--head><title>' + document.title  + '</title>');
+		
+        mywindow.document.write("</head--> <style type='text/css' media='print'>@page {size: auto;margin: 0mm;} body {background-color:#FFFFFF;margin: 0px; }</style><body>");
+		mywindow.document.write('<!--center> <h1> Barcode of ' +  pData.company.companyName + ' Company </h1> </center-->');
 		mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
-		mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2>" + pData.productName +' ('+ pData.color +' | '+ pData.size + ") </h2> </td></tr> 	<tr>");
+		mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><!--h2>" + pData.productName +' ('+ pData.color +' | '+ pData.size + ") </h2--> </td></tr> 	<tr>");
 		
 		if(qty%2==0){
 				
@@ -283,8 +283,8 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			
 		for(var n=0;n<qty;n++){
 
-			mywindow.document.write("<td style='position:relative;float:left; width: 48%;padding-bottom:5px;display: inline-block;'> ");
-			mywindow.document.write(pData.productName +" ("+ pData.color +" | "+ pData.size + ") <br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
+			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 26px ;padding-left:35px;display: inline-block;'> ");
+			mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='margin-left:70px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span>");
 			
 			if(n == qty-1){
 				
@@ -342,7 +342,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		
 		// console.log($scope.selectedBoxArray);
-		console.log($scope.filteredItems);
+		//console.log($scope.filteredItems);
 	
 		if($scope.barcodeFlag == 1){
 			
@@ -359,7 +359,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		}
 		
 		
-		var mywindow = window.open('', 'PRINT', 'height=1200,width=800');
+		var mywindow = window.open('', 'PRINT', 'height=137,width=284');
 	
 		 var is_chrome = Boolean(mywindow.chrome);
 
@@ -492,7 +492,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			$scope.hideQtyArray.splice(index,1);
 		}
 		
-		console.log($scope.hideQtyArray);
+		//console.log($scope.hideQtyArray);
 	}
   
   /** Barcode **/

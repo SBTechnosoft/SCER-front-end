@@ -20,6 +20,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	  
 	 $rootScope.AddCompanyModify = false;
 	 $location.path('app/AddCompany'); 
+	 
 	}
 	
 	
@@ -28,14 +29,50 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	
 	apiCall.getCall(apiPath.getAllCompany).then(function(response){
 		
-		data = response;
-		for (var i = 0; i < data.length; i++) {
-		  data[i].cityName = ""; //initialization of new property 
-		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+		if(apiResponse.noContent == response || apiResponse.notFound == response){
+				
+			data = [];
+			 toaster.pop('info', '', 'Data Not Available');
+		}
+		else{
+			
+			data = response;
+			for (var i = 0; i < data.length; i++) {
+			  data[i].cityName = ""; //initialization of new property 
+			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+			}
+			
 		}
 		$scope.TableData();
 	});
+	
+	//ajaxCall.abort();
  
+ 
+	$scope.getAllCompanyFunction = function(){
+		
+		apiCall.getCall(apiPath.getAllCompany).then(function(response){
+			
+			if(apiResponse.noContent == response || apiResponse.notFound == response){
+				
+				data = [];
+				toaster.pop('info', '', 'Data Not Available');
+			}
+			else{
+				
+				data = [];
+				data = response;
+				for (var i = 0; i < data.length; i++) {
+				  data[i].cityName = ""; //initialization of new property 
+				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+				}
+				
+			}			
+			
+			vm.tableParams.reload();
+		});
+	}
+	
 	$scope.TableData = function()
 	{
 		
@@ -49,7 +86,6 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	  }, {
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
-			  console.log(params.$params);
 			  
 			  // use build-in angular filter
 			   if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
@@ -194,16 +230,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 					
 					toaster.pop('success', '', 'Default Company Successfully Changed');
 					
-					apiCall.getCall(apiPath.getAllCompany).then(function(response){
-				
-						data = [];
-						data = response;
-						for (var i = 0; i < data.length; i++) {
-						  data[i].cityName = ""; //initialization of new property 
-						  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-						}
-						vm.tableParams.reload();
-					});
+					$scope.getAllCompanyFunction();
 				}
 				else{
 					
@@ -244,7 +271,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	   
 		modalInstance.result.then(function () {
 		 
-		 console.log('ok');
+		
 		 toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Company Deleting....',60000);
 		// return false;
@@ -253,22 +280,12 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	  
 			apiCall.deleteCall(deletePath).then(function(deleteres){
 				
-				console.log(deleteres);
 				 toaster.clear();
 				if(apiResponse.ok == deleteres){
 						
 					toaster.pop('success', 'Title', 'Delete Successfully');
 					
-					apiCall.getCall(apiPath.getAllCompany).then(function(response){
-						
-						data = [];
-						data = response;
-						for (var i = 0; i < data.length; i++) {
-						  data[i].cityName = ""; //initialization of new property 
-						  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-						}
-						vm.tableParams.reload();
-					});
+					$scope.getAllCompanyFunction();
 				}
 				else{
 					

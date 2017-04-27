@@ -16,8 +16,8 @@
 <div data-ng-controller="settingOptionController as form" class="row">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="col-md-12" >
-		<div class="panel panel-primary">
-			<div class="panel-heading"><i class="fa fa-barcode" ></i> Barcode </div>
+		<div class="panel panel-primary" >
+			<div class="panel-heading" data-ng-class="app.theme.brand"><i class="fa fa-barcode" ></i> Barcode </div>
 			
 			<div class="panel-body">
 				 <form  action="#" name="formBarcode" class="form-validate form-horizontal">
@@ -63,7 +63,7 @@
 						<div class="col-sm-4">
 							<fieldset class="my-fieldset-paddingBottom">
 							   <div class="form-group">
-								   <button type="button" class="mr mb-sm btn btn-primary" tabIndex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  ng-click="AddUpdateBarcodeSetting()" ng-disabled="formBarcode.$invalid"  >{{insertUpdateLabel}}</button>
+								   <button type="button" class="mr mb-sm btn btn-primary" tabIndex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  ng-click="AddUpdateBarcodeSetting()" ng-disabled="formBarcode.$invalid"  data-ng-class="app.theme.brand" >{{insertUpdateLabel}}</button>
 							   </div>
 							</fieldset>
 						</div>
@@ -72,6 +72,35 @@
 			</div>
 				
 		</div >
+		<!-- COlor -->
+		
+		<div class="panel panel-purple">
+			<div class="panel-heading"><i class="material-icons" style="font-size: 17px;">&#xE23A;</i> Themes </div>
+			
+			<div class="panel-body">
+				 <div class="p">
+					<!--p class="text-muted text-thin">THEMES</p-->
+					<div class="clearfix mb">
+					   <div data-ng-repeat="theme in themes" class="pull-left wd-tiny mb">
+						  <div class="setting-color">
+							 <label>
+								<input type="radio" name="setting-theme" data-ng-model="app.themeId" data-ng-value="$index" data-ng-change="setTheme($index)" />
+								<span class="icon-check"></span>
+								<ul class="list-table">
+								   <li data-ng-class="theme.sidebar"></li>
+								   <li data-ng-class="theme.brand"></li>
+								   <li data-ng-class="theme.topbar"></li>
+								</ul>
+							 </label>
+						  </div>
+					   </div>
+					</div>
+				 </div>
+			</div>
+				
+		</div >
+		
+		
     </div>
 	 
   

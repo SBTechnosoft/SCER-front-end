@@ -106,7 +106,8 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	vm.sdfg;
 	$scope.AddEditFunction = function(){
 		
-	if(Object.keys(getSetFactory.get()).length){
+	//if(Object.keys(getSetFactory.get()).length){
+	if(getSetFactory.get() > 0){
 	  
 	  $scope.addBranch.bId = getSetFactory.get();
 	  getSetFactory.blank();

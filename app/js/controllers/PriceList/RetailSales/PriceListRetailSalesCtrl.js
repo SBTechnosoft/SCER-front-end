@@ -19,7 +19,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
  
 	var getData = getSetFactory.get();
 	getSetFactory.blank();
-	console.log(getData);
+	//console.log(getData);
 	// return false;
 	
 	//var getData = { "Content-Type": undefined, "fromDate": "14-01-2017", "toDate": "30-03-2017", "companyId": "46", "productId": "908" };
@@ -88,7 +88,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 	apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID,getData).then(function(responseDrop){
 		
 		
-		console.log(responseDrop);
+		//console.log(responseDrop);
 		if(apiResponse.notFound == responseDrop){
 				
 			toaster.pop('info', 'Message', 'No Data Found Go To Search');
@@ -210,7 +210,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 			}
 			
 			// console.log(categoryArray);
-			console.log(treeArrayData);
+			//console.log(treeArrayData);
 			
 			$scope.getArray = csvArray;
 			
@@ -389,7 +389,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 		
 		apiCall.getCallHeader(apiPath.getProductByCompany+CompanyID+'/priceList',getData).then(function(responseDrop){
 		
-			console.log(responseDrop);
+			//console.log(responseDrop);
 			toaster.clear();
 			
 			if(angular.isObject(responseDrop) && responseDrop.hasOwnProperty('documentPath')){

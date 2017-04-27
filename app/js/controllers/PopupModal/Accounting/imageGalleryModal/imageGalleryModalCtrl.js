@@ -197,7 +197,7 @@ function imageGalleryModalCtrl($rootScope,$scope, $modalInstance,$http,apiCall,a
 		  
 			$scope.insertPayment = function(){
 				  
-				  console.log($scope.billData);
+				 // console.log($scope.billData);
 				 
 				  
 				var payFormData = new FormData();
@@ -223,7 +223,7 @@ function imageGalleryModalCtrl($rootScope,$scope, $modalInstance,$http,apiCall,a
 				
 				apiCall.postCall(apiPath.billPaymentRefund+$scope.billData.saleId+'/payment',payFormData).then(function(response){
 					
-					console.log(response);
+					//console.log(response);
 					if(angular.isObject(response) && response.hasOwnProperty('documentPath')){
 						
 						$modalInstance.close($scope.paymentForm.paymentTrn);

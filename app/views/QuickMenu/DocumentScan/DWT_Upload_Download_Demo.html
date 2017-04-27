@@ -1,0 +1,151 @@
+
+<script src="app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js?r=541554"></script>
+<script src="app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.initiate.js?r=54654"></script>
+
+
+<!--script src="Resources/addon/dynamsoft.webtwain.addon.pdf.js"></script-->
+
+<!--link rel="stylesheet" href="app/views/QuickMenu/DocumentScan/Style/ds.demo.css"-->
+
+
+<div class="modal-header">
+		
+	<button type="button" data-dismiss="modal" data-ng-click="closeButton()" aria-hidden="true" class="close pull-right">×</button>  
+		  <h4 id="myModalLabel" class="modal-title">Scan Document</h4>
+			
+			<center>
+		
+			<button type="button" class="mr mb-sm btn btn-primary btn-sm"  ng-click="DWT_AcquireImage();" > Scan </button>
+			
+			<button type="button" class="mr mb-sm btn btn-success btn-sm"  ng-click="doneButton();" > Done </button>
+			
+			<button type="button" class="mr mb-sm btn btn-danger btn-sm"  ng-click="ClearScanned();" > Clear All </button>
+			
+			
+			
+		 </center>
+			 
+		
+	</div>
+	<div class="modal-body my-model-body" >
+	
+            <!-- dwtcontrolContainer is the default div id for Dynamic Web TWAIN control.
+             If you need to rename the id, you should also change the id in the dynamsoft.webtwain.config.js accordingly. -->
+            <div id="dwtcontrolContainer"></div>
+        
+		
+	</div>
+
+<!--script src="app/views/QuickMenu/DocumentScan/Scripts/script.js"></script-->
+<script>
+
+		var CurrentPathName = unescape(location.pathname);
+	var CurrentPath = CurrentPathName.substring(0, CurrentPathName.lastIndexOf("/") + 1);
+	var strHTTPServer = location.hostname;
+	var strActionPage = CurrentPath + 'action/php.php';
+
+
+       function DWT_AcquireImage(){
+			
+                 var DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+               // var DWObject = Dynamsoft.WebTwainEnv;
+	<!-- DWObject.IfDisableSourceAfterAcquire = true;  -->
+               DWObject.SelectSource();
+         DWObject.OpenSource();
+         DWObject.IfShowUI = false;
+        // DWObject.IfFeederEnabled = true;
+
+        // DWObject.IfAutoFeed = true;
+
+         DWObject.XferCount = -1;
+
+         DWObject.AcquireImage(); //using ADF  for scanning
+
+		 
+
+		  console.log("dgdgdgg");
+
+         var strFileName;
+
+         var Digital = new Date();
+
+         var Month = Digital.getMonth() + 1;
+
+         var Day = Digital.getDate();
+
+         var Hour = Digital.getHours();
+
+         var Minute = Digital.getMinutes();
+
+         var Second = Digital.getSeconds();
+
+         var CurrentTime = Month + "_" + Day + "_" + Hour + "_" + Minute + "_" + Second;
+
+		 
+
+		DWObject.IfShowFileDialog = false;
+
+         strFileName = "/home/siliconbrain/public_html/siliconbrain/erp.siliconbrain.co.in/server/"+CurrentTime + ".pdf";
+	console.log(DWObject.clientId);
+
+
+
+		
+
+         //DWObject.SaveAsPDF(strFileName); //save each scanned image as a different PDF file 
+
+		 //var Digital = new Date();
+			//var uploadfilename = Digital.getMilliseconds(); // Uses milliseconds according to local time as the file name
+			//DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer'); // Get the Dynamic Web TWAIN object that is embeded in the div with id 'dwtcontrolContainer'.
+			//DWObject.HTTPPort = location.port;
+			//DWObject.HTTPUploadAllThroughPostAsPDF(strHTTPServer, strActionPage, uploadfilename + ".pdf", OnHttpUploadSuccess, OnHttpServerReturnedSomething);
+			
+		console.log("save");
+
+		  console.log(DWObject.CurrentImageIndexInBuffer);
+		  
+		
+
+         if (DWObject.ErrorCode != 0) {  
+
+             alert (DWObject.ErrorString);
+
+         }
+
+            }
+
+			
+	function uploadImage() {
+			var Digital = new Date();
+			var uploadfilename = Digital.getMilliseconds(); // Uses milliseconds according to local time as the file name
+			var DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer'); // Get the Dynamic Web TWAIN object that is embeded in the div with id 'dwtcontrolContainer'.
+			
+			console.log(DWObject);
+			DWObject.IfSSL = true;
+			
+			DWObject.HTTPPort = location.port;
+			DWObject.HTTPUploadAllThroughPostAsPDF(strHTTPServer, strActionPage, uploadfilename + ".pdf", OnHttpUploadSuccess, OnHttpServerReturnedSomething);
+		}
+		
+			
+			
+	function OnHttpUploadSuccess() {
+
+		console.log('successful');
+		
+	}
+	
+	function getImage(){
+	
+		var DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+		console.log(DWObject.GetImageURL(0, 500, 500));
+		
+	}
+
+	function OnHttpServerReturnedSomething(errorCode, errorString, sHttpResponse) {
+		console.log(errorString);
+		
+		var textFromServer = sHttpResponse;
+	}
+</script>
+

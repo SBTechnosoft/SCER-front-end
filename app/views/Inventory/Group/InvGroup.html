@@ -16,7 +16,7 @@
 						
 					<label class="col-sm-1 control-label"> *Name </label>
 						<div class="col-sm-4">
-							<input ng-model="invGroupData.groupName" name="groupName" id="input-id-1" type="text" placeholder="Category Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" auto-focus/>
+							<input ng-model="invGroupData.groupName" name="groupName" id="input-id-1" type="text" placeholder="Category Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="35" auto-focus/>
 							
 							 <span ng-messages="formGroup.groupName.$error" ng-if="formGroup.groupName.$dirty || formGroup.groupName.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -51,6 +51,7 @@
 		 <!--button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="#" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 		Add Group</button-->
+		<button type="button" class="btn btn-primary my-small-button pull-right" ng-click="openCategoryBatchModal()" > Batch </button> 
          <div class="panel-title">Category</div>
       </div>
       

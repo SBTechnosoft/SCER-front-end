@@ -118,6 +118,18 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 			
 			$state.go("app.AccDataSpecialJrnl");
 		}
+		else if($scope.viewDataTypePath == 'salesTaxation'){
+			
+			$state.go("app.AccSalesTaxation");
+		}
+		else if($scope.viewDataTypePath == 'purchaseTaxation'){
+			
+			$state.go("app.AccPurchaseTaxation");
+		}
+		else if($scope.viewDataTypePath == 'purchaseDetailTaxation'){
+			
+			$state.go("app.AccPurchaseDetailTaxation");
+		}
 		 //$state.go("app.AccDataSales");
 		
 	}

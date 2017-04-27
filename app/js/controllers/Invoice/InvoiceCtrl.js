@@ -23,7 +23,7 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 	
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllInvoice).then(function(response){
-		console.log(response);
+		//console.log(response);
 		data = response;
 		for (var i = 0; i < data.length; i++) {
 		  data[i].companyName = ""; //initialization of new property 

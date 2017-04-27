@@ -19,6 +19,8 @@
 
    <title data-ng-bind="pageTitle()">CRM</title>
    <!-- App CSS-->
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
    <link rel="stylesheet" href="app/css/app.css" data-ng-if="!app.layout.isRTL">
    <!--link rel="stylesheet" href="app/css/apprtl.css" data-ng-if="app.layout.isRTL"-->
 </head>
@@ -31,15 +33,15 @@
    <script src="app/js/base.js"></script>
    
     <script src="app/js/customeJS/ngMessage.js"></script>
-	  <script src="app/js/customeJS/ngExport.js"></script>
-	  <script src="app/js/customeJS/ngSanatize.js"></script>
-	  <script src="app/js/customeJS/ngcsv.js"></script>
-	  <script src="app/js/customeJS/googleReCaptcha.js"></script>
-	  <!--script src="app/js/jQuery.print.js"></script-->
+	<script src="app/js/customeJS/ngExport.js"></script>
+	<script src="app/js/customeJS/ngSanatize.js"></script>
+	<script src="app/js/customeJS/ngcsv.js"></script>
+	<script src="app/js/customeJS/googleReCaptcha.js"></script>
+	<!--script src="app/js/jQuery.print.js"></script-->
+	
 	  
-	  
-   <script src="app/js/app.js"></script>
-   <script src="app/js/controllers/appCtrl.js"></script>
+	<script src="app/js/app.js"></script>
+	<script src="app/js/controllers/appCtrl.js"></script>
     <script src="app/js/controllers/config.js"></script>
 	<script src="app/js/controllers/constants.js"></script>
 	<!--script src="app/js/controllers/calendarCtrl.js"></script>
@@ -155,6 +157,7 @@
 		<!--Bill-->
 		<script src="app/js/controllers/QuickMenu/RetailsaleBillCtrl.js"></script>
 		<script src="app/js/controllers/PopupModal/QuickMenu/PreviewBillModalCtrl.js"></script>
+		<script src="app/js/controllers/PopupModal/QuickMenu/DocumentScanModalCtrl.js"></script>
 		<!--script src="app/js/controllers/QuickMenu/WholesaleBillCtrl.js"></script-->
 		<!--script src="app/js/controllers/QuickMenu/BillTableModalCtrl.js"></script-->
 	<!-- End QuickMenu -->
@@ -205,8 +208,7 @@
 				<script src="app/js/controllers/PopupModal/Accounting/Statements/balanceSheetModalCtrl.js"></script>
 			<!-- End -->
 		<!-- Taxation -->
-		<script src="app/js/controllers/Accounting/Taxation/AccViewTaxationCtrl.js"></script>
-		<script src="app/js/controllers/Accounting/Taxation/AccDataTaxationCtrl.js"></script>
+		<script src="app/js/controllers/Accounting/Taxation/AccTaxationCtrl.js"></script>
 		<!-- Ledger -->
 		<script src="app/js/controllers/Accounting/Ledger/LedgerCtrl.js"></script>
 		<script src="app/js/controllers/Accounting/Ledger/AccDataLedgerCtrl.js"></script>
@@ -219,6 +221,9 @@
 		<script src="app/js/controllers/Inventory/Product/AddInvProductCtrl.js"></script>
 			<!-- Barcode Popup -->
 				<script src="app/js/controllers/PopupModal/Inventory/productBarcodeModalCtrl.js"></script>
+			<!-- End -->
+			<!-- Batch Insert Popup -->
+				<script src="app/js/controllers/PopupModal/Inventory/InventoryBatchModalCtrl.js"></script>
 			<!-- End -->
 		<!-- Barcode Print -->
 		<script src="app/js/controllers/Inventory/BarcodePrint/InvBarcodePrintCtrl.js"></script>

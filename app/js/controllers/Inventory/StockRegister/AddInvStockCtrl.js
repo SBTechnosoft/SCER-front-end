@@ -89,7 +89,7 @@ function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$
 		});
 		
 		delete dataSet.authenticationToken;
-		console.log(dataSet);
+		//console.log(dataSet);
 	}
 
 	$scope.generate = function(){
@@ -110,8 +110,8 @@ function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$
 		}
 		
 		getSetFactory.set(dataSet);
-		console.log(dataSet);
-		console.log(getSetFactory.get());
+		//console.log(dataSet);
+		//console.log(getSetFactory.get());
 		$state.go("app.InvStock");
 		//getSetFactory.blank();
 		

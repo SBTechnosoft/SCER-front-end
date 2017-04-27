@@ -38,7 +38,7 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 	var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12]};
 	 
 	vm.tableNameDrop=[];
-	var headerDr = {'Content-Type': undefined,'ledgerGroup':[31]};
+	var headerDr = {'Content-Type': undefined,'ledgerGroup':[32]};
   
  // console.log($rootScope.defaultCompany());
  
@@ -120,7 +120,7 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		vm.multiCurrentBalance[index].currentBalance = item.currentBalance;
 		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 		
-		console.log(vm.AccPaymentTable);
+		//console.log(vm.AccPaymentTable);
 		
 	}
 	
@@ -235,7 +235,7 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			vm.tempAccPaymentTable.push(vm.AccPaymentTable[i]);
 		}
 		
-		console.log(vm.tempAccPaymentTable);
+		//console.log(vm.tempAccPaymentTable);
 		
 		var json = angular.copy(vm.tempAccPaymentTable);
 			 
@@ -257,7 +257,7 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		
 		var  date = new Date(vm.dt1);
 		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-		console.log(fdate);
+		//console.log(fdate);
 		
 		if(formdata.has('entryDate')){
 			
@@ -288,7 +288,7 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			
 			apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
 					
-				console.log(data);
+				//console.log(data);
 				if(apiResponse.ok == data){
 					
 					vm.dt1 = new Date();
@@ -558,13 +558,13 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			});
 			
 			//Set Last Inserted Ledger
-			console.log(data);
+			//console.log(data);
 			
 			
 			var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
 			apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
 				
-				console.log(response);
+				//console.log(response);
 				
 				if(data.index == null){
 					

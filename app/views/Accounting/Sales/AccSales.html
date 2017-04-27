@@ -41,155 +41,157 @@
 			<script type="text/ng-template" id="customTemplate.html">
 					<a><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span> ({{match.model.color}} | {{match.model.size}})</a>
 				</script>
-			<table  class="table table-bordered table-striped" >
-				<thead>
-					<tr>
-						<th class="header" style="width:32%">Name of Item</th>
-						<th  class="header" style="width:7%">Color|Size</th>
-						<th class="header" style="width:10%">Discount Type</th>
-						<th class="header" style="width:7%">Discount</th>
-						<th style="width:10%" >Rate</th>
-						<th style="width:5%" >Quantity</th>
-						<th style="width:5%" >VAT</th>
-						<th style="width:5%" >A.Vat</th>
-						<th style="width:10%" >Amount</th>
-						<th style="width:6%">Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr id="addAfter" ng-repeat="item in form.AccSalesTable">
-						<td>
-							<div class="input-group" id="typeDrop">
-								<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="*Enter Product Name(JS)" typeahead-editable="false" ng-required="true"  typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" auto-focus />
-								<span class="input-group-btn" >
-								   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
-								</span>
-							</div>
-						</td>
-						<td style="text-align:center;">
-							{{item.color}} | {{item.size}}
-						</td>
-						<td>
-							<select  ng-model="item.discountType"  class="form-control" style="float:left;padding-left: 5px;padding-right: 5px;" ng-change="changeProductTable()">
-								<option value="flat" selected="selected">Flat</option>
-								<option value="percentage">%</option>
-							</select>
-							
-						</td>
-						<td>
-							<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" dir="rtl" ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
-						</td>
-						<td>
-							<!--span style="float:right">{{item.price}}</span-->
-							<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.price" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 \.]+$/" only-number /> 
-						</td>
-						<td>
-							<input id="input-id-1" type="text"  style="padding-left: 5px;padding-right: 5px;"ng-model="item.qty" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-maxlength="6"  ng-pattern="/^[0-9]*$/" only-number />
-						</td>
-						<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
-						<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
-						<td >
-							<!--span style="float:right">{{item.price*item.qty}}</span-->
-							<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints)}}</span>
-							<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints)}}</span>
-						</td>
-						<td style="">
+			 <div class="table-responsive">
+				<table  class="table table-bordered table-striped" >
+					<thead>
+						<tr>
+							<th class="header" style="width:32%">Name of Item</th>
+							<th  class="header" style="width:7%">Color|Size</th>
+							<th class="header" style="width:10%">Discount Type</th>
+							<th class="header" style="width:7%">Discount</th>
+							<th style="width:10%" >Rate</th>
+							<th style="width:5%" >Quantity</th>
+							<th style="width:5%" >VAT</th>
+							<th style="width:5%" >A.Vat</th>
+							<th style="width:10%" >Amount</th>
+							<th style="width:6%">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr id="addAfter" ng-repeat="item in form.AccSalesTable">
+							<td>
+								<div class="input-group" id="typeDrop">
+									<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="*Enter Product Name(JS)" typeahead-editable="false" ng-required="true"  typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" auto-focus />
+									<span class="input-group-btn" >
+									   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+									</span>
+								</div>
+							</td>
+							<td style="text-align:center;">
+								{{item.color}} | {{item.size}}
+							</td>
+							<td>
+								<select  ng-model="item.discountType"  class="form-control" style="float:left;padding-left: 5px;padding-right: 5px;" ng-change="changeProductTable()">
+									<option value="flat" selected="selected">Flat</option>
+									<option value="percentage">%</option>
+								</select>
+								
+							</td>
+							<td>
+								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" dir="rtl" ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
+							</td>
+							<td>
+								<!--span style="float:right">{{item.price}}</span-->
+								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.price" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" only-number /> 
+							</td>
+							<td>
+								<input id="input-id-1" type="text"  style="padding-left: 5px;padding-right: 5px;"ng-model="item.qty" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-maxlength="6"  ng-pattern="/^[1-9]+[0-9]*$/" only-number />
+							</td>
+							<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
+							<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
+							<td >
+								<!--span style="float:right">{{item.price*item.qty}}</span-->
+								<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints)}}</span>
+								<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints)}}</span>
+							</td>
+							<td style="">
+								<center>
+									<!--i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i-->
+									<a href="#" ng-click="addRow($index)"> 
+										<i   title="Add" class="fa fa-plus" style="font-size:20px;" title="Add"></i>
+									</a>
+									&nbsp;
+									<a  class="text-danger" href="#" ng-click="removeRow($index)" ng-if="$index!=0">
+										<i  class="fa fa-times" style="font-size:20px;" title="Delete" > </i>
+									</a>
+								</center>
+							</td>
+						</tr>
+						<!--tr >
+							<td>
+								<div class="input-group">
+									<input type="text" class="form-control" placeholder="Enter Product Name(JS)" />
+									<span class="input-group-btn">
+									   <button type="button" class="btn btn-default"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+									</span>
+								</div>
+							</td>
+							<td>
+								<select  ng-model="discountDropDown2"  class="form-control" style="width:50%;float:left;">
+									<option value="flat" selected="selected">Flat</option>
+									<option value="percentage">Percentage</option>
+								</select>
+								<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:50%;" dir="rtl" /> 
+							</td>
+							<td>5000</td>
+							<td>
+								<input id="input-id-1" type="text" ng-model="qtyName"  class="form-control" style="width:100%;" dir="rtl" /> 
+							</td>
+							<td >4500</td>
+							<td style="">
 							<center>
-								<!--i ui-sref="" ng-click="" class="fa icon-square-plus" style="font-size:20px;color:blue" title="Add"></i-->
-								<a href="#" ng-click="addRow($index)"> 
-									<i   title="Add" class="fa fa-plus" style="font-size:20px;" title="Add"></i>
-								</a>
+								<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"> </i>
 								&nbsp;
-								<a  class="text-danger" href="#" ng-click="removeRow($index)" ng-if="$index!=0">
-									<i  class="fa fa-times" style="font-size:20px;" title="Delete" > </i>
-								</a>
+								<i ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete"> </i>
 							</center>
-						</td>
-					</tr>
-					<!--tr >
-						<td>
-							<div class="input-group">
-								<input type="text" class="form-control" placeholder="Enter Product Name(JS)" />
-								<span class="input-group-btn">
-								   <button type="button" class="btn btn-default"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+							</td>
+						</tr-->
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td colspan="2" style="text-align:left"  > <strong> Total </strong></td>
+							<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td colspan="2" style="text-align:left"  > <strong> Tax </strong></td>
+							<!--td>	<input id="input-id-1" name="tax" type="text" ng-model="accSales.tax" ng-change="changeAccSales('tax',accSales.tax)" class="form-control"  dir="rtl"  ng-pattern="/^[0-9]*$/" /> 
+							
+								<span ng-messages="formSales.tax.$error" ng-if="formSales.tax.$dirty || formSales.tax.$touched"  role="alert">
+									<span ng-messages-include="errorPatternNumber"></span>
 								</span>
-							</div>
-						</td>
-						<td>
-							<select  ng-model="discountDropDown2"  class="form-control" style="width:50%;float:left;">
-								<option value="flat" selected="selected">Flat</option>
-								<option value="percentage">Percentage</option>
-							</select>
-							<input id="input-id-1" type="text" ng-model="disName"  class="form-control" style="width:50%;" dir="rtl" /> 
-						</td>
-						<td>5000</td>
-						<td>
-							<input id="input-id-1" type="text" ng-model="qtyName"  class="form-control" style="width:100%;" dir="rtl" /> 
-						</td>
-						<td >4500</td>
-						<td style="">
-						<center>
-							<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add"> </i>
-							&nbsp;
-							<i ui-sref=""  class="fa fa-times" style="font-size:20px;color:red;" title="Delete"> </i>
-						</center>
-						</td>
-					</tr-->
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td colspan="2" style="text-align:left"  > <strong> Total </strong></td>
-						<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td colspan="2" style="text-align:left"  > <strong> Tax </strong></td>
-						<!--td>	<input id="input-id-1" name="tax" type="text" ng-model="accSales.tax" ng-change="changeAccSales('tax',accSales.tax)" class="form-control"  dir="rtl"  ng-pattern="/^[0-9]*$/" /> 
-						
-							<span ng-messages="formSales.tax.$error" ng-if="formSales.tax.$dirty || formSales.tax.$touched"  role="alert">
-								<span ng-messages-include="errorPatternNumber"></span>
-							</span>
-						
-						</td-->
-						<!--td style="text-align:right">{{accSales.tax = (form.productTax | sumOfValue:'tax')}}</td-->
-						<td style="text-align:right">{{accSales.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td colspan="2" style="text-align:left"  > <strong> Grand Total </strong></td>
-						<td style="text-align:right">{{grandTotalTable = (totalTable -- accSales.tax | setDecimal: noOfDecimalPoints)}}</td>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
+							
+							</td-->
+							<!--td style="text-align:right">{{accSales.tax = (form.productTax | sumOfValue:'tax')}}</td-->
+							<td style="text-align:right">{{accSales.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td colspan="2" style="text-align:left"  > <strong> Grand Total </strong></td>
+							<td style="text-align:right">{{grandTotalTable = (totalTable -- accSales.tax | setDecimal: noOfDecimalPoints)}}</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 	
@@ -234,83 +236,85 @@
 				
 			</div>
 			<!-- Client Multiple Table -->
-			<table  class="table table-bordered table-striped">
-				<thead>
-					<tr>
-						<th style="width:14%">Dr/Cr</th>
-						<th  style="width:42%">Particulars</th>
-						<th style="width:17%">Debit</th>
-						<th style="width:17%">Credit</th>
-						<th style="width:10%">Action</th>
-					</tr>
-				</thead>
-				<tbody >
-					<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable">
-						
-							<td>
-								<select  ng-model="item.amountType"  class="form-control" ng-change="changeAmountType($index)" >
-									<option value="debit" selected="selected" >Dr</option>
-									<option value="credit" ng-if="$index!=0" >Cr</option>
-								</select>
-							</td>
-							<td ng-if="item.amountType=='debit'">
-								<div class="input-group mytypeDrop">
-									<input typeahead="item.ledgerName for item in form.clientNameDropDr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="*Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
-									<span class="input-group-btn" >
-									<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
-									</span>
+			 <div class="table-responsive">
+				<table  class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th style="width:14%">Dr/Cr</th>
+							<th  style="width:42%">Particulars</th>
+							<th style="width:17%">Debit</th>
+							<th style="width:17%">Credit</th>
+							<th style="width:10%">Action</th>
+						</tr>
+					</thead>
+					<tbody >
+						<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable">
+							
+								<td>
+									<select  ng-model="item.amountType"  class="form-control" ng-change="changeAmountType($index)" >
+										<option value="debit" selected="selected" >Dr</option>
+										<option value="credit" ng-if="$index!=0" >Cr</option>
+									</select>
+								</td>
+								<td ng-if="item.amountType=='debit'">
+									<div class="input-group mytypeDrop">
+										<input typeahead="item.ledgerName for item in form.clientNameDropDr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="*Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
+										<span class="input-group-btn" >
+										<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+										</span>
+										
+									</div>
+									<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance'] |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
+								</td>
+								<td ng-if="item.amountType=='credit'">
+									<div class="input-group mytypeDrop" >
+										<input typeahead="item.ledgerName for item in form.clientNameDropCr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="*Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
+										<span class="input-group-btn" >
+										<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
+										</span>
+									</div>
 									
-								</div>
-								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance'] |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
-							</td>
-							<td ng-if="item.amountType=='credit'">
-								<div class="input-group mytypeDrop" >
-									<input typeahead="item.ledgerName for item in form.clientNameDropCr | filter:$viewValue | orderBy:'ledgerName' | limitTo:20" ng-model="item.ledgerName" type="text" typeahead-on-select="setMultiTable($item,$index)" class="form-control" placeholder="*Enter Client Name" typeahead-editable="false" name="ledgerName" ng-required="true" />
-									<span class="input-group-btn" >
-									<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
-									</span>
-								</div>
+									<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance'] |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
+								</td>
+								<td>
+									<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 								
-								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance'] |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
-							</td>
-							<td>
-								<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
+								</td>
+								<td>
+									<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
+									
+								</td>
+								<td>
+									<center>
+										<!--i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add" ng-if="$index!=0"></i-->
+										<a href="#" ng-click="addClientRow($index)"  > 
+											<i  title="Add" class="fa fa-plus" style="font-size:20px;" title="Add"></i>
+										</a>
+										&nbsp;
+										<a href="#" ng-click="removeClientRow($index)" class="text-danger" ng-if="$index!=0&&$index!=0"> 
+											<i  class="fa fa-times" style="font-size:20px;" title="Delete" ></i>
+										</a>
+									</center>
+								</td>
 							
-							</td>
-							<td>
-								<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
+						</tr>
+						<tr>
+							<td></td>
+							<td>Total</td>
+							<td >
+								<span style="float:right">{{totalDebit  = ((form.AccClientMultiTable | sumOfDebit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
 								
+								<!--span style="float:right">{{getDebitTotal()}}</span-->
 							</td>
-							<td>
-								<center>
-									<!--i ng-click="addClientRow()" ui-sref="" title="Add" class="fa fa-plus" style="font-size:20px;color:#17A1E5;" title="Add" ng-if="$index!=0"></i-->
-									<a href="#" ng-click="addClientRow($index)"  > 
-										<i  title="Add" class="fa fa-plus" style="font-size:20px;" title="Add"></i>
-									</a>
-									&nbsp;
-									<a href="#" ng-click="removeClientRow($index)" class="text-danger" ng-if="$index!=0&&$index!=0"> 
-										<i  class="fa fa-times" style="font-size:20px;" title="Delete" ></i>
-									</a>
-								</center>
+							<td >
+								<span style="float:right">{{totalCredit = ((form.AccClientMultiTable | sumOfCredit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
+								<!--span style="float:right">{{getCreditTotal()}}</span-->
 							</td>
-						
-					</tr>
-					<tr>
-						<td></td>
-						<td>Total</td>
-						<td >
-							<span style="float:right">{{totalDebit  = ((form.AccClientMultiTable | sumOfDebit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
-							
-							<!--span style="float:right">{{getDebitTotal()}}</span-->
-						</td>
-						<td >
-							<span style="float:right">{{totalCredit = ((form.AccClientMultiTable | sumOfCredit:'amount') | setDecimal: noOfDecimalPoints)}}</span>
-							<!--span style="float:right">{{getCreditTotal()}}</span-->
-						</td>
-						<td ></td>
-					</tr>
-				</tbody>
-			</table>
+							<td ></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			<!-- End Client Multiple Table -->
 		</div>
 	</div>
@@ -380,29 +384,30 @@
 		  <h4 id="myModalLabel" class="modal-title"><b>{{displayCompany}}</b></h4>
 	</div>
 	<div class="modal-body my-model-body">
-		 
-		<table data-ng-table="tableParams"   class="table table-bordered table-striped">
-			<!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
-			 <tbody>
-				<tr data-ng-repeat="user in $data">
-				<td data-title="'Sr. No.'"  >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
-					<td data-title="'Date'" sortable="'date'"  >{{user.entryDate}}</td>
-					<td data-title="'Perticular'"   >{{user.ledger.ledgerName}}</td>
+		 <div class="table-responsive">
+			<table data-ng-table="tableParams"   class="table table-bordered table-striped">
+				<!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+				 <tbody>
+					<tr data-ng-repeat="user in $data">
+					<td data-title="'Sr. No.'"  >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
+						<td data-title="'Date'" sortable="'date'"  >{{user.entryDate}}</td>
+						<td data-title="'Perticular'"   >{{user.ledger.ledgerName}}</td>
+						
+						<td data-title="'Debit'"    ><span ng-if="user.amountType=='debit'">{{user.amount}}</span></td>
+						
+						<td data-title="'Credit'"    ><span ng-if="user.amountType=='credit'">{{user.amount}}</span></td>
+						
 					
-					<td data-title="'Debit'"    ><span ng-if="user.amountType=='debit'">{{user.amount}}</span></td>
-					
-					<td data-title="'Credit'"    ><span ng-if="user.amountType=='credit'">{{user.amount}}</span></td>
-					
-				
-				   <!--td data-title="'Action'" sortable="'action'">
-						<center>
-							<i ui-sref="" ng-click="editSales(user.jfId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
-							<i ui-sref="" ng-click="deleteSales(user.jfId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
-						</center>
-					</td-->
-				</tr>
-			 </tbody>
-		</table>
+					   <!--td data-title="'Action'" sortable="'action'">
+							<center>
+								<i ui-sref="" ng-click="editSales(user.jfId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+								<i ui-sref="" ng-click="deleteSales(user.jfId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i>
+							</center>
+						</td-->
+					</tr>
+				 </tbody>
+			</table>
+		</div>
 		<span ng-include="'app/views/partials/tableFooter/tableFooter.html'" >  </span> 
 	</div>
 </script>
