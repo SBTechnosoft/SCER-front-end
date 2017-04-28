@@ -813,6 +813,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		}
 		
 		if(formdata.has('entryDate')){
+			
 			var  date = new Date(vm.dt1);
 			//var fdate  = date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
 			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();

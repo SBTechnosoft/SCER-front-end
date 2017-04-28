@@ -179,7 +179,20 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		
 	}
 	
+	//Client Data
+	$scope.clientGetAllFunction = function(){
+		
+		vm.clientSuggest = [];
 	
+		apiCall.getCall(apiPath.getAllClient).then(function(responseDrop){
+			
+			vm.clientSuggest = responseDrop;
+			
+		
+		});
+	
+	}
+	$scope.clientGetAllFunction();
 
   // Datepicker
   // ----------------------------------- 
@@ -249,6 +262,9 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				$scope.accPurchase.jfid = data.journal[0].jfId;
 				
 				$scope.currentAndOpeningBal(data.journal[0].company.companyId,'purchase');
+				
+				//Client Name
+				$scope.accPurchase.clientName = data.clientName;
 				
 				//Set Invoice Number
 				$scope.accPurchase.billNo = data.productTransaction[0].billNumber;
@@ -624,6 +640,15 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		}
 
 	};
+	
+	$scope.setClientName = function(Fname,value) {
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		formdata.append(Fname,value.clientName);
+  	}
 	
 	$scope.changeAccPurchase = function(Fname,value) {
 		if(formdata.has(Fname))

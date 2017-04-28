@@ -63,8 +63,13 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	
 	$rootScope.erpPath = "http://api.siliconbrain.co.in/";
 	// $rootScope.erpPath = "http://api.swaminarayancycles.com/";
+	// $rootScope.erpPath = "http://v2api.siliconbrain.in/";
 
+
+
+	//$rootScope.templateCompanyLogo = "<img src='http://v2erp.siliconbrain.in/app/img/aksLogo.png' height='100%' width='100%' />";
 	$rootScope.templateCompanyLogo = "<img src='http://erp.siliconbrain.co.in/app/img/aksLogo.png' height='100%' width='100%' />";
+	//$rootScope.templateCompanyLogo = "<img src='http://erp.swaminarayancycles.com/app/img/aksLogo.png' height='100%' width='100%' />";
 	
 	/** Silicon **/
 	$rootScope.defaultState = "IN-GJ";

@@ -6,7 +6,7 @@
 
 App.controller('AccReceiptController', AccReceiptController);
 
-function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,apiResponse,validationMessage) {
+function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,apiResponse,validationMessage,getSetFactory) {
   'use strict';
   
   var vm = this;
@@ -26,11 +26,14 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 	
 	/* VALIDATION END */
   
+    $scope.disableCompany = false;
+	
   var account = {};
   account.amountType = 'debit';
   
+  vm.AccReceiptTable = [];
   vm.multiCurrentBalance = []; // Current Balance Array For Table
-  vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
+ // vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
   
   vm.accountCurrentBalance = {};
   
@@ -40,6 +43,17 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 	 
 	vm.tableNameDrop=[];
 	var headerDr = {'Content-Type': undefined,'ledgerGroup':[31]};
+	
+	
+	 // Chosen data
+  // ----------------------------------- 
+	vm.companyDrop = [];
+	
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+		
+		vm.companyDrop = responseCompanyDrop;
+	
+	});
 	
 	$scope.defaultCompany = function(){
 		
@@ -88,10 +102,132 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		});
 	}
 	
+	
+	//Update Data
+	if(getSetFactory.get() > 0){
+		
+		$scope.accReceipt.getSetJrnlId = getSetFactory.get();
+		getSetFactory.blank();
+		
+		console.log("update");
+		console.log($scope.accReceipt.getSetJrnlId);
+		
+		var getOneJrnlPath = apiPath.getOneJrnl+$scope.accReceipt.getSetJrnlId;
+		//console.log(getOneJrnlPath);
+		
+		var headerDataEdit = {'Content-Type': undefined};
+	   
+			
+		apiCall.getCallHeader(getOneJrnlPath,headerDataEdit).then(function(response){
+			
+			console.log(response);
+			
+			$scope.accReceipt.jfid = response[0].jfId;
+			$scope.accReceipt.companyDropDown = response[0].company;
+			
+			//Disable Company
+			$scope.disableCompany = true;
+			
+			//set Decimal Number
+			
+			$scope.noOfDecimalPoints = parseInt(response[0].company.noOfDecimalPoints);
+			
+			//Auto suggest Account
+			vm.accountDrop=[];
+			vm.tableNameDrop=[];
+			
+			//Auto suggest Client Name For Debit
+			var jsuggestPath = apiPath.getLedgerJrnl+response[0].company.companyId;
+			
+			apiCall.getCallHeader(jsuggestPath,headerCr).then(function(response3){
+				
+				for(var t=0;t<response3.length;t++){
+					
+					for(var k=0;k<response3[t].length;k++){
+						
+						vm.accountDrop.push(response3[t][k]);
+					}
+					
+				}
+			
+			});
+			
+			apiCall.getCallHeader(jsuggestPath,headerDr).then(function(response3){
+				
+				for(var t=0;t<response3.length;t++){
+					
+					for(var k=0;k<response3[t].length;k++){
+						
+						vm.tableNameDrop.push(response3[t][k]);
+					}
+					
+				}
+			
+			});
+			
+			//Set Date
+			var getResdate = response[0].entryDate;
+			var splitedate = getResdate.split("-").reverse().join("-");
+			vm.dt1 = new Date(splitedate);
+			vm.minStart = new Date(splitedate);
+			vm.maxStart = new Date(splitedate);
+			
+			//Set Table Array
+			for(var i=0;i<response.length;i++){
+				
+				if(response[i].amountType == "debit"){
+					
+					account.ledgerId = response[i].ledger.ledgerId;
+					account.ledgerName = response[i].ledger.ledgerName;
+					
+					$scope.accReceipt.account = response[i].ledger.ledgerName;
+					
+					vm.accountCurrentBalance.currentBalance = response[i].ledger.currentBalance;
+					vm.accountCurrentBalance.amountType= response[i].ledger.currentBalanceType;
+				}
+				else{
+					
+					 var tempData = {};
+					tempData.amountType = response[i].amountType;
+					tempData.ledgerId= response[i].ledger.ledgerId;
+					tempData.ledgerName = response[i].ledger.ledgerName;
+					tempData.amount = parseFloat(response[i].amount);
+					
+					vm.AccReceiptTable.push(tempData);
+					
+					//Set Current Balance 
+					var tempBalanceData = {};
+					
+					tempBalanceData.currentBalance = response[i].ledger.currentBalance;
+					tempBalanceData.amountType = response[i].ledger.currentBalanceType;
+				
+					vm.multiCurrentBalance.push(tempBalanceData);
+					
+				}
+				
+				
+				
+			}
+			
+		});
+		
+	}
+	else{
+		
+		console.log("Insert");
+		vm.AccReceiptTable = [];
+		vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
+		
+		 vm.multiCurrentBalance = []; // Current Balance Array For Table
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
+  
+		$scope.defaultCompany();
+	
+	}
+	// END
   /* Table */
   
-	vm.AccReceiptTable = [];
-	vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
+	
 	
 	$scope.addRow = function(index){
 		
@@ -119,6 +255,7 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		vm.multiCurrentBalance[index].amountType = item.currentBalanceType;
 		
 		//console.log(vm.AccReceiptTable);
+		$scope.changeJrnlArray = true;
 	}
 	
 	$scope.removeRow = function (idx) {
@@ -136,7 +273,22 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		
 		vm.accountCurrentBalance.currentBalance = item.currentBalance;
 		vm.accountCurrentBalance.amountType= item.currentBalanceType;
+		
+		$scope.changeJrnlArray = true;
   	}
+	
+	//Changed date
+	$scope.changeReceiptDate = function(Fname){
+		
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		var  date = new Date(vm.dt1);
+		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+		//console.log(Fname+'..'+fdate);
+		formdata.append(Fname,fdate);
+	}
 	
 	//Total For Array Table
 	$scope.getTotal = function(){
@@ -152,18 +304,6 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 	}
 	
  
-  // Chosen data
-  // ----------------------------------- 
-	vm.companyDrop = [];
-	
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-		
-		vm.companyDrop = responseCompanyDrop;
-		
-		$scope.defaultCompany();
-	
-	});
-	
 	//Set JSuggest Data When Company
 	$scope.changeCompany = function(Fname,value){
 		
@@ -218,7 +358,14 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		vm.accountCurrentBalance = {};
 	}
 	
-	$scope.addUpReceipt = function(){
+	//Change in Journal Table
+	$scope.changeJrnlTable = function(){
+		
+		$scope.changeJrnlArray = true;
+		
+	}
+	
+	$scope.jointJournalArray = function(){
 		
 		vm.tempAccReceiptTable = [];
 		account.amount = $scope.accReceipt.totalAmount;
@@ -234,50 +381,81 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 		
 		var json = angular.copy(vm.tempAccReceiptTable);
 			 
-			for(var j=0;j<json.length;j++){
-				 
-				angular.forEach(json[j], function (value,key) {
-					
-					formdata.append('data['+j+']['+key+']',value);
-					
-				});
+		for(var j=0;j<json.length;j++){
+			 
+			angular.forEach(json[j], function (value,key) {
 				
-			}
+				formdata.append('data['+j+']['+key+']',value);
+				
+			});
+			
+		}
+				
+	}
+	
+	$scope.addUpReceipt = function(){
 		
-		if(!formdata.has('companyId')){
+		toaster.clear();
+		
+		if($scope.accReceipt.getSetJrnlId){
+			
+			toaster.pop('wait', 'Please Wait', 'Data Updating....',60000);
+			
+			var accPaymentPath = apiPath.postJrnl+'/'+$scope.accReceipt.jfid;
+			
+			if($scope.changeJrnlArray){
+				
+				$scope.jointJournalArray();
+			}
+			
+		}
+		else{
+			
+			toaster.pop('wait', 'Please Wait', 'Data Inserting....',60000);
+			
+			$scope.jointJournalArray();
+			
+			if(!formdata.has('companyId')){
 			
 			formdata.append('companyId',$scope.accReceipt.companyDropDown.companyId);
-		}
-		
-		var  date = new Date(vm.dt1);
-		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-		//console.log(fdate);
-		
-		if(formdata.has('entryDate')){
+			}
 			
-			formdata.delete('entryDate',fdate);
+			var  date = new Date(vm.dt1);
+			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+			//console.log(fdate);
+			
+			if(formdata.has('entryDate')){
+				
+				formdata.delete('entryDate',fdate);
+			}
+			formdata.append('entryDate',fdate);
+			
+			
+			var accPaymentPath = apiPath.postJrnl;
+			
 		}
-		formdata.append('entryDate',fdate);
 		
-	
-		var accPaymentPath = apiPath.postJrnl;
 		
 		var headerData = {'Content-Type': undefined,'type':'receipt'};
 		
 		apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 			
-			$scope.accReceipt.jfid = response.nextValue;
-			
-			if(formdata.has('jfId')){
+			if(!$scope.accReceipt.getSetJrnlId){
 				
-				formdata.delete('jfId');
+				$scope.accReceipt.jfid = response.nextValue;
 				
+				if(formdata.has('jfId')){
+					
+					formdata.delete('jfId');
+					
+				}
+				
+				formdata.append('jfId',$scope.accReceipt.jfid);
 			}
 			
-			formdata.append('jfId',$scope.accReceipt.jfid);
-				
 			apiCall.postCallHeader(accPaymentPath,headerData,formdata).then(function(data){
 					
+				toaster.clear();
 				//console.log(data);
 				if(apiResponse.ok == data){
 					
@@ -285,21 +463,35 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 					vm.minStart = new Date();
 					vm.maxStart = new Date();
 				
-					var jsonDel = angular.copy(vm.tempAccReceiptTable);
-					 
-					for(var j=0;j<jsonDel.length;j++){
-						 
-						angular.forEach(jsonDel[j], function (value,key) {
-							
-							formdata.delete('data['+j+']['+key+']',value);
-							
-						});
+					if($scope.changeJrnlArray){
 						
+						var jsonDel = angular.copy(vm.tempAccReceiptTable);
+						 
+						for(var j=0;j<jsonDel.length;j++){
+							 
+							angular.forEach(jsonDel[j], function (value,key) {
+								
+								formdata.delete('data['+j+']['+key+']',value);
+								
+							});
+							
+						}
 					}
+					$scope.changeJrnlArray = false;
 					
 					// Delete formdata  keys
 					for (var key of formdata.keys()) {
 					   formdata.delete(key); 
+					}
+					
+					if($scope.accReceipt.getSetJrnlId){
+						
+						toaster.pop('success', 'Title', 'Update Successfull');
+						$scope.disableCompany = false;
+						
+					}
+					else{
+						toaster.pop('success', 'Title', 'Insert Successfull');
 					}
 					
 					$scope.accReceipt = [];
@@ -309,17 +501,17 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 					var account = {};
 					account.amountType = 'credit';
 		  
-					toaster.pop('success', 'Title', 'Insert Successfully');
+				
 					
 					vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
 					vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
 					
 					//Next JfId
-					apiCall.getCall(apiPath.getJrnlNext).then(function(response){
+					// apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 			
-						$scope.accReceipt.jfid = response.nextValue;
+						// $scope.accReceipt.jfid = response.nextValue;
 
-					});
+					// });
 					
 					$scope.defaultCompany();
 					
@@ -328,16 +520,19 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 					
 					toaster.pop('warning', 'Opps!!', data);
 					
-					var jsonDel = angular.copy(vm.tempAccReceiptTable);
-					 
-					for(var j=0;j<jsonDel.length;j++){
-						 
-						angular.forEach(jsonDel[j], function (value,key) {
-							
-							formdata.delete('data['+j+']['+key+']',value);
-							
-						});
+					if($scope.changeJrnlArray){
 						
+						var jsonDel = angular.copy(vm.tempAccReceiptTable);
+						 
+						for(var j=0;j<jsonDel.length;j++){
+							 
+							angular.forEach(jsonDel[j], function (value,key) {
+								
+								formdata.delete('data['+j+']['+key+']',value);
+								
+							});
+							
+						}
 					}
 					
 					// Delete formdata  keys
@@ -350,6 +545,52 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			});
 		});
 	}
+	
+	$scope.cancel = function(){
+		
+		toaster.clear();
+		
+		vm.dt1 = new Date();
+		vm.minStart = new Date();
+		vm.maxStart = new Date();
+	
+		// if($scope.changeJrnlArray){
+			
+			// var jsonDel = angular.copy(vm.tempAccReceiptTable);
+			 
+			// for(var j=0;j<jsonDel.length;j++){
+				 
+				// angular.forEach(jsonDel[j], function (value,key) {
+					
+					// formdata.delete('data['+j+']['+key+']',value);
+					
+				// });
+				
+			// }
+		// }
+		$scope.changeJrnlArray = false;
+		
+		// Delete formdata  keys
+		for (var key of formdata.keys()) {
+		   formdata.delete(key); 
+		}
+		
+		$scope.accReceipt = [];
+		$scope.accReceipt.totalAmount;
+		vm.tableNameDrop = [];
+		vm.accountDrop = [];
+		var account = {};
+		account.amountType = 'credit';
+
+	
+		
+		vm.AccReceiptTable = [{"ledgerId":"","ledgerName":"","amount":"","amountType":"credit"}];
+		vm.multiCurrentBalance = [{"currentBalance":"","amountType":""}];
+	
+		$scope.defaultCompany();
+		
+	}
+	
 
   // Datepicker
   // ----------------------------------- 
@@ -606,4 +847,4 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
   *
   **/
 }
-AccReceiptController.$inject = ["$rootScope","$scope","apiCall","apiPath","toaster","$modal","apiResponse","validationMessage"];
+AccReceiptController.$inject = ["$rootScope","$scope","apiCall","apiPath","toaster","$modal","apiResponse","validationMessage","getSetFactory"];

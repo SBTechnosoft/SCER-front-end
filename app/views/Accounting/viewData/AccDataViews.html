@@ -33,11 +33,11 @@
 								
 								<!--td data-title="'Amount'"  filter="{ 'amount': 'text' }" >{{user.amount}}</td-->
 							   <td data-title="'Action'" >
-									<center ng-if="headerType != 'specialJournal'" >
+									<center ng-if="headerType == 'sale' || headerType == 'purchase'" >
 										<i ui-sref="" ng-if="user.ledger.ledgerName != 'sales' && user.ledger.ledgerName != 'purchase'" ng-click="editDataView(user.jfId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
 										<!--i ui-sref="" ng-if="user.ledger.ledgerName != 'sales' && user.ledger.ledgerName != 'purchase'" ng-click="deleteDataView(user.jfId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i-->
 									</center>
-									<center ng-if="headerType == 'specialJournal'">
+									<center ng-if="headerType == 'specialJournal' || headerType == 'payment' || headerType == 'receipt'">
 										<i ui-sref="" ng-click="editDataView(user.journalId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i>
 										<!--i ui-sref="" ng-click="deleteDataView(user.journalId)" class="fa fa-times-circle" style="font-size:17px;color:red"></i-->
 									</center>

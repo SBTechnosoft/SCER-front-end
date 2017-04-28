@@ -68,20 +68,20 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		
 		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
 		//console.log(getJrnlPath);
-		 var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
+		 var headerData = {'Content-Type': undefined,'journalType':'payment','fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
 	}
 	else if($scope.headerType == 'receipt'){
 		
 		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
 		//console.log(getJrnlPath);
 		// var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate,'type':'sales'};
-		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
+		var headerData = {'Content-Type': undefined,'journalType':'receipt','fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
 	}
 	else if($scope.headerType == 'specialJournal'){
 		
 		var getJrnlPath = apiPath.getJrnlByCompany+$rootScope.accView.companyId;
 		//console.log(getJrnlPath);
-		var headerData = {'Content-Type': undefined,'fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
+		var headerData = {'Content-Type': undefined,'journalType':'special_journal','fromDate':$rootScope.accView.fromDate,'toDate':$rootScope.accView.toDate};
 	}
   
 	  // console.log($rootScope.accView.companyId);
