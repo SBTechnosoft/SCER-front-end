@@ -42,7 +42,6 @@ App.directive("fileread", [function () {
   }
 }]);
 
-
 App.controller('InventoryBatchModalController',InventoryBatchModalController);
 
 function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,apiResponse,$timeout,getSetFactory,$state,$window,toaster,inventoryType) {
@@ -66,22 +65,20 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 	/** Excel **/
 		
 		vm.gridOptions = {
+			columnDefs: [
+			{ name: 'parentName', displayName: 'Parent Name', field: 'parentName' },
+			{ name: 'brandName', displayName: 'Brand Name', field: 'brandName' },
+			{ name: 'description', displayName: 'Description', field: 'descrition' }
+		  ],
 			enableColumnMenus: false
 		};
 
-		
-		vm.reset = reset;
-		  
-		function reset() {
-			vm.gridOptions.data = [];
-			vm.gridOptions.columnDefs = [];
-		}
   
 	/** End **/
 	
 	$scope.getExcelData = function(){
 		
-		//console.log(vm.gridOptions);
+		console.log(vm.gridOptions.data);
 		if($scope.inventoryType == "Brand"){
 			
 			vm.batchdropdown = [{"key":"productParentCategoryId","value":"Parent Name"},{"key":"productCategoryName","value":"Brand Name"},{"key":"productCategoryDescription","value":"Description"}];
@@ -106,20 +103,28 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 		}
 		else if($scope.inventoryType == "Product"){
 			
-			vm.batchdropdown = [{"key":"companyId","value":"Company Name"},
-			{"key":"branchId","value":"Branch Name"},
-			{"key":"productCategoryId","value":"Brand Name"},
-			{"key":"productGroupId","value":"Category Name"},
-			{"key":"productName","value":"Product Name"},
+			vm.batchdropdown = [{"key":"companyId","value":"Company"},
+			{"key":"branchId","value":"Branch"},
+			{"key":"productCategoryId","value":"Brand"},
+			{"key":"productGroupId","value":"Category"},
+			{"key":"productName","value":"P.Name"},
 			{"key":"color","value":"Color"},
 			{"key":"size","value":"Size"},
-			{"key":"productDescription","value":"Product Description"},
-			{"key":"measurementUnit","value":"Measurement Unit"},
-			{"key":"purchasePrice","value":"Purchase Price"},
-			{"key":"mrp","value":"MRP"}
+			{"key":"productDescription","value":"Description"},
+			{"key":"measurementUnit","value":"Measurement"},
+			{"key":"purchasePrice","value":"Pur.Price"},
+			{"key":"wholesaleMargin","value":"TaxMargin"},
+			{"key":"wholesaleMarginFlat","value":"TaxMarginFlat"},
+			{"key":"semiWholesaleMargin","value":"semiTaxMargin"},
+			{"key":"vat","value":"Vat"},
+			{"key":"margin","value":"Margin"},
+			{"key":"marginFlat","value":"MarginFlat"},
+			{"key":"additionalTax","value":"Add.Tax"},
+			{"key":"mrp","value":"MRP"},
+			{"key":"minimumStockLevel","value":"minimumStock"}
 			];
 			
-			MappingData = ['companyId','branchId','productCategoryId','productGroupId','productName','color','size','productDescription','measurementUnit','purchasePrice','mrp'];
+			MappingData = ['companyId','branchId','productCategoryId','productGroupId','productName','color','size','productDescription','measurementUnit','purchasePrice','wholesaleMargin','wholesaleMarginFlat','semiWholesaleMargin','vat','margin','marginFlat','additionalTax','mrp','minimumStockLevel'];
 			
 			$scope.dropdownData.brandName = vm.batchdropdown[0];
 			$scope.dropdownData.description = vm.batchdropdown[1];
@@ -131,7 +136,15 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 			$scope.dropdownData.desc = vm.batchdropdown[7];
 			$scope.dropdownData.measurement = vm.batchdropdown[8];
 			$scope.dropdownData.purchasePrice = vm.batchdropdown[9];
-			$scope.dropdownData.mrp = vm.batchdropdown[10];
+			$scope.dropdownData.taxMargin = vm.batchdropdown[10];
+			$scope.dropdownData.taxMarginFlat = vm.batchdropdown[11];
+			$scope.dropdownData.semiTaxMargin = vm.batchdropdown[12];
+			$scope.dropdownData.vat = vm.batchdropdown[13];
+			$scope.dropdownData.margin = vm.batchdropdown[14];
+			$scope.dropdownData.marginFlat = vm.batchdropdown[15];
+			$scope.dropdownData.additionalTax = vm.batchdropdown[16];
+			$scope.dropdownData.mrp = vm.batchdropdown[17];
+			$scope.dropdownData.minimumStock = vm.batchdropdown[18];
 		}
 		
 		
@@ -288,8 +301,8 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				
 				//singleArray = excelData[i];
 				
-				innerObject.parentID = $scope.keyExists('Parent Name',excelData[i]);
-				innerObject.name = $scope.keyExists('Brand Name',excelData[i]);
+				innerObject.parentID = $scope.keyExists('ParentName',excelData[i]);
+				innerObject.name = $scope.keyExists('BrandName',excelData[i]);
 				innerObject.desc = $scope.keyExists('Description',excelData[i]);
 				innerObject.display = "yes";
 				
@@ -373,8 +386,8 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				
 				var innerObject = {};
 				
-				innerObject.parentID = $scope.keyExists('Parent Name',excelData[i]);
-				innerObject.name = $scope.keyExists('Category Name',excelData[i]);
+				innerObject.parentID = $scope.keyExists('ParentName',excelData[i]);
+				innerObject.name = $scope.keyExists('CategoryName',excelData[i]);
 				innerObject.desc = $scope.keyExists('Description',excelData[i]);
 				innerObject.display = "yes";
 				
@@ -469,7 +482,17 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				innerObject.Description = $scope.keyExists('Description',excelData[i]);
 				innerObject.Measurement = $scope.keyExists('Measurement',excelData[i]);
 				innerObject.PurchasePrice = $scope.keyExists('PurchasePrice',excelData[i]);
+				
+				innerObject.TaxMargin = $scope.keyExists('TaxMargin',excelData[i]);
+				innerObject.TaxMarginFlat = $scope.keyExists('TaxMarginFlat',excelData[i]);
+				innerObject.semiTaxMargin = $scope.keyExists('semiTaxMargin',excelData[i]);
+				innerObject.Vat = $scope.keyExists('Vat',excelData[i]);
+				innerObject.Margin = $scope.keyExists('Margin',excelData[i]);
+				innerObject.marginFlat = $scope.keyExists('marginFlat',excelData[i]);
+				innerObject.AdditionalTax = $scope.keyExists('AdditionalTax',excelData[i]);
+				
 				innerObject.MRP = $scope.keyExists('MRP',excelData[i]);
+				innerObject.MinimumStock = $scope.keyExists('MinimumStock',excelData[i]);
 				
 				
 				

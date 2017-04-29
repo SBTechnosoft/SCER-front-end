@@ -1860,7 +1860,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		var modalInstance = $modal.open({
 		  templateUrl: 'app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html?buster='+Math.random(),
 		  controller: documentScanController,
-		  size: 'lg'
+		  size: 'lg',
+		 // preserveScope: true
 		});
 		
 		modalInstance.result.then(function (data) {
