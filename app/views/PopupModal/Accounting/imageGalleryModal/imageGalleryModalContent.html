@@ -68,7 +68,7 @@
 						   
 							  <label class="col-sm-3 control-label">*Amount</label>
 							  <div class="col-sm-9" style="padding-right: 0px;padding-left: 30px;">
-								 <input id="input-id-1" tabindex="2" name="amount" ng-model="paymentForm.amount"  type="text" placeholder="Amount" class="form-control"  ng-required="true" ng-pattern="/^[0-9 .]*$/" dir="rtl"  max="{{LimitAmount}}" min="1" auto-focus only-number />
+								 <input id="input-id-1" tabindex="2" name="amount" ng-model="paymentForm.amount"  type="text" placeholder="Amount" class="form-control"  ng-required="true" ng-pattern="/^[0-9 .]*$/"   max="{{LimitAmount}}" min="1" auto-focus only-number />
 								 
 								 <span ng-messages="formPayment.amount.$error" ng-if="formPayment.amount.$dirty || formPayment.amount.$touched"  role="alert">
 									<span ng-messages-include="errorRequired"></span>

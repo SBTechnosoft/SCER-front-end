@@ -134,12 +134,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.clientGetAllFunction();
 	
 	
-	vm.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
+	// vm.statesDrop=[];
+	// apiCall.getCall(apiPath.getAllState).then(function(response3){
 		
-		vm.statesDrop = response3;
+		// vm.statesDrop = response3;
 		
-	});
+	// });
 	
 	
 	$scope.getInitStateCity = function(){
@@ -1017,13 +1017,14 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 				$scope.clientGetAllFunction();
 				
+				$scope.getInitStateCity(); //get Default State and City
 				//Get State
-				vm.statesDrop=[];
-				apiCall.getCall(apiPath.getAllState).then(function(response3){
+				// vm.statesDrop=[];
+				// apiCall.getCall(apiPath.getAllState).then(function(response3){
 					
-					vm.statesDrop = response3;
+					// vm.statesDrop = response3;
 				
-				});
+				// });
 				
 				$anchorScroll();
 			
@@ -1856,11 +1857,13 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.openScanPopup = function(){
 		
 		// $templateCache.remove(window.location.host+'/front-end/app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html');
-	
+		 $(".modal-body").html("");
+		 
+		 
 		var modalInstance = $modal.open({
 		  templateUrl: 'app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html?buster='+Math.random(),
 		  controller: documentScanController,
-		  size: 'lg',
+		  size: 'lg'
 		 // preserveScope: true
 		});
 		

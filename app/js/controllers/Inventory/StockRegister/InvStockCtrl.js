@@ -439,6 +439,7 @@ $scope.TableData = function(){
           date: 'asc'     // initial sorting
       }
   }, {
+	  counts: [],
       total: data.length,
       getData: function($defer, params) {
           

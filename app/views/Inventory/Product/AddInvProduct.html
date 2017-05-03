@@ -128,7 +128,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">*Purchase Price</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="purchasePrice" dir="rtl" ng-model="addInvProduct.purchasePrice" ng-change="changeInvProductData('purchasePrice',addInvProduct.purchasePrice)" type="text" placeholder="Purchase Price" class="form-control" tabindex="2" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20" only-number />
+                     <input id="input-id-1" name="purchasePrice"  ng-model="addInvProduct.purchasePrice" ng-change="changeInvProductData('purchasePrice',addInvProduct.purchasePrice)" type="text" placeholder="Purchase Price" class="form-control" tabindex="2" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20" only-number />
 					 
 					<span ng-messages="formProduct.purchasePrice.$error" ng-if="formProduct.purchasePrice.$dirty || formProduct.purchasePrice.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -170,7 +170,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Semi-Wholesale Margin</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="semiWholesaleMargin" dir="rtl" ng-model="addInvProduct.semiWholesaleMargin" ng-change="changeInvProductData('semiWholesaleMargin',addInvProduct.semiWholesaleMargin)" type="text" placeholder="Semi-Wholesale Margin" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+                     <input id="input-id-1" name="semiWholesaleMargin" ng-model="addInvProduct.semiWholesaleMargin" ng-change="changeInvProductData('semiWholesaleMargin',addInvProduct.semiWholesaleMargin)" type="text" placeholder="Semi-Wholesale Margin" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 					 
 					<span ng-messages="formProduct.semiWholesaleMargin.$error" ng-if="formProduct.semiWholesaleMargin.$dirty || formProduct.semiWholesaleMargin.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -185,7 +185,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">VAT(%)</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="vat" dir="rtl" ng-model="addInvProduct.vat" ng-change="changeInvProductData('vat',addInvProduct.vat)" type="text" placeholder="VAT(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+                     <input id="input-id-1" name="vat" ng-model="addInvProduct.vat" ng-change="changeInvProductData('vat',addInvProduct.vat)" type="text" placeholder="VAT(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 					 
 					<span ng-messages="formProduct.vat.$error" ng-if="formProduct.vat.$dirty || formProduct.vat.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -200,7 +200,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Margin</label>
                   <div class="col-sm-3">
-                     <input id="input-id-1" name="marginFlat" dir="rtl" ng-model="addInvProduct.marginFlat" ng-change="changeInvProductData('marginFlat',addInvProduct.marginFlat)" type="text" placeholder="Flat" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" only-number />
+                     <input id="input-id-1" name="marginFlat" ng-model="addInvProduct.marginFlat" ng-change="changeInvProductData('marginFlat',addInvProduct.marginFlat)" type="text" placeholder="Flat" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" only-number />
 					 
 					<span ng-messages="formProduct.marginFlat.$error" ng-if="formProduct.marginFlat.$dirty || formProduct.marginFlat.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -211,7 +211,7 @@
                   </div>
 				  
                   <div class="col-sm-2">
-                     <input id="input-id-1" name="margin" dir="rtl" ng-model="addInvProduct.margin" ng-change="changeInvProductData('margin',addInvProduct.margin)" type="text" placeholder="(%)Percentage" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+                     <input id="input-id-1" name="margin"  ng-model="addInvProduct.margin" ng-change="changeInvProductData('margin',addInvProduct.margin)" type="text" placeholder="(%)Percentage" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 					 
 					<span ng-messages="formProduct.margin.$error" ng-if="formProduct.margin.$dirty || formProduct.margin.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -228,7 +228,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Additional Tax(%)</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="additionalTax" dir="rtl" ng-model="addInvProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addInvProduct.additionalTax)" type="text" placeholder="Additional Tax" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+                     <input id="input-id-1" name="additionalTax" ng-model="addInvProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addInvProduct.additionalTax)" type="text" placeholder="Additional Tax" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 					 
 					<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -243,7 +243,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">*MRP</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="mrp" dir="rtl" ng-model="addInvProduct.mrp" ng-change="changeInvProductData('mrp',addInvProduct.mrp)" type="text" placeholder="MRP" class="form-control" tabindex="2" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20"  only-number />
+                     <input id="input-id-1" name="mrp" ng-model="addInvProduct.mrp" ng-change="changeInvProductData('mrp',addInvProduct.mrp)" type="text" placeholder="MRP" class="form-control" tabindex="2" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20"  only-number />
 					 
 					<span ng-messages="formProduct.mrp.$error" ng-if="formProduct.mrp.$dirty || formProduct.mrp.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -258,7 +258,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Minimum Stock</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="minimumStockLevel" dir="rtl" ng-model="addInvProduct.minimumStockLevel" ng-change="changeInvProductData('minimumStockLevel',addInvProduct.minimumStockLevel)" type="text" placeholder="Minimum Stock" class="form-control" tabindex="2" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
+                     <input id="input-id-1" name="minimumStockLevel"  ng-model="addInvProduct.minimumStockLevel" ng-change="changeInvProductData('minimumStockLevel',addInvProduct.minimumStockLevel)" type="text" placeholder="Minimum Stock" class="form-control" tabindex="2" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
 					 
 					<span ng-messages="formProduct.minimumStockLevel.$error" ng-if="formProduct.minimumStockLevel.$dirty || formProduct.minimumStockLevel.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>

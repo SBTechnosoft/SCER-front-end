@@ -172,6 +172,7 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 			  userName: 'asc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			  

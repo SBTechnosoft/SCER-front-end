@@ -135,6 +135,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 			  productCategoryName: 'asc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 

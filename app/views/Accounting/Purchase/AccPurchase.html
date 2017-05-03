@@ -78,13 +78,13 @@
 									
 								</td>
 								<td>
-									<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" dir="rtl" ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
+									<input id="input-id-1" type="text" ng-model="item.discount" ng-change="changeProductTable()" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
 								</td>
 								<td>
-									<input id="input-id-1" type="text" ng-model="item.price"  ng-change="changeProductTable()" class="form-control" placeholder="Price" dir="rtl" ng-required="true" ng-pattern="/^[1-9]+[0-9 .]*$/" only-number />
+									<input id="input-id-1" type="text" ng-model="item.price"  ng-change="changeProductTable()" class="form-control" placeholder="Price"  ng-required="true" ng-pattern="/^[1-9]+[0-9 .]*$/" only-number />
 								</td>
 								<td>
-									<input id="input-id-1" type="text" ng-model="item.qty" ng-change="changeProductTable()" class="form-control" dir="rtl"  ng-required="true" ng-minlength="1" ng-maxlength="7" ng-pattern="/^[1-9]+[0-9]*$/" only-number />
+									<input id="input-id-1" type="text" ng-model="item.qty" ng-change="changeProductTable()" class="form-control"   ng-required="true" ng-minlength="1" ng-maxlength="7" ng-pattern="/^[1-9]+[0-9]*$/" only-number />
 								</td>
 								<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
 								<td >
@@ -133,7 +133,7 @@
 								<td></td>
 								<td colspan="2" style="text-align:left"  > <strong> Tax </strong></td>
 								<td>
-								<input id="input-id-1" name="tax" type="text" ng-model="accPurchase.tax"  ng-change="changeAccPurchase('tax',accPurchase.tax)"  class="form-control"  dir="rtl" ng-pattern="/^[0-9 .]*$/" only-number />
+								<input id="input-id-1" name="tax" type="text" ng-model="accPurchase.tax"  ng-change="changeAccPurchase('tax',accPurchase.tax)"  class="form-control"   ng-pattern="/^[0-9 .]*$/" only-number />
 									
 									<span ng-messages="formPurchase.tax.$error" ng-if="formPurchase.tax.$dirty || formPurchase.tax.$touched"  role="alert">
 										<span ng-messages-include="errorPatternNumber"></span>
@@ -172,7 +172,7 @@
 						   <div class="form-group">
 							  <label for="input-id-1" class="col-sm-3 control-label">*Bill#</label>
 							  <div class="col-sm-9">
-								 <input id="input-id-1" name="billNo" ng-model="accPurchase.billNo" ng-change="changeAccPurchase('billNumber',accPurchase.billNo)" type="text" placeholder="Bill Number" class="form-control" dir="rtl" ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" />
+								 <input id="input-id-1" name="billNo" ng-model="accPurchase.billNo" ng-change="changeAccPurchase('billNumber',accPurchase.billNo)" type="text" placeholder="Bill Number" class="form-control"  ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" />
 								 
 								 <span ng-messages="formPurchase.billNo.$error" ng-if="formPurchase.billNo.$dirty || formPurchase.billNo.$touched"  role="alert">
 									<span ng-messages-include="errorRequired"></span>
@@ -261,10 +261,10 @@
 								<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance']  |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 							</td>
 							<td>
-								<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
+								<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control"  ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 							</td>
 							<td>
-								<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
+								<input id="input-id-1" type="text" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control"  ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 							</td>
 							<td style="">
 								<center>

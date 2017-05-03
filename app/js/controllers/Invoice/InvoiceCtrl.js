@@ -41,6 +41,7 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 			  companyName: 'asc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			  //console.log(params.$params);
@@ -127,7 +128,13 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 	 //console.log(addInvoice);
 	 
 	 formdata.append('companyId',addInvoice.companyDrop.companyId);
-	 formdata.append('invoiceLabel',addInvoice.invoiceLabel);
+	 if($scope.addInvoice.invoiceLabel){
+		 
+		 formdata.append('invoiceLabel',addInvoice.invoiceLabel);
+	 }
+	else{
+		 formdata.append('invoiceLabel','');
+	}
 	 formdata.append('startAt',addInvoice.startAt);
 	  formdata.append('endAt',addInvoice.startAt);
 	 formdata.append('invoiceType',addInvoice.invoiceType);

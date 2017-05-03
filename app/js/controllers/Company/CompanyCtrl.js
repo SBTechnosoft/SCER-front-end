@@ -84,6 +84,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			  companyName: 'asc'     // initial sorting
 		  }
 	  }, {
+		   counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			  

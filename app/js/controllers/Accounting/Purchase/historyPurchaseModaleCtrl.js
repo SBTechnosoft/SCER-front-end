@@ -113,6 +113,7 @@ function historyPurchaseModaleCtrl($scope, $modalInstance,$rootScope, $filter, n
 			  date: 'desc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 

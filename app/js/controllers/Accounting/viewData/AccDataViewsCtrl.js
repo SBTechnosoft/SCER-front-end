@@ -290,6 +290,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  ledgerName: 'asc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
@@ -387,6 +388,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  date: 'desc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 

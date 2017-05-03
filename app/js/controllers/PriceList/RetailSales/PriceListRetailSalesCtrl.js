@@ -256,6 +256,7 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
 				  productName: 'asc'     // initial sorting
 			  }
 		  },{
+			  counts: [],
 			  total: data.length, // length of data
 			  getData: function($defer, params) {
 				 

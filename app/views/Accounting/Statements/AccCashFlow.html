@@ -31,7 +31,7 @@
 		 <a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary"  style="margin-right: 5px;" data-ng-class="app.theme.brand" >Generate Pdf</a> 
 		 <a ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" data-ng-class="app.theme.brand" >Export to Excel</a>
 		
-         <div class="panel-title">Cash Flow of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date: dateFormat}} </b></div>
+         <div class="panel-title"><b> {{displayCompany}} Statement of Cash Flows For The Year Ended {{displayDate | date: dateFormat}} </b></div>
       </div>
 	   <div class="table-responsive">
 		  <table  export-csv="csv"   show-filter="true" class="table table-bordered table-striped" >

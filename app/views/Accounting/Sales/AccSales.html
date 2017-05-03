@@ -78,14 +78,14 @@
 								
 							</td>
 							<td>
-								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.discount" ng-change="changeProductTable()" class="form-control" dir="rtl" ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
+								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.discount" ng-change="changeProductTable()" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
 							</td>
 							<td>
 								<!--span style="float:right">{{item.price}}</span-->
-								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.price" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" only-number /> 
+								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.price" ng-change="changeProductTable()"  class="form-control" style="width:100%;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" only-number /> 
 							</td>
 							<td>
-								<input id="input-id-1" type="text"  style="padding-left: 5px;padding-right: 5px;"ng-model="item.qty" ng-change="changeProductTable()"  class="form-control" style="width:100%;" dir="rtl" ng-required="true" ng-minlength="1" ng-maxlength="6"  ng-pattern="/^[1-9]+[0-9]*$/" only-number />
+								<input id="input-id-1" type="text"  style="padding-left: 5px;padding-right: 5px;"ng-model="item.qty" ng-change="changeProductTable()"  class="form-control" style="width:100%;"  ng-required="true" ng-minlength="1" ng-maxlength="6"  ng-pattern="/^[1-9]+[0-9]*$/" only-number />
 							</td>
 							<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
 							<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
@@ -206,7 +206,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">*Invoice#</label>
 						  <div class="col-sm-6">
-							 <input ng-model="accSales.invoiceNo" name="invoice" ng-change="changeAccSales('invoiceNumber',accSales.invoiceNo)" id="input-id-1" type="text" placeholder="Invoice Number" class="form-control" dir="rtl" ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" />
+							 <input ng-model="accSales.invoiceNo" name="invoice" ng-change="changeAccSales('invoiceNumber',accSales.invoiceNo)" id="input-id-1" type="text" placeholder="Invoice Number" class="form-control"  ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" />
 							 
 							 <span ng-messages="formSales.invoice.$error" ng-if="formSales.invoice.$dirty || formSales.invoice.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -277,11 +277,11 @@
 									<h5 >Current Balance {{form.multiCurrentBalance[$index]['currentBalance'] |  currency:"&#8377; ": noOfDecimalPoints}} {{form.multiCurrentBalance[$index]['amountType']}}</h5>
 								</td>
 								<td>
-									<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
+									<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='debit'" class="form-control"  ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 								
 								</td>
 								<td>
-									<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control" dir="rtl" ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
+									<input id="input-id-1" type="text" name="amount" ng-model="item.amount" ng-change="changeJrnlTable()" ng-if="item.amountType=='credit'" class="form-control"  ng-required="true" ng-pattern="/^[0-9 .]*$/" only-number />
 									
 								</td>
 								<td>

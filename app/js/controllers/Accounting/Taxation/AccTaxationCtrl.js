@@ -84,6 +84,7 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 				  invoiceNumber: 'asc'     // initial sorting
 			  }
 		  }, {
+			  counts: [],
 			  total: data.length, // length of data
 			  getData: function($defer, params) {
 				 

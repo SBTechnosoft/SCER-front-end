@@ -1,6 +1,6 @@
 <div class="modal-header">
 		<button type="button" data-dismiss="modal" data-ng-click="closeButton()" aria-hidden="true" class="close">×</button>  
-		  <h4 id="myModalLabel" class="modal-title">Modal title</h4>
+		  <h4 id="myModalLabel" class="modal-title">Product Form</h4>
 	</div>
 	<div class="modal-body my-model-body">
 		<center>
@@ -111,7 +111,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">*Purchase Price</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="purchasePrice" dir="rtl" ng-model="addModelProduct.purchasePrice" type="text" placeholder="Purchase Price" class="form-control" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20" tabindex="2" only-number  />
+                     <input id="input-id-1" name="purchasePrice"  ng-model="addModelProduct.purchasePrice" type="text" placeholder="Purchase Price" class="form-control" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20" tabindex="2" only-number  />
 					 
 					<span ng-messages="formProduct.purchasePrice.$error" ng-if="formProduct.purchasePrice.$dirty || formProduct.purchasePrice.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -154,7 +154,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Semi-Wholesale Margin</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="semiWholesaleMargin" dir="rtl" ng-model="addModelProduct.semiWholesaleMargin" type="text" placeholder="Semi-Wholesale Margin" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
+                     <input id="input-id-1" name="semiWholesaleMargin" ng-model="addModelProduct.semiWholesaleMargin" type="text" placeholder="Semi-Wholesale Margin" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.semiWholesaleMargin.$error" ng-if="formProduct.semiWholesaleMargin.$dirty || formProduct.semiWholesaleMargin.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -169,7 +169,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">VAT(%)</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="vat" dir="rtl" ng-model="addModelProduct.vat" type="text" placeholder="VAT(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
+                     <input id="input-id-1" name="vat" ng-model="addModelProduct.vat" type="text" placeholder="VAT(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.vat.$error" ng-if="formProduct.vat.$dirty || formProduct.vat.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -184,7 +184,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Margin</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" name="marginFlat" dir="rtl" ng-model="addModelProduct.marginFlat" type="text" placeholder="Flat" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" tabindex="2" only-number />
+                     <input id="input-id-1" name="marginFlat" ng-model="addModelProduct.marginFlat" type="text" placeholder="Flat" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.marginFlat.$error" ng-if="formProduct.marginFlat.$dirty || formProduct.marginFlat.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -195,7 +195,7 @@
                   </div>
 				  
 				  <div class="col-sm-3">
-                     <input id="input-id-1" name="margin" dir="rtl" ng-model="addModelProduct.margin" type="text" placeholder="(%)Percentage" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
+                     <input id="input-id-1" name="margin"  ng-model="addModelProduct.margin" type="text" placeholder="(%)Percentage" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.margin.$error" ng-if="formProduct.margin.$dirty || formProduct.margin.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -211,7 +211,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Additional Tax(%)</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="additionalTax" dir="rtl" ng-model="addModelProduct.additionalTax" type="text" placeholder="Additional Tax" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" tabindex="2" only-number />
+                     <input id="input-id-1" name="additionalTax"  ng-model="addModelProduct.additionalTax" type="text" placeholder="Additional Tax" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -226,7 +226,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">*MRP</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="mrp" dir="rtl" ng-model="addModelProduct.mrp = addModelProduct.purchasePrice" type="text" placeholder="MRP" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-required="true" ng-maxlength="20" tabindex="2" only-number />
+                     <input id="input-id-1" name="mrp"  ng-model="addModelProduct.mrp = addModelProduct.purchasePrice" type="text" placeholder="MRP" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-required="true" ng-maxlength="20" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.mrp.$error" ng-if="formProduct.mrp.$dirty || formProduct.mrp.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -241,7 +241,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Minimum Stock</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="minimumStockLevel" dir="rtl" ng-model="addModelProduct.minimumStockLevel" type="text" placeholder="Minimum Stock" class="form-control"  ng-pattern="/^[0-9]*$/"  ng-maxlength="10" tabindex="2" only-number />
+                     <input id="input-id-1" name="minimumStockLevel"  ng-model="addModelProduct.minimumStockLevel" type="text" placeholder="Minimum Stock" class="form-control"  ng-pattern="/^[0-9]*$/"  ng-maxlength="10" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.minimumStockLevel.$error" ng-if="formProduct.minimumStockLevel.$dirty || formProduct.minimumStockLevel.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>

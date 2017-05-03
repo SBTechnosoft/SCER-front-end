@@ -30,7 +30,7 @@
 		 <a ng-click="generatePdf('twoSidePdf')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" data-ng-class="app.theme.brand" >Generate Pdf</a> 
 		 <a  ng-click="generatePdf('twoSideExcel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" data-ng-class="app.theme.brand" >Export to Excel</a>
 		 <!--a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a-->
-         <div class="panel-title">Balance Sheet of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date: dateFormat}} </b></div>
+         <div class="panel-title"><b> {{displayCompany}} Balance Sheet At {{displayDate | date: dateFormat}} </b></div>
       </div>
 	   <div class="table-responsive">
 		  <table  export-csv="csv"   show-filter="false" class="table table-bordered table-striped" >

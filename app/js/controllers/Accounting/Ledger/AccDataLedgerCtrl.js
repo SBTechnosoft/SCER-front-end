@@ -253,6 +253,7 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 			  date: 'desc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 

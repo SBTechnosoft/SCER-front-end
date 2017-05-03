@@ -41,6 +41,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			  companyName: 'asc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			  //console.log(params.$params);
@@ -121,7 +122,16 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	 //console.log(addInvoice);
 	 
 	 formdata.append('companyId',addquotation.companyDrop.companyId);
-	 formdata.append('quotationLabel',addquotation.quotationLabel);
+	 
+		if($scope.addquotation.quotationLabel){
+		 
+		  formdata.append('quotationLabel',addquotation.quotationLabel);
+		 }
+		else{
+			 formdata.append('quotationLabel','');
+		}
+	
+	
 	 formdata.append('startAt',addquotation.startAt);
 	  formdata.append('endAt',addquotation.startAt);
 	 formdata.append('quotationType',addquotation.quotationType);

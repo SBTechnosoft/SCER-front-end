@@ -37,7 +37,7 @@
 			   
 				  <label class="col-sm-3 control-label">Quantity</label>
 				  <div class="col-sm-5" >
-					 <input id="input-id-1" tabindex="2" name="quantity" ng-model="productBarcodeForm.quantity"  type="text" placeholder="Quantity" class="form-control"  ng-required="true" ng-pattern="/^[0-9]*$/" dir="rtl"   min="1" auto-focus only-number />
+					 <input id="input-id-1" tabindex="2" name="quantity" ng-model="productBarcodeForm.quantity"  type="text" placeholder="Quantity" class="form-control"  ng-required="true" ng-pattern="/^[0-9]*$/"   min="1" auto-focus only-number />
 					 
 					 <span ng-messages="barcodeForm.quantity.$error" ng-if="barcodeForm.quantity.$dirty || barcodeForm.quantity.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>

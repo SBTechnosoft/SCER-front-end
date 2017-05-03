@@ -1,4 +1,8 @@
+<style>
 
+
+
+</style>
 <!--h3 class="my-fieldset-marginBottom">
    <small>
    <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
@@ -280,15 +284,15 @@
 							<option value="flat" selected="selected">Flat</option>
 							<option value="percentage">%</option>
 						</select>
-						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="padding-left: 6px;padding-right: 6px;width:50%;" dir="rtl" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()"  ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="padding-left: 6px;padding-right: 6px;width:50%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()"  ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
 						
 					</td>
 					<td>
 						<!--span style="float:right">{{item.price}}</span-->
-						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable()" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable()" only-number /> 
 					</td>
 					<td>
-						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;" dir="rtl" ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable()" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable()" only-number /> 
 					</td>
 					<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
 					<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
@@ -376,7 +380,7 @@
 					<td></td>
 					<td style="text-align:left"> <strong> Advance </strong> </td>
 					<td colspan="2"  > 
-						<input id="input-id-1" type="text" name="advance" ng-model="quickBill.advance"  class="form-control"  dir="rtl" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductAdvance()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
+						<input id="input-id-1" type="text" name="advance" ng-model="quickBill.advance"  class="form-control"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductAdvance()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">
 							<span ng-messages-include="errorPatternNumber"></span>
 						</span>

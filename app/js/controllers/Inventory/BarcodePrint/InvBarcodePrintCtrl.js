@@ -152,6 +152,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			  // productCategoryName: 'asc'     // initial sorting
 		  // }
 	  }, {
+		  counts: [],
 		  total:   $scope.completedQueries.length, // length of data
 		  getData: function($defer, params) {
 			 

@@ -49,7 +49,7 @@
 				<th   ng-if="selectedBoxArray.length <= 0 && barcodeFlag!=1" >Print</th>
 				<th style="width:10%" ng-if="selectedBoxArray.length > 0 || barcodeFlag==1" ng-init="barcodePrintData.multiQuantity = 0" >
 					
-						<input id="input-id-1"  name="quantity" ng-model="barcodePrintData.multiQuantity"  type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/" dir="rtl"   min="1"  ng-disabled="hideQtyArray.length > 0" only-number /> 
+						<input id="input-id-1"  name="quantity" ng-model="barcodePrintData.multiQuantity"  type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/"    min="1"  ng-disabled="hideQtyArray.length > 0" only-number /> 
 					
 						
 					
@@ -99,7 +99,7 @@
 				   
 					<td   filter="{ 'color': 'text' }" >{{user.color}}</td>
 					<td    filter="{ 'size': 'text' }" >{{user.size}}</td>
-					<td ng-init="user.barcodeQuantity=0"> <input id="input-id-1"  name="quantity" ng-model="user.barcodeQuantity" type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/" dir="rtl" ng-disabled="barcodePrintData.multiQuantity>0" ng-change="hideMiltiQuantity(user.barcodeQuantity,user.productId)"  min="1" only-number /> </td>
+					<td ng-init="user.barcodeQuantity=0"> <input id="input-id-1"  name="quantity" ng-model="user.barcodeQuantity" type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/"  ng-disabled="barcodePrintData.multiQuantity>0" ng-change="hideMiltiQuantity(user.barcodeQuantity,user.productId)"  min="1" only-number /> </td>
 			
 				   <td  style="width:10%"> 
 						<center>

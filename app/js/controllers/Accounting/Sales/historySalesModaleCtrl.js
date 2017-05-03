@@ -109,6 +109,7 @@ function historySalesModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTa
 			  date: 'desc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 

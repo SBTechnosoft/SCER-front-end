@@ -172,7 +172,7 @@
 					   <div class="form-group">
 						   <label for="input-id-1" class="col-sm-2 control-label">PAN</label>
 						  <div class="col-sm-8">
-							 <input id="input-id-1" tabindex="2" name="pan" ng-model="addCompany.pan" ng-change="changeCompanyData('pan',addCompany.pan)" type="text" placeholder="PAN Number" ng-pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/" ng-minlength="10" ng-maxlength="10" class="form-control" dir="rtl" />
+							 <input id="input-id-1" tabindex="2" name="pan" ng-model="addCompany.pan" ng-change="changeCompanyData('pan',addCompany.pan)" type="text" placeholder="PAN Number" ng-pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/" ng-minlength="10" ng-maxlength="10" class="form-control"  />
 							 
 							 <span ng-messages="formCompany.pan.$error" ng-if="formCompany.pan.$dirty || formCompany.pan.$touched" role="alert">
 								<span ng-messages-include="errorPatternThisSpecial"></span>
@@ -194,7 +194,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-2 control-label">VAT</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="vatNo" ng-model="addCompany.vat" ng-change="changeCompanyData('vatNo',addCompany.vat)"  masked="" type="text" placeholder="VAT" ng-pattern="/^([a-zA-Z0-9])+$/" ng-minlength="11" ng-maxlength="11" class="form-control" dir="rtl" />
+						 <input id="input-id-1" tabindex="2" name="vatNo" ng-model="addCompany.vat" ng-change="changeCompanyData('vatNo',addCompany.vat)"  masked="" type="text" placeholder="VAT" ng-pattern="/^([a-zA-Z0-9])+$/" ng-minlength="11" ng-maxlength="11" class="form-control"  />
 						 
 						  <span ng-messages="formCompany.vatNo.$error" ng-if="formCompany.vatNo.$dirty || formCompany.vatNo.$touched" role="alert">
 							<span ng-messages-include="errorPatternThisSpecial"></span>
@@ -238,7 +238,7 @@
 					  
 					   <label for="input-id-1" class="col-sm-2 control-label">SGST</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="sgst" masked="" ng-model="addCompany.sgst" ng-change="changeCompanyData('sgst',addCompany.sgst)"   type="text" placeholder="SGST Number" class="form-control" dir="rtl" />
+						 <input id="input-id-1" tabindex="2" name="sgst" masked="" ng-model="addCompany.sgst" ng-change="changeCompanyData('sgst',addCompany.sgst)"   type="text" placeholder="SGST Number" class="form-control"  />
 					  </div>
 					  
 				 </div>

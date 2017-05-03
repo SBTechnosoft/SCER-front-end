@@ -221,6 +221,7 @@ function AccProfitLossController($rootScope,$scope, $filter, ngTableParams,apiCa
 			   ledgerfName: 'asc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: $scope.myArrayData.length, // length of data
 		  getData: function($defer, params) {
 			  //console.log(params.$params);

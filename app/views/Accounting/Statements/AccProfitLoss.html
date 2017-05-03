@@ -33,7 +33,7 @@
 		 <a  ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" data-ng-class="app.theme.brand" >Export to Excel</a>
 		 
 		  
-         <div class="panel-title">Profit & Loss of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date: dateFormat}} </b></div>
+         <div class="panel-title"><b> {{displayCompany}} Statement of Profit and Loss For The Year Ended {{displayDate | date: dateFormat}} </b></div>
       </div>
 	   <div class="table-responsive">
 		  <table  export-csv="csv"    class="table table-bordered table-striped" >

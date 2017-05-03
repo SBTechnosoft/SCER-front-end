@@ -321,6 +321,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 			   ledgerfName: 'asc'     // initial sorting
 		  }
 	  }, {
+		  counts: [],
 		  total: $scope.myArrayData.length, // length of data
 		  getData: function($defer, params) {
 			  //console.log(params.$params);
