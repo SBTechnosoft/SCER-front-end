@@ -27,6 +27,7 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 	/* VALIDATION END */
   
     $scope.disableCompany = false;
+	var Modalopened = false;
 	
   var account = {};
   account.amountType = 'debit';
@@ -738,6 +739,10 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
   **/
 	$scope.openLedger = function (size,index) {
 	
+	
+	if (Modalopened) return;
+	
+
 	if($scope.accReceipt.companyDropDown){
 		
 		var modalInstance = $modal.open({
@@ -753,7 +758,10 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			  }
 		  }
 		});
-
+		
+		Modalopened = true;
+	
+	
 		var state = $('#modal-state');
 		modalInstance.result.then(function (data) {
 		  
@@ -826,12 +834,12 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 				
 			});
 				
-			
+			Modalopened = false;
 		
 		}, function (data) {
 			
 			//alert(data);
-		  
+			Modalopened = false;
 		});
 	}
 	else{

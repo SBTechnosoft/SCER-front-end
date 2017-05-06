@@ -355,6 +355,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			
 			angular.element("input[type='file']").val(null);
 			angular.element("img.showImg").css("display","none");
+			$scope.$apply()
 			
 			
 		}

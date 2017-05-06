@@ -17,6 +17,8 @@ function AccCashFlowController($rootScope,$scope, $filter, ngTableParams,apiCall
   $scope.noOfDecimalPoints;
   $scope.displayCompany;
   
+   var Modalopened = false;
+   
   $scope.dateFormat =  $rootScope.dateFormats; //Date Format
   
   var erpPath = $rootScope.erpPath;

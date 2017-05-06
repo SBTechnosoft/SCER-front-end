@@ -13,6 +13,8 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
   var formdata = new FormData();
   $scope.billData = [];
   
+  var Modalopened = false;
+  
 	$scope.erpPath = $rootScope.erpPath; //Erp Path
 	
 	$scope.dateFormat =  $rootScope.dateFormats; //Date Format
@@ -552,14 +554,16 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	{
 		
 		toaster.clear();
-	
-	var modalInstance = $modal.open({
-		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
-		  controller: deleteDataModalController,
-		  size: size
-		});
+		if (Modalopened) return;
+		
+		var modalInstance = $modal.open({
+			  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+			  controller: deleteDataModalController,
+			  size: size
+			});
 
-	   
+		Modalopened = true;
+		
 		modalInstance.result.then(function () {
 		 
 		 console.log('ok');
@@ -583,9 +587,14 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			 
 			});
 		 /** End **/
+		 
+		 Modalopened = false;
 		
 		}, function () {
+			
 		  console.log('Cancel');	
+		  Modalopened = false;
+		  
 		});
 		
 		
@@ -735,6 +744,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	
 	$scope.openImageGallery = function (size,saleId) {
 
+		if (Modalopened) return;
 		
 		$scope.singleBillData = $scope.returnSingleData(saleId);
 		
@@ -757,13 +767,18 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  }
 		  }
 		});
-
+	
+		Modalopened = true;
 	   
 		modalInstance.result.then(function () {
 		 
-		
+			Modalopened = false;
+			
 		}, function () {
-		  console.log('Cancel');	
+			
+			console.log('Cancel');	
+			Modalopened = false;
+		  
 		});
 		
 	
@@ -779,6 +794,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	
 	$scope.openPdf = function (size,saleId) {
 
+		if (Modalopened) return;
 		
 		$scope.singleBillData = $scope.returnSingleData(saleId);
 		
@@ -802,12 +818,17 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		  }
 		});
 
+	   Modalopened = true;
 	   
 		modalInstance.result.then(function () {
 		 
+			Modalopened = false;
 		
 		}, function () {
+			
 		  console.log('Cancel');	
+		  Modalopened = false;
+		  
 		});
 		
 	
@@ -824,6 +845,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	
 	$scope.openPayment = function (size,saleId,transaction) {
 
+		if (Modalopened) return;
 		
 		$scope.singleBillData = $scope.returnSingleData(saleId);
 		
@@ -847,6 +869,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 		  }
 		});
 
+	   Modalopened = true;
 	   
 		modalInstance.result.then(function (msg) {
 		 
@@ -864,11 +887,13 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			/** End **/
 			
 			console.log('success');
-		
+			Modalopened = false;
+			
 		}, function () {
 			
 			console.log('Cancel');
-		  
+			Modalopened = false;
+			
 		});
 		
 	

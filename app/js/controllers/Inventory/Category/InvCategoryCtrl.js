@@ -14,6 +14,7 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 	$scope.invCategoryData = [];
 	var formdata = new FormData();
 	$scope.invCategoryID = [];
+	var Modalopened = false;
 	
 	/* VALIDATION */
 	
@@ -199,14 +200,16 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 				deleteCat: function(size,data) {         // this works too: $scope.someMethod;
 					//console.log(data);
 					toaster.clear();
-	
+				if (Modalopened) return;
+				
 			var modalInstance = $modal.open({
 				  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
 				  controller: deleteDataModalController,
 				  size: size
 				});
 
-			   
+			    Modalopened = true;
+				
 				modalInstance.result.then(function () {
 				 
 				 //console.log('ok');
@@ -239,9 +242,11 @@ function InvCategoryController($scope,$filter,$timeout,$templateCache,ngTablePar
 			
 					});
 				 /** End **/
-				
+					 Modalopened = false;
+					 
 				}, function () {
 				  console.log('Cancel');	
+					 Modalopened = false;
 				});
 		
 					
@@ -457,6 +462,8 @@ $scope.branchF = [
 
 	$scope.openCategoryBatchModal = function(){
 		
+		if (Modalopened) return;
+		
 		var modalInstance = $modal.open({
 			
 			templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
@@ -470,14 +477,18 @@ $scope.branchF = [
 			}
 		});
 		
+		Modalopened = true;
+		
 		modalInstance.result.then(function (data) {
 		 
 		  console.log('Ok');	
 		  $scope.init();
-		  
+		   Modalopened = false;
+		   
 		
 		}, function (data) {
 		  console.log('Cancel');	
+		   Modalopened = false;
 
 		});
 	}

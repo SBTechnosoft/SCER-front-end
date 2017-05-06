@@ -20,6 +20,7 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
 	$scope.totalCredit;  // sum of Credit Amount
   
 	$scope.disableCompany = false;
+	var Modalopened = false;
 	
 	 $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
 	 
@@ -661,58 +662,67 @@ function AccSpecialJrnlController($rootScope,$scope,apiCall,apiPath,getSetFactor
   **/
 	$scope.openLedger = function (size,index) {
 
-	if($scope.addAccJrnl.companyDropDown){
+		
+		if (Modalopened) return;
+		
+		if($scope.addAccJrnl.companyDropDown){
 
-		var modalInstance = $modal.open({
-		  templateUrl: 'app/views/PopupModal/Accounting/ledgerModal.html',
-		  controller: AccLedgerModalController,
-		  size: size,
-			resolve:{
-				ledgerIndex: function(){
-					return index;
-				},
-				companyId: function(){
-					return $scope.addAccJrnl.companyDropDown;
+			var modalInstance = $modal.open({
+			  templateUrl: 'app/views/PopupModal/Accounting/ledgerModal.html',
+			  controller: AccLedgerModalController,
+			  size: size,
+				resolve:{
+					ledgerIndex: function(){
+						return index;
+					},
+					companyId: function(){
+						return $scope.addAccJrnl.companyDropDown;
+					}
 				}
-			}
-		});
-
-		var state = $('#modal-state');
-		
-		modalInstance.result.then(function (data) {
-		  
-			//Auto suggest Client Name
-			var jsuggestPath = apiPath.getLedgerJrnl+data.companyId;
-			var headerData = {'Content-Type': undefined};
-			
-			apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
-				
-				vm.clientNameDrop = response3;
-			
 			});
 			
-			//console.log(data);
+			Modalopened = true;
 			
-			var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
-			apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
+			var state = $('#modal-state');
+			
+			modalInstance.result.then(function (data) {
+			  
+				//Auto suggest Client Name
+				var jsuggestPath = apiPath.getLedgerJrnl+data.companyId;
+				var headerData = {'Content-Type': undefined};
 				
-				//console.log(response);
-				vm.AccSpecialJrnlTable[data.index].ledgerName = response.ledgerName;
-				vm.AccSpecialJrnlTable[data.index].ledgerId = response.ledgerId;
+				apiCall.getCallHeader(jsuggestPath,headerData).then(function(response3){
+					
+					vm.clientNameDrop = response3;
 				
-				vm.multiCurrentBalance[data.index].currentBalance = response.currentBalance;
-				vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
-		
+				});
+				
+				//console.log(data);
+				
+				var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
+				apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
+					
+					//console.log(response);
+					vm.AccSpecialJrnlTable[data.index].ledgerName = response.ledgerName;
+					vm.AccSpecialJrnlTable[data.index].ledgerId = response.ledgerId;
+					
+					vm.multiCurrentBalance[data.index].currentBalance = response.currentBalance;
+					vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
+			
+					
+				});
+				
+				Modalopened = false;
+				
+			}, function () {
+				
+				Modalopened = false;
 				
 			});
-		
-		}, function () {
-		  
-		});
-	}
-	else{
-		alert('Please Select Company');
-	}
+		}
+		else{
+			alert('Please Select Company');
+		}
   };
 
   /**

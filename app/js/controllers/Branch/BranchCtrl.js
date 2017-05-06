@@ -11,6 +11,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
   var vm = this;
   var data = [];
   var formdata = new FormData();
+  var Modalopened = false;
   
   //Go To AddBranch
   $scope.GoToAddBranch = function(){
@@ -329,6 +330,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
   {
 	
 	toaster.clear();
+	if (Modalopened) return;
 	
 	var modalInstance = $modal.open({
 		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
@@ -336,6 +338,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 		  size: size
 		});
 
+	   Modalopened = true;
 	   
 		modalInstance.result.then(function () {
 		 
@@ -364,10 +367,13 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 			 
 			});
 		 /** End **/
+		 Modalopened = false;
 		
 		}, function () {
 		  console.log('Cancel');
-			toaster.clear();		  
+			toaster.clear();	
+				Modalopened = false;
+				
 		});
 		
 	

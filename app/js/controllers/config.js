@@ -163,10 +163,11 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		/*** Template ***/
 		//General
 		.state('app.tempGeneral', {
+			cache: false,
             url: '/tempGeneral',
             templateUrl: basepath('Template/General.html'),
 			controller: 'tempGeneralController as form',
-			resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
+			resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','tinymce')
         })
 		//Email
 		// .state('app.tempEmail', {
@@ -241,6 +242,15 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Inventory/Group/InvGroup.html'),
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','treeGrid','getBranchSrv','toaster','importExcel','exportExcel')
         })
+		//Srock Summary
+		.state('app.InvStockSummary', {
+            url: '/InvStockSummary',
+            templateUrl: basepath('Inventory/StockSummary/InvStockSummary.html'),
+            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
+        })
+		
+		/** END INVENTORY **/
+		
 		//Accounting Sales
 		.state('app.AccSales', {
             url: '/AccSales',
@@ -587,7 +597,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/RetailsaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner','twain'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','twain'),{
 				saleType: function(){
 					
 					return 'RetailsaleBill';
@@ -599,7 +609,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/WholesaleBill',
             templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','barcodeScanner','twain'),{
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','twain'),{
 				saleType: function(){
 					
 					return 'WholesaleBill';
@@ -659,6 +669,31 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         })
 		/*** End PriceList ***/
 		
+		/***  Analyzer Reports **/
+		
+		//View Police Report
+		.state('app.ReportPolice', {
+            url: '/ReportPolice',
+            templateUrl: basepath('Accounting/viewData/AccView.html'),
+			controller: 'AccViewController as form',
+            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				viewDataType: function(){
+					return 'PoliceReport';
+				}
+			})
+        })
+		//Data Plice Reports
+		.state('app.ReportPoliceData', {
+			url: '/ReportPoliceData',
+			templateUrl: basepath('Analyzer/Reports/ReportPoliceData.html'),
+			controller: 'PoliceReportController as table',
+			resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+				headerType: function(){
+					return 'PoliceReport';
+				}
+			})
+		})
+		/*** End Analyzer Reports **/
         .state('app.form-validation', {
             url: '/form-validation',
             templateUrl: basepath('form-validation.html')

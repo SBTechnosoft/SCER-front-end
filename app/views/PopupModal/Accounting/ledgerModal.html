@@ -133,7 +133,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">First Address</label>
 					<div class="col-sm-8">
-						<textarea ng-model="ledgerForm.address1" name="firstAddress" tabindex="2" ng-change="changeLedgerData('address1',ledgerForm.address1)"  name="address"  placeholder="Your First address"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="50" ng-minlength="1"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
+						<textarea ng-model="ledgerForm.address1" name="firstAddress" tabindex="2" ng-change="changeLedgerData('address1',ledgerForm.address1)"  name="address"  placeholder="Your First address"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="200" ng-minlength="1"  class="form-control ng-pristine ng-valid ng-touched"></textarea>
 						
 						<span ng-messages="formLedger.firstAddress.$error" ng-if="formLedger.firstAddress.$dirty || formLedger.firstAddress.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>
@@ -148,7 +148,7 @@
 				<div class="form-group">
 					<label for="input-id-1" class="col-sm-3 control-label">Second Address</label>
 					<div class="col-sm-8">
-						<textarea ng-model="ledgerForm.address2" name="secondAddress" tabindex="2" ng-change="changeLedgerData('address2',ledgerForm.address2)" name="address" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="50" ng-minlength="1"></textarea>
+						<textarea ng-model="ledgerForm.address2" name="secondAddress" tabindex="2" ng-change="changeLedgerData('address2',ledgerForm.address2)" name="address" placeholder="Your Second address" class="form-control ng-pristine ng-valid ng-touched"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-maxlength="200" ng-minlength="1"></textarea>
 						
 						<span ng-messages="formLedger.secondAddress.$error" ng-if="formLedger.secondAddress.$dirty || formLedger.secondAddress.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>

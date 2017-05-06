@@ -130,6 +130,10 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 			
 			$state.go("app.AccPurchaseDetailTaxation");
 		}
+		else if($scope.viewDataTypePath == 'PoliceReport'){
+			
+			$state.go("app.ReportPoliceData");
+		}
 		 //$state.go("app.AccDataSales");
 		
 	}

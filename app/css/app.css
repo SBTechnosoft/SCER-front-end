@@ -2316,7 +2316,8 @@ select[multiple].input-lg {
   color: #a0aab2;
   text-decoration: none;
   box-shadow: 0 1px 1px rgba(0,0,0,.075), 0 0 8px black;
-  border: 1px solid transparent !important;
+  /** border: 1px solid transparent !important; **/
+  border: 1px solid #f2f2f2  !important;
 }
 .btn:active,
 .btn.active {
@@ -3554,6 +3555,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-fixed-bottom .navbar-collapse {
     max-height: 200px;
   }
+  
+ 
 }
 .container > .navbar-header,
 .container-fluid > .navbar-header,
@@ -3570,6 +3573,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     margin-right: 0;
     margin-left: 0;
   }
+  
+   
+  
 }
 .navbar-static-top {
   z-index: 1000;
@@ -6724,6 +6730,7 @@ body {
     left: auto;
     right: 0;
   }
+  
 }
 /* ========================================================================
    Component: sidebar.less
@@ -13272,6 +13279,23 @@ body .jvectormap-zoomout {
   opacity: 1 !important;
 }
 /* My CSS */
+
+@media screen and (max-width: 480px) {
+   .topnavbar > .navbar-collapse.in > ul.nav > li{
+	  float:left;
+	  position:relative;
+	  width:50%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+   .topnavbar > .navbar-collapse.in > ul.nav > li{
+	  float:left;
+	  position:relative;
+	  width:50%;
+  }
+}
+
 .my-Topbar-Color{
 	background-color: rgb(95, 112, 118) !important;
 	
@@ -13337,6 +13361,7 @@ padding-right:0px !important;
 	
 	/* color: #f2f2f2 !important; */
 	height:inherit;
+	
 }
 .my-ancher-topbar-select:hover{
 	

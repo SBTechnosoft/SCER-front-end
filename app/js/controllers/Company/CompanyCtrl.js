@@ -1,6 +1,6 @@
 
 /**=========================================================
- * Module: AngularTableController.js
+ * Module: CompanyController.js
  * Controller for ngTables
  =========================================================*/
 
@@ -12,7 +12,8 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
    var formdata = new FormData();
    
    $scope.companyradio='ok';
-	
+	 var Modalopened = false;
+	 
 	 $scope.erpPath = $rootScope.erpPath; // Erp Path
 	 
   //Go To AddCompany
@@ -126,90 +127,6 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	  });
 	}
 
-  // FILTERS
-  // ----------------------------------- 
-
-  vm.tableParams2 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      filter: {
-          name: '',
-          age: ''
-          // name: 'M'       // initial filter
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-          // use build-in angular filter
-          var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-          vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(vm.users);
-      }
-  });
-
-  // SELECT ROWS
-  // ----------------------------------- 
-
-  vm.data = data;
-
-  vm.tableParams3 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10          // count per page
-  }, {
-      total: data.length, // length of data
-      getData: function ($defer, params) {
-          // use build-in angular filter
-          var filteredData = params.filter() ?
-                  $filter('filter')(data, params.filter()) :
-                  data;
-          var orderedData = params.sorting() ?
-                  $filter('orderBy')(filteredData, params.orderBy()) :
-                  data;
-
-          params.total(orderedData.length); // set total for recalc pagination
-          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-
-  vm.changeSelection = function(user) {
-      // console.info(user);
-  };
-
-  // EXPORT CSV
-  // -----------------------------------  
-
-  var data4 = [{name: "Moroni", age: 50},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34}];
-
-  vm.tableParams4 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-  }, {
-      total: data4.length, // length of data4
-      getData: function($defer, params) {
-          $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
   
   $scope.isDefault_comp = function(id,companyStatus)
   {
@@ -258,18 +175,17 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
   $scope.delete_comp = function(size,id)
   {
 	  //alert(id);
-	  
+	  if (Modalopened) return;
 	  //return false;
 	  
-	 
-	
-	var modalInstance = $modal.open({
-		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
-		  controller: deleteDataModalController,
-		  size: size
-		});
+		var modalInstance = $modal.open({
+			  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
+			  controller: deleteDataModalController,
+			  size: size
+			});
 
-	   
+		 Modalopened = true;
+		 
 		modalInstance.result.then(function () {
 		 
 		
@@ -295,10 +211,14 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			 
 			});
 		 /** End **/
-		
+			 Modalopened = false;
+			 
 		}, function () {
-		  console.log('Cancel');	
-		   toaster.clear();
+			
+			console.log('Cancel');	
+			toaster.clear();
+		    Modalopened = false;
+			
 		});
 		
 	

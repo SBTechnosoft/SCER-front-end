@@ -1,0 +1,45 @@
+<h3>
+	
+   <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   Inventory >>
+   Stock Summary</small>
+</h3>
+<div data-ng-controller="InvStockSummaryController as table" class="container-fluid">
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
+	<div class="panel panel-default" >
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-sm-1 control-label"> Company </label>
+					<div class="col-sm-7">
+						<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states track by s.companyId" class="form-control chosen-select" >
+						<option value=""> All </option>
+						</select>
+					</div>
+				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showProduct()"  data-ng-class="app.theme.brand">Go</button>
+			</div>
+		</div>
+	</div>
+	
+   <div class="panel panel-default">
+      <div class="panel-heading" >
+         <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
+         <div class="panel-title" id="allPro">All Product  </div>
+      </div>
+	   <div class="table-responsive">
+		  <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
+		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+			 <tbody>
+				<tr data-ng-repeat="user in $data">
+					<td data-title="'Brand'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategory.productCategoryName}}</td>
+					 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroup.productGroupName}}</td>
+					<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
+				   
+					<td data-title="'Color'"  filter="{ 'color': 'text' }" >{{user.color}}</td>
+					<td data-title="'Size'"  filter="{ 'size': 'text' }" >{{user.size}}</td>
+				</tr>
+			 </tbody>
+		  </table>
+		 </div>
+	   <span ng-include="'app/views/partials/tableFooter/tableFooter.html'" >  </span>
+   </div>
+</div>

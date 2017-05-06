@@ -10,7 +10,7 @@
 
 App.controller('documentScanController',documentScanController);
 
-function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,$templateCache) {
+function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,$templateCache,$window) {
   'use strict';
   
 	// $scope.firstScript = "app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js?r="+Math.random();
@@ -22,6 +22,7 @@ function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,
 	  $scope.ok = function (msg) {
       $modalInstance.close(msg);
     };
+
 	
 	$scope.doneButton = function () {
 		
@@ -79,15 +80,18 @@ function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,
 	var CurrentPath = CurrentPathName.substring(0, CurrentPathName.lastIndexOf("/") + 1);
 	var strHTTPServer = location.hostname;
 	var strActionPage = CurrentPath + 'action/php.php';
+	
 	if (DWObject) {
 		DWObject.destroy();
 	}
 	
-var DWObject;
+	var DWObject;
+		
+	 //DWObject = $window.Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+	 
         $scope.DWT_AcquireImage= function(){
 			
-                 DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-				 
+				 DWObject = $window.Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
 				 
                // var DWObject = Dynamsoft.WebTwainEnv;
 	//DWObject.IfDisableSourceAfterAcquire = true; 
@@ -143,7 +147,6 @@ var DWObject;
 			
 		// console.log("save");
 
-		  console.log(DWObject.CurrentImageIndexInBuffer);
 		  
 		
 
@@ -203,4 +206,4 @@ var DWObject;
 	/** End  **/
 }
 
-documentScanController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","$templateCache"];
+documentScanController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","$templateCache","$window"];

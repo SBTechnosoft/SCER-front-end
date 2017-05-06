@@ -19,6 +19,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
   $scope.accountSelected;
   $scope.invetorySelected;
   $scope.priceListSelected;
+  $scope.analyzerSelected;
  
   $scope.getClass = function(){
 	  
@@ -33,6 +34,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 		$scope.accountSelected = true;
 	  $scope.invetorySelected = false;
 	  $scope.priceListSelected = false;
+	   $scope.analyzerSelected = false;
 	   
 	var menuJson = 'server/sidebar/Accounting.json',
       menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
@@ -63,6 +65,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 		$scope.accountSelected = false;
 	  $scope.invetorySelected = false;
 	  $scope.priceListSelected = false;
+	   $scope.analyzerSelected = false;
 	   
 	var menuJson = 'server/sidebar/sidebar-items.json',
       menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
@@ -92,6 +95,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 		 $scope.accountSelected = false;
 	  $scope.invetorySelected = true;
 	  $scope.priceListSelected = false;
+	   $scope.analyzerSelected = false;
 	  
 		var menuJson = 'server/sidebar/Inventory.json',
 		  menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
@@ -110,9 +114,11 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	  // GET Price List Sidebar
 	  $scope.getPriceList = function(){
 		 
+		 
 		 $scope.accountSelected = false;
 	  $scope.invetorySelected = false;
 	  $scope.priceListSelected = true;
+	  $scope.analyzerSelected = false;
 	  
 		var menuJson = 'server/sidebar/PriceList.json',
 		  menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
@@ -128,6 +134,29 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			});
 	  };
   
+	// GET Reports Sidebar
+	  $scope.getAnalyzer = function(){
+		 
+		 $scope.accountSelected = false;
+	  $scope.invetorySelected = false;
+	  $scope.priceListSelected = false;
+	  $scope.analyzerSelected = true;
+	  
+		var menuJson = 'server/sidebar/Analyzer.json',
+		  menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
+		
+		  $http.get(menuURL)
+			.success(function(items) {
+				//$rootScope.menuItems=[];
+			   $rootScope.menuItems = items;
+			   
+			})
+			.error(function(data, status, headers, config) {
+			  alert('Failure loading menu');
+			});
+	  };
+	  
+	  
 	  $scope.logout = function(){
 		  
 		//alert('in');2e7719b36240c051e694a88cc511d4a6  d29ac73b666a3be3fc463448fdc5d9fc

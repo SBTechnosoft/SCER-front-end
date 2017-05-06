@@ -21,6 +21,8 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
    $scope.firstLayout = true;
   $scope.secondLayout = false;
   
+  var Modalopened = false;
+  
   $scope.dateFormat =  $rootScope.dateFormats; //Date Format
   
   /** Sundry debitor and creditor **/
@@ -413,6 +415,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 	$scope.openCreditorDebitorModal = function(personType){
 		
 		toaster.clear();
+		if (Modalopened) return;
 		
 		var modalInstance = $modal.open({
 		  templateUrl: 'app/views/PopupModal/Accounting/Statements/balanceSheetModal.html',
@@ -457,14 +460,19 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 			  }
 		  }
 		});
-
+	
+	   Modalopened = true;
 	   
 		modalInstance.result.then(function () {
 		 
 			
-		
+			Modalopened = false;
+			
 		}, function () {
-		  console.log('Cancel');	
+			
+			console.log('Cancel');
+			Modalopened = false;
+		  
 		});
 			
 	}

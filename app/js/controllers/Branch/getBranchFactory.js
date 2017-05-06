@@ -1,6 +1,7 @@
 App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiResponse", function ($http,$q,apiPath,$rootScope,$state,apiResponse) {
 	
 	
+	
 	return {
 		 getCall : function(url){
 			 

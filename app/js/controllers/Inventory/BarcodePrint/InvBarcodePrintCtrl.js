@@ -10,6 +10,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
+	var Modalopened = false;
 
    $scope.completedQueries = [];
   $scope.erpPath = $rootScope.erpPath; // Erp Path
@@ -504,6 +505,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		
 		//return false;
 		toaster.clear();
+		if (Modalopened) return;
 		
 		var modalInstance = $modal.open({
 			  templateUrl: 'app/views/PopupModal/Inventory/productBarcodeModal.html',
@@ -530,13 +532,17 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			  }
 			});
 
+		   Modalopened = true;
 		   
 		modalInstance.result.then(function () {
 		 
 		 console.log('ok');
+		  Modalopened = false;
+		  
 		
 		}, function () {
 		  console.log('Cancel');	
+		   Modalopened = false;
 		});
 			
 			

@@ -24,6 +24,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.quickBill = [];
 	
 	vm.disableCompany = false;
+	var Modalopened = false;
 	
 	$scope.saleType = saleType;
 	
@@ -55,6 +56,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	/* VALIDATION END */
 	vm.paymentModeDrop =['cash','bank','card'];
 	
+	$scope.quickBill.paymentMode = 'cash';
 	
 	
 	//Default Company Function
@@ -67,9 +69,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			$scope.quickBill.companyDropDown = response2;
 			
-			
-				
-				formdata.delete('companyId');
+			formdata.delete('companyId');
 			
 			
 			formdata.append('companyId',response2.companyId);
@@ -79,7 +79,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
 			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			var id = response2.companyId;
 			var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
@@ -547,8 +547,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			formdata.delete('emailId');
 			formdata.delete('address1');
 			formdata.delete('address2');
-			formdata.delete('stateAbb');
-			formdata.delete('cityId');
+			// formdata.delete('stateAbb');
+			// formdata.delete('cityId');
 			
 			$scope.quickBill.WorkNo = '';
 			$scope.quickBill.companyName = ''
@@ -556,8 +556,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			$scope.quickBill.emailId = '';
 			$scope.quickBill.fisrtAddress = '';
 			$scope.quickBill.secondAddress = '';
-			$scope.quickBill.cityId = {};
-			$scope.quickBill.stateAbb = {};
+			//$scope.quickBill.cityId = {};
+			//$scope.quickBill.stateAbb = {};
 			
 		}
   	}
@@ -652,7 +652,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	 {
 		vm.loadData = true;
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 		
 		$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
 		
@@ -721,7 +721,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			formdata.delete('companyId');
 			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Updating....',60000);
+			toaster.pop('wait', 'Please Wait', 'Data Updating....',600000);
 			
 			var BillPath = apiPath.postBill+'/'+$scope.quickBill.EditBillData.saleId;
 			
@@ -758,7 +758,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		}
 		else{
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Inserting....',60000);
+			toaster.pop('wait', 'Please Wait', 'Data Inserting....',600000);
 			
 			var  date = new Date(vm.dt1);
 			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
@@ -780,6 +780,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			}
 			 
 			formdata.append('invoiceNumber',$scope.quickBill.invoiceNumber);
+			if(!formdata.has('paymentMode')){
+				
+				formdata.append('paymentMode',$scope.quickBill.paymentMode);
+			}
+			
+			
 			
 			formdata.append('total',$scope.totalTable);
 			 formdata.append('tax',$scope.quickBill.tax);
@@ -1026,6 +1032,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 				// });
 				
+				$scope.quickBill.paymentMode = 'cash';
+				
 				$anchorScroll();
 			
 			}
@@ -1125,6 +1133,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$scope.clientGetAllFunction();
 		
 		$scope.getInitStateCity();
+		
+		$scope.quickBill.paymentMode = 'cash';
 		
 		$anchorScroll();
 		
@@ -1347,7 +1357,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				if($scope.quickBill.companyDropDown){
 					
 					//Code Start
-						toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+						toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 				
 						var formdata = new FormData();
 						
@@ -1444,7 +1454,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 			toaster.clear();
 			
+			if (Modalopened) return;
 			
+			 toaster.pop('wait', 'Please Wait', 'popup opening....',600000);
+			 
 			if($scope.quickBill.companyDropDown){
 		
 			var modalInstance = $modal.open({
@@ -1513,13 +1526,20 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			  }
 			});
 
+			Modalopened = true;
 		   
-			modalInstance.result.then(function (data) {
-			
-				$scope.pop(data);
+			modalInstance.opened.then(function() {
+				toaster.clear();
+			});
+		
+				modalInstance.result.then(function (data) {
 				
+					$scope.pop(data);
+					Modalopened = false;
+					
 				}, function () {
-				  console.log('Cancel');	
+				  console.log('Cancel');
+					Modalopened = false;
 				});
 			}
 			else{
@@ -1680,6 +1700,11 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   **/
   $scope.openProduct = function (size,index) {
 	
+	
+	if (Modalopened) return;
+	
+	toaster.pop('wait', 'Please Wait', 'popup opening....',600000);
+	
 	if($scope.quickBill.companyDropDown){
 		
 		var modalInstance = $modal.open({
@@ -1697,7 +1722,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		  }
 		});
 
-	   
+		Modalopened = true;
+		
+		modalInstance.opened.then(function() {
+			toaster.clear();
+		});
+
 		modalInstance.result.then(function (data) {
 		 
 			//console.log(data);
@@ -1720,9 +1750,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				$scope.setProductData(response[0],data.index);
 				
 			});
+			
+			Modalopened = false;
 		
 		}, function () {
 		  console.log('Cancel');	
+		  Modalopened = false;
 		});
 	}
 	else{
@@ -1732,111 +1765,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   /**
   Product Model End
   **/
-  	  var arg = {
-                resultFunction: function(result) {
-				//console.log(result);
-				//console.log(vm.AccBillTable.length);
-				//console.log(index);
-				if(result.format == "Code128"){
-					
-					//console.log('Code 128');
-					
-					//var proBarcode = result.code;
-					var proBarcode = "JIO_EXE_MT_PROCT1_RDRD_244T";
-					
-					//Api
-						
-						var headerSearch = {'Content-Type': undefined,'productCode':proBarcode};
-				
-						apiCall.getCallHeader(apiPath.getAllProduct,headerSearch).then(function(response){
-							
-							var companyId = $scope.quickBill.companyDropDown.companyId;
-							
-							/** Inner Loop **/
-								/** Check Product is Already in Array or not **/
-								var checkFlag = 0;
-									var cnt = vm.AccBillTable.length;
-									for(var m=0;m<cnt;m++){
-										
-										var arrayData = vm.AccBillTable[m];
-										
-										if(companyId == response.company.companyId){
-											
-											if(arrayData.productId == response.productId){
-												
-												
-												toaster.clear();
-												toaster.pop('info', 'Product Already Selected', '');
-								
-												checkFlag = 1;
-												//console.log(arrayData);
-												break;
-											}
-										}
-										else{
-											
-											toaster.clear();
-											toaster.pop('info', 'Product has Diffrent Company', '');
-											checkFlag = 1;
-											break;
-										}
-										
-									}
-								/** End Check Product **/
-								if(checkFlag == 0){
-									
-									var barcodeflag = 0;
-									var checkCnt = vm.AccBillTable.length;
-										for(var cVar=0;cVar<checkCnt;cVar++){
-											
-											var arrayData = vm.AccBillTable[cVar];
-											
-											if(arrayData.productId == ""){
-												
-												vm.AccBillTable[cVar].productName = response.productName;
-												//vm.AccBillTable[data.index].productId = response.productId;
-												
-												$scope.setProductData(response,cVar);
-												toaster.clear();
-												toaster.pop('success', 'Barcode Scanned', '');
-								
-												barcodeflag = 1;
-												//console.log(arrayData);
-												break;
-											}
-
-											
-										}
-										
-										var nextindex = parseInt(cnt)-1;
-										if(barcodeflag == 0){
-											
-											$scope.addRow(nextindex);
-											
-											var fatIndex = nextindex+1;
-											
-											//console.log(response);
-											vm.AccBillTable[fatIndex].productName = response.productName;
-											//vm.AccBillTable[data.index].productId = response.productId;
-											
-											$scope.setProductData(response,fatIndex);
-											//$scope.$apply();
-											toaster.clear();
-											toaster.pop('success', 'Barcode Scanned', '');	
-											
-											$scope.$apply();
-										}
-								}
-							/** End loop **/
-							
-						});
-								
-					//End Api
-					
-					
-					} //IF
-                }
-            };
 			
 			$scope.countScannedDocumet = 0;
 			$scope.clearScannedResult = function(){
@@ -1856,15 +1784,26 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 	$scope.openScanPopup = function(){
 		
-		// $templateCache.remove(window.location.host+'/front-end/app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html');
-		 $(".modal-body").html("");
+		$templateCache.remove('http://'+window.location.host+'/front-end/app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html');
+		 //$(".modal-body").html("");
 		 
+		 console.log('http://'+window.location.host+'/front-end/app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html');
+		 
+		 if (Modalopened) return;
+		 
+		 toaster.pop('wait', 'Please Wait', 'popup opening....',600000);
 		 
 		var modalInstance = $modal.open({
 		  templateUrl: 'app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html?buster='+Math.random(),
 		  controller: documentScanController,
 		  size: 'lg'
 		 // preserveScope: true
+		});
+		
+		Modalopened = true;
+		
+		modalInstance.opened.then(function() {
+			toaster.clear();
 		});
 		
 		modalInstance.result.then(function (data) {
@@ -1900,7 +1839,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 			  }
 			  
-		
+			Modalopened = false;
+			
 		}, function (data) {
 		  console.log('Cancel');	
 	
@@ -1912,7 +1852,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 			}
 		  
-			  
+			 Modalopened = false; 
 			
 			
 		 // $scope.imageTwainImg = data;
@@ -1923,7 +1863,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
   $scope.focusbarcode = function(){
 
-	$("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.stop();
+	//$("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.stop();
 	//console.log('done');
 	 // console.log(arg.resultFunction());
   }

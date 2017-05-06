@@ -1,7 +1,10 @@
 
+//$.getScript('app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js');
+//$.getScript('app/vendor/tinymce/js/tinymce/tinymce.min.js');
+
 App.controller('tempGeneralController', tempGeneralController);
 
-function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,validationMessage) {
+function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResponse,validationMessage,$templateCache) {
   'use strict';
   var vm = this;
   $scope.generalTemp = [];
@@ -10,10 +13,27 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
   // $scope.tempType  = tempType;
 	/* VALIDATION */
 	
+	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
 	
 	/* VALIDATION END */
- 
+	
+	 $rootScope.$on('$viewContentLoaded', function() {
+		$templateCache.remove('app/views/Template/General.html');
+		$templateCache.remove('app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js');
+		$templateCache.remove('app/vendor/tinymce/js/tinymce/tinymce.min.js');
+	 });
+   
+   
+		$scope.$on('$destroy', function() {
+			var tinyInstance = tinymce.get('textdesc');
+
+			if (tinyInstance) {
+			  tinyInstance.remove();
+			  tinyInstance = null;
+			}
+		});
+		
       tinymce.init({
        selector: "#textdesc",
 	    height : "350",
@@ -310,7 +330,8 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
 	            if(type=='image') $('#my_form input').click();
 	        }
       });	
-     
+	  
+	  
 	$scope.getCompanyWiseTemplate = function(id){
 		
 		//All Template In Right
@@ -600,4 +621,4 @@ function tempGeneralController($scope,apiCall,apiPath,toaster,apiResponse,valida
     {value: 5, name: 'Huge'}
   ];
 }
-tempGeneralController.$inject = ["$scope","apiCall","apiPath","toaster","apiResponse","validationMessage"];
+tempGeneralController.$inject = ["$rootScope","$scope","apiCall","apiPath","toaster","apiResponse","validationMessage","$templateCache"];

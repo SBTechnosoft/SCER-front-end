@@ -44,6 +44,36 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 	vm.userTypeDrop = ['admin','staff'];
 	
 	
+	$scope.defaultCompany = function(){
+		
+		//Company Dropdown data
+		vm.companyDrop = [];
+		
+		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+			
+			vm.companyDrop = responseCompanyDrop;
+			
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
+				
+				$scope.addStaff.company = response;
+				
+				formdata.append('companyId',response.companyId);
+				
+				vm.branchDrop = [];
+				var getAllBranch = apiPath.getOneBranch+response.companyId;
+				//Get Branch
+				apiCall.getCall(getAllBranch).then(function(response4){
+					
+					vm.branchDrop = response4;
+						
+				});
+			});
+			
+		
+		});
+		
+	}
 	
 	 //Update Set
 	//if(Object.keys(getSetFactory.get()).length){
@@ -115,32 +145,7 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 		$scope.addStaff.userType = 'staff';
 		formdata.append('userType','staff');
 		
-		//Company Dropdown data
-		vm.companyDrop = [];
-		
-		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-			
-			vm.companyDrop = responseCompanyDrop;
-			
-			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
-				
-				$scope.addStaff.company = response;
-				
-				formdata.append('companyId',response.companyId);
-				
-				vm.branchDrop = [];
-				var getAllBranch = apiPath.getOneBranch+response.companyId;
-				//Get Branch
-				apiCall.getCall(getAllBranch).then(function(response4){
-					
-					vm.branchDrop = response4;
-						
-				});
-			});
-			
-		
-		});
+		$scope.defaultCompany();
 	}
 	
 	  
@@ -231,6 +236,17 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 		for (var key of formdata.keys()) {
 		   formdata.delete(key); 
 		}
+		
+		
+		$scope.addStaff.userType = 'staff';
+		
+		if(formdata.has('userType')){
+			
+			formdata.delete('userType');
+		}
+		formdata.append('userType','staff');
+		
+		$scope.defaultCompany();
 	}
 	
   // Datepicker

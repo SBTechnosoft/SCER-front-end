@@ -4,17 +4,16 @@
  * Controller for ngTables
  =========================================================*/
 
-App.controller('InvProductController', InvProductController);
+App.controller('InvStockSummaryController', InvStockSummaryController);
 
-function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
+function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
 
   var data = [];
 	var flag = 0;
-	 var Modalopened = false;
-	 
+	
 	$scope.showProduct = function(){
 		
 		if($scope.stateCheck){
@@ -188,147 +187,9 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 	}
 
 
-  $scope.editProduct = function(id)
-  {
-	getSetFactory.set(id);
-	 $location.path('app/AddInvProduct');
-  }
   
-  $scope.deleteProduct = function(size,id)
-  {
-		//alert(id);
-		toaster.clear();
-		if (Modalopened) return;
-		
-	var modalInstance = $modal.open({
-		  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
-		  controller: deleteDataModalController,
-		  size: size
-		});
-	
-	    Modalopened = true;
-		
-		modalInstance.result.then(function () {
-		 
-		 console.log('ok');
-		 
-		// return false;
-		 /**Delete Code **/
-			apiCall.deleteCall(apiPath.getAllProduct+'/'+id).then(function(response){
-		
-				//console.log(response);
-				
-				if(apiResponse.ok == response){
-					
-					
-					$scope.showProduct();
-					toaster.pop('success', 'Title', 'Delete SuccessFully');
-					//vm.tableParams.reload();
-					
-				}
-				else{
-
-					toaster.pop('warning', 'Opps!!', response);
-				}
-
-			});
-		 /** End **/
-			 Modalopened = false;
-			 
-		}, function () {
-		  console.log('Cancel');	
-			 Modalopened = false;
-		});
-		
-		
-  }
   
-   /** Barcode **/
-   
-		$scope.openProductBatchModal = function(){
-			
-			if (Modalopened) return;
-			
-			var modalInstance = $modal.open({
-				
-				templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
-				controller: 'InventoryBatchModalController as vm',
-				size: 'flg',
-				resolve:{
-					inventoryType: function(){
-						
-						return "Product";
-					}
-				}
-			});
-			
-			 Modalopened = true;
-			 
-			modalInstance.result.then(function (data) {
-			 
-			  console.log('Ok');	
-			  $scope.init();
-			  Modalopened = false;
-			
-			}, function (data) {
-			  console.log('Cancel');	
-				Modalopened = false;
-				
-			});
-		}
-	
-   /** End **/
-   
-   
-  /** Barcode **/
   
-	$scope.barcodePopup = function(size,id,pName,pColor,pSize)
-	{
-		//alert(id);
-		
-		// $('#allPro').print(2);
-		
-		// return false;
-		toaster.clear();
-		
-		var modalInstance = $modal.open({
-			  templateUrl: 'app/views/PopupModal/Inventory/productBarcodeModal.html',
-			  controller: productBarcodeModalCtrl,
-			  size: size,
-			  resolve:{
-				  productId: function(){
-					 
-					return id;
-				  },
-				  productName: function(){
-					 
-					return pName;
-				  },
-				  productColor: function(){
-					 
-					return pColor;
-				  },
-				  productSize: function(){
-					 
-					return pSize;
-				  }
-				  
-			  }
-			});
-
-		   
-		modalInstance.result.then(function () {
-		 
-		 console.log('ok');
-		
-		}, function () {
-		  console.log('Cancel');	
-		});
-			
-			
-	}
-  
-  /** End **/
 
 }
-InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];
+InvStockSummaryController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];

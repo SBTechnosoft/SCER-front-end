@@ -1,6 +1,6 @@
 <style>
 
-
+	
 
 </style>
 <!--h3 class="my-fieldset-marginBottom">
@@ -133,7 +133,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">*Name</label>
 						  <div class="col-sm-8">
-							 <input ng-model="quickBill.clientName" name="clientName" id="input-id-1" type="text" placeholder="Client Name" class="form-control"  ng-required="true" ng-pattern="/^[a-zA-Z ]*$/" ng-maxlength="35" ng-change="changeInBill('clientName',quickBill.clientName)" />
+							 <input ng-model="quickBill.clientName" name="clientName" id="input-id-1" type="text" placeholder="Client Name" class="form-control"  ng-required="true" ng-pattern="/^[a-zA-Z &_`#().\'-]*$/" ng-maxlength="35" ng-change="changeInBill('clientName',quickBill.clientName)" />
 							 
 							  <span ng-messages="formBill.clientName.$error" ng-if="formBill.clientName.$dirty || formBill.clientName.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -177,7 +177,7 @@
 						<div class="form-group">
 							<label for="input-id-1" class="col-sm-3 control-label">Address</label>
 							<div class="col-sm-8">
-								<textarea rows="1" name="firstAddress" ng-model="quickBill.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"   ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-change="changeInBill('address1',quickBill.fisrtAddress)" style="height:38px;" ></textarea>
+								<textarea rows="1" name="firstAddress" ng-model="quickBill.fisrtAddress" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched"   ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ng-change="changeInBill('address1',quickBill.fisrtAddress)" ng-maxlength="200" style="height:38px;" ></textarea>
 								
 								<span ng-messages="formBill.firstAddress.$error" ng-if="formBill.firstAddress.$dirty || formBill.firstAddress.$touched" role="alert">
 										<span ng-messages-include="errorRequired"></span>

@@ -13,6 +13,7 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 	$scope.invGroupData = [];
 	var formdata = new FormData();
 	$scope.invGroupID = [];
+	var Modalopened = false;
 	
 	/* VALIDATION */
 	
@@ -71,13 +72,15 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 				deleteCat: function(size,data) {         // this works too: $scope.someMethod;
 					//console.log(data);
 					toaster.clear();
-	
+					if (Modalopened) return;
+					
 					var modalInstance = $modal.open({
 						  templateUrl: 'app/views/PopupModal/Delete/deleteDataModal.html',
 						  controller: deleteDataModalController,
 						  size: size
 						});
 
+					   Modalopened = true;
 					   
 						modalInstance.result.then(function () {
 						 
@@ -112,9 +115,11 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 					
 							});
 						 /** End **/
-						
+							 Modalopened = false;
+							 
 						}, function () {
 						  console.log('Cancel');	
+						  Modalopened = false;
 						});
 		
 					
@@ -316,6 +321,8 @@ $scope.branchF = [
   
   $scope.openCategoryBatchModal = function(){
 		
+		if (Modalopened) return;
+		
 		var modalInstance = $modal.open({
 			
 			templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
@@ -329,15 +336,17 @@ $scope.branchF = [
 			}
 		});
 		
+		Modalopened = true;
+		
 		modalInstance.result.then(function (data) {
 		 
 		  console.log('Ok');	
 		  $scope.init();
-		  
+		   Modalopened = false;
 		
 		}, function (data) {
 		  console.log('Cancel');	
-
+			 Modalopened = false;
 		});
 	}
   

@@ -34,6 +34,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	 var dateFormats = $rootScope.dateFormats; //Date Format
 	 
 	$scope.disableCompany = false;
+	var Modalopened = false;
+	
 	$scope.disableCompanyPoint = 0;
 	
 	 $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
@@ -1217,6 +1219,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
   **/
 	$scope.openLedger = function (size,index) {
 
+		if (Modalopened) return;
+		
 	if($scope.accPurchase.companyDropDown){
 		
 		var modalInstance = $modal.open({
@@ -1234,6 +1238,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			  }
 		});
 
+		 Modalopened = true;
+		 
 		var state = $('#modal-state');
 		modalInstance.result.then(function (data) {
 		  
@@ -1291,9 +1297,13 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				});
 				
 			}
-		
+			
+			Modalopened = false;
+			
 		}, function () {
-		  
+			
+			Modalopened = false;
+			
 		});
 	}
 	else{
@@ -1312,6 +1322,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
   **/
   $scope.openProduct = function (size,index) {
 
+	if (Modalopened) return;
+	
 	if($scope.accPurchase.companyDropDown){
 		
 		var modalInstance = $modal.open({
@@ -1329,6 +1341,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		  }
 		});
 
+	   Modalopened = true;
 	   
 		modalInstance.result.then(function (data) {
 		 
@@ -1351,9 +1364,12 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				$scope.settabledata(response[0],data.index);
 				
 			});
-		
+			
+			 Modalopened = false;
+			 
 		}, function () {
 		  console.log('Cancel');	
+		  Modalopened = false;
 		});
 	}
 	else{
@@ -1372,7 +1388,9 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	**/
 	
 	$scope.openHistoryModal = function (size) {
-
+		
+		if (Modalopened) return;
+		
 		var modalInstance = $modal.open({
 		  templateUrl: '/myHistoryPurchaseModalContent.html',
 		  controller: historyPurchaseModaleCtrl,
@@ -1385,12 +1403,16 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		  }
 		});
 
-	   
+	    Modalopened = true;
+		
 		modalInstance.result.then(function () {
 		 
-		
+			 Modalopened = false;
+			 
 		}, function () {
 		  console.log('Cancel');	
+		   Modalopened = false;
+		   
 		});
 	
 	};

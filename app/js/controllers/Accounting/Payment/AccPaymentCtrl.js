@@ -13,6 +13,7 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
   $scope.accPayment = [];
   var formdata = new FormData();
   
+  
   $scope.accPayment.totalAmount;
   $scope.accPayment.jfid; // JFID
   
@@ -26,6 +27,7 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 	/* VALIDATION END */
   
   $scope.disableCompany = false;
+  var Modalopened = false;
   
   var account = {};
   account.amountType = 'credit';
@@ -727,6 +729,8 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
   **/
 	$scope.openLedger = function (size,index) {
 	
+	if (Modalopened) return;
+
 	if($scope.accPayment.companyDropDown){
 		
 		var modalInstance = $modal.open({
@@ -742,7 +746,9 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 			  }
 		  }
 		});
-
+		
+		Modalopened = true;
+		
 		var state = $('#modal-state');
 		modalInstance.result.then(function (data) {
 		  
@@ -815,10 +821,11 @@ function AccPaymentController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 				
 			});
 				
-			
+			Modalopened = false;
 		
 		}, function (data) {
 			
+			Modalopened = false;
 			//alert(data);
 		  
 		});

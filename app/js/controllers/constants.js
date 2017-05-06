@@ -139,7 +139,8 @@ App
 	'getPurchaseTax': 'http://api.siliconbrain.co.in/accounting/taxation/purchase-tax/company/',
 	'getPurchaseDetail': 'http://api.siliconbrain.co.in/accounting/taxation/purchase-detail/company/',
 	'batchBrand': 'http://api.siliconbrain.co.in/product-categories/batch',
-	'batchCategory': 'http://api.siliconbrain.co.in/product-groups/batch'
+	'batchCategory': 'http://api.siliconbrain.co.in/product-groups/batch',
+	'policeReport': 'http://api.siliconbrain.co.in/reports/polish-report/company/'
   })
   //Api Path
   .constant('apiResponse', {

@@ -55,18 +55,17 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 				
 				toaster.clear();
 				console.log(response);
-				if(apiResponse.noContent == response){
+				if(apiResponse.noContent == response || apiResponse.notFound == response){
 						
 					data = [];
 					toaster.pop('alert', 'Opps!!', 'No Data Available');
-					
+					$scope.exportPdfHidden = false;
 				}
 				else{
 					//console.log('else');
 					data = response;
-					
-					
-					
+	
+					$scope.exportPdfHidden = true;
 				}
 				
 				$scope.TableData();

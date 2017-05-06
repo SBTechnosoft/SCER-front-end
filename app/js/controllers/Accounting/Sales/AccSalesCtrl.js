@@ -26,6 +26,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
  $scope.accSales.tax = 0;
   
   $scope.disableCompany = false;
+  var Modalopened = false;
   
   $scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
   
@@ -1241,6 +1242,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
   **/
 	$scope.openLedger = function (size,index) {
 	
+		if (Modalopened) return;
+		
 	if($scope.accSales.companyDropDown){
 		
 		var modalInstance = $modal.open({
@@ -1257,6 +1260,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		  }
 		});
 
+		 Modalopened = true;
+		 
 		var state = $('#modal-state');
 		modalInstance.result.then(function (data) {
 		  
@@ -1314,10 +1319,13 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 				});
 				
 			}
-		
+			
+			 Modalopened = false;
+			 
 		}, function (data) {
 			
 			//alert(data);
+			Modalopened = false;
 		  
 		});
 	}
@@ -1339,6 +1347,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
   **/
   $scope.openProduct = function (size,index) {
 	
+		if (Modalopened) return;
+		
 	if($scope.accSales.companyDropDown){
 		
 		var modalInstance = $modal.open({
@@ -1355,7 +1365,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			  }
 		  }
 		});
-
+		
+		 Modalopened = true;
 	   
 		modalInstance.result.then(function (data) {
 		 
@@ -1380,9 +1391,14 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 				$scope.settabledata(response[0],data.index);
 				
 			});
-		
+			
+			 Modalopened = false;
+			 
 		}, function () {
-		  console.log('Cancel');	
+			
+			console.log('Cancel');	
+		   Modalopened = false;
+		   
 		});
 	}
 	else{
@@ -1399,7 +1415,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 	
 	$scope.openHistoryModal = function (size) {
 
-		
+		if (Modalopened) return;
 		
 		if($scope.accSales.companyDropDown){
 			
@@ -1419,13 +1435,19 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			  }
 			});
 
+		   Modalopened = true;
 		   
 			modalInstance.result.then(function () {
 			 
 				toaster.clear();
+				Modalopened = false;
+				
 			}, function () {
-			  console.log('Cancel');
-				toaster.clear();			  
+				
+				console.log('Cancel');
+				toaster.clear();	
+				
+				Modalopened = false;
 			  
 			});
 		}

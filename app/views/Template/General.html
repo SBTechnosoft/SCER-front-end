@@ -1,6 +1,6 @@
 
-<script src="app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
-<script src="app/vendor/tinymce/js/tinymce/tinymce.min.js"></script>
+<script src="app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js?x=123"></script>
+<script src="app/vendor/tinymce/js/tinymce/tinymce.min.js?x=564"></script>
 
 <h3>
    <small>
@@ -45,9 +45,10 @@
 					 
 					   <div class="form-group">
 						 
-						  <div class="col-sm-12">
-							 <textarea  id="textdesc"   name="textdesc" ui-tinymce ng-model="tinymceModel"placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" ></textarea>
-							 
+						  <div class="col-sm-12"  >
+							
+							<textarea  id="textdesc"   name="textdesc" ui-tinymce ng-model="tinymceModel" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" ></textarea>
+ 
 							 <span ng-messages="formGeneral.textdesc.$error" ng-if="formGeneral.textdesc.$dirty || formGeneral.textdesc.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
 							 </span>
@@ -128,4 +129,7 @@
 <script type="text/ng-template" id="errorPatternThisSpecial">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacterAndNumber}}</span>
 </script>
-
+<script type="text/javascript" >
+	
+     
+</script>
