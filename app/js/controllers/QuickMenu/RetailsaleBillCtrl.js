@@ -31,6 +31,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	vm.AccBillTable = [];
 	vm.productTax = [];
 			
+	var defStateData = {};
+	var AllDefCityData = [];
+	var defCityData = {};
+	
 	$scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
 	
 	$scope.productArrayFactory = productArrayFactory;
@@ -117,6 +121,45 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		});
 	}
 	
+	$scope.ReloadAfterSave = function(response2){
+		
+		$scope.quickBill.companyDropDown = response2;
+			
+			formdata.delete('companyId');
+			
+			
+			formdata.append('companyId',response2.companyId);
+			
+			//console.log('default');
+			
+			$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
+			
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
+			
+			var id = response2.companyId;
+			var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
+
+			//Get City
+			apiCall.getCall(getLatest).then(function(response4){
+				//console.log(response4);
+				var label = response4.invoiceLabel;
+				$scope.quickBill.invoiceEndAt = response4.endAt;
+				$scope.quickBill.invoiceId = response4.invoiceId;
+				
+				if(response4.invoiceType=='postfix'){
+					
+					$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
+					//console.log($scope.quickBill.invoiceNumber);
+				}
+				else{
+					$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
+					//console.log($scope.quickBill.invoiceNumber);
+				}
+				toaster.clear();
+			});
+			
+	}
 	//Auto Suggest Client Contact Dropdown data
 	$scope.clientGetAllFunction = function(){
 		
@@ -159,13 +202,14 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			if(stateData.stateAbb == defState){
 				
 				$scope.quickBill.stateAbb = stateData;
-				
+				defStateData = stateData;
 				/** City **/
 					var getonecity = apiPath.getAllCity+defState;
 					vm.cityDrop = [];
 					//Get City
 					apiCall.getCall(getonecity).then(function(response4){
 						vm.cityDrop = response4;
+						AllDefCityData = response4;
 						
 						var cntCity = response4.length;
 						var defCity = $rootScope.defaultCity;
@@ -177,6 +221,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 							if(cityData.cityId == defCity){
 								
 								$scope.quickBill.cityId = cityData;
+								defCityData = cityData;
 								
 								if(formdata.get('cityId'))
 								{
@@ -207,6 +252,36 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	});
 	}
 	
+	
+	$scope.stateAndCityDefault = function(stateData,cityData){
+		
+		$scope.quickBill.stateAbb = stateData;
+				
+			/** City **/
+			vm.cityDrop = [];
+			vm.cityDrop = AllDefCityData;
+						
+			$scope.quickBill.cityId = cityData;
+							
+			if(formdata.get('cityId'))
+			{
+				formdata.delete('cityId');
+			}
+			
+			formdata.append('cityId',cityData.cityId);
+							
+				
+				
+			if(formdata.get('stateAbb'))
+			{
+				formdata.delete('stateAbb');
+			}
+			
+			formdata.append('stateAbb',stateData.stateAbb);
+		
+				/** End **/
+				
+	}
 	//$scope.getInitStateCity();
 	
 	
@@ -1009,21 +1084,26 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					//console.log('Not');
 				}
 			
+				var companyObject = $scope.quickBill.companyDropDown;
 				$scope.quickBill = [];
 				vm.dt1 = new Date();
 				vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 				vm.productTax = [{"tax":0,"additionalTax":0}];
-				vm.cityDrop = [];
+				//vm.cityDrop = [];
 				
 				$scope.changeProductArray = false;
 				$scope.changeProductAdvancePrice = false;
 				vm.disableCompany = false; 
 				
-				$scope.defaultComapny();
+				// $scope.defaultComapny();
+				$scope.ReloadAfterSave(companyObject);
 				
 				$scope.clientGetAllFunction();
 				
-				$scope.getInitStateCity(); //get Default State and City
+				//$scope.getInitStateCity(); //get Default State and City
+				
+				$scope.stateAndCityDefault(defStateData,defCityData); 
+				
 				//Get State
 				// vm.statesDrop=[];
 				// apiCall.getCall(apiPath.getAllState).then(function(response3){
@@ -1035,6 +1115,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				$scope.quickBill.paymentMode = 'cash';
 				
 				$anchorScroll();
+				$("#contactNoSelect").focus();
 			
 			}
 			else{
@@ -1136,9 +1217,11 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 		$scope.quickBill.paymentMode = 'cash';
 		
+		$("#contactNoSelect").focus();
+
 		$anchorScroll();
 		
-		$("#contactNo").focus();
+		
 	}
 		
 	$scope.directPrintPdf = function(pdfUrlPath){

@@ -44,7 +44,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			//$rootScope.menuItems=[];
            $rootScope.menuItems = items;
 		   //alert('done');
-		   
+		  
 		  
         })
         .error(function(data, status, headers, config) {
@@ -53,7 +53,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 
         });
     
-  
+		 $scope.toggleHeaderMenu();
 		
   };
   
@@ -84,7 +84,8 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
           alert('Failure loading menu');
 
         });
-    
+		
+		 $scope.toggleHeaderMenu();
   
 		
   };
@@ -109,6 +110,8 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
 			});
+			
+			 $scope.toggleHeaderMenu();
 	  };
 	  
 	  // GET Price List Sidebar
@@ -132,6 +135,8 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
 			});
+			
+			 $scope.toggleHeaderMenu();
 	  };
   
 	// GET Reports Sidebar
@@ -154,6 +159,8 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
 			});
+			
+			 $scope.toggleHeaderMenu();
 	  };
 	  
 	  

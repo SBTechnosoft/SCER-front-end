@@ -2359,7 +2359,8 @@ fieldset[disabled] a.btn {
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
   color: #a0aab2;
-  background-color: #f5f5f5;
+ /** background-color: #f5f5f5; **/
+  background-color: #43a8eb;
   border-color: #ced4dd;
 }
 .btn-default:active:hover,
@@ -13281,19 +13282,34 @@ body .jvectormap-zoomout {
 /* My CSS */
 
 @media screen and (max-width: 480px) {
+	
    .topnavbar > .navbar-collapse.in > ul.nav > li{
-	  float:left;
-	  position:relative;
-	  width:50%;
+	  float:left !important;
+	  position:relative !important;
+	  width:50% !important;
   }
+  .headerMobileScroll{
+
+	overflow-y: scroll !important;
+	max-height: calc(100vh - 81px) !important;
+	
+	}
 }
 
 @media screen and (max-width: 768px) {
+	
    .topnavbar > .navbar-collapse.in > ul.nav > li{
-	  float:left;
-	  position:relative;
-	  width:50%;
+	  float:left !important;
+	  position:relative !important;
+	  width:50% !important;
   }
+  .headerMobileScroll{
+
+	overflow-y: scroll !important;
+	max-height: calc(100vh - 81px) !important;
+	
+	}
+
 }
 
 .my-Topbar-Color{

@@ -181,6 +181,22 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		
 	}
 	
+	$scope.ReloadAfterSave = function(response){
+		
+		$scope.accPurchase.companyDropDown = response;
+			
+		if(formdata.has('companyId')){
+			
+			formdata.delete('companyId');
+		}
+		
+		formdata.append('companyId',response.companyId);
+		
+		$scope.currentAndOpeningBal(response.companyId,'purchase');
+		
+		$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
+		
+	}
 	//Client Data
 	$scope.clientGetAllFunction = function(){
 		
@@ -1011,9 +1027,12 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 					vm.dt1 = new Date();
 					vm.minStart = new Date();
 					
+					var companyData = $scope.accPurchase.companyDropDown;
+					
+					
 					$scope.accPurchase = [];
-					vm.clientNameDropDr=[]; // Debit Jsuggest Blank
-					vm.clientNameDropCr=[]; // Credit Jsuggest Blank
+					//vm.clientNameDropDr=[]; // Debit Jsuggest Blank
+					//vm.clientNameDropCr=[]; // Credit Jsuggest Blank
 					
 					angular.element("input[type='file']").val(null);
 					formdata.delete('file[]');
@@ -1030,7 +1049,9 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			
 					});
 					
-					$scope.defaultCompany();
+					$scope.ReloadAfterSave(companyData);
+					// $scope.defaultCompany();
+					
 				}
 				else{
 					
