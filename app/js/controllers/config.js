@@ -199,6 +199,12 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				templateUrl: basepath('Setting/SettingOption/SettingOption.html'),
 				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
 			})
+			//Jobcard#
+			.state('app.SettingJobcardNumber', {
+				url: '/SettingJobcardNumber',
+				templateUrl: basepath('Setting/SettingJobcardNumber/SettingJobcardNumber.html'),
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','ngTable','ngTableExport','getBranchSrv','toaster')
+			})
 		/*** End Setting ***/
 		//Add Inventory Product
 		.state('app.AddInvProduct', {
@@ -618,6 +624,18 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         })
 		/*** End Quick Menu ***/
 		
+		/** CRM **/
+		
+			//Jobcard
+			.state('app.CrmJobcard', {
+				url: '/CrmJobcard',
+				templateUrl: basepath('CRM/Jobcard/CrmJobcard.html'),
+				controller: 'CrmJobcardController as form',
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
+			})
+			
+		/** End CRM **/
+		
 		/*** PriceList ***/
 		//Form RetailSales
 		.state('app.FormPriceListRetailSales', {
@@ -888,9 +906,11 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 
 }]).config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeBar = true;
-    cfpLoadingBarProvider.includeSpinner = false;
+	//cfpLoadingBarProvider.barColor = '#fff';
+    cfpLoadingBarProvider.includeSpinner = true;
     cfpLoadingBarProvider.latencyThreshold = 500;
     cfpLoadingBarProvider.parentSelector = '.app-container > section';
+	//cfpLoadingBarProvider.spinnerTemplate = "<div><span class='fa fa-spinner'>Loading...</div>";
 }]).config(['$httpProvider', function($httpProvider) {
 	// $httpProvider.defaults.useXDomain = true;
   // $httpProvider.defaults.withCredentials = true;

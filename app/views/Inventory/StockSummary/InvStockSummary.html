@@ -8,20 +8,31 @@
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
 	<div class="panel panel-default" >
 		<div class="panel-body">
-			<div class="form-group">
-				<label class="col-sm-1 control-label"> Company </label>
-					<div class="col-sm-7">
-						<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states track by s.companyId" class="form-control chosen-select" >
-						<option value=""> All </option>
-						</select>
-					</div>
-				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showProduct()"  data-ng-class="app.theme.brand">Go</button>
+		
+			<div class="col-md-8">
+			
+				<label class="col-sm-2 control-label"> Company </label>
+				<div class="col-sm-10">
+					<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states track by s.companyId" class="form-control chosen-select" >
+					
+					</select>
+				</div>
+				
 			</div>
+			<div class="col-md-1 myPaddingTop">
+				<div class="col-sm-12">
+					<button type="button" class="mb-sm btn btn-primary pull-right"  ng-click="showProduct()"  data-ng-class="app.theme.brand">Go</button>
+				</div>
+			</div>
+			
+			<div class="col-sm-3">
+			</div>
+			
 		</div>
 	</div>
 	
    <div class="panel panel-default">
-      <div class="panel-heading" >
+      <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
          <div class="panel-title" id="allPro">All Product  </div>
       </div>
@@ -30,12 +41,13 @@
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 			 <tbody>
 				<tr data-ng-repeat="user in $data">
-					<td data-title="'Brand'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategory.productCategoryName}}</td>
-					 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroup.productGroupName}}</td>
+					<td data-title="'Brand'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategoryName}}</td>
+					 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroupName}}</td>
 					<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
 				   
-					<td data-title="'Color'"  filter="{ 'color': 'text' }" >{{user.color}}</td>
-					<td data-title="'Size'"  filter="{ 'size': 'text' }" >{{user.size}}</td>
+					<td data-title="'Color'"  filter="{ 'color': 'text' }" >{{user.product.color}}</td>
+					<td data-title="'Size'"  filter="{ 'size': 'text' }" >{{user.product.size}}</td>
+					<td data-title="'Qty'"  filter="{ 'qty': 'text' }" >{{user.qty}}</td>
 				</tr>
 			 </tbody>
 		  </table>

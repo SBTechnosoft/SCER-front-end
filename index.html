@@ -19,6 +19,8 @@
 
    <title data-ng-bind="pageTitle()">CRM</title>
    <!-- App CSS-->
+   
+ 
    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
    <link rel="stylesheet" href="app/css/app.css" data-ng-if="!app.layout.isRTL">
@@ -37,6 +39,8 @@
 	<script src="app/js/customeJS/ngSanatize.js"></script>
 	<script src="app/js/customeJS/ngcsv.js"></script>
 	<script src="app/js/customeJS/googleReCaptcha.js"></script>
+	<script src="https://cdn.rawgit.com/CrackerakiUA/ui-cropper/master/compile/minified/ui-cropper.css"></script>
+	<script src="https://rawgit.com/CrackerakiUA/ui-cropper/master/compile/unminified/ui-cropper.js"></script>
 	<!--script src="app/js/jQuery.print.js"></script-->
 	
 	  
@@ -123,6 +127,7 @@
 	<script src="app/js/controllers/fileupload/demoCtrl.js"></script-->
 	
 	<script src="app/js/controllers/PopupModal/Delete/DeleteDataModalCtrl.js"></script>
+	<script src="app/js/controllers/PopupModal/TopBar/CalculatorModalCtrl.js"></script>
 	
 	<!-- Company -->
     <script src="app/js/controllers/Company/CompanyCtrl.js"></script>
@@ -152,6 +157,8 @@
 	<!--Setting-->
 		<!--Option-->
 		<script src="app/js/controllers/Setting/SettingOption/SettingOptionCtrl.js"></script>
+		<!--Jobcard#-->
+		<script src="app/js/controllers/Setting/SettingJobcardNumber/SettingJobcardNumberCtrl.js"></script>
 	<!-- Setting -->
 	
 	<!--QuickMenu -->
@@ -163,6 +170,11 @@
 		<!--script src="app/js/controllers/QuickMenu/BillTableModalCtrl.js"></script-->
 	<!-- End QuickMenu -->
 	
+	<!--CRM -->
+		<!--Jobcard-->
+		<script src="app/js/controllers/CRM/Jobcard/CrmJobcardCtrl.js"></script>
+		
+	<!-- End CRM -->
 	
 	<!-- ACCOUNTING -->
 	

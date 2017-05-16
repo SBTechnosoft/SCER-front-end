@@ -3,7 +3,7 @@
 <!-- Sidebar-->
 <aside data-ng-include="'app/views/partials/sidebar.html'" data-ng-class="app.theme.sidebar"></aside>
 <!-- Main-->
-<section>
+<section  data-ng-class="app.topbar.isCollapsed ? 'appContentPaddingBig' :  'appContentPadding'" >
    <!-- Content-->
    <div ui-view="" autoscroll="false" data-ng-class="app.viewAnimation" class="app"></div>
 </section>

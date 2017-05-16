@@ -11,27 +11,36 @@
 	<div class="panel panel-default" ng-show="AddCompanyModify">
 		 <!--h4 class="panel-heading"></h4-->
 		 <div class="panel-body">
-			
-			<div class="col-md-10">
-			
-				<label for="input-id-1" class="col-sm-1 control-label">Company</label>
-				<!--input type="text" class="form-control" placeholder="Company Name" /-->
-				<div class="col-sm-7">
-					 <select chosen="" data-ng-model="addCompany.companyDropDown2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany()" class="form-control chosen-select"></select>
-				</div>
+		 
+				<div class="col-md-8">
 				
-				<div class="col-sm-2">
-					<button type="button" ng-disabled="form.selectCompany" class="btn btn-default pull-right" style="background-color:#17A1E5;color:white !important" data-ng-class="app.theme.brand" ng-click="gotoModify()">Go!</button>
+					<label for="input-id-1" class="col-sm-2 control-label">Company</label>
+					<!--input type="text" class="form-control" placeholder="Company Name" /-->
+					<div class="col-sm-10">
+						 <select chosen="" data-ng-model="addCompany.companyDropDown2" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany()" class="form-control chosen-select"></select>
+					</div>
+					
 				</div>
-				
+				<div class="col-md-1 myPaddingTop">
+					<div class="col-sm-12">
+						<button type="button" ng-disabled="form.selectCompany" class="mb-sm btn btn-primary pull-right" data-ng-class="app.theme.brand" ng-click="gotoModify()">Go!</button>
+					</div>
+				</div>
+				<div class="col-md-3">
+					
+				</div>
 			</div> 
 			
-		 </div>
+		
 	</div>
 	<form  action="#" name="formCompany" class="form-validate form-horizontal">
 	   <div class="panel panel-default">
-		  <h4 class="panel-heading">Basic Details</h4>
-		 
+		  <div class="panel-heading myFormHeading" >
+			<div class="panel-title">
+				Basic Details
+			</div>
+		  </div>
+		  
 		  <div class="panel-body">
 			
 				<div class="col-md-9">
@@ -150,7 +159,11 @@
 		  </div>
 	   </div>
 	   <div class="panel panel-default">
-		  <h4 class="panel-heading">Registration & Texation Details</h4>
+		   <div class="panel-heading myFormHeading" >
+			<div class="panel-title">
+				Registration & Texation Details
+			</div>
+		  </div>
 		  <div class="panel-body">
 			
 			<div class="col-md-12">
@@ -267,7 +280,12 @@
 		  </div>
 	   </div>
 	   <div class="panel panel-default">
-		  <h4 class="panel-heading">Settings</h4>
+		  
+		   <div class="panel-heading myFormHeading" >
+			<div class="panel-title">
+				Settings
+			</div>
+		  </div>
 		  <div class="panel-body">
 			
 				<fieldset class="my-fieldset-paddingBottom">

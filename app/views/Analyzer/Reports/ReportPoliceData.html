@@ -8,7 +8,7 @@
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
 	
    <div class="panel panel-default">
-      <div class="panel-heading" >
+      <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
 		<a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary" ng-if="exportPdfHidden" data-ng-class="app.theme.brand" >Export to Pdf</a>
 		  <div class="panel-title" id="allPro"> <h5>Police Reports of <b>{{displayCompany}}</b> Company Between {{::displayfromDate}} to {{::displaytoDate}} </h5> </div>

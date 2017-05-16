@@ -19,6 +19,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 	vm.localSiteKey = "6Ld6HSYTAAAAADSDPt5td0Te37OIgB2R10JvAgQg";
 	vm.siliconSiteKey = "6LchHRoUAAAAAIZHW5kSReJ6ZLRJ1gmT4D36Kdhv";
 	vm.swaminarayanSiteKey = "6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C";
+	vm.v2erp = "6LfxfhwUAAAAAL3B7C6bI-_ZCuCYvO1vNFu4f4-6";
 	
 	$scope.createCallback = function(widgetId){
       $scope.widgetId = widgetId;

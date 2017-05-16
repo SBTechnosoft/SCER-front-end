@@ -1,0 +1,16 @@
+[
+  {
+    "text": "Jobcard",
+    "sref": "app.CrmJobcard",
+    "icon": "icon-stack"
+  },
+  {
+    "text": "Clients",
+    "sref": "app.CrmClients",
+    "icon": "icon-stack",
+		"subnav": [
+		  {"text": "List of Clients", "sref": "app.CrmListClients", "translate": "" }
+		],
+		"translate": ""
+  }
+]

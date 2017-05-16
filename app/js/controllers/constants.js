@@ -140,7 +140,13 @@ App
 	'getPurchaseDetail': 'http://api.siliconbrain.co.in/accounting/taxation/purchase-detail/company/',
 	'batchBrand': 'http://api.siliconbrain.co.in/product-categories/batch',
 	'batchCategory': 'http://api.siliconbrain.co.in/product-groups/batch',
-	'policeReport': 'http://api.siliconbrain.co.in/reports/polish-report/company/'
+	'policeReport': 'http://api.siliconbrain.co.in/reports/polish-report/company/',
+	'stockSummary': 'http://api.siliconbrain.co.in/products/company/',
+	'stockSummary2': '/stock-summary',
+	'getJobcardNumber': 'crm/job-form-number',
+	'getLatestJobcardNumber': 'crm/job-form-number/company/',
+	'PostJobcard': 'crm/job-form',
+	
   })
   //Api Path
   .constant('apiResponse', {

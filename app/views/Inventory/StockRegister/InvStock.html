@@ -9,19 +9,30 @@
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<div class="form-group">
-				<label class="col-sm-1 control-label"> Product </label>
-					<div class="col-sm-7">
+		
+			<div class="col-md-8">
+				<label class="col-sm-2 control-label"> Product </label>
+					<div class="col-sm-10">
 						<select chosen=""  ng-model="allProductModel" ng-options="s as s.productName+' ('+s.color+' | '+s.size+')' for s in table.states track by s.productId" class="form-control chosen-select" >
 						</select>
 					</div>
-				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showProduct()" >Go</button>
 			</div>
+			
+			<div class="col-md-1 myPaddingTop">
+				<div class="col-sm-12">
+					<button type="button" class="mb-sm btn btn-primary pull-right"  ng-click="showProduct()" >Go</button>
+		
+				</div>
+			</div>
+			
+			<div class="col-sm-3">
+			</div>
+			
 		</div>
 	</div>
 	
    <div class="panel panel-default">
-    <div class="panel-heading">
+    <div class="panel-heading myHeading">
 	<a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary" ng-if="disableButton" >Generate Pdf</a> 
 	
 	<!--a data-ng-mousedown="csv.generate()" data-ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to CSV</a-->

@@ -22,14 +22,16 @@
 							<option value="">All</option>
 						</select>
 					</div>
-					
-				<button type="button" class="mr mb-sm btn btn-primary" ng-click="showFilterStaff()" data-ng-class="app.theme.brand" >Go</button>
-				
+					<div class="col-sm-1 myPaddingTop">
+				<button type="button" class="mb-sm btn btn-primary pull-right" ng-click="showFilterStaff()" data-ng-class="app.theme.brand" >Go</button>
+				</div>
+				<div class="col-sm-1">
+				</div>
 			</div>
 		</div>
 	</div>
    <div class="panel panel-default">
-      <div class="panel-heading" >
+      <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
 		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="app.AddStaff" ng-if="allowedAdd == 'admin' || allowedAdd == 'superadmin'" data-ng-class="app.theme.brand" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>

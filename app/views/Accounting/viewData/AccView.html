@@ -11,7 +11,13 @@
  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	
    <div class="panel panel-default">
-      <h4 class="panel-heading">View</h4>
+     
+		<div class="panel-heading myFormHeading" >
+			<div class="panel-title">
+				{{viewDataTypePath}}
+			</div>
+		</div>
+		
       <div class="panel-body">
          <form method="get" action="/" novalidate="" class="form-horizontal">
 			 <fieldset>

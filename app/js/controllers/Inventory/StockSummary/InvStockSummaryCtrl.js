@@ -79,6 +79,21 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			});
 		 
 		});
+		
+		vm.productCategoryData=[];
+		apiCall.getCall(apiPath.getAllCategory).then(function(response2){
+			
+			vm.productCategoryData = response2;
+		 
+		});
+		
+		vm.productGroupData=[];
+		apiCall.getCall(apiPath.getAllGroup).then(function(response2){
+			
+			vm.productGroupData = response2;
+		 
+		});
+		
 		 
 	}
 	$scope.init();
@@ -88,7 +103,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 		toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
-		apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
+		apiCall.getCall(apiPath.stockSummary+id+apiPath.stockSummary2).then(function(response){
 			
 			toaster.clear();
 			
@@ -102,10 +117,19 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 				//console.log('else');
 				data = response;
 				for (var i = 0; i < data.length; i++) {
-				  data[i].productCategoryName = ""; //initialization of new property 
-				  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-				  data[i].productGroupName = ""; //initialization of new property 
-				  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+					
+					var index = vm.productCategoryData.findIndex(x => x.productCategoryId==data[i].product.productCategoryId);
+					data[i].productCategoryName = ""; //initialization of new property 
+					data[i].productCategoryName =	vm.productCategoryData[index].productCategoryName;  //set the data from nested obj into new property
+					
+					var groupIndex = vm.productGroupData.findIndex(x => x.productGroupId==data[i].product.productGroupId);
+					data[i].productGroupName = ""; //initialization of new property 
+					data[i].productGroupName = vm.productGroupData[groupIndex].productGroupName;  //set the data from nested obj into new property
+				  
+					data[i].productName = ""; //initialization of new property 
+					data[i].productName = data[i].product.productName;  //set the data from nested obj into new property
+					// data[i].productGroupName = ""; //initialization of new property 
+					// data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
 				}
 				
 				
@@ -132,7 +156,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  productCategoryName: 'asc'     // initial sorting
+			  productName: 'asc'     // initial sorting
 		  }
 	  }, {
 		  counts: [],

@@ -4,7 +4,7 @@
 
 <h3>
    <small>
-   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >>
    Templates
    </small>
 </h3>
@@ -13,15 +13,19 @@
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div class="col-md-10" style="padding-left:0px">
 	   <div class="panel panel-default">
-		  <h4 class="panel-heading" >Template Design</h4>
-		 
+			<div class="panel-heading myFormHeading" >
+				<div class="panel-title">
+					Template Design
+				</div>
+			</div>
+		  
 		  <div class="panel-body">
 			 <form action="#" name="formGeneral" class="form-validate form-horizontal">
 					<fieldset>
 					   <div class="form-group">
 						  <label class="col-sm-2 control-label">*Company</label>
 						  <div class="col-sm-5">
-							 <select chosen="" tabindex="1"  ng-model="generalTemp.companyDropDown"  ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ng-required="true" ></select>
+							 <select chosen="" tabindex="2"  ng-model="generalTemp.companyDropDown"  ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ng-required="true" ></select>
 						  </div>
 					   </div>
 					</fieldset>
@@ -29,7 +33,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-2 control-label">*Template Name</label>
 						  <div class="col-sm-5">
-							 <input id="input-id-1"  type="text" name="tempName" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &_`#().\'-]*$/" ng-minlength="1" ng-maxlength="35" auto-focus/>
+							 <input id="input-id-1"  type="text" name="tempName" ng-model="generalTemp.tempName" placeholder="Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &_`#().\'-]*$/" ng-minlength="1" ng-maxlength="35" tabindex="2" auto-focus/>
 							 
 							 <span ng-messages="formGeneral.tempName.$error" ng-if="formGeneral.tempName.$dirty || formGeneral.tempName.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -47,7 +51,7 @@
 						 
 						  <div class="col-sm-12"  >
 							
-							<textarea  id="textdesc"   name="textdesc" ui-tinymce ng-model="tinymceModel" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" ></textarea>
+							<textarea  id="textdesc"  tabindex="2"  name="textdesc" ui-tinymce ng-model="tinymceModel" placeholder="Your First address"  class="form-control ng-pristine ng-valid ng-touched" ></textarea>
  
 							 <span ng-messages="formGeneral.textdesc.$error" ng-if="formGeneral.textdesc.$dirty || formGeneral.textdesc.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -58,7 +62,7 @@
 					</fieldset>
 					
 					 <button type="button" class="mr mb-sm btn btn-danger pull-right" style="margin-right:0px !important;visibility:hidden" ng-click="cancel()" >Cancel</button>
-					 <button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="addUpTemplate()" ng-disabled="formGeneral.$invalid" ng-if="tempID" >Update</button>
+					 <button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="2"  ng-click="addUpTemplate()" ng-disabled="formGeneral.$invalid" ng-if="tempID" >Update</button>
 				 </form>
 			</div>
 				
@@ -66,7 +70,11 @@
     </div>
 	  <div class="col-md-2" style="padding-right:0px">
 	   <div class="panel panel-default">
-		<h4 class="panel-heading">Templates</h4>
+		 <div class="panel-heading myHeading" >
+			<div class="panel-title">
+				Templates
+			</div>
+		 </div>
 		  <div class="panel-body">
 			
 			<select chosen="" tabindex="1"  ng-model="generalTempList.companyDropDownList"  ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ng-change="changeTemplateList(generalTempList.companyDropDownList.companyId)" ng-required="true" ></select>

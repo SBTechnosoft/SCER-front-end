@@ -14,7 +14,9 @@
 <div   class="container-fluid" >
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div id="panelDemo14" class="panel panel-default">
-         <div class="panel-heading"><h5>Data of <b>{{displayCompany}}</b> Company Between {{::displayfromDate}} to {{::displaytoDate}} </h5></div>
+         <div class="panel-heading myHeading">
+			<h5>Data of <b>{{displayCompany}}</b> Company Between {{::displayfromDate}} to {{::displaytoDate}} </h5>
+		 </div>
          <div class="panel-body">
             <tabset>
                <tab heading="Table" ng-if="headerType != 'Wholesales' && headerType != 'Retailsales'">

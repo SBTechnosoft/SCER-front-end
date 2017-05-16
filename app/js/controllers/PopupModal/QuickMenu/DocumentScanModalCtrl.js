@@ -10,9 +10,9 @@
 
 App.controller('documentScanController',documentScanController);
 
-function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,$templateCache,$window) {
+function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,$templateCache,$window,imageUrl) {
   'use strict';
-  
+	
 	// $scope.firstScript = "app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js?r="+Math.random();
 	// $scope.randomNumber = Math.random();
 	
@@ -28,20 +28,22 @@ function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,
 		
 		var ImageArray = [];
 		
-		if(DWObject.HowManyImagesInBuffer > 0){
+		ImageArray[0] = $scope.myCroppedImage;
 		
-			for(var setIndex = 0;setIndex < DWObject.HowManyImagesInBuffer;setIndex++){
+		// if(DWObject.HowManyImagesInBuffer > 0){
+		
+			// for(var setIndex = 0;setIndex < DWObject.HowManyImagesInBuffer;setIndex++){
 				
-				ImageArray[setIndex] = DWObject.GetImageURL(setIndex, 500, 500);
-			}
+				// ImageArray[setIndex] = DWObject.GetImageURL(setIndex, 500, 500);
+			// }
 			
-			 $modalInstance.close(ImageArray);
+			$modalInstance.close(ImageArray);
 			
-		}
-		else{
+		// }
+		// else{
 			
-			$modalInstance.dismiss(ImageArray);
-		}
+			// $modalInstance.dismiss(ImageArray);
+		// }
 		
 		
 		//DWObject.GetImageURL(0, 500, 500);
@@ -53,9 +55,10 @@ function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,
 	$scope.closeButton = function () {
 		
 		var ImageArray = [];
+		ImageArray[0] = $scope.myImage;
+		$modalInstance.close(ImageArray);
 		
-			
-			$modalInstance.dismiss(ImageArray);
+			//$modalInstance.dismiss(ImageArray);
 			
 		//DWObject.GetImageURL(0, 500, 500);
 		//DWObject.HowManyImagesInBuffer
@@ -75,135 +78,11 @@ function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,
 	
 	
 	/** Twain Code **/
-	
-		var CurrentPathName = unescape(location.pathname);
-	var CurrentPath = CurrentPathName.substring(0, CurrentPathName.lastIndexOf("/") + 1);
-	var strHTTPServer = location.hostname;
-	var strActionPage = CurrentPath + 'action/php.php';
-	
-	if (DWObject) {
-		DWObject.destroy();
-	}
-	
-	var DWObject;
-		
-	 //DWObject = $window.Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-	 
-        $scope.DWT_AcquireImage= function(){
-			
-				 DWObject = $window.Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-				 
-               // var DWObject = Dynamsoft.WebTwainEnv;
-	//DWObject.IfDisableSourceAfterAcquire = true; 
-               DWObject.SelectSource();
-         DWObject.OpenSource();
-         DWObject.IfShowUI = false;
-        // DWObject.IfFeederEnabled = true;
-
-        // DWObject.IfAutoFeed = true;
-
-         DWObject.XferCount = -1;
-
-         DWObject.AcquireImage(); //using ADF  for scanning
-
-		 
-
-		  // console.log("dgdgdgg");
-
-         // var strFileName;
-
-         // var Digital = new Date();
-
-         // var Month = Digital.getMonth() + 1;
-
-         // var Day = Digital.getDate();
-
-         // var Hour = Digital.getHours();
-
-         // var Minute = Digital.getMinutes();
-
-         // var Second = Digital.getSeconds();
-
-         // var CurrentTime = Month + "_" + Day + "_" + Hour + "_" + Minute + "_" + Second;
-
-		 
-
-		DWObject.IfShowFileDialog = false;
-
-         // strFileName = "/home/siliconbrain/public_html/siliconbrain/erp.siliconbrain.co.in/server/"+CurrentTime + ".pdf";
-	// console.log(DWObject.clientId);
-
-
-
-		
-
-         //DWObject.SaveAsPDF(strFileName); //save each scanned image as a different PDF file 
-
-		 //var Digital = new Date();
-			//var uploadfilename = Digital.getMilliseconds(); // Uses milliseconds according to local time as the file name
-			//DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer'); // Get the Dynamic Web TWAIN object that is embeded in the div with id 'dwtcontrolContainer'.
-			//DWObject.HTTPPort = location.port;
-			//DWObject.HTTPUploadAllThroughPostAsPDF(strHTTPServer, strActionPage, uploadfilename + ".pdf", OnHttpUploadSuccess, OnHttpServerReturnedSomething);
-			
-		// console.log("save");
-
-		  
-		
-
-			 if (DWObject.ErrorCode != 0) {  
-
-				 alert (DWObject.ErrorString);
-
-			 }
-
-            }
-
-			$scope.ClearScanned = function(){
-				
-				var DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-				
-				DWObject.RemoveAllImages();
-				
-				$modalInstance.dismiss('clear');
-				
-			}
-			
-	$scope.uploadImage = function() {
-			var Digital = new Date();
-			var uploadfilename = Digital.getMilliseconds(); // Uses milliseconds according to local time as the file name
-			var DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer'); // Get the Dynamic Web TWAIN object that is embeded in the div with id 'dwtcontrolContainer'.
-			
-			console.log(DWObject);
-			DWObject.IfSSL = true;
-			
-			DWObject.HTTPPort = location.port;
-			DWObject.HTTPUploadAllThroughPostAsPDF(strHTTPServer, strActionPage, uploadfilename + ".pdf", OnHttpUploadSuccess, OnHttpServerReturnedSomething);
-		}
-		
-			
-			
-	$scope.OnHttpUploadSuccess = function() {
-
-		console.log('successful');
-		
-	}
-	
-	$scope.getImage = function(){
-	
-		var DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-		console.log(DWObject.GetImageURL(0, 500, 500));
-		
-	}
-
-	$scope.OnHttpServerReturnedSomething = function(errorCode, errorString, sHttpResponse) {
-		console.log(errorString);
-		
-		var textFromServer = sHttpResponse;
-	}
-	
-	
+//	$scope.myImage='https://raw.githubusercontent.com/CrackerakiUA/ui-cropper/master/screenshots/live.jpg';
+	 $scope.myImage = imageUrl;
+    $scope.myCroppedImage='';
 
 	/** End  **/
 }
 
-documentScanController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","$templateCache","$window"];
+documentScanController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","$templateCache","$window","imageUrl"];

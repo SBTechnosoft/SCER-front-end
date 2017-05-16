@@ -5,13 +5,14 @@
 <div data-ng-controller="CompanyController as table" class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
-      <div class="panel-heading" >
+      <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
 		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="" ng-click="GoToAddCompany()"  data-ng-class="app.theme.brand" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 		Add Company</button>
          <div class="panel-title">All Companies</div>
       </div>
+	  
 	  <div class="table-responsive">
       <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
 	  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->

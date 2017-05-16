@@ -34,9 +34,14 @@
 			<!--div class="g-recaptcha" data-sitekey="6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C"></div--> <!-- swaminarayan --> 
 			<!--div class="g-recaptcha" data-sitekey="6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C"></div-->  <!-- siliconbrain --> 
 			<div class="form-group has-feedback">
-				<div vc-recaptcha key="loginCtrl.localSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" ></div> <!-- local --> 
-				<!-- div vc-recaptcha key="loginCtrl.swaminarayanSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" ></div-->  <!-- swaminarayan --> 
-				<!-- div vc-recaptcha key="loginCtrl.siliconSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" ></div -->  <!-- siliconbrain --> 
+				<div vc-recaptcha key="loginCtrl.localSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" style="transform:scale(0.95);-webkit-transform:scale(0.95);transform-origin:0 0;-webkit-transform-origin:0 0;" ></div> <!-- local --> 
+				
+				<!-- div vc-recaptcha key="loginCtrl.swaminarayanSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" style="transform:scale(0.95);-webkit-transform:scale(0.95);transform-origin:0 0;-webkit-transform-origin:0 0;" ></div-->  <!-- swaminarayan --> 
+				
+				<!-- div vc-recaptcha key="loginCtrl.siliconSiteKey" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" style="transform:scale(0.95);-webkit-transform:scale(0.95);transform-origin:0 0;-webkit-transform-origin:0 0;" ></div -->  <!-- siliconbrain --> 
+				
+				<!--div vc-recaptcha key="loginCtrl.v2erp" on-create="createCallback(widgetId)" on-success="checkCaptcha(response)" style="transform:scale(0.95);-webkit-transform:scale(0.95);transform-origin:0 0;-webkit-transform-origin:0 0;" ></div-->  <!-- v2erp --> 
+				
 			</div>
 			
 			<span class="text-danger" ng-if="notMatch">EmailId or Password is Wrong.</span>
@@ -63,7 +68,6 @@
 </div>
 
 <!--script src='https://www.google.com/recaptcha/api.js'></script-->
-<!--script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
+<!--script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
     </script-->
 	<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script> 

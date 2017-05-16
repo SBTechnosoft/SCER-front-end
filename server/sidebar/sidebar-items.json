@@ -61,7 +61,8 @@
     "sref": "#",
     "icon": "fa fa-cog",
     "subnav": [
-      {"text": "Option", "sref": "app.SettingOption", "icon": "fa fa-barcode", "translate": "" }
+      {"text": "Option", "sref": "app.SettingOption", "icon": "fa fa-barcode", "translate": "" },
+      {"text": "Jobcard#", "sref": "app.SettingJobcardNumber", "icon": "fa fa-barcode", "translate": "" }
     ],
     "translate": ""
   }
