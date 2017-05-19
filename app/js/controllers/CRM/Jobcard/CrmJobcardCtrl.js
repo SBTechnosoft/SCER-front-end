@@ -1,20 +1,24 @@
 
+
+
+
 App.controller('CrmJobcardController', CrmJobcardController);
 
-function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,$sce,$templateCache) {
+function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,$sce,$templateCache,getLatestNumber) {
   'use strict';
  
 	var vm = this;
-	var formdata = new FormData();
+	
 	
 	 $scope.erpPath = $rootScope.erpPath; //Erp Path
 	 var dateFormats = $rootScope.dateFormats; //Date Format
 	 
 	 /** Api path **/
 	 
-		var JobcardGetApiPath = $scope.erpPath+apiPath.getLatestJobcardNumber; // JobcardNumber
+		var JobcardGetApiPath = apiPath.getLatestJobcardNumber; // JobcardNumber
+		var JobcardPostApiPath = apiPath.PostJobcard; // Jobcard Insertion Path
 		
-		var JobcardPostApiPath = $scope.erpPath+apiPath.PostJobcard; // Jobcard Insertion Path
+		var invoiceLatestApiPath = apiPath.getLatestInvoice1; // Latest Invoice#
 	 
 	 /** End **/
 	$scope.quickBill = [];
@@ -63,6 +67,27 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	$scope.quickBill.serviceType = 'paid';
 	
 	
+	$scope.getInvoiceAndJobcardNumber = function(id){
+		
+		var getLatest = JobcardGetApiPath+id+apiPath.getLatestInvoice2;
+	
+		//Get Jobcard#
+		apiCall.getCall(getLatest).then(function(response4){
+			
+			$scope.quickBill.jobcardNumber = getLatestNumber.getJobcard(response4);
+			
+		});
+		
+		var getLatestInvoice = invoiceLatestApiPath+id+apiPath.getLatestInvoice2;
+		//Get Invoice#
+		apiCall.getCall(getLatestInvoice).then(function(response4){
+			
+			$scope.quickBill.invoiceNumber = getLatestNumber.getInvoice(response4);
+		});
+			
+		
+	}
+	
 	//Default Company Function
 	$scope.defaultComapny = function(){
 		
@@ -73,11 +98,6 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 			$scope.quickBill.companyDropDown = response2;
 			
-			formdata.delete('companyId');
-			
-			
-			formdata.append('companyId',response2.companyId);
-			
 			//console.log('default');
 			
 			$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
@@ -86,26 +106,8 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			var id = response2.companyId;
-			var getLatest = JobcardGetApiPath+id+apiPath.getLatestInvoice2;
-
-			//Get City
-			apiCall.getCall(getLatest).then(function(response4){
-				//console.log(response4);
-				var label = response4.jobCardNumberLabel;
-				$scope.quickBill.invoiceEndAt = response4.endAt;
-				//$scope.quickBill.invoiceId = response4.invoiceId;
-				
-				if(response4.jobCardNumberType=='postfix'){
-					
-					$scope.quickBill.jobcardNumber = label+$scope.quickBill.invoiceEndAt;
-					//console.log($scope.quickBill.jobcardNumber);
-				}
-				else{
-					$scope.quickBill.jobcardNumber = $scope.quickBill.invoiceEndAt+label;
-					//console.log($scope.quickBill.jobcardNumber);
-				}
-					
-			});
+			
+			$scope.getInvoiceAndJobcardNumber(id); // Invoice# and Jobcard#
 			
 			//Auto Suggest Product Dropdown data
 			vm.productNameDrop = [];
@@ -118,6 +120,10 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 				vm.loadData = false;
 			});
 			
+			
+			
+			
+			
 		});
 	}
 	
@@ -125,39 +131,20 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		
 		$scope.quickBill.companyDropDown = response2;
 			
-			formdata.delete('companyId');
-			
-			
-			formdata.append('companyId',response2.companyId);
 			
 			//console.log('default');
 			
 			$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
 			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
+			//toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			var id = response2.companyId;
-			var getLatest = JobcardGetApiPath+id+apiPath.getLatestInvoice2;
-
-			//Get City
-			apiCall.getCall(getLatest).then(function(response4){
-				//console.log(response4);
-				var label = response4.jobCardNumberLabel;
-				$scope.quickBill.invoiceEndAt = response4.endAt;
-				$scope.quickBill.invoiceId = response4.invoiceId;
+			
+			$scope.getInvoiceAndJobcardNumber(id,function(){
 				
-				if(response4.jobCardNumberType=='postfix'){
-					
-					$scope.quickBill.jobcardNumber = label+$scope.quickBill.invoiceEndAt;
-					//console.log($scope.quickBill.jobcardNumber);
-				}
-				else{
-					$scope.quickBill.jobcardNumber = $scope.quickBill.invoiceEndAt+label;
-					//console.log($scope.quickBill.jobcardNumber);
-				}
 				toaster.clear();
-			});
+			}); // Invoice# and Jobcard#
 			
 	}
 	//Auto Suggest Client Contact Dropdown data
@@ -222,26 +209,13 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 								
 								$scope.quickBill.cityId = cityData;
 								defCityData = cityData;
-								
-								if(formdata.get('cityId'))
-								{
-									formdata.delete('cityId');
-								}
-								
-								formdata.append('cityId',defCity);
 					
 								break;
 							}
 						}
 						
 					});
-					
-					if(formdata.get('stateAbb'))
-					{
-						formdata.delete('stateAbb');
-					}
-					
-					formdata.append('stateAbb',defState);
+				
 			
 				/** End **/
 				
@@ -263,21 +237,9 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 						
 			$scope.quickBill.cityId = cityData;
 							
-			if(formdata.get('cityId'))
-			{
-				formdata.delete('cityId');
-			}
 			
-			formdata.append('cityId',cityData.cityId);
 							
 				
-				
-			if(formdata.get('stateAbb'))
-			{
-				formdata.delete('stateAbb');
-			}
-			
-			formdata.append('stateAbb',stateData.stateAbb);
 		
 				/** End **/
 				
@@ -309,6 +271,8 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		var data = {};	
 		data.productId = '';
 		data.productName ='';
+		data.color ='';
+		data.frameNo ='';
 		data.productInformation ='';
 		data.discountType ='flat';
 		data.discount ='';
@@ -358,7 +322,6 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 			if(item.purchasePrice == 0 || grandPrice == 0){
 				
-				
 				grandPrice = productArrayFactory.calculate(item.mrp,0,item.margin)  + parseFloat(item.marginFlat);
 			}
 		}
@@ -400,8 +363,6 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			//console.log($scope.quickBill.EditBillData);
 			getSetFactory.blank();
 			
-			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
-			
 			vm.disableCompany = false;
 			//get Company
 			vm.companyDrop=[];
@@ -419,7 +380,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 			//console.log(jsonProduct.inventory);
 			//console.log($scope.quickBill.EditBillData);
-			$scope.quickBill.documentData = $scope.quickBill.EditBillData.file;
+			//$scope.quickBill.documentData = $scope.quickBill.EditBillData.file;
 			
 			
 			/** Company Wise Product **/
@@ -437,8 +398,14 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 			//console.log($scope.quickBill.documentData);
 			
-			$scope.quickBill.jobcardNumber = $scope.quickBill.EditBillData.jobcardNumber;  //Invoice Number
+			$scope.quickBill.jobcardNumber = $scope.quickBill.EditBillData.jobCardNo;  //Invoice Number
 			
+			var getLatestInvoice = invoiceLatestApiPath+$scope.quickBill.EditBillData.company.companyId+apiPath.getLatestInvoice2;
+			//Get Invoice#
+			apiCall.getCall(getLatestInvoice).then(function(response4){
+				
+				$scope.quickBill.invoiceNumber = getLatestNumber.getInvoice(response4);
+			});
 			
 			
 			$scope.noOfDecimalPoints = parseInt($scope.quickBill.EditBillData.company.noOfDecimalPoints);//decimal points
@@ -448,45 +415,50 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			var splitedate = getResdate.split("-").reverse().join("-");
 			vm.dt1 = new Date(splitedate);
 			
+			//Set Delivery Date
 			var getResdate2 =  $scope.quickBill.EditBillData.deliveryDate;
 			var splitedate2 = getResdate2.split("-").reverse().join("-");
 			vm.dt2 = new Date(splitedate2);
 			
-			$scope.quickBill.BillContact = $scope.quickBill.EditBillData.client.contactNo;
-			$scope.quickBill.WorkNo = $scope.quickBill.EditBillData.client.workNo;
-			$scope.quickBill.companyName = $scope.quickBill.EditBillData.client.companyName;
-			$scope.quickBill.clientName = $scope.quickBill.EditBillData.client.clientName;
-			$scope.quickBill.emailId = $scope.quickBill.EditBillData.client.emailId;
-			$scope.quickBill.fisrtAddress = $scope.quickBill.EditBillData.client.address1;
-			$scope.quickBill.secondAddress = $scope.quickBill.EditBillData.client.address2;
-			$scope.quickBill.stateAbb = $scope.quickBill.EditBillData.client.stateAbb;
-			$scope.quickBill.cityId = $scope.quickBill.EditBillData.client.cityId;
+			$scope.quickBill.BillContact = $scope.quickBill.EditBillData.contactNo;
+			
+			$scope.quickBill.clientName = $scope.quickBill.EditBillData.clientName;
+			$scope.quickBill.emailId = $scope.quickBill.EditBillData.emailId;
+			$scope.quickBill.fisrtAddress = $scope.quickBill.EditBillData.address;
+			$scope.quickBill.stateAbb = $scope.quickBill.EditBillData.state.stateAbb;
+			$scope.quickBill.cityId = $scope.quickBill.EditBillData.city.cityId;
 			
 			$scope.quickBill.advance = $scope.quickBill.EditBillData.advance; //Advance
 			
+			vm.statesDrop=[];
+			apiCall.getCall(apiPath.getAllState).then(function(response3){
+				
+				vm.statesDrop = response3;
+				$scope.quickBill.stateAbb = $scope.quickBill.EditBillData.state;
+			});
 			
 			/** Set State & City **/
 				//State DropDown Selection
-				var stateDropPath = apiPath.getAllState+'/'+$scope.quickBill.EditBillData.client.stateAbb;
-				apiCall.getCall(stateDropPath).then(function(res3){
+				// var stateDropPath = apiPath.getAllState+'/'+$scope.quickBill.EditBillData.state.stateAbb;
+				// apiCall.getCall(stateDropPath).then(function(res3){
 					
-					if(angular.isObject(res3)){
+					// if(angular.isObject(res3)){
 						
-						$scope.quickBill.stateAbb = res3;
-					}
-					else{
-						toaster.pop('alert', 'Opps!!', 'State Not Selected');
-					}
-				});
+						
+					// }
+					// else{
+						// toaster.pop('alert', 'Opps!!', 'State Not Selected');
+					// }
+				// });
 				
 				//City DropDown
-				var cityAllDropPath = apiPath.getAllCity+$scope.quickBill.EditBillData.client.stateAbb;
+				var cityAllDropPath = apiPath.getAllCity+$scope.quickBill.EditBillData.state.stateAbb;
 				apiCall.getCall(cityAllDropPath).then(function(res5){
 					vm.cityDrop = res5;
 				});
 				
 				//City DropDown Selection
-				var cityDropPath = apiPath.getOneCity+'/'+$scope.quickBill.EditBillData.client.cityId;
+				var cityDropPath = apiPath.getOneCity+'/'+$scope.quickBill.EditBillData.city.cityId;
 				apiCall.getCall(cityDropPath).then(function(res4){
 					
 					if(angular.isObject(res4)){
@@ -508,13 +480,14 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 				$scope.quickBill.BankName = $scope.quickBill.EditBillData.bankName;
 			}
 			
+			$scope.quickBill.serviceType = $scope.quickBill.EditBillData.serviceType;
 			//console.log('If');
-			
-		vm.AccBillTable = jsonProduct.inventory;
+			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
+		vm.AccBillTable = jsonProduct;
 			
 			
 			//console.log(vm.AccBillTable);
-			var EditProducArray = jsonProduct.inventory;
+			var EditProducArray = jsonProduct;
 			var count = EditProducArray.length;
 			for(var w=0;w<count;w++){
 				
@@ -532,6 +505,10 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 					/** Tax **/
 					//console.log(resData);
 					vm.AccBillTable[d].productName = resData.productName;
+					vm.AccBillTable[d].color = resData.color;
+					vm.AccBillTable[d].size = resData.size;
+					vm.AccBillTable[d].frameNo = '';
+					
 					
 					vm.productTax[d].tax = parseFloat(resData.vat);
 					vm.productTax[d].additionalTax = parseFloat(resData.additionalTax); // Additional Tax
@@ -561,7 +538,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 			//console.log('Else');
 			//vm.AccBillTable = [];
-			vm.AccBillTable = [{"productId":"","productName":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 			vm.productTax = [{"tax":0,"additionalTax":0}];
 			
 			$scope.defaultComapny();
@@ -595,36 +572,22 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	//Changed date
 	$scope.changeBillDate = function(Fname,value){
 		
-		if(formdata.has(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		var  date = new Date(value);
-		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
+		// if(formdata.has(Fname))
+		// {
+			// formdata.delete(Fname);
+		// }
+		// var  date = new Date(value);
+		// var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 		//console.log(Fname+'..'+fdate);
-		formdata.append(Fname,fdate);
+		//formdata.append(Fname,fdate);
 	}
 	
 	$scope.changeInBill = function(Fname,value) {
-		if(formdata.has(Fname))
-		{
-			formdata.delete(Fname);
-		}
-		if(value != "" && value != undefined){
-			
-			formdata.append(Fname,value);
-		}
-		
 		
 		if(Fname == 'contactNo')
 		{
 			//console.log(Fname+'..'+value);
-			formdata.delete('workNo');
-			formdata.delete('companyName');
-			formdata.delete('clientName');
-			formdata.delete('emailId');
-			formdata.delete('address1');
-			formdata.delete('address2');
+			
 			// formdata.delete('stateAbb');
 			// formdata.delete('cityId');
 			
@@ -642,21 +605,15 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	
 	$scope.changePaymentInBill = function(Fname,value) {
 		
-		if(formdata.has(Fname))
-		{
-			formdata.delete(Fname);
-		}
 		
 		if(value != 'bank'){
 			
-			formdata.delete('bankName');
-			formdata.delete('checkNumber');
+			
 			
 			$scope.quickBill.BankName = "";
 			$scope.quickBill.chequeNo = "";
 			
 		}
-		formdata.append(Fname,value);
 		
 		//console.log(Fname+'..'+value);
   	}
@@ -713,12 +670,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 				
 		});
-			if(formdata.get(Fname))
-			{
-				formdata.delete(Fname);
-			}
 			
-			formdata.append(Fname,state);
 	}
 	
   /* End */
@@ -734,28 +686,9 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		
 		$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
 		
-		var getLatest = JobcardGetApiPath+item.companyId+apiPath.getLatestInvoice2;
-		
-		//Get City
-		apiCall.getCall(getLatest).then(function(response4){
-			var label = response4.jobCardNumberLabel;
-			$scope.quickBill.invoiceEndAt = response4.endAt;
-			$scope.quickBill.invoiceId = response4.invoiceId;
+		$scope.getInvoiceAndJobcardNumber(item.companyId); // Invoice# and Jobcard#
 			
 			
-			if(response4.jobCardNumberType=='postfix'){
-				//console.log('postfix');
-				$scope.quickBill.jobcardNumber = label+$scope.quickBill.invoiceEndAt;
-				//console.log($scope.quickBill.jobcardNumber);
-			}
-			else{
-				//console.log('Prefix');
-				$scope.quickBill.jobcardNumber = $scope.quickBill.invoiceEndAt+label ;
-				//console.log($scope.quickBill.jobcardNumber);
-			}
-				
-		});
-		
 		//Auto Suggest Product Dropdown data
 		vm.productNameDrop = [];
 		
@@ -768,16 +701,16 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		
 		});
 		
-		vm.AccBillTable = [{"productId":"","productName":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 		vm.productTax = [{"tax":0,"additionalTax":0}];
 		$scope.quickBill.advance = 0;
 		
 		// if(formdata.has('companyId')){
 	
-			formdata.delete('companyId');
+			//formdata.delete('companyId');
 			
 		//}
-		formdata.append('companyId',item.companyId);
+		//formdata.append('companyId',item.companyId);
 	}
   
   
@@ -787,157 +720,187 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 
 	$scope.pop = function(generate)
 	{
+		var billFormData = new FormData();
 		//alert(generate);
 		$scope.disableButton = true;
-		
-		
-							
-		 //$scope.disableButton = true;
 	
 		if($scope.quickBill.EditBillData){
 			
-			formdata.delete('companyId');
-			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Updating....',600000);
-			
-			var BillPath = JobcardPostApiPath+'/'+$scope.quickBill.EditBillData.saleId;
-			
-			 if($scope.changeProductArray){
-				 
-				formdata.append('total',$scope.totalTable);
-				 formdata.append('tax',$scope.quickBill.tax);
-				 formdata.append('grandTotal',$scope.grandTotalTable);
-				 if($scope.quickBill.advance){
-					
-					 formdata.append('advance',$scope.quickBill.advance);
-				 }
-				 else{
-					 formdata.append('advance',0);
-				 }
-				 
-					if($scope.quickBill.labourCharge){
-				
-						formdata.append('labourCharge',$scope.quickBill.labourCharge);
-					}
-					else{
-						formdata.append('labourCharge',0);
-					}
-					
-				 formdata.append('balance',$scope.balanceTable);
-				 
-			}
-			
-			// if($scope.changeProductAdvancePrice){
-				
-				 // if($scope.quickBill.advance){
-					
-					 // formdata.append('advance',$scope.quickBill.advance);
-				 // }
-				 // else{
-					 // formdata.append('advance',0);
-				 // }
-				 
-			// }
-			 
+			toaster.pop('wait', 'Please Wait', 'Jobcard Data Updating....',600000);
 			
 		}
 		else{
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Inserting....',600000);
+			toaster.pop('wait', 'Please Wait', 'Jobcard Data Inserting....',600000);
 			
+		}
+	 
+		var formdata = new FormData();
+	  /** Jobcard FormData **/
 			var  date = new Date(vm.dt1);
 			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 				
-			if(!formdata.has('entryDate')){
-				
-				formdata.append('entryDate',fdate);
-			}
+			 formdata.append('entryDate',fdate);
 			
 			//Delivery Date
 			var  date2 = new Date(vm.dt2);
 			var fdate2  = date2.getDate()+'-'+(date2.getMonth()+1)+'-'+date2.getFullYear();
 				
-			if(!formdata.has('deliveryDate')){
-				
-				formdata.append('deliveryDate',fdate2);
-			}
-			
-			
-			 formdata.append('transactionDate',fdate);
+			formdata.append('deliveryDate',fdate2);
 			 
-			if(!formdata.has('contactNo')){
-				
-				
+			formdata.append('jobCardNumber',$scope.quickBill.jobcardNumber);
 		
-				formdata.append('contactNo','');
-			}
 			 
-			formdata.append('jobCardNo',$scope.quickBill.jobcardNumber);
-			
-			if(!formdata.has('paymentMode')){
-				
-				formdata.append('paymentMode',$scope.quickBill.paymentMode);
-			}
-			
-			if(!formdata.has('serviceType')){
-				
-				formdata.append('serviceType',$scope.quickBill.serviceType);
-			}
-			
-			formdata.append('total',$scope.totalTable);
-			 formdata.append('tax',$scope.quickBill.tax);
-			 formdata.append('grandTotal',$scope.grandTotalTable);
-			 if($scope.quickBill.advance){
-				
-				 formdata.append('advance',$scope.quickBill.advance);
-			 }
-			 else{
-				 formdata.append('advance',0);
-			 }
-			
-			 formdata.append('balance',$scope.balanceTable);
 			 
-			if($scope.quickBill.labourCharge){
-				
-				formdata.append('labourCharge',$scope.quickBill.labourCharge);
-			}
-			else{
-				formdata.append('labourCharge',0);
-			}
 			
 			formdata.append('isDisplay','yes');
 			
+			/** Another FormData **/
+				 formdata.append('companyId',$scope.quickBill.companyDropDown.companyId);
+				 
+				  
+				  if($scope.quickBill.BillContact != undefined){
+					   formdata.append('contactNo',$scope.quickBill.BillContact);
+				  }
+				  else{
+					 formdata.append('contactNo','');
+				  }
+				
+				  formdata.append('clientName',$scope.quickBill.clientName);
+				  formdata.append('emailId',$scope.quickBill.emailId);
+				  formdata.append('address1',$scope.quickBill.fisrtAddress);
+				  formdata.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
+				  formdata.append('cityId',$scope.quickBill.cityId.cityId);
+				  formdata.append('transactionDate',fdate);
+				  formdata.append('total',$scope.totalTable);
+				 formdata.append('tax',$scope.quickBill.tax);
+				 formdata.append('grandTotal',$scope.grandTotalTable);
+				
+				 formdata.append('balance',$scope.balanceTable);
+					if($scope.quickBill.advance){
+				
+						formdata.append('advance',$scope.quickBill.advance);
+				
+					 }
+					 else{
+						 formdata.append('advance',0);
+						
+					 }
+					
+					if($scope.quickBill.labourCharge){
+						
+						formdata.append('labourCharge',$scope.quickBill.labourCharge);
+						
+					}
+					else{
+						formdata.append('labourCharge',0);
+						
+					}
 			
-		}
-	 
+				  formdata.append('paymentMode',$scope.quickBill.paymentMode);
+				  
+				 if($scope.quickBill.paymentMode == 'bank'){
+					  
+					 formdata.append('bankName',$scope.quickBill.BankName.bankName);
+					formdata.append('checkNumber',$scope.quickBill.chequeNo);
+				  }
+				  
+				  formdata.append('serviceType',$scope.quickBill.serviceType);
+			/** End **/
+			
+	  /** End **/
 	  
 	  
-	 if($scope.changeProductArray){
-		 
-		 var  date = new Date();
-		var tdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-		
-			if(!formdata.has('transactionDate')){
+	  if(generate == 'generateBill'){
+		  
+			var  date3 = new Date(vm.dt1);
+			var fdate3  = date3.getDate()+'-'+(date3.getMonth()+1)+'-'+date3.getFullYear();
 				
-				formdata.append('transactionDate',tdate);
+			billFormData.append('companyId',$scope.quickBill.companyDropDown.companyId);
+			billFormData.append('entryDate',fdate3);
+				  
+				  
+			 if($scope.quickBill.advance){
+				 
+				 billFormData.append('advance',$scope.quickBill.advance); // Bill
+			 }
+			 else{
 				
+				 billFormData.append('advance',0); // Bill
+			 }
+			
+			if($scope.quickBill.labourCharge){
+				
+				billFormData.append('extraCharge',$scope.quickBill.labourCharge); // Bill
 			}
+			else{
+				
+				billFormData.append('extraCharge',0); // Bill
+			}
+			
+			/** Bill FormData **/
+				
+				if($scope.quickBill.BillContact != undefined){
+					billFormData.append('contactNo',$scope.quickBill.BillContact);
+				}
+				else{
+					billFormData.append('contactNo','');
+				}
+				
+				  billFormData.append('clientName',$scope.quickBill.clientName);
+				  billFormData.append('emailId',$scope.quickBill.emailId);
+				  billFormData.append('address1',$scope.quickBill.fisrtAddress);
+				  billFormData.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
+				  billFormData.append('cityId',$scope.quickBill.cityId.cityId);
+				  billFormData.append('transactionDate',fdate);
+				  billFormData.append('total',$scope.totalTable);
+				 billFormData.append('tax',$scope.quickBill.tax);
+				 billFormData.append('grandTotal',$scope.grandTotalTable);
+				
+				 billFormData.append('balance',$scope.balanceTable);
+				  billFormData.append('paymentMode',$scope.quickBill.paymentMode);
+				  
+				 if($scope.quickBill.paymentMode == 'bank'){
+					  
+					 billFormData.append('bankName',$scope.quickBill.BankName.bankName);
+					billFormData.append('checkNumber',$scope.quickBill.chequeNo);
+				  }
+			/** End **/
+			billFormData.append('invoiceNumber',$scope.quickBill.invoiceNumber);
+			billFormData.append('jobCardNumber',$scope.quickBill.jobcardNumber);
+	  }
+	  
+	 
+		 
+		 var  date4 = new Date();
+		var tdate  = date4.getDate()+'-'+(date4.getMonth()+1)+'-'+date4.getFullYear();
+		
+				formdata.append('transactionDate',tdate);
+				billFormData.append('transactionDate',tdate);
+				
+		
 		  
 		   
-		 //Inventory
+		 //Product
 		  var json2 = angular.copy(vm.AccBillTable);
 		 
 		 for(var i=0;i<json2.length;i++){
 			 
 			angular.forEach(json2[i], function (value,key) {
 				
-				formdata.append('product['+i+']['+key+']',value);
+				if(key != 'color' && key!= 'frameNo' && key!='size'){
+					formdata.append('product['+i+']['+key+']',value);
+				}
+				if(key != 'productInformation'){
+					billFormData.append('inventory['+i+']['+key+']',value);
+				}
 			});
 					
 		 }
+		 
 	 
-	 }
+	 
 	 
 	 
 	 // if($scope.saleType == 'RetailsaleBill'){
@@ -952,19 +915,20 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	 // }
 	 
 	// alert($scope.salesTypeHeader);
-	 if(generate == 'generateBill'){
+	if(generate == 'generateBill'){
 					
-		var headerData = {'Content-Type': undefined,'operation':'generateBill'};
-		
+		var billHeaderData = {'Content-Type': undefined,'salesType':'retail_sales','operation':'preprint'};
+		var headerData = {'Content-Type': undefined};
 	}
 	else{
+		
 		var headerData = {'Content-Type': undefined};
 	}
 	   
 			
 		apiCall.postCallHeader(JobcardPostApiPath,headerData,formdata).then(function(data){
 			
-			toaster.clear();
+			
 		
 			//Delete Inventory Data From Formdata Object
 			var json3 = angular.copy(vm.AccBillTable);
@@ -987,6 +951,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			formdata.delete('entryDate');
 			formdata.delete('deliveryDate');
 			formdata.delete('jobCardNo');
+			formdata.delete('invoiceNumber');
 			formdata.delete('transactionDate');
 			formdata.delete('total');
 			formdata.delete('tax');
@@ -999,91 +964,44 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			formdata.delete('isDisplay');
 			
 			
-			if((angular.isObject(data) && data.hasOwnProperty('documentPath')) || apiResponse.ok == data){
+			if(apiResponse.ok == data){
 				
-				$scope.disableButton = false;
-				
-				// apiCall.postCall(apiPath.getAllInvoice+'/'+$scope.quickBill.invoiceId,formdataNew).then(function(response3){
-			
-					// console.log(response3);
-					// formdataNew.delete('endAt');
-		
-				// });
-				
-				
-				formdata.delete('companyId');
-				formdata.delete('contactNo');
-				formdata.delete('workNo');
-				formdata.delete('companyName');
-				formdata.delete('clientName');
-				
-				formdata.delete('emailId');
-				formdata.delete('address1');
-				formdata.delete('address2');
-				formdata.delete('stateAbb');
-				formdata.delete('cityId');
-				formdata.delete('paymentMode');
-				formdata.delete('serviceType');
-				formdata.delete('bankName');
-				formdata.delete('checkNumber');
+				toaster.clear();
 				
 				if(generate == 'generateBill'){
 					
-					var pdfPath = $scope.erpPath+data.documentPath;
-					// var printwWindow = $window.open(pdfPath, '_blank');
-					// printwWindow.print();
-					$scope.directPrintPdf(pdfPath);
-				}
-				else{
-					//console.log('Not');
-				}
-			
-				var companyObject = $scope.quickBill.companyDropDown;
-				$scope.quickBill = [];
-				vm.dt1 = new Date();
-				vm.dt2 = new Date();
-				vm.AccBillTable = [{"productId":"","productName":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-				vm.productTax = [{"tax":0,"additionalTax":0}];
-				//vm.cityDrop = [];
-				
-				$scope.changeProductArray = false;
-				$scope.changeProductAdvancePrice = false;
-				vm.disableCompany = false; 
-				
-				// $scope.defaultComapny();
-				$scope.ReloadAfterSave(companyObject);
-				
-				$scope.clientGetAllFunction();
-				
-				//$scope.getInitStateCity(); //get Default State and City
-				
-				$scope.stateAndCityDefault(defStateData,defCityData); 
-				
-				//Get State
-				// vm.statesDrop=[];
-				// apiCall.getCall(apiPath.getAllState).then(function(response3){
+					toaster.pop('wait', 'Please Wait', 'Bill Data Inserting....',600000);
 					
-					// vm.statesDrop = response3;
-				
-				// });
-				
-				$scope.quickBill.paymentMode = 'cash';
-				$scope.quickBill.serviceType = 'paid';
-				
-				$anchorScroll();
-				$("#contactNoSelect").focus();
-				
-				if($scope.quickBill.EditBillData){
-					
-					toaster.pop('success', 'Title', 'Update Successfully');
+					apiCall.postCallHeader(apiPath.postBill,billHeaderData,billFormData).then(function(response){
+						
+						toaster.clear();
+						
+						if((angular.isObject(response) && response.hasOwnProperty('documentPath'))){
+							
+							var pdfPath = $scope.erpPath+response.documentPath;
+							$scope.directPrintPdf(pdfPath);
+							var billFormData = new FormData();
+						}
+						
+						$scope.disableButton = false;
+						
+						$scope.clearDataAfterResponse();
+						
+					});
 				}
 				else{
 					
-					toaster.pop('success', 'Title', 'Insert Successfully');
+					toaster.clear();
+					
+					$scope.disableButton = false;
+					
+					$scope.clearDataAfterResponse();
 				}
-			
+				
+				
 			}
 			else{
+				toaster.clear();
 				
 				if(apiResponse.noContent == data){
 					
@@ -1115,66 +1033,27 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	
 	$scope.cancel = function(){
 		
+		var companyObject = $scope.quickBill.companyDropDown;
+		
 		$scope.quickBill = [];
 		
 		$scope.disableButton = false; 
 		
-	
-		
-	
-		//Delete Inventory Data From Formdata Object
-		var json3 = angular.copy(vm.AccBillTable);
-		 
-		for(var i=0;i<json3.length;i++){
-			 
-			angular.forEach(json3[i], function (value,key) {
-				
-				formdata.delete('product['+i+']['+key+']');
-			});
-				
-		}
-		
-		formdata.delete('entryDate');
-		formdata.delete('deliveryDate');
-		formdata.delete('jobCardNo');
-		formdata.delete('transactionDate');
-		formdata.delete('total');
-		formdata.delete('tax');
-		formdata.delete('grandTotal');
-		formdata.delete('advance');
-		formdata.delete('balance');
-		formdata.delete('labourCharge');
-		
-		//formdata.delete('inventory');
-		formdata.delete('isDisplay');
-		
-		formdata.delete('companyId');
-		formdata.delete('contactNo');
-		formdata.delete('workNo');
-		formdata.delete('companyName');
-		formdata.delete('clientName');
-		
-		formdata.delete('emailId');
-		formdata.delete('address1');
-		formdata.delete('address2');
-		formdata.delete('stateAbb');
-		formdata.delete('cityId');
-		formdata.delete('paymentMode');
-		formdata.delete('serviceType');
-		formdata.delete('bankName');
-		formdata.delete('checkNumber');
+		var formdata = new FormData();
+		var billFormData = new FormData();
 				
 		vm.dt1 = new Date();
 		vm.dt2 = new Date();
-		vm.AccBillTable = [{"productId":"","productName":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 		vm.productTax = [{"tax":0,"additionalTax":0}];
 		vm.cityDrop = [];
 		
 		$scope.changeProductArray = false;
 		$scope.changeProductAdvancePrice = false;
 		vm.disableCompany = false;
+		$scope.quickBill.companyDropDown = companyObject;
 		
-		$scope.defaultComapny();
+		$scope.getInvoiceAndJobcardNumber(companyObject.companyId); // Invoice# and Jobcard#
 		
 		$scope.clientGetAllFunction();
 		
@@ -1189,7 +1068,55 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		
 		
 	}
+	
+	$scope.clearDataAfterResponse = function(){
 		
+		var companyObject = $scope.quickBill.companyDropDown;
+		$scope.quickBill = [];
+		vm.dt1 = new Date();
+		vm.dt2 = new Date();
+		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","productInformation":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+		vm.productTax = [{"tax":0,"additionalTax":0}];
+		//vm.cityDrop = [];
+		
+		$scope.changeProductArray = false;
+		$scope.changeProductAdvancePrice = false;
+		vm.disableCompany = false; 
+		
+		// $scope.defaultComapny();
+		$scope.ReloadAfterSave(companyObject);
+		
+		$scope.clientGetAllFunction();
+		
+		//$scope.getInitStateCity(); //get Default State and City
+		
+		$scope.stateAndCityDefault(defStateData,defCityData); 
+		
+		//Get State
+		// vm.statesDrop=[];
+		// apiCall.getCall(apiPath.getAllState).then(function(response3){
+			
+			// vm.statesDrop = response3;
+		
+		// });
+		
+		$scope.quickBill.paymentMode = 'cash';
+		$scope.quickBill.serviceType = 'paid';
+		
+		$anchorScroll();
+		$("#contactNoSelect").focus();
+		
+		if($scope.quickBill.EditBillData){
+			
+			toaster.pop('success', 'Title', 'Update Successfully');
+		}
+		else{
+			
+			toaster.pop('success', 'Title', 'Insert Successfully');
+		}
+
+	}
+				
 	$scope.directPrintPdf = function(pdfUrlPath){
 		
 		/** Print **/
@@ -1220,44 +1147,6 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	}
 	
 	
-	$scope.scannedImageSaveToFormData = function(url,callback){
-		
-		
-		var xhr = new XMLHttpRequest();
-		  xhr.onload = function() {
-			var reader = new FileReader();
-			reader.onloadend = function() {
-			  callback(reader.result);
-			}
-			reader.readAsDataURL(xhr.response);
-		  };
-		  xhr.open('GET', url);
-		  xhr.responseType = 'blob';
-		  xhr.send();
-
-		  /** Print **/
-			 // $http({
-				// url : url,
-				// method : 'GET',
-				// headers : {
-					// 'Content-type' : undefined
-				// }
-			// }).success(function(data, status, headers, config) {
-				
-				  // var pdfFile = new Blob([data], {
-					// type : 'image/png'
-				// });
-
-				
-				// formdata.append("file[]",pdfFile);
-				
-			// }).error(function(data, status, headers, config) {
-				// alert('Sorry, something went wrong')
-			// });
-		/** End **/
-		
-					
-	}
 	
 	
 	$scope.setClientSuggest = function(Fname,data){
@@ -1281,9 +1170,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			if(angular.isObject(res3)){
 				
 				$scope.quickBill.stateAbb = res3;
-				formdata.delete('stateAbb');
 				
-				formdata.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
 			}
 			else{
 				toaster.pop('alert', 'Opps!!', 'State Not Selected');
@@ -1304,49 +1191,12 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 				
 				//console.log('Object');
 				$scope.quickBill.cityId = res4;
-				formdata.delete('cityId');
-				formdata.append('cityId',$scope.quickBill.cityId.cityId);
+				
 			}
 			else{
 				
 				toaster.pop('alert', 'Opps!!', 'City Not Selected');
 			}
-			
-			
-			/** Set Data In Form **/
-				if(formdata.has(Fname)){
-					
-					formdata.delete(Fname);
-				}
-				formdata.append(Fname,$scope.quickBill.BillContact);
-				
-				
-			
-				formdata.delete('clientName');
-				formdata.delete('jobCardNo');
-				formdata.delete('emailId');
-				formdata.delete('address1');
-				formdata.delete('address2');
-				  
-				  formdata.append('clientName',$scope.quickBill.clientName);
-				  
-				 if($scope.quickBill.emailId){
-					 
-				  formdata.append('emailId',$scope.quickBill.emailId);
-				 }
-				  
-				  if($scope.quickBill.fisrtAddress){
-					 
-					 formdata.append('address1',$scope.quickBill.fisrtAddress);
-				  }
-				  
-				  if($scope.quickBill.secondAddress){
-					 
-					 formdata.append('address2',$scope.quickBill.secondAddress);
-				  }
-				  
-				//console.log($scope.quickBill.BillContact);
-			/** End **/
 			
 		});
 	}
@@ -1696,4 +1546,4 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	}
 	
 }
-CrmJobcardController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","$sce","$templateCache"];
+CrmJobcardController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","$sce","$templateCache","getLatestNumber"];

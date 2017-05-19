@@ -1,18 +1,11 @@
 
-/**=========================================================
- * Module: AddStaffController.js
- * Controller for input components
- =========================================================*/
-
-
-	
 //$.getScript('app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.initiate.js');
 //$.getScript('app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js');
 //$.getScript('app/views/QuickMenu/DocumentScan/Scripts/script.js');
  
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,maxImageSize,$sce,$templateCache) {
+function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory) {
   'use strict';
  
 	var vm = this;
@@ -62,6 +55,17 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	$scope.quickBill.paymentMode = 'cash';
 	
+	$scope.getInvoiceAndJobcardNumber = function(id){
+		
+		var getLatestInvoice = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
+		//Get Invoice#
+		apiCall.getCall(getLatestInvoice).then(function(response4){
+			
+			$scope.quickBill.invoiceNumber = getLatestNumber.getInvoice(response4);
+		});
+			
+		
+	}
 	
 	//Default Company Function
 	$scope.defaultComapny = function(){
@@ -86,37 +90,27 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			var id = response2.companyId;
-			var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
-
-			//Get City
-			apiCall.getCall(getLatest).then(function(response4){
-				//console.log(response4);
-				var label = response4.invoiceLabel;
-				$scope.quickBill.invoiceEndAt = response4.endAt;
-				$scope.quickBill.invoiceId = response4.invoiceId;
-				
-				if(response4.invoiceType=='postfix'){
-					
-					$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
-					//console.log($scope.quickBill.invoiceNumber);
-				}
-				else{
-					$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
-					//console.log($scope.quickBill.invoiceNumber);
-				}
-					
-			});
+			
+			$scope.getInvoiceAndJobcardNumber(id); // Invoice#
 			
 			//Auto Suggest Product Dropdown data
 			vm.productNameDrop = [];
 			
-			apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(responseDrop){
+			//apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(responseDrop){
 				
 				//console.log(responseDrop);
-				vm.productNameDrop = responseDrop;
+				//vm.productNameDrop = responseDrop;
+				//console.log(productFactory.getProductByCompany(id));
+				//vm.productNameDrop = productFactory.getProductByCompany(id);
+			productFactory.getProductByCompany(id).then(function(data){
+				console.log(data);
+				vm.productNameDrop = data;
 				toaster.clear();
 				vm.loadData = false;
 			});
+			
+			
+			//});
 			
 		});
 	}
@@ -138,24 +132,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			var id = response2.companyId;
-			var getLatest = apiPath.getLatestInvoice1+id+apiPath.getLatestInvoice2;
-
-			//Get City
-			apiCall.getCall(getLatest).then(function(response4){
-				//console.log(response4);
-				var label = response4.invoiceLabel;
-				$scope.quickBill.invoiceEndAt = response4.endAt;
-				$scope.quickBill.invoiceId = response4.invoiceId;
-				
-				if(response4.invoiceType=='postfix'){
-					
-					$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
-					//console.log($scope.quickBill.invoiceNumber);
-				}
-				else{
-					$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label;
-					//console.log($scope.quickBill.invoiceNumber);
-				}
+			$scope.getInvoiceAndJobcardNumber(id,function(){
 				toaster.clear();
 			});
 			
@@ -464,17 +441,26 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			/** Set State & City **/
 				//State DropDown Selection
-				var stateDropPath = apiPath.getAllState+'/'+$scope.quickBill.EditBillData.client.stateAbb;
-				apiCall.getCall(stateDropPath).then(function(res3){
+				vm.statesDrop=[];
+				apiCall.getCall(apiPath.getAllState).then(function(response3){
 					
-					if(angular.isObject(res3)){
+					vm.statesDrop = response3;
+					
+					var stateDropPath = apiPath.getAllState+'/'+$scope.quickBill.EditBillData.client.stateAbb;
+					apiCall.getCall(stateDropPath).then(function(res3){
 						
-						$scope.quickBill.stateAbb = res3;
-					}
-					else{
-						toaster.pop('alert', 'Opps!!', 'State Not Selected');
-					}
+						if(angular.isObject(res3)){
+							
+							$scope.quickBill.stateAbb = res3;
+						}
+						else{
+							toaster.pop('alert', 'Opps!!', 'State Not Selected');
+						}
+					});
+				
 				});
+			
+				
 				
 				//City DropDown
 				var cityAllDropPath = apiPath.getAllCity+$scope.quickBill.EditBillData.client.stateAbb;
@@ -730,40 +716,25 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 		
 		$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
-		
-		var getLatest = apiPath.getLatestInvoice1+item.companyId+apiPath.getLatestInvoice2;
-		
-		//Get City
-		apiCall.getCall(getLatest).then(function(response4){
-			var label = response4.invoiceLabel;
-			$scope.quickBill.invoiceEndAt = response4.endAt;
-			$scope.quickBill.invoiceId = response4.invoiceId;
-			
-			
-			if(response4.invoiceType=='postfix'){
-				//console.log('postfix');
-				$scope.quickBill.invoiceNumber = label+$scope.quickBill.invoiceEndAt;
-				//console.log($scope.quickBill.invoiceNumber);
-			}
-			else{
-				//console.log('Prefix');
-				$scope.quickBill.invoiceNumber = $scope.quickBill.invoiceEndAt+label ;
-				//console.log($scope.quickBill.invoiceNumber);
-			}
-				
-		});
+	
+		$scope.getInvoiceAndJobcardNumber(item.companyId); // Invoice#
 		
 		//Auto Suggest Product Dropdown data
 		vm.productNameDrop = [];
 		
-		apiCall.getCall(apiPath.getProductByCompany+item.companyId+'/branch').then(function(responseDrop){
+		//apiCall.getCall(apiPath.getProductByCompany+item.companyId+'/branch').then(function(responseDrop){
 			
-			vm.productNameDrop = responseDrop;
+			//vm.productNameDrop = responseDrop;
+			//vm.productNameDrop = productFactory.getProductByCompany(item.companyId);
+			productFactory.getProductByCompany(item.companyId).then(function(data){
+				console.log(data);
+				vm.productNameDrop = data;
+				toaster.clear();
+				vm.loadData = false;
+			});
 			
-			toaster.clear();
-			vm.loadData = false;
 		
-		});
+		//});
 		
 		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 		vm.productTax = [{"tax":0,"additionalTax":0}];
@@ -813,6 +784,14 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					 formdata.append('advance',0);
 				 }
 				
+				if($scope.quickBill.extraCharge){
+				
+					formdata.append('extraCharge',$scope.quickBill.extraCharge);
+				}
+				else{
+					formdata.append('extraCharge',0);
+				}
+					
 				 formdata.append('balance',$scope.balanceTable);
 				 
 			}
@@ -873,6 +852,14 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				 formdata.append('advance',0);
 			 }
 			
+			if($scope.quickBill.extraCharge){
+				
+				formdata.append('extraCharge',$scope.quickBill.extraCharge);
+			}
+			else{
+				formdata.append('extraCharge',0);
+			}
+				
 			 formdata.append('balance',$scope.balanceTable);
 			
 			formdata.append('isDisplay','yes');
@@ -969,12 +956,22 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			formdata.delete('grandTotal');
 			formdata.delete('advance');
 			formdata.delete('balance');
+			formdata.delete('labourCharge');
 			
 			//formdata.delete('inventory');
 			formdata.delete('isDisplay');
 			
 			
 			if(angular.isObject(data) && data.hasOwnProperty('documentPath')){
+				
+				if($scope.quickBill.EditBillData){
+					
+					toaster.pop('success', 'Title', 'Update Successfully');
+				}
+				else{
+					
+					toaster.pop('success', 'Title', 'Insert Successfully');
+				}
 				
 				$scope.disableButton = false;
 				
@@ -1006,16 +1003,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				formdata.delete('remark');
 				
 				$scope.clearScannedResult();
-				
-				
-				if($scope.quickBill.EditBillData){
-					
-					toaster.pop('success', 'Title', 'Update Successfully');
-				}
-				else{
-					
-					toaster.pop('success', 'Title', 'Insert Successfully');
-				}
 				
 				
 				if(generate == 'generate'){
@@ -1130,6 +1117,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		formdata.delete('grandTotal');
 		formdata.delete('advance');
 		formdata.delete('balance');
+		formdata.delete('labourCharge');
 		
 		//formdata.delete('inventory');
 		formdata.delete('isDisplay');
@@ -1252,13 +1240,13 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$scope.quickBill.cityId = {};
 		$scope.quickBill.stateAbb = {};
 		
-		$scope.quickBill.WorkNo = data.workNo;
-		$scope.quickBill.companyName = data.companyName;
+		//$scope.quickBill.WorkNo = data.workNo;
+		//$scope.quickBill.companyName = data.companyName;
 		$scope.quickBill.clientName = data.clientName;
 		$scope.quickBill.emailId = data.emailId;
 		
 		$scope.quickBill.fisrtAddress = data.address1;
-		$scope.quickBill.secondAddress = data.address2;
+		//$scope.quickBill.secondAddress = data.address2;
 		
 		//State DropDown Selection
 		var stateDropPath = apiPath.getAllState+'/'+data.state.stateAbb;
@@ -1306,24 +1294,24 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				}
 				formdata.append(Fname,$scope.quickBill.BillContact);
 				
-				formdata.delete('workNo');
-				formdata.delete('companyName');
+				//formdata.delete('workNo');
+				//formdata.delete('companyName');
 				formdata.delete('clientName');
 				formdata.delete('invoiceNumber');
 				formdata.delete('emailId');
 				formdata.delete('address1');
-				formdata.delete('address2');
+				//formdata.delete('address2');
 				
 				
-				 if($scope.quickBill.WorkNo){
+				 // if($scope.quickBill.WorkNo){
 					 
-				  formdata.append('workNo',$scope.quickBill.WorkNo);
-				 }
+				  // formdata.append('workNo',$scope.quickBill.WorkNo);
+				 // }
 				 
-				  if($scope.quickBill.companyName){
+				  // if($scope.quickBill.companyName){
 					  
-					formdata.append('companyName',$scope.quickBill.companyName);
-				  }
+					// formdata.append('companyName',$scope.quickBill.companyName);
+				  // }
 				  
 				  formdata.append('clientName',$scope.quickBill.clientName);
 				  
@@ -1337,10 +1325,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					 formdata.append('address1',$scope.quickBill.fisrtAddress);
 				  }
 				  
-				  if($scope.quickBill.secondAddress){
+				  // if($scope.quickBill.secondAddress){
 					 
-					 formdata.append('address2',$scope.quickBill.secondAddress);
-				  }
+					 // formdata.append('address2',$scope.quickBill.secondAddress);
+				  // }
 				  
 				//console.log($scope.quickBill.BillContact);
 			/** End **/
@@ -2064,4 +2052,4 @@ $scope.presssuburb = function(event){
   // return ($location.path().substr(0, path.length) === path) ? 'active' : '';
 // }
 }
-RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","maxImageSize","$sce","$templateCache"];
+RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory"];

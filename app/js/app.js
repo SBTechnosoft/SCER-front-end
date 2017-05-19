@@ -13,7 +13,7 @@ if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript 
 
 
 var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages','ngTableToCsv',"ngSanitize", "ngCsv","vcRecaptcha","uiCropper"])
-    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','apiPath', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,apiPath) {
+    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http) {
 		
 		
 		//$templateCache.removeAll();
@@ -135,6 +135,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 		
 		// alert(data);
 	// }
+	
 	
 	
   }

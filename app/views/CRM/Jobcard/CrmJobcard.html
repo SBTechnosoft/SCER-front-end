@@ -337,7 +337,7 @@ h4 .control-label{
 				<tr>
 					<td></td>
 					<td></td>
-					<td style="text-align:left" ><strong>L.Charge<strong></td>
+					<td style="text-align:left" title="Labour Charge" ><strong>L.Charge<strong></td>
 					<td ng-init="quickBill.labourCharge = 0">
 						<input id="input-id-1" type="text" name="labourCharge" ng-model="quickBill.labourCharge"  class="form-control"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
 						<span ng-messages="formBill.labourCharge.$error" ng-if="formBill.labourCharge.$dirty || formBill.labourCharge.$touched"  role="alert">
@@ -347,7 +347,7 @@ h4 .control-label{
 					<td  style="text-align:left" > <strong>Total </strong> </td>
 					<td colspan="2" style="text-align:right" >{{quickBill.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
 					<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
-					<td style="text-align:right">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.labourCharge*1) | setDecimal: noOfDecimalPoints) }}</td>
+					<td style="text-align:right">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.labourCharge ? quickBill.labourCharge*1 : 0) | setDecimal: noOfDecimalPoints) }}</td>
 				</tr>
 				<!--tr>
 					<td></td>
@@ -510,6 +510,8 @@ h4 .control-label{
 		</div-->
 		
 		<div class="col-sm-12">
+			
+			<button type="button" class="mr mb-sm btn btn-danger pull-right" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" >New</button>
 			
 			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generateBill')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" > <span ng-if="quickBill.EditBillData" >Update & Bill Generate </span> <span ng-if="!quickBill.EditBillData">Save & Bill Generate </span> </button>
 			 

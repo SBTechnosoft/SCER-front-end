@@ -1,13 +1,18 @@
 [
   {
     "text": "Jobcard",
-    "sref": "app.CrmJobcard",
-    "icon": "icon-stack"
+    "sref": "",
+    "icon": "icon-tag",
+		"subnav": [
+		  {"text": "All", "sref": "app.CrmAllJobcard", "translate": "" },
+		  {"text": "Add/Edit", "sref": "app.CrmJobcard", "translate": "" }
+		],
+		"translate": ""
   },
   {
     "text": "Clients",
     "sref": "app.CrmClients",
-    "icon": "icon-stack",
+    "icon": "icon-head",
 		"subnav": [
 		  {"text": "List of Clients", "sref": "app.CrmListClients", "translate": "" }
 		],

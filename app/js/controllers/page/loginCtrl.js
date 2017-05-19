@@ -58,7 +58,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 					formdata.append('password',$scope.loginData.password);
 					
 					$http({
-						url: apiPath.loginAuth,
+						url: $rootScope.erpPath+apiPath.loginAuth,
 						method: 'post',
 						processData: false,
 					   headers: {'Content-Type': undefined},

@@ -6,7 +6,7 @@
 
 App.controller('AddCompanyController', AddCompanyController);
 
-function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,toaster,apiResponse,validationMessage,validationPattern,getSetFactory,maxImageSize) {
+function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,toaster,apiResponse,validationMessage,validationPattern,getSetFactory,maxImageSize,stateCityFactory) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -49,7 +49,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	
 	$scope.gotoModify = function(){
 		
-		var id = $scope.addCompany.companyDropDown2.companyId;
+		var id = $scope.addCompany.companyDropDown2;
 		// $location.path('app/AddCompany/'+id);
 		  getSetFactory.set(id);
 		$scope.AddEditFunction();
@@ -86,20 +86,27 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	//Get State
 	vm.statesDrop=[];
 	vm.cityDrop = [];
-	 
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
-		vm.statesDrop = response3;
-	});
+	
+	 vm.statesDrop = stateCityFactory.getState();
+	 console.log(stateCityFactory.getState());
+	
+	// console.log(stateCityFactory.getDefaultStateCities($rootScope.defaultState));
+	
+	
+	// apiCall.getCall(apiPath.getAllState).then(function(response3){
+		// vm.statesDrop = response3;
+	// });
 	
 	$scope.ChangeState = function(Fname,state)
 	{
 		//console.log(apiPath.getAllCity+state);
 		var getonecity = apiPath.getAllCity+state;
 		//Get City
-		apiCall.getCall(getonecity).then(function(response4){
-			vm.cityDrop = response4;
-				
-		});
+		//apiCall.getCall(getonecity).then(function(response4){
+			vm.cityDrop = stateCityFactory.getDefaultStateCities(state);
+			//vm.cityDrop = response4;
+			
+		//});
 		
 		if(formdata.has(Fname))
 		{
@@ -116,70 +123,82 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	$scope.AddEditFunction = function(){
 		
 		//console.log(Object.keys(getSetFactory.get()).length);
+		//console.log(getSetFactory.get());
+		//console.log(Object.keys(getSetFactory.get()).length);
 		//if(Object.keys(getSetFactory.get()).length){
-		if(getSetFactory.get() > 0){
+		//if(getSetFactory.get() > 0){
+		if(Object.keys(getSetFactory.get()).length > 0){
 	  
-		
-		$scope.addCompany.cId = getSetFactory.get();
+		var editCompanyData = getSetFactory.get();
 		getSetFactory.blank();
+		
+		$scope.addCompany.cId = editCompanyData.companyId;
+		
 		
 		//Edit Branch
 		var editCompany = apiPath.getAllCompany+'/'+$scope.addCompany.cId;
 	
-		apiCall.getCall(editCompany).then(function(res){
+		//apiCall.getCall(editCompany).then(function(res){
 		
-		//console.log(res);
-		vm.sdfg = res.companyId;
-		
-		$scope.addCompany.companyDropDown2 = res;
-		
-		//console.log(vm.sdfg);
-		$scope.addCompany.Name = res.companyName;
-		$scope.addCompany.displayName = res.companyDisplayName;
-		$scope.addCompany.address1 = res.address1;
-		$scope.addCompany.address2 = res.address2;
-		$scope.addCompany.pincode = res.pincode;
-		$scope.addCompany.pan = res.pan;
-		$scope.addCompany.tin = res.tin;
-		$scope.addCompany.vat = res.vatNo;
-		$scope.addCompany.serviceTax = res.serviceTaxNo;
-		$scope.addCompany.sgst = res.sgst;
-		$scope.addCompany.cgst = res.cgst;
-		$scope.addCompany.currency = res.basicCurrencySymbol;
-		$scope.addCompany.formalName = res.formalName;
-		
-		$scope.addCompany.decimal = res.noOfDecimalPoints;
-		vm.disableDecimal = true;
-		$scope.addCompany.curSymbol = res.currencySymbol;
-		
-		if(res.logo.documentName){
+			//console.log(res);
+			vm.sdfg = editCompanyData.companyId;
 			
-			$scope.addCompany.documentUrl = res.logo.documentUrl;
-			$scope.addCompany.documentName = res.logo.documentName;
-		}
-		
-		$scope.addCompany.statesDropDown = res.state;
-		
-		
-		//City DropDown
-		var cityAllDropPath = apiPath.getAllCity+res.state.stateAbb;
-		apiCall.getCall(cityAllDropPath).then(function(res5){
+			$scope.addCompany.companyDropDown2 = editCompanyData;
 			
-			vm.cityDrop = res5;
+			//console.log(vm.sdfg);
+			$scope.addCompany.Name = editCompanyData.companyName;
+			$scope.addCompany.displayName = editCompanyData.companyDisplayName;
+			$scope.addCompany.address1 = editCompanyData.address1;
+			$scope.addCompany.address2 = editCompanyData.address2;
+			$scope.addCompany.pincode = editCompanyData.pincode;
+			$scope.addCompany.pan = editCompanyData.pan;
+			$scope.addCompany.tin = editCompanyData.tin;
+			$scope.addCompany.vat = editCompanyData.vatNo;
+			$scope.addCompany.serviceTax = editCompanyData.serviceTaxNo;
+			$scope.addCompany.sgst = editCompanyData.sgst;
+			$scope.addCompany.cgst = editCompanyData.cgst;
+			$scope.addCompany.currency = editCompanyData.basicCurrencySymbol;
+			$scope.addCompany.formalName = editCompanyData.formalName;
 			
-			$scope.addCompany.cityDropDown = res.city;
-		});
-		
+			$scope.addCompany.decimal = editCompanyData.noOfDecimalPoints;
+			vm.disableDecimal = true;
+			$scope.addCompany.curSymbol = editCompanyData.currencySymbol;
+			
+			$scope.addCompany.documentUrl = undefined;
+			$scope.addCompany.documentName = undefined;
+				
+			if(editCompanyData.logo.documentName){
+				
+				$scope.addCompany.documentUrl = editCompanyData.logo.documentUrl;
+				$scope.addCompany.documentName = editCompanyData.logo.documentName;
+			}
+			
+			 vm.statesDrop = stateCityFactory.getState();
+			$scope.addCompany.statesDropDown = editCompanyData.state;
+			 console.log('stateDone');
+			
+			//City DropDown
+			var cityAllDropPath = apiPath.getAllCity+editCompanyData.state.stateAbb;
+			apiCall.getCall(cityAllDropPath).then(function(res5){
+				
+				vm.cityDrop = res5;
+				
+				$scope.addCompany.cityDropDown = editCompanyData.city;
+			});
+			
 	
 		
-		});
+		//});
 	  
 	  }
 	  else{
 		  
 		  vm.disableDecimal = false;
-		 
-		
+			 vm.statesDrop = stateCityFactory.getState();
+			 $scope.addCompany.statesDropDown = stateCityFactory.getDefaultState($rootScope.defaultState);
+			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+			//vm.cityDrop = response4;
+			$scope.addCompany.cityDropDown = stateCityFactory.getDefaultCity($rootScope.defaultCity);
 		  console.log('Not');
 	  }
   
@@ -460,4 +479,4 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	}
   
 }
-AddCompanyController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","$state","toaster","apiResponse","validationMessage","validationPattern","getSetFactory","maxImageSize"];
+AddCompanyController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","$state","toaster","apiResponse","validationMessage","validationPattern","getSetFactory","maxImageSize","stateCityFactory"];

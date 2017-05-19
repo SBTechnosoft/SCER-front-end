@@ -12,7 +12,7 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
  var data = [];
  $scope.jobcardForm = [];
  
- var JobcardGetApiPath = $rootScope.erpPath+apiPath.getJobcardNumber;
+ var JobcardGetApiPath = apiPath.getJobcardNumber;
  
  //Table
  $scope.jobcardForm.jobCardNumberType = "prefix";

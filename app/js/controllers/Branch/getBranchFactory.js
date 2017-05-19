@@ -1,6 +1,6 @@
 App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiResponse", function ($http,$q,apiPath,$rootScope,$state,apiResponse) {
 	
-	
+	var apiRootPath = $rootScope.erpPath;
 	
 	return {
 		 getCall : function(url){
@@ -8,7 +8,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			var deferred = $q.defer();
 			
 			$http({
-				url: url,
+				url: apiRootPath+url,
 				method: 'get',
 				processData: false,
 				crossDomain:true,
@@ -30,7 +30,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			 var deferred = $q.defer();
 			 
 			$http({
-				url: url,
+				url: apiRootPath+url,
 				method: 'post',
 				processData: false,
 				crossDomain:true,
@@ -50,7 +50,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			 var deferred = $q.defer();
 			 
 			$http({
-				url: url,
+				url: apiRootPath+url,
 				method: 'patch',
 				processData: false,
 				crossDomain:true,
@@ -74,7 +74,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			var deferred = $q.defer();
 			
 			$http({
-				url: url,
+				url: apiRootPath+url,
 				method: 'get',
 				processData: false,
 				crossDomain:true,
@@ -101,7 +101,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			var deferred = $q.defer();
 			 
 			$http({
-				url: url,
+				url: apiRootPath+url,
 				method: 'post',
 				processData: false,
 				crossDomain:true,
@@ -128,7 +128,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			var deferred = $q.defer();
 			
 			$http({
-				url: url,
+				url: apiRootPath+url,
 				method: 'delete',
 				processData: false,
 				headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
@@ -149,7 +149,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			var deferred = $q.defer();
 			
 			$http({
-				url: apiPath.getAllCompany,
+				url: apiRootPath+apiPath.getAllCompany,
 				method: 'get',
 				processData: false,
 				crossDomain:true,
@@ -179,7 +179,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			var deferred = $q.defer();
 			
 			$http({
-				url: apiPath.getAllBranch,
+				url: apiRootPath+apiPath.getAllBranch,
 				method: 'get',
 				processData: false,
 				crossDomain:true,

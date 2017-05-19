@@ -626,7 +626,14 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		
 		/** CRM **/
 		
-			//Jobcard
+			//View All Jobcard
+			.state('app.CrmAllJobcard', {
+				url: '/CrmAllJobcard',
+				templateUrl: basepath('CRM/Jobcard/CrmAllJobcard.html'),
+				resolve: requireDeps('ngTable', 'ngTableExport','getBranchSrv','toaster')
+			})
+		
+			//Jobcard Add/Edit
 			.state('app.CrmJobcard', {
 				url: '/CrmJobcard',
 				templateUrl: basepath('CRM/Jobcard/CrmJobcard.html'),

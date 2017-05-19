@@ -330,14 +330,18 @@ h4 .control-label{
 				<tr>
 					<td></td>
 					<td></td>
-					
 					<td></td>
-					<td></td>
-					<td></td>
+					<td style="text-align:left" title="Extra Charge" ><strong>E.Charge<strong></td>
+					<td ng-init="quickBill.extraCharge = 0">
+						<input id="input-id-1" type="text" name="extraCharge" ng-model="quickBill.extraCharge"  class="form-control"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
+						<span ng-messages="formBill.extraCharge.$error" ng-if="formBill.extraCharge.$dirty || formBill.extraCharge.$touched"  role="alert">
+							<span ng-messages-include="errorPatternNumber"></span>
+						</span>
+					</td>
 					<td  style="text-align:left" > <strong>Total </strong> </td>
 					<td colspan="2" style="text-align:right" >{{quickBill.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
 					<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
-					<td style="text-align:right">{{grandTotalTable = (totalTable -- quickBill.tax | setDecimal: noOfDecimalPoints)}}</td>
+					<td style="text-align:right">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}</td>
 				</tr>
 				<!--tr>
 					<td></td>

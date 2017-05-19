@@ -4,7 +4,7 @@
  * Controls the header navigation
  =========================================================*/
 
-App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse','$modal', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse,$modal) {
+App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse','$modal','stateCityFactory','productFactory', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse,$modal,stateCityFactory,productFactory) {
   'use strict';
   
   $scope.userName = $rootScope.$storage.authUser.userName;
@@ -282,6 +282,31 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	  Calculator Model End
 	  **/
   
+	/** Set Data In Factory **/
+		
+		apiCall.getCall(apiPath.getAllState).then(function(response){
+			
+			//console.log(response);
+			stateCityFactory.setState(response);
+			
+		});
+		
+		apiCall.getCall(apiPath.getOneCity).then(function(response){
+			
+			//console.log(response);
+			stateCityFactory.setCity(response);
+			
+		});
+		
+		//apiCall.getCall(apiPath.getAllProduct).then(function(response){
+			
+			//console.log(response);
+			//productFactory.setProduct(response);
+			
+		//});
+		
+	/** End **/
+	
 	  $scope.logout = function(){
 		  
 		//alert('in');2e7719b36240c051e694a88cc511d4a6  d29ac73b666a3be3fc463448fdc5d9fc
