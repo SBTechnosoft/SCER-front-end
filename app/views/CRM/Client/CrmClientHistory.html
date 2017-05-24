@@ -1,0 +1,105 @@
+<h3>
+	<small>
+   <a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
+    Client  >>
+   <a ui-sref="app.CrmClientFilterView"> Filter </a> >>
+   <a ui-sref="app.CrmClientFilterData"> Filter Data </a> >>
+	History
+   </small>
+</h3>
+<div   class="container-fluid" >
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	<div id="panelDemo14" class="panel panel-default">
+         <div class="panel-heading myHeading">
+			<h5><b>{{clientName}}</b> History Between {{::displayfromDate}} to {{::displaytoDate}} </h5>
+		 </div>
+         <div class="panel-body">
+            <tabset>
+				<tab heading="Client Details" >
+					<form  action="#"  class="form-horizontal">
+						<div class="row"> 
+							<div class="col-md-12"> 
+							
+								<div class="col-md-6"> 
+									 <fieldset class="my-fieldset-paddingBottom">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Client Name</label>
+											<div class="col-sm-9">
+												<p class="form-control-static myFontLarger">{{ClientData.clientName}}</p>
+											</div>
+										</div>
+									</fieldset>
+									<fieldset class="my-fieldset-paddingBottom">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Email ID</label>
+											<div class="col-sm-9">
+												<p class="form-control-static myFontLarger">{{ClientData.emailId}}</p>
+											</div>
+										</div>
+									</fieldset>
+									<fieldset class="my-fieldset-paddingBottom">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">State</label>
+											<div class="col-sm-9">
+												<p class="form-control-static myFontLarger">{{ClientData.state.stateName}}</p>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							
+								<div class="col-md-6"> 
+									<fieldset class="my-fieldset-paddingBottom">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Mobile#</label>
+											<div class="col-sm-9">
+												<p class="form-control-static myFontLarger">{{ClientData.contactNo}}</p>
+											</div>
+										</div>
+									</fieldset>
+									<fieldset class="my-fieldset-paddingBottom">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Address</label>
+											<div class="col-sm-9">
+												<p class="form-control-static myFontLarger">{{ClientData.address1}}</p>
+											</div>
+										</div>
+									</fieldset>
+									<fieldset class="my-fieldset-paddingBottom">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">City</label>
+											<div class="col-sm-9">
+												<p class="form-control-static myFontLarger">{{ClientData.city.cityName}}</p>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</div>
+					</form>
+				</tab>
+			    <tab heading="Conversation"  >
+				 
+					
+				</tab>
+				<tab heading="History"  >
+				 
+					
+				</tab>
+				<tab heading="Email/SMS"   >
+				  <div class="input-group form-group  pull-right" style="margin-top:5px">
+					 <a ui-sref="app.CrmClientHistory.compose" class="btn btn-primary" data-ng-class="app.theme.brand">
+						<span>Mail</span>
+					 </a>
+					
+					 <a ui-sref="app.CrmClientHistory.sms" class="btn btn-primary" data-ng-class="app.theme.brand">
+						<span>SMS</span>
+					 </a>
+				 </div>
+				  <div ui-view="container" class="data-ng-fadeInUp"></div>
+					
+				</tab>
+            </tabset>
+         </div>
+    </div>
+   
+</div>

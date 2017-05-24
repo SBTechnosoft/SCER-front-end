@@ -2,18 +2,16 @@
   {
     "text": "Dashboard",
     "sref": "app.dashboard",
-    "icon": "icon-bar-graph",
-    "translate": ""
+    "icon": "icon-bar-graph"
   },
   {
     "text": "Companies",
     "sref": "#",
     "icon": "icon-box",
     "subnav": [
-      {"text": "All", "sref": "app.Company", "translate": "" },
-      {"text": "Modify", "sref": "app.AddCompany", "translate": "" }
-    ],
-    "translate": ""
+      {"text": "All", "sref": "app.Company" },
+      {"text": "Modify", "sref": "app.AddCompany" }
+    ]
   },
   {
     "text": "Branches",

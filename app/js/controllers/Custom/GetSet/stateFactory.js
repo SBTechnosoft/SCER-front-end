@@ -1,20 +1,31 @@
-App.factory('stateCityFactory', function() {
+App.factory('stateCityFactory',['apiCall','apiPath','$q',function(apiCall,apiPath,$q) {
  var savedData = {};
  var cityData = {};
  
- function setState(data) {
-   savedData = data;
+ function getCity() {
+	 return cityData;
  }
- function setCity(data) {
-   cityData = data;
+ function getState() {
+	var deferredMenu = $q.defer();
+	 
+	if(savedData.length > 0) {
+		deferredMenu.resolve(savedData);
+	} else {
+		
+		apiCall.getCall(apiPath.getOneCity).then(function(data) {
+			cityData = data;
+			
+			apiCall.getCall(apiPath.getAllState).then(function(data) {
+				savedData = data;
+
+				deferredMenu.resolve(data);
+			});
+		});
+	}
+
+	return deferredMenu.promise;
  }
  
- function getState() {
-  return savedData;
- }
- function getCity() {
-  return cityData;
- }
  
  function blankState() {
    savedData = {};
@@ -24,6 +35,7 @@ App.factory('stateCityFactory', function() {
  }
 
 	function getDefaultState(stateId){
+		
 		var Cnt = savedData.length;
 		for(var y=0;y<Cnt;y++)
 		{
@@ -33,6 +45,8 @@ App.factory('stateCityFactory', function() {
 				break;
 			}
 		}
+		
+		
 	}
 	
 	function getDefaultStateCities(stateId){
@@ -67,8 +81,6 @@ App.factory('stateCityFactory', function() {
 	
 		
  return {
-  setState: setState,
-  setCity: setCity,
   getState: getState,
   getCity: getCity,
   blankState: blankState,
@@ -78,4 +90,4 @@ App.factory('stateCityFactory', function() {
   getDefaultCity: getDefaultCity
  }
 
-});
+}]);

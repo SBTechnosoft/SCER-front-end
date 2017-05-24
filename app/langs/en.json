@@ -11,17 +11,10 @@
     "nav": {
       "DASHBOARD": "",
       "DOCUMENTATION": "Documentation",
-      "component": {
-        "COMPONENTS": "Components",
-        "BUTTON": "Buttons",
-        "NOTIFICATION": "Notifications",
-        "BOOTSTRAPUI": "Bootstrap UI",
-        "PANEL": "Panels",
-        "PORTLET": "Portlet",
-        "GRID": "Grid",
-        "GRID_MASONRY": "Grid Masonry",
-        "TYPO": "Typography",
-        "PALETTE": "Palette"
+      "Company": {
+        "COMPANIES": "Companies",
+        "ALL": "All",
+        "MODIFY": "Modify"
       },
       "icon": {
         "ICON": "Icons",

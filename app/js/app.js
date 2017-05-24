@@ -13,7 +13,7 @@ if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript 
 
 
 var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages','ngTableToCsv',"ngSanitize", "ngCsv","vcRecaptcha","uiCropper"])
-    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http) {
+    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','hostUrl','googleSiteKey','hostFrontUrl', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,hostUrl,googleSiteKey,hostFrontUrl) {
 		
 		
 		//$templateCache.removeAll();
@@ -62,24 +62,25 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       picture:  'app/img/user/08.jpg'
     };
 	
+	$rootScope.googleSiteKey = googleSiteKey;
 	
+	$rootScope.erpPath = hostUrl.siliconbrain;
+	// $rootScope.erpPath = hostUrl.swaminarayan;
+	// $rootScope.erpPath = hostUrl.v2erpKey;
+
+	var hostFrontUrls = hostFrontUrl;
+
+	$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.siliconbrain+"app/img/aksLogo.png' height='100%' width='100%' />";
+	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.swaminarayan+"app/img/aksLogo.png' height='100%' width='100%' />";
+	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.v2erpKey+"app/img/aksLogo.png' height='100%' width='100%' />";
 	
-	$rootScope.erpPath = "http://api.siliconbrain.co.in/";
-	// $rootScope.erpPath = "http://api.swaminarayancycles.com/";
-	// $rootScope.erpPath = "http://v2api.siliconbrain.in/";
-
-
-
-	//$rootScope.templateCompanyLogo = "<img src='http://v2erp.siliconbrain.in/app/img/aksLogo.png' height='100%' width='100%' />";
-	$rootScope.templateCompanyLogo = "<img src='http://erp.siliconbrain.co.in/app/img/aksLogo.png' height='100%' width='100%' />";
-	//$rootScope.templateCompanyLogo = "<img src='http://erp.swaminarayancycles.com/app/img/aksLogo.png' height='100%' width='100%' />";
 	
 	/** Silicon **/
 	$rootScope.defaultState = "IN-GJ";
 	$rootScope.defaultCity = 31;
 	
 	
-	/** Swaminarayan **/
+	/** Swaminarayan & v2erp **/
 	//$rootScope.defaultState = "IN-GJ";
 	//$rootScope.defaultCity = 856;
 	

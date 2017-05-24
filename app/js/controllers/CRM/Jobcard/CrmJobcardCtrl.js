@@ -4,7 +4,7 @@
 
 App.controller('CrmJobcardController', CrmJobcardController);
 
-function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,$sce,$templateCache,getLatestNumber) {
+function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,$sce,$templateCache,getLatestNumber,stateCityFactory,productFactory) {
   'use strict';
  
 	var vm = this;
@@ -30,10 +30,6 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	
 	vm.AccBillTable = [];
 	vm.productTax = [];
-			
-	var defStateData = {};
-	var AllDefCityData = [];
-	var defCityData = {};
 	
 	$scope.noOfDecimalPoints; // decimalPoints For Price,Tax Etc.....
 	
@@ -107,22 +103,20 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 			var id = response2.companyId;
 			
-			$scope.getInvoiceAndJobcardNumber(id); // Invoice# and Jobcard#
+			
 			
 			//Auto Suggest Product Dropdown data
 			vm.productNameDrop = [];
 			
-			apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(responseDrop){
+			//apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(responseDrop){
+			productFactory.getProductByCompany(id).then(function(responseDrop){
 				
+				$scope.getInvoiceAndJobcardNumber(id); // Invoice# and Jobcard#
 				//console.log(responseDrop);
 				vm.productNameDrop = responseDrop;
 				toaster.clear();
 				vm.loadData = false;
 			});
-			
-			
-			
-			
 			
 		});
 	}
@@ -141,10 +135,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			
 			var id = response2.companyId;
 			
-			$scope.getInvoiceAndJobcardNumber(id,function(){
-				
-				toaster.clear();
-			}); // Invoice# and Jobcard#
+			$scope.getInvoiceAndJobcardNumber(id); // Invoice# and Jobcard#
 			
 	}
 	//Auto Suggest Client Contact Dropdown data
@@ -174,76 +165,20 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	
 	$scope.getInitStateCity = function(){
 		
-		//Get State
-	vm.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
+		vm.statesDrop=[];
+		vm.cityDrop = [];
 		
-		vm.statesDrop = response3;
-		
-		var cntState = response3.length;
-		var defState = $rootScope.defaultState;
-		
-		for(var y=0;y<cntState;y++)
-		{
-			var stateData = response3[y];
-			if(stateData.stateAbb == defState){
+		stateCityFactory.getState().then(function(response){
+			toaster.clear();
+			vm.statesDrop = response;
+			$scope.quickBill.stateAbb = stateCityFactory.getDefaultState($rootScope.defaultState);
 				
-				$scope.quickBill.stateAbb = stateData;
-				defStateData = stateData;
-				/** City **/
-					var getonecity = apiPath.getAllCity+defState;
-					vm.cityDrop = [];
-					//Get City
-					apiCall.getCall(getonecity).then(function(response4){
-						vm.cityDrop = response4;
-						AllDefCityData = response4;
-						
-						var cntCity = response4.length;
-						var defCity = $rootScope.defaultCity;
-		
-						for(var d=0;d<cntCity;d++)
-						{
-							var cityData = response4[d];
-							
-							if(cityData.cityId == defCity){
-								
-								$scope.quickBill.cityId = cityData;
-								defCityData = cityData;
-					
-								break;
-							}
-						}
-						
-					});
-				
-			
-				/** End **/
-				
-				break;
-			}
-		}
-	
-	});
+			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+			$scope.quickBill.cityId = stateCityFactory.getDefaultCity($rootScope.defaultCity);
+
+		});
 	}
 	
-	
-	$scope.stateAndCityDefault = function(stateData,cityData){
-		
-		$scope.quickBill.stateAbb = stateData;
-				
-			/** City **/
-			vm.cityDrop = [];
-			vm.cityDrop = AllDefCityData;
-						
-			$scope.quickBill.cityId = cityData;
-							
-			
-							
-				
-		
-				/** End **/
-				
-	}
 	//$scope.getInitStateCity();
 	
 	
@@ -356,11 +291,11 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	$scope.EditAddBill = function(){
 	
 		//if(Object.keys(getSetFactory.get()).length){
-		if(Object.keys(getSetFactory.get()).length){
+		if(Object.keys(getSetFactory.get()).length > 0){
 			
 			$scope.quickBill.EditBillData = getSetFactory.get();
 			
-			//console.log($scope.quickBill.EditBillData);
+			console.log($scope.quickBill.EditBillData);
 			getSetFactory.blank();
 			
 			vm.disableCompany = false;
@@ -388,8 +323,9 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 				//Auto Suggest Product Dropdown data
 				vm.productNameDrop = [];
 				
-				apiCall.getCall(apiPath.getProductByCompany+$scope.quickBill.EditBillData.company.companyId+'/branch').then(function(responseDrop){
-					
+				//apiCall.getCall(apiPath.getProductByCompany+$scope.quickBill.EditBillData.company.companyId+'/branch').then(function(responseDrop){
+				productFactory.getProductByCompany($scope.quickBill.EditBillData.company.companyId).then(function(responseDrop){
+				
 					vm.productNameDrop = responseDrop;
 				
 				});
@@ -425,52 +361,23 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			$scope.quickBill.clientName = $scope.quickBill.EditBillData.clientName;
 			$scope.quickBill.emailId = $scope.quickBill.EditBillData.emailId;
 			$scope.quickBill.fisrtAddress = $scope.quickBill.EditBillData.address;
-			$scope.quickBill.stateAbb = $scope.quickBill.EditBillData.state.stateAbb;
-			$scope.quickBill.cityId = $scope.quickBill.EditBillData.city.cityId;
 			
 			$scope.quickBill.advance = $scope.quickBill.EditBillData.advance; //Advance
 			
-			vm.statesDrop=[];
-			apiCall.getCall(apiPath.getAllState).then(function(response3){
-				
-				vm.statesDrop = response3;
-				$scope.quickBill.stateAbb = $scope.quickBill.EditBillData.state;
-			});
-			
 			/** Set State & City **/
+				/** Set State & City **/
 				//State DropDown Selection
-				// var stateDropPath = apiPath.getAllState+'/'+$scope.quickBill.EditBillData.state.stateAbb;
-				// apiCall.getCall(stateDropPath).then(function(res3){
+				vm.statesDrop=[];
+				vm.cityDrop=[];
+				stateCityFactory.getState().then(function(response){
 					
-					// if(angular.isObject(res3)){
-						
-						
-					// }
-					// else{
-						// toaster.pop('alert', 'Opps!!', 'State Not Selected');
-					// }
-				// });
-				
-				//City DropDown
-				var cityAllDropPath = apiPath.getAllCity+$scope.quickBill.EditBillData.state.stateAbb;
-				apiCall.getCall(cityAllDropPath).then(function(res5){
-					vm.cityDrop = res5;
+					vm.statesDrop = response;
+					  $scope.quickBill.stateAbb =  $scope.quickBill.EditBillData.state;
+					vm.cityDrop = stateCityFactory.getDefaultStateCities($scope.quickBill.EditBillData.state.stateAbb);
+					$scope.quickBill.cityId = $scope.quickBill.EditBillData.city;
 				});
-				
-				//City DropDown Selection
-				var cityDropPath = apiPath.getOneCity+'/'+$scope.quickBill.EditBillData.city.cityId;
-				apiCall.getCall(cityDropPath).then(function(res4){
-					
-					if(angular.isObject(res4)){
-						
-						$scope.quickBill.cityId = res4;
 			
-					}
-					else{
-						
-						toaster.pop('alert', 'Opps!!', 'City Not Selected');
-					}
-				});
+				
 			/** End  **/
 			
 			$scope.quickBill.paymentMode = $scope.quickBill.EditBillData.paymentMode;
@@ -483,7 +390,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			$scope.quickBill.serviceType = $scope.quickBill.EditBillData.serviceType;
 			//console.log('If');
 			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
-		vm.AccBillTable = jsonProduct;
+			vm.AccBillTable = jsonProduct;
 			
 			
 			//console.log(vm.AccBillTable);
@@ -500,7 +407,8 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 				
 				vm.productTax.push(taxObject);
 				
-				apiCall.getCall(apiPath.getAllProduct+'/'+setData.productId).then(function(resData){
+				//apiCall.getCall(apiPath.getAllProduct+'/'+setData.productId).then(function(resData){
+				productFactory.getSingleProduct(setData.productId).then(function(resData){
 					
 					/** Tax **/
 					//console.log(resData);
@@ -661,15 +569,13 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	$scope.ChangeState = function(Fname,state)
 	 {
 		
-		var getonecity = apiPath.getAllCity+state;
+		//var getonecity = apiPath.getAllCity+state;
 		
 		//Get City
-		apiCall.getCall(getonecity).then(function(response4){
-			vm.cityDrop = response4;
-			
-			
-				
-		});
+		//apiCall.getCall(getonecity).then(function(response4){
+		vm.cityDrop = stateCityFactory.getDefaultStateCities(state);
+			//vm.cityDrop = response4;
+		//});
 			
 	}
 	
@@ -692,7 +598,8 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		//Auto Suggest Product Dropdown data
 		vm.productNameDrop = [];
 		
-		apiCall.getCall(apiPath.getProductByCompany+item.companyId+'/branch').then(function(responseDrop){
+		//apiCall.getCall(apiPath.getProductByCompany+item.companyId+'/branch').then(function(responseDrop){
+		productFactory.getProductByCompany(item.companyId).then(function(responseDrop){
 			
 			vm.productNameDrop = responseDrop;
 			
@@ -1089,8 +996,6 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		$scope.clientGetAllFunction();
 		
 		//$scope.getInitStateCity(); //get Default State and City
-		
-		$scope.stateAndCityDefault(defStateData,defCityData); 
 		
 		//Get State
 		// vm.statesDrop=[];
@@ -1546,4 +1451,4 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	}
 	
 }
-CrmJobcardController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","$sce","$templateCache","getLatestNumber"];
+CrmJobcardController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","$sce","$templateCache","getLatestNumber","stateCityFactory","productFactory"];

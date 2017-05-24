@@ -6,11 +6,9 @@
 
 App.controller('AddStaffController', AddStaffController);
 
-function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,apiResponse,validationMessage,getSetFactory) {
+function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,apiResponse,validationMessage,getSetFactory,stateCityFactory) {
   'use strict';
- 
-	
-	
+
 	var vm = this;
 	$scope.addStaff = [];
 	var formdata = new FormData();
@@ -33,12 +31,12 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 	
 	
 	//Get State
-	vm.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
+	// vm.statesDrop=[];
+	// apiCall.getCall(apiPath.getAllState).then(function(response3){
 		
-		vm.statesDrop = response3;
+		// vm.statesDrop = response3;
 	
-	});
+	// });
 	
 	//User Type 
 	vm.userTypeDrop = ['admin','staff'];
@@ -76,17 +74,19 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 	}
 	
 	 //Update Set
-	//if(Object.keys(getSetFactory.get()).length){
-	if(getSetFactory.get() > 0){
+	if(Object.keys(getSetFactory.get()).length > 0){
+	//if(getSetFactory.get() > 0){
 		
-		$scope.addStaff.getSetStaffId = getSetFactory.get();
+		var editStaffData = getSetFactory.get();
 		getSetFactory.blank();
+		
+		$scope.addStaff.getSetStaffId = editStaffData.userId;
 		
 		$scope.updatedId = $scope.addStaff.getSetStaffId;
 		
 		var getOneStaff = apiPath.getOneStaff+$scope.addStaff.getSetStaffId;
 		
-		apiCall.getCall(getOneStaff).then(function(response){
+		//apiCall.getCall(getOneStaff).then(function(response){
 		
 			//Company Dropdown data
 			vm.companyDrop = [];
@@ -94,51 +94,50 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 			apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 				
 				vm.companyDrop = responseCompanyDrop;
+				
 			});
 			
-			$scope.addStaff.company = response.company;
+			$scope.addStaff.company = editStaffData.company;
 			
 			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+response.company.companyId;
+			var getAllBranch = apiPath.getOneBranch+editStaffData.company.companyId;
 			//Get Branch
 			apiCall.getCall(getAllBranch).then(function(response4){
 				
 				vm.branchDrop = response4;
 				
-				$scope.addStaff.branch = response.branch;
+				$scope.addStaff.branch = editStaffData.branch;
 			
-			});
-			
-			
-			
-			//Staff Name
-			$scope.addStaff.name = response.userName;
-			//Staff EmailID
-			$scope.addStaff.emailId = response.emailId;
-			//Staff Password
-			$scope.addStaff.password = response.password;
-			//Staff Contact
-			$scope.addStaff.contact = response.contactNo;
-			//Staff Address
-			$scope.addStaff.address = response.address;
-			//Staff Pincode
-			$scope.addStaff.pincode = response.pincode;
-			// user Type
-			$scope.addStaff.userType = response.userType;
-			
-			$scope.addStaff.stateDropDown = response.state;
-			
-			//City DropDown
-			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
-			apiCall.getCall(cityAllDropPath).then(function(res5){
-				
-				vm.cityDrop = res5;
-				
-				$scope.addStaff.cityDropDown = response.city;
 			});
 
+			//Staff Name
+			$scope.addStaff.name = editStaffData.userName;
+			//Staff EmailID
+			$scope.addStaff.emailId = editStaffData.emailId;
+			//Staff Password
+			$scope.addStaff.password = editStaffData.password;
+			//Staff Contact
+			$scope.addStaff.contact = editStaffData.contactNo;
+			//Staff Address
+			$scope.addStaff.address = editStaffData.address;
+			//Staff Pincode
+			$scope.addStaff.pincode = editStaffData.pincode;
+			// user Type
+			$scope.addStaff.userType = editStaffData.userType;
 			
-		});
+			$scope.addStaff.stateDropDown = editStaffData.state;
+			
+			 vm.statesDrop=[];
+			 vm.cityDrop=[];
+			stateCityFactory.getState().then(function(response3){
+				toaster.clear();
+				vm.statesDrop = response3;
+				  $scope.addStaff.stateDropDown = editStaffData.state;
+				vm.cityDrop = stateCityFactory.getDefaultStateCities(editStaffData.state.stateAbb);
+				$scope.addStaff.cityDropDown = editStaffData.city;
+			});
+			
+		//});
 	}
 	else{
 		
@@ -146,6 +145,25 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 		formdata.append('userType','staff');
 		
 		$scope.defaultCompany();
+		
+		 vm.statesDrop=[];
+		 vm.cityDrop=[];
+		stateCityFactory.getState().then(function(response3){
+			toaster.clear();
+			vm.statesDrop = response3;
+			  $scope.addStaff.stateDropDown = stateCityFactory.getDefaultState($rootScope.defaultState);
+			  if(formdata.has('stateAbb')){
+				formdata.delete('stateAbb');
+			}
+			formdata.append('stateAbb',$scope.addStaff.stateDropDown.stateAbb);
+			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+			$scope.addStaff.cityDropDown = stateCityFactory.getDefaultCity($rootScope.defaultCity);
+			if(formdata.has('cityId')){
+				formdata.delete('cityId');
+			}
+			formdata.append('cityId',$scope.addStaff.cityDropDown.cityId);
+		});
+			
 	}
 	
 	  
@@ -174,11 +192,7 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 		//console.log(apiPath.getAllCity+state);
 		var getonecity = apiPath.getAllCity+state;
 		//Get City
-		apiCall.getCall(getonecity).then(function(response4){
-			
-			vm.cityDrop = response4;
-		
-		});
+		vm.cityDrop = stateCityFactory.getDefaultStateCities(state);
 		
 		if(formdata.has(Fname))
 		{
@@ -247,6 +261,23 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 		formdata.append('userType','staff');
 		
 		$scope.defaultCompany();
+		
+		stateCityFactory.getState().then(function(response3){
+			
+			vm.statesDrop = response3;
+			  $scope.addStaff.stateDropDown = stateCityFactory.getDefaultState($rootScope.defaultState);
+			  if(formdata.has('stateAbb')){
+				formdata.delete('stateAbb');
+			}
+			formdata.append('stateAbb',$scope.addStaff.stateDropDown.stateAbb);
+			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+			$scope.addStaff.cityDropDown = stateCityFactory.getDefaultCity($rootScope.defaultCity);
+			if(formdata.has('cityId')){
+				formdata.delete('cityId');
+			}
+			formdata.append('cityId',$scope.addStaff.cityDropDown.cityId);
+		});
+		
 	}
 	
   // Datepicker
@@ -379,4 +410,4 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
     {value: 5, name: 'Huge'}
   ];
 }
-AddStaffController.$inject = ["$scope","$rootScope","toaster","apiCall","apiPath","$state","apiResponse","validationMessage","getSetFactory"];
+AddStaffController.$inject = ["$scope","$rootScope","toaster","apiCall","apiPath","$state","apiResponse","validationMessage","getSetFactory","stateCityFactory"];

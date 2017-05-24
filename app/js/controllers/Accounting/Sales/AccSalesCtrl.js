@@ -7,7 +7,7 @@
 
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory,maxImageSize) {
+function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory,maxImageSize,productFactory) {
   'use strict';
   
  // $templateCache.remove($state.current.templateUrl);
@@ -175,9 +175,10 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			//Auto Suggest Product Dropdown data
 			vm.productNameDrop = [];
 			
-			apiCall.getCall(apiPath.getProductByCompany+response.companyId+'/branch').then(function(responseDrop){
+			//apiCall.getCall(apiPath.getProductByCompany+response.companyId+'/branch').then(function(responseDrop){
+			productFactory.getProductByCompany(response.companyId).then(function(data){
 				
-				vm.productNameDrop = responseDrop;
+				vm.productNameDrop = data;
 				toaster.clear();
 				vm.loadData = false;
 			});
@@ -308,9 +309,10 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			//Auto Suggest Product Dropdown data
 			vm.productNameDrop = [];
 			
-			apiCall.getCall(apiPath.getProductByCompany+data.journal[0].company.companyId+'/branch').then(function(responseDrop){
+			//apiCall.getCall(apiPath.getProductByCompany+data.journal[0].company.companyId+'/branch').then(function(responseDrop){
+			productFactory.getProductByCompany(data.journal[0].company.companyId).then(function(data){
 				
-				vm.productNameDrop = responseDrop;
+				vm.productNameDrop = data;
 			
 			});
 			/**
@@ -608,9 +610,10 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		//Auto Suggest Product Dropdown data
 		vm.productNameDrop = [];
 		
-		apiCall.getCall(apiPath.getProductByCompany+value.companyId+'/branch').then(function(responseDrop){
+		//apiCall.getCall(apiPath.getProductByCompany+value.companyId+'/branch').then(function(responseDrop){
+		productFactory.getProductByCompany(value.companyId).then(function(data){
 			
-			vm.productNameDrop = responseDrop;
+			vm.productNameDrop = data;
 			toaster.clear();
 			vm.loadData = false;
 		});
@@ -1372,13 +1375,23 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		 
 			//console.log(data);
 			
-			var UrlPath = apiPath.getProductByCompany+data.companyId;
+			//var UrlPath = apiPath.getProductByCompany+data.companyId;
 			
-			apiCall.getCall(UrlPath+'/branch').then(function(responseDrop){
+			// apiCall.getCall(UrlPath+'/branch').then(function(responseDrop){
 			
-				vm.productNameDrop = responseDrop;
+				// vm.productNameDrop = responseDrop;
 		
+			// });
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
+			
+			productFactory.blankProduct();
+			productFactory.getProductByCompany(data.companyId).then(function(response){
+				
+				vm.productNameDrop = response;
+				toaster.clear();
 			});
+			
 			
 			var headerSearch = {'Content-Type': undefined,'productName':data.productName,'color':data.color,'size':data.size};
 			
@@ -1462,4 +1475,4 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 	**/
   
 }
-AccSalesController.$inject = ["$rootScope","$scope","apiCall","apiPath","$modal","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory","maxImageSize"];
+AccSalesController.$inject = ["$rootScope","$scope","apiCall","apiPath","$modal","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory","maxImageSize","productFactory"];

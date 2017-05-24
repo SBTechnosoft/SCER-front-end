@@ -284,19 +284,19 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
   
 	/** Set Data In Factory **/
 		
-		apiCall.getCall(apiPath.getAllState).then(function(response){
+		//apiCall.getCall(apiPath.getAllState).then(function(response){
 			
 			//console.log(response);
-			stateCityFactory.setState(response);
+			//stateCityFactory.setState(response);
 			
-		});
+		//});
 		
-		apiCall.getCall(apiPath.getOneCity).then(function(response){
+		//apiCall.getCall(apiPath.getOneCity).then(function(response){
 			
 			//console.log(response);
-			stateCityFactory.setCity(response);
+			//stateCityFactory.setCity(response);
 			
-		});
+		//});
 		
 		//apiCall.getCall(apiPath.getAllProduct).then(function(response){
 			

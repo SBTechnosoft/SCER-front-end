@@ -6,7 +6,7 @@
 
 App.controller('loginController', loginController);
 
-function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRecaptchaService) {
+function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,apiResponse,vcRecaptchaService,googleSiteKey) {
   'use strict';
   var vm = this;
  
@@ -14,12 +14,24 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 	
 	$scope.loginData = [];
 	$scope.notMatch = false; // True when Email or password will Be Wrong.
-		$scope.errorCaptcha = false;
+	$scope.errorCaptcha = false;
 	
-	vm.localSiteKey = "6Ld6HSYTAAAAADSDPt5td0Te37OIgB2R10JvAgQg";
-	vm.siliconSiteKey = "6LchHRoUAAAAAIZHW5kSReJ6ZLRJ1gmT4D36Kdhv";
-	vm.swaminarayanSiteKey = "6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C";
-	vm.v2erp = "6LfxfhwUAAAAAL3B7C6bI-_ZCuCYvO1vNFu4f4-6";
+	var googleSiteKeys = $rootScope.googleSiteKey;
+	 var hostName = "http://"+window.location.hostname+"/";
+	 
+	angular.forEach(hostFrontUrl, function(value, key) {
+		console.log(value);
+		if(value == hostName){
+			vm.googleSiteKey = googleSiteKeys[key];
+		}
+	});
+	
+	// vm.localSiteKey = "6Ld6HSYTAAAAADSDPt5td0Te37OIgB2R10JvAgQg";
+	// vm.siliconSiteKey = "6LchHRoUAAAAAIZHW5kSReJ6ZLRJ1gmT4D36Kdhv";
+	// vm.swaminarayanSiteKey = "6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C";
+	// vm.v2erp = "6LfxfhwUAAAAAL3B7C6bI-_ZCuCYvO1vNFu4f4-6";
+	
+	vm.loaderIcon = false;
 	
 	$scope.createCallback = function(widgetId){
       $scope.widgetId = widgetId;
@@ -45,6 +57,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 	
 	$scope.login = function(){
 		
+		
 		//console.log(vcRecaptchaService.getResponse($scope.widgetId));
 		//return false;
 			
@@ -56,6 +69,8 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 					 var formdata = new FormData();
 					formdata.append('emailId',$scope.loginData.emailId);
 					formdata.append('password',$scope.loginData.password);
+					
+					vm.loaderIcon = true;
 					
 					$http({
 						url: $rootScope.erpPath+apiPath.loginAuth,
@@ -85,7 +100,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 							
 						}
 						else{
-							
+							vm.loaderIcon = false;
 							$scope.disableValue = false;
 							$scope.notMatch = true;
 						}
@@ -96,6 +111,7 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 			else{
 				
 				$scope.errorCaptcha = true;
+				vm.loaderIcon = false;
 			}
 			
                
@@ -109,4 +125,4 @@ function loginController($rootScope,$scope,$http,apiPath,$state,apiResponse,vcRe
 
 
 }
-loginController.$inject = ["$rootScope","$scope","$http","apiPath","$state","apiResponse","vcRecaptchaService"];
+loginController.$inject = ["$rootScope","$scope","hostFrontUrl","$http","apiPath","$state","apiResponse","vcRecaptchaService"];

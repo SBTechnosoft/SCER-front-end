@@ -17845,7 +17845,7 @@ window.Modernizr = function(e, t, n) {
             }];
             e.interceptors.push(t)
         }]), angular.module("cfp.loadingBar", []).provider("cfpLoadingBar", function() {
-            this.includeSpinner = !0, this.includeBar = !0, this.latencyThreshold = 100, this.startSize = .02, this.parentSelector = "body", this.spinnerTemplate = '<div id="loading-bar-spinner" ><div class="spinner-icon"></div></div>', this.loadingBarTemplate = '<div id="loading-bar"  style="top:81px" ><div class="bar"  ><div class="peg"></div></div></div>', this.$get = ["$injector", "$document", "$timeout", "$rootScope", function(e, t, n, r) {
+            this.includeSpinner = !0, this.includeBar = !0, this.latencyThreshold = 100, this.startSize = .02, this.parentSelector = "body", this.spinnerTemplate = '<div id="loading-bar-spinner" style="top:inherit !important" ><div class="spinner-icon"></div></div>', this.loadingBarTemplate = '<div id="loading-bar"  style="top:inherit !important" ><div class="bar"  ><div class="peg"></div></div></div>', this.$get = ["$injector", "$document", "$timeout", "$rootScope", function(e, t, n, r) {
                 function i() {
                     c || (c = e.get("$animate"));
                     var i = t.find(d).eq(0);

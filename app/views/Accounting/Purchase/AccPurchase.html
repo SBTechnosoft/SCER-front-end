@@ -193,7 +193,7 @@
 							  
 								 <input  typeahead="s.clientName for s in form.clientSuggest | filter:$viewValue | orderBy:'clientName' | limitTo:10" ng-model="accPurchase.clientName" typeahead-on-select="setClientName('clientName',$item)" id="input-id-1" type="text" placeholder="Party Name" class="form-control" dir="ltr" name="clientName" id="clientName"  ng-required="true"  ng-pattern="/^[a-zA-Z ]*$/"  />
 							 
-								<span ng-messages="formBill.clientName.$error" ng-if="formBill.clientName.$dirty || formBill.clientName.$touched" role="alert">
+								<span ng-messages="formPurchase.clientName.$error" ng-if="formPurchase.clientName.$dirty || formPurchase.clientName.$touched" role="alert">
 									<span ng-messages-include="errorRequired"></span>
 									<span ng-messages-include="errorPatternNumber"></span>
 									<span ng-messages-include="errorLonglength"></span>

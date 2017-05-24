@@ -53,17 +53,17 @@
 					<td data-title="'Action'" sortable="'action'">
 					
 						<center ng-if="allowedAdd == 'superadmin'">
-							<i ui-sref="" ng-click="editStaff(user.userId)" class="fa fa-edit" style="font-size:17px;color:#10709f" ng-if="allowedId != user.userId"> </i> &nbsp; &nbsp;
+							<i ui-sref="" ng-click="editStaff(user)" class="fa fa-edit" style="font-size:17px;color:#10709f" ng-if="allowedId != user.userId"> </i> &nbsp; &nbsp;
 							<i ui-sref="" ng-click="deleteStaff('sm',user.userId)" class="fa fa-times-circle" style="font-size:17px;color:red" ng-if="allowedId != user.userId"></i>
 						</center>
 						
 						<center ng-if="allowedAdd == 'admin' && user.userType != 'superadmin'">
-							<i ui-sref="" ng-click="editStaff(user.userId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+							<i ui-sref="" ng-click="editStaff(user)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
 							<i ui-sref="" ng-click="deleteStaff('sm',user.userId)" class="fa fa-times-circle" style="font-size:17px;color:red" ng-if="allowedId != user.userId"></i>
 						</center>
 						
 						<center ng-if="allowedId == user.userId && allowedAdd == 'staff' && user.userType != 'superadmin'">
-							<i ui-sref="" ng-click="editStaff(user.userId)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i>
+							<i ui-sref="" ng-click="editStaff(user)" class="fa fa-edit" style="font-size:17px;color:#10709f"> </i>
 						</center>
 					</td>
 				</tr>

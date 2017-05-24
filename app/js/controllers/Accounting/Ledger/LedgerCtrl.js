@@ -6,7 +6,7 @@
 
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage) {
+function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage,stateCityFactory) {
   'use strict';
   
 	var vm = this;
@@ -55,6 +55,26 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			
 		});
 		
+		$scope.ledgerForm.stateDropDown = stateCityFactory.getDefaultState($rootScope.defaultState);
+		if(formdata.has('stateAbb')){
+			
+			formdata.delete('stateAbb');
+		
+		}
+		formdata.append('stateAbb',$scope.ledgerForm.stateDropDown.stateAbb);
+		
+		vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+		$scope.ledgerForm.cityDrop = stateCityFactory.getDefaultCity($rootScope.defaultCity);
+		
+		if(formdata.has('cityId')){
+			
+			formdata.delete('cityId');
+		
+		
+		}
+		formdata.append('cityId',$scope.ledgerForm.cityDrop.cityId);
+		
+		
 		formdata.delete('amountType');
 		formdata.delete('amount');
 		
@@ -94,19 +114,14 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			
 			$scope.ledgerForm.companyDropDown = response.company;
 			
-			$scope.ledgerForm.stateDropDown = response.state;
-			
-			//City DropDown
-			vm.cityDrop = [];
-			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
-			apiCall.getCall(cityAllDropPath).then(function(res5){
-				vm.cityDrop = res5;
+			/** State/City **/
+				$scope.ledgerForm.stateDropDown = response.state;
 				
+				vm.cityDrop = stateCityFactory.getDefaultStateCities(response.state.stateAbb);
 				$scope.ledgerForm.cityDrop = response.city;
 				vm.disableValue = true;
 				vm.disableCompanyValue = true;
-				
-			});
+			/** End **/
 			
 		});
 		//vm.disableValue = true;
@@ -145,16 +160,9 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 			
 			$scope.ledgerForm.stateDropDown = response.state;
 			
-			//City DropDown
-			vm.cityDrop = [];
-			var cityAllDropPath = apiPath.getAllCity+response.state.stateAbb;
-			apiCall.getCall(cityAllDropPath).then(function(res5){
-				vm.cityDrop = res5;
-				$scope.ledgerForm.cityDrop = response.city;
-			});
-			
-			
-			
+			vm.cityDrop = stateCityFactory.getDefaultStateCities(response.state.stateAbb);
+			$scope.ledgerForm.cityDrop = response.city;
+
 			// $scope.ledgerForm.ledgerName = response.ledgerName;
 			// $scope.ledgerForm.ledgerName = response.ledgerName;
 			// $scope.ledgerForm.ledgerName = response.ledgerName;
@@ -276,10 +284,11 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	
 	//Get State
 	vm.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
+	//apiCall.getCall(apiPath.getAllState).then(function(response3){
+	stateCityFactory.getState().then(function(response){
 		
-		vm.statesDrop = response3;
-	
+		vm.statesDrop = response;
+		
 	});
 	
 	$scope.setPcode = function(Fname,value) {
@@ -296,18 +305,20 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		
 		var getonecity = apiPath.getAllCity+state;
 		
+		//vm.cityDrop = [];
+		vm.cityDrop = stateCityFactory.getDefaultStateCities(state);
 		//Get City
-		apiCall.getCall(getonecity).then(function(response4){
-			vm.cityDrop = response4;
+		// apiCall.getCall(getonecity).then(function(response4){
+			// vm.cityDrop = response4;
 				
-		});
+		// });
 		
-			if(formdata.has(Fname))
-			{
-				formdata.delete(Fname);
-			}
-			
-			formdata.append(Fname,state);
+		if(formdata.has(Fname))
+		{
+			formdata.delete(Fname);
+		}
+		
+		formdata.append(Fname,state);
 	}
 	
   
@@ -582,4 +593,4 @@ function AccLedgerController($scope,$filter, ngTableParams,apiCall,apiPath,toast
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","getSetFactory","$state","apiResponse","validationMessage"];
+AccLedgerController.$inject = ["$rootScope","$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","getSetFactory","$state","apiResponse","validationMessage","stateCityFactory"];

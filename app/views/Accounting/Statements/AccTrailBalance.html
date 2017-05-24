@@ -49,7 +49,7 @@
 				<th>Debit</th>
 				<th>Credit</th>
 			</thead>
-			 <tbody  >
+			 <tbody >
 				<tr data-ng-repeat="user in myArrayData" >
 				
 					<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a ng-click="goToLedgerTransaction(user.ledgerId)" ui-sref="" href=""  tabindex="{{$index+1}}" style="text-transform:capitalize"   >{{user.ledgerName}}</a></td>

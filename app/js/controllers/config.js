@@ -641,6 +641,51 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster')
 			})
 			
+			//Client Filter
+			.state('app.CrmClientFilterView', {
+				url: '/CrmClientFilterView',
+				templateUrl: basepath('Accounting/viewData/AccView.html'),
+				controller: 'AccViewController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+					viewDataType: function(){
+						return 'CrmClientFilterView';
+					}
+				})
+			})
+			//Client Filter Data
+			.state('app.CrmClientFilterData', {
+				url: '/CrmClientFilterData',
+				templateUrl: basepath('CRM/Client/CrmClientFilterData.html'),
+				controller: 'CrmClientFilterDataController as table',
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
+			})
+			//Client History
+			.state('app.CrmClientHistory', {
+				url: '/CrmClientHistory',
+				 templateUrl: basepath('CRM/Client/CrmClientHistory.html'),
+				controller: 'CrmClientHistoryController as table',
+				resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','toaster')
+			})
+		
+			 .state('app.CrmClientHistory.compose', {
+				url: '/mailCompose',
+				views: {
+				  'container@app.CrmClientHistory': {
+					templateUrl: basepath('CRM/Client/mailCompose.html')
+				  }
+				},
+				resolve: requireDeps('wysiwyg')
+			})
+			
+			.state('app.CrmClientHistory.sms', {
+				url: '/sms',
+				views: {
+				  'container@app.CrmClientHistory': {
+					templateUrl: basepath('CRM/Client/sms.html')
+				  }
+				},
+				resolve: requireDeps('wysiwyg')
+			})
 		/** End CRM **/
 		
 		/*** PriceList ***/
@@ -913,15 +958,11 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 
 }]).config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeBar = true;
+	cfpLoadingBarProvider.loadingBarTemplate = '<div id="loading-bar" style="top:inherit !important"><div class="bar"><div class="peg"></div></div></div>';
 	//cfpLoadingBarProvider.barColor = '#fff';
     cfpLoadingBarProvider.includeSpinner = true;
     cfpLoadingBarProvider.latencyThreshold = 500;
-    cfpLoadingBarProvider.parentSelector = '.app-container > section';
+   // cfpLoadingBarProvider.parentSelector = '.app-container > section';
+    cfpLoadingBarProvider.parentSelector = '.myTopBarPos';
 	//cfpLoadingBarProvider.spinnerTemplate = "<div><span class='fa fa-spinner'>Loading...</div>";
-}]).config(['$httpProvider', function($httpProvider) {
-	// $httpProvider.defaults.useXDomain = true;
-  // $httpProvider.defaults.withCredentials = true;
-  // delete $httpProvider.defaults.headers.common["X-Requested-With"];
-// $httpProvider.defaults.headers.common["Accept"] = "application/json";
-// $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
 }]);

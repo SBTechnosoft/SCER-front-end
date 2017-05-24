@@ -177,6 +177,7 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 				}
 				else{
 					
+					console.log(data);
 				
 					vm.pieChartData = [{ "color" : "#6cc539",
 									"data" : "0",

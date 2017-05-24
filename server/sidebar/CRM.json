@@ -11,10 +11,10 @@
   },
   {
     "text": "Clients",
-    "sref": "app.CrmClients",
+    "sref": "",
     "icon": "icon-head",
 		"subnav": [
-		  {"text": "List of Clients", "sref": "app.CrmListClients", "translate": "" }
+		  {"text": "List of Clients", "sref": "app.CrmClientFilterView", "translate": "" }
 		],
 		"translate": ""
   }

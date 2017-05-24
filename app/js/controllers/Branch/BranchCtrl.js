@@ -24,10 +24,14 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
   
 	$scope.showBranches = function(){
 		
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
+		
 		if($scope.stateCheck){
 			
 			apiCall.getCall(apiPath.getOneBranch+$scope.stateCheck.companyId).then(function(response){
 				
+				toaster.clear();
 				//console.log(response);
 				if(apiResponse.noContent == response)
 				{
@@ -63,6 +67,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 			
 			apiCall.getCall(apiPath.getAllBranch).then(function(response){
 				
+				toaster.clear();
 				//console.log(response);
 				if(apiResponse.noContent == response)
 				{
@@ -94,9 +99,13 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	
 	//Company
 	$scope.init = function (){
-			
+		
+		
 		vm.states=[];
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
+			
+		toaster.clear();
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			vm.states = response2;
 			
@@ -122,6 +131,8 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	
 		apiCall.getCall(apiPath.getOneBranch+id).then(function(response){
 			//console.log(response);
+			toaster.clear();
+			
 			if(apiResponse.noContent == response)
 			{
 				data = [];

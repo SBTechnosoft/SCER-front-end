@@ -383,7 +383,7 @@ h4 .control-label{
 					<td></td>
 					<td style="text-align:left"> <strong> Advance </strong> </td>
 					<td colspan="2"  > 
-						<input id="input-id-1" type="text" name="advance" ng-model="quickBill.advance"  class="form-control"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductAdvance()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
+						<input id="input-id-1" type="text" name="advance" ng-model="quickBill.advance"  class="form-control"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">
 							<span ng-messages-include="errorPatternNumber"></span>
 						</span>
@@ -505,7 +505,7 @@ h4 .control-label{
 			 </div-->
 			
 		<div class="col-sm-5">
-		
+	
 			<button type="button" class="mr mb-sm btn btn-labeled btn-primary pull-left"  ng-click="goToNextPrevious('previous')" data-ng-class="app.theme.brand" >
                <span class="btn-label"><i class="fa fa-arrow-left"></i>
                </span>Previous</button>

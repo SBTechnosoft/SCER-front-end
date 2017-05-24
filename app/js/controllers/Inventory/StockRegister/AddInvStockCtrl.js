@@ -6,7 +6,7 @@
 
 App.controller('AddInvStockController', AddInvStockController);
 
-function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$state,toaster) {
+function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$state,toaster,productFactory) {
   'use strict';
   
   var vm = this;
@@ -28,7 +28,8 @@ function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$
 			//Auto Suggest Product Dropdown data
 			vm.productDrop = [];
 			
-			apiCall.getCall(apiPath.getProductByCompany+response2.companyId+'/branch').then(function(responseDrop){
+			//apiCall.getCall(apiPath.getProductByCompany+response2.companyId+'/branch').then(function(responseDrop){
+			productFactory.getProductByCompany(response2.companyId).then(function(responseDrop){
 				
 				if(angular.isArray(responseDrop)){
 					vm.productDrop = responseDrop;
@@ -77,6 +78,7 @@ function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$
 		vm.productDrop = [];
 		
 		apiCall.getCallHeader(Path,dataSet).then(function(response){
+		//productFactory.getProductByCompany($scope.invStock.companyDropDown.companyId).then(function(response){
 			
 			if(angular.isArray(response)){
 				vm.productDrop = response;
@@ -280,4 +282,4 @@ function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$
   
   
 }
-AddInvStockController.$inject = ["$rootScope","$scope","apiCall","apiPath","getSetFactory","$state","toaster"];
+AddInvStockController.$inject = ["$rootScope","$scope","apiCall","apiPath","getSetFactory","$state","toaster","productFactory"];

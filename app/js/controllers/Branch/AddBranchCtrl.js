@@ -6,7 +6,7 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$location,apiResponse,validationMessage,getSetFactory) {
+function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$location,apiResponse,validationMessage,getSetFactory,stateCityFactory) {
   'use strict';
   var vm = this;
   var formdata = new FormData();
@@ -49,7 +49,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	$scope.goToModify = function()
 	{
 		
-		var id = $scope.addBranch.branchDropDown.branchId;
+		var id = $scope.addBranch.branchDropDown;
 		  getSetFactory.set(id);
 		$scope.AddEditFunction();
 		//$location.path('app/AddBranch'); 
@@ -67,23 +67,23 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		
 		if(!$scope.addBranch.bId){
 			
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
-			
-			$scope.addBranch.companyDropDown = response;
-			$scope.addBranch.companyDropDown2 = response;
-			
-			formdata.append('companyId',response.companyId);
-			
-			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+response.companyId;
-			//Get Branch
-			apiCall.getCall(getAllBranch).then(function(response4){
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
 				
-				vm.branchDrop = response4;
+				$scope.addBranch.companyDropDown = response;
+				$scope.addBranch.companyDropDown2 = response;
+				
+				formdata.append('companyId',response.companyId);
+				
+				vm.branchDrop = [];
+				var getAllBranch = apiPath.getOneBranch+response.companyId;
+				//Get Branch
+				apiCall.getCall(getAllBranch).then(function(response4){
 					
+					vm.branchDrop = response4;
+						
+				});
 			});
-		});
 		
 		}
 	
@@ -97,72 +97,101 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 	// });
   
 	//Get State
-	vm.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
-		vm.statesDrop = response3;
 	
-	});
+	// apiCall.getCall(apiPath.getAllState).then(function(response3){
+		// vm.statesDrop = response3;
+	
+	// });
+		
 	
 	vm.sdfg;
 	$scope.AddEditFunction = function(){
 		
-	//if(Object.keys(getSetFactory.get()).length){
-	if(getSetFactory.get() > 0){
+	if(Object.keys(getSetFactory.get()).length > 0){
+	//if(getSetFactory.get() > 0){
 	  
-	  $scope.addBranch.bId = getSetFactory.get();
-	  getSetFactory.blank();
+	  var editBranchData = getSetFactory.get();
+	   getSetFactory.blank();
+	   
+	  $scope.addBranch.bId = editBranchData.branchId;
+	 
 	  
 		//Edit Branch
 		var editBranch = apiPath.getAllBranch+'/'+$scope.addBranch.bId;
 		
-		apiCall.getCall(editBranch).then(function(res){
+		//apiCall.getCall(editBranch).then(function(res){
 			
 			
-			vm.sdfg = res.companyId;
+			vm.sdfg = editBranchData.company.companyId;
 			//console.log(vm.sdfg);
-			$scope.addBranch.branchName = res.branchName;
-			$scope.addBranch.fisrtAddress = res.address1;
-			$scope.addBranch.secondAddress = res.address2;
-			//$scope.addBranch.stateDropDown = res.state_abb;
-			//$scope.addBranch.cityDropDown = res.city_id;
+			$scope.addBranch.branchName = editBranchData.branchName;
+			$scope.addBranch.fisrtAddress = editBranchData.address1;
+			$scope.addBranch.secondAddress = editBranchData.address2;
+			//$scope.addBranch.stateDropDown = editBranchData.state_abb;
+			//$scope.addBranch.cityDropDown = editBranchData.city_id;
 			
-			$scope.addBranch.pincode = res.pincode;
+			$scope.addBranch.pincode = editBranchData.pincode;
 			
-			$scope.addBranch.companyDropDown = res.company;
+			$scope.addBranch.companyDropDown = editBranchData.company;
 				
-			$scope.addBranch.companyDropDown2 = res.company;
+			$scope.addBranch.companyDropDown2 = editBranchData.company;
 			
 			//Branch
 			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+res.company.companyId;
+			var getAllBranch = apiPath.getOneBranch+editBranchData.company.companyId;
 			//Get Branch
 			apiCall.getCall(getAllBranch).then(function(response4){
 				
 				vm.branchDrop = response4;
 					
-				$scope.addBranch.branchDropDown = res;
+				$scope.addBranch.branchDropDown = editBranchData;
 			});
 				
-				
-			$scope.addBranch.stateDropDown = res.state;
-			
+			 vm.statesDrop=[];
+			 vm.cityDrop=[];
+			stateCityFactory.getState().then(function(response3){
+				toaster.clear();
+				vm.statesDrop = response3;
+				  $scope.addBranch.stateDropDown = editBranchData.state;
+				vm.cityDrop = stateCityFactory.getDefaultStateCities(editBranchData.state.stateAbb);
+				$scope.addBranch.cityDropDown = editBranchData.city;
+			});
 			//City DropDown
-			var cityAllDropPath = apiPath.getAllCity+res.state.stateAbb;
-			apiCall.getCall(cityAllDropPath).then(function(res5){
+			//var cityAllDropPath = apiPath.getAllCity+editBranchData.state.stateAbb;
+			//apiCall.getCall(cityAllDropPath).then(function(res5){
 				
-				vm.cityDrop = res5;
-				$scope.addBranch.cityDropDown = res.city;
-			});
+				//vm.cityDrop = res5;
+				//$scope.addBranch.cityDropDown = editBranchData.city;
+			//});
 			
 			
 			
 		
-		});
+		//});
 	  
 	  }
 	  else{
 		  
 		  console.log('Not');
+			vm.statesDrop=[];
+			stateCityFactory.getState().then(function(response3){
+				toaster.clear();
+				vm.statesDrop = response3;
+				 $scope.addBranch.stateDropDown = stateCityFactory.getDefaultState($rootScope.defaultState);
+				if(formdata.has('stateAbb')){
+					formdata.delete('stateAbb');
+				}
+				formdata.append('stateAbb',$scope.addBranch.stateDropDown.stateAbb);
+		
+				vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+				$scope.addBranch.cityDropDown = stateCityFactory.getDefaultCity($rootScope.defaultCity);
+				
+				if(formdata.has('cityId')){
+					formdata.delete('cityId');
+				}
+				formdata.append('cityId',$scope.addBranch.cityDropDown.cityId);
+		
+			});
 	  }
 	}
   
@@ -300,13 +329,8 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   $scope.ChangeCity = function(Fname,state)
   {
-	//console.log(apiPath.getAllCity+state);
-	var getonecity = apiPath.getAllCity+state;
-	//Get City
-	apiCall.getCall(getonecity).then(function(response4){
-		vm.cityDrop = response4;
-			
-	});
+		vm.cityDrop = stateCityFactory.getDefaultStateCities(state);
+		
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
@@ -405,4 +429,4 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   
 }
-AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$location","apiResponse","validationMessage","getSetFactory"];
+AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$location","apiResponse","validationMessage","getSetFactory","stateCityFactory"];

@@ -6,8 +6,9 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$location,apiResponse,validationMessage,getSetFactory,$modal) {
+function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$state,apiResponse,validationMessage,getSetFactory,$modal,productFactory) {
   'use strict';
+  
   var vm = this;
   $scope.addInvProduct = [];
   var formdata = new FormData();
@@ -79,60 +80,62 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 	});
 	
 	//Edit Product
-	//if(Object.keys(getSetFactory.get()).length){
-	if(getSetFactory.get() > 0){
-		
-		$scope.addInvProduct.getSetProductId = getSetFactory.get();
+	if(Object.keys(getSetFactory.get()).length > 0){
+	//if(getSetFactory.get() > 0){
+		var editProductData = getSetFactory.get();
 		getSetFactory.blank();
 		
+		$scope.addInvProduct.getSetProductId = editProductData.productId;
 		
-		var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
+		
+		
+		//var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
 	
-		apiCall.getCall(editProduct).then(function(res){
+		//apiCall.getCall(editProduct).then(function(res){
 			
-			console.log(res);
+			//console.log(res);
 			
-			$scope.addInvProduct.name = res.productName;
-			$scope.addInvProduct.productDescription = res.productDescription;
-			$scope.addInvProduct.color = res.color;
-			$scope.addInvProduct.size = res.size;
+			$scope.addInvProduct.name = editProductData.productName;
+			$scope.addInvProduct.productDescription = editProductData.productDescription;
+			$scope.addInvProduct.color = editProductData.color;
+			$scope.addInvProduct.size = editProductData.size;
 			
 			
 			
-			$scope.addInvProduct.company = res.company;
+			$scope.addInvProduct.company = editProductData.company;
 			
 			//Get Branch
 			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+res.company.companyId;
+			var getAllBranch = apiPath.getOneBranch+editProductData.company.companyId;
 			//console.log('here...'+getAllBranch);
 			apiCall.getCall(getAllBranch).then(function(response4){
 				
 				vm.branchDrop = response4;
-				$scope.addInvProduct.branch = res.branch;
+				$scope.addInvProduct.branch = editProductData.branch;
 				
 			});
 			
-			$scope.addInvProduct.category = res.productCategory;
-			$scope.addInvProduct.group = res.productGroup;
+			$scope.addInvProduct.category = editProductData.productCategory;
+			$scope.addInvProduct.group = editProductData.productGroup;
 			
 			
 			//Measure DropDown Selection
 			
-				$scope.addInvProduct.measureUnit = res.measurementUnit;
+				$scope.addInvProduct.measureUnit = editProductData.measurementUnit;
 			
 			
-			$scope.addInvProduct.purchasePrice = res.purchasePrice;
-			$scope.addInvProduct.wholesaleMarginFlat = res.wholesaleMarginFlat;
-			$scope.addInvProduct.wholesaleMargin = res.wholesaleMargin;
-			$scope.addInvProduct.semiWholesaleMargin = res.semiWholesaleMargin;
-			$scope.addInvProduct.vat = res.vat;
-			$scope.addInvProduct.mrp = res.mrp;
-			$scope.addInvProduct.additionalTax = res.additionalTax;
-			$scope.addInvProduct.marginFlat = res.marginFlat;
-			$scope.addInvProduct.margin = res.margin;
-			$scope.addInvProduct.minimumStockLevel = res.minimumStockLevel;
+			$scope.addInvProduct.purchasePrice = editProductData.purchasePrice;
+			$scope.addInvProduct.wholesaleMarginFlat = editProductData.wholesaleMarginFlat;
+			$scope.addInvProduct.wholesaleMargin = editProductData.wholesaleMargin;
+			$scope.addInvProduct.semiWholesaleMargin = editProductData.semiWholesaleMargin;
+			$scope.addInvProduct.vat = editProductData.vat;
+			$scope.addInvProduct.mrp = editProductData.mrp;
+			$scope.addInvProduct.additionalTax = editProductData.additionalTax;
+			$scope.addInvProduct.marginFlat = editProductData.marginFlat;
+			$scope.addInvProduct.margin = editProductData.margin;
+			$scope.addInvProduct.minimumStockLevel = editProductData.minimumStockLevel;
 			
-		});
+		//});
 	}
 	else{
 		
@@ -315,8 +318,9 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 				//console.log(response5);
 				if(apiResponse.ok == response5){
 					
-					$location.path('app/InvProduct');
+					$state.go('app.InvProduct');
 					toaster.pop('success', 'Title', 'SuccessFull');
+					productFactory.blankProduct();
 				}
 				else{
 					formdata.delete('isDisplay');
@@ -340,7 +344,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 					
 					toaster.pop('success', 'Title', 'SuccessFull');
 					
-					$location.path('app/InvProduct');
+					$state.go('app.InvProduct');
+					productFactory.blankProduct();
 				}
 				else{
 					formdata.delete('isDisplay');
@@ -404,4 +409,4 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$lo
 	
 	
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$location","apiResponse","validationMessage","getSetFactory","$modal"];
+AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory"];

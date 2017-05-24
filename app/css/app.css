@@ -9479,7 +9479,7 @@ fieldset[disabled] .btn-orange.active {
 }
 #loading-bar-spinner {
   display: block;
-  position: fixed;
+  position: fixed; /** fixed **/
   z-index: 90002;
   top: 10px;
   left: 10px;
@@ -13338,9 +13338,13 @@ body .jvectormap-zoomout {
 	
 }
 
-.myLoaderTop{
+.myLoaderTopBig{
 	
 	top: 81px !important;
+}
+.myLoaderTopSmall{
+	
+	top: 60px !important;
 }
 
 .myLoaderColor{
@@ -13435,6 +13439,9 @@ padding-right:0px !important;
 .myFormHeading{	
 	background:#88bf57 !important;
 	color:#fff !important;
+}
+.myFontLarger{
+	font-size: larger !important;
 }
 /* End */
 

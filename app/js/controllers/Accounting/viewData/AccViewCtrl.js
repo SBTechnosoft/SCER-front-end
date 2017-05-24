@@ -6,7 +6,7 @@
 
 App.controller('AccViewController', AccViewController);
 
-function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType) {
+function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType,validationMessage) {
   'use strict';
   
   var vm = this; 
@@ -14,7 +14,13 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   
   $scope.viewDataTypePath = viewDataType;
   var dateFormats = $rootScope.dateFormats; //Date Format
- 
+  
+	/* VALIDATION */
+	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
+	
+	/* VALIDATION END */
+	
 	this.salesTypeDrop = [
 	'All',
 	'Retailsales',
@@ -23,29 +29,55 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   
 	$scope.accViewSales.salesType = 'All';
 	
-  //Company Dropdown data
-	vm.companyDrop = [];
-	
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+	$scope.companyApiLoad = function(){
+		//Company Dropdown data
+		vm.companyDrop = [];
 		
-		vm.companyDrop = responseCompanyDrop;
-		
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 			
-			$scope.accViewSales.companyDropDown = response;
+			vm.companyDrop = responseCompanyDrop;
 			
-			//vm.branchDrop = [];
-			//var getAllBranch = apiPath.getOneBranch+response.companyId;
-			//Get Branch
-			// apiCall.getCall(getAllBranch).then(function(response4){
+			//Set default Company
+			apiCall.getDefaultCompany().then(function(response){
 				
-				// vm.branchDrop = response4;
+				$scope.accViewSales.companyDropDown = response;
+				
+				//vm.branchDrop = [];
+				//var getAllBranch = apiPath.getOneBranch+response.companyId;
+				//Get Branch
+				// apiCall.getCall(getAllBranch).then(function(response4){
 					
-			// });
+					// vm.branchDrop = response4;
+						
+				// });
+			});
+		
+		});
+	}
+	
+	if($scope.viewDataTypePath != 'CrmClientFilterView'){
+		
+		$scope.companyApiLoad();
+		
+	}
+	
+	$scope.clientGetAllFunction = function(){
+		
+		vm.clientSuggest = [];
+	
+		apiCall.getCall(apiPath.getAllClient).then(function(responseDrop){
+			
+			vm.clientSuggest = responseDrop;
+			
+		
 		});
 	
-	});
+	}
+	
+	if($scope.viewDataTypePath == 'CrmClientFilterView'){
+		
+		$scope.clientGetAllFunction();
+	}
 	
   //Get All Branch on Company Change
   $scope.changeCompany = function(id)
@@ -68,7 +100,16 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 		var  todate = new Date(vm.dt2);
 		var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
 		
-		$rootScope.accView.companyId = $scope.accViewSales.companyDropDown.companyId;
+		if($scope.accViewSales.companyDropDown){
+			$rootScope.accView.companyId = $scope.accViewSales.companyDropDown.companyId;
+		}
+		
+		if($scope.viewDataTypePath == 'CrmClientFilterView'){
+			
+			$rootScope.accView.clientContact = $scope.accViewSales.clientContact;
+			$rootScope.accView.clientName = $scope.accViewSales.clientName;
+		}
+		
 		$rootScope.accView.fromDate = modifyFromDate; // FromDate
 		$rootScope.accView.toDate = modifyToDate; // TODate
 		
@@ -133,6 +174,10 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 		else if($scope.viewDataTypePath == 'PoliceReport'){
 			
 			$state.go("app.ReportPoliceData");
+		}
+		else if($scope.viewDataTypePath == 'CrmClientFilterView'){
+			
+			$state.go("app.CrmClientFilterData");
 		}
 		 //$state.go("app.AccDataSales");
 		
@@ -294,4 +339,4 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
  
   
 }
-AccViewController.$inject = ["$rootScope","$scope","apiCall","apiPath","$state","viewDataType"];
+AccViewController.$inject = ["$rootScope","$scope","apiCall","apiPath","$state","viewDataType","validationMessage"];

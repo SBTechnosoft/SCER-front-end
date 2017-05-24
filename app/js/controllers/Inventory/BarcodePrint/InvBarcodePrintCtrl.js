@@ -6,7 +6,7 @@
 
 App.controller('InvBarcodePrintController', InvBarcodePrintController);
 
-function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
+function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal,productFactory) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -38,7 +38,8 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
 		
-			apiCall.getCall(apiPath.getAllProduct).then(function(response){
+			//apiCall.getCall(apiPath.getAllProduct).then(function(response){
+			productFactory.getProduct().then(function(response){
 				
 				toaster.clear();
 				
@@ -98,7 +99,8 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
 			
-		apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
+		//apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
+		productFactory.getProductByCompany(id).then(function(response){
 			
 			toaster.clear();
 			
@@ -135,6 +137,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			 
 		});
 	}
+	
 	$scope.query = {
 			productCategoryName: undefined,
 			productGroupName: undefined,
@@ -551,4 +554,4 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
   /** End **/
 
 }
-InvBarcodePrintController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];
+InvBarcodePrintController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal","productFactory"];

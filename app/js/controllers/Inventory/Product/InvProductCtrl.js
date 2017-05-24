@@ -6,7 +6,7 @@
 
 App.controller('InvProductController', InvProductController);
 
-function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
+function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory,$modal,productFactory) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -29,11 +29,12 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
-			apiCall.getCall(apiPath.getAllProduct).then(function(response){
-				
+			//apiCall.getCall(apiPath.getAllProduct).then(function(response){
+			productFactory.getProduct().then(function(response){
+					
 				toaster.clear();
 				
-				if(apiResponse.noContent == response){
+				if(response.length <= 0){
 					
 					data = [];
 					toaster.pop('alert', 'Opps!!', 'No Product Available');
@@ -52,8 +53,8 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 					
 				}
 				
-				 vm.tableParams.reload();
-				  vm.tableParams.page(1);
+				vm.tableParams.reload();
+				vm.tableParams.page(1);
 				
 			});
 			
@@ -89,42 +90,45 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
 		toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
-		apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
-			
-			toaster.clear();
-			
-			if(apiResponse.noContent == response){
-					
-				data = [];
-				toaster.pop('alert', 'Opps!!', 'No Product Available');
+			productFactory.getProductByCompany(id).then(function(response){
 				
-			}
-			else{
-				//console.log('else');
-				data = response;
-				for (var i = 0; i < data.length; i++) {
-				  data[i].productCategoryName = ""; //initialization of new property 
-				  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-				  data[i].productGroupName = ""; //initialization of new property 
-				  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+				toaster.clear();
+				//console.log(response.length);
+				if(response.length <= 0){
+						
+					data = [];
+					toaster.pop('alert', 'Opps!!', 'No Product Available');
+					
+				}
+				else{
+					//console.log('else');
+					data = response;
+					for (var i = 0; i < data.length; i++) {
+					  data[i].productCategoryName = ""; //initialization of new property 
+					  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
+					  data[i].productGroupName = ""; //initialization of new property 
+					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+					}
+					
+					
 				}
 				
+				if(flag == 0){
+						
+					//console.log('zero');
+					$scope.TableData();
+				}
+				else{
+					//console.log('one');
+					 vm.tableParams.reload();
+					 vm.tableParams.page(1);
+				}
 				
-			}
+			});
 			
-			if(flag == 0){
-					
-				//console.log('zero');
-				$scope.TableData();
-			}
-			else{
-				//console.log('one');
-				 vm.tableParams.reload();
-				 vm.tableParams.page(1);
-			}
+		// apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
 			
-			 
-		});
+		// });
 	}
 	
 	$scope.TableData = function(){
@@ -191,7 +195,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
   $scope.editProduct = function(id)
   {
 	getSetFactory.set(id);
-	 $location.path('app/AddInvProduct');
+	 $state.go('app.AddInvProduct');
   }
   
   $scope.deleteProduct = function(size,id)
@@ -331,4 +335,4 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$lo
   /** End **/
 
 }
-InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];
+InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal","productFactory"];

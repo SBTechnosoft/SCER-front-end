@@ -69,9 +69,8 @@ App.factory('productFactory',['apiCall','apiPath','$q', function(apiCall,apiPath
 	function getProductByCompany(compId){
 		var deferredMenu = $q.defer();
 		
-		console.log(compId);
 		if(savedData.length > 0) {
-			console.log('if');
+			
 			var AllData = savedData;
 			
 			var StateArray = [];
@@ -86,7 +85,6 @@ App.factory('productFactory',['apiCall','apiPath','$q', function(apiCall,apiPath
 					
 				}
 			}
-			console.log(StateArray);
 			deferredMenu.resolve(StateArray);
 				
 		} else {
