@@ -56,7 +56,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr id="addAfter" ng-repeat="item in form.AccPurchaseTable">
+							<tr id="addAfter" ng-repeat="item in form.AccPurchaseTable" data-ng-class="app.tableAnimation">
 								<td>
 									<!--input id="input-id-1" type="text" ng-model="itemName"  class="form-control" placeholder="Enter Item Name(JS)" style="width:95%;float:left"/>
 									<i ui-sref=""  class="fa fa-plus" style="font-size:20px;color:#17A1E5;float:right" title="Add"> </i-->
@@ -235,7 +235,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable">
+						<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable" data-ng-class="app.tableAnimation">
 							<td>
 								<select  ng-model="item.amountType" class="form-control" ng-change="changeAmountType($index)">
 									<option value="debit" selected="selected">Dr</option>

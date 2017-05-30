@@ -28,7 +28,7 @@
          <ul class="nav" >
             <hr class="hidden-collapsed" />
             <!-- Iterates over all sidebar items-->
-			<li data-ng-class="getSidebarItemClass(item)" data-ng-repeat="item in menuItems" data-ng-include="'sidebar-items.html'" data-ng-click="toggleCollapse($index)" data-ng-switch="item.type"></li>
+			<li data-ng-class="[getSidebarItemClass(item),'ng-fadeInUp']" data-ng-repeat="item in menuItems" data-ng-include="'sidebar-items.html'" data-ng-click="toggleCollapse($index)" data-ng-switch="item.type"></li>
 				<!--li class="nav-heading"><a > <i class="fa fa-home" ></i><span class="ng-scope ng-binding" >QWERTY</span></a></li-->
          </ul>
          <!-- END sidebar nav-->

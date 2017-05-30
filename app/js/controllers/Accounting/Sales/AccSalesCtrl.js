@@ -1358,6 +1358,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		  templateUrl: 'app/views/PopupModal/Accounting/productModal.html',
 		  controller: AccProductModalController,
 		  size: size,
+		modalClass: 'rotateInDownLeft',
 		  resolve:{
 			  productIndex: function(){
 				  return index;

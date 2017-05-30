@@ -24,7 +24,7 @@ h4 .control-label{
 
 <!-- START panel-->
 <div class="container-fluid"   >
-	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'animation-class': 'bounceIn'}"></toaster-container>
 	<form  action="#" name="formBill" class="form-validate form-horizontal">
 	<div class="panel panel-default">
 		 <h4 class="panel-heading col-sm-12" style="padding:5px 1px;">
@@ -260,7 +260,7 @@ h4 .control-label{
 				<a><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span> ({{match.model.color}} | {{match.model.size}})</a>
 			</script>
 			<tbody >
-				<tr id="addAfter" ng-repeat="item in form.AccBillTable">
+				<tr id="addAfter" ng-repeat="item in form.AccBillTable" data-ng-class="app.tableAnimation">
 					<td>
 						<div class="input-group mytypeDrop">
 							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index)" type="text" class="form-control" placeholder="*Enter Product Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)"  />
@@ -515,7 +515,7 @@ h4 .control-label{
 				</span>
 			</button>
 			
-			<button type="button" class="mr mb-sm btn btn-success pull-left" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" >New</button>
+			<button type="button" class="mr mb-sm btn btn-success pull-left" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()"  >New</button>
 			
 			
 		</div>

@@ -2,11 +2,11 @@
 <header data-ng-include="'app/views/partials/top-navbar.html'" data-ng-class="app.theme.topbar" ></header>
 
 <!-- Sidebar-->
-<aside data-ng-include="'app/views/partials/sidebar.html'" data-ng-class="app.theme.sidebar"></aside>
+<aside data-ng-include="'app/views/partials/sidebar.html'"  data-ng-class="app.theme.sidebar"></aside>
 <!-- Main-->
 
 <section  data-ng-class="app.topbar.isCollapsed ? 'appContentPaddingBig' :  'appContentPadding'" >
-<div class="myTopBarPos" data-ng-class="app.topbar.isCollapsed ? 'myLoaderTopBig':'myLoaderTopSmall' " ></div>
+<div class="myTopBarPos" data-ng-class="app.topbar.isCollapsed ? 'myLoaderTopBig':'myLoaderTopSmall' "  ></div>
    <!-- Content-->
    <div ui-view="" autoscroll="false" data-ng-class="app.viewAnimation" class="app"></div>
 </section>

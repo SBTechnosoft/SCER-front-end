@@ -60,7 +60,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr id="addAfter" ng-repeat="item in form.AccSpecialJrnlTable">
+					<tr id="addAfter" ng-repeat="item in form.AccSpecialJrnlTable" data-ng-class="app.tableAnimation">
 						<td>
 							<select  ng-model="item.amountType" class="form-control" ng-change="changeSpecialJrnlTable()">
 								<option value="debit" selected="selected">Dr</option>

@@ -2,7 +2,7 @@
   {
     "text": "Jobcard",
     "sref": "",
-    "icon": "icon-tag",
+    "icon": "fa fa-vcard-o",
 		"subnav": [
 		  {"text": "All", "sref": "app.CrmAllJobcard", "translate": "" },
 		  {"text": "Add/Edit", "sref": "app.CrmJobcard", "translate": "" }

@@ -36,6 +36,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       description: 'Siliconbrain Technosoft LLP',
       year: ((new Date()).getFullYear()),
       viewAnimation: 'ng-fadeInLeft2',
+      tableAnimation: 'ng-fadeInDown',
       layout: {
         isFixed: true,
         isBoxed: false,

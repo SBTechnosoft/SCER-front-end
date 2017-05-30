@@ -170,7 +170,7 @@ function ($compile, $timeout, $sce, toasterConfig, toaster) {
             };
         }],
         template:
-        '<div  id="toast-container" ng-class="config.position">' +
+        '<div  id="toast-container" ng-class="config.position" >' +
             '<div ng-repeat="toaster in toasters" class="toast" ng-class="toaster.type" ng-click="click(toaster)" ng-mouseover="stopTimer(toaster)"  ng-mouseout="restartTimer(toaster)">' +
               '<button class="toast-close-button" ng-show="config.closeButton">&times;</button>' +
               '<div ng-class="config.title">{{toaster.title}}</div>' +
