@@ -7,7 +7,17 @@
 App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse','$modal','stateCityFactory','productFactory', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse,$modal,stateCityFactory,productFactory) {
   'use strict';
   
-  $scope.userName = $rootScope.$storage.authUser.userName;
+	if($rootScope.$storage.authUser){
+		
+		$scope.userName = $rootScope.$storage.authUser.userName;
+		
+	}
+	else{
+		
+		$rootScope.$storage.$reset();
+		$state.go("page.login");
+	}
+	
   
   $scope.headerMenuCollapsed = false;
 	
@@ -284,7 +294,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
   
 	/** Set Data In Factory **/
 		
-		//apiCall.getCall(apiPath.getAllState).then(function(response){
+		//apiCall.getCall(apiPath.getJrnlNext).then(function(response){
 			
 			//console.log(response);
 			//stateCityFactory.setState(response);

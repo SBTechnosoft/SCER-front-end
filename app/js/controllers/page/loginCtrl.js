@@ -20,7 +20,7 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 	 var hostName = "http://"+window.location.hostname+"/";
 	 
 	angular.forEach(hostFrontUrl, function(value, key) {
-		console.log(value);
+		//console.log(value);
 		if(value == hostName){
 			vm.googleSiteKey = googleSiteKeys[key];
 		}
