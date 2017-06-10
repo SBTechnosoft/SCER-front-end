@@ -66,11 +66,11 @@ function PriceListRetailSalesController($rootScope,$scope, $filter, ngTableParam
             },
 			{
                 field: "vat",
-				displayName: "Vat"
+				displayName: "CGST"
             },
 			{
                 field: "additionalTax",
-				displayName: "A.Vat"
+				displayName: "SGST"
             },
 			{
                 field: "amount",

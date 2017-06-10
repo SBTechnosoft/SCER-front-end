@@ -325,7 +325,7 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				});
 			}
 			
-			toaster.pop('wait', 'Please Wait', 'Data Inserting....',30000);
+			toaster.pop('wait', 'Please Wait', 'Data Inserting....',300000000);
 			
 			apiCall.postCall(apiPath.batchBrand,batchFormData).then(function(response){
 				
@@ -347,7 +347,7 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 						
 						if(apiResponse.mappingError == response){
 							
-							toaster.pop('warning', 'opps!','please Set Proper Mapping');
+							toaster.pop('warning', 'opps!','Please Set Proper Mapping');
 						}
 						else{
 							toaster.pop('warning', 'opps!',response);
@@ -411,7 +411,7 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				});
 			}
 			
-			toaster.pop('wait', 'Please Wait', 'Data Inserting....',30000);
+			toaster.pop('wait', 'Please Wait', 'Data Inserting....',30000000);
 			
 			apiCall.postCall(apiPath.batchCategory,batchFormData).then(function(response){
 				
@@ -432,7 +432,7 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 						
 						if(apiResponse.mappingError == response){
 							
-							toaster.pop('warning', 'opps!','please Set Proper Mapping');
+							toaster.pop('warning', 'opps!','Please Set Proper Mapping');
 						}
 						else{
 							toaster.pop('warning', 'opps!',response);
@@ -507,9 +507,9 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				});
 			}
 			
-			toaster.pop('wait', 'Please Wait', 'Data Inserting....',30000);
+			toaster.pop('wait', 'Please Wait', 'Data Inserting....',3000000000);
 			
-			apiCall.postCall(apiPath.batchCategory,batchFormData).then(function(response){
+			apiCall.postCall(apiPath.batchProduct,batchFormData).then(function(response){
 				
 				toaster.clear();
 				if(apiResponse.ok == response){
@@ -527,9 +527,9 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 					}
 					else{
 						
-						if(apiResponse.mappingError == response){
+						if(apiResponse.mappingError == response.mapping_error){
 							
-							toaster.pop('warning', 'opps!','please Set Proper Mapping');
+							toaster.pop('warning', 'opps!','Please Set Proper Mapping');
 						}
 						else{
 							toaster.pop('warning', 'opps!',response);

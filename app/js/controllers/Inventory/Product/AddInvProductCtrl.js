@@ -133,6 +133,11 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 			$scope.addInvProduct.additionalTax = editProductData.additionalTax;
 			$scope.addInvProduct.marginFlat = editProductData.marginFlat;
 			$scope.addInvProduct.margin = editProductData.margin;
+			
+			$scope.addInvProduct.hsn = editProductData.hsn;
+			$scope.addInvProduct.igst = editProductData.igst;
+			$scope.addInvProduct.cess = editProductData.cess;
+			
 			$scope.addInvProduct.minimumStockLevel = editProductData.minimumStockLevel;
 			
 		//});

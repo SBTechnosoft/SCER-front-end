@@ -140,6 +140,7 @@ App
 	'getPurchaseDetail': 'accounting/taxation/purchase-detail/company/',
 	'batchBrand': 'product-categories/batch',
 	'batchCategory': 'product-groups/batch',
+	'batchProduct': 'products/batch',
 	'policeReport': 'reports/polish-report/company/',
 	'stockSummary': 'products/company/',
 	'stockSummary2': '/stock-summary',

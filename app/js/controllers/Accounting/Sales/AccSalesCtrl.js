@@ -1376,7 +1376,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		 
 			//console.log(data);
 			
-			//var UrlPath = apiPath.getProductByCompany+data.companyId;
+			var UrlPath = apiPath.getProductByCompany+data.companyId;
 			
 			// apiCall.getCall(UrlPath+'/branch').then(function(responseDrop){
 			

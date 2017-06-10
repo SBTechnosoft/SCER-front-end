@@ -144,7 +144,24 @@
 				  </div>
 			   </div>
 			</fieldset>
-		
+			<fieldset class="my-fieldset-paddingBottom">
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Is Dealer</label>
+					<div class="col-sm-9">
+						<div class="radio-inline c-radio">
+								<label>
+								   <input ng-model="ledgerForm.isDealer" tabindex="2" id="inlineradio1" ng-change="changeLedgerData('isDealer',ledgerForm.isDealer)" type="radio" name="i-radio" value="y"   />
+								   <span class="fa fa-circle" ></span>Yes</label>
+							 </div>
+							 <div class="radio-inline c-radio">
+								<label>
+								   <input ng-model="ledgerForm.isDealer" tabindex="2" id="inlineradio2" ng-change="changeLedgerData('isDealer',ledgerForm.isDealer)" type="radio" name="i-radio" value="n" ng-checked="true" />
+								   <span class="fa fa-circle"></span>No</label>
+							 </div>
+					</div>
+					
+				</div>
+			</fieldset>
 	  </div>
 	  
 	  <h4 class="panel-heading">Address/Contact</h4>

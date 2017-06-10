@@ -82,7 +82,9 @@
 						   <div class="form-group">
 							  <label class="col-sm-3 control-label">Brand</label>
 							  <div class="col-sm-9">
-								 <select chosen="" data-ng-model="invStock.category" tabindex="2" data-ng-options="s.productCategoryName for s in form.categoryDrop track by s.productCategoryId" ng-change="changeStockData('productCategoryId',invStock.category.productCategoryId)" class="form-control chosen-select" ></select>
+								 <select chosen="" data-ng-model="invStock.category" tabindex="2" data-ng-options="s.productCategoryName for s in form.categoryDrop track by s.productCategoryId" ng-change="changeStockData('productCategoryId',invStock.category.productCategoryId)" class="form-control chosen-select" >
+									<option value=""> All </option>
+								 </select>
 							  </div>
 						   </div>
 						</fieldset>
@@ -96,7 +98,9 @@
 						   <div class="form-group">
 							  <label class="col-sm-3 control-label">Category</label>
 							  <div class="col-sm-9">
-								<select chosen="" data-ng-model="invStock.group" data-ng-options="s.productGroupName for s in form.groupDrop track by s.productGroupId" ng-change="changeStockData('productGroupId',invStock.group.productGroupId)" class="form-control chosen-select" size='5' tabindex="2" ></select>
+								<select chosen="" data-ng-model="invStock.group" data-ng-options="s.productGroupName for s in form.groupDrop track by s.productGroupId" ng-change="changeStockData('productGroupId',invStock.group.productGroupId)" class="form-control chosen-select" size='5' tabindex="2" >
+									<option value=""> All </option>
+								</select>
 							  </div>
 						   </div>
 						</fieldset>	

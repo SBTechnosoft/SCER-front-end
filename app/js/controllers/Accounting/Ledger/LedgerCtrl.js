@@ -77,12 +77,15 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		
 		formdata.delete('amountType');
 		formdata.delete('amount');
+		formdata.delete('isDealer');
 		
 		$scope.ledgerForm.amountType = 'debit';
 		$scope.ledgerForm.openingBal;
+		$scope.ledgerForm.isDealer = 'n';
 		
 		formdata.append('amountType',$scope.ledgerForm.amountType);
 		formdata.appned('amount',$scope.ledgerForm.openingBal);
+		formdata.appned('isDealer',$scope.ledgerForm.isDealer);
 		
 	}
 	
@@ -106,6 +109,8 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			$scope.ledgerForm.pan = response.pan;
 			$scope.ledgerForm.sgst = response.sgst;
 			$scope.ledgerForm.cgst = response.cgst;
+			
+			$scope.ledgerForm.isDealer = response.isDealer;
 			
 			$scope.ledgerForm.amountType = response.openingBalanceType;
 			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);
@@ -150,6 +155,8 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			$scope.ledgerForm.pan = response.pan;
 			$scope.ledgerForm.sgst = response.sgst;
 			$scope.ledgerForm.cgst = response.cgst;
+			
+			$scope.ledgerForm.isDealer = response.isDealer;
 			
 			$scope.ledgerForm.amountType = response.openingBalanceType;
 			$scope.ledgerForm.openingBal = parseInt(response.openingBalance);

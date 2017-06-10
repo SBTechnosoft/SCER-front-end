@@ -27,7 +27,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		else{
 			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			//apiCall.getCall(apiPath.getAllProduct).then(function(response){
 			productFactory.getProduct().then(function(response){
@@ -88,7 +88,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	$scope.getProduct = function(id){
 		
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			productFactory.getProductByCompany(id).then(function(response){
 				
@@ -224,7 +224,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 				
 				if(apiResponse.ok == response){
 					
-					
+					 productFactory.blankProduct();
 					$scope.showProduct();
 					toaster.pop('success', 'Title', 'Delete SuccessFully');
 					//vm.tableParams.reload();
@@ -247,7 +247,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		
   }
   
-   /** Barcode **/
+   /** Batch **/
    
 		$scope.openProductBatchModal = function(){
 			
@@ -271,6 +271,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 			modalInstance.result.then(function (data) {
 			 
 			  console.log('Ok');	
+			  productFactory.blankProduct();
 			  $scope.init();
 			  Modalopened = false;
 			

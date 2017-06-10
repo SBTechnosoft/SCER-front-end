@@ -5,7 +5,7 @@
  
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,stateCityFactory) {
+function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,stateCityFactory,$filter) {
   'use strict';
  
 	var vm = this;
@@ -286,6 +286,87 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	// End Table 
 	
+	//Total Tax For Product Table
+	$scope.getTotalTax = function(){
+		
+		var total = 0;
+		for(var i = 0; i < vm.AccBillTable.length; i++){
+			var product = vm.AccBillTable[i];
+			var vartax = vm.productTax[i];
+			var totaltax = parseFloat(vartax.tax) + parseFloat(vartax.additionalTax);
+			if(product.discountType == 'flat') {
+				
+				var getAmount = $filter('setDecimal')((product.price*product.qty) - product.discount,$scope.noOfDecimalPoints);
+				
+			}
+			else{
+				var getAmount  =  $filter('setDecimal')((product.price*product.qty)-((product.price*product.qty)*product.discount/100),$scope.noOfDecimalPoints);
+			}
+			total += productArrayFactory.calculateTax(getAmount,totaltax,0);
+		}
+		return total;
+	}
+	
+	$scope.getTotal = function(){
+		
+		var total = 0;
+		for(var i = 0; i < vm.AccBillTable.length; i++){
+			var product = vm.AccBillTable[i];
+			total += parseFloat(product.amount);
+		}
+		return total;
+		
+	}
+	
+	/** Tax Calculation **/
+	
+		$scope.calculateTaxReverse = function(item,cgst,sgst){
+			
+			var getCgst = cgst;
+			var getSgst = sgst;
+			
+			if(item.discountType == 'flat') {
+				//item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints);
+				
+				var amount =  $filter('setDecimal')((item.price*item.qty) - item.discount,$scope.noOfDecimalPoints);
+				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				
+				item.amount = amount+cgstAmount+sgstAmount;
+				
+			}
+			else{
+				//item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints);
+				var amount  =  $filter('setDecimal')((item.price*item.qty)-((item.price*item.qty)*item.discount/100),$scope.noOfDecimalPoints);
+				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				
+				item.amount = amount+cgstAmount+sgstAmount;
+			}
+		}
+		
+	/** END **/
+	
+	
+	/** Tax Calculation **/
+	
+		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,index){
+			
+			var getCgst = parseFloat(cgst);
+			var getSgst = parseFloat(sgst);
+			var TaxSum = getCgst+getSgst;
+			
+			//console.log(TaxSum);
+			// console.log(item.amount);
+			
+			vm.AccBillTable[index].price = $filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints);
+			
+			var Price = item.amount/ (1+(TaxSum/100));
+			
+		}
+		
+	/** END **/
+	
 	
 	/** Check Update Or Insert Bill **/
 	
@@ -558,29 +639,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		// return total;
 	// }
 	
-	//Total Tax For Product Table
-	$scope.getTotalTax = function(){
-		
-		var total = 0;
-		for(var i = 0; i < vm.AccBillTable.length; i++){
-			var product = vm.AccBillTable[i];
-			var vartax = vm.productTax[i];
-			var totaltax = parseFloat(vartax.tax) + parseFloat(vartax.additionalTax);
-			total += productArrayFactory.calculateTax(product.amount,totaltax,0);
-		}
-		return total;
-	}
 	
-	$scope.getTotal = function(){
-		
-		var total = 0;
-		for(var i = 0; i < vm.AccBillTable.length; i++){
-			var product = vm.AccBillTable[i];
-			total += product.amount;
-		}
-		return total;
-		
-	}
 	
 	
 	
@@ -1255,31 +1314,40 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 							preHeaderData.salesType = 'whole_sales';
 
 						 }
-			 
-						if($scope.quickBill.EditBillData){
-							
-							if(nextPre == 'next'){
-							
-							preHeaderData.nextSaleId = $scope.quickBill.EditBillData.saleId;
-							
-							}
-							else{
-								preHeaderData.previousSaleId = $scope.quickBill.EditBillData.saleId;
-							}
-							
+						
+						if(nextPre == "first" || nextPre == "last"){
+							preHeaderData.operation = nextPre;
 						}
 						else{
 							
-							if(nextPre == 'next'){
+							if($scope.quickBill.EditBillData){
 							
-							preHeaderData.nextSaleId = 0;
-							
+								if(nextPre == 'next'){
+								
+								preHeaderData.nextSaleId = $scope.quickBill.EditBillData.saleId;
+								
+								}
+								else{
+									preHeaderData.previousSaleId = $scope.quickBill.EditBillData.saleId;
+								}
+								
 							}
 							else{
-								preHeaderData.previousSaleId = 0;
+								
+								if(nextPre == 'next'){
+								
+								preHeaderData.nextSaleId = 0;
+								
+								}
+								else{
+									preHeaderData.previousSaleId = 0;
+								}
+								
 							}
-							
+						
 						}
+						
+						
 					
 						//var preHeaderData = {'Content-Type': undefined,'sale_id':sale_id,'salesType':$scope.saleType};
 						
@@ -1919,4 +1987,4 @@ $scope.presssuburb = function(event){
   // return ($location.path().substr(0, path.length) === path) ? 'active' : '';
 // }
 }
-RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","stateCityFactory"];
+RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","stateCityFactory","$filter"];

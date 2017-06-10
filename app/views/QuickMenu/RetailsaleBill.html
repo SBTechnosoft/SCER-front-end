@@ -250,8 +250,8 @@ h4 .control-label{
 						<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;">Discount</th>
 					<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;" >Rate</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >Quantity</th>
-					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >VAT</th>
-					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >A.Vat</th>
+					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >CGST</th>
+					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >SGST</th>
 					<th class="header my-table-paddingTopBottom" style="width:9%;padding-top:5px !important;padding-bottom:5px !important;" >Amount</th>
 					<th class="header my-table-paddingTopBottom" style="width:7%;padding-top:5px !important;padding-bottom:5px !important;">Action</th>
 				</tr>
@@ -263,7 +263,7 @@ h4 .control-label{
 				<tr id="addAfter" ng-repeat="item in form.AccBillTable" data-ng-class="app.tableAnimation">
 					<td>
 						<div class="input-group mytypeDrop">
-							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index)" type="text" class="form-control" placeholder="*Enter Product Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)"  />
+							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index);calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" type="text" class="form-control" placeholder="*Enter Product Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)"  />
 							<span class="input-group-btn">
 							   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 							</span>
@@ -279,25 +279,33 @@ h4 .control-label{
 						<input id="input-id-1" type="text" ng-model="item.frameNo"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
 					</td>
 					<td>
-						<select  ng-model="item.discountType"  class="form-control" style="padding-left: 5px;padding-right: 5px;width:50%;float:left;" ng-change="changeProductTable()" >
+						<select  ng-model="item.discountType"  class="form-control" style="padding-left: 5px;padding-right: 5px;width:50%;float:left;" ng-change="changeProductTable();" >
 							<option value="flat" selected="selected">Flat</option>
 							<option value="percentage">%</option>
 						</select>
-						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="padding-left: 6px;padding-right: 6px;width:50%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()"  ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="padding-left: 6px;padding-right: 6px;width:50%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)"  ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
 						
 					</td>
 					<td>
 						<!--span style="float:right">{{item.price}}</span-->
-						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable()" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
 					</td>
 					<td>
-						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable()" only-number /> 
+						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
 					</td>
-					<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
-					<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
-					<td >
-						<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints)}}</span>
-						<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints)}}</span>
+					<td style="text-align:right"><span> {{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} </span></td>
+					<td style="text-align:right">{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
+					<td>
+						<span style="float:right" ng-if="item.discountType == 'flat'" >
+						
+							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax,$index)" only-number /> 
+							
+						</span>
+						<span style="float:right" ng-if="item.discountType == 'percentage'" >
+						
+							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
+							
+						</span>
 						
 						<!--span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = getTotalAmount() - item.discount}}</span>
 						<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = getTotalAmount()-(getTotalAmount() * item.discount/100)}}</span-->
@@ -341,8 +349,8 @@ h4 .control-label{
 					<td  style="text-align:left" > <strong>Total </strong> </td>
 					<td colspan="2" style="text-align:right" >{{quickBill.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
 					<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
-					<td style="text-align:right">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}</td>
-				</tr>
+					<td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td>
+				</tr> 
 				<!--tr>
 					<td></td>
 					<td></td>
@@ -389,7 +397,7 @@ h4 .control-label{
 						</span>
 					</td>
 					<td style="text-align:left"  > <strong> Balance </strong></td>
-					<td style="text-align:right">{{balanceTable = (grandTotalTable-quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
+					<td style="text-align:right">{{balanceTable = (totalTable + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) - quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
 				</tr>
 				<!--tr colspan="5">
 					<td></td>
@@ -449,7 +457,7 @@ h4 .control-label{
 					
 				<div class="col-sm-2">
 					 <!--button type="button" class="mr mb-sm btn btn-primary" ng-click="openScanPopup();" >Scan ({{countScannedDocumet}})</button-->
-					 <button type="button" class="mr mb-sm btn btn-primary"  ng-click="DWT_AcquireImage();" >Scan ({{countScannedDocumet}})</button>
+					 <!--button type="button" class="mr mb-sm btn btn-primary"  ng-click="DWT_AcquireImage();" >Scan ({{countScannedDocumet}})</button-->
 				</div>
 				
 			</div>
@@ -506,6 +514,8 @@ h4 .control-label{
 			
 		<div class="col-sm-5">
 	
+			<button type="button" class="mr mb-sm btn btn-primary pull-left" ng-click="goToNextPrevious('first')" tabIndex="2" data-ng-class="app.theme.brand" > First </button>
+			
 			<button type="button" class="mr mb-sm btn btn-labeled btn-primary pull-left"  ng-click="goToNextPrevious('previous')" data-ng-class="app.theme.brand" >
                <span class="btn-label"><i class="fa fa-arrow-left"></i>
                </span>Previous</button>
@@ -514,6 +524,8 @@ h4 .control-label{
 				<span class="btn-label btn-label-right"><i class="fa fa-arrow-right"></i>
 				</span>
 			</button>
+			
+			<button type="button" class="mr mb-sm btn btn-primary pull-left" ng-click="goToNextPrevious('last')" tabIndex="2" data-ng-class="app.theme.brand" > Last </button>
 			
 			<button type="button" class="mr mb-sm btn btn-success pull-left" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()"  >New</button>
 			
@@ -529,7 +541,7 @@ h4 .control-label{
 			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('not')" ng-disabled="formBill.$invalid || disableButton" tabIndex="3" > <span ng-if="quickBill.EditBillData">Update</span> <span ng-if="!quickBill.EditBillData">Save</span> </button>
 			
 			<button type="button" class="mr mb-sm btn btn-primary pull-right" ng-click="previewBill('lg')" tabIndex="2" data-ng-class="app.theme.brand" > Preview </button>
-			
+			<button type="button" class="mr mb-sm btn btn-primary pull-right"  ng-click="DWT_AcquireImage();" >Scan ({{countScannedDocumet}})</button>
 			
 		</div>
 		

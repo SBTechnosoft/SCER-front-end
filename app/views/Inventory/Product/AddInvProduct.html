@@ -61,7 +61,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">*Product Name</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="productName" ng-model="addInvProduct.name" ng-change="changeInvProductData('productName',addInvProduct.name)" type="text" placeholder="Product Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="50" tabindex="2" auto-focus/>
+                     <input id="input-id-1" name="productName" ng-model="addInvProduct.name" ng-change="changeInvProductData('productName',addInvProduct.name)" type="text" placeholder="Product Name" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="100" tabindex="2" auto-focus/>
 					 
 					<span ng-messages="formProduct.productName.$error" ng-if="formProduct.productName.$dirty || formProduct.productName.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -188,11 +188,26 @@
             </fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">VAT(%)</label>
+                  <label for="input-id-1" class="col-sm-3 control-label">CGST(%)</label>
                   <div class="col-sm-5">
-                     <input id="input-id-1" name="vat" ng-model="addInvProduct.vat" ng-change="changeInvProductData('vat',addInvProduct.vat)" type="text" placeholder="VAT(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+                     <input id="input-id-1" name="vat" ng-model="addInvProduct.vat" ng-change="changeInvProductData('vat',addInvProduct.vat)" type="text" placeholder="CGST(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 					 
 					<span ng-messages="formProduct.vat.$error" ng-if="formProduct.vat.$dirty || formProduct.vat.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">SGST(%)</label>
+                  <div class="col-sm-5">
+                     <input id="input-id-1" name="additionalTax" ng-model="addInvProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addInvProduct.additionalTax)" type="text" placeholder="SGST(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+					 
+					<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
 						<span ng-messages-include="errorLonglength"></span>
 						<span ng-messages-include="errorPatternThisSpecial"></span>
@@ -229,21 +244,7 @@
 				   <label for="input-id-1" class="col-sm-2 control-label-left" >{{ (displayParseFloat(addInvProduct.marginFlat) + (displayParseFloat(addInvProduct.purchasePrice) * displayParseFloat(addInvProduct.margin) / 100)) |  currency:"&#8377; "}}</label>
                </div>
             </fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Additional Tax(%)</label>
-                  <div class="col-sm-5">
-                     <input id="input-id-1" name="additionalTax" ng-model="addInvProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addInvProduct.additionalTax)" type="text" placeholder="Additional Tax" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
-					 
-					<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
-					 </span>
-					
-                  </div>
-               </div>
-            </fieldset>
+			
 			 <fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">*MRP</label>
@@ -259,6 +260,51 @@
                   </div>
                </div>
             </fieldset>
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">HSN/SAC#</label>
+                  <div class="col-sm-5">
+                     <input id="input-id-1" name="hsn" ng-model="addInvProduct.hsn" ng-change="changeInvProductData('hsn',addInvProduct.hsn)" type="text" placeholder="HSN/SAC Number" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="2"/>
+					 
+					<span ng-messages="formProduct.hsn.$error" ng-if="formProduct.hsn.$dirty || formProduct.hsn.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">IGST(%)</label>
+                  <div class="col-sm-2">
+                     <input id="input-id-1" name="igst" ng-model="addInvProduct.igst" ng-change="changeInvProductData('igst',addInvProduct.igst)" type="text" placeholder="IGST(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+					 
+					<span ng-messages="formProduct.igst.$error" ng-if="formProduct.igst.$dirty || formProduct.igst.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+              
+
+                  <label for="input-id-1" class="col-sm-1 control-label">CESS(%)</label>
+                  <div class="col-sm-2">
+                     <input id="input-id-1" name="cess" ng-model="addInvProduct.cess" ng-change="changeInvProductData('cess',addInvProduct.cess)" type="text" placeholder="CESS(%)" class="form-control" tabindex="2"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+					 
+					<span ng-messages="formProduct.cess.$error" ng-if="formProduct.cess.$dirty || formProduct.cess.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			
 			 <fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Minimum Stock</label>

@@ -152,6 +152,18 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		if($scope.addModelProduct.minimumStockLevel){
 			formdata.append('minimumStockLevel',$scope.addModelProduct.minimumStockLevel);
 		}
+		
+		if($scope.addModelProduct.hsn){
+			formdata.append('hsn',$scope.addModelProduct.hsn);
+		}
+		
+		if($scope.addModelProduct.igst){
+			formdata.append('igst',$scope.addModelProduct.igst);
+		}
+		
+		if($scope.addModelProduct.cess){
+			formdata.append('cess',$scope.addModelProduct.cess);
+		}
 		// formdata.append('vat',$scope.addModelProduct.vat);
 		// formdata.append('additionalTax',$scope.addModelProduct.additionalTax);
 		// formdata.append('marginFlat',$scope.addModelProduct.marginFlat);

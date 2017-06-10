@@ -83,6 +83,37 @@
 				
 				<fieldset class="my-fieldset-paddingBottom">
 					<div class="form-group">
+						<label class="col-sm-2 control-label">Customer Care#</label>
+						<div class="col-sm-8">
+						   <input type="text" name="customerCare" tabindex="2" ng-model="addCompany.customerCare" ng-change="changeCompanyData('customerCare',addCompany.customerCare)"   placeholder="Customer Care#" class="form-control"  ng-minlength="10" ng-maxlength="12" only-number  />
+						   
+						   <span ng-messages="formCompany.customerCare.$error" ng-if="formCompany.customerCare.$dirty || formCompany.customerCare.$touched" role="alert">
+								<span ng-messages-include="errorRequired"></span>
+							</span>
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
+						 <label for="input-id-1" class="col-sm-2 control-label">Email ID</label>
+						<div class="col-sm-8">
+							<div class="input-group m-b">
+								<span class="input-group-addon">@</span>
+								<input type="email" tabindex="2" name="emailId" ng-model="addCompany.emailId" ng-change="changeCompanyData('emailId',addCompany.emailId)" ng-disabled="form.disableValue" placeholder="Email ID" class="form-control"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
+							</div>
+							
+							<span ng-messages="formCompany.emailId.$error" ng-if="formCompany.emailId.$dirty || formCompany.emailId.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorEmail"></span>
+							</span>
+							
+						</div>
+					</div>
+				</fieldset>
+				
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
 						<label for="input-id-1" class="col-sm-2 control-label">*First Address</label>
 						<div class="col-sm-8">
 							<textarea style="" tabindex="2" name="firstAddress"   placeholder="Your First address" data-ng-model="addCompany.address1" ng-change="changeCompanyData('address1',addCompany.address1)" class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>

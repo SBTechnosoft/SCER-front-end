@@ -145,6 +145,10 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			//console.log(vm.sdfg);
 			$scope.addCompany.Name = editCompanyData.companyName;
 			$scope.addCompany.displayName = editCompanyData.companyDisplayName;
+			
+			$scope.addCompany.customerCare = editCompanyData.customerCare;
+			$scope.addCompany.emailId = editCompanyData.emailId;
+			
 			$scope.addCompany.address1 = editCompanyData.address1;
 			$scope.addCompany.address2 = editCompanyData.address2;
 			$scope.addCompany.pincode = editCompanyData.pincode;

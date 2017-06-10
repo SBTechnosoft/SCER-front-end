@@ -36,7 +36,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		else{
 			
 			toaster.clear();
-			toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 		
 			//apiCall.getCall(apiPath.getAllProduct).then(function(response){
 			productFactory.getProduct().then(function(response){
@@ -97,7 +97,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 	$scope.getProduct = function(id){
 		
 		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 		//apiCall.getCall(apiPath.getProductByCompany+id+'/branch').then(function(response){
 		productFactory.getProductByCompany(id).then(function(response){
@@ -266,7 +266,8 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 	
 		//console.log(pData);
 		
-		var mywindow = window.open('', 'PRINT', 'height=27cm,width=21cm');
+		//var mywindow = window.open('', 'PRINT', 'height=850,width=850');
+		var mywindow = window.open('', 'PRINT', 'height=850,width=850');
 
 		 var is_chrome = Boolean(mywindow.chrome);
 
@@ -289,7 +290,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		for(var n=0;n<qty;n++){
 
 			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 26px ;padding-left:35px;display: inline-block;'> ");
-			mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='margin-left:70px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span>");
+			mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:12px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span>");
 			
 			if(n == qty-1){
 				
@@ -364,14 +365,14 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		}
 		
 		
-		var mywindow = window.open('', 'PRINT', 'height=137,width=284');
+		var mywindow = window.open('', 'PRINT', 'height=850,width=850');
 	
 		 var is_chrome = Boolean(mywindow.chrome);
 
-        mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+        mywindow.document.write('<html><!--head><title>' + document.title  + '</title>');
 
-        mywindow.document.write("</head><body style='height:29.7cm;width:21cm;'>");
-		mywindow.document.write('<center> <h1> Barcode of ' + CompanyNamePrint  + ' Company </h1> </center>');
+        mywindow.document.write("</head--><style type='text/css' media='print'>@page {size: auto;margin: 0mm;} body {background-color:#FFFFFF;margin: 0px; }</style><body>");
+		mywindow.document.write('<!--center> <h1> Barcode of ' + CompanyNamePrint  + ' Company </h1> </center-->');
 		
 		
 		
@@ -390,7 +391,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			 }
 			
 			
-			mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </td></tr> 	<tr>");
+			mywindow.document.write("<!--tr><td colspan='2' style='text-align:center;'><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </td></tr--> 	<tr>");
 			
 			if($scope.barcodePrintData.multiQuantity > 0){
 				
@@ -415,8 +416,8 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				
 				
 				
-				mywindow.document.write("<td style='position:relative;float:left; width: 48%;padding-bottom:5px;display: inline-block;'> ");
-				mywindow.document.write(arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ") <br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' />");
+				mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 26px ;padding-left:35px;display: inline-block;'> ");
+				mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:12px'>"+arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ")</span>");
 				
 				if(qtyIndex == qtyLength-1){
 					

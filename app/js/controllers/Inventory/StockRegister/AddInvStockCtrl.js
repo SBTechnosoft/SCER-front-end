@@ -68,7 +68,19 @@ function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$
 	//Changed Data When Update
 	$scope.changeStockData = function(Fname,value){
 		
-		dataSet[Fname] = value;
+		console.log(Fname+' '+value);
+		if(Fname == 'productCategoryId' && value == undefined)
+		{
+			delete dataSet.productCategoryId;
+		}
+		else if(Fname == 'productGroupId' && value == undefined){
+			
+			delete dataSet.productGroupId;
+		}
+		else{
+			dataSet[Fname] = value;
+		}
+		
 		
 		var Path = apiPath.getProductByCompany+$scope.invStock.companyDropDown.companyId;
 			
@@ -130,13 +142,14 @@ function AddInvStockController($rootScope,$scope,apiCall,apiPath,getSetFactory,$
   
   this.today2 = function() {
     this.dt2 = this.dt1;
+	//this.dt2 = new Date();
   };
   this.today2();
 	
 	this.check = function()
   {
 	  
-	 this.dt2 = this.dt1;
+	 //this.dt2 = this.dt1;
   };
   
   this.clear = function () {
