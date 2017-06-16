@@ -118,8 +118,10 @@ App
 	'getAllClient': 'clients',
 	'getAllBank': 'banks',
 	'postBill': 'accounting/bills',
+	'postQuotationBill': 'accounting/quotations',
 	'getLatestInvoice1': 'settings/invoice-numbers/company/',
 	'getLatestInvoice2': '/latest',
+	'getLatestQuotation': 'settings/quotation-numbers/company/',
 	'getJrnlByCompany': 'accounting/journals/company/',
 	'getOneJrnl': 'accounting/journals/',
 	'getLedgerJrnl':   'accounting/ledgers/company/',
@@ -146,7 +148,7 @@ App
 	'stockSummary2': '/stock-summary',
 	'getJobcardNumber': 'crm/job-form-number',
 	'getLatestJobcardNumber': 'crm/job-form-number/company/',
-	'PostJobcard': 'crm/job-form',
+	'PostJobcard': 'crm/job-form'
 	
   })
   //Api Path

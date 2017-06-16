@@ -90,15 +90,26 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 				
 		// });
   }
+  
+	$scope.dateFilter = function(pDate){
+		
+		var  fromdate = new Date(pDate);
+		var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
+		
+		return modifyFromDate;
+		
+	}
 	
 	$scope.redirectToData = function(){
 		
 		//var viewDataTypePath = viewDataType;
-		var  fromdate = new Date(vm.dt1);
-		var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
+		// var  fromdate = new Date(vm.dt1);
+		// var modifyFromDate  = fromdate.getDate()+'-'+(fromdate.getMonth()+1)+'-'+fromdate.getFullYear();
 		
-		var  todate = new Date(vm.dt2);
-		var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
+		// var  todate = new Date(vm.dt2);
+		// var modifyToDate  = todate.getDate()+'-'+(todate.getMonth()+1)+'-'+todate.getFullYear();
+		var modifyFromDate = $scope.dateFilter(vm.dt1);
+		var modifyToDate = $scope.dateFilter(vm.dt2);
 		
 		if($scope.accViewSales.companyDropDown){
 			$rootScope.accView.companyId = $scope.accViewSales.companyDropDown.companyId;
@@ -108,6 +119,17 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 			
 			$rootScope.accView.clientContact = $scope.accViewSales.clientContact;
 			$rootScope.accView.clientName = $scope.accViewSales.clientName;
+			$rootScope.accView.emailId = $scope.accViewSales.emailId;
+			$rootScope.accView.address = $scope.accViewSales.address;
+			$rootScope.accView.invoiceNumber = $scope.accViewSales.invoiceNumber;
+			$rootScope.accView.jobCardNumber = $scope.accViewSales.jobCardNumber;
+			
+			var jobcardModifyFromDate = $scope.dateFilter(vm.jobcardDate1);
+			var jobcardModifyToDate = $scope.dateFilter(vm.jobcardDate2);
+		
+			$rootScope.accView.jobCardFromDate = jobcardModifyFromDate; // Jobcard FromDate
+			$rootScope.accView.jobCardToDate = jobcardModifyToDate; // Jobcard TODate
+			
 		}
 		
 		$rootScope.accView.fromDate = modifyFromDate; // FromDate
@@ -187,15 +209,34 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   // ----------------------------------- 
 	this.minStart = new Date(0,0,1);
 	this.maxStart = new Date();
+	
   this.today = function() {
     this.dt1 = new Date();
   };
+   
+  
   this.today();
   
   this.today2 = function() {
     this.dt2 = this.dt1;
   };
   this.today2();
+	
+	/** JObcard **/
+	
+		this.todayJobcard = function() {
+			this.jobcardDate1 = new Date();
+		};
+	   
+	  
+		this.todayJobcard();
+	  
+		this.todayJobcard2 = function() {
+			this.jobcardDate2 = this.jobcardDate1;
+		};
+		this.todayJobcard2();
+  
+	/** End **/
 	
 	this.check = function()
   {
@@ -232,7 +273,23 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 
     this.openedEnd = true;
   };
+  
+  /** JObcard **/
+   this.openStartJobcard = function($event) {
+	  
+    $event.preventDefault();
+    $event.stopPropagation();
 
+    this.openedStartJobcard = true;
+  };
+  
+  this.openEndJobcard = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    this.openedEndJobcard = true;
+  };
+/** End **/
   this.dateOptions = {
     formatYear: 'yy',
     startingDay: 1

@@ -14,8 +14,11 @@ App.factory('productFactory',['apiCall','apiPath','$q', function(apiCall,apiPath
 			deferredMenu.resolve(savedData);
 		} else {
 			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
-				savedData = data;
-
+				
+				if(angular.isArray(data)){
+					savedData = data;
+				}
+				
 				deferredMenu.resolve(data);
 			})
 		}
@@ -47,16 +50,24 @@ App.factory('productFactory',['apiCall','apiPath','$q', function(apiCall,apiPath
 				
 		} else {
 			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
-				savedData = data;
-				var AllData = data;
-				var Cnt = AllData.length;
-				for(var y=0;y<Cnt;y++)
-				{
-					var stateData = AllData[y];
-					if(stateData.productId == proId){
-						deferredMenu.resolve(stateData);
-						break;
+				
+				if(angular.isArray(data)){
+					
+					savedData = data;
+					var AllData = data;
+					var Cnt = AllData.length;
+					for(var y=0;y<Cnt;y++)
+					{
+						var stateData = AllData[y];
+						if(stateData.productId == proId){
+							deferredMenu.resolve(stateData);
+							break;
+						}
 					}
+					
+				}
+				else{
+					deferredMenu.resolve(data);
 				}
 				
 			})
@@ -88,23 +99,34 @@ App.factory('productFactory',['apiCall','apiPath','$q', function(apiCall,apiPath
 			deferredMenu.resolve(StateArray);
 				
 		} else {
-				console.log('else');
-			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
-				savedData = data;
 				
-				var AllData = data;
+			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
+				
 				var StateArray = [];
-				var Cnt = AllData.length;
-				for(var y=0;y<Cnt;y++)
-				{
-					var productArrayData = AllData[y];
+				
+				if(angular.isArray(data)){
 					
-					if(productArrayData.company.companyId == compId){
+					savedData = data;
+					var AllData = data;
+					var StateArray = [];
+					var Cnt = AllData.length;
+					for(var y=0;y<Cnt;y++)
+					{
+						var productArrayData = AllData[y];
 						
-						StateArray.push(productArrayData);
-						
+						if(productArrayData.company.companyId == compId){
+							
+							StateArray.push(productArrayData);
+							
+						}
 					}
+					deferredMenu.resolve(StateArray);
 				}
+				else{
+					deferredMenu.resolve(data);
+				}
+				
+				
 		
 				deferredMenu.resolve(StateArray);
 			})

@@ -25,22 +25,40 @@
 		   
       </div>
 	   <div class="table-responsive">
-		  <table data-ng-table="table.tableParams" show-filter="false" class="table table-bordered table-striped">
+		  <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
-			 <tbody>
-				<tr data-ng-repeat="user in $data">
-					<td data-title="'#'"  >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
-					<td data-title="'Client Name'"  filter="{ 'clientName': 'text' }" >
+			 <tbody >
+				<tr data-ng-repeat="user in $data" style="width:100%">
+					<td style="text-align: left" header="'ng-table/headers/checkbox.html'" style="width:5%" >
+						<div class="checkbox c-checkbox">
+						  <label>
+							 <input type="checkbox" ng-model="user.selected" ng-change="changeBox(user.selected,user)" />
+							 <span class="fa fa-check"></span>
+						  </label>
+					   </div>
+					</td>
+					<td data-title="'#'"  style="width:3%" >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
+					<td data-title="'Client Name'" sortable="'clientName'" filter="{ 'clientName': 'text' }"  style="width:22%" >
 						<a ng-click="goToClientTransaction(user.clientId)" ui-sref="" href=""  tabindex="{{$index+1}}" style="text-transform:capitalize"   >
 							{{user.clientName}}
 						</a>
 					</td>
-					<td data-title="'contact#'"  filter="{ 'contactNo': 'text' }" >{{user.contactNo}}</td>
+					<td data-title="'Contact#'" sortable="'contactNo'"  filter="{ 'contactNo': 'text' }"  style="width:15%" >{{user.contactNo}}</td>
+					<td data-title="'Address'" sortable="'address1'"  filter="{ 'address1': 'text' }" style="width:23%" >{{user.address1}}</td>
 					 <!--td data-title="'EntryDate'"  filter="{ 'entryDate': 'text' }" >{{dateConvert(user.entryDate) | date:dateFormat}}</td-->
 					
-					<td data-title="'State'"  filter="{ 'stateAbb': 'text' }" >{{user.state.stateAbb}}</td>
-					<td data-title="'City'"  filter="{ 'city': 'text' }"  >{{user.city.cityName}}</td>
-					
+					<td data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  style="width:10%" >{{user.stateAbb}}</td>
+					<td data-title="'City'" sortable="'cityName'" filter="{ 'city': 'text' }"  style="width:10%" >{{user.cityName}}</td>
+					<td d header="'ng-table/headers/checkboxIcon.html'" style="width:12%">
+						<center>
+							<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'email')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;" > </i>
+							&nbsp;
+							<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'sms')" class="fa fa-commenting" title="SMS" style="font-size:17px;color:#43a8eb;"  ></i>
+							&nbsp;
+							<i ui-sref="" ng-click="goToClientTransaction(user.clientId)" class="fa fa-address-card" title="Sticker" style="font-size:17px;color:#43a8eb;" ></i>
+							&nbsp;
+						</center>
+					</td>
 				</tr>
 			 </tbody>
 		  </table>
@@ -48,3 +66,22 @@
 	   <span ng-include="'app/views/partials/tableFooter/tableFooter.html'" >  </span>
    </div>
 </div>
+
+ <script type="text/ng-template" id="ng-table/headers/checkbox.html">
+       <div data-toggle="tooltip" data-title="Check All" class="checkbox c-checkbox" check-all="check-all">
+		  <label>
+			 <input type="checkbox" ng-model="parentCheckBox" ng-change="changeAllBox(parentCheckBox)" />
+			 <span class="fa fa-check"></span>
+		  </label>
+	   </div>
+ </script>
+ <script type="text/ng-template" id="ng-table/headers/checkboxIcon.html">
+      <center ng-if="selectedBoxArray.length > 0">
+		<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'email','group')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;" > </i>
+		&nbsp;
+		<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'sms','group')" class="fa fa-commenting" title="SMS" style="font-size:17px;color:#43a8eb;"  ></i>
+		&nbsp;
+		<i ui-sref="" ng-click="goToClientTransaction(user.clientId)" class="fa fa-address-card" title="Sticker" style="font-size:17px;color:#43a8eb;" ></i>
+		&nbsp;
+	</center>
+ </script>

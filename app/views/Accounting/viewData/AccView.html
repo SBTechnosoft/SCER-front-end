@@ -48,16 +48,16 @@
 			</div>
 			
 			<!-- Crm Client -->
-			<div class="col-sm-12">
+			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
 				<div class="col-sm-6">
-					 <fieldset ng-if="viewDataTypePath == 'CrmClientFilterView'">
+					 <fieldset >
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label">Contact</label>
 						  <div class="col-sm-9">
-							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | orderBy:'contactNo' | limitTo:10" ng-model="accViewSales.clientContact" id="input-id-1" type="text" placeholder="Enter Contact Number" class="form-control" dir="ltr" name="contactNo" id="contactNoSelect"  auto-focus="true" ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10"  ng-required="true" only-number style="font-size:15px;" tabindex="2" />
+							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | orderBy:'contactNo' | limitTo:10" ng-model="accViewSales.clientContact" id="input-id-1" type="text" placeholder="Enter Contact Number" class="form-control" dir="ltr" name="contactNo" id="contactNoSelect"  auto-focus="true"  ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10"   only-number style="font-size:15px;" tabindex="2" />
 									 
 								<span ng-messages="accFormView.contactNo.$error" ng-if="accFormView.contactNo.$dirty || accFormView.contactNo.$touched" role="alert">
-									<span ng-messages-include="errorRequired"></span>
+								
 									<span ng-messages-include="errorPatternNumber"></span>
 									<span ng-messages-include="errorLonglength"></span>
 									<span ng-messages-include="errorShortlength"></span>
@@ -67,19 +67,82 @@
 					</fieldset  >
 				</div>
 				<div class="col-sm-6">
-					 <fieldset ng-if="viewDataTypePath == 'CrmClientFilterView'">
+					 <fieldset >
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label">Client Name</label>
 						  <div class="col-sm-9">
 						  
-							 <input  typeahead="s.clientName for s in form.clientSuggest | filter:$viewValue | orderBy:'clientName' | limitTo:10" ng-model="accViewSales.clientName" id="input-id-1" type="text" placeholder="Client Name" class="form-control" dir="ltr" name="clientName" id="clientName"  ng-required="true"  ng-pattern="/^[a-zA-Z ]*$/" tabindex="2" />
+							 <input  typeahead="s.clientName for s in form.clientSuggest | filter:$viewValue | orderBy:'clientName' | limitTo:10" ng-model="accViewSales.clientName" id="input-id-1" type="text" placeholder="Client Name" class="form-control" dir="ltr" name="clientName" id="clientName"    ng-pattern="/^[a-zA-Z ]*$/" tabindex="2" />
 									 
 								<span ng-messages="accFormView.clientName.$error" ng-if="accFormView.clientName.$dirty || accFormView.clientName.$touched" role="alert">
-									<span ng-messages-include="errorRequired"></span>
 									<span ng-messages-include="errorPatternNumber"></span>
 									<span ng-messages-include="errorLonglength"></span>
 									<span ng-messages-include="errorShortlength"></span>
 								</span>
+						  </div>
+					   </div>
+					</fieldset  >
+				</div>
+			</div>
+			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
+				<div class="col-sm-6">
+					 <fieldset >
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">EmailID</label>
+						  <div class="col-sm-9">
+							  <input ng-model="accViewSales.emailId" name="emailId"  id="input-id-1" type="email" placeholder="Email ID" class="form-control"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" tabindex="2" />
+							 
+							 <span ng-messages="accFormView.emailId.$error" ng-if="accFormView.emailId.$dirty || accFormView.emailId.$touched"  role="alert">
+								<span ng-messages-include="shortLength"></span>
+								<span ng-messages-include="errorEmail"></span>
+							</span>
+						  </div>
+					   </div>
+					</fieldset  >
+				</div>
+				<div class="col-sm-6">
+					 <fieldset >
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Address</label>
+						  <div class="col-sm-9">
+							<input ng-model="accViewSales.address" name="address"  id="input-id-1" type="text" placeholder="Address" class="form-control"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/"  ng-maxlength="200" tabindex="2" />
+							 
+							 <span ng-messages="accFormView.address.$error" ng-if="accFormView.address.$dirty || accFormView.address.$touched"  role="alert">
+								<span ng-messages-include="shortLength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							</span>
+						  </div>
+					   </div>
+					</fieldset  >
+				</div>
+			</div>
+			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
+				<div class="col-sm-6">
+					 <fieldset >
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Invoice#</label>
+						  <div class="col-sm-9">
+							  <input ng-model="accViewSales.invoiceNumber" name="invoice"  id="input-id-1" type="text" placeholder="Invoice Number" class="form-control"  ng-minlength="1"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" tabindex="2" />
+							 
+							 <span ng-messages="accFormView.invoice.$error" ng-if="accFormView.invoice.$dirty || accFormView.invoice.$touched"  role="alert">
+								<span ng-messages-include="shortLength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							</span>
+						  </div>
+					   </div>
+					</fieldset  >
+				</div>
+				<div class="col-sm-6">
+					 <fieldset >
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Jobcard#</label>
+						  <div class="col-sm-9">
+							<input ng-model="accViewSales.jobCardNumber" name="jobcard"  id="input-id-1" type="text" placeholder="Jobcard Number" class="form-control"  ng-minlength="1"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" tabindex="2" />
+							 
+							 <span ng-messages="accFormView.jobcard.$error" ng-if="accFormView.jobcard.$dirty || accFormView.jobcard.$touched"  role="alert">
+								<span ng-messages-include="shortLength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							</span>
 						  </div>
 					   </div>
 					</fieldset  >
@@ -91,10 +154,11 @@
 				<div class="col-sm-6">
 					<fieldset>
 					   <div class="form-group">
-						  <label class="col-sm-3 control-label">Start Date</label>
+						  <label class="col-sm-3 control-label" ng-if="viewDataTypePath != 'CrmClientFilterView'" >Start Date</label>
+						  <label class="col-sm-3 control-label" ng-if="viewDataTypePath == 'CrmClientFilterView'" >Invoice StartDate</label>
 						  <div class="col-sm-9">
 							 <p class="input-group">
-								<input type="text" datepicker-popup="{{form.format}}" ng-change="form.check()" data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+								<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 								class="form-control" tabindex="2" readonly />
 								<span class="input-group-btn">
 								   <button type="button" tabindex="2" data-ng-click="form.openStart($event)" class="btn btn-default">
@@ -110,13 +174,54 @@
 				<div class="col-sm-6">
 					<fieldset>
 						<div class="form-group">
-						<label class="col-sm-3 control-label">End Date</label>
+						<label class="col-sm-3 control-label" ng-if="viewDataTypePath != 'CrmClientFilterView'">End Date</label>
+						<label class="col-sm-3 control-label" ng-if="viewDataTypePath == 'CrmClientFilterView'" >Invoice EndDate</label>
 						  <div class="col-sm-9">
 							 <p class="input-group">
 								<input type="text" datepicker-popup="{{form.format}}" data-ng-model="form.dt2" is-open="form.openedEnd" min-date="form.dt1" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
 								class="form-control" tabindex="2"  readonly/>
 								<span class="input-group-btn">
 								   <button type="button" tabindex="2" data-ng-click="form.openEnd($event)" class="btn btn-default">
+									  <em class="fa fa-calendar"></em>
+								   </button>
+								</span>
+							 </p>
+						  </div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+			
+			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
+				<div class="col-sm-6">
+					<fieldset>
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label"  >Jobcard StartDate</label>
+						  <div class="col-sm-9">
+							 <p class="input-group">
+								<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.jobcardDate1" is-open="form.openedStartJobcard" min-date="form.minStart" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+								class="form-control" tabindex="2" readonly />
+								<span class="input-group-btn">
+								   <button type="button" tabindex="2" data-ng-click="form.openStartJobcard($event)" class="btn btn-default">
+									  <em class="fa fa-calendar"></em>
+								   </button>
+								</span>
+							 </p>
+						  </div>
+						  
+					   </div>
+					</fieldset>
+				</div>
+				<div class="col-sm-6">
+					<fieldset>
+						<div class="form-group">
+						<label class="col-sm-3 control-label" >Jobcard EndDate</label>
+						  <div class="col-sm-9">
+							 <p class="input-group">
+								<input type="text" datepicker-popup="{{form.format}}" data-ng-model="form.jobcardDate2" is-open="form.openedEndJobcard" min-date="form.jobcardDate1" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
+								class="form-control" tabindex="2"  readonly/>
+								<span class="input-group-btn">
+								   <button type="button" tabindex="2" data-ng-click="form.openEndJobcard($event)" class="btn btn-default">
 									  <em class="fa fa-calendar"></em>
 								   </button>
 								</span>
@@ -159,7 +264,7 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label"></label>
 							<div class="col-sm-9">
-								<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="redirectToData()" tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  >Generate</button>
+								<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="redirectToData()" ng-disabled="accFormView.$invalid" tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  >Generate</button>
 							</div>
 						</div>
 					</fieldset>

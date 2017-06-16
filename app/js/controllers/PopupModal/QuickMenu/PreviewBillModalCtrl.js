@@ -9,7 +9,7 @@
 
 App.controller('previewBillModalController',previewBillModalController);
 
-function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,companyId,apiResponse,$sce,billData,inventoryData,taxData,total,totalTax,grandTotal,advance,balance,remark,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate) {
+function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,companyId,apiResponse,$sce,billData,inventoryData,taxData,total,totalTax,grandTotal,advance,balance,remark,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate,saleType) {
   'use strict';
   
 	 var data = [];
@@ -32,7 +32,14 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 		$scope.buttonValidation = buttonValidation;
 		$scope.insertOrUpdate = insertOrUpdate;
 	 /** End **/
+	 $scope.saleType = saleType;
 	 
+	if($scope.saleType == 'QuotationPrint'){
+		$scope.useTemplate = 'quotation';
+	}
+	else{
+		$scope.useTemplate = 'invoice';
+	}
 	 //console.log( $scope.inventoryData);
 	$scope.TemplateDisplay;
 	
@@ -253,10 +260,10 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			}
 			
 			var mainPrice = parseFloat(productData.price)*parseInt(productData.qty);
+			//productData.amount
+			var vat = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,$scope.taxData[productArray].tax,0),$scope.noOfDecimalPoints);
 			
-			var vat = $filter('setDecimal')(productArrayFactory.calculateTax(productData.amount,$scope.taxData[productArray].tax,0),$scope.noOfDecimalPoints);
-			
-			var aTax = $filter('setDecimal')(productArrayFactory.calculateTax(productData.amount,$scope.taxData[productArray].additionalTax,0),$scope.noOfDecimalPoints);
+			var aTax = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,$scope.taxData[productArray].additionalTax,0),$scope.noOfDecimalPoints);
 			
 			if(productData.discountType == 'percentage'){
 				
@@ -278,8 +285,14 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				
 			}
 			
-			output = output+
-			 "<tr class='trhw' style='font-family: Calibri; text-align: left; height: 0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 0.7cm; text-align:center; padding:0 0 0 0;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.color +"|"+ productData.size +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 0.7cm; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ discount +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+  vat +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productTotal;
+			if($scope.saleType == "QuotationPrint"){
+				
+				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height: 0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 0.7cm; text-align:center; padding:0 0 0 0;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;' colspan='2'>"+ productData.color +"|"+ productData.size +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 0.7cm; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;' colspan='2' >"+ productData.price +"</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 0.7cm; text-align: right; padding:0 0 0 0;'>PCS</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productTotal;
+			 
+			}
+			else{
+				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height: 0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 0.7cm; text-align:center; padding:0 0 0 0;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.color +"|"+ productData.size +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 0.7cm; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ discount +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+  vat +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productTotal;
+			}
 			   
 			
 			   
@@ -293,7 +306,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				var totalProductSpace = parseInt(srNumber)*0.7;
 				var finalProductBlankSpace = parseFloat(descTotalCM) - parseFloat(totalProductSpace);
 				
-				output = output + "<tr class='trhw' style='font-family: Calibri; text-align: left; height:"+finalProductBlankSpace+"cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;'></td><td class='tg-m36b theqp' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;   height: "+finalProductBlankSpace+"cm; text-align: center; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thsrno' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;   height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td><td class='tg-ullm thamt' style='font-size: 12px;  height: "+finalProductBlankSpace+"cm; text-align: right; padding:0 0 0 0;'></td></tr>";
+				output = output + "<tr class='trhw' style='font-family: Calibri; text-align: left; height:"+finalProductBlankSpace+"cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;' colspan='12'></td></tr>";
 			}
 			 srNumber++;
 			totalQty = totalQty + parseInt(productData.qty);
@@ -322,10 +335,11 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	billArrayTag.CLIENTADD = $scope.billData.fisrtAddress+','+$scope.billData.secondAddress;
 	billArrayTag.OrderDate = fdate;
 	billArrayTag.Mobile = $scope.billData.BillContact;
-	billArrayTag.Total = $scope.grandTotal;
+	//billArrayTag.Total = $scope.grandTotal;
+	billArrayTag.Total = $scope.total;
 	billArrayTag.TotalTax = $scope.billData.tax;
 	billArrayTag.TotalQty = totalQty;
-	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.grandTotal);
+	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.total);
 	billArrayTag.REMAINAMT = $scope.balance;
 	billArrayTag.REMARK = $scope.remark;
 	billArrayTag.Description = output;
@@ -343,7 +357,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 		for(var j=0;j<countData;j++){
 			
 			var TemplateData = responseTemp[j];
-			if(TemplateData.templateType == 'invoice'){
+			if(TemplateData.templateType == $scope.useTemplate){
 				
 				var tempData = TemplateData.templateBody;
 				
@@ -354,7 +368,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				});
 	
 				 
-				tempData = tempData.replace("[Total]",$scope.grandTotal,"g");
+				tempData = tempData.replace("[Total]",$scope.total,"g");
 				
 				$scope.TemplateDisplay = $sce.trustAsHtml(tempData);
 			
@@ -369,4 +383,4 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	
 }
 
-previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","companyId","apiResponse","$sce","billData","inventoryData","taxData","total","totalTax","grandTotal","advance","balance","remark","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate"];
+previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","companyId","apiResponse","$sce","billData","inventoryData","taxData","total","totalTax","grandTotal","advance","balance","remark","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate","saleType"];

@@ -427,6 +427,16 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			formdata.delete(Fname);
 		}
 		formdata.append(Fname,value);
+		
+		if(Fname == 'companyName'){
+			
+			if(formdata.has('companyDisplayName'))
+			{
+				formdata.delete('companyDisplayName');
+			}
+			formdata.append('companyDisplayName',value);
+		
+		}
 	}
 	
   $scope.addCompanyForm = function(addCompany)

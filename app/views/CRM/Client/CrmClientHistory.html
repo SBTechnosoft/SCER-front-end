@@ -15,7 +15,7 @@
 		 </div>
          <div class="panel-body">
             <tabset>
-				<tab heading="Client Details" >
+				<tab heading="Client Details" active="activeDetail"  >
 					<form  action="#"  class="form-horizontal">
 						<div class="row"> 
 							<div class="col-md-12"> 
@@ -77,25 +77,26 @@
 						</div>
 					</form>
 				</tab>
-			    <tab heading="Conversation"  >
+			    <tab heading="Conversation" active="false"  >
 				 
 					
 				</tab>
-				<tab heading="History"  >
+				<tab heading="History" active="false">
 				 
 					
 				</tab>
-				<tab heading="Email/SMS"   >
-				  <div class="input-group form-group  pull-right" style="margin-top:5px">
-					 <a ui-sref="app.CrmClientHistory.compose" class="btn btn-primary" data-ng-class="app.theme.brand">
-						<span>Mail</span>
-					 </a>
-					
-					 <a ui-sref="app.CrmClientHistory.sms" class="btn btn-primary" data-ng-class="app.theme.brand">
-						<span>SMS</span>
-					 </a>
-				 </div>
-				  <div ui-view="container" class="data-ng-fadeInUp"></div>
+				<tab heading="Email/SMS"  active="activeEmail"  >
+				
+					<div class="input-group form-group  pull-right" style="margin-top:5px">
+						<a ui-sref="app.CrmClientHistory.compose" class="btn btn-primary" data-ng-class="app.theme.brand">
+							<span>Mail</span>
+						</a>
+						
+						<a ui-sref="app.CrmClientHistory.sms" class="btn btn-primary" data-ng-class="app.theme.brand">
+							<span>SMS</span>
+						</a>
+					</div>
+					<div ui-view="container" class="data-ng-fadeInUp"></div>
 					
 				</tab>
             </tabset>

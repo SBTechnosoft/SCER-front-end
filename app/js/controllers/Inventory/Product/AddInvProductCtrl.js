@@ -83,6 +83,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	if(Object.keys(getSetFactory.get()).length > 0){
 	//if(getSetFactory.get() > 0){
 		var editProductData = getSetFactory.get();
+		console.log(editProductData);
 		getSetFactory.blank();
 		
 		$scope.addInvProduct.getSetProductId = editProductData.productId;
@@ -134,9 +135,28 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 			$scope.addInvProduct.marginFlat = editProductData.marginFlat;
 			$scope.addInvProduct.margin = editProductData.margin;
 			
-			$scope.addInvProduct.hsn = editProductData.hsn;
-			$scope.addInvProduct.igst = editProductData.igst;
-			$scope.addInvProduct.cess = editProductData.cess;
+			
+			if(editProductData.hsn == null){
+				$scope.addInvProduct.hsn = '';
+			}
+			else{
+				$scope.addInvProduct.hsn = editProductData.hsn;
+			}
+			
+			
+			if(editProductData.igst == null){
+				$scope.addInvProduct.igst = '';
+			}
+			else{
+				$scope.addInvProduct.igst = editProductData.igst;
+			}
+			
+			if(editProductData.cess == null){
+				$scope.addInvProduct.cess ='';
+			}
+			else{
+				$scope.addInvProduct.cess = editProductData.cess;
+			}
 			
 			$scope.addInvProduct.minimumStockLevel = editProductData.minimumStockLevel;
 			

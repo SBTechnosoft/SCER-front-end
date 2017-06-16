@@ -15,9 +15,31 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 	
 	$scope.dateFormat =  $rootScope.dateFormats; //Date Format
    
+	
+	
+	
 	$scope.clientName = "Jugal";
 	/** Display Company and date **/
-		apiCall.getCall(apiPath.getAllClient+'/66').then(function(res){
+	
+		var clientFactory = getSetFactory.get();
+		getSetFactory.blank();
+		
+		
+		var clientId = clientFactory.id;
+		console.log(clientFactory);
+		console.log(clientId);
+		
+		if(clientFactory.tab == 'email' || clientFactory.tab == 'sms'){
+			
+			$scope.activeDetail = false;
+			$scope.activeEmail = true;
+		}
+		else{
+			$scope.activeDetail = true;
+			$scope.activeEmail = false;
+		}
+		
+		apiCall.getCall(apiPath.getAllClient+'/'+clientId).then(function(res){
 			
 			$scope.ClientData = res;
 			

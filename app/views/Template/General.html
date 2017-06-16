@@ -86,6 +86,15 @@
 					<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
 
 				</a>
+				
+				<br />
+					<br />
+				<h4 style="text-align:center;">Quotation</h4>
+				<a ui-sref="" ng-repeat="item in form.AllTempRight" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'quotation'">
+					<i class="sidebar-item-icon icon-layout" ></i> <span style="letter-spacing:.025em;font-weight: bold;text-transform:capitalize">{{item.templateName}}</span>
+
+				</a>
+				
 				<br />
 					<br />
 				<h4 style="text-align:center;">Payment</h4>

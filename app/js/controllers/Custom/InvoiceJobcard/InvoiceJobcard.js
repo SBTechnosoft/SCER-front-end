@@ -37,6 +37,23 @@ App.factory('getLatestNumber', ["apiCall","apiPath", function (apiCall,apiPath) 
 		
 		return jobcardlatestNumber;
 			
+		},
+		 getQuotation : function(response){
+			 var latestNumber;
+			var label = response.quotationLabel;
+			var invoiceEndAt = response.endAt;
+			if(response.quotationType=='postfix'){
+				
+				latestNumber = label+invoiceEndAt;
+			}
+			else{
+				
+				latestNumber = invoiceEndAt+label;
+				
+			}
+		
+		return latestNumber;
+			
 		}
 	};
 	

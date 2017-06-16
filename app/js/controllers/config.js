@@ -598,30 +598,42 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','getBranchSrv','flot-chart','flot-chart-plugins','toaster')
         })
 		/*** Quick Menu ***/
-		//Retailsale Bill
-		.state('app.RetailsaleBill', {
-            url: '/RetailsaleBill',
-            templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
-			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','twain'),{
-				saleType: function(){
-					
-					return 'RetailsaleBill';
-				}
+			//Retailsale Bill
+			.state('app.RetailsaleBill', {
+				url: '/RetailsaleBill',
+				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
+				controller: 'RetailsaleBillController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','twain'),{
+					saleType: function(){
+						
+						return 'RetailsaleBill';
+					}
+				})
 			})
-        })
-		//WholeSale Bill
-		.state('app.WholesaleBill', {
-            url: '/WholesaleBill',
-            templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
-			controller: 'RetailsaleBillController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','twain'),{
-				saleType: function(){
-					
-					return 'WholesaleBill';
-				}
+			//WholeSale Bill
+			.state('app.WholesaleBill', {
+				url: '/WholesaleBill',
+				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
+				controller: 'RetailsaleBillController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','twain'),{
+					saleType: function(){
+						
+						return 'WholesaleBill';
+					}
+				})
 			})
-        })
+			//Quotation Print
+			.state('app.QuotationPrint', {
+				url: '/QuotationPrint',
+				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
+				controller: 'RetailsaleBillController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster'),{
+					saleType: function(){
+						
+						return 'QuotationPrint';
+					}
+				})
+			})
 		/*** End Quick Menu ***/
 		
 		/** CRM **/
@@ -657,7 +669,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/CrmClientFilterData',
 				templateUrl: basepath('CRM/Client/CrmClientFilterData.html'),
 				controller: 'CrmClientFilterDataController as table',
-				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv')
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv','wysiwyg')
 			})
 			//Client History
 			.state('app.CrmClientHistory', {
