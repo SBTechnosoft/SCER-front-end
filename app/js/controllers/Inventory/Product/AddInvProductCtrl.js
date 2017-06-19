@@ -151,12 +151,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 				$scope.addInvProduct.igst = editProductData.igst;
 			}
 			
-			if(editProductData.cess == null){
-				$scope.addInvProduct.cess ='';
-			}
-			else{
-				$scope.addInvProduct.cess = editProductData.cess;
-			}
+			
 			
 			$scope.addInvProduct.minimumStockLevel = editProductData.minimumStockLevel;
 			

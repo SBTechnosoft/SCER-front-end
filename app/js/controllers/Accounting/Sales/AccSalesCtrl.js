@@ -7,7 +7,7 @@
 
 App.controller('AccSalesController', AccSalesController);
 
-function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory,maxImageSize,productFactory) {
+function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory,maxImageSize,productFactory,$filter) {
   'use strict';
   
  // $templateCache.remove($state.current.templateUrl);
@@ -369,6 +369,8 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 				
 				
 				vm.productTax.push(varTax);
+				
+				$scope.calculateTaxReverse(vm.AccSalesTable[j],vm.productTax[j].tax,vm.productTax[j].additionalTax);
 				//console.log();
 			}
 			
@@ -526,7 +528,7 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 		var total = 0;
 		for(var i = 0; i < vm.AccSalesTable.length; i++){
 			var product = vm.AccSalesTable[i];
-			total += product.amount;
+			total += parseFloat(product.amount);
 		}
 		return total;
 	}
@@ -539,11 +541,68 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 			var product = vm.AccSalesTable[i];
 			var vartax = vm.productTax[i];
 			var totaltax = parseFloat(vartax.tax) + parseFloat(vartax.additionalTax);
-			total += productArrayFactory.calculateTax(product.amount,totaltax,0);
+			if(product.discountType == 'flat') {
+				
+				var getAmount = $filter('setDecimal')((product.price*product.qty) - product.discount,$scope.noOfDecimalPoints);
+				
+			}
+			else{
+				var getAmount  =  $filter('setDecimal')((product.price*product.qty)-((product.price*product.qty)*product.discount/100),$scope.noOfDecimalPoints);
+			}
+			total += productArrayFactory.calculateTax(getAmount,totaltax,0);
 		}
 		return total;
 	}
-
+	
+	/** Tax Calculation **/
+	
+		$scope.calculateTaxReverse = function(item,cgst,sgst){
+			
+			var getCgst = cgst;
+			var getSgst = sgst;
+			
+			if(item.discountType == 'flat') {
+				//item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints);
+				
+				var amount =  $filter('setDecimal')((item.price*item.qty) - item.discount,$scope.noOfDecimalPoints);
+				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				
+				item.amount = amount+cgstAmount+sgstAmount;
+				
+			}
+			else{
+				//item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints);
+				var amount  =  $filter('setDecimal')((item.price*item.qty)-((item.price*item.qty)*item.discount/100),$scope.noOfDecimalPoints);
+				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				
+				item.amount = amount+cgstAmount+sgstAmount;
+			}
+		}
+		
+	/** END **/
+	
+	
+	/** Tax Calculation **/
+	
+		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,index){
+			
+			var getCgst = parseFloat(cgst);
+			var getSgst = parseFloat(sgst);
+			var TaxSum = getCgst+getSgst;
+			
+			//console.log(TaxSum);
+			// console.log(item.amount);
+			
+			vm.AccSalesTable[index].price = $filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints);
+			
+			var Price = item.amount/ (1+(TaxSum/100));
+			
+		}
+		
+	/** END **/
+	
 	//Auto suggest Client Name
 	// vm.clientNameDrop=[];
 	// apiCall.getCall(apiPath.getAllLedger).then(function(response3){
@@ -1476,4 +1535,4 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 	**/
   
 }
-AccSalesController.$inject = ["$rootScope","$scope","apiCall","apiPath","$modal","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory","maxImageSize","productFactory"];
+AccSalesController.$inject = ["$rootScope","$scope","apiCall","apiPath","$modal","getSetFactory","toaster","apiResponse","validationMessage","productArrayFactory","maxImageSize","productFactory","$filter"];

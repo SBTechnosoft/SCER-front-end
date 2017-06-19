@@ -279,7 +279,7 @@
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">IGST(%)</label>
-                  <div class="col-sm-2">
+                  <div class="col-sm-5">
                      <input id="input-id-1" name="igst" ng-model="addInvProduct.igst" ng-change="changeInvProductData('igst',addInvProduct.igst)" type="text" placeholder="IGST(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 					 
 					<span ng-messages="formProduct.igst.$error" ng-if="formProduct.igst.$dirty || formProduct.igst.$touched"  role="alert">
@@ -291,17 +291,7 @@
                   </div>
               
 
-                  <label for="input-id-1" class="col-sm-1 control-label">CESS(%)</label>
-                  <div class="col-sm-2">
-                     <input id="input-id-1" name="cess" ng-model="addInvProduct.cess" ng-change="changeInvProductData('cess',addInvProduct.cess)" type="text" placeholder="CESS(%)" class="form-control" tabindex="2"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
-					 
-					<span ng-messages="formProduct.cess.$error" ng-if="formProduct.cess.$dirty || formProduct.cess.$touched"  role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
-					 </span>
-					
-                  </div>
+                 
                </div>
             </fieldset>
 			

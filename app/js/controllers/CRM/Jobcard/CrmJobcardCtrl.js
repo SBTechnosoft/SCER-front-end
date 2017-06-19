@@ -4,7 +4,7 @@
 
 App.controller('CrmJobcardController', CrmJobcardController);
 
-function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,$sce,$templateCache,getLatestNumber,stateCityFactory,productFactory) {
+function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,$sce,$templateCache,getLatestNumber,stateCityFactory,productFactory,$filter) {
   'use strict';
  
 	var vm = this;
@@ -421,6 +421,8 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 					vm.productTax[d].tax = parseFloat(resData.vat);
 					vm.productTax[d].additionalTax = parseFloat(resData.additionalTax); // Additional Tax
 					
+					$scope.calculateTaxReverse(vm.AccBillTable[d],vm.productTax[d].tax,vm.productTax[d].additionalTax);
+					
 					d++;
 					/** End **/
 					
@@ -507,7 +509,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			$scope.quickBill.secondAddress = '';
 			//$scope.quickBill.cityId = {};
 			//$scope.quickBill.stateAbb = {};
-			
+			$scope.clientSaveButton = true;
 		}
   	}
 	
@@ -548,7 +550,15 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			var product = vm.AccBillTable[i];
 			var vartax = vm.productTax[i];
 			var totaltax = parseFloat(vartax.tax) + parseFloat(vartax.additionalTax);
-			total += productArrayFactory.calculateTax(product.amount,totaltax,0);
+			if(product.discountType == 'flat') {
+				
+				var getAmount = $filter('setDecimal')((product.price*product.qty) - product.discount,$scope.noOfDecimalPoints);
+				
+			}
+			else{
+				var getAmount  =  $filter('setDecimal')((product.price*product.qty)-((product.price*product.qty)*product.discount/100),$scope.noOfDecimalPoints);
+			}
+			total += productArrayFactory.calculateTax(getAmount,totaltax,0);
 		}
 		return total;
 	}
@@ -558,11 +568,60 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		var total = 0;
 		for(var i = 0; i < vm.AccBillTable.length; i++){
 			var product = vm.AccBillTable[i];
-			total += product.amount;
+			total += parseFloat(product.amount);
 		}
 		return total;
 		
 	}
+	
+	/** Tax Calculation **/
+	
+		$scope.calculateTaxReverse = function(item,cgst,sgst){
+			
+			var getCgst = cgst;
+			var getSgst = sgst;
+			
+			if(item.discountType == 'flat') {
+				//item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints);
+				
+				var amount =  $filter('setDecimal')((item.price*item.qty) - item.discount,$scope.noOfDecimalPoints);
+				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				
+				item.amount = amount+cgstAmount+sgstAmount;
+				
+			}
+			else{
+				//item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints);
+				var amount  =  $filter('setDecimal')((item.price*item.qty)-((item.price*item.qty)*item.discount/100),$scope.noOfDecimalPoints);
+				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				
+				item.amount = amount+cgstAmount+sgstAmount;
+			}
+		}
+		
+	/** END **/
+	
+	
+	/** Tax Calculation **/
+	
+		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,index){
+			
+			var getCgst = parseFloat(cgst);
+			var getSgst = parseFloat(sgst);
+			var TaxSum = getCgst+getSgst;
+			
+			//console.log(TaxSum);
+			// console.log(item.amount);
+			
+			vm.AccBillTable[index].price = $filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints);
+			
+			var Price = item.amount/ (1+(TaxSum/100));
+			
+		}
+		
+	/** END **/
 	
 	
 	
@@ -581,6 +640,45 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	
   /* End */
   
+  
+  /** Insert Client **/
+	
+		$scope.insertClientData = function(){
+			
+			if($scope.quickBill.BillContact == undefined || $scope.quickBill.clientName == undefined || $scope.quickBill.emailId == undefined || $scope.quickBill.fisrtAddress == undefined || $scope.quickBill.BillContact == '' || $scope.quickBill.clientName == ''){
+				toaster.clear();
+				toaster.pop('warning','Enter Proper Data');
+				return false;
+			}
+			
+			var clientFormdata = new FormData();
+			
+			clientFormdata.append('contactNo',$scope.quickBill.BillContact);
+			clientFormdata.append('clientName',$scope.quickBill.clientName);
+			clientFormdata.append('emailId',$scope.quickBill.emailId);
+			clientFormdata.append('address1',$scope.quickBill.fisrtAddress);
+			clientFormdata.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
+			clientFormdata.append('cityId',$scope.quickBill.cityId.cityId);
+			
+			
+			apiCall.postCall(apiPath.getAllClient,clientFormdata).then(function(data){
+				console.log(data);
+				if(angular.isArray(data)){
+					toaster.pop('success','Client Saved');
+				}
+				else{
+					if(data == apiResponse.contentNotProper){
+						toaster.pop('info','Client Already Saved');
+					}
+					else{
+						toaster.pop('warning',data);
+					}
+				}
+			});
+		}
+		
+	/** End **/
+	
 	
   
 	//Change Invoice Number When Company Changed
@@ -1056,7 +1154,9 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	
 	$scope.setClientSuggest = function(Fname,data){
 		
-		console.log(data);
+		$scope.clientSaveButton = false; //Save Button
+		
+		//console.log(data);
 		$scope.quickBill.cityId = {};
 		$scope.quickBill.stateAbb = {};
 		
@@ -1329,7 +1429,45 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
   /**
   Product Model End
   **/
+	
+	/** Invoice **/
+		$scope.goInvoiceNumber = function(){
 			
+			apiCall.getCall(apiPath.PostJobcard+'/'+$scope.quickBill.searchInvoiceNumber).then(function(response){
+				
+				// console.log('starting');
+				 console.log(response);
+				
+				if(angular.isObject(response)){
+					$scope.quickBill = [];
+					getSetFactory.set(response);
+					
+					$scope.EditAddBill();
+					
+					$anchorScroll();
+					
+				}
+				else{
+					
+					if(apiResponse.noContent == response){
+						toaster.clear();
+						toaster.pop('warning', 'Opps!!', 'Data Not Available');
+					}
+					else if(response.status == 500){
+						toaster.clear();
+						toaster.pop('warning', 'Something Wrong', response.statusText);
+					}
+					else{
+						toaster.clear();
+						toaster.pop('warning', 'Something Wrong', response);
+					}
+					
+				}
+				
+			});
+		
+		}
+	/** End **/
 	
 			
   $scope.focusbarcode = function(){
@@ -1451,4 +1589,4 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	}
 	
 }
-CrmJobcardController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","$sce","$templateCache","getLatestNumber","stateCityFactory","productFactory"];
+CrmJobcardController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","$sce","$templateCache","getLatestNumber","stateCityFactory","productFactory","$filter"];

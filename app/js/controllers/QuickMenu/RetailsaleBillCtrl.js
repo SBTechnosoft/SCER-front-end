@@ -345,7 +345,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				var amount =  $filter('setDecimal')((item.price*item.qty) - item.discount,$scope.noOfDecimalPoints);
 				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
 				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
-				
+				console.log(amount);
 				item.amount = amount+cgstAmount+sgstAmount;
 				
 			}
@@ -365,6 +365,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	/** Tax Calculation **/
 	
 		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,index){
+			
 			
 			var getCgst = parseFloat(cgst);
 			var getSgst = parseFloat(sgst);

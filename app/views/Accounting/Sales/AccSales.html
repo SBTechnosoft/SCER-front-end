@@ -61,7 +61,7 @@
 						<tr id="addAfter" ng-repeat="item in form.AccSalesTable" data-ng-class="app.tableAnimation" >
 							<td>
 								<div class="input-group" id="typeDrop">
-									<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index)" type="text" class="form-control" placeholder="*Enter Product Name(JS)" typeahead-editable="false" ng-required="true"  typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" auto-focus />
+									<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="settabledata($item,$index);calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" type="text" class="form-control" placeholder="*Enter Product Name(JS)" typeahead-editable="false" ng-required="true"  typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" auto-focus />
 									<span class="input-group-btn" >
 									   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 									</span>
@@ -78,21 +78,42 @@
 								
 							</td>
 							<td>
-								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.discount" ng-change="changeProductTable()" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
+								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.discount" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
 							</td>
 							<td>
 								<!--span style="float:right">{{item.price}}</span-->
-								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.price" ng-change="changeProductTable()"  class="form-control" style="width:100%;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" only-number /> 
+								<input id="input-id-1" type="text" style="padding-left: 5px;padding-right: 5px;" ng-model="item.price" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)"  class="form-control" style="width:100%;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" only-number /> 
 							</td>
 							<td>
-								<input id="input-id-1" type="text"  style="padding-left: 5px;padding-right: 5px;"ng-model="item.qty" ng-change="changeProductTable()"  class="form-control" style="width:100%;"  ng-required="true" ng-minlength="1" ng-maxlength="6"  ng-pattern="/^[1-9]+[0-9]*$/" only-number />
+								<input id="input-id-1" type="text"  style="padding-left: 5px;padding-right: 5px;"ng-model="item.qty" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)"  class="form-control" style="width:100%;"  ng-required="true" ng-minlength="1" ng-maxlength="6"  ng-pattern="/^[1-9]+[0-9]*$/" only-number />
 							</td>
-							<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}}</td>
-							<td style="text-align:right">{{productArrayFactory.calculateTax(item.amount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</td>
-							<td >
-								<!--span style="float:right">{{item.price*item.qty}}</span-->
-								<span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints)}}</span>
-								<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints)}}</span>
+							<td style="text-align:right">
+								<span ng-if="item.discountType == 'flat'"> {{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} </span>
+								<span ng-if="item.discountType == 'percentage'" > 	{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} 
+								</span>
+							</td>
+							<td style="text-align:right">	
+								<span ng-if="item.discountType == 'flat'">
+								{{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
+								</span>
+								<span ng-if="item.discountType == 'percentage'">{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
+								</span>
+								
+							</td>
+							<td>
+								<span style="float:right" ng-if="item.discountType == 'flat'" >
+								
+									<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax,$index)" only-number /> 
+									
+								</span>
+								<span style="float:right" ng-if="item.discountType == 'percentage'" >
+								
+									<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
+									
+								</span>
+								
+								<!--span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = getTotalAmount() - item.discount}}</span>
+								<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = getTotalAmount()-(getTotalAmount() * item.discount/100)}}</span-->
 							</td>
 							<td style="">
 								<center>
@@ -155,17 +176,6 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<td colspan="2" style="text-align:left"  > <strong> Total </strong></td>
-							<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
 							<td colspan="2" style="text-align:left"  > <strong> Tax </strong></td>
 							<!--td>	<input id="input-id-1" name="tax" type="text" ng-model="accSales.tax" ng-change="changeAccSales('tax',accSales.tax)" class="form-control"  dir="rtl"  ng-pattern="/^[0-9]*$/" /> 
 							
@@ -185,10 +195,22 @@
 							<td></td>
 							<td></td>
 							<td></td>
+							<td colspan="2" style="text-align:left"  > <strong> Total </strong></td>
+							<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
+							<td></td>
+						</tr>
+						
+						<!--tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
 							<td colspan="2" style="text-align:left"  > <strong> Grand Total </strong></td>
 							<td style="text-align:right">{{grandTotalTable = (totalTable -- accSales.tax | setDecimal: noOfDecimalPoints)}}</td>
 							<td></td>
-						</tr>
+						</tr-->
 					</tbody>
 				</table>
 			</div>

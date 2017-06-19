@@ -76,13 +76,6 @@ h4 .control-label{
 				
 		 </h4>
 		<div class="panel-body" style="padding:0px">
-			
-			
-			
-			
-			
-		
-	
       <!--h4 class="panel-heading" style="my-fieldset-paddingTopBottom" >Client Details</h4-->
    
 			<div class="col-sm-12">
@@ -315,8 +308,11 @@ h4 .control-label{
 						</span>
 					</td>
 					<td style="text-align:right">	
-						<span ng-if="item.discountType == 'flat'">{{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</span>
-						<span ng-if="item.discountType == 'percentage'">{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}</span>
+						<span ng-if="item.discountType == 'flat'">
+						{{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
+						</span>
+						<span ng-if="item.discountType == 'percentage'">{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
+						</span>
 						
 					</td>
 					<td>

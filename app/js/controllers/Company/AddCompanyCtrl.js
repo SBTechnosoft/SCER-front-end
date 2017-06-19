@@ -158,6 +158,14 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			$scope.addCompany.serviceTax = editCompanyData.serviceTaxNo;
 			$scope.addCompany.sgst = editCompanyData.sgst;
 			$scope.addCompany.cgst = editCompanyData.cgst;
+			
+			if(editCompanyData.cess == null){
+				$scope.addCompany.cess ='';
+			}
+			else{
+				$scope.addCompany.cess = editCompanyData.cess;
+			}
+			
 			$scope.addCompany.currency = editCompanyData.basicCurrencySymbol;
 			$scope.addCompany.formalName = editCompanyData.formalName;
 			
