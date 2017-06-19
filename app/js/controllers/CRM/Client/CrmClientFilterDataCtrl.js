@@ -14,6 +14,9 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 	var erpPath = $rootScope.erpPath;
 	$scope.dateFormat =  $rootScope.dateFormats; //Date Format
 	
+	$scope.sticker = [];
+	$scope.filteredItems;
+	
   var data = [];
 	var flag = 0;
 	
@@ -50,8 +53,8 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			
 			var headerData = {'Content-Type': undefined};
 			
-			headerData.fromDate = $scope.displayfromDate;
-			headerData.toDate = $scope.displaytoDate;
+			headerData.invoiceFromDate = $scope.displayfromDate;
+			headerData.invoiceToDate = $scope.displaytoDate;
 			
 			headerData.jobCardFromDate = $scope.displayJobCardFromDate;
 			headerData.jobCardToDate = $scope.displayJobCardToDate;
@@ -196,7 +199,7 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			getSetFactory.set(obj);
 			
 			if(tab == ""){
-				$state.go('app.CrmClientHistory');
+				$state.go('app.CrmClientHistory.compose');
 			}
 			else{
 				
@@ -251,6 +254,197 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		
 	}
 	
+	/** Sticker Single **/
+		$scope.singleStickerPrint = function(pData){
+	
+		var qty  = pData.qty;
+		
+		var mywindow = window.open('', 'PRINT', 'height=850,width=850');
+
+		 var is_chrome = Boolean(mywindow.chrome);
+
+        mywindow.document.write('<html><!--head><title>' + document.title  + '</title>');
+		
+        mywindow.document.write("</head--> <style type='text/css' media='print'>@page {size: auto;margin: 0mm;} body {background-color:#FFFFFF;margin: 0px; }</style><body>");
+		mywindow.document.write('<!--center> <h1> Barcode of Company </h1> </center-->');
+		mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
+		mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><!--h2> </h2--> </td></tr> 	<tr>");
+		
+		if(qty%2==0){
+				
+			var space = "";
+		}
+		else{
+			
+			var space = "<td></td>";
+		}
+			
+		for(var n=0;n<qty;n++){
+
+			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px;padding-left:35px;display: inline-block;'> ");
+			mywindow.document.write("<span style='margin-left:5px;font-size:14px'>"+pData.clientName+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Address:</b> "+pData.address+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Contact#:</b> "+pData.contactNo+"</span><br /><span style='margin-left:5px;font-size:14px'><b>EmailID:</b> "+pData.emailId+"</span>");
+			
+			if(n == qty-1){
+				
+				
+				mywindow.document.write("</td> "+ space );
+				
+				/** Next Code **/
+				
+					mywindow.document.write("</tr></table>");
+		
+					mywindow.document.write('</body></html>');
+
+					
+					
+					if (is_chrome) {
+						
+					   setTimeout(function () { // wait until all resources loaded 
+							mywindow.focus(); // necessary for IE >= 10
+							mywindow.print();  // change window to mywindow
+							mywindow.close();// change window to mywindow
+						 }, 2000);
+					}
+					else {
+						mywindow.document.close(); // necessary for IE >= 10
+						mywindow.focus(); // necessary for IE >= 10
+						mywindow.print();
+						mywindow.close();
+					}
+				
+					return true;
+		
+				/** End **/
+			}
+			else{
+				mywindow.document.write("</td>");
+			}
+			// mywindow.document.write("<div style='position:relative;float:left; width: 50%;'> ");
+			// mywindow.document.write($scope.stateCheck.companyName+"<br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
+			// mywindow.document.write("</div>");
+		}
+	}
+	
+	$scope.multiStickerPrint = function(){
+		
+		
+		// console.log($scope.selectedBoxArray);
+		//console.log($scope.filteredItems);
+	
+		if($scope.clientFlag == 1){
+			
+				var dataArrayLength = $scope.filteredItems.length;
+				
+		}
+		else{
+			
+			var dataArrayLength = $scope.selectedBoxArray.length;
+		}
+		
+		
+		var mywindow = window.open('', 'PRINT', 'height=850,width=850');
+	
+		 var is_chrome = Boolean(mywindow.chrome);
+
+        mywindow.document.write('<html><!--head><title>' + document.title  + '</title>');
+
+        mywindow.document.write("</head--><style type='text/css' media='print'>@page {size: auto;margin: 0mm;} body {background-color:#FFFFFF;margin: 0px; }</style><body>");
+		mywindow.document.write('<!--center> <h1> Barcode of Company </h1> </center-->');
+		
+		
+		
+		
+		
+		for(var dataIndex=0;dataIndex<dataArrayLength;dataIndex++){
+			
+			mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
+			
+			if($scope.clientFlag == 1){
+				
+				var arrayProductData = $scope.filteredItems[dataIndex];
+			}
+			else{
+				var arrayProductData = $scope.selectedBoxArray[dataIndex];
+			 }
+			
+			
+			mywindow.document.write("<!--tr><td colspan='2' style='text-align:center;'> </td></tr--> 	<tr>");
+			
+			if($scope.sticker.multiQty > 0){
+				
+				var qtyLength = $scope.sticker.multiQty;
+			}
+			else{
+				var qtyLength = arrayProductData.qty;
+			}
+			
+			
+			if(qtyLength%2==0){
+				
+				var space = "";
+			}
+			else{
+				
+				var space = "<td></td>";
+			}
+			
+			
+			for(var qtyIndex=0;qtyIndex<qtyLength;qtyIndex++){
+				
+				
+				
+				mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px ;padding-left:35px;display: inline-block;'> ");
+				mywindow.document.write("<span style='margin-left:5px;font-size:14px'>"+arrayProductData.clientName +"</span><br /><span style='margin-left:5px;font-size:14px'><b>Address:</b> "+arrayProductData.address1+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Contact#:</b> "+arrayProductData.contactNo+"</span><br /><span style='margin-left:5px;font-size:14px'><b>EmailID:</b> "+arrayProductData.emailId+"</span>");
+				
+				if(qtyIndex == qtyLength-1){
+					
+					
+					mywindow.document.write("</td> "+ space );
+				}
+				else{
+					mywindow.document.write("</td>");
+				}
+				
+			
+			}
+			mywindow.document.write("</tr></table>");
+			
+			if(dataIndex == dataArrayLength-1)
+			{
+				 mywindow.document.write('</body></html>');
+
+				 // mywindow.document.close(); // necessary for IE >= 10
+					
+					
+					if (is_chrome) {
+					   setTimeout(function () { // wait until all resources loaded 
+							mywindow.focus(); // necessary for IE >= 10
+							mywindow.print();  // change window to mywindow
+							mywindow.close();// change window to mywindow
+						 }, 2000);
+					}
+					else {
+						mywindow.document.close(); // necessary for IE >= 10
+						mywindow.focus(); // necessary for IE >= 10
+						mywindow.print();
+						mywindow.close();
+					}
+			
+			
+					// mywindow.focus(); // necessary for IE >= 10*/
+				  // mywindow.print();
+				// mywindow.close();
+
+				return true;
+			}
+		}
+		
+		
+		
+		
+		
+	}
+	/** End **/
 	/** Email/SMS Popup **/
 		var Modalopened = false;
 		

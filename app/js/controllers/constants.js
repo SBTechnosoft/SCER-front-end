@@ -148,7 +148,9 @@ App
 	'stockSummary2': '/stock-summary',
 	'getJobcardNumber': 'crm/job-form-number',
 	'getLatestJobcardNumber': 'crm/job-form-number/company/',
-	'PostJobcard': 'crm/job-form'
+	'PostJobcard': 'crm/job-form',
+	'sendEmail': 'crm/conversastion/bulk-email',
+	'sendSMS': 'crm/conversastion/bulk-sms'
 	
   })
   //Api Path

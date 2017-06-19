@@ -2,23 +2,28 @@
 
 App.controller('CrmClientHistoryController', CrmClientHistoryController);
 
-function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$timeout,getSetFactory,$state,$modal,$window,toaster,apiResponse) {
+function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$timeout,getSetFactory,$state,$modal,$window,toaster,apiResponse,maxImageSize,validationMessage) {
   'use strict';
   var vm = this;
   var data = [];
   var formdata = new FormData();
   $scope.billData = [];
+  $scope.email = [];
+  $scope.sms = [];
+  $scope.attachFile = [];
   
   var Modalopened = false;
   
 	$scope.erpPath = $rootScope.erpPath; //Erp Path
 	
 	$scope.dateFormat =  $rootScope.dateFormats; //Date Format
-   
 	
+	/* VALIDATION */
 	
+	$scope.errorMessage = validationMessage; //Error Messages In Constant
 	
-	$scope.clientName = "Jugal";
+	/* VALIDATION END */
+	
 	/** Display Company and date **/
 	
 		var clientFactory = getSetFactory.get();
@@ -33,10 +38,13 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 			
 			$scope.activeDetail = false;
 			$scope.activeEmail = true;
+			
+			$scope.emailSMS = clientFactory.tab;
 		}
 		else{
 			$scope.activeDetail = true;
 			$scope.activeEmail = false;
+			$scope.emailSMS = 'email';
 		}
 		
 		apiCall.getCall(apiPath.getAllClient+'/'+clientId).then(function(res){
@@ -139,5 +147,112 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 		
 	};
 	
+	
+	/** Email/SMS **/
+	
+		// Bootstrap Wysiwyg
+		 // ----------------------------------- 
+		 
+		  $scope.editorFontFamilyList = [
+			'Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
+			'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact',
+			'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+			'Times New Roman', 'Verdana'
+		  ];
+		  
+		  $scope.editorFontSizeList = [
+			{value: 1, name: 'Small'},
+			{value: 3, name: 'Normal'},
+			{value: 5, name: 'Huge'}
+		  ];
+	  
+		// Send Mail/SMS
+			// -----------------------------------
+		$scope.sendEmail = function(){
+			
+			var formdata = new FormData();
+			
+			
+				var clientData = $scope.ClientData;
+				formdata.append('client[0][clientId]',clientData.clientId);
+			
+				
+			if($scope.emailSMS == 'email'){
+				
+				if($scope.email.cc){
+					
+					formdata.append('ccEmailId',$scope.email.cc);
+				}
+				if($scope.email.bcc){
+					
+					formdata.append('bccEmailId',$scope.email.bcc);
+				}
+				
+				formdata.append('subject',$scope.email.subject);
+				var conversation = $('#editor').html();
+				formdata.append('conversation',conversation);
+				formdata.append('conversationType',$scope.emailSMS);
+				
+				if($scope.attachFile.length > 0){
+					
+					formdata.append('attachment[]',$scope.attachFile[0]);
+				}
+				
+				var mailSmsPath = apiPath.sendEmail;
+			}
+			else{
+				
+				var mailSmsPath = apiPath.sendSMS;
+				
+				formdata.append('conversationType','sms');
+				formdata.append('conversation',$scope.sms.conversation);
+				
+			}
+			
+			apiCall.postCall(mailSmsPath,formdata).then(function(response){
+				console.log(response);
+					$scope.email = [];
+					$scope.sms = [];
+					$('#editor').html('');
+					angular.element("input[type='file']").val(null);
+					$scope.attachFile = [];
+			});
+		}
+		
+		//Set Multiple File In Formdata On Change
+		$scope.uploadFile = function(files) {
+			$scope.attachFile = [];
+			//console.log(files);
+			//formdata.append("file[]", files[0]);
+			var flag = 0;
+			
+			for(var m=0;m<files.length;m++){
+				
+				if(parseInt(files[m].size) > maxImageSize){
+					
+					flag = 1;
+					toaster.clear();
+					//toaster.pop('alert','Image Size is Too Long','');
+					toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+					angular.element("input[type='file']").val(null);
+					break;
+				}
+				
+			}
+			
+			if(flag == 0){
+				
+				toaster.clear();
+				angular.forEach(files, function (value,key) {
+					$scope.attachFile.push(value);
+				});
+			}
+
+		};
+	
+		$scope.openEMail = function(type){
+			$scope.emailSMS = type;
+		}
+	/** End **/
 }
-CrmClientHistoryController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$timeout","getSetFactory","$state","$modal","$window","toaster","apiResponse"];
+CrmClientHistoryController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$timeout","getSetFactory","$state","$modal","$window","toaster","apiResponse","maxImageSize","validationMessage"];

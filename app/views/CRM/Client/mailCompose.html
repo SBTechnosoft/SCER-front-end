@@ -9,22 +9,22 @@
 <!-- START Mails-->
 <div class="panel panel-default">
    <div class="panel-body">
-      <form role="form-horizontal" method="post">
-         <div class="input-group form-group">
+      <form role="form-horizontal" action="#" name="formEmail">
+         <!--div class="input-group form-group">
             <span class="input-group-addon text-sm">To:</span>
             <input type="text" class="form-control" />
-         </div>
+         </div-->
          <div data-ng-show="mail.cc" class="input-group form-group">
             <span class="input-group-addon text-sm">CC:</span>
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" ng-model="email.cc"  />
          </div>
          <div data-ng-show="mail.bcc" class="input-group form-group">
             <span class="input-group-addon text-sm">BCC:</span>
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" ng-model="email.bcc" />
          </div>
          <div class="input-group form-group">
             <span class="input-group-addon text-sm">Subject:</span>
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" ng-model="email.subject" ng-required="true" />
          </div>
          <div class="mb-editor">
             <!-- The wysiswyg toolbar buttons-->
@@ -34,7 +34,7 @@
                      <em class="fa fa-font"></em><b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
-                     <li data-ng-repeat="ff in form.editorFontFamilyList"><a href="" data-edit="fontName {{ff}}" data-ng-attr-style="font-family: '{{ff}}';">{{ff}}</a>
+                     <li data-ng-repeat="ff in editorFontFamilyList"><a href="" data-edit="fontName {{ff}}" data-ng-attr-style="font-family: '{{ff}}';">{{ff}}</a>
                      </li>
                   </ul>
                </div>
@@ -43,7 +43,7 @@
                      <em class="fa fa-text-height"></em><b class="caret"></b>
                   </button>
                   <ul class="dropdown-menu">
-                     <li data-ng-repeat="fz in form.editorFontSizeList"><a href="" data-edit="fontSize {{fz.value}}" data-ng-attr-style="font-size: {{fz.value}};">{{fz.name}}</a>
+                     <li data-ng-repeat="fz in editorFontSizeList"><a href="" data-edit="fontSize {{fz.value}}" data-ng-attr-style="font-size: {{fz.value}};">{{fz.name}}</a>
                      </li>
                   </ul>
                </div>
@@ -109,7 +109,7 @@
                   <a id="pictureBtn" tooltip="Insert picture (or just drag &amp; drop)" class="btn btn-default">
                      <em class="fa fa-picture-o"></em>
                   </a>
-                  <input type="file" data-edit="insertImage" style="position: absolute; opacity: 0; width: 41px; height: 34px;" />
+                  <input type="file" data-edit="insertImage" style="position: absolute; opacity: 0; width: 66px; height: 38px;" />
                </div>
                <div class="btn-group">
                   <a data-edit="undo" tooltip="Undo (Ctrl/Cmd+Z)" class="btn btn-default">
@@ -121,14 +121,24 @@
                </div>
             </div>
             <!-- The wysiswyg editor-->
-            <div id="editor" wysiwyg="" height="200px" max-height="300px" class="form-control">Type here..</div>
-         </div>
-		  <div class="input-group form-group  pull-right" style="margin-top:5px">
-	   <button type="button" class="btn btn-info">
-				<em class="icon-location fa-fw"></em>
-				<span>Send</span>
-			 </button>
+            <div id="editor" wysiwyg="" height="200px" max-height="300px" class="form-control"  >Type here..</div>
+			
+			 <div class="input-group form-group" style="margin-top:10px">
+				<label for="input-id-1" class="col-sm-3 control-label">Attachment</label>
+				<div class="col-sm-6">
+					<input type="file" onchange="angular.element(this).scope().uploadFile(this.files)"  />
+				</div>
 			 </div>
+		 
+		 
+         </div>
+		 
+			<div class="input-group form-group  pull-right" style="margin-top:5px">
+				<button type="button" class="btn btn-primary" ng-click="sendEmail()" ng-disabled="formEmail.$invalid">
+					<em class="icon-location fa-fw"></em>
+					<span>Send</span>
+				</button>
+			</div>
 			
       </form>
 		

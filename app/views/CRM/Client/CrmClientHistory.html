@@ -11,7 +11,7 @@
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
 	<div id="panelDemo14" class="panel panel-default">
          <div class="panel-heading myHeading">
-			<h5><b>{{clientName}}</b> History Between {{::displayfromDate}} to {{::displaytoDate}} </h5>
+			<h5><b>{{ClientData.clientName}}</b> History <!--span>Between {{::displayfromDate}} to {{::displaytoDate}}</span--> </h5>
 		 </div>
          <div class="panel-body">
             <tabset>
@@ -88,11 +88,11 @@
 				<tab heading="Email/SMS"  active="activeEmail"  >
 				
 					<div class="input-group form-group  pull-right" style="margin-top:5px">
-						<a ui-sref="app.CrmClientHistory.compose" class="btn btn-primary" data-ng-class="app.theme.brand">
+						<a ui-sref="app.CrmClientHistory.compose" class="btn btn-primary" data-ng-class="app.theme.brand" ng-click="openEMail('email')" >
 							<span>Mail</span>
 						</a>
 						
-						<a ui-sref="app.CrmClientHistory.sms" class="btn btn-primary" data-ng-class="app.theme.brand">
+						<a ui-sref="app.CrmClientHistory.sms" class="btn btn-primary" data-ng-class="app.theme.brand" ng-click="openEMail('sms')">
 							<span>SMS</span>
 						</a>
 					</div>
@@ -104,3 +104,11 @@
     </div>
    
 </div>
+
+<script type="text/ng-template" id="errorRequired">
+	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternThisSpecial">
+	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacter}}</span>
+</script>
