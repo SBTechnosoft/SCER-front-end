@@ -13443,6 +13443,11 @@ padding-right:0px !important;
 .myFontLarger{
 	font-size: larger !important;
 }
+
+.is-hover {
+  background-color: yellow !important;
+}
+
 /* End */
 
 /* ========================================================================

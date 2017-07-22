@@ -669,7 +669,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/CrmClientFilterData',
 				templateUrl: basepath('CRM/Client/CrmClientFilterData.html'),
 				controller: 'CrmClientFilterDataController as table',
-				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv','wysiwyg')
+				resolve: requireDeps('ngTable','moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv','wysiwyg')
 			})
 			//Client History
 			.state('app.CrmClientHistory', {

@@ -1,0 +1,25 @@
+==> Price: 1000
+==> Qty: 1
+==> Discount : 0
+==> CGST : 4% (40)
+==> SGST : 1% (10)
+
+	Amount : 1050
+
+	
+	+++++++++++  2  ++++++++++++++
+	
+==> Price: 1000
+==> Qty: 1
+==> Discount : 50
+==> CGST : 4% (40)
+==> SGST : 1% (10)
+
+	Formula: 
+	
+	B = ((Price*qty)-Discount)    (950)
+	
+	CGST = B*4%  (38)
+	SGST = B*1%	 (9.5)
+	
+	Final Amount = 997.5

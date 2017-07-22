@@ -36,16 +36,16 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 	$scope.displayJobCardToDate = $rootScope.accView.jobCardToDate;		// Jobcard
 	
 	
-	console.log('Contact: '+$rootScope.accView.clientContact);
-	console.log('Name: '+$rootScope.accView.clientName);
-	console.log('Email: '+$rootScope.accView.emailId);
-	console.log('Address: '+$rootScope.accView.address);
-	console.log('Invoice: '+$rootScope.accView.invoiceNumber);
-	console.log('Jobcard: '+$rootScope.accView.jobCardNumber);
-	console.log('fromdate: '+$rootScope.accView.fromDate);
-	console.log('todate: '+$rootScope.accView.toDate);
-	console.log('JobacrdFrom: '+$rootScope.accView.jobCardFromDate);
-	console.log('JobcardTo: '+$rootScope.accView.jobCardToDate);
+	// console.log('Contact: '+$rootScope.accView.clientContact);
+	// console.log('Name: '+$rootScope.accView.clientName);
+	// console.log('Email: '+$rootScope.accView.emailId);
+	// console.log('Address: '+$rootScope.accView.address);
+	// console.log('Invoice: '+$rootScope.accView.invoiceNumber);
+	// console.log('Jobcard: '+$rootScope.accView.jobCardNumber);
+	// console.log('fromdate: '+$rootScope.accView.fromDate);
+	// console.log('todate: '+$rootScope.accView.toDate);
+	// console.log('JobacrdFrom: '+$rootScope.accView.jobCardFromDate);
+	// console.log('JobcardTo: '+$rootScope.accView.jobCardToDate);
 	
 	
 	/** Display Company and date **/

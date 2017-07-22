@@ -195,20 +195,23 @@ App
     'localhost': 'http://localhost/',
     'swaminarayan': 'http://api.swaminarayancycles.com/',
     'v2erpKey': 'http://v2api.siliconbrain.in/',
-    'siliconbrain':  'http://api.siliconbrain.co.in/'
+    'siliconbrain':  'http://api.siliconbrain.co.in/',
+    'prabandhak':  'http://beta.prabandhak.co.in/ERP/back-end/'
   })
   // front-end Url
   .constant('hostFrontUrl', {
     'localhost': 'http://localhost/',
     'swaminarayan': 'http://erp.swaminarayancycles.com/',
     'v2erpKey': 'http://v2erp.siliconbrain.in/',
-    'siliconbrain':  'http://erp.siliconbrain.co.in/'
+    'siliconbrain':  'http://erp.siliconbrain.co.in/',
+    'prabandhak':  'http://beta.prabandhak.co.in/ERP/front-end/'
   })
   // Google Captcha Site Key
   .constant('googleSiteKey', {
     'localhost': '6Ld6HSYTAAAAADSDPt5td0Te37OIgB2R10JvAgQg',
     'swaminarayan': '6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C',
     'v2erpKey': '6LfxfhwUAAAAAL3B7C6bI-_ZCuCYvO1vNFu4f4-6',
-    'siliconbrain':  '6LchHRoUAAAAAIZHW5kSReJ6ZLRJ1gmT4D36Kdhv'
+    'siliconbrain':  '6LchHRoUAAAAAIZHW5kSReJ6ZLRJ1gmT4D36Kdhv',
+    'prabandhak':  '6Leghh0UAAAAAEr155Ro63rus07_jm0kJ0qWWhUH'
   })
 ;

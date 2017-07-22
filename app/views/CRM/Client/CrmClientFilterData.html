@@ -6,19 +6,6 @@
 </h3>
 <div class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
-	<!--div class="panel panel-default">
-		<div class="panel-body">
-			<div class="form-group">
-				<label class="col-sm-1 control-label"> Company </label>
-					<div class="col-sm-7">
-						<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states track by s.companyId" class="form-control chosen-select" >
-						</select>
-					</div>
-				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showProduct()"  data-ng-class="app.theme.brand">Go</button>
-			</div>
-		</div>
-	</div-->
-	
    <div class="panel panel-default">
       <div class="panel-heading myHeading" >
          <div class="panel-title" id="allPro"> <h5> <b>{{clientName}}</b> Data Between {{::displayfromDate}} to {{::displaytoDate}} </h5> </div>
@@ -26,7 +13,7 @@
       </div>
 	   <div class="table-responsive">
 		  <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
-		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+		
 			 <tbody >
 				<tr data-ng-repeat="user in ($parent.filteredItems = $data)" style="width:100%">
 					<td style="text-align: left" header="'ng-table/headers/checkbox.html'" style="width:5%" >

@@ -940,7 +940,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				else{
 					formdata.append('advance',0);
 				}
-				formdata.append('balance',$scope.balanceTable);
+				
+				formdata.append('balance',$scope.quickBill.balanceTable);
 				
 				var BillPath = apiPath.postBill;
 			}
@@ -1966,7 +1967,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$templateCache.remove('http://'+window.location.host+'/front-end/app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html');
 		 //$(".modal-body").html("");
 		 
-		 console.log('http://'+window.location.host+'/front-end/app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html');
+		 //console.log('http://'+window.location.host+'/front-end/app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html');
 		 
 		 if (Modalopened) return;
 		 
@@ -2194,7 +2195,10 @@ $scope.presssuburb = function(event){
 			 
 			DWObject.RegisterEvent("OnPostAllTransfers", function () {
 				var imageUrl = DWObject.GetImageURL(0);
-				$scope.openScanPopup(imageUrl);
+				if(imageUrl != ''){
+					$scope.openScanPopup(imageUrl);
+				}
+				
 				console.log(imageUrl);
 			 });
 

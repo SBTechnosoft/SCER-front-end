@@ -60,7 +60,7 @@ h4 .control-label{
 					
 			<div class="col-sm-4">
 				<label for="input-id-1" class="col-sm-3 control-label"> *Date </label>
-				<div class="col-sm-9">
+				<div class="col-sm-7">
 					 <div class="input-group hackyhack" >
 						<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart" min-date="false" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" ng-change="changeBillDate('entryDate')" close-text="Close" class="form-control" id="entryDate" ng-required="true" readonly/>
 						<span class="input-group-btn">
@@ -68,7 +68,16 @@ h4 .control-label{
 							  <em class="fa fa-calendar"></em>
 						   </button>
 						</span>
+						
 					 </div>
+					 
+				</div>
+				<div class="col-sm-2">
+					 <div class="input-group hackyhack" >
+						<span class="input-group-btn">
+							<a  class="mr mb-sm btn btn-primary pull-left goButton"   ui-sref="app.AccViewRetailSales"  ><i class="fa fa-search"></i></a>
+						</span>
+					</div>
 				</div>
 			</div>
 				
@@ -256,9 +265,9 @@ h4 .control-label{
 					<th class="header my-table-paddingTopBottom" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame No.</th>
 					<!--th class="header" style="width:5%">Discount Type</th>
 					<th class="header" style="width:5%">Discount</th-->
-						<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;">Discount</th>
-					<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;" >Rate</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >Quantity</th>
+					<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;" >Rate</th>
+					<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;">Discount</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >CGST</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >SGST</th>
 					<th class="header my-table-paddingTopBottom" style="width:9%;padding-top:5px !important;padding-bottom:5px !important;" >Amount</th>
@@ -284,8 +293,15 @@ h4 .control-label{
 						<!--input id="input-id-1" type="text" ng-model="item.color"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"    ng-pattern="/^[a-z-A-Z]*$/" ng-change="changeProductTable()"  /--> 
 					</td>
 					<td>
-						
 						<input id="input-id-1" type="text" ng-model="item.frameNo"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
+					</td>
+					<td>
+						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
+					</td>
+					
+					<td>
+						<!--span style="float:right">{{item.price}}</span-->
+						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
 					</td>
 					<td>
 						<select  ng-model="item.discountType"  class="form-control" style="padding-left: 5px;padding-right: 5px;width:50%;float:left;" ng-change="changeProductTable();" >
@@ -294,13 +310,6 @@ h4 .control-label{
 						</select>
 						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control" style="padding-left: 6px;padding-right: 6px;width:50%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)"  ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
 						
-					</td>
-					<td>
-						<!--span style="float:right">{{item.price}}</span-->
-						<input id="input-id-1" type="text" ng-model="item.price"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
-					</td>
-					<td>
-						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
 					</td>
 					<td style="text-align:right">
 						<span ng-if="item.discountType == 'flat'"> {{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} </span>
@@ -369,7 +378,8 @@ h4 .control-label{
 					<td  style="text-align:left" > <strong>Total </strong> </td>
 					<td colspan="2" style="text-align:right" >{{quickBill.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
 					<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
-					<td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td>
+					<!--td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td-->
+					<td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td>
 				</tr> 
 				<!--tr>
 					<td></td>
@@ -417,20 +427,8 @@ h4 .control-label{
 						</span>
 					</td>
 					<td style="text-align:left"  > <strong> Balance </strong></td>
-					<td style="text-align:right">{{balanceTable = (totalTable + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) - quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
+					<td style="text-align:right">{{quickBill.balanceTable = (totalTable + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) - quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
 				</tr>
-				<!--tr colspan="5">
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td colspan="2" style="text-align:left"  > <strong> Balance </strong></td>
-					<td style="text-align:right">{{balanceTable = (grandTotalTable-quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
-					<td></td>
-				</tr-->
 			</tbody>
 		</table>
 	</div>
@@ -552,18 +550,18 @@ h4 .control-label{
 		
 		<div class="col-sm-7">
 			
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generate')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" ng-if="saleType == 'QuotationPrint'" > <span ng-if="quickBill.EditBillData" >Update & Generate </span> <span ng-if="!quickBill.EditBillData">Save & Generate </span> </button>
+			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generate')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" ng-if="saleType == 'QuotationPrint'" > <span ng-if="quickBill.EditBillData" >Update & Print </span> <span ng-if="!quickBill.EditBillData">Save & Print </span> </button>
 			 
 			<!--button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('preprint')" ng-disabled="formBill.$invalid || disableButton" tabIndex="4" > <span ng-if="quickBill.EditBillData" >Update PrePrinted & Generate </span> <span ng-if="!quickBill.EditBillData">Preprinted & Generate </span> </button-->
 			
 			<div dropdown="dropdown" class="btn-group mb-sm mr pull-right"  ng-disabled="formBill.$invalid || disableButton" ng-if="saleType != 'QuotationPrint'">
-               <button type="button" ng-disabled="formBill.$invalid || disableButton" dropdown-toggle="" class="btn dropdown-toggle btn-success" tabIndex="6" >Generate&nbsp;
+               <button type="button" ng-disabled="formBill.$invalid || disableButton" dropdown-toggle="" class="btn dropdown-toggle btn-success" tabIndex="6" >Print&nbsp;
                   <span class="caret"></span>
                </button>
                <ul role="menu" class="dropdown-menu"  >
                   <li><a  href="#" ng-click="pop('preprint')"  tabIndex="7" ><span ng-if="quickBill.EditBillData" >Update PrePrinted & Generate </span> <span ng-if="!quickBill.EditBillData">Preprinted & Generate </span></a>
                   </li>
-                  <li><a href="#" ng-click="pop('generate')" tabIndex="8" ><span ng-if="quickBill.EditBillData" >Update & Generate </span> <span ng-if="!quickBill.EditBillData">Save & Generate </span></a>
+                  <li><a href="#" ng-click="pop('generate')" tabIndex="8" ><span ng-if="quickBill.EditBillData" >Update & Print </span> <span ng-if="!quickBill.EditBillData">Save & Print </span></a>
                   </li>
                   
                </ul>

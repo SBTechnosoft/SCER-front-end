@@ -91,7 +91,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 	
 		apiCall.getCall(apiPath.getBalanceSheet+id).then(function(response){
 			
-			console.log(response);
+			// console.log(response);
 			//data = response;
 			toaster.clear();
 			
@@ -134,14 +134,14 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 				totaldebit += parseFloat(dataOfTrial.amount);
 				
 				if(dataOfTrial.ledger.ledgerGroupId == 31){
-					console.log('in');
+					// console.log('in');
 					
 					$scope.totalSundaryDebitor += parseFloat(dataOfTrial.amount);
 					
 					sundryDebitorArray.push(dataOfTrial);
 					
 					if(debitorFlag == 0){
-						console.log('Flag IF');
+						// console.log('Flag IF');
 						debitorFlag = 1;
 						
 						 var trailObjectDebtors = {};
@@ -157,7 +157,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 						for(var varDebtors=0;varDebtors<cntLendebtors;varDebtors++){
 					
 							var trailArrayData = trialBalanceArray[varDebtors];
-								console.log('Push');
+								// console.log('Push');
 							//console.log(trailArrayData[0]);
 							if(trailArrayData[1] == undefined){
 								inFlagDebtor = 1;
@@ -175,7 +175,7 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 					}
 				}
 				else{
-					console.log('Else Debit');
+					// console.log('Else Debit');
 					var cntLen = trialBalanceArray.length;
 					if(cntLen > 0){
 						var inFlag = 0;
@@ -522,5 +522,8 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 		}
 	
 	/*** End Pdf ***/
+	
+	
+
 }
 AccBalanceSheetController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","$window","getSetFactory","$modal"];

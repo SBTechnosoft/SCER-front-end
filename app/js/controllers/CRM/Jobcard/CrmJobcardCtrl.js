@@ -969,7 +969,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 			formdata.delete('isDisplay');
 			
 			
-			if(apiResponse.ok == data){
+			if((angular.isObject(data) && data.hasOwnProperty('documentPath'))){
 				
 				toaster.clear();
 				
@@ -998,6 +998,9 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 					
 					toaster.clear();
 					
+					var pdfPath = $scope.erpPath+data.documentPath;
+					$scope.directPrintPdf(pdfPath);
+							
 					$scope.disableButton = false;
 					
 					$scope.clearDataAfterResponse();
@@ -1093,7 +1096,7 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 		
 		$scope.clientGetAllFunction();
 		
-		//$scope.getInitStateCity(); //get Default State and City
+		$scope.getInitStateCity(); //get Default State and City
 		
 		//Get State
 		// vm.statesDrop=[];
@@ -1433,7 +1436,10 @@ function CrmJobcardController($rootScope,$scope,apiCall,apiPath,$http,$window,$m
 	/** Invoice **/
 		$scope.goInvoiceNumber = function(){
 			
-			apiCall.getCall(apiPath.PostJobcard+'/'+$scope.quickBill.searchInvoiceNumber).then(function(response){
+			var JobcardNumber = $scope.quickBill.searchInvoiceNumber.replace(/\//g, "~");
+			console.log(JobcardNumber);
+			
+			apiCall.getCall(apiPath.PostJobcard+'/'+JobcardNumber).then(function(response){
 				
 				// console.log('starting');
 				 console.log(response);
