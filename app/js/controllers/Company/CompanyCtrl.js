@@ -223,6 +223,79 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		
 	
   }
+  
+  /** Sticker Single **/
+		$scope.singleStickerPrint = function(pData){
+		
+		
+		var qty  = pData.qty;
+		
+		var mywindow = window.open('', 'PRINT', 'height=850,width=850');
+
+		 var is_chrome = Boolean(mywindow.chrome);
+
+        mywindow.document.write('<html><!--head><title>' + document.title  + '</title>');
+		
+        mywindow.document.write("</head--> <style type='text/css' media='print'>@page {size: auto;margin: 0mm;} body {background-color:#FFFFFF;margin: 0px; }</style><body>");
+		mywindow.document.write('<!--center> <h1> Barcode of Company </h1> </center-->');
+		mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
+		mywindow.document.write("<tr><td colspan='2' style='text-align:center;'><!--h2> </h2--> </td></tr> 	<tr>");
+		
+		if(qty%2==0){
+				
+			var space = "";
+		}
+		else{
+			
+			var space = "<td></td>";
+		}
+			
+		for(var n=0;n<qty;n++){
+
+			mywindow.document.write("<td style='position:relative;float:left; width: 280px;padding-top: 23px;padding-left:35px;display: inline-block;font-family: Microsoft New Tai Lue'> ");
+			mywindow.document.write("<span style='margin-left:5px;font-size:12px;text-transform:uppercase;'><b>"+pData.companyName+"</b></span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.address1+"</span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.address2+"</span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.cityName+"- PIN "+pData.pincode+"</span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.customerCare+"</span>");
+			
+			if(n == qty-1){
+				
+				
+				mywindow.document.write("</td> "+ space );
+				
+				/** Next Code **/
+				
+					mywindow.document.write("</tr></table>");
+		
+					mywindow.document.write('</body></html>');
+
+					
+					
+					if (is_chrome) {
+						
+					   setTimeout(function () { // wait until all resources loaded 
+							mywindow.focus(); // necessary for IE >= 10
+							mywindow.print();  // change window to mywindow
+							mywindow.close();// change window to mywindow
+						 }, 2000);
+					}
+					else {
+						mywindow.document.close(); // necessary for IE >= 10
+						mywindow.focus(); // necessary for IE >= 10
+						mywindow.print();
+						mywindow.close();
+					}
+				
+					return true;
+		
+				/** End **/
+			}
+			else{
+				mywindow.document.write("</td>");
+			}
+			// mywindow.document.write("<div style='position:relative;float:left; width: 50%;'> ");
+			// mywindow.document.write($scope.stateCheck.companyName+"<br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
+			// mywindow.document.write("</div>");
+		}
+	}
+	
 
 }
 CompanyController.$inject = ["$rootScope","$scope", "$filter","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","$modal","getSetFactory"];

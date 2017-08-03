@@ -60,7 +60,8 @@
     "icon": "fa fa-cog",
     "subnav": [
       {"text": "Option", "sref": "app.SettingOption", "icon": "fa fa-barcode", "translate": "" },
-      {"text": "Jobcard#", "sref": "app.SettingJobcardNumber", "icon": "fa fa-barcode", "translate": "" }
+      {"text": "Jobcard#", "sref": "app.SettingJobcardNumber", "icon": "fa fa-barcode", "translate": "" },
+      {"text": "Client Profession", "sref": "app.SettingClientProfession", "icon": "fa fa-suitcase", "translate": "" }
     ],
     "translate": ""
   }

@@ -53,7 +53,7 @@ h4 .control-label{
 				
 				<label for="input-id-1" class="col-sm-3 control-label"> *Company </label>
 				<div class="col-sm-9 contentOfForm" >
-					<select chosen="" data-ng-model="quickBill.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(quickBill.companyDropDown)" ng-disabled="form.disableCompany" class="form-control chosen-select" ng-required="true"></select>
+					<select chosen="" data-ng-model="quickBill.companyDropDown" name="companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(quickBill.companyDropDown)" ng-disabled="form.disableCompany" class="form-control chosen-select" ng-required="true"></select>
 				</div>
 						
 			</div>
@@ -93,11 +93,11 @@ h4 .control-label{
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">*Contact</label>
 						  <div class="col-sm-9">
-							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | orderBy:'contactNo' | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Enter Contact Number" class="form-control" dir="ltr" name="contactNo" id="contactNoSelect"  auto-focus="true" ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10"   only-number style="font-size:15px;" />
+							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | orderBy:'contactNo' | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Enter Contact Number" class="form-control" dir="ltr" name="contactNo" id="contactNoSelect"  auto-focus="true" ng-required="true" ng-maxlength="12" ng-pattern="/^[1-9][0-9]+$/"  ng-minlength="10"   only-number style="font-size:15px;" />
 							 
 							<span ng-messages="formBill.contactNo.$error" ng-if="formBill.contactNo.$dirty || formBill.contactNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
-								<span ng-messages-include="errorPatternNumber"></span>
+								<span ng-messages-include="errorPatternNumberContact"></span>
 								<span ng-messages-include="errorLonglength"></span>
 								<span ng-messages-include="errorShortlength"></span>
 							</span>
@@ -281,7 +281,7 @@ h4 .control-label{
 				<tr id="addAfter" ng-repeat="item in form.AccBillTable" data-ng-class="app.tableAnimation">
 					<td>
 						<div class="input-group mytypeDrop">
-							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index);calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" type="text" class="form-control" placeholder="*Enter Product Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)"  />
+							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index);calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax);quickBill.advance = ((totalTable) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)" type="text" class="form-control" placeholder="*Enter Product Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)"  />
 							<span class="input-group-btn">
 							   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 							</span>
@@ -327,12 +327,12 @@ h4 .control-label{
 					<td>
 						<span style="float:right" ng-if="item.discountType == 'flat'" >
 						
-							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax,$index)" only-number /> 
+							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax,$index);" only-number /> 
 							
 						</span>
 						<span style="float:right" ng-if="item.discountType == 'percentage'" >
 						
-							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
+							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax,$index);" only-number /> 
 							
 						</span>
 						
@@ -370,7 +370,7 @@ h4 .control-label{
 					<td></td>
 					<td style="text-align:left" title="Extra Charge" ><strong>E.Charge<strong></td>
 					<td ng-init="quickBill.extraCharge = 0">
-						<input id="input-id-1" type="text" name="extraCharge" ng-model="quickBill.extraCharge"  class="form-control"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
+						<input id="input-id-1" type="text" name="extraCharge" ng-model="quickBill.extraCharge"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();quickBill.advance = ((totalTable) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)" style="padding-left: 6px;padding-right: 6px;" only-number /> 
 						<span ng-messages="formBill.extraCharge.$error" ng-if="formBill.extraCharge.$dirty || formBill.extraCharge.$touched"  role="alert">
 							<span ng-messages-include="errorPatternNumber"></span>
 						</span>
@@ -379,7 +379,8 @@ h4 .control-label{
 					<td colspan="2" style="text-align:right" >{{quickBill.tax = (getTotalTax() | setDecimal: noOfDecimalPoints)}}</td>
 					<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
 					<!--td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td-->
-					<td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td>
+					<td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span>
+					</td>
 				</tr> 
 				<!--tr>
 					<td></td>
@@ -420,14 +421,14 @@ h4 .control-label{
 					<td></td>
 					<td></td>
 					<td style="text-align:left"> <strong> Advance </strong> </td>
-					<td colspan="2"  > 
-						<input id="input-id-1" type="text" name="advance" ng-model="quickBill.advance"  class="form-control"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;" only-number /> 
+					<td colspan="2"   > 
+						<input id="input-id-1" type="text" name="advance"  ng-model="quickBill.advance"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;padding-bottom: 8px;padding-top: 8px;" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">
 							<span ng-messages-include="errorPatternNumber"></span>
 						</span>
 					</td>
-					<td style="text-align:left"  > <strong> Balance </strong></td>
-					<td style="text-align:right">{{quickBill.balanceTable = (totalTable + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) - quickBill.advance | setDecimal: noOfDecimalPoints)}}</td>
+					<td style="text-align:left"> <strong> Balance </strong></td>
+					<td style="text-align:right" >{{quickBill.balanceTable = (totalTable + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) - (quickBill.advance ? quickBill.advance*1 : 0) | setDecimal: noOfDecimalPoints)}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -559,7 +560,7 @@ h4 .control-label{
                   <span class="caret"></span>
                </button>
                <ul role="menu" class="dropdown-menu"  >
-                  <li><a  href="#" ng-click="pop('preprint')"  tabIndex="7" ><span ng-if="quickBill.EditBillData" >Update PrePrinted & Generate </span> <span ng-if="!quickBill.EditBillData">Preprinted & Generate </span></a>
+                  <li><a  href="#" ng-click="pop('preprint')"  tabIndex="7" ><span ng-if="quickBill.EditBillData" >Update PrePrinted & Print </span> <span ng-if="!quickBill.EditBillData">Preprinted & Print </span></a>
                   </li>
                   <li><a href="#" ng-click="pop('generate')" tabIndex="8" ><span ng-if="quickBill.EditBillData" >Update & Print </span> <span ng-if="!quickBill.EditBillData">Save & Print </span></a>
                   </li>
@@ -572,7 +573,7 @@ h4 .control-label{
 			
 			<button type="button" class="mr mb-sm btn btn-primary pull-right" ng-click="previewBill('lg')" tabIndex="4" data-ng-class="app.theme.brand" > Preview </button>
 			<button type="button" class="mr mb-sm btn btn-primary pull-right"  ng-click="DWT_AcquireImage();" tabIndex="3" ng-if="saleType != 'QuotationPrint'">Scan ({{countScannedDocumet}})</button>
-			<button type="button" class="mr mb-sm btn btn-info pull-right" ng-disabled="!quickBill.EditBillData"  ng-click="cancel('copy')" tabIndex="2" ng-if="saleType != 'QuotationPrint'">Copy</button>
+			<button type="button" class="mr mb-sm btn btn-info pull-right" ng-disabled="!quickBill.EditBillData"  ng-click="cancel('copy')" tabIndex="2" >Copy</button>
 			
 			<button type="button" class="mr mb-sm btn btn-success pull-right" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" ng-if="saleType == 'QuotationPrint'" >New</button>
 		</div>
@@ -626,6 +627,10 @@ h4 .control-label{
 
 <script type="text/ng-template" id="errorPatternNumber">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.Numbers}}</span>
+</script>
+
+<script type="text/ng-template" id="errorPatternNumberContact">
+	<span class="text-danger" ng-message="pattern">Only Number & Not Start With Zero</span>
 </script>
 
 <script type="text/ng-template" id="errorPatternAlphaNumeric">

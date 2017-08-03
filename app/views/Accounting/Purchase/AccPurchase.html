@@ -13,15 +13,15 @@
 		 <!--h4 class="panel-heading"></h4-->
 		<div class="panel-body">
 			<div class="form-group">
-				<label class="col-sm-1 control-label">*Company </label>
-					<div class="col-sm-4">
+				<label class="col-sm-1 control-label my-colMd-paddingLeftRight">*Company </label>
+					<div class="col-sm-2 my-colMd-paddingLeftRight">
 						<select chosen="" data-ng-model="accPurchase.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accPurchase.companyDropDown)" ng-disabled="disableCompany" class="form-control chosen-select" ng-required="true"></select>
 					</div>
-				<label class="col-sm-1 control-label">*Date </label>
-					<div class="col-sm-4">
+				<label class="col-sm-1 control-label my-colMd-paddingLeftRight">*Date </label>
+					<div class="col-sm-2 my-colMd-paddingLeftRight">
 						 <p class="input-group"style="float:right">
 							<input type="text" datepicker-popup="{{form.format}}"  data-ng-model="form.dt1" is-open="form.openedStart"  max-date="false" ng-change="changePurchaseDate('entryDate')" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" close-text="Close"
-							class="form-control" ng-required="true"  readonly/>
+							class="form-control my-textbox-paddingLeftRight" ng-required="true"  readonly/>
 							<span class="input-group-btn">
 							   <button type="button" data-ng-click="form.openStart($event)" class="btn btn-default">
 								  <em class="fa fa-calendar"></em>
@@ -29,6 +29,36 @@
 							</span>
 						 </p>
 					</div>
+				<label class="col-sm-1 control-label my-colMd-paddingLeftRight">*Bill#</label>
+					  <div class="col-sm-2 my-colMd-paddingLeftRight">
+						 <input id="input-id-1" name="billNo" ng-model="accPurchase.billNo" ng-change="changeAccPurchase('billNumber',accPurchase.billNo)" type="text" placeholder="Bill Number" class="form-control"  ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" />
+						 
+						 <span ng-messages="formPurchase.billNo.$error" ng-if="formPurchase.billNo.$dirty || formPurchase.billNo.$touched"  role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="shortLength"></span>
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+						</span>
+						
+					  </div>
+				<label class="col-sm-1 control-label my-colMd-paddingLeftRight">*Party Name</label>
+				  <div class="col-sm-2 my-colMd-paddingLeftRight">
+				  <div class="input-group">
+				  
+					 <input  typeahead="s.ledgerName for s in form.clientSuggest | filter:$viewValue | orderBy:'clientName' | limitTo:10" ng-model="accPurchase.clientName" typeahead-on-select="setClientName('clientName',$item)" id="input-id-1" type="text" placeholder="Party Name" class="form-control" dir="ltr" name="clientName" id="clientName"  ng-required="true"  ng-pattern="/^[a-zA-Z ]*$/"  />
+					<span class="input-group-btn">
+					<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',-1)"><i class="fa fa-plus" style="color:#17A1E5;"></i></button>
+					</span>
+					
+					
+					
+				  </div>
+				  <span ng-messages="formPurchase.clientName.$error" ng-if="formPurchase.clientName.$dirty || formPurchase.clientName.$touched" role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorPatternAlpha"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorShortlength"></span>
+					</span>
+				  </div>
 				<!--button type="button" class="mr mb-sm btn btn-primary">Go</button-->
 				
 			</div>
@@ -162,66 +192,8 @@
 	
 	<div class="col-md-8" style="padding-left:0px;padding-right:15px"> 
 		<div class="panel panel-default">
-		<h4 class="panel-heading">Purchase</h4>
-			<div class="panel-body">
-			
-				 <div class="col-md-12">
-					
-					 <div class="col-md-5">
-						<fieldset>
-						   <div class="form-group">
-							  <label for="input-id-1" class="col-sm-3 control-label">*Bill#</label>
-							  <div class="col-sm-9">
-								 <input id="input-id-1" name="billNo" ng-model="accPurchase.billNo" ng-change="changeAccPurchase('billNumber',accPurchase.billNo)" type="text" placeholder="Bill Number" class="form-control"  ng-minlength="2" ng-required="true"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" />
-								 
-								 <span ng-messages="formPurchase.billNo.$error" ng-if="formPurchase.billNo.$dirty || formPurchase.billNo.$touched"  role="alert">
-									<span ng-messages-include="errorRequired"></span>
-									<span ng-messages-include="shortLength"></span>
-									<span ng-messages-include="errorPatternThisSpecial"></span>
-								</span>
-								
-							  </div>
-						   </div>
-						</fieldset>
-					</div>
-					
-					 <div class="col-md-7">
-						<fieldset>
-						   <div class="form-group">
-							  <label for="input-id-1" class="col-sm-4 control-label">*Party Name</label>
-							  <div class="col-sm-8">
-							  
-								 <input  typeahead="s.clientName for s in form.clientSuggest | filter:$viewValue | orderBy:'clientName' | limitTo:10" ng-model="accPurchase.clientName" typeahead-on-select="setClientName('clientName',$item)" id="input-id-1" type="text" placeholder="Party Name" class="form-control" dir="ltr" name="clientName" id="clientName"  ng-required="true"  ng-pattern="/^[a-zA-Z ]*$/"  />
-							 
-								<span ng-messages="formPurchase.clientName.$error" ng-if="formPurchase.clientName.$dirty || formPurchase.clientName.$touched" role="alert">
-									<span ng-messages-include="errorRequired"></span>
-									<span ng-messages-include="errorPatternNumber"></span>
-									<span ng-messages-include="errorLonglength"></span>
-									<span ng-messages-include="errorShortlength"></span>
-								</span>
-								
-							  </div>
-						   </div>
-						</fieldset>
-					</div>
-					
-				</div>
-					<!--fieldset>
-						<div class="form-group">
-						  <label for="input-id-1" class="col-sm-3 control-label">Vender Name</label>
-						  <div class="col-sm-6">
-							<div class="input-group">
-									<input typeahead="item.ledgerName for item in form.clientNameDrop | filter:$viewValue | limitTo:10" ng-model="accPurchase.clientName" type="text" typeahead-on-select="setAccPurchase('clientName',$item)" type="text" class="form-control" placeholder="Enter Vender Name" />
-									<span class="input-group-btn" ng-controller="AccPurchaseModalController">
-							 		<button type="button" class="btn btn-default" data-ng-click="open('lg')"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
-									</span>
-								</div>
-						  </div>
-						  
-					   </div>
-					</fieldset-->
+		<!--h4 class="panel-heading">Purchase</h4-->
 				
-			</div>
 			<!-- Client Multiple Table -->
 			 <div class="table-responsive">
 				<table  class="table table-bordered table-striped">
@@ -235,7 +207,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable" data-ng-class="app.tableAnimation">
+						<tr id="addAfter" ng-repeat="item in form.AccClientMultiTable" data-ng-class="app.tableAnimation" dat-filter="2"> 
 							<td>
 								<select  ng-model="item.amountType" class="form-control" ng-change="changeAmountType($index)">
 									<option value="debit" selected="selected">Dr</option>
@@ -298,7 +270,7 @@
 	
 	<div class="col-md-4" style="padding-left:15px;padding-right:0px"> 
 		<div class="panel panel-default">
-		<h4 class="panel-heading">History</h4>
+		<h4 class="panel-heading">History <button type="button" tabindex="-1" ng-click="openHistoryModal('lg')" class="mr mb-sm btn btn-turquoise btn-sm" style="float:right" >View History</button></h4>
 			<div class="panel-body">
 					
 						<dl class="dl-horizontal">
@@ -308,25 +280,26 @@
 						   <dd style="margin-left: 122px;">{{displayCurrentBal |  currency:"&#8377; ": noOfDecimalPoints }} <span style="text-transform: capitalize;">{{displayCurrentBalType}} <span> </dd>
 						</dl>
 						
-						<button type="button" tabindex="-1" ng-click="openHistoryModal('lg')" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
 						
-						<dl class="dl-horizontal" style="visibility:hidden">
+						
+						<!--dl class="dl-horizontal" style="visibility:hidden">
 							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
 							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
 							<button type="button" class="mr mb-sm btn btn-turquoise" style="float:right" >View History</button>
-						</dl>
+						</dl-->
 			</div>
 		</div>
 	</div>
      
-	 
+	 <div class="col-md-4" style="padding-left:15px;padding-right:0px"> 
+		<textarea  name="address" rows="4"  ng-model="accPurchase.remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+	</div>
 	
-	<textarea  name="address" ng-model="accPurchase.remark" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-	<br />
-	<div class="form-group">
+	
+	<div class="form-group col-md-12">
 		<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
 		
-		<div class="col-sm-6">
+		<div class="col-sm-1">
 			<input type="file" ng-model="accPurchase.attach" onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
 		</div>
 		

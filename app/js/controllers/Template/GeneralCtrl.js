@@ -446,11 +446,11 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 					formdata.delete('templateName');
 					
 					formdata.delete('templateBody');
-					apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+					// apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
 			
-						vm.AllTempRight = responseTemp;
+						// vm.AllTempRight = responseTemp;
 		
-					});
+					// });
 					
 					$scope.defaultCompany();
 				}
@@ -482,11 +482,11 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 					formdata.delete('templateType');
 					formdata.delete('templateBody');
 					
-					apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
+					// apiCall.getCall(apiPath.getAllTemplate).then(function(responseTemp){
 			
-						vm.AllTempRight = responseTemp;
+						// vm.AllTempRight = responseTemp;
 		
-					});
+					// });
 					
 					$scope.defaultCompany();
 				}

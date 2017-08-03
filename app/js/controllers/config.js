@@ -16,6 +16,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
       App.constant   = $provide.constant;
       App.value      = $provide.value;
 
+	  //$compileProvider.debugInfoEnabled(false);
       // LAZY LOAD MODULES
       // ----------------------------------- 
 
@@ -204,6 +205,12 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/SettingJobcardNumber',
 				templateUrl: basepath('Setting/SettingJobcardNumber/SettingJobcardNumber.html'),
 				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','ngTable','ngTableExport','getBranchSrv','toaster')
+			})
+			//Client Profession
+			.state('app.SettingClientProfession', {
+				url: '/SettingClientProfession',
+				templateUrl: basepath('Setting/SettingClientProfession/SettingClientProfession.html'),
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','treeGrid','ngTable','ngTableExport','getBranchSrv','toaster')
 			})
 		/*** End Setting ***/
 		//Add Inventory Product

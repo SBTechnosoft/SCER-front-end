@@ -105,10 +105,39 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		});
 	}
 	
+	//Client Data
+	$scope.clientGetAllFunction = function(id){
+		
+		var headerCr = {'Content-Type': undefined,'ledgerGroup':[31]};
+		
+		vm.clientSuggest = [];
+		
+		apiCall.getCallHeader(apiPath.getLedgerJrnl+id,headerCr).then(function(response){
+			
+			if(angular.isArray(response)){
+				
+				for(var t=0;t<response.length;t++){
+				
+					for(var k=0;k<response[t].length;k++){
+						
+						vm.clientSuggest.push(response[t][k]);
+					}
+					
+				}
+			
+			}
+			else{
+				vm.clientSuggest = [];
+			}
+			
+		});
+	
+	}
+	
 	$scope.defaultCompany = function(){
 		
 		vm.loadData = true;
-		
+			
 		//Set default Company
 		apiCall.getDefaultCompany().then(function(response){
 		
@@ -126,6 +155,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 			$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+			
+			$scope.clientGetAllFunction(response.companyId);
 			
 			vm.clientNameDropDr=[];
 			vm.clientNameDropCr=[];
@@ -197,20 +228,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		$scope.noOfDecimalPoints = parseInt(response.noOfDecimalPoints);
 		
 	}
-	//Client Data
-	$scope.clientGetAllFunction = function(){
-		
-		vm.clientSuggest = [];
 	
-		apiCall.getCall(apiPath.getAllClient).then(function(responseDrop){
-			
-			vm.clientSuggest = responseDrop;
-			
-		
-		});
 	
-	}
-	$scope.clientGetAllFunction();
 
   // Datepicker
   // ----------------------------------- 
@@ -571,6 +590,8 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
+		$scope.clientGetAllFunction(value.companyId);
+		
 		vm.clientNameDropDr=[];
 		vm.clientNameDropCr=[];
 		
@@ -666,7 +687,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value.clientName);
+		formdata.append(Fname,value.ledgerName);
   	}
 	
 	$scope.changeAccPurchase = function(Fname,value) {
@@ -1240,7 +1261,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
   *
   **/
 	$scope.openLedger = function (size,index) {
-
+		
 		if (Modalopened) return;
 		
 	if($scope.accPurchase.companyDropDown){
@@ -1265,8 +1286,6 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 		var state = $('#modal-state');
 		modalInstance.result.then(function (data) {
 		  
-			
-			
 			if($scope.accPurchase.companyDropDown){
 				
 				//Auto suggest Client Name For Debit
@@ -1305,18 +1324,29 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 				
 				//Set Last Inserted Ledger
 				//console.log(data);
-
-				var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
-				apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
+				if(data.index != undefined){
 					
-					//console.log(response);
-					vm.AccClientMultiTable[data.index].ledgerName = response.ledgerName;
-					vm.AccClientMultiTable[data.index].ledgerId = response.ledgerId;
+					if(parseInt(data.index) == -1){
 					
-					vm.multiCurrentBalance[data.index].currentBalance =  response.currentBalance;
-					vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
-		
-				});
+						$scope.accPurchase.clientName = data.ledgerName;
+					}
+					else{
+						
+						var headerSearch = {'Content-Type': undefined,'ledgerName':data.ledgerName};
+						apiCall.getCallHeader(apiPath.getLedgerJrnl+data.companyId,headerSearch).then(function(response){
+							
+							//console.log(response);
+							vm.AccClientMultiTable[data.index].ledgerName = response.ledgerName;
+							vm.AccClientMultiTable[data.index].ledgerId = response.ledgerId;
+							
+							vm.multiCurrentBalance[data.index].currentBalance =  response.currentBalance;
+							vm.multiCurrentBalance[data.index].amountType = response.currentBalanceType;
+				
+						});
+					}
+				}
+				
+				
 				
 			}
 			

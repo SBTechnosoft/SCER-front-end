@@ -289,13 +289,19 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		//console.log(vm.AccBillTable);
 		
 		$scope.changeProductArray = true;
+		
+		$scope.advanceValueUpdate();
 	}
+	
+	
 	
 	$scope.removeRow = function (idx) {
 		vm.AccBillTable.splice(idx,1);
 		vm.productTax.splice(idx, 1);
 		
 		$scope.changeProductArray = true;
+		
+		$scope.advanceValueUpdate();
 	};
 	
 	// End Table 
@@ -357,6 +363,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 				item.amount = amount+cgstAmount+sgstAmount;
 			}
+			
+			$scope.advanceValueUpdate();
 		}
 		
 	/** END **/
@@ -373,15 +381,25 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			//console.log(TaxSum);
 			// console.log(item.amount);
+			//console.log($filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints));
 			
-			vm.AccBillTable[index].price = $filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints);
+			vm.AccBillTable[index].price = $filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints) / parseInt(item.qty);
 			
 			var Price = item.amount/ (1+(TaxSum/100));
 			
+			$scope.advanceValueUpdate();
 		}
 		
 	/** END **/
 	
+	
+	$scope.advanceValueUpdate = function(){
+		
+		setTimeout(function () { // wait until all resources loaded 
+			$scope.quickBill.advance = $filter('setDecimal')(($scope.totalTable) + ($scope.quickBill.extraCharge ? $scope.quickBill.extraCharge*1 : 0),$scope.noOfDecimalPoints);
+			$scope.$apply();
+		 }, 1000);
+	}
 	
 	/** Check Update Or Insert Bill **/
 	
@@ -450,7 +468,24 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			}
 			else if($scope.saleType == 'QuotationPrint'){
 				
-				$scope.quickBill.invoiceNumber = $scope.quickBill.EditBillData.quotationNumber;  //Quotation Number
+				if(copyData == 'copy'){
+						
+					var getLatestInvoice = apiPath.getLatestQuotation+$scope.quickBill.EditBillData.company.companyId+apiPath.getLatestInvoice2;
+					//Get Quotation#
+					apiCall.getCall(getLatestInvoice).then(function(response4){
+						
+						$scope.quickBill.invoiceNumber = getLatestNumber.getQuotation(response4[0]);
+						
+					});
+					
+				}
+				else{
+					
+					$scope.quickBill.invoiceNumber = $scope.quickBill.EditBillData.quotationNumber;  //Quotation Number
+					
+				}
+				
+				
 			}
 			
 			/** Company Wise Product **/
@@ -593,6 +628,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$scope.changeProductArray = true;
 		$scope.changeProductAdvancePrice = true;
 		
+		// $scope.quickBill.advance = $filter('setDecimal')(($scope.totalTable) + ($scope.quickBill.extraCharge ? $scope.quickBill.extraCharge*1 : 0),$scope.noOfDecimalPoints);
 		
 	}
 	
@@ -747,41 +783,43 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	//Change Invoice Number When Company Changed
 	$scope.changeCompany = function(item)
 	 {
-		vm.loadData = true;
-		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
-		
-		$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
-	
-		//Auto Suggest Product Dropdown data
-		vm.productNameDrop = [];
-		
-		//apiCall.getCall(apiPath.getProductByCompany+item.companyId+'/branch').then(function(responseDrop){
+		 if ($scope.formBill.companyDropDown.$touched) {
+			vm.loadData = true;
+			toaster.clear();
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
-			//vm.productNameDrop = responseDrop;
-			//vm.productNameDrop = productFactory.getProductByCompany(item.companyId);
-		productFactory.getProductByCompany(item.companyId).then(function(data){
-			console.log(data);
-			vm.productNameDrop = data;
-			
-			$scope.getInvoiceAndJobcardNumber(item.companyId); // Invoice#
-			
-			vm.loadData = false;
-		});
-			
+			$scope.noOfDecimalPoints = parseInt(item.noOfDecimalPoints);
 		
-		//});
-		
-		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-		vm.productTax = [{"tax":0,"additionalTax":0}];
-		$scope.quickBill.advance = 0;
-		
-		// if(formdata.has('companyId')){
-	
-			formdata.delete('companyId');
+			//Auto Suggest Product Dropdown data
+			vm.productNameDrop = [];
 			
-		//}
-		formdata.append('companyId',item.companyId);
+			//apiCall.getCall(apiPath.getProductByCompany+item.companyId+'/branch').then(function(responseDrop){
+				
+				//vm.productNameDrop = responseDrop;
+				//vm.productNameDrop = productFactory.getProductByCompany(item.companyId);
+			productFactory.getProductByCompany(item.companyId).then(function(data){
+				console.log(data);
+				vm.productNameDrop = data;
+				
+				$scope.getInvoiceAndJobcardNumber(item.companyId); // Invoice#
+				
+				vm.loadData = false;
+			});
+				
+			
+			//});
+			
+			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+			vm.productTax = [{"tax":0,"additionalTax":0}];
+			$scope.quickBill.advance = 0;
+			
+			// if(formdata.has('companyId')){
+		
+				formdata.delete('companyId');
+				
+			//}
+			formdata.append('companyId',item.companyId);
+		 }
 	}
   
   
@@ -932,12 +970,13 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				}
 				
 				 formdata.append('grandTotal',$scope.grandTotalTable);
-				 
+				 	// console.log($scope.quickBill.advance);
 				if($scope.quickBill.advance){
 				
 					formdata.append('advance',$scope.quickBill.advance);
 				}
 				else{
+					
 					formdata.append('advance',0);
 				}
 				
@@ -1455,8 +1494,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 						var formdata = new FormData();
 						
-						
-						
 						var preHeaderData = {'Content-Type': undefined,'companyId':$scope.quickBill.companyDropDown.companyId};
 						
 						if($scope.saleType == 'RetailsaleBill'){
@@ -1479,7 +1516,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 							
 								if(nextPre == 'next'){
 								
-								preHeaderData.nextSaleId = $scope.quickBill.EditBillData.saleId;
+									preHeaderData.nextSaleId = $scope.quickBill.EditBillData.saleId;
 								
 								}
 								else{
@@ -1661,7 +1698,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	/** Invoice **/
 		$scope.goInvoiceNumber = function(){
 			
-			
+			toaster.pop('wait', 'Please Wait', 'Searching...',600000);
 			
 			if($scope.saleType == 'RetailsaleBill'){
 				
@@ -1687,22 +1724,35 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			apiCall.getCallHeader(BillPath,preHeaderData).then(function(response){
 				
 				// console.log('starting');
-				 console.log(response);
-				
+				// console.log(response);
+				toaster.clear();
 				if(angular.isArray(response)){
-					$scope.quickBill = [];
-					getSetFactory.set(response[0]);
 					
-					$scope.EditAddBill();
+					if(response.length > 1){
+						
+						console.log('Multiple');
+						$scope.openBillHistoryModal('lg',response);
+  
+					}
+					else{
+						
+						$scope.quickBill = [];
+						
+						getSetFactory.set(response[0]);
 					
-					$anchorScroll();
+						$scope.EditAddBill();
+						
+						$anchorScroll();
+					
+					}
+					
 					
 				}
 				else{
 					
-					if(apiResponse.noContent == response){
+					if(apiResponse.noContent == response || apiResponse.notFound == response){
 						toaster.clear();
-						toaster.pop('warning', 'Opps!!', 'Data Not Available');
+						toaster.pop('info', 'Opps!!', 'Data Not Available');
 					}
 					else if(response.status == 500){
 						toaster.clear();
@@ -2034,7 +2084,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 				$scope.clearScannedResult();
 				toaster.pop('info','Documents Clear','');
-				
+				 DWObject.RemoveAllImages();
 			}
 		  
 			 Modalopened = false; 
@@ -2167,44 +2217,103 @@ $scope.presssuburb = function(event){
 	 $scope.DWT_AcquireImage= function(){
 			
 			var DWObject = $window.Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-				 
+			
+				 DWObject.RemoveAllImages();
              // var DWObject = Dynamsoft.WebTwainEnv;
 			//DWObject.IfDisableSourceAfterAcquire = true; 
-             DWObject.SelectSource();
-			DWObject.OpenSource();
-			DWObject.IfShowUI = false;
-			// DWObject.IfFeederEnabled = true;
-
-			// DWObject.IfAutoFeed = true;
-
-         DWObject.XferCount = -1;
-		//DWObject.PageSize = EnumDWT_CapSupportedSizes.TWSS_USLEGAL;
-		// DWObject.Unit = EnumDWT_UnitType.TWUN_INCHES;
-        //DWObject.SetImageLayout(0, 0, 5, 5);
-         DWObject.AcquireImage(); //using ADF  for scanning
-
-		
-
-		DWObject.IfShowFileDialog = false;
-
-			 if (DWObject.ErrorCode != 0) {  
-
-				 alert (DWObject.ErrorString);
-
-			 }
-			 
-			DWObject.RegisterEvent("OnPostAllTransfers", function () {
-				var imageUrl = DWObject.GetImageURL(0);
-				if(imageUrl != ''){
-					$scope.openScanPopup(imageUrl);
-				}
+			   var bSelected = DWObject.SelectSource();
 				
-				console.log(imageUrl);
-			 });
+				if(bSelected){
+						DWObject.OpenSource();
+						DWObject.IfShowUI = false;
+						// DWObject.IfFeederEnabled = true;
 
+						// DWObject.IfAutoFeed = true;
+
+					 DWObject.XferCount = -1;
+					//DWObject.PageSize = EnumDWT_CapSupportedSizes.TWSS_USLEGAL;
+					// DWObject.Unit = EnumDWT_UnitType.TWUN_INCHES;
+					//DWObject.SetImageLayout(0, 0, 5, 5);
+					 DWObject.AcquireImage(); //using ADF  for scanning
+
+					
+
+						DWObject.IfShowFileDialog = false;
+
+						 if (DWObject.ErrorCode != 0) {  
+
+							 alert (DWObject.ErrorString);
+
+						 }
+						 
+						DWObject.RegisterEvent("OnPostAllTransfers", function () {
+							var imageUrl = DWObject.GetImageURL(0);
+							if(imageUrl != ''){
+								$scope.openScanPopup(imageUrl);
+							}
+							
+							console.log(imageUrl);
+						 });
+				}
     }
 
 	
+	 /**
+		History Modal 
+		**/
+		
+		$scope.openBillHistoryModal = function (size,responseData) {
+
+            console.log(responseData);
+			if (Modalopened) return;
+			
+				toaster.clear();
+				toaster.pop('wait', 'Please Wait', 'Modal Data Loading....',60000);
+				
+				var modalInstance = $modal.open({
+				  templateUrl: 'app/views/PopupModal/QuickMenu/myHistorySalesBillModalContent.html',
+				  controller: historySalesBillModaleCtrl,
+				  size: size,
+				  resolve:{
+					  responseData: function(){
+						 
+						return responseData;
+					  }
+				  }
+				});
+
+			   Modalopened = true;
+			   
+				modalInstance.result.then(function (singleData) {
+				 
+					toaster.clear();
+					
+					Modalopened = false;
+					
+					//$scope.quickBill = [];
+						
+					getSetFactory.set(singleData);
+				
+					$scope.EditAddBill();
+					
+					$anchorScroll();
+					
+				}, function () {
+					
+					console.log('Cancel');
+					toaster.clear();	
+					
+					Modalopened = false;
+				  
+				});
+		
+		};
+		
+		/**
+		End History Modal 
+		**/
+  
+  
 	
          // $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery.play();
 			

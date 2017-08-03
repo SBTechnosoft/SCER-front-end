@@ -54,14 +54,12 @@ function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,
 	
 	$scope.closeButton = function () {
 		
-		var ImageArray = [];
-		ImageArray[0] = $scope.myImage;
-		$modalInstance.close(ImageArray);
+		// var ImageArray = [];
+		// ImageArray[0] = $scope.myImage;
+		// $modalInstance.close(ImageArray);
 		
-			//$modalInstance.dismiss(ImageArray);
+		$modalInstance.dismiss('clear');
 			
-		//DWObject.GetImageURL(0, 500, 500);
-		//DWObject.HowManyImagesInBuffer
     };
 	
     $scope.cancel = function () {
