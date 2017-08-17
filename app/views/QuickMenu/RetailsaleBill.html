@@ -88,12 +88,12 @@ h4 .control-label{
       <!--h4 class="panel-heading" style="my-fieldset-paddingTopBottom" >Client Details</h4-->
    
 			<div class="col-sm-12">
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">*Contact</label>
 						  <div class="col-sm-9">
-							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | orderBy:'contactNo' | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Enter Contact Number" class="form-control" dir="ltr" name="contactNo" id="contactNoSelect"  auto-focus="true" ng-required="true" ng-maxlength="12" ng-pattern="/^[1-9][0-9]+$/"  ng-minlength="10"   only-number style="font-size:15px;" />
+							 <input  typeahead="s.contactNo for s in form.clientSuggest | filter:$viewValue | orderBy:'contactNo' | limitTo:10" ng-model="quickBill.BillContact" typeahead-on-select="setClientSuggest('contactNo',$item)" ng-change="changeInBill('contactNo',quickBill.BillContact)" id="input-id-1" type="text" placeholder="Enter Contact Number" class="form-control" dir="ltr" name="contactNo" id="contactNoSelect"  auto-focus="true" ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10"   only-number style="font-size:15px;" />
 							 
 							<span ng-messages="formBill.contactNo.$error" ng-if="formBill.contactNo.$dirty || formBill.contactNo.$touched" role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -141,7 +141,7 @@ h4 .control-label{
 					   </div>
 					</fieldset>
 				</div-->
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">*Name</label>
@@ -160,10 +160,10 @@ h4 .control-label{
 					</fieldset>
 				</div>
 				
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					 <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 					   <div class="form-group">
-						  <label for="input-id-1" class="col-sm-3 control-label">Email ID</label>
+						  <label for="input-id-1" class="col-sm-3 control-label">Email</label>
 							<div class="col-sm-9">
 								<div class="input-group m-b">
 									<span class="input-group-addon">@</span>
@@ -180,12 +180,24 @@ h4 .control-label{
 					   </div>
 					</fieldset>
 				</div>
+				
+				<div class="col-sm-3">
+					<fieldset class="my-fieldset-paddingBottom">
+						<div class="form-group" >
+							<label for="input-id-1" class="col-sm-4 control-label">Profession</label>
+							<div class="col-sm-8">
+								<select chosen="" data-ng-model="quickBill.professionDropDown" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId" ng-change="changeInBill('professionId',quickBill.professionDropDown.professionId)" class="form-control chosen-select" ></select>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				
 			</div>
 			
 			<div class="col-sm-12">
 				
 				
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group">
 							<label for="input-id-1" class="col-sm-3 control-label">Address</label>
@@ -203,7 +215,7 @@ h4 .control-label{
 					</fieldset>
 				</div>
 				
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group">
 							<label class="col-sm-3 control-label"> *State </label>
@@ -213,20 +225,22 @@ h4 .control-label{
 						</div>
 					</fieldset>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group">
 							<label class="col-sm-3 control-label"> *City </label>
-							<div class="col-sm-9" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'">
+							<!--div class="col-sm-9" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'"-->
+							<div class="col-sm-9" >
 								<select chosen="" data-ng-model="quickBill.cityId" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId"  class="form-control chosen-select" ng-required="true" ng-change="changeInBill('cityId',quickBill.cityId.cityId)" ></select>
 							</div>
-							<div class="col-sm-3 contentOfForm" ng-if="clientSaveButton">
-								<button type="button" class="mr mb-sm btn btn-primary pull-left goButton"  ng-click="insertClientData()"  >Save</button>
-							</div>
+							
 						</div>
 					</fieldset>
 				</div>
 				
+				<div class="col-sm-3 contentOfForm" ng-if="clientSaveButton">
+					<button type="button" class="mr mb-sm btn btn-primary pull-left goButton"  ng-click="insertClientData()"  >Save</button>
+				</div>
 			</div>
 			
 			<!--div class="col-sm-12">
@@ -449,7 +463,7 @@ h4 .control-label{
 					   </div>
 					</fieldset>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					
 					<fieldset class="my-fieldset-paddingBottom">
 						<div class="form-group">
@@ -460,17 +474,6 @@ h4 .control-label{
 						</div>
 					</fieldset>
 				</div>
-				<div class="col-sm-3">
-					<fieldset class="my-fieldset-paddingBottom">
-						<div class="form-group" >
-							<label for="input-id-1" class="col-sm-4 control-label">Profession</label>
-							<div class="col-sm-8">
-								<select chosen="" data-ng-model="quickBill.professionDropDown" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId" ng-change="changeInBill('professionId',quickBill.professionDropDown.professionId)" class="form-control chosen-select" ></select>
-							</div>
-						</div>
-					</fieldset>
-				</div>
-				
 				<div class="col-sm-4" ng-if="saleType != 'QuotationPrint'">
 					<fieldset class="my-fieldset-paddingBottom">
 						<div class="form-group">
@@ -562,9 +565,11 @@ h4 .control-label{
 		
 		<div class="col-sm-7">
 			
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generate')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" ng-if="saleType == 'QuotationPrint'" > <span ng-if="quickBill.EditBillData" >Update & Print </span> <span ng-if="!quickBill.EditBillData">Save & Print </span> </button>
-			 
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('preprint')" ng-disabled="formBill.$invalid || disableButton" tabIndex="4" > <span ng-if="quickBill.EditBillData" >Update PrePrinted & Generate </span> <span ng-if="!quickBill.EditBillData">Preprinted & Generate </span> </button>
+			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generate')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" ng-if="saleType == 'QuotationPrint'" > <span ng-if="quickBill.EditBillData" >Update Print </span> <span ng-if="!quickBill.EditBillData">Print </span> </button>
+			
+			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generate')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" ng-if="saleType != 'QuotationPrint' && printButtonType == 'print'" > <span ng-if="quickBill.EditBillData" >Update Print </span> <span ng-if="!quickBill.EditBillData">Print </span> </button>
+			
+			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('preprint')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" ng-if="saleType != 'QuotationPrint' && printButtonType == 'preprint'" > <span ng-if="quickBill.EditBillData" >Update PrePrint </span> <span ng-if="!quickBill.EditBillData">PrePrint </span> </button>
 			
 			<!--div dropdown="dropdown" class="btn-group mb-sm mr pull-right"  ng-disabled="formBill.$invalid || disableButton" ng-if="saleType != 'QuotationPrint'">
                <button type="button" ng-disabled="formBill.$invalid || disableButton" dropdown-toggle="" class="btn dropdown-toggle btn-success" tabIndex="6" >Print&nbsp;

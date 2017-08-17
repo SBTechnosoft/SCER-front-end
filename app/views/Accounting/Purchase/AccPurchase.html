@@ -92,7 +92,7 @@
                         <a><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span> ({{match.model.color}} | {{match.model.size}})</a>
                     </script>
                     <tbody>
-                        <tr id="addAfter" ng-repeat="item in form.AccBillTable" data-ng-class="app.tableAnimation">
+                        <tr id="addAfter" ng-repeat="item in form.AccPurchaseTable" data-ng-class="app.tableAnimation">
                             <td>
                                 <div class="input-group mytypeDrop">
                                     <input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index);calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax);quickBill.advance = ((totalTable) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)" type="text" class="form-control" placeholder="*Enter Product Name" typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)" />

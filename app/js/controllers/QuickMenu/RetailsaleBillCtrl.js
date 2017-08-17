@@ -122,6 +122,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			});
 			
 			
+			$scope.printButtonType = response2.printType == '' ? 'print':response2.printType;
+			
 			//});
 			
 		});
@@ -196,7 +198,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
 			$scope.quickBill.cityId = stateCityFactory.getDefaultCity($rootScope.defaultCity);
 				
-				console.log('state Inn');
+				//console.log('state Inn');
 		});
 	}
 	
@@ -261,10 +263,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		var tax;
 		
 		if($scope.saleType == 'WholesaleBill'){
-			console.log(item);
+			//console.log(item);
 			
 			grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.wholesaleMargin) + parseFloat(item.wholesaleMarginFlat);
-			console.log(grandPrice);
+			//console.log(grandPrice);
 			//tax = productArrayFactory.calculateTax(item.purchasePrice,0,item.margin);
 			vm.productTax[index].tax = item.vat;
 			//vm.productTax[index].margin = item.wholesaleMargin;
@@ -367,7 +369,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				var amount =  $filter('setDecimal')((item.price*item.qty) - item.discount,$scope.noOfDecimalPoints);
 				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
 				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
-				console.log(amount);
+				//console.log(amount);
 				item.amount = $filter('setDecimal')(amount+cgstAmount+sgstAmount,$scope.noOfDecimalPoints);;
 				
 			}
@@ -431,14 +433,14 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			$scope.quickBill.EditBillData = getSetFactory.get();
 			
-			console.log($scope.quickBill.EditBillData);
+			//console.log($scope.quickBill.EditBillData);
 			getSetFactory.blank();
 			
 			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
 			
 			vm.disableCompany = false;
 			var setCompanyData = $scope.quickBill.EditBillData.company;
-			var setDecimalPoint = $scope.quickBill.EditBillData.company.noOfDecimalPoints;
+			var setDecimalPoint = parseInt($scope.quickBill.EditBillData.company.noOfDecimalPoints);
 			//get Company
 			vm.companyDrop=[];
 			apiCall.getCall(apiPath.getAllCompany).then(function(response2){
@@ -539,6 +541,14 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			// $scope.quickBill.stateAbb = $scope.quickBill.EditBillData.client.stateAbb;
 			// $scope.quickBill.cityId = $scope.quickBill.EditBillData.client.cityId;
 			
+			if($scope.quickBill.EditBillData.client.professionId != ''){
+				
+				apiCall.getCall(apiPath.clientProfession+'/'+$scope.quickBill.EditBillData.client.professionId).then(function(response){
+				
+					$scope.quickBill.professionDropDown = response;
+				
+				});
+			}
 			
 			
 			
@@ -692,6 +702,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			formdata.delete('emailId');
 			formdata.delete('address1');
 			formdata.delete('address2');
+			formdata.delete('professionId');
 			// formdata.delete('stateAbb');
 			// formdata.delete('cityId');
 			
@@ -701,6 +712,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			$scope.quickBill.emailId = '';
 			$scope.quickBill.fisrtAddress = '';
 			$scope.quickBill.secondAddress = '';
+			$scope.quickBill.professionDropDown = {};
 			//$scope.quickBill.cityId = {};
 			//$scope.quickBill.stateAbb = {};
 			$scope.clientSaveButton = true;
@@ -726,10 +738,15 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			clientFormdata.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
 			clientFormdata.append('cityId',$scope.quickBill.cityId.cityId);
 			
+			if($scope.quickBill.professionDropDown.professionId){
+				clientFormdata.append('professionId',$scope.quickBill.professionDropDown.professionId);
+			}
+			
 			
 			apiCall.postCall(apiPath.getAllClient,clientFormdata).then(function(data){
-				console.log(data);
-				if(angular.isArray(data)){
+				//console.log(data);
+				if(angular.isObject(data)){
+					$scope.setClientSuggest('contactNo',data);
 					toaster.pop('success','Client Saved');
 				}
 				else{
@@ -805,7 +822,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	 {
 		// console.log('Update Innnnn');
 		 // if ($scope.formBill.companyDropDown.$touched) {
-			  console.log('INNN');
+			  // console.log('INNN');
+			  // console.log(item);
 			 
 			vm.loadData = true;
 			toaster.clear();
@@ -837,6 +855,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			$scope.quickBill.advance = 0;
 			
 			$scope.printButtonType = item.printType == '' ? 'print':item.printType;
+			
 			// if(formdata.has('companyId')){
 		
 				formdata.delete('companyId');
@@ -1409,7 +1428,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	$scope.setClientSuggest = function(Fname,data){
 		
-		console.log(data);
+		//console.log(data);
 		$scope.clientSaveButton = false; //Save Button
 		
 		$scope.quickBill.cityId = {};
@@ -1722,7 +1741,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					Modalopened = false;
 					
 				}, function () {
-				  console.log('Cancel');
+				 // console.log('Cancel');
 					Modalopened = false;
 				});
 			}
@@ -1770,7 +1789,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					
 					if(response.length > 1){
 						
-						console.log('Multiple');
+						//console.log('Multiple');
 						$scope.openBillHistoryModal('lg',response);
   
 					}
@@ -2024,7 +2043,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			Modalopened = false;
 		
 		}, function () {
-		  console.log('Cancel');	
+		 // console.log('Cancel');	
 		  Modalopened = false;
 		});
 	}
@@ -2083,7 +2102,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 		modalInstance.result.then(function (data) {
 		 
-		console.log('ok');
+		//console.log('ok');
 		
 		if(data.length > 0){
 		
@@ -2117,7 +2136,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			Modalopened = false;
 			
 		}, function (data) {
-		  console.log('Cancel');	
+		  //console.log('Cancel');	
 	
 	
 			if(data == "clear"){
@@ -2249,7 +2268,7 @@ $scope.presssuburb = function(event){
 	
 	 if(event.target.value.length == 14){
 			
-			console.log(event.target.value.length);
+			//console.log(event.target.value.length);
 			$scope.SetBarcodData(event.target.value);
 	 }
 }
@@ -2292,7 +2311,7 @@ $scope.presssuburb = function(event){
 								$scope.openScanPopup(imageUrl);
 							}
 							
-							console.log(imageUrl);
+							//console.log(imageUrl);
 						 });
 				}
     }
@@ -2304,7 +2323,7 @@ $scope.presssuburb = function(event){
 		
 		$scope.openBillHistoryModal = function (size,responseData) {
 
-            console.log(responseData);
+           // console.log(responseData);
 			if (Modalopened) return;
 			
 				toaster.clear();
@@ -2340,7 +2359,7 @@ $scope.presssuburb = function(event){
 					
 				}, function () {
 					
-					console.log('Cancel');
+					//console.log('Cancel');
 					toaster.clear();	
 					
 					Modalopened = false;

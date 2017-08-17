@@ -377,8 +377,8 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 	//Get Data When Company Change
 	$scope.changeCompanyToGetList = function(value){
 		
-		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',1000);
 		
 		//Auto suggest Client Name For Debit
 		var jsuggestPath = apiPath.getLedgerJrnl+value;

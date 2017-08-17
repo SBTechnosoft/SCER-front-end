@@ -162,9 +162,9 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 					
 					vm.professionDrop = response;
 					var myTreeData2 = getTree(response, 'professionId', 'professionParentId');
-					
 					$scope.tree_data = myTreeData2;
 				}
+				
 				
 				toaster.clear();
 			});
@@ -197,7 +197,7 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 	}
 	
 	apiCall.postCall(url,formdata).then(function(response5){
-		console.log(response5);
+		//console.log(response5);
 		if(apiResponse.ok == response5){
 			
 			toaster.pop('success', 'Title', 'Successfull');
@@ -205,6 +205,11 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 			$scope.init();
 			
 			$scope.clientProfessionForm = [];
+	
+	
+			formdata.delete('professionParentId');
+			formdata.delete('professionName');
+			
 		}
 		else{
 			toaster.pop('warning', 'Opps!!', response5);
@@ -216,6 +221,7 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 		
 		$scope.clientProfessionForm = [];
 		var formdata = FormData();
+		formdata.delete('professionParentId');
 		formdata.delete('professionName');
 		
 	}
