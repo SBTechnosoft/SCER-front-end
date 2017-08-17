@@ -62,15 +62,15 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		
 		$scope.categoryDrop = responseDrop;
 		//console.log(responseDrop);
-		var lengthCount = responseDrop.length;
+		// var lengthCount = responseDrop.length;
 		
-		for(var k=0;k<lengthCount;k++){
+		// for(var k=0;k<lengthCount;k++){
 			
-			if(responseDrop[k].productCategoryName == "AVON"){
-				$scope.addModelProduct.category = responseDrop[k];
-			}
+			// if(responseDrop[k].productCategoryName == "AVON"){
+				// $scope.addModelProduct.category = responseDrop[k];
+			// }
 		
-		}
+		// }
 		
 	
 	});
@@ -91,13 +91,17 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
  
 	$scope.addModelProduct.measureUnit = 'piece';
 	
-	$scope.addModelProduct.vat = 4;
-	$scope.addModelProduct.additionalTax = 1;
+	//$scope.addModelProduct.vat = 4;
+	//$scope.addModelProduct.additionalTax = 1;
 	//$scope.addModelProduct.mrp = $scope.addModelProduct.purchasePrice + 100;
 	
 	$scope.displayParseFloat=function(val) {
 		
 		return isNaN(parseFloat(val)) ? 0: parseFloat(val);
+	}
+	
+	$scope.changeMRP = function(){
+		$scope.addModelProduct.mrp = $scope.addModelProduct.purchasePrice;
 	}
 	
 	$scope.clickSave = function(){
@@ -159,10 +163,6 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		
 		if($scope.addModelProduct.igst){
 			formdata.append('igst',$scope.addModelProduct.igst);
-		}
-		
-		if($scope.addModelProduct.cess){
-			formdata.append('cess',$scope.addModelProduct.cess);
 		}
 		// formdata.append('vat',$scope.addModelProduct.vat);
 		// formdata.append('additionalTax',$scope.addModelProduct.additionalTax);

@@ -150,7 +150,8 @@ App
 	'getLatestJobcardNumber': 'crm/job-form-number/company/',
 	'PostJobcard': 'crm/job-form',
 	'sendEmail': 'crm/conversastion/bulk-email',
-	'sendSMS': 'crm/conversastion/bulk-sms'
+	'sendSMS': 'crm/conversastion/bulk-sms',
+  'clientProfession' : 'settings/professions'
 	
   })
   //Api Path

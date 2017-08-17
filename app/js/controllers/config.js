@@ -210,7 +210,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 			.state('app.SettingClientProfession', {
 				url: '/SettingClientProfession',
 				templateUrl: basepath('Setting/SettingClientProfession/SettingClientProfession.html'),
-				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','treeGrid','ngTable','ngTableExport','getBranchSrv','toaster')
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','treeGrid','getBranchSrv','toaster')
 			})
 		/*** End Setting ***/
 		//Add Inventory Product

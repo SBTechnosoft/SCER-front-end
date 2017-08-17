@@ -137,7 +137,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	
 		//apiCall.getCall(editCompany).then(function(res){
 		
-			//console.log(res);
+			console.log(editCompanyData);
 			vm.sdfg = editCompanyData.companyId;
 			
 			$scope.addCompany.companyDropDown2 = editCompanyData;
@@ -172,6 +172,13 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			$scope.addCompany.decimal = editCompanyData.noOfDecimalPoints;
 			vm.disableDecimal = true;
 			$scope.addCompany.curSymbol = editCompanyData.currencySymbol;
+			if(editCompanyData.printType == ''){
+				$scope.addCompany.printType = 'printed';
+			}
+			else{
+				$scope.addCompany.printType = editCompanyData.printType;
+			}
+			
 			
 			$scope.addCompany.documentUrl = undefined;
 			$scope.addCompany.documentName = undefined;

@@ -56,6 +56,8 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
         topbar:  'my-Topbar-Color'
       }
     };
+	
+	 
     // User information
     $rootScope.user = {
       name:     'Jimmie Stevens-7016944320',

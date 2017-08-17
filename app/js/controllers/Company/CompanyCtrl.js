@@ -134,8 +134,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	  toaster.clear();
 	  
 	  if(companyStatus == 'not'){
-		  
-	 
+		 
 			formdata.append('isDefault','ok');
 			var editCompany2 = apiPath.getAllCompany+'/'+id;
 			

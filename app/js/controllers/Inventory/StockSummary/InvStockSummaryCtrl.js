@@ -116,6 +116,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			else{
 				//console.log('else');
 				data = response;
+				console.table(data);
 				for (var i = 0; i < data.length; i++) {
 					
 					var index = vm.productCategoryData.findIndex(x => x.productCategoryId==data[i].product.productCategoryId);

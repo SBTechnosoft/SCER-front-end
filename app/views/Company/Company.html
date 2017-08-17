@@ -7,10 +7,10 @@
    <div class="panel panel-default">
       <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
-		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="" ng-click="GoToAddCompany()"  data-ng-class="app.theme.brand" >
+		  <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="" ng-click="GoToAddCompany()"  data-ng-class="app.theme.brand" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 		Add Company</button>
-         <div class="panel-title">All Companies</div>
+        <div class="panel-title">All Companies</div>
       </div>
 	  
 	  <div class="table-responsive">
@@ -30,7 +30,7 @@
                 <td data-title="'Default'" >
 					<center>
 						<input type="radio"  name="companyradio" ng-model="companyradio"  ng-value="user.isDefault" ng-click="isDefault_comp(user.companyId,user.isDefault)" ui-sref="" />
-				  </center>
+					</center>
                 </td>
 				<td data-title="'Sticker'"  ng-init="user.qty=0"  >
 						<input id="input-id-1"  name="quantity" ng-model="user.qty" type="text" placeholder="Qty" class="form-control input-sm" ng-pattern="/^[0-9]*$/" style="width:50px"  min="1" only-number />

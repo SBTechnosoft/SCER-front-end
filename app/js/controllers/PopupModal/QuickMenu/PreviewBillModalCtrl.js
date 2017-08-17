@@ -284,6 +284,12 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				
 				
 			}
+			if(angular.isUndefined(productData.hsn)){
+				var hsnNo = '';
+			}
+			else{
+				var hsnNo = productData.hsn;
+			}
 			
 			if($scope.saleType == "QuotationPrint"){
 				
@@ -291,7 +297,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			 
 			}
 			else{
-				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height: 0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 0.7cm; text-align:center; padding:0 0 0 0;border: 1px solid black'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;border: 1px solid black' colspan='3' >"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;border: 1px solid black'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 0.7cm; text-align: center; padding:0 0 0 0;border: 1px solid black'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;border: 1px solid black'>"+ productData.price +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;border: 1px solid black'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;border: 1px solid black'>"+  vat +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;border: 1px solid black'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 0.7cm; text-align: right; padding:0 0 0 0;border: 1px solid black'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;border: 1px solid black'>"+ productTotal;
+				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height:  0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 14px; height: 0.7cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.hsn +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 14px;   height:  0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 14px; height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ vat +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 14px; height: 0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height: 0.7cm; text-align: right; padding:0 5px 0 0;'>"+ productTotal;
 			}
 			   
 			
@@ -323,6 +329,9 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	date.setMonth(date.getMonth() + 1);
 	var Lastdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 			
+	$scope.RoundTotal = Math.round($scope.total);
+	$scope.RoundFigure =  $filter('setDecimal')($scope.RoundTotal - $scope.total,$scope.noOfDecimalPoints);
+			
 	var billArrayTag = {};
 	
 	billArrayTag.CMPLOGO = $scope.companyLogo;
@@ -337,6 +346,8 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	billArrayTag.Mobile = $scope.billData.BillContact;
 	//billArrayTag.Total = $scope.grandTotal;
 	billArrayTag.Total = $scope.total;
+	billArrayTag.RoundTotal = $scope.RoundTotal;
+	billArrayTag.RoundFigure = $scope.RoundFigure;
 	billArrayTag.TotalTax = $scope.billData.tax;
 	billArrayTag.TotalQty = totalQty;
 	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.total);

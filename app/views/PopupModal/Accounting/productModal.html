@@ -1,6 +1,10 @@
 <div class="modal-header">
 		<button type="button" data-dismiss="modal" data-ng-click="closeButton()" aria-hidden="true" class="close">×</button>  
-		  <h4 id="myModalLabel" class="modal-title">Product Form</h4>
+		  <h4 id="myModalLabel" class="modal-title">Product Form 
+		  
+			<button type="button" class="mr mb-sm btn btn-success btn-sm my-modal-heading-button"  ng-click="clickSave()" ng-disabled="formProduct.$invalid" >Save</button>
+			<button type="button" class="mr mb-sm btn btn-danger btn-sm"   ng-click="cancel()">Cancel</button>
+		</h4>
 	</div>
 	<div class="modal-body my-model-body">
 		<center>
@@ -111,7 +115,7 @@
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">*Purchase Price</label>
                   <div class="col-sm-7">
-                     <input id="input-id-1" name="purchasePrice"  ng-model="addModelProduct.purchasePrice" type="text" placeholder="Purchase Price" class="form-control" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20" tabindex="2" only-number  />
+                     <input id="input-id-1" name="purchasePrice"  ng-model="addModelProduct.purchasePrice" ng-change="changeMRP()" type="text" placeholder="Purchase Price" class="form-control" ng-required="true" ng-pattern="/^[0-9 \.]+$/" ng-maxlength="20" tabindex="2" only-number  />
 					 
 					<span ng-messages="formProduct.purchasePrice.$error" ng-if="formProduct.purchasePrice.$dirty || formProduct.purchasePrice.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -124,9 +128,51 @@
             </fieldset>
 			 <fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">*MRP</label>
+                  <div class="col-sm-7">
+                     <input id="input-id-1" name="mrp"  ng-model="addModelProduct.mrp" type="text" placeholder="MRP" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-required="true" ng-maxlength="20" tabindex="2" only-number />
+					 
+					<span ng-messages="formProduct.mrp.$error" ng-if="formProduct.mrp.$dirty || formProduct.mrp.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+               </div>
+            </fieldset>
+			<fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-3 control-label">Retail Margin</label>
+                  <div class="col-sm-4">
+                     <input id="input-id-1" name="marginFlat" ng-model="addModelProduct.marginFlat" type="text" placeholder="Flat" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" tabindex="2" only-number />
+					 
+					<span ng-messages="formProduct.marginFlat.$error" ng-if="formProduct.marginFlat.$dirty || formProduct.marginFlat.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+				  
+				  <div class="col-sm-3">
+                     <input id="input-id-1" name="margin"  ng-model="addModelProduct.margin" type="text" placeholder="(%)Percentage" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
+					 
+					<span ng-messages="formProduct.margin.$error" ng-if="formProduct.margin.$dirty || formProduct.margin.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span>
+					
+                  </div>
+				  <label for="input-id-1" class="col-sm-2 control-label-left" >{{ (displayParseFloat(addModelProduct.marginFlat) + (displayParseFloat(addModelProduct.purchasePrice) * displayParseFloat(addModelProduct.margin) / 100)) |  currency:"&#8377; "}}</label>
+               </div>
+            </fieldset>
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
                   <label for="input-id-1" class="col-sm-3 control-label">Tax Margin</label>
                   <div class="col-sm-4">
-                     <input id="input-id-1" name="wholesaleMarginFlat"  ng-model="addModelProduct.wholesaleMarginFlat" type="text" placeholder="Flat" class="form-control"  ng-pattern="/^[0-9 .]*$/" style="direction:RTL;" ng-maxlength="8"  tabindex="2" only-number />
+                     <input id="input-id-1" name="wholesaleMarginFlat"  ng-model="addModelProduct.wholesaleMarginFlat" type="text" placeholder="Flat" class="form-control"  ng-pattern="/^[0-9 .]*$/"  ng-maxlength="8"  tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.wholesaleMarginFlat.$error" ng-if="formProduct.wholesaleMarginFlat.$dirty || formProduct.wholesaleMarginFlat.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -137,7 +183,7 @@
                   </div>
 				  
 				  <div class="col-sm-3">
-                     <input id="input-id-1" name="wholesaleMargin"  ng-model="addModelProduct.wholesaleMargin" type="text" placeholder="(%)Percentage" class="form-control" ng-pattern="/^[0-9 .]*$/" style="direction:RTL;" ng-maxlength="8" max="100" tabindex="2" only-number />
+                     <input id="input-id-1" name="wholesaleMargin"  ng-model="addModelProduct.wholesaleMargin" type="text" placeholder="(%)Percentage" class="form-control" ng-pattern="/^[0-9 .]*$/"  ng-maxlength="8" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.wholesaleMargin.$error" ng-if="formProduct.wholesaleMargin.$dirty || formProduct.wholesaleMargin.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -167,8 +213,8 @@
             </fieldset>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">CGST(%)</label>
-                  <div class="col-sm-7">
+                  <label for="input-id-1" class="col-sm-1 control-label ">CGST(%)</label>
+                  <div class="col-sm-3">
                      <input id="input-id-1" name="vat" ng-model="addModelProduct.vat" type="text" placeholder="CGST(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.vat.$error" ng-if="formProduct.vat.$dirty || formProduct.vat.$touched"  role="alert">
@@ -178,12 +224,9 @@
 					 </span>
 					
                   </div>
-               </div>
-            </fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">SGST(%)</label>
-                  <div class="col-sm-7">
+				  
+				   <label for="input-id-1" class="col-sm-1 control-label my-padding-textbox">SGST(%)</label>
+                  <div class="col-sm-3">
                      <input id="input-id-1" name="additionalTax"  ng-model="addModelProduct.additionalTax" type="text" placeholder="SGST(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
@@ -193,70 +236,8 @@
 					 </span>
 					
                   </div>
-               </div>
-            </fieldset>
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Margin</label>
-                  <div class="col-sm-4">
-                     <input id="input-id-1" name="marginFlat" ng-model="addModelProduct.marginFlat" type="text" placeholder="Flat" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" tabindex="2" only-number />
-					 
-					<span ng-messages="formProduct.marginFlat.$error" ng-if="formProduct.marginFlat.$dirty || formProduct.marginFlat.$touched"  role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
-					 </span>
-					
-                  </div>
 				  
-				  <div class="col-sm-3">
-                     <input id="input-id-1" name="margin"  ng-model="addModelProduct.margin" type="text" placeholder="(%)Percentage" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
-					 
-					<span ng-messages="formProduct.margin.$error" ng-if="formProduct.margin.$dirty || formProduct.margin.$touched"  role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
-					 </span>
-					
-                  </div>
-				  <label for="input-id-1" class="col-sm-2 control-label-left" >{{ (displayParseFloat(addModelProduct.marginFlat) + (displayParseFloat(addModelProduct.purchasePrice) * displayParseFloat(addModelProduct.margin) / 100)) |  currency:"&#8377; "}}</label>
-               </div>
-            </fieldset>
-			
-			 <fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">*MRP</label>
-                  <div class="col-sm-7">
-                     <input id="input-id-1" name="mrp"  ng-model="addModelProduct.mrp = addModelProduct.purchasePrice" type="text" placeholder="MRP" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-required="true" ng-maxlength="20" tabindex="2" only-number />
-					 
-					<span ng-messages="formProduct.mrp.$error" ng-if="formProduct.mrp.$dirty || formProduct.mrp.$touched"  role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
-					 </span>
-					
-                  </div>
-               </div>
-            </fieldset>
-			 <fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">HSN/SAC#</label>
-                  <div class="col-sm-7">
-                     <input id="input-id-1" name="hsn" ng-model="addModelProduct.hsn"  type="text" placeholder="HSN/SAC Number" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="2"/>
-					 
-					<span ng-messages="formProduct.hsn.$error" ng-if="formProduct.hsn.$dirty || formProduct.hsn.$touched"  role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
-					 </span>
-					
-                  </div>
-               </div>
-            </fieldset>
-			
-			<fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">IGST(%)</label>
+				   <label for="input-id-1" class="col-sm-1 control-label my-padding-textbox">IGST(%)</label>
                   <div class="col-sm-3">
                      <input id="input-id-1" name="igst" ng-model="addModelProduct.igst"  type="text" placeholder="IGST(%)" class="form-control" tabindex="2" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 					 
@@ -267,26 +248,25 @@
 					 </span>
 					
                   </div>
-              
-
-                  <label for="input-id-1" class="col-sm-1 control-label">CESS(%)</label>
-                  <div class="col-sm-3">
-                     <input id="input-id-1" name="cess" ng-model="addModelProduct.cess"  type="text" placeholder="CESS(%)" class="form-control" tabindex="2"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+				  
+               </div>
+            </fieldset>
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                  <label for="input-id-1" class="col-sm-2 control-label">HSN/SAC#</label>
+                  <div class="col-sm-5">
+                     <input id="input-id-1" name="hsn" ng-model="addModelProduct.hsn"  type="text" placeholder="HSN/SAC Number" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="2"/>
 					 
-					<span ng-messages="formProduct.cess.$error" ng-if="formProduct.cess.$dirty || formProduct.cess.$touched"  role="alert">
+					<span ng-messages="formProduct.hsn.$error" ng-if="formProduct.hsn.$dirty || formProduct.hsn.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
 						<span ng-messages-include="errorLonglength"></span>
 						<span ng-messages-include="errorPatternThisSpecial"></span>
 					 </span>
 					
                   </div>
-               </div>
-            </fieldset>
-			
-			 <fieldset class="my-fieldset-paddingBottom">
-               <div class="form-group">
-                  <label for="input-id-1" class="col-sm-3 control-label">Minimum Stock</label>
-                  <div class="col-sm-7">
+				  
+				   <label for="input-id-1" class="col-sm-2 control-label">Minimum Stock</label>
+                  <div class="col-sm-3">
                      <input id="input-id-1" name="minimumStockLevel"  ng-model="addModelProduct.minimumStockLevel" type="text" placeholder="Minimum Stock" class="form-control"  ng-pattern="/^[0-9]*$/"  ng-maxlength="10" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.minimumStockLevel.$error" ng-if="formProduct.minimumStockLevel.$dirty || formProduct.minimumStockLevel.$touched"  role="alert">
@@ -296,6 +276,12 @@
 					 </span>
 					
                   </div>
+				  
+               </div>
+            </fieldset>
+			 <fieldset class="my-fieldset-paddingBottom">
+               <div class="form-group">
+                 
                </div>
             </fieldset>
 				<button type="button" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="cancel()">Cancel</button>
