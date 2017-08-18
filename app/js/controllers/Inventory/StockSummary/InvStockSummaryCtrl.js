@@ -18,7 +18,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 		
 		if($scope.stateCheck){
 			
-			flag = 1;
+		
 			$scope.getProduct($scope.stateCheck.companyId);
 			
 			
@@ -100,6 +100,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 	
 	$scope.getProduct = function(id){
 		
+		console.log(vm.productCategoryData);
 		toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
@@ -120,6 +121,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 				for (var i = 0; i < data.length; i++) {
 					
 					var index = vm.productCategoryData.findIndex(x => x.productCategoryId==data[i].product.productCategoryId);
+					console.log(index);
 					data[i].productCategoryName = ""; //initialization of new property 
 					data[i].productCategoryName =	vm.productCategoryData[index].productCategoryName;  //set the data from nested obj into new property
 					
@@ -153,6 +155,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 	
 	$scope.TableData = function(){
 		 
+		
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
@@ -209,6 +212,8 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			
 		  }
 	  });
+	  
+		flag = 1;
 	}
 
 
