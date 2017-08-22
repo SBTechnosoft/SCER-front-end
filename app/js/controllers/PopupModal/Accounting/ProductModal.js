@@ -164,13 +164,11 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		if($scope.addModelProduct.igst){
 			formdata.append('igst',$scope.addModelProduct.igst);
 		}
-		// formdata.append('vat',$scope.addModelProduct.vat);
-		// formdata.append('additionalTax',$scope.addModelProduct.additionalTax);
-		// formdata.append('marginFlat',$scope.addModelProduct.marginFlat);
-		// formdata.append('margin',$scope.addModelProduct.margin);
-		// formdata.append('mrp',$scope.addModelProduct.mrp);
 		
-		//formdata.append('branchId',1);
+		$scope.addModelProduct.purchaseCgst ? formdata.append('purchaseCgst',$scope.addModelProduct.purchaseCgst) : 0;
+		$scope.addModelProduct.purchaseSgst ? formdata.append('purchaseSgst',$scope.addModelProduct.purchaseSgst) : 0;
+		$scope.addModelProduct.purchaseIgst ? formdata.append('purchaseIgst',$scope.addModelProduct.purchaseIgst) : 0;
+		
 		formdata.append('isDisplay','yes');
 		apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
 		

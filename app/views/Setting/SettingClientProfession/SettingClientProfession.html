@@ -25,7 +25,7 @@
 				   <div class="form-group">
 					  <label for="input-id-1" class="col-sm-4 control-label">*Profession Name</label>
 					  <div class="col-sm-8">
-						 <input id="input-id-1" tabindex="2" name="jobCardNumberLabel" ng-pattern="/^[a-zA-Z &_`#().\'-\/]*$/"  ng-maxlength="35" ng-model="clientProfessionForm.professionName" ng-change="changeProfessionData('professionName',clientProfessionForm.professionName)" type="text" placeholder="Profession Name" required class="form-control" auto-focus/>
+						 <input id="input-id-1" tabindex="2" name="jobCardNumberLabel" ng-pattern="/^[a-zA-Z0-9 &_`#().\'-]*$/" ng-minlength="2"  ng-maxlength="50" ng-model="clientProfessionForm.professionName" ng-change="changeProfessionData('professionName',clientProfessionForm.professionName)" type="text" placeholder="Profession Name" required class="form-control" auto-focus/>
 						 
 						 <span ng-messages="formInvoice.jobCardNumberLabel.$error" ng-if="formInvoice.jobCardNumberLabel.$dirty || formInvoice.jobCardNumberLabel.$touched"  role="alert">
 							<span ng-messages-include="errorRequired"></span>

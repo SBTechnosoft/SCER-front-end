@@ -508,9 +508,11 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 
     };
 	
+	vm.productHsn = [];
 	$scope.settabledata = function(item,index)
 	{
 		vm.AccPurchaseTable[index].productId = item.productId;
+		vm.productHsn[index] = item.hsn;
 		
 		var grandPrice;
 
@@ -537,6 +539,7 @@ function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFa
 	$scope.removeRow = function (idx) {
 		vm.AccPurchaseTable.splice(idx, 1);
 		vm.productTax.splice(idx, 1);
+		vm.productHsn.splice(idx,1);
 		$scope.changeProductArray = true;
 	};
 	

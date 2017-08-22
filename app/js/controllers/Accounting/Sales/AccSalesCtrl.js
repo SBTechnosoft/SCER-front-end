@@ -488,12 +488,15 @@ function AccSalesController($rootScope,$scope,apiCall,apiPath,$modal,getSetFacto
 	$scope.removeRow = function (idx) {
 		vm.AccSalesTable.splice(idx, 1);
 		vm.productTax.splice(idx, 1);
+		vm.productHsn.splice(idx,1);
 		$scope.changeProductArray = true;
 	};
 	
+	vm.productHsn = [];
 	$scope.settabledata = function(item,index)
 	{
 		vm.AccSalesTable[index].productId = item.productId;
+		vm.productHsn[index] = item.hsn;
 		
 		var grandPrice;
 

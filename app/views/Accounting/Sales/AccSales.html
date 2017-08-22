@@ -13,7 +13,7 @@
 	<div class="panel panel-default">
 		 <!--h4 class="panel-heading"></h4-->
 		<div class="panel-body">
-			<div class="form-group">
+			
 				<label class="col-sm-1 control-label"> *Company </label>
 					<div class="col-sm-3">
 						<select chosen="" data-ng-model="accSales.companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany('companyId',accSales.companyDropDown)" ng-disabled="disableCompany" class="form-control chosen-select" ng-required="true" ></select>
@@ -42,8 +42,6 @@
 						</span>
 				
 					</div>
-						  
-			</div>
 		</div>
 	</div>
 	
@@ -59,8 +57,9 @@
 					<thead>
 						<tr>
 							<th class="header" style="width:32%">Name of Item</th>
+							<th style="width:3%" >HSN#</th>
 							<th  class="header" style="width:7%">Color|Size</th>
-							<th class="header" style="width:10%">Discount Type</th>
+							<th class="header" style="width:7%">Discount Type</th>
 							<th class="header" style="width:7%">Discount</th>
 							<th style="width:10%" >Rate</th>
 							<th style="width:5%" >Quantity</th>
@@ -79,6 +78,9 @@
 									   <button type="button" class="btn btn-default" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 									</span>
 								</div>
+							</td>
+							<td>
+								<h6>{{form.productHsn[$index]}}</h6>
 							</td>
 							<td style="text-align:center;">
 								{{item.color}} | {{item.size}}
@@ -171,24 +173,14 @@
 							</td>
 						</tr-->
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td colspan="7"></td>
 							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>
 						</tr>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td colspan="7"></td>
 							<td colspan="2" style="text-align:left"  > <strong> Tax </strong></td>
 							<!--td>	<input id="input-id-1" name="tax" type="text" ng-model="accSales.tax" ng-change="changeAccSales('tax',accSales.tax)" class="form-control"  dir="rtl"  ng-pattern="/^[0-9]*$/" /> 
 							
@@ -202,12 +194,8 @@
 							<td></td>
 						</tr>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td colspan="7"></td>
+							
 							<td colspan="2" style="text-align:left"  > <strong> Total </strong></td>
 							<td style="text-align:right">{{totalTable = (getTotal() | setDecimal: noOfDecimalPoints)}}</td>
 							<td></td>
@@ -346,24 +334,30 @@
 		</div>
 	</div>
      
-	<div class="col-md-4" style="padding-left:15px;padding-right:0px"> 
-		<textarea ng-model="accSales.remark" name="address" ng-model="remark" rows="1" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
-	</div>
+	
 		
 		<div class="form-group col-sm-12">
+			
+			<div class="col-sm-4" > 
+				<textarea ng-model="accSales.remark" name="address" ng-model="remark" rows="1" placeholder="Remark" class="form-control ng-pristine ng-valid ng-touched"></textarea>
+			</div>
+			
 			<label for="input-id-1" class="col-sm-1 control-label">Attachment</label>
 			<div class="col-sm-6">
 				<input type="file" ng-model="accSales.attach" onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
 			</div>
-			<div class="col-sm-10">
-				<a href="{{erpPath}}{{item.documentUrl}}{{item.documentName}}" target="_blank" ng-repeat="item in accSales.documentData" >
-				
-					<img src="{{erpPath}}{{item.documentUrl}}{{item.documentName}}" height="130" width="150" class="brand-logo-collapsed" style="margin-bottom: 5px;margin-right:5px"  />
-					
-				</a>
-			</div>
+			
+			
 		</div>
 	
+		<div class="col-sm-12">
+			<a href="{{erpPath}}{{item.documentUrl}}{{item.documentName}}" target="_blank" ng-repeat="item in accSales.documentData" >
+			
+				<img src="{{erpPath}}{{item.documentUrl}}{{item.documentName}}" height="130" width="150" class="brand-logo-collapsed" style="margin-bottom: 5px;margin-right:5px"  />
+				
+			</a>
+		</div>
+			
 		<button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" >Cancel</button>
 		<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop()" ng-disabled="formSales.$invalid || disableButton" >
 			<span ng-if="!accSales.getSetJrnlId" > Insert </span> <span ng-if="accSales.getSetJrnlId" > Update </span>
