@@ -629,6 +629,13 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 					}
 				})
 			})
+			//Purchase Bill
+			.state('app.PurchaseBill', {
+				url: '/PurchaseBill',
+				templateUrl: basepath('QuickMenu/PurchaseBill.html'),
+				controller: 'PurchaseBillController as form',
+				resolve: requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv','toaster','twain')
+			})
 			//Quotation Print
 			.state('app.QuotationPrint', {
 				url: '/QuotationPrint',

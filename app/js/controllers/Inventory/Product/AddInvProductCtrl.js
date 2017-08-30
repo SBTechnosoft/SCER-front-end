@@ -151,9 +151,9 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 				$scope.addInvProduct.igst = editProductData.igst;
 			}
 			
-			$scope.addInvProduct.purchaseCgst = editProductData.purchaseCgst == null ? '' : editProductData.purchaseCgst;
-			$scope.addInvProduct.purchaseSgst = editProductData.purchaseSgst == null ? '' : editProductData.purchaseSgst;
-			$scope.addInvProduct.purchaseIgst = editProductData.purchaseIgst == null ? '' : editProductData.purchaseIgst;
+			// $scope.addInvProduct.purchaseCgst = editProductData.purchaseCgst == null ? '' : editProductData.purchaseCgst;
+			// $scope.addInvProduct.purchaseSgst = editProductData.purchaseSgst == null ? '' : editProductData.purchaseSgst;
+			// $scope.addInvProduct.purchaseIgst = editProductData.purchaseIgst == null ? '' : editProductData.purchaseIgst;
 			
 			$scope.addInvProduct.minimumStockLevel = editProductData.minimumStockLevel;
 			

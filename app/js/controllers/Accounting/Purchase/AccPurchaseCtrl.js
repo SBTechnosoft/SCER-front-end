@@ -3,17 +3,7 @@
  * Module: AccPurchaseController.js
  * Controller for input components
  =========================================================*/
-// function filterByName(item, typedValue) {
-	// console.log(item);
-    // return item.filter(function(patient) {
-        // matches_productName = patient.productName.indexOf(typedValue) != -1;
-        // matches_color = patient.color.indexOf(typedValue) != -1;
 
-        // return matches_productName || matches_color;
-    // });
-// }
-
-	
 App.controller('AccPurchaseController', AccPurchaseController);
 
 function AccPurchaseController($scope,apiCall,apiPath,$modal,$rootScope,getSetFactory,toaster,apiResponse,validationMessage,productArrayFactory,purchaseType,maxImageSize,productFactory) {
