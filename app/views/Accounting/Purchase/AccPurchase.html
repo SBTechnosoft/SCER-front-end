@@ -44,7 +44,7 @@
 				  <div class="col-sm-2 my-colMd-paddingLeftRight">
 				  <div class="input-group">
 				  
-					 <input  typeahead="s.ledgerName for s in form.clientSuggest | filter:$viewValue | orderBy:'clientName' | limitTo:10" ng-model="accPurchase.clientName" typeahead-on-select="setClientName('clientName',$item)" id="input-id-1" type="text" placeholder="Party Name" class="form-control" dir="ltr" name="clientName" id="clientName"  ng-required="true"  ng-pattern="/^[a-zA-Z ]*$/"  />
+					 <input  typeahead="s.ledgerName for s in form.clientSuggest | filter:$viewValue | orderBy:'ledgerName' | limitTo:10" ng-model="accPurchase.clientName" typeahead-on-select="setClientName('clientName','vendorId',$item)" typeahead-editable="false" id="input-id-1" type="text" placeholder="Party Name" class="form-control" dir="ltr" name="clientName" id="clientName"  ng-required="true"  ng-pattern="/^[a-zA-Z ]*$/"  />
 					<span class="input-group-btn">
 					<button type="button" class="btn btn-default" data-ng-click="openLedger('lg',-1)"><i class="fa fa-plus" style="color:#17A1E5;"></i></button>
 					</span>

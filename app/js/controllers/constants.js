@@ -151,7 +151,9 @@ App
 	'PostJobcard': 'crm/job-form',
 	'sendEmail': 'crm/conversastion/bulk-email',
 	'sendSMS': 'crm/conversastion/bulk-sms',
-  'clientProfession' : 'settings/professions'
+	'clientProfession' : 'settings/professions',
+	'postPurchaseBill' : 'accounting/purchase-bills',
+	'PurchaseBillByCompany' : 'accounting/purchase-bills/company/'
 	
   })
   //Api Path
