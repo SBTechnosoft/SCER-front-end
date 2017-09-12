@@ -6,8 +6,7 @@
     "subnav": [
       { "text": "View",  "sref": "app.AccViewSales", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccSales", "translate": "" },
-	  { "text": "Retail Sales",  "sref": "app.AccViewRetailSales", "translate": "" },
-      { "text": "Tax Sales", "sref": "app.AccViewWholeSales", "translate": "" }
+      { "text": "Tax Invoice", "sref": "app.AccViewWholeSales", "translate": "" }
     ]
   },
   {
@@ -92,7 +91,8 @@
     "subnav": [
       { "text": "SalesTax",  "sref": "app.AccViewSalesTaxation", "translate": "" },
       { "text": "PurchaseTax", "sref": "app.AccViewPurchaseTaxation", "translate": "" },
-      { "text": "Purchase Details", "sref": "app.AccViewPurchaseDetailTaxation", "translate": "" }
+      { "text": "Purchase Details", "sref": "app.AccViewPurchaseDetailTaxation", "translate": "" },
+      { "text": "GST Return", "sref": "app.AccViewGstReturn", "translate": "" }
     ]
   },
   {

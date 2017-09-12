@@ -588,7 +588,28 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 					}
 				})
 			})
-			
+			//GST Return View
+			.state('app.AccViewGstReturn', {
+				url: '/AccViewGstReturn',
+				templateUrl: basepath('Accounting/viewData/AccView.html'),
+				controller: 'AccViewController as form',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+					viewDataType: function(){
+						return 'GST Return';
+					}
+				})
+			})
+			//GST Return Data
+			.state('app.AccDataGstReturn', {
+				url: '/AccDataGstReturn',
+				templateUrl: basepath('Accounting/Taxation/AccGstReturn.html'),
+				controller: 'AccTaxationController as table',
+				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv'),{
+					headerType: function(){
+						return 'GST Return';
+					}
+				})
+			})
 		/** End Taxation **/
 		
 		//Accounting Ledger

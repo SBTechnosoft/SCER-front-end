@@ -140,6 +140,7 @@ App
 	'getSalesTax': 'accounting/taxation/sale-tax/company/',
 	'getPurchaseTax': 'accounting/taxation/purchase-tax/company/',
 	'getPurchaseDetail': 'accounting/taxation/purchase-detail/company/',
+	'getGstReturn': 'accounting/taxation/gst-return/company/',
 	'batchBrand': 'product-categories/batch',
 	'batchCategory': 'product-groups/batch',
 	'batchProduct': 'products/batch',

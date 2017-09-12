@@ -23,6 +23,7 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 	//$scope.filterCompanyId = $rootScope.accView.companyId;
 	$scope.clientContact = $rootScope.accView.clientContact;
 	$scope.clientName = $rootScope.accView.clientName;
+	$scope.professionId = $rootScope.accView.professionId;
 	
 	$scope.clientEmailId = $rootScope.accView.emailId;
 	$scope.clientAddress = $rootScope.accView.address;
@@ -59,32 +60,35 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			headerData.jobCardFromDate = $scope.displayJobCardFromDate;
 			headerData.jobCardToDate = $scope.displayJobCardToDate;
 			
-			if($scope.clientContact != undefined || $scope.clientContact != ''){
+			if($scope.clientContact != undefined && $scope.clientContact != ''){
 				headerData.contactNo = $scope.clientContact;
 			}
 			
-			if($scope.clientName != undefined || $scope.clientName != ''){
+			if($scope.clientName != undefined && $scope.clientName != ''){
 				headerData.clientName = $scope.clientName;
 			}
 			
-			if($scope.clientEmailId != undefined || $scope.clientEmailId != ''){
+			if($scope.professionId != undefined && $scope.professionId != ''){
+				headerData.professionId = $scope.professionId;
+			}
+			
+			if($scope.clientEmailId != undefined && $scope.clientEmailId != ''){
 				headerData.emailId = $scope.clientEmailId;
 			}
 			
-			if($scope.clientAddress != undefined || $scope.clientAddress != ''){
+			if($scope.clientAddress != undefined && $scope.clientAddress != ''){
 				headerData.address = $scope.clientAddress;
 			}
 			
-			if($scope.invoiceNumber != undefined || $scope.invoiceNumber != ''){
+			if($scope.invoiceNumber != undefined && $scope.invoiceNumber != ''){
 				headerData.invoiceNumber = $scope.invoiceNumber;
 			}
 			
-			if($scope.jobCardNumber != undefined || $scope.jobCardNumber != ''){
+			if($scope.jobCardNumber != undefined && $scope.jobCardNumber != ''){
 				headerData.jobCardNumber = $scope.jobCardNumber;
 			}
 			
-			toaster.pop('wait', 'Please Wait', 'Data Loading....',30000);
-			
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			apiCall.getCallHeader(apiPath.getAllClient,headerData).then(function(res){
 			
 				toaster.clear();
@@ -103,11 +107,13 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 						data[i].stateAbb = res[i].state.stateAbb;
 						data[i].cityName = "";
 						data[i].cityName = res[i].city.cityName;
+						data[i].professionName = "";
+						data[i].professionName = res[i].profession.professionName;
 					}
 					
 				}
 				else{
-					toaster.pop('warning', res);
+					toaster.pop('info', res);
 				}
 				
 				$scope.TableData();
@@ -140,15 +146,8 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			  total: data.length, // length of data
 			  getData: function($defer, params) {
 				 
-				  // if()
-				  // {
-					  // alert('yes');
-				  // }
-				  // else{
-					  // alert('no');
-				  // }
 				  // use build-in angular filter
-				  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "")  || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.stateAbb) != "undefined" && params.$params.filter.stateAbb != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "") || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "")))
+				  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "")  || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.stateAbb) != "undefined" && params.$params.filter.stateAbb != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "") || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.professionName) != "undefined" && params.$params.filter.professionName != "")))
 				  {
 						 var orderedData = params.filter() ?
 						 $filter('filter')(data, params.filter()) :
@@ -278,11 +277,15 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			
 			var space = "<td></td>";
 		}
-			
+		
+		var clientAddress = pData.address1 ? pData.address1:'';
+		var clientContactNo= pData.contactNo ? pData.contactNo:'';
+		var clientEmailId = pData.emailId ? pData.emailId:'';
+		
 		for(var n=0;n<qty;n++){
 
 			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px;padding-left:35px;display: inline-block;'> ");
-			mywindow.document.write("<span style='margin-left:5px;font-size:14px'>"+pData.clientName+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Address:</b> "+pData.address+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Contact#:</b> "+pData.contactNo+"</span><br /><span style='margin-left:5px;font-size:14px'><b>EmailID:</b> "+pData.emailId+"</span>");
+			mywindow.document.write("<span style='margin-left:5px;font-size:14px'>"+pData.clientName+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Address:</b> "+clientAddress+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Contact#:</b> "+clientContactNo+"</span><br /><span style='margin-left:5px;font-size:14px'><b>EmailID:</b> "+clientEmailId+"</span>");
 			
 			if(n == qty-1){
 				
@@ -352,9 +355,6 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		mywindow.document.write('<!--center> <h1> Barcode of Company </h1> </center-->');
 		
 		
-		
-		
-		
 		for(var dataIndex=0;dataIndex<dataArrayLength;dataIndex++){
 			
 			mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
@@ -391,13 +391,10 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			
 			for(var qtyIndex=0;qtyIndex<qtyLength;qtyIndex++){
 				
-				
-				
 				mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px ;padding-left:35px;display: inline-block;'> ");
 				mywindow.document.write("<span style='margin-left:5px;font-size:14px'>"+arrayProductData.clientName +"</span><br /><span style='margin-left:5px;font-size:14px'><b>Address:</b> "+arrayProductData.address1+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Contact#:</b> "+arrayProductData.contactNo+"</span><br /><span style='margin-left:5px;font-size:14px'><b>EmailID:</b> "+arrayProductData.emailId+"</span>");
 				
 				if(qtyIndex == qtyLength-1){
-					
 					
 					mywindow.document.write("</td> "+ space );
 				}
@@ -438,10 +435,6 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 				return true;
 			}
 		}
-		
-		
-		
-		
 		
 	}
 	/** End **/

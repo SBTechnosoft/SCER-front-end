@@ -5,7 +5,7 @@
    Client Filter Data</small>
 </h3>
 <div class="container-fluid">
-	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
       <div class="panel-heading myHeading" >
          <div class="panel-title" id="allPro"> <h5> <b>{{clientName}}</b> Data Between {{::displayfromDate}} to {{::displaytoDate}} </h5> </div>
@@ -30,13 +30,14 @@
 							{{user.clientName}}
 						</a>
 					</td>
-					<td data-title="'Contact#'" sortable="'contactNo'"  filter="{ 'contactNo': 'text' }"  style="width:15%" >{{user.contactNo}}</td>
+					<td data-title="'Contact#'" sortable="'contactNo'"  filter="{ 'contactNo': 'text' }"  style="width:10%" >{{user.contactNo}}</td>
+					<td data-title="'Profession'" sortable="'professionName'"  filter="{ 'professionName': 'text' }"  style="width:15%" >{{user.professionName}}</td>
 					<td data-title="'Address'" sortable="'address1'"  filter="{ 'address1': 'text' }" style="width:18%" >{{user.address1}}</td>
 					 <!--td data-title="'EntryDate'"  filter="{ 'entryDate': 'text' }" >{{dateConvert(user.entryDate) | date:dateFormat}}</td-->
 					
-					<td data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  style="width:7%" >{{user.stateAbb}}</td>
+					<td data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  style="width:5%" >{{user.stateAbb}}</td>
 					<td data-title="'City'" sortable="'cityName'" filter="{ 'city': 'text' }"  style="width:8%" >{{user.cityName}}</td>
-					<td  data-title="'Email/SMS'" header="'ng-table/headers/checkboxIcon.html'" style="width:12%">
+					<td  data-title="'Email/SMS'" header="'ng-table/headers/checkboxIcon.html'" style="width:10%">
 						<center>
 							<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'email')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;" > </i>
 							&nbsp;

@@ -94,10 +94,10 @@
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 			 <tbody>
 				<tr data-ng-repeat="user in $data">
-					<td data-title="'Company Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{user.company.companyName}}</td>
-					<td data-title="'Label'" sortable="'quotationLabel'" filter="{ 'quotationLabel': 'text' }" >{{user.quotationLabel}}</td>
-					<td data-title="'Prefix/Postfix'" sortable="'quotationType'" filter="{ 'quotationType': 'text' }" >{{user.quotationType}}</td>
-					<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" style="text-align:right" >{{user.startAt}}</td>
+					<td data-title="'Company Name'" sortable="'companyName'" filter="{ 'companyName': 'text' }" >{{::user.company.companyName}}</td>
+					<td data-title="'Label'" sortable="'quotationLabel'" filter="{ 'quotationLabel': 'text' }" >{{::user.quotationLabel}}</td>
+					<td data-title="'Prefix/Postfix'" sortable="'quotationType'" filter="{ 'quotationType': 'text' }" >{{::user.quotationType}}</td>
+					<td data-title="'Started_at'" sortable="'startAt'" filter="{ 'startAt': 'text' }" style="text-align:right" >{{::user.startAt}}</td>
 					<!--td data-title="'created_at'" sortable="'created_at'" filter="{ 'created_at': 'text' }" >{{user.created_at}}</td-->
 			
 				   <!--td data-title="'Action'" filter="{ '': 'text' }">

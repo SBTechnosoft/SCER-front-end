@@ -41,13 +41,13 @@
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 			 <tbody>
 				<tr data-ng-repeat="user in $data">
-					<td data-title="'Brand'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{user.productCategoryName}}</td>
-					 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{user.productGroupName}}</td>
-					<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{user.productName}}</td>
+					<td data-title="'Brand'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" >{{::user.productCategoryName}}</td>
+					 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" >{{::user.productGroupName}}</td>
+					<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" >{{::user.productName}}</td>
 				   
-					<td data-title="'Color'"  filter="{ 'color': 'text' }" >{{user.product.color}}</td>
-					<td data-title="'Size'"  filter="{ 'size': 'text' }" >{{user.product.size}}</td>
-					<td data-title="'Qty'"  filter="{ 'qty': 'text' }" >{{user.qty}}</td>
+					<td data-title="'Color'"  filter="{ 'color': 'text' }" >{{::user.product.color}}</td>
+					<td data-title="'Size'"  filter="{ 'size': 'text' }" >{{::user.product.size}}</td>
+					<td data-title="'Qty'"  filter="{ 'qty': 'text' }" >{{::user.qty}}</td>
 				</tr>
 			 </tbody>
 		  </table>

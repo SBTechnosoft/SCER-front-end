@@ -96,8 +96,7 @@
 					<div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">*Color</label>
 						  <div class="col-sm-4">
-							 <input id="input-id-1" name="productColor" ng-model="addInvProduct.color" ng-change="changeInvProductData('color',addInvProduct.color)" type="text" placeholder="Color" class="form-control" tabindex="7" ng-required="true" ng-pattern="/^[a-zA-Z .\-\/()]+$/" ng-maxlength="30" />
-							 
+							 <input id="input-id-1" name="productColor" ng-model="addInvProduct.color" ng-change="changeInvProductData('color',addInvProduct.color)" type="text" placeholder="Color" class="form-control" tabindex="7" ng-required="true" ng-pattern="/^[a-zA-Z0-9 .\/()-]+$/" ng-maxlength="30" />
 							<span ng-messages="formProduct.productColor.$error" ng-if="formProduct.productColor.$dirty || formProduct.productColor.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
 								<span ng-messages-include="errorLonglength"></span>
@@ -109,7 +108,7 @@
 
 						  <label for="input-id-1" class="col-sm-1 control-label">*Size</label>
 						  <div class="col-sm-4">
-							 <input id="input-id-1" name="productSize" ng-model="addInvProduct.size" ng-change="changeInvProductData('size',addInvProduct.size)" type="text" placeholder="Size" class="form-control" tabindex="8" ng-required="true" ng-pattern="/^[a-zA-Z0-9 .\-\/()]+$/" ng-maxlength="15"/>
+							 <input id="input-id-1" name="productSize" ng-model="addInvProduct.size" ng-change="changeInvProductData('size',addInvProduct.size)" type="text" placeholder="Size" class="form-control" tabindex="8" ng-required="true" ng-pattern="/^[a-zA-Z0-9 .\/()-]+$/" ng-maxlength="15"/>
 							 
 							<span ng-messages="formProduct.productSize.$error" ng-if="formProduct.productSize.$dirty || formProduct.productSize.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -240,7 +239,7 @@
 				</div>
 			
 				
-			<h4 class="panel-heading bg-default myHeading">Sales GST</h4>
+			<h4 class="panel-heading bg-default myHeading">GST</h4>
 				<div class="panel-body">
 					<div class="col-md-4" >
 					   <div class="form-group">

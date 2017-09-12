@@ -1,3 +1,8 @@
+<style>
+.bgWhiteTR{
+background-color: white;
+}
+</style>
 <h3>
 	
    <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
@@ -62,30 +67,30 @@
 		  </thead>
 			 <tbody data-ng-repeat="user in $data" style="text-align:center">
 				<!-- tr data-ng-repeat="user in $data" -->
-				<tr style="background-color: white;">
+				<tr class="bgWhiteTR">
 					
-					<td rowspan="{{user.balance.length == 0?1:user.balance.length}}"   ng-if="$index != 0"> {{user.transactionDate}}</td>
-					<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="user.transactionType == 'Inward' && $index != 0">Purchase</td>
-					<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="user.transactionType == 'Outward' && $index != 0">Sales</td>
-					<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="$index != 0">{{user.qty}} </td>
-					<td rowspan="{{user.balance.length == 0?1:user.balance.length}}" ng-if="$index != 0" >{{user.price}}</td>
+					<td rowspan="{{::user.balance.length == 0?1:user.balance.length}}"   ng-if="$index != 0"> {{::user.transactionDate}}</td>
+					<td rowspan="{{::user.balance.length == 0?1:user.balance.length}}" ng-if="user.transactionType == 'Inward' && $index != 0">Purchase</td>
+					<td rowspan="{{::user.balance.length == 0?1:user.balance.length}}" ng-if="user.transactionType == 'Outward' && $index != 0">Sales</td>
+					<td rowspan="{{::user.balance.length == 0?1:user.balance.length}}" ng-if="$index != 0">{{::user.qty}} </td>
+					<td rowspan="{{::user.balance.length == 0?1:user.balance.length}}" ng-if="$index != 0" >{{::user.price}}</td>
+					            
+					<td rowspan="{{::user.balance.length}}"    ng-if="$index == 0"> {{::user.transactionDate}}</td>
+					<td rowspan="{{::user.balance.length}}" ng-if="user.transactionType == 'Inward' && $index == 0">Purchase</td>
+					<td rowspan="{{::user.balance.length}}" ng-if="user.transactionType == 'Outward' && $index == 0">Sales</td>
+					<td rowspan="{{::user.balance.length}}" ng-if="$index == 0">{{::user.qty}} </td>
+					<td rowspan="{{::user.balance.length}}" ng-if="$index == 0">{{::user.price}}</td>
 					
-					<td rowspan="{{user.balance.length}}"    ng-if="$index == 0"> {{user.transactionDate}}</td>
-					<td rowspan="{{user.balance.length}}" ng-if="user.transactionType == 'Inward' && $index == 0">Purchase</td>
-					<td rowspan="{{user.balance.length}}" ng-if="user.transactionType == 'Outward' && $index == 0">Sales</td>
-					<td rowspan="{{user.balance.length}}" ng-if="$index == 0">{{user.qty}} </td>
-					<td rowspan="{{user.balance.length}}" ng-if="$index == 0">{{user.price}}</td>
 					
-					
-					<td>{{user.balance[0].date}} </td>
-					<td>{{user.balance[0].qty}}</td>
-					<td>{{user.balance[0].price}}</td>
+					<td>{{::user.balance[0].date}} </td>
+					<td>{{::user.balance[0].qty}}</td>
+					<td>{{::user.balance[0].price}}</td>
 					
 				</tr>
 				<tr ng-repeat="bal in user.balance" ng-if="$index > 0" style="background-color: white;">
-						<td>{{bal.date}} </td>
-						<td>{{bal.qty}}</td>
-						<td>{{bal.price}}</td>
+						<td>{{::bal.date}} </td>
+						<td>{{::bal.qty}}</td>
+						<td>{{::bal.price}}</td>
 				</tr >
 					
 				

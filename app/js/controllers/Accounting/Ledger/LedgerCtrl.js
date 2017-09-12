@@ -107,7 +107,7 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
 			$scope.ledgerForm.pan = response.pan;
-			$scope.ledgerForm.sgst = response.sgst;
+			//$scope.ledgerForm.sgst = response.sgst;
 			$scope.ledgerForm.cgst = response.cgst;
 			
 			$scope.ledgerForm.isDealer = response.isDealer;
@@ -132,8 +132,6 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		//vm.disableValue = true;
 	}
 	
-
-	
 	$scope.editLedgerData = function(id)
 	{
 		vm.disableValue = false;
@@ -153,7 +151,7 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
 			$scope.ledgerForm.pan = response.pan;
-			$scope.ledgerForm.sgst = response.sgst;
+			//$scope.ledgerForm.sgst = response.sgst;
 			$scope.ledgerForm.cgst = response.cgst;
 			
 			$scope.ledgerForm.isDealer = response.isDealer;

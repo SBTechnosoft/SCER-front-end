@@ -15,8 +15,11 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
   
 	 var data = [];
 	 
+	 
 	 $scope.responseData = responseData;
 	
+	$scope.dateFormats = $rootScope.dateFormats;
+		
 		$scope.stockModel=[];
  
 	if($rootScope.ArraystockModel)
@@ -124,14 +127,17 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 		
 		return entDate; 
 	}
-	
+	// Addition With parse
+	$scope.parseFloatAddition = function(total,tax){
+		
+		return parseFloat(total)+parseFloat(tax);
+	}
 	
 	$scope.editDataViewSales = function(singleData){
-			
-		
-			$modalInstance.close(singleData);
-		}
-		
+		$modalInstance.close(singleData);
+	}
+	
+	
 	/**
 		End
 	**/

@@ -105,12 +105,12 @@
 						  </label>
 					   </div>
 					</td>
-					<td  sortable="'productCategoryName'"  >{{user.productCategory.productCategoryName}}</td>
-					<td   sortable="'productGroupName'"  >{{user.productGroup.productGroupName}}</td>
-					<td   sortable="'productName'"  >{{user.productName}}</td>
+					<td  sortable="'productCategoryName'"  >{{::user.productCategory.productCategoryName}}</td>
+					<td   sortable="'productGroupName'"  >{{::user.productGroup.productGroupName}}</td>
+					<td   sortable="'productName'"  >{{::user.productName}}</td>
 				   
-					<td   filter="{ 'color': 'text' }" >{{user.color}}</td>
-					<td    filter="{ 'size': 'text' }" >{{user.size}}</td>
+					<td   filter="{ 'color': 'text' }" >{{::user.color}}</td>
+					<td    filter="{ 'size': 'text' }" >{{::user.size}}</td>
 					<td ng-init="user.barcodeQuantity=0"> <input id="input-id-1"  name="quantity" ng-model="user.barcodeQuantity" type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/"  ng-disabled="barcodePrintData.multiQuantity>0" ng-change="hideMiltiQuantity(user.barcodeQuantity,user.productId)"  min="1" only-number /> </td>
 			
 				   <td  style="width:10%"> 

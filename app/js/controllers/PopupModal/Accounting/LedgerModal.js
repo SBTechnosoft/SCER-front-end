@@ -6,15 +6,17 @@
 
 App.controller('AccLedgerModalController', AccLedgerModalController);
 
-function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,ledgerIndex,companyId,validationMessage) {
+function AccLedgerModalController($rootScope,$scope, $modalInstance,apiCall,apiPath,ledgerIndex,companyId,validationMessage,stateCityFactory,getSetFactory,apiResponse) {
   'use strict';
   
 	$scope.ledgerIndex = ledgerIndex;
-
+	
 	$scope.stockModel=[];
 	var formdata = new FormData();
 	$scope.ledgerForm = [];	
 	  
+	 $scope.disableLedgerGroup = false;
+	
 	 $scope.defaultCompany = companyId;
 	 
 	/* VALIDATION */
@@ -29,29 +31,95 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 	apiCall.getCall(apiPath.getAllCompany).then(function(response3){
 		
 		$scope.companyDrop = response3;
-		$scope.ledgerForm.companyDropDown = $scope.defaultCompany;
 		$scope.disableCompany = true;
 	
 	});
 	
-	//Get State
-	$scope.statesDrop=[];
-	apiCall.getCall(apiPath.getAllState).then(function(response3){
+	 $scope.underWhat=[];
+	apiCall.getCall(apiPath.getAllLedgerGroup).then(function(response3){
 		
-		$scope.statesDrop = response3;
+		$scope.underWhat = response3;
 	
 	});
 	
+	$scope.getInitStateCity = function(){
+		
+		stateCityFactory.getState().then(function(response){
+			$scope.statesDrop = response;
+			$scope.ledgerForm.stateDropDown = stateCityFactory.getDefaultState($rootScope.defaultState);
+			formdata.delete('stateAbb');
+			formdata.append('stateAbb',$rootScope.defaultState);
+			$scope.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+			$scope.ledgerForm.cityDrop = stateCityFactory.getDefaultCity($rootScope.defaultCity);
+			formdata.delete('cityId');
+			formdata.append('cityId',$rootScope.defaultCity);
+		});
+	}
+	
+	
+	//Edit Ledger
+	if(Object.keys(getSetFactory.get()).length){
+		
+		var editLedgerData = getSetFactory.get();
+		console.log(editLedgerData);
+		getSetFactory.blank();
+		
+		$scope.ledgerForm.getSetLedgerId = editLedgerData.ledgerId;
+		$scope.ledgerForm.ledgerName = editLedgerData.ledgerName;
+		$scope.ledgerForm.emailId = editLedgerData.emailId;
+		$scope.ledgerForm.alias = editLedgerData.alias;
+		$scope.ledgerForm.invAffect = editLedgerData.inventoryAffected;
+		$scope.ledgerForm.contact = editLedgerData.contactNo;
+		$scope.ledgerForm.address1 = editLedgerData.address1;
+		$scope.ledgerForm.address2 = editLedgerData.address2;
+		$scope.ledgerForm.tin = editLedgerData.tin;
+		$scope.ledgerForm.pan = editLedgerData.pan;
+		//$scope.ledgerForm.sgst = editLedgerData.sgst;
+		$scope.ledgerForm.cgst = editLedgerData.cgst;
+		
+		$scope.ledgerForm.isDealer = editLedgerData.isDealer;
+		
+		$scope.ledgerForm.amountType = editLedgerData.openingBalanceType;
+		$scope.ledgerForm.openingBal = editLedgerData.openingBalance;
+		
+		$scope.ledgerForm.under = editLedgerData.ledgerGroup.ledgerGroupName;
+		
+		$scope.ledgerForm.companyDropDown = editLedgerData.company;
+		
+		/** State/City **/
+		stateCityFactory.getState().then(function(response){
+			$scope.statesDrop = response;
+			$scope.ledgerForm.stateDropDown = editLedgerData.state;
+			
+			$scope.cityDrop = stateCityFactory.getDefaultStateCities(editLedgerData.state.stateAbb);
+			$scope.ledgerForm.cityDrop = editLedgerData.city;
+		});
+			$scope.disableCompanyValue = true;
+		/** End **/
+	}
+	else{
+		$scope.ledgerForm.companyDropDown = $scope.defaultCompany;
+		$scope.getInitStateCity();
+		
+		if($scope.ledgerIndex == 'purchaseBill'){
+			formdata.delete('ledgerGroupId');
+			formdata.append('ledgerGroupId',31);
+			$scope.ledgerForm.under = "Sundry Creditors";
+			//$scope.disableLedgerGroup = true;
+		}
+		
+		 $scope.ledgerForm.amountType = 'debit';
+		$scope.ledgerForm.openingBal = 0;
+	  
+		formdata.append('amountType',$scope.ledgerForm.amountType);
+		formdata.append('amount',$scope.ledgerForm.openingBal);
+	}
+	
 	$scope.ChangeState = function(Fname,state)
 	 {
-		
-		var getonecity = apiPath.getAllCity+state;
-		
 		//Get City
-		apiCall.getCall(getonecity).then(function(response4){
-			$scope.cityDrop = response4;
-				
-		});
+		$scope.cityDrop = stateCityFactory.getDefaultStateCities(state);
+		
 		//console.log(Fname+'...'+state);
 			if(formdata.has(Fname))
 			{
@@ -60,13 +128,6 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 			
 			formdata.append(Fname,state);
 	}
-	
-	 $scope.underWhat=[];
-	apiCall.getCall(apiPath.getAllLedgerGroup).then(function(response3){
-		
-		$scope.underWhat = response3;
-	
-	});
 	
 	$scope.setPcode = function(Fname,value) {
   		//console.log(value.ledgerGroupId);
@@ -87,12 +148,6 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 		'credit'
 	  ];
 	  
-	  $scope.ledgerForm.amountType = 'debit';
-	  $scope.ledgerForm.openingBal = 0;
-	  
-	  formdata.append('amountType',$scope.ledgerForm.amountType);
-		formdata.append('amount',$scope.ledgerForm.openingBal);
-		
 	//Changed Data When Update
 	$scope.changeLedgerData = function(Fname,value){
 		//console.log(Fname+'..'+value);
@@ -113,35 +168,73 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 
     $scope.clickSave = function () {
 		
+		if($scope.ledgerForm.getSetLedgerId){
+			
+			var ledgerPath = apiPath.getAllLedger+'/'+$scope.ledgerForm.getSetLedgerId;
+		}
+		else{
+			var ledgerPath = apiPath.getAllLedger;
+			if(!formdata.has('isDealer')){
+				formdata.append('isDealer','n');
+			}
+			formdata.append('balanceFlag','opening');
+			formdata.append('companyId',$scope.ledgerForm.companyDropDown.companyId);
+		}
+		
 		var filterArray = {};
 		
-		formdata.append('balanceFlag','opening');
-		formdata.append('companyId',$scope.ledgerForm.companyDropDown.companyId);
-		apiCall.postCall(apiPath.getAllLedger,formdata).then(function(response5){
+		apiCall.postCall(ledgerPath,formdata).then(function(response5){
 		
 			//console.log(response5);
-			
-			if(angular.isArray(response5)){
-				
-				//Delete formdata  keys
-				for (var key of formdata.keys()) {
-				   formdata.delete(key); 
+			if($scope.ledgerForm.getSetLedgerId){
+				if(response5 == apiResponse.ok){
+					
+					if($scope.ledgerIndex == 'purchaseBill'){
+						filterArray.index = $scope.ledgerForm;
+					}
+					else{
+						filterArray.index = $scope.ledgerIndex;
+					}
+					
+					filterArray.companyId = $scope.ledgerForm.companyDropDown.companyId;
+					filterArray.ledgerName = $scope.ledgerForm.ledgerName;
+					
+					$modalInstance.close(filterArray);
+					
+					$scope.ledgerForm = [];
 				}
-				
-				filterArray.index = $scope.ledgerIndex;
-				filterArray.companyId = $scope.ledgerForm.companyDropDown.companyId;
-				filterArray.ledgerName = $scope.ledgerForm.ledgerName;
-				
-				$modalInstance.close(filterArray);
-				
-				$scope.ledgerForm = [];
+				else{
+					alert(response5);
+				}
 			}
 			else{
+				if(angular.isArray(response5)){
 				
-				formdata.delete('balanceFlag');
-				formdata.delete('companyId');
-		
-				alert(response5);
+					//Delete formdata  keys
+					for (var key of formdata.keys()) {
+					   formdata.delete(key); 
+					}
+					if($scope.ledgerIndex == 'purchaseBill'){
+						filterArray.index = response5[0];
+					}
+					else{
+						filterArray.index = $scope.ledgerIndex;
+					}
+					
+					filterArray.companyId = $scope.ledgerForm.companyDropDown.companyId;
+					filterArray.ledgerName = $scope.ledgerForm.ledgerName;
+					
+					$modalInstance.close(filterArray);
+					
+					$scope.ledgerForm = [];
+				}
+				else{
+					
+					formdata.delete('balanceFlag');
+					formdata.delete('companyId');
+			
+					alert(response5);
+				}
 			}
 		});
 		
@@ -161,4 +254,4 @@ function AccLedgerModalController($scope, $modalInstance,$rootScope,apiCall,apiP
 	
   
 }
-AccLedgerModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","ledgerIndex","companyId","validationMessage"];
+AccLedgerModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","ledgerIndex","companyId","validationMessage","stateCityFactory","getSetFactory","apiResponse"];

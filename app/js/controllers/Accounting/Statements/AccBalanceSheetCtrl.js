@@ -48,10 +48,6 @@ function AccBalanceSheetController($rootScope,$scope, $filter, ngTableParams,api
 		$scope.getBranch($scope.stateCheck.companyId);
 		
 		$scope.displayCompany = $scope.stateCheck.companyName;
-		
-		
-		
-		
 	}
 	
 	//Company

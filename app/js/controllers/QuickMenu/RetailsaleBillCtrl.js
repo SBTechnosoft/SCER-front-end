@@ -183,9 +183,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	
 	$scope.getInitStateCity = function(){
-		
-		
-			
 		vm.statesDrop=[];
 		vm.cityDrop = [];
 		
@@ -477,7 +474,11 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			});
 			
 			var clientDataIndex = vm.clientSuggest.findIndex(x => x.clientId==$scope.quickBill.EditBillData.client.clientId);
-
+			// var clientDataIndex = vm.clientSuggest.findIndex(x => x.clientId==$scope.quickBill.EditBillData.client.clientId);
+			// var clientAllData = vm.clientSuggest;
+			// var clientDataIndex = clientAllData.filter(function(options){
+					// return options.clientId == $scope.quickBill.EditBillData.client.clientId;
+				// });
 			
 			
 			if($scope.saleType == 'RetailsaleBill' || $scope.saleType == 'WholesaleBill'){
@@ -490,13 +491,13 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					return x.documentId > max.documentId ? x : max;
 					
 				});
-				
 				$scope.quickBill.EditBillData.lastPdf = articleWithMaxNumber;
 
 				setTimeout(function(){ 
 				
 					var clientUpdateData = vm.clientSuggest[clientDataIndex];
 					angular.element("input[type='file']").val(null);
+					angular.element(".fileAttachLabel").html('');
 					formdata.delete('file[]');
 					//$scope.quickBill.documentData = $scope.quickBill.EditBillData.file;
 					if(clientUpdateData.hasOwnProperty('file')){
@@ -506,9 +507,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					}
 				
 				}, 1000);
-				
-				
-				
 				
 				$scope.quickBill.paymentMode = $scope.quickBill.EditBillData.paymentMode;
 				if($scope.quickBill.paymentMode == 'bank'){
@@ -619,8 +617,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			$scope.quickBill.overallDiscountType = $scope.quickBill.EditBillData.totalDiscounttype;
 			$scope.quickBill.overallDiscount = $scope.quickBill.EditBillData.totalDiscount;
 			
-		vm.AccBillTable = angular.copy(jsonProduct.inventory);
-			
+			vm.AccBillTable = angular.copy(jsonProduct.inventory);
 			
 			//console.log(vm.AccBillTable);
 			var EditProducArray = angular.copy(jsonProduct.inventory);
@@ -690,6 +687,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			//vm.AccBillTable = [];
 			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 			vm.productTax = [{"tax":0,"additionalTax":0}];
+			vm.productHsn = [];
 			
 			$scope.quickBill.overallDiscountType = 'flat';
 			
@@ -874,7 +872,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		 // if ($scope.formBill.companyDropDown.$touched) {
 			  // console.log('INNN');
 			  // console.log(item);
-			 
+		if(angular.isObject(item)){
+			
 			vm.loadData = true;
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
@@ -902,6 +901,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 			vm.productTax = [{"tax":0,"additionalTax":0}];
+			vm.productHsn = [];
 			$scope.quickBill.advance = 0;
 			
 			$scope.printButtonType = item.printType == '' ? 'print':item.printType;
@@ -916,6 +916,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		 // else{
 			  // console.log('ELLSSEEE');
 		 // }
+		 }
 	}
   
   
@@ -1225,9 +1226,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 				// });
 				angular.element("input[type='file']").val(null);
+				angular.element(".fileAttachLabel").html('');
 				formdata.delete('file[]');
-				
-				
 				
 				formdata.delete('companyId');
 				formdata.delete('contactNo');
@@ -1271,6 +1271,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				vm.dt1 = new Date();
 				vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 				vm.productTax = [{"tax":0,"additionalTax":0}];
+				vm.productHsn = [];
 				//vm.cityDrop = [];
 				
 				$scope.changeProductArray = false;
@@ -1337,9 +1338,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$scope.disableButton = false; 
 		
 		angular.element("input[type='file']").val(null);
+		angular.element(".fileAttachLabel").html('');
 		formdata.delete('file[]');
 		
-	
 		//Delete Inventory Data From Formdata Object
 		var json3 = angular.copy(vm.AccBillTable);
 		 
@@ -1387,6 +1388,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		vm.dt1 = new Date();
 		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
 		vm.productTax = [{"tax":0,"additionalTax":0}];
+		vm.productHsn = [];
 		
 		$scope.quickBill.overallDiscountType = 'flat';
 		
@@ -1590,6 +1592,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
 				formdata.delete('file[]');
 				angular.element("input[type='file']").val(null);
+				angular.element(".fileAttachLabel").html('');
 				break;
 			}
 			
@@ -2147,9 +2150,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		var  id = vm.AccBillTable[index].productId;
 		
 		productFactory.getSingleProduct(id).then(function(response){
-			
 			getSetFactory.set(response);
-			$state.go('app.AddInvProduct');
+			$scope.openProduct('lg',index);
 		});
 		
 		

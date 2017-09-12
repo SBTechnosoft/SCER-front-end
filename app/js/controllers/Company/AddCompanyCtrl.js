@@ -156,7 +156,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			$scope.addCompany.tin = editCompanyData.tin;
 			$scope.addCompany.vat = editCompanyData.vatNo;
 			$scope.addCompany.serviceTax = editCompanyData.serviceTaxNo;
-			$scope.addCompany.sgst = editCompanyData.sgst;
+			//$scope.addCompany.sgst = editCompanyData.sgst;
 			$scope.addCompany.cgst = editCompanyData.cgst;
 			
 			if(editCompanyData.cess == null){

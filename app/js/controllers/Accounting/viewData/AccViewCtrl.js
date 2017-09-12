@@ -71,6 +71,15 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 			
 		
 		});
+		
+		vm.professionDrop = [];
+		
+		apiCall.getCall(apiPath.clientProfession).then(function(responseDrop){
+			
+			vm.professionDrop = responseDrop;
+			
+		
+		});
 	
 	}
 	
@@ -116,9 +125,10 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 		}
 		
 		if($scope.viewDataTypePath == 'CrmClientFilterView'){
-			
+		//	console.log($scope.accViewSales.professionDropDown);
 			$rootScope.accView.clientContact = $scope.accViewSales.clientContact;
 			$rootScope.accView.clientName = $scope.accViewSales.clientName;
+			$rootScope.accView.professionId = $scope.accViewSales.professionDropDown != undefined ? $scope.accViewSales.professionDropDown.professionId:'';
 			$rootScope.accView.emailId = $scope.accViewSales.emailId;
 			$rootScope.accView.address = $scope.accViewSales.address;
 			$rootScope.accView.invoiceNumber = $scope.accViewSales.invoiceNumber;
@@ -193,6 +203,10 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 			
 			$state.go("app.AccPurchaseDetailTaxation");
 		}
+		else if($scope.viewDataTypePath == 'GST Return'){
+			
+			$state.go("app.AccDataGstReturn");
+		}
 		else if($scope.viewDataTypePath == 'PoliceReport'){
 			
 			$state.go("app.ReportPoliceData");
@@ -218,7 +232,13 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   this.today();
   
   this.today2 = function() {
-    this.dt2 = this.dt1;
+	if($scope.viewDataTypePath == 'GST Return'){
+		this.dt2 = new Date();
+		 this.dt1.setMonth( this.dt1.getMonth() - 1);
+	}
+	else{
+		 this.dt2 = this.dt1;
+	}
   };
   this.today2();
 	

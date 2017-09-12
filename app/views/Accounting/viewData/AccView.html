@@ -49,8 +49,8 @@
 			
 			<!-- Crm Client -->
 			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
-				<div class="col-sm-6">
-					 <fieldset >
+				<div class="col-sm-4">
+					 <fieldset class="my-fieldset-paddingBottom" >
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label">Contact</label>
 						  <div class="col-sm-9">
@@ -66,11 +66,11 @@
 					   </div>
 					</fieldset  >
 				</div>
-				<div class="col-sm-6">
-					 <fieldset >
+				<div class="col-sm-4">
+					 <fieldset class="my-fieldset-paddingBottom " >
 					   <div class="form-group">
-						  <label class="col-sm-3 control-label">Client Name</label>
-						  <div class="col-sm-9">
+						  <label class="col-sm-4 control-label">Client Name</label>
+						  <div class="col-sm-8">
 						  
 							 <input  typeahead="s.clientName for s in form.clientSuggest | filter:$viewValue | orderBy:'clientName' | limitTo:10" ng-model="accViewSales.clientName" id="input-id-1" type="text" placeholder="Client Name" class="form-control" dir="ltr" name="clientName" id="clientName"    ng-pattern="/^[a-zA-Z ]*$/" tabindex="2" />
 									 
@@ -83,10 +83,20 @@
 					   </div>
 					</fieldset  >
 				</div>
+				<div class="col-sm-4">
+					 <fieldset class="my-fieldset-paddingBottom " >
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Profession</label>
+						  <div class="col-sm-9">
+							<select chosen="" data-ng-model="accViewSales.professionDropDown" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId"  class="form-control input-sm chosen-select" tabindex="2" ></select>
+						  </div>
+					   </div>
+					</fieldset  >
+				</div>
 			</div>
 			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
-				<div class="col-sm-6">
-					 <fieldset >
+				<div class="col-sm-4">
+					 <fieldset class="my-fieldset-paddingBottom " >
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label">EmailID</label>
 						  <div class="col-sm-9">
@@ -100,28 +110,11 @@
 					   </div>
 					</fieldset  >
 				</div>
-				<div class="col-sm-6">
-					 <fieldset >
+				<div class="col-sm-4">
+					 <fieldset class="my-fieldset-paddingBottom " >
 					   <div class="form-group">
-						  <label class="col-sm-3 control-label">Address</label>
-						  <div class="col-sm-9">
-							<input ng-model="accViewSales.address" name="address"  id="input-id-1" type="text" placeholder="Address" class="form-control"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/"  ng-maxlength="200" tabindex="2" />
-							 
-							 <span ng-messages="accFormView.address.$error" ng-if="accFormView.address.$dirty || accFormView.address.$touched"  role="alert">
-								<span ng-messages-include="shortLength"></span>
-								<span ng-messages-include="errorPatternThisSpecial"></span>
-							</span>
-						  </div>
-					   </div>
-					</fieldset  >
-				</div>
-			</div>
-			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
-				<div class="col-sm-6">
-					 <fieldset >
-					   <div class="form-group">
-						  <label class="col-sm-3 control-label">Invoice#</label>
-						  <div class="col-sm-9">
+						  <label class="col-sm-4 control-label">Invoice#</label>
+						  <div class="col-sm-8">
 							  <input ng-model="accViewSales.invoiceNumber" name="invoice"  id="input-id-1" type="text" placeholder="Invoice Number" class="form-control"  ng-minlength="1"  ng-pattern="/^[a-zA-Z0-9 &_`#().\'-\/]*$/" tabindex="2" />
 							 
 							 <span ng-messages="accFormView.invoice.$error" ng-if="accFormView.invoice.$dirty || accFormView.invoice.$touched"  role="alert">
@@ -132,8 +125,8 @@
 					   </div>
 					</fieldset  >
 				</div>
-				<div class="col-sm-6">
-					 <fieldset >
+				<div class="col-sm-4">
+					 <fieldset class="my-fieldset-paddingBottom " >
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label">Jobcard#</label>
 						  <div class="col-sm-9">
@@ -147,12 +140,31 @@
 					   </div>
 					</fieldset  >
 				</div>
+				
+			</div>
+			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
+				<div class="col-sm-12">
+					 <fieldset class="my-fieldset-paddingBottom " >
+					   <div class="form-group">
+						  <label class="col-sm-1 control-label">Address</label>
+						  <div class="col-sm-11">
+							<input ng-model="accViewSales.address" name="address"  id="input-id-1" type="text" placeholder="Address" class="form-control"  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/"  ng-maxlength="200" tabindex="2" />
+							 
+							 <span ng-messages="accFormView.address.$error" ng-if="accFormView.address.$dirty || accFormView.address.$touched"  role="alert">
+								<span ng-messages-include="shortLength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							</span>
+						  </div>
+					   </div>
+					</fieldset  >
+				</div>
+				
 			</div>
 			<!-- Crm End -->
 			
 			<div class="col-sm-12">
 				<div class="col-sm-6">
-					<fieldset>
+					<fieldset class="my-fieldset-paddingBottom ">
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label" ng-if="viewDataTypePath != 'CrmClientFilterView'" >Start Date</label>
 						  <label class="col-sm-3 control-label" ng-if="viewDataTypePath == 'CrmClientFilterView'" >Invoice StartDate</label>
@@ -172,7 +184,7 @@
 					</fieldset>
 				</div>
 				<div class="col-sm-6">
-					<fieldset>
+					<fieldset  class="my-fieldset-paddingBottom ">
 						<div class="form-group">
 						<label class="col-sm-3 control-label" ng-if="viewDataTypePath != 'CrmClientFilterView'">End Date</label>
 						<label class="col-sm-3 control-label" ng-if="viewDataTypePath == 'CrmClientFilterView'" >Invoice EndDate</label>
@@ -194,7 +206,7 @@
 			
 			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
 				<div class="col-sm-6">
-					<fieldset>
+					<fieldset class="my-fieldset-paddingBottom ">
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label"  >Jobcard StartDate</label>
 						  <div class="col-sm-9">
@@ -213,7 +225,7 @@
 					</fieldset>
 				</div>
 				<div class="col-sm-6">
-					<fieldset>
+					<fieldset class="my-fieldset-paddingBottom ">
 						<div class="form-group">
 						<label class="col-sm-3 control-label" >Jobcard EndDate</label>
 						  <div class="col-sm-9">
@@ -317,16 +329,12 @@
    </div>
    <!-- END panel-->
 </div>
-
-	
 <script type="text/ng-template" id="errorRequired">
 	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
 </script>
-
 <script type="text/ng-template" id="errorLonglength">
 	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
 </script>
-
 <script type="text/ng-template" id="errorShortlength">
 	<span class="text-danger" ng-message="minlength">{{errorMessage.shortLength}}</span>
 </script>

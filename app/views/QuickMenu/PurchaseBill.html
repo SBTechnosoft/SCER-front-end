@@ -16,6 +16,10 @@ h4 .control-label{
 .goButton{
 	padding:6px 16px;
 }
+.input-file { position: relative; margin: 60px 60px 0 } /* Remove margin, it is just for stackoverflow viewing */
+.input-file .input-group-addon { border: 0px; padding: 0px; }
+.input-file .input-group-addon .btn { border-radius: 0 4px 4px 0 }
+.input-file .input-group-addon input { cursor: pointer; position:absolute; width: 72px; z-index:2;top:0;right:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0; background-color:transparent; color:transparent; }
 </style>
 <!-- START panel-->
 <div class="container-fluid"   >
@@ -24,8 +28,7 @@ h4 .control-label{
 	<div class="panel panel-default">
 		 <h4 class="panel-heading col-sm-12" style="padding:5px 1px;">
 		 
-			 <div class="col-sm-4">
-				
+			<div class="col-sm-4">
 				<label for="input-id-1" class="col-sm-6 control-label" style="font-size: 19px !important;float: left;text-align: left;padding-top: 3px;padding-left: 0px;padding-right: 0px;">Purchase Bill <span style="font-size:14px">[{{purchaseBill.billNumber}}]</span></label>
 				
 				<div class="col-sm-4" >
@@ -34,15 +37,13 @@ h4 .control-label{
 				<div class="col-sm-2 contentOfForm" >
 					<button type="button" class="btn btn-primary btn-sm pull-left goButton"   ng-click="goInvoiceNumber()"  >Go</button>
 				</div>
-			 </div>
-			 
+			</div>
 			<div class="col-sm-4">
 				<label for="input-id-1" class="col-sm-3 control-label"> *Company </label>
 				<div class="col-sm-9 contentOfForm" >
 					<select chosen="" data-ng-model="purchaseBill.companyDropDown" name="companyDropDown" data-ng-options="s.companyName for s in form.companyDrop track by s.companyId" ng-change="changeCompany(purchaseBill.companyDropDown)" ng-disabled="form.disableCompany" class="form-control input-sm chosen-select" ng-required="true"></select>
 				</div>
 			</div>
-					
 			<div class="col-sm-4">
 				<label for="input-id-1" class="col-sm-3 control-label"> *Date </label>
 				<div class="col-sm-7">
@@ -58,7 +59,7 @@ h4 .control-label{
 				<div class="col-sm-2">
 					 <div class="input-group hackyhack" >
 						<span class="input-group-btn">
-							<a  class="mr-sm mb-sm btn btn-primary btn-sm pull-left goButton"   ui-sref="app.AccViewRetailSales"  ><i class="fa fa-search"></i></a>
+							<a  class="mr-sm mb-sm btn btn-primary btn-sm pull-left goButton"   ui-sref="app.AccViewWholeSales"  ><i class="fa fa-search"></i></a>
 						</span>
 					</div>
 				</div>
@@ -79,7 +80,6 @@ h4 .control-label{
 								<span ng-messages-include="errorLonglength"></span>
 								<span ng-messages-include="errorShortlength"></span>
 							</span>
-									
 						  </div>
 					   </div>
 					</fieldset >
@@ -89,40 +89,37 @@ h4 .control-label{
 						 <div class="form-group">
 							<label for="input-id-1" class="col-sm-3 control-label">*Vendar Name</label>
 							<div class="col-sm-9">
-								 <div class="input-group">
-									<input  typeahead="s.ledgerName for s in form.clientNameDropCr | filter:$viewValue | orderBy:'ledgerName' | limitTo:10" ng-model="purchaseBill.clientName" typeahead-on-select="setVenderId('vendorId',$item)" typeahead-editable="false" id="input-id-1" type="text" placeholder="Vendar Name" class="form-control input-sm" dir="ltr" name="formBill" id="formBill" only-alpha ng-required="true"  ng-pattern="/^[a-zA-Z ]*$/"  />
+								<div class="input-group">
+									<input  typeahead="s.ledgerName for s in form.clientNameDropCr | filter:$viewValue | orderBy:'ledgerName' | limitTo:10" ng-model="purchaseBill.ledgerName" typeahead-on-select="setVenderId('vendorId',$item);changeProductTable();" typeahead-editable="false" autocomplete="off" id="input-id-1" type="text" placeholder="Vendar Name" class="form-control input-sm" dir="ltr" name="clientName" ng-required="true" />
 									<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-sm" data-ng-click="openLedger('lg',-1)"><i class="fa fa-plus" style="color:#17A1E5;"></i></button>
-									</span>
-								
-									<span ng-messages="formBill.clientName.$error" ng-if="formBill.clientName.$dirty || formBill.clientName.$touched" role="alert">
-										<span ng-messages-include="errorRequired"></span>
-										<span ng-messages-include="errorPatternAlpha"></span>
-										<span ng-messages-include="errorLonglength"></span>
-										<span ng-messages-include="errorShortlength"></span>
+										<button type="button" class="btn btn-default btn-sm" ng-if="getLength(purchaseBill.ledgerEditableData) > 0" ng-click="editLedgerWithRedirect()"><i class="fa fa-edit" style="font-size:15px;color:#17A1E5;"></i></button>
+										<button type="button" class="btn btn-default btn-sm" data-ng-click="openLedger('lg')"><i class="fa fa-plus" style="color:#17A1E5;"></i></button>
 									</span>
 								</div>
+								<span ng-messages="formBill.clientName.$error" ng-if="formBill.clientName.$dirty || formBill.clientName.$touched" role="alert">
+									<span ng-messages-include="errorRequired"></span>
+									<span ng-messages-include="errorPatternAlpha"></span>
+									<span ng-messages-include="errorLonglength"></span>
+									<span ng-messages-include="errorShortlength"></span>
+								</span>
 							</div>
 						</div>
 					</fieldset >
 				</div>
-				
 			</div>
       </div>
-  
      <div class="table-responsive">
 		<table  class="table table-bordered table-striped" >
 			<thead>
 				<tr>
+					<th class="header my-table-paddingTopBottom" style="width:1%;padding-top:5px !important;padding-bottom:5px !important;">Sr#</th>
 					<th class="header my-table-paddingTopBottom" style="width:30%;padding-top:5px !important;padding-bottom:5px !important;min-width:150px;" >Name of Item</th>
 					<th class="header my-table-paddingTopBottom" style="width:3%;padding-top:5px !important;padding-bottom:5px !important;">HSN#</th>
 					<th class="header my-table-paddingTopBottom" style="width:11%;padding-top:5px !important;padding-bottom:5px !important;text-align:center">Color | Size</th>
 					<th class="header my-table-paddingTopBottom" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame No.</th>
-					<!--th class="header" style="width:5%">Discount Type</th>
-					<th class="header" style="width:5%">Discount</th-->
-					<th class="header my-table-paddingTopBottom" style="width:2%;padding-top:5px !important;padding-bottom:5px !important;" >Qty.</th>
+					<th class="header my-table-paddingTopBottom" style="width:4%;padding-top:5px !important;padding-bottom:5px !important;" >Qty.</th>
 					<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;" >Rate</th>
-					<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;">Discount</th>
+					<th class="header my-table-paddingTopBottom" style="width:9%;padding-top:5px !important;padding-bottom:5px !important;">Discount</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >CGST</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >SGST</th>
 					<th class="header my-table-paddingTopBottom" style="width:9%;padding-top:5px !important;padding-bottom:5px !important;" >Amount</th>
@@ -134,11 +131,14 @@ h4 .control-label{
 			</script>
 			<tbody >
 				<tr id="addAfter" ng-repeat="item in form.AccBillTable track by $index" data-ng-class="app.tableAnimation">
+					<td style="text-align:center">
+						<strong>{{::$index+1}}</strong>
+					</td>
 					<td>
 						<div class="input-group mytypeDrop">
-							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index);calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax);purchaseBill.advance = ((totalTable) + (purchaseBill.extraCharge ? purchaseBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)" type="text" class="form-control input-sm" placeholder="*Enter Product Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)"  />
+							<input typeahead="item.productName for item in form.productNameDrop | filter:$viewValue | orderBy:'productName' | limitTo:30" ng-model="item.productName" typeahead-on-select="setProductData($item,$index);calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax);purchaseBill.advance = ((totalTable) + (purchaseBill.extraCharge ? purchaseBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints);editProductSuggest = true;" autocomplete="off" type="text" class="form-control input-sm" placeholder="*Enter Product Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" typeahead-template-url="customTemplate.html" ng-disabled="form.loadData" ng-keypress="presssuburb($event)"  />
 							<span class="input-group-btn">
-								 <button type="button" class="btn btn-default btn-sm" ng-click="editProductWithRedirect($index)"><i class="fa fa-edit" style="font-size:15px;color:#17A1E5;"></i></button>
+								 <button type="button" class="btn btn-default btn-sm" ng-if="item.productId" ng-click="editProductWithRedirect($index)"><i class="fa fa-edit" style="font-size:15px;color:#17A1E5;"></i></button>
 							   <button type="button" class="btn btn-default btn-sm" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus" style="font-size:15px;color:#17A1E5;"></i></button>
 							</span>
 						</div>
@@ -147,9 +147,8 @@ h4 .control-label{
 						<h6>{{form.productHsn[$index]}}</h6>
 					</td>
 					<td style="text-align:center;">
-						<input id="input-id-1" type="text" ng-model="item.color"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;"  ng-pattern="/^[a-zA-Z .\/()-]*$/" ng-change="changeProductTable()"  /> 
+						<input id="input-id-1" type="text" ng-model="item.color"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;"  ng-pattern="/^[a-zA-Z0-9 .\/()-]*$/" ng-change="changeProductTable()"  /> 
 						<input id="input-id-1" type="text" ng-model="item.size"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;"    ng-pattern="/^[a-zA-Z0-9 .\/()-]*$/" ng-change="changeProductTable()"  />
-						<!--input id="input-id-1" type="text" ng-model="item.color"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"    ng-pattern="/^[a-z-A-Z]*$/" ng-change="changeProductTable()"  /--> 
 					</td>
 					<td>
 						<input id="input-id-1" type="text" ng-model="item.frameNo"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
@@ -157,18 +156,16 @@ h4 .control-label{
 					<td>
 						<input id="input-id-1" type="text" ng-model="item.qty"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
 					</td>
-					
 					<td>
 						<!--span style="float:right">{{item.price}}</span-->
 						<input id="price" type="text" ng-model="item.price"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
 					</td>
 					<td>
-						<select  ng-model="item.discountType"  class="form-control input-sm" style="padding-left: 5px;padding-right: 5px;width:50%;float:left;" ng-change="changeProductTable();" >
+						<select  ng-model="item.discountType"  class="form-control input-sm" style="padding-left: 3px;padding-right: 3px;width:60%;float:left;" ng-change="changeProductTable();" >
 							<option value="flat" selected="selected">Flat</option>
 							<option value="percentage">%</option>
 						</select>
-						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control input-sm" style="padding-left: 6px;padding-right: 6px;width:50%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)"  ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
-						
+						<input id="input-id-1" type="text" ng-model="item.discount"  class="form-control input-sm" style="padding-left: 5px;padding-right: 5px;width:40%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)"  ng-attr-max="{{item.discountType == 'percentage' && '100' || ''}}" only-number /> 
 					</td>
 					<td style="text-align:right">
 						<span ng-if="item.discountType == 'flat'"> {{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} </span>
@@ -181,22 +178,14 @@ h4 .control-label{
 						</span>
 						<span ng-if="item.discountType == 'percentage'">{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
 						</span>
-						
 					</td>
 					<td>
 						<span style="float:right" ng-if="item.discountType == 'flat'" >
-						
 							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax,$index);" only-number /> 
-							
 						</span>
 						<span style="float:right" ng-if="item.discountType == 'percentage'" >
-						
 							<input id="input-id-1" type="text" ng-model="item.amount"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,form.productTax[$index].tax,form.productTax[$index].additionalTax,$index);" only-number /> 
-							
 						</span>
-						
-						<!--span style="float:right" ng-if="item.discountType == 'flat'" >{{item.amount = getTotalAmount() - item.discount}}</span>
-						<span style="float:right" ng-if="item.discountType == 'percentage'" >{{item.amount = getTotalAmount()-(getTotalAmount() * item.discount/100)}}</span-->
 					</td>
 					<td style="">
 					<center>
@@ -211,7 +200,7 @@ h4 .control-label{
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4"></td>
+					<td colspan="5"></td>
 					<td></td>
 					<td></td>
 					
@@ -224,7 +213,7 @@ h4 .control-label{
 					<td></td>
 				</tr>
 				<tr>
-					<td style="text-align:right" title="Extra Charge" colspan="5" ><span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span><strong>E.Charge<strong></td>
+					<td style="text-align:right" title="Extra Charge" colspan="6" ><span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span><strong>E.Charge<strong></td>
 					<td ng-init="purchaseBill.extraCharge = 0">
 						<input id="input-id-1" type="text" name="extraCharge" ng-model="purchaseBill.extraCharge"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();advanceValueUpdate()" style="padding-left: 6px;padding-right: 6px;" only-number /> 
 						<span ng-messages="formBill.extraCharge.$error" ng-if="formBill.extraCharge.$dirty || formBill.extraCharge.$touched"  role="alert">
@@ -245,7 +234,7 @@ h4 .control-label{
 					</td>
 				</tr> 
 				<tr >
-					<td style="text-align:right" colspan="7" > <strong> Advance </strong> </td>
+					<td style="text-align:right" colspan="8" > <strong> Advance </strong> </td>
 					<td colspan="2"   > 
 						<input id="input-id-1" type="text" name="advance"  ng-model="purchaseBill.advance"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;padding-bottom: 8px;padding-top: 8px;" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">
@@ -267,7 +256,7 @@ h4 .control-label{
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label"> *P.Mode </label>
 							<div class="col-sm-8">
-								<select chosen="" data-ng-model="purchaseBill.paymentMode" data-ng-options="s for s in form.paymentModeDrop" class="form-control input-sm chosen-select" ng-required="true" ng-change="changePaymentInBill('paymentMode',purchaseBill.paymentMode)" >
+								<select chosen="" data-ng-model="purchaseBill.paymentMode" data-ng-options="s for s in form.paymentModeDrop" class="form-control input-sm chosen-select" ng-required="true" ng-change="changePaymentInBill('paymentMode',purchaseBill.paymentMode);changeProductTable();" >
 								<option value=""></option>
 								</select>
 							</div>
@@ -287,14 +276,21 @@ h4 .control-label{
 				</div>
 				<div class="col-sm-4">
 					<fieldset class="my-fieldset-paddingBottom">
-						<div class="form-group">
+						<!--div class="form-group">
 							<label for="input-id-1" class="col-sm-3 control-label">Attachment</label>
 							<div class="col-sm-6">
-								<input type="file" onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
+								<input type="file" class="filestyle" data-btnClass="btn-primary"  onchange="angular.element(this).scope().uploadFile(this.files)" multiple />
 							</div>
-							
+						</div-->
+						<div class="input-group">
+						  <span class="input-group-btn">
+							<span class="btn btn-primary btn-sm" onclick="angular.element(this).parent().find('input[type=file]').click();">Attachments</span>
+							<input style="display: none;" type="file" name="uploaded_file" onchange="angular.element(this).parent().parent().find('.form-control').html(this.files.length > 1 ? this.files.length+' files' : this.files[0].name);angular.element(this).scope().uploadFile(this.files);"  multiple>
+						  </span>
+						  <span class="form-control input-sm fileAttachLabel" style="width: 117%;" ></span>
 						</div>
 					</fieldset>
+					
 				</div>
 			</div>
 			
@@ -327,12 +323,9 @@ h4 .control-label{
 					   </div>
 					</fieldset>
 				</div>
-				
 			</div>
-			
 		<div class="col-sm-12">
 			<div class="col-sm-7">
-				
 				<button type="button" class="mr-sm mb-sm btn btn-primary btn-sm pull-left" ng-click="pop('not')" ng-disabled="formBill.$invalid || disableButton"  > <span ng-if="purchaseBill.EditBillData">Update</span> <span ng-if="!purchaseBill.EditBillData">Save</span> </button>
 				
 				<button type="button" class="mr-sm mb-sm btn btn-primary btn-sm pull-left"  ng-click="cancel()"   >New</button>
@@ -340,11 +333,9 @@ h4 .control-label{
 				<button type="button" class="mr-sm mb-sm btn btn-primary btn-sm pull-left"  ng-click="deleteBill('sm')" ng-if="purchaseBill.EditBillData"  >Delete</button>
 				
 				<button type="button" class="mr-sm mb-sm btn btn-primary btn-sm pull-left" ng-if="purchaseBill.EditBillData"  ng-click="cancel('copy')"  >Copy</button>
-				
 			</div>
 			
 			<div class="col-sm-5" >
-				
 				 <button type="button" class="mr-sm mb-sm btn btn-primary btn-sm"  ng-click="DWT_AcquireImage();"  >Scan ({{countScannedDocumet}})</button>
 				 
 				<button type="button" class="mr-sm mb-sm btn btn-primary btn-sm" ng-click="goToNextPrevious('first')"  data-ng-class="app.theme.brand"    > First </button>
@@ -359,7 +350,6 @@ h4 .control-label{
 				</button>
 				
 				<button type="button" class="mr-sm mb-sm btn btn-primary btn-sm" ng-click="goToNextPrevious('last')"  data-ng-class="app.theme.brand"   > Last </button>
-				
 			</div>
 		</div>
       </div>
@@ -369,39 +359,30 @@ h4 .control-label{
 <div   style="display:none" >
 	<div id="dwtcontrolContainer" style="display:block"></div>
 </div>
-
 <script type="text/ng-template" id="errorRequired">
 	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>
 </script>
-
 <script type="text/ng-template" id="errorLonglength">
 	<span class="text-danger" ng-message="maxlength">{{errorMessage.longLength}}</span>
 </script>
-
 <script type="text/ng-template" id="errorShortlength">
 	<span class="text-danger" ng-message="minlength">{{errorMessage.shortLength}}</span>
 </script>
-
 <script type="text/ng-template" id="errorEmail">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.email}}</span>
 </script>
-
 <script type="text/ng-template" id="errorPatternAlpha">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.Alphabets}}</span>
 </script>
-
 <script type="text/ng-template" id="errorPatternNumber">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.Numbers}}</span>
 </script>
-
 <script type="text/ng-template" id="errorPatternNumberContact">
 	<span class="text-danger" ng-message="pattern">Only Number & Not Start With Zero</span>
 </script>
-
 <script type="text/ng-template" id="errorPatternAlphaNumeric">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.AlphaNumeric}}</span>
 </script>
-
 <script type="text/ng-template" id="errorPatternThisSpecial">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacter}}</span>
 </script>
