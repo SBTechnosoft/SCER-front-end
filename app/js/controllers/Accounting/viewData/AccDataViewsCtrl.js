@@ -157,17 +157,19 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 							
 						}
 
-						
+						data[p].invoiceNumber = parseInt(data[p].invoiceNumber);
 					}
 					
 					$scope.contents = data;
 					
 					
 					$scope.contents.sort(function(a, b){
-						var entDate = a.entryDate.split("-").reverse().join("-");
-						var toDate = b.entryDate.split("-").reverse().join("-");
-						var dateA=new Date(entDate), dateB=new Date(toDate);
-						return dateB-dateA; 
+						// var entDate = a.entryDate.split("-").reverse().join("-");
+						// var toDate = b.entryDate.split("-").reverse().join("-");
+						// var dateA=new Date(entDate), dateB=new Date(toDate);
+						var parseA = parseInt(a.invoiceNumber);
+						var parseB = parseInt(b.invoiceNumber);
+						return parseA - parseB; 
 					});
 					
 					data= $scope.contents;
@@ -382,13 +384,11 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 	
 	$scope.saleTableData = function(){
 	
-		
-
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
-			  date: 'desc'     // initial sorting
+			  invoiceNumber: 'asc'     // initial sorting
 		  }
 	  }, {
 		  counts: [],
@@ -420,7 +420,8 @@ function AccViewDataController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  });
 			  orderedData = data;
 
-			} else if(!params.sorting().date){
+			}
+			else if(!params.sorting().date){
 
 			  if (params.filter().term) {
 				orderedData = params.filter() ? $filter('filter')(data, params.filter().term) : data;

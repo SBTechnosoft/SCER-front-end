@@ -684,6 +684,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				angular.element(".fileAttachLabel").html('');
 				formdata.delete('file[]');
 				formdata.delete('companyId');
+				formdata.delete('billNumber');
 				formdata.delete('paymentMode');
 				formdata.delete('bankName');
 				formdata.delete('checkNumber');

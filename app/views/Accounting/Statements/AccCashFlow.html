@@ -39,18 +39,22 @@
 		 <a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary"  style="margin-right: 5px;" data-ng-class="app.theme.brand" >Generate Pdf</a> 
 		 <a ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" data-ng-class="app.theme.brand" >Export to Excel</a>
 		
-         <div class="panel-title"><b> {{displayCompany}} Statement of Cash Flows For The Year Ended {{displayDate | date: dateFormat}} </b></div>
+         <div class="panel-title"><b> <i>{{displayCompany}}</i> Statement of Cash Flows For The Year Ended <i>{{displayDate | date: dateFormat}}</i> </b></div>
       </div>
 	   <div class="table-responsive">
 		  <table  export-csv="csv"   show-filter="true" class="table table-bordered table-striped" >
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+		  	<div class="input-group m-b"> 
+				<span class="input-group-addon"><i class="fa fa-search" ></i></span>
+				<input tabindex="1" ng-model="query" type="text" class="form-control" placeholder="Search" />
+			</div>
 			<thead>
 				<th>Ledger Name</th>
 				<th>Debit</th>
 				<th>Credit</th>
 			</thead>
 			 <tbody  >
-				<tr data-ng-repeat="user in myArrayData" >
+				<tr data-ng-repeat="user in myArrayData | filter:query" >
 				
 					<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a ng-click="goToLedgerTransaction(user.ledgerId)" ui-sref="" style="text-transform:capitalize" href=""  tabindex="0" >{{user.ledgerName}}</a></td>
 					<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-center">{{user.debitAmount  | number: noOfDecimalPoints}}</td>
@@ -78,7 +82,7 @@
    
    <!-- Second -->
    <div class="panel panel-default" ng-show="secondLayout">
-      <div class="panel-heading" >
+      <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
 		  <!--a  class="btn btn-sm btn-labeled btn-primary pull-right" ng-click="changeLayout()" >
                <span class="btn-label "><i class="icon icon-layout"></i>
@@ -89,11 +93,15 @@
 		 <a ng-click="generatePdf('twoSideExcel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to Excel</a>
 		 
 		 
-         <div class="panel-title">Second Cash Flow of <b> {{displayCompany}} </b> Company of <b> {{displayDate | date: dateFormat}} </b></div>
+         <div class="panel-title"><b> <i>{{displayCompany}}</i> Statement of Cash Flows For The Year Ended <i>{{displayDate | date: dateFormat}}</i> </b></div>
       </div>
 	   <div class="table-responsive">
 		  <table  export-csv="csv"   show-filter="true" class="table table-bordered table-striped" >
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
+		  	<div class="input-group m-b"> 
+				<span class="input-group-addon"><i class="fa fa-search" ></i></span>
+				<input tabindex="1" ng-model="query" type="text" class="form-control" placeholder="Search" />
+			</div>
 			<thead>
 				<th>Ledger Name</th>
 				<th>Debit</th>
@@ -101,7 +109,7 @@
 				<th>Credit</th>
 			</thead>
 			 <tbody  >
-				<tr data-ng-repeat="user in mySecondArrayData" >
+				<tr data-ng-repeat="user in mySecondArrayData | filter:query" >
 					
 					<td ><a ng-click="goToLedgerTransaction(user[1].ledgerId)" ui-sref="" style="text-transform:capitalize" href="" tabindex="1" ng-if="user[1].ledgerName" >{{user[1].ledgerName}}</a></td>
 					 <td style="text-align:right" header-class="text-center">{{user[1].debitAmount  | number: noOfDecimalPoints}}</td>

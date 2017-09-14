@@ -7,10 +7,7 @@
  * License: http://themeforest.net/licenses/standard?license=regular
  * 
  */
-
 if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript requires jQuery'); }
-
-
 
 var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages','ngTableToCsv',"ngSanitize", "ngCsv","vcRecaptcha","uiCropper"])
     .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','hostUrl','googleSiteKey','hostFrontUrl', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,hostUrl,googleSiteKey,hostFrontUrl) {
@@ -70,13 +67,18 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	$rootScope.erpPath = hostUrl.siliconbrain;
 	// $rootScope.erpPath = hostUrl.swaminarayan;
 	// $rootScope.erpPath = hostUrl.v2erpKey;
+	 //$rootScope.erpPath = hostUrl.arnexim;
+	// $rootScope.erpPath = hostUrl.arnknits;
+	// $rootScope.erpPath = hostUrl.demoPrabandhak;
 
 	var hostFrontUrls = hostFrontUrl;
 
 	$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.siliconbrain+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.swaminarayan+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.v2erpKey+"app/img/aksLogo.png' height='100%' width='100%' />";
-	
+	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.arnexim+"app/img/aksLogo.png' height='100%' width='100%' />";
+	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.arnknits+"app/img/aksLogo.png' height='100%' width='100%' />";
+	// $rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.demoPrabandhak+"app/img/aksLogo.png' height='100%' width='100%' />";
 	
 	/** Silicon **/
 	$rootScope.defaultState = "IN-GJ";
@@ -94,10 +96,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	/** End **/
 	
 	/** Authentication Token & UserName **/
-		
 		//$rootScope.loggedUser = [];
-		
-		
 	/** END **/
 	
 	//Branch Modify
@@ -114,35 +113,5 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	$rootScope.accView.fromDate = accModifyDate; // FromDate
 	$rootScope.accView.toDate = accModifyDate; // TODate
 	
-	// $http({
-			// url: apiPath.getAllCompany,
-			 // method: 'get',
-			// processData: false,
-			 // headers: {'Content-Type': undefined}
-		// }).success(function(data, status, headers, config) {
-			
-			// for(var i=0;i<data.length;i++){
-				
-				// if(data[i].isDefault == 'ok')
-				// {
-					// $rootScope.accView.companyId = data[i].companyId; //Company ID
-					
-				// }
-			// }
-	
-		// }).error(function(data, status, headers, config) {
-			
-		// });
-		
-	//Focus Textbox On Page Load
-	// $rootScope.focusFunction = function(data){
-		
-		// alert(data);
-	// }
-	
-	
-	
   }
 ]);
-
-

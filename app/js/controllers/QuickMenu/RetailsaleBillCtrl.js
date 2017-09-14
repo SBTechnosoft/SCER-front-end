@@ -242,6 +242,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		var varTax = {};
 		varTax.tax = 0;
 		varTax.additionalTax = 0;
+		varTax.igst = 0;
 		
 		vm.productTax.splice(plusOne, 0, varTax);
 		
@@ -286,6 +287,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		}
 		
 		vm.productTax[index].additionalTax = parseFloat(item.additionalTax); // Additional Tax
+		vm.productTax[index].igst = parseFloat(item.igst); // Additional Tax
 		
 		vm.AccBillTable[index].price = grandPrice;
 		
@@ -377,7 +379,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	/** Tax Calculation **/
 	
-		$scope.calculateTaxReverse = function(item,cgst,sgst){
+		$scope.calculateTaxReverse = function(item,cgst,sgst,igst){
 			
 			var getCgst = cgst;
 			var getSgst = sgst;
@@ -447,9 +449,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 		//if(Object.keys(getSetFactory.get()).length){
 		if(Object.keys(getSetFactory.get()).length){
-			
-			var formdata = new FormData();
-			
+			formdata = undefined;
+			formdata = new FormData();
+			console.log('here');
 			$scope.quickBill.EditBillData = getSetFactory.get();
 			
 			//console.log($scope.quickBill.EditBillData);
@@ -484,15 +486,17 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			if($scope.saleType == 'RetailsaleBill' || $scope.saleType == 'WholesaleBill'){
 				
 				$scope.quickBill.EditBillData.lastPdf = {};
-				var articleWithMaxNumber = $scope.quickBill.EditBillData.file.filter(function(options){
-					return options.documentFormat == "pdf";
-				}).reduce(function(max, x) {
-					
-					return x.documentId > max.documentId ? x : max;
-					
-				});
-				$scope.quickBill.EditBillData.lastPdf = articleWithMaxNumber;
-
+				if($scope.quickBill.EditBillData.file[0].documentId != '' && $scope.quickBill.EditBillData.file[0].documentId != 0){
+					var articleWithMaxNumber = $scope.quickBill.EditBillData.file.filter(function(options){
+						return options.documentFormat == "pdf";
+					}).reduce(function(max, x) {
+						
+						return x.documentId > max.documentId ? x : max;
+						
+					});
+					$scope.quickBill.EditBillData.lastPdf = articleWithMaxNumber || {};
+				}
+				
 				setTimeout(function(){ 
 				
 					var clientUpdateData = vm.clientSuggest[clientDataIndex];
@@ -630,6 +634,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				var taxObject = {};
 				taxObject.tax = 0;
 				taxObject.additionalTax = 0;
+				taxObject.igst = 0;
 				
 				vm.productTax.push(taxObject);
 				
@@ -736,7 +741,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		}
 		if(value != "" && value != undefined){
 			
-			formdata.append(Fname,value);
+			formdata.set(Fname,value);
 		}
 		
 		
@@ -779,12 +784,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			var clientFormdata = new FormData();
 			
-			clientFormdata.append('contactNo',$scope.quickBill.BillContact);
-			clientFormdata.append('clientName',$scope.quickBill.clientName);
-			clientFormdata.append('emailId',$scope.quickBill.emailId);
-			clientFormdata.append('address1',$scope.quickBill.fisrtAddress);
-			clientFormdata.append('stateAbb',$scope.quickBill.stateAbb.stateAbb);
-			clientFormdata.append('cityId',$scope.quickBill.cityId.cityId);
+			clientFormdata.set('contactNo',$scope.quickBill.BillContact);
+			clientFormdata.set('clientName',$scope.quickBill.clientName);
+			clientFormdata.set('emailId',$scope.quickBill.emailId);
+			clientFormdata.set('address1',$scope.quickBill.fisrtAddress);
+			clientFormdata.set('stateAbb',$scope.quickBill.stateAbb.stateAbb);
+			clientFormdata.set('cityId',$scope.quickBill.cityId.cityId);
 			
 			if($scope.quickBill.professionDropDown.professionId){
 				clientFormdata.append('professionId',$scope.quickBill.professionDropDown.professionId);
@@ -1288,6 +1293,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				//$scope.stateAndCityDefault(defStateData,defCityData); 
 				
 				$scope.quickBill.paymentMode = 'cash';
+				$scope.quickBill.overallDiscountType = 'flat';
 				
 				$anchorScroll();
 				$("#contactNoSelect").focus();
@@ -1295,12 +1301,16 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			}
 			else{
 				toaster.clear();
-				console.log(data);
 				if(apiResponse.noContent == data){
 					
-					// toaster.pop('warning', 'Opps!!', 'Field Not Change');
-					var pdfPath = $scope.erpPath+$scope.quickBill.EditBillData.lastPdf.documentUrl+$scope.quickBill.EditBillData.lastPdf.documentName;
-					$scope.directPrintPdf(pdfPath);
+					if(angular.equals($scope.quickBill.EditBillData.lastPdf,{})){
+						toaster.pop('info', 'Plz Update Some Data Then Print');
+					}
+					else{
+						//toaster.pop('wait', 'Printing...');
+						var pdfPath = $scope.erpPath+$scope.quickBill.EditBillData.lastPdf.documentUrl+$scope.quickBill.EditBillData.lastPdf.documentName;
+						$scope.directPrintPdf(pdfPath);
+					}
 				}
 				else if(data.status == 500){
 					toaster.pop('warning', 'Something Wrong', data.statusText);
@@ -1613,15 +1623,23 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	/** Next Previews **/
 	
 		$scope.goToNextPrevious = function(nextPre){
-			
+			formdata= undefined;
+				
 				toaster.clear();
 				if($scope.quickBill.companyDropDown){
 					
 					//Code Start
 						toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
-				
-						var formdata = new FormData();
 						
+						formdata = new FormData();
+						// Delete formdata  keys
+						for (var key of formdata.keys()) {
+						   formdata.delete(key); 
+						}
+						for (var [key, value] of formdata.entries()) { 
+						   formdata.delete(key); 
+						}
+					
 						var preHeaderData = {'Content-Type': undefined,'companyId':$scope.quickBill.companyDropDown.companyId};
 						
 						if($scope.saleType == 'RetailsaleBill'){

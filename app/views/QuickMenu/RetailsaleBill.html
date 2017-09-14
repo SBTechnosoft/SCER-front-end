@@ -186,11 +186,11 @@ h4 .control-label{
 		<table  class="table table-bordered table-striped" >
 			<thead>
 				<tr>
-					<th class="header my-table-paddingTopBottom" style="width:1%;padding-top:5px !important;padding-bottom:5px !important;">Sr#</th>
+					<th class="header my-table-paddingTopBottom" style="width:1%;padding-top:5px !important;padding-bottom:5px !important;">#</th>
 					<th class="header my-table-paddingTopBottom" style="width:30%;padding-top:5px !important;padding-bottom:5px !important;min-width:150px;" >Name of Item</th>
-					<th class="header my-table-paddingTopBottom" style="width:3%;padding-top:5px !important;padding-bottom:5px !important;">HSN#</th>
+					<th class="header my-table-paddingTopBottom" style="width:3%;padding-top:5px !important;padding-bottom:5px !important;">HSN</th>
 					<th class="header my-table-paddingTopBottom" style="width:11%;padding-top:5px !important;padding-bottom:5px !important;text-align:center">Color | Size</th>
-					<th class="header my-table-paddingTopBottom" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame No.</th>
+					<th class="header my-table-paddingTopBottom" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame#</th>
 					<!--th class="header" style="width:5%">Discount Type</th>
 					<th class="header" style="width:5%">Discount</th-->
 					<th class="header my-table-paddingTopBottom" style="width:4%;padding-top:5px !important;padding-bottom:5px !important;" >Qty.</th>
@@ -198,6 +198,7 @@ h4 .control-label{
 					<th class="header my-table-paddingTopBottom" style="width:9%;padding-top:5px !important;padding-bottom:5px !important;">Discount</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >CGST</th>
 					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >SGST</th>
+					<th class="header my-table-paddingTopBottom" style="width:5%;padding-top:5px !important;padding-bottom:5px !important;" >IGST</th>
 					<th class="header my-table-paddingTopBottom" style="width:9%;padding-top:5px !important;padding-bottom:5px !important;" >Amount</th>
 					<th class="header my-table-paddingTopBottom" style="width:7%;padding-top:5px !important;padding-bottom:5px !important;">Action</th>
 				</tr>
@@ -247,17 +248,26 @@ h4 .control-label{
 						
 					</td>
 					<td style="text-align:right">
-						<span ng-if="item.discountType == 'flat'"> {{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} </span>
-						<span ng-if="item.discountType == 'percentage'" > 	{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} 
+						<input id="price" type="text" ng-model="item.cgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
+						<span ng-if="item.discountType == 'flat'"> {{item.cgstAmount = productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} </span>
+						<span ng-if="item.discountType == 'percentage'" > 	{{item.cgstAmount = productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].tax,0) | setDecimal: noOfDecimalPoints}} 
 						</span>
 					</td>
-					<td style="text-align:right">	
+					<td style="text-align:right">
+						<input id="price" type="text" ng-model="item.sgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,form.productTax[$index].tax,form.productTax[$index].additionalTax)" only-number /> 
 						<span ng-if="item.discountType == 'flat'">
-						{{productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
+						{{item.sgstAmount =productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
 						</span>
-						<span ng-if="item.discountType == 'percentage'">{{productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
+						<span ng-if="item.discountType == 'percentage'">{{item.sgstAmount =productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].additionalTax,0) | setDecimal: noOfDecimalPoints}}
 						</span>
-						
+					</td>
+						<td style="text-align:right">
+						<input id="price" type="text" ng-model="item.igstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,0,0,item.igstPercentage)" only-number /> 
+						<span ng-if="item.discountType == 'flat'">
+						{{item.igstAmount = productArrayFactory.calculateTax((item.price*item.qty) - item.discount,form.productTax[$index].igst,0) | setDecimal: noOfDecimalPoints}}
+						</span>
+						<span ng-if="item.discountType == 'percentage'">{{item.igstAmount = productArrayFactory.calculateTax((item.price*item.qty)-((item.price*item.qty)*item.discount/100),form.productTax[$index].igst,0) | setDecimal: noOfDecimalPoints}}
+						</span>
 					</td>
 					<td>
 						<span style="float:right" ng-if="item.discountType == 'flat'" >
@@ -292,6 +302,7 @@ h4 .control-label{
 					<td></td>
 					<td></td>
 					<td></td>
+					<td></td>
 				</tr>
 				<tr>
 					<td style="text-align:right" title="Extra Charge" colspan="6" ><span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span><strong>E.Charge<strong></td>
@@ -302,13 +313,13 @@ h4 .control-label{
 						</span>
 					</td>
 					<td> 
-						<select  ng-model="quickBill.overallDiscountType"  class="form-control input-sm" style="padding-left: 5px;padding-right: 5px;width:50%;float:left;" ng-change="changeProductTable();advanceValueUpdate()" >
+						<select  ng-model="quickBill.overallDiscountType"  class="form-control input-sm" style="padding-left: 3px;padding-right: 3px;width:60%;float:left;" ng-change="changeProductTable();advanceValueUpdate()" >
 							<option value="flat" selected="selected">Flat</option>
 							<option value="percentage">%</option>
 						</select>
-						<input id="input-id-1" type="text" ng-model="quickBill.overallDiscount"  class="form-control input-sm" style="padding-left: 6px;padding-right: 6px;width:50%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();advanceValueUpdate()"  ng-attr-max="{{quickBill.overallDiscountType == 'percentage' && '100' || ''}}" only-number /> 
+						<input id="input-id-1" type="text" ng-model="quickBill.overallDiscount"  class="form-control input-sm" style="padding-left: 5px;padding-right: 5px;width:40%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();advanceValueUpdate()"  ng-attr-max="{{quickBill.overallDiscountType == 'percentage' && '100' || ''}}" only-number /> 
 					</td>
-					<td colspan="2" style="text-align:right" >{{quickBill.tax = getTotalTax() ? (getTotalTax() | setDecimal: noOfDecimalPoints) : 0}}</td>
+					<td colspan="3" style="text-align:right" >{{quickBill.tax = getTotalTax() ? (getTotalTax() | setDecimal: noOfDecimalPoints) : 0}}</td>
 					<td style="text-align:right">{{totalTable = getTotal() ? (getTotal() | setDecimal: noOfDecimalPoints) : 0}}</td>
 					<!--td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td-->
 					<td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = (totalTable | setDecimal: noOfDecimalPoints)}}<span>
@@ -347,7 +358,7 @@ h4 .control-label{
 					<td></td>
 				</tr-->
 				<tr ng-if="saleType != 'QuotationPrint'">
-					<td style="text-align:right" colspan="8" > <strong> Advance </strong> </td>
+					<td style="text-align:right" colspan="9" > <strong> Advance </strong> </td>
 					<td colspan="2"   > 
 						<input id="input-id-1" type="text" name="advance"  ng-model="quickBill.advance"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;padding-bottom: 8px;padding-top: 8px;" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">

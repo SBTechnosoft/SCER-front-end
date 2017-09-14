@@ -22,7 +22,6 @@ App.directive('onlyAlpha', function() {
     link: function (scope, element, attr, ngModelCtrl) {
       function fromUser(text) {
         var transformedInput = text.replace(/[^A-Za-z ]/g, '');
-        console.log(transformedInput);
         if(transformedInput !== text) {
             ngModelCtrl.$setViewValue(transformedInput);
             ngModelCtrl.$render();

@@ -245,6 +245,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	var descTotalCM = 10.4;
 	var output = "";
 	var totalQty = 0;
+	var totalDiscount = 0;
 	var srNumber = 1;
 	
 	for(var productArray=0;productArray<inventoryCount;productArray++){
@@ -267,10 +268,8 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			
 			if(productData.discountType == 'percentage'){
 				
-				
-				
 				var discount = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,productData.discount,0),$scope.noOfDecimalPoints);
-				
+				totalDiscount = totalDiscount + discount;
 				// var productTotal = (mainPrice - discount) + vat + aTax;
 				var productTotal = $filter('setDecimal')((mainPrice - discount) + vat + aTax,$scope.noOfDecimalPoints);
 				
@@ -278,7 +277,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			else{
 				
 				var discount =  $filter('setDecimal')(productData.discount,$scope.noOfDecimalPoints);
-				
+				totalDiscount = totalDiscount + discount;
 				// var productTotal = (mainPrice - discount) + vat + aTax;
 				var productTotal = $filter('setDecimal')((mainPrice - discount) + vat + aTax,$scope.noOfDecimalPoints);
 				
@@ -297,7 +296,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			 
 			}
 			else{
-				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height:  0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 14px; height: 0.7cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.hsn +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 14px;   height:  0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 14px; height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ vat +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 14px; height: 0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height: 0.7cm; text-align: right; padding:0 5px 0 0;'>"+ productTotal;
+				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height:  0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 14px; height: 0.7cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ hsnNo +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 14px;   height:  0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 14px; height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ vat +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 14px; height: 0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height: 0.7cm; text-align: right; padding:0 5px 0 0;'>"+ productTotal;
 			}
 			   
 			
@@ -312,11 +311,10 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				var totalProductSpace = parseInt(srNumber)*0.7;
 				var finalProductBlankSpace = parseFloat(descTotalCM) - parseFloat(totalProductSpace);
 				
-				output = output + "<tr class='trhw' style='font-family: Calibri; text-align: left; height:"+finalProductBlankSpace+"cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;' colspan='12'></td></tr>";
+				output = output + "<tr class='trhw' style='font-family: Calibri; text-align: left; height:"+finalProductBlankSpace+"cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' colspan='3' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td></tr>";
 			}
 			 srNumber++;
 			totalQty = totalQty + parseInt(productData.qty);
-			
 			
 		}
 		
@@ -329,6 +327,17 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	date.setMonth(date.getMonth() + 1);
 	var Lastdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 			
+	//OverAll Discount
+	var overAllDiscount = 0;
+		if($scope.billData.overallDiscountType == 'percentage'){
+			overAllDiscount = $filter('setDecimal')(productArrayFactory.calculateTax($scope.total,$scope.billData.overallDiscount,0),$scope.noOfDecimalPoints);
+			totalDiscount = totalDiscount + overAllDiscount;
+		}
+		else{
+			overAllDiscount =  $filter('setDecimal')($scope.billData.overallDiscount,$scope.noOfDecimalPoints);
+			totalDiscount = totalDiscount + overAllDiscount;
+		}
+	
 	$scope.RoundTotal = Math.round($scope.total);
 	$scope.RoundFigure =  $filter('setDecimal')($scope.RoundTotal - $scope.total,$scope.noOfDecimalPoints);
 			
@@ -336,11 +345,13 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	
 	billArrayTag.CMPLOGO = $scope.companyLogo;
 	billArrayTag.Company = $scope.companyData.companyName;
-	billArrayTag.CompanyAdd = $scope.companyData.address1+','+$scope.companyData.address2;
+	billArrayTag.CompanyAdd = $scope.companyData.address1 == 'undefined' ? '' : $scope.companyData.address1 +' '+ $scope.companyData.address2 == 'undefined' ? '' : ', '+$scope.companyData.address2;
 	billArrayTag.CreditCashMemo = "CASH";
 	billArrayTag.RetailOrTax = "RETAIL";
 	billArrayTag.ClientName = $scope.billData.clientName;
 	billArrayTag.INVID = $scope.billData.invoiceNumber;
+	billArrayTag.ChallanNo = " ";
+	billArrayTag.ChallanDate = " ";
 	billArrayTag.CLIENTADD = $scope.billData.fisrtAddress+','+$scope.billData.secondAddress;
 	billArrayTag.OrderDate = fdate;
 	billArrayTag.Mobile = $scope.billData.BillContact;
@@ -349,16 +360,16 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	billArrayTag.RoundTotal = $scope.RoundTotal;
 	billArrayTag.RoundFigure = $scope.RoundFigure;
 	billArrayTag.TotalTax = $scope.billData.tax;
+	billArrayTag.TotalDiscount = totalDiscount;
 	billArrayTag.TotalQty = totalQty;
 	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.total);
 	billArrayTag.REMAINAMT = $scope.balance;
-	billArrayTag.REMARK = $scope.remark;
+	billArrayTag.REMARK = angular.isUndefined($scope.remark) ? '': $scope.remark;
 	billArrayTag.Description = output;
 	billArrayTag.ExpireDate = Lastdate;
 	billArrayTag.CompanySGST = $scope.companyData.sgst;
 	billArrayTag.CompanyCGST = $scope.companyData.cgst;
 	billArrayTag.CLIENTTINNO = " ";
-	
 	
 	
 	apiCall.getCall(apiPath.getTemplateByCompany+$scope.companyData.companyId).then(function(responseTemp){
@@ -380,6 +391,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	
 				 
 				tempData = tempData.replace("[Total]",$scope.total,"g");
+				tempData = tempData.replace("[Company]",$scope.companyData.companyName,"g");
 				
 				$scope.TemplateDisplay = $sce.trustAsHtml(tempData);
 			
