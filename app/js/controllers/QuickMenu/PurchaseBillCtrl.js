@@ -16,7 +16,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	var Modalopened = false;
 	
 	vm.AccBillTable = [];
-	vm.productTax = [];
 	vm.productHsn = [];
 	
 	var defStateData = {};
@@ -148,12 +147,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		//vm.AccBillTable.push(data);
 		vm.AccBillTable.splice(plusOne,0,data);
 		
-		var varTax = {};
-		varTax.tax = 0;
-		varTax.additionalTax = 0;
-		
-		vm.productTax.splice(plusOne, 0, varTax);
-		
 		$scope.changeProductArray = true;
 		
     };
@@ -165,21 +158,21 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		vm.AccBillTable[index].productId = item.productId;
 		vm.productHsn[index] = item.hsn;
 		
-		var grandPrice;
+		var grandPrice = 0;
 		var tax;
 		
 		grandPrice = productArrayFactory.calculate(item.purchasePrice,0,item.wholesaleMargin) + parseFloat(item.wholesaleMarginFlat);
-		vm.productTax[index].tax = item.vat;
+	
 		
 		if(item.purchasePrice == 0 || grandPrice == 0){
 			
-			
 			grandPrice = productArrayFactory.calculate(item.mrp,0,item.margin)  + parseFloat(item.marginFlat);
 		}
+		//Custom GST
+		vm.AccBillTable[index].cgstPercentage = checkGSTValue(item.vat);
+		vm.AccBillTable[index].sgstPercentage = checkGSTValue(item.additionalTax);
+		vm.AccBillTable[index].igstPercentage = checkGSTValue(item.igst);
 	
-		
-		vm.productTax[index].additionalTax = parseFloat(item.additionalTax); // Additional Tax
-		
 		vm.AccBillTable[index].price = grandPrice;
 		
 		/** Color/Size **/
@@ -187,7 +180,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		vm.AccBillTable[index].size = item.size;
 		/** End **/
 		
-		$scope.calculateTaxReverse(vm.AccBillTable[index],vm.productTax[index].tax,vm.productTax[index].additionalTax);
+		$scope.calculateTaxReverse(vm.AccBillTable[index],vm.AccBillTable[index].cgstPercentage,vm.AccBillTable[index].sgstPercentage,vm.AccBillTable[index].igstPercentage);
 		
 		$scope.changeProductArray = true;
 		
@@ -198,8 +191,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	
 	$scope.removeRow = function (idx) {
 		vm.AccBillTable.splice(idx,1);
-		vm.productTax.splice(idx, 1);
-		
 		vm.productHsn.splice(idx,1);
 		
 		$scope.changeProductArray = true;
@@ -209,6 +200,17 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	
 	// End Table 
 	
+	//Return right value
+	function checkGSTValue(value){
+		
+		if(angular.isUndefined(value) || value == '' || value == null){
+			return 0;
+		}
+		else{
+			return parseFloat(value);
+		}
+	}
+	
 	//Total Tax For Product Table
 	$scope.getTotalTax = function(){
 		
@@ -216,12 +218,10 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		var count = vm.AccBillTable.length;
 		for(var i = 0; i < count; i++){
 			var product = vm.AccBillTable[i];
-			var vartax = vm.productTax[i];
-			var totaltax = parseFloat(vartax.tax) + parseFloat(vartax.additionalTax);
+			var totaltax = checkGSTValue(product.cgstPercentage) + checkGSTValue(product.sgstPercentage) + checkGSTValue(product.igstPercentage);
 			if(product.discountType == 'flat') {
 				
 				var getAmount = $filter('setDecimal')((product.price*product.qty) - product.discount,$scope.noOfDecimalPoints);
-				
 			}
 			else{
 				var getAmount  =  $filter('setDecimal')((product.price*product.qty)-((product.price*product.qty)*product.discount/100),$scope.noOfDecimalPoints);
@@ -259,29 +259,27 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	
 	/** Tax Calculation **/
 	
-		$scope.calculateTaxReverse = function(item,cgst,sgst){
+		$scope.calculateTaxReverse = function(item,cgst,sgst,igst){
 			
-			var getCgst = cgst;
-			var getSgst = sgst;
+			var getCgst = checkGSTValue(cgst);
+			var getSgst = checkGSTValue(sgst);
+			var getIgst = checkGSTValue(igst);
 			
 			if(item.discountType == 'flat') {
-				//item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints);
-				
 				var amount =  $filter('setDecimal')((item.price*item.qty) - item.discount,$scope.noOfDecimalPoints);
-				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
-				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
-				//console.log(amount);
-				item.amount = $filter('setDecimal')(amount+cgstAmount+sgstAmount,$scope.noOfDecimalPoints);
-				
+				item.cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				item.sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				item.igstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getIgst,0),$scope.noOfDecimalPoints);
 			}
 			else{
-				//item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints);
 				var amount  =  $filter('setDecimal')((item.price*item.qty)-((item.price*item.qty)*item.discount/100),$scope.noOfDecimalPoints);
-				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
-				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
-				
-				item.amount =  $filter('setDecimal')(amount+cgstAmount+sgstAmount,$scope.noOfDecimalPoints);
+				item.cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				item.sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				item.igstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getIgst,0),$scope.noOfDecimalPoints);
 			}
+			
+			item.amount = $filter('setDecimal')(amount+item.cgstAmount+item.sgstAmount+item.igstAmount,$scope.noOfDecimalPoints);
+			
 			if(!$scope.purchaseBill.EditBillData){
 				$scope.advanceValueUpdate();
 			}
@@ -290,15 +288,18 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	/** END **/
 	/** Tax Calculation **/
 	
-		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,index){
+		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,igst,index){
 		
-			var getCgst = parseFloat(cgst);
-			var getSgst = parseFloat(sgst);
-			var TaxSum = getCgst+getSgst;
+			var getCgst = checkGSTValue(cgst);
+			var getSgst = checkGSTValue(sgst);
+			var getIgst = checkGSTValue(igst);
+			var TaxSum = getCgst+getSgst+getIgst;
 			
 			vm.AccBillTable[index].price = $filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints) / parseInt(item.qty);
 			
-			var Price = item.amount/ (1+(TaxSum/100));
+			vm.AccBillTable[index].cgstAmount = $filter('setDecimal')(vm.AccBillTable[index].price * getCgst/100,$scope.noOfDecimalPoints);
+			vm.AccBillTable[index].sgstAmount = $filter('setDecimal')(vm.AccBillTable[index].price * getSgst/100,$scope.noOfDecimalPoints);
+			vm.AccBillTable[index].igstAmount = $filter('setDecimal')(vm.AccBillTable[index].price * getIgst/100,$scope.noOfDecimalPoints);
 			
 			if(!$scope.purchaseBill.EditBillData){
 				$scope.advanceValueUpdate();
@@ -387,18 +388,16 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			for(var w=0;w<count;w++){
 				
 				var d = 0; // For Overcome Duplication 
-				var taxObject = {};
-				taxObject.tax = 0;
-				taxObject.additionalTax = 0;
-				vm.productTax.push(taxObject);
-				
+
 				productFactory.getSingleProduct(EditProducArray[w].productId).then(function(resData){
 					/** Tax **/
 						vm.AccBillTable[d].productName = resData.productName;
 						vm.productHsn[d] = resData.hsn;
-						vm.productTax[d].tax = parseFloat(resData.vat);
-						vm.productTax[d].additionalTax = parseFloat(resData.additionalTax); // Additional Tax
-						$scope.calculateTaxReverse(vm.AccBillTable[d],vm.productTax[d].tax,vm.productTax[d].additionalTax);
+						if(!EditProducArray[d].hasOwnProperty('cgstPercentage')){
+							vm.AccBillTable[d].cgstPercentage = parseFloat(resData.vat);
+							vm.AccBillTable[d].sgstPercentage = parseFloat(resData.additionalTax); // Additional Tax
+							$scope.calculateTaxReverse(vm.AccBillTable[d],vm.AccBillTable[d].cgstPercentage,vm.AccBillTable[d].sgstPercentage,0);
+						}
 						vm.AccBillTable[d].amount = EditProducArray[d].amount;
 						//$scope.calculateTaxReverseTwo(vm.AccBillTable[d],vm.productTax[d].tax,vm.productTax[d].additionalTax,d);
 						d++;
@@ -411,7 +410,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			$scope.purchaseBill.advance = $filter('setDecimal')($scope.purchaseBill.EditBillData.advance,$scope.noOfDecimalPoints); //Advance
 			//Total Discount
 			$scope.purchaseBill.overallDiscountType = $scope.purchaseBill.EditBillData.totalDiscounttype;
-			$scope.purchaseBill.overallDiscount = $scope.purchaseBill.EditBillData.totalDiscount;
+			$scope.purchaseBill.overallDiscount = parseFloat($scope.purchaseBill.EditBillData.totalDiscount) > 0 ? $scope.purchaseBill.EditBillData.totalDiscount : 0;
 		
 			toaster.clear();
 			if(copyData == 'copy'){
@@ -432,7 +431,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			
 			//vm.AccBillTable = [];
 			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-			vm.productTax = [{"tax":0,"additionalTax":0}];
 			vm.productHsn = [];
 			
 			$scope.purchaseBill.overallDiscountType = 'flat';
@@ -521,7 +519,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				toaster.clear();
 			});
 			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-			vm.productTax = [{"tax":0,"additionalTax":0}];
 			vm.productHsn = [];
 			$scope.purchaseBill.advance = 0;
 			
@@ -696,7 +693,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				$scope.purchaseBill = [];
 				vm.dt1 = new Date();
 				vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-				vm.productTax = [{"tax":0,"additionalTax":0}];
 				vm.productHsn = [];
 				//vm.cityDrop = [];
 				
@@ -777,7 +773,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				
 		vm.dt1 = new Date();
 		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-		vm.productTax = [{"tax":0,"additionalTax":0}];
 		vm.productHsn = [];
 		$scope.purchaseBill.overallDiscountType = 'flat';
 		$scope.changeProductArray = false;

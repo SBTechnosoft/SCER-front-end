@@ -281,7 +281,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			if(item.purchasePrice == 0 || grandPrice == 0){
 				
-				
 				grandPrice = productArrayFactory.calculate(item.mrp,0,item.margin)  + parseFloat(item.marginFlat);
 			}
 		}
@@ -289,6 +288,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		vm.productTax[index].additionalTax = parseFloat(item.additionalTax); // Additional Tax
 		vm.productTax[index].igst = parseFloat(item.igst); // Additional Tax
 		
+		vm.AccBillTable[index].cgstPercentage = parseFloat(item.vat);
+		vm.AccBillTable[index].sgstPercentage = parseFloat(item.additionalTax);
+		vm.AccBillTable[index].igstPercentage = parseFloat(item.igst);
 		vm.AccBillTable[index].price = grandPrice;
 		
 		/** Color/Size **/
@@ -299,7 +301,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 		//console.log(vm.AccBillTable);
 		
-		$scope.calculateTaxReverse(vm.AccBillTable[index],vm.productTax[index].tax,vm.productTax[index].additionalTax);
+		$scope.calculateTaxReverse(vm.AccBillTable[index],vm.productTax[index].tax,vm.productTax[index].additionalTax,vm.productTax[index].igst);
 		
 		$scope.changeProductArray = true;
 		
@@ -326,6 +328,16 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	// End Table 
 	
+	function checkGSTValue(value){
+		
+		if(angular.isUndefined(value) || value == ''){
+			return 0;
+		}
+		else{
+			return parseFloat(value);
+		}
+	}
+	
 	//Total Tax For Product Table
 	$scope.getTotalTax = function(){
 		
@@ -333,8 +345,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		var count = vm.AccBillTable.length;
 		for(var i = 0; i < count; i++){
 			var product = vm.AccBillTable[i];
-			var vartax = vm.productTax[i];
-			var totaltax = parseFloat(vartax.tax) + parseFloat(vartax.additionalTax);
+			// var vartax = vm.productTax[i];
+			var totaltax = checkGSTValue(product.cgstPercentage) + checkGSTValue(product.sgstPercentage) + checkGSTValue(product.igstPercentage);
 			if(product.discountType == 'flat') {
 				
 				var getAmount = $filter('setDecimal')((product.price*product.qty) - product.discount,$scope.noOfDecimalPoints);
@@ -381,26 +393,27 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 		$scope.calculateTaxReverse = function(item,cgst,sgst,igst){
 			
-			var getCgst = cgst;
-			var getSgst = sgst;
-			
+			var getCgst = checkGSTValue(cgst);
+			var getSgst = checkGSTValue(sgst);
+			var getIgst = checkGSTValue(igst);
+
 			if(item.discountType == 'flat') {
-				//item.amount = ((item.price*item.qty) - item.discount | setDecimal: noOfDecimalPoints);
 				
 				var amount =  $filter('setDecimal')((item.price*item.qty) - item.discount,$scope.noOfDecimalPoints);
-				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
-				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
-				//console.log(amount);
-				item.amount = $filter('setDecimal')(amount+cgstAmount+sgstAmount,$scope.noOfDecimalPoints);
+				item.cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				item.sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				item.igstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getIgst,0),$scope.noOfDecimalPoints);
 				
+				item.amount = $filter('setDecimal')(amount+item.cgstAmount+item.sgstAmount+item.igstAmount,$scope.noOfDecimalPoints);
 			}
 			else{
 				//item.amount = ((item.price*item.qty)-((item.price*item.qty)*item.discount/100) | setDecimal: noOfDecimalPoints);
 				var amount  =  $filter('setDecimal')((item.price*item.qty)-((item.price*item.qty)*item.discount/100),$scope.noOfDecimalPoints);
-				var cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
-				var sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				item.cgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getCgst,0),$scope.noOfDecimalPoints);
+				item.sgstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getSgst,0),$scope.noOfDecimalPoints);
+				item.igstAmount =  $filter('setDecimal')(productArrayFactory.calculateTax(amount,getIgst,0),$scope.noOfDecimalPoints);
 				
-				item.amount =  $filter('setDecimal')(amount+cgstAmount+sgstAmount,$scope.noOfDecimalPoints);
+				item.amount = $filter('setDecimal')(amount+item.cgstAmount+item.sgstAmount+item.igstAmount,$scope.noOfDecimalPoints);
 			}
 			if(!$scope.quickBill.EditBillData){
 				$scope.advanceValueUpdate();
@@ -412,19 +425,18 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	
 	/** Tax Calculation **/
 	
-		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,index){
+		$scope.calculateTaxReverseTwo = function(item,cgst,sgst,igst,index){
 		
-			var getCgst = parseFloat(cgst);
-			var getSgst = parseFloat(sgst);
-			var TaxSum = getCgst+getSgst;
+			var getCgst = checkGSTValue(cgst);
+			var getSgst = checkGSTValue(sgst);
+			var getIgst = checkGSTValue(igst);
+			var TaxSum = getCgst+getSgst+getIgst;
+		
+			vm.AccBillTable[index].price = $filter('setDecimal')((item.amount/ (1+(TaxSum/100))) / parseInt(item.qty),$scope.noOfDecimalPoints);
 			
-			//console.log(TaxSum);
-			// console.log(item.amount);
-			//console.log($filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints));
-			
-			vm.AccBillTable[index].price = $filter('setDecimal')(item.amount/ (1+(TaxSum/100)),$scope.noOfDecimalPoints) / parseInt(item.qty);
-			
-			var Price = item.amount/ (1+(TaxSum/100));
+			vm.AccBillTable[index].cgstAmount = $filter('setDecimal')(vm.AccBillTable[index].price * getCgst/100,$scope.noOfDecimalPoints);
+			vm.AccBillTable[index].sgstAmount = $filter('setDecimal')(vm.AccBillTable[index].price * getSgst/100,$scope.noOfDecimalPoints);
+			vm.AccBillTable[index].igstAmount = $filter('setDecimal')(vm.AccBillTable[index].price * getIgst/100,$scope.noOfDecimalPoints);
 			
 			if(!$scope.quickBill.EditBillData){
 				$scope.advanceValueUpdate();
@@ -619,7 +631,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			/** End  **/
 			
 			$scope.quickBill.overallDiscountType = $scope.quickBill.EditBillData.totalDiscounttype;
-			$scope.quickBill.overallDiscount = $scope.quickBill.EditBillData.totalDiscount;
+			$scope.quickBill.overallDiscount = parseFloat($scope.quickBill.EditBillData.totalDiscount) > 0 ? $scope.quickBill.EditBillData.totalDiscount : 0;
 			
 			vm.AccBillTable = angular.copy(jsonProduct.inventory);
 			
@@ -631,31 +643,20 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				var d = 0;
 				var setData = EditProducArray[w];
 				
-				var taxObject = {};
-				taxObject.tax = 0;
-				taxObject.additionalTax = 0;
-				taxObject.igst = 0;
-				
-				vm.productTax.push(taxObject);
-				
 				//apiCall.getCall(apiPath.getAllProduct+'/'+setData.productId).then(function(resData){
 				productFactory.getSingleProduct(setData.productId).then(function(resData){
 					
 					/** Tax **/
 					//console.log(resData);
 					vm.AccBillTable[d].productName = resData.productName;
-					
-					vm.productTax[d].tax = parseFloat(resData.vat);
-					vm.productTax[d].additionalTax = parseFloat(resData.additionalTax); // Additional Tax
-					
-					$scope.calculateTaxReverse(vm.AccBillTable[d],vm.productTax[d].tax,vm.productTax[d].additionalTax);
-					
-					vm.AccBillTable[d].amount = EditProducArray[d].amount;
-					//$scope.calculateTaxReverseTwo(vm.AccBillTable[d],vm.productTax[d].tax,vm.productTax[d].additionalTax,d);
-					
+					if(!EditProducArray[d].hasOwnProperty('cgstPercentage')){
+						vm.AccBillTable[d].cgstPercentage = parseFloat(resData.vat);
+						vm.AccBillTable[d].sgstPercentage = parseFloat(resData.additionalTax); // Additional Tax
+						$scope.calculateTaxReverse(vm.AccBillTable[d],parseFloat(resData.vat),parseFloat(resData.additionalTax),0);
+					}
+					vm.AccBillTable[d].amount = EditProducArray[d].amount; // For Amount (Reverse Calculation) not be Incorrect
 					d++;
 					/** End **/
-					
 				});
 			}
 			
@@ -1167,10 +1168,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		apiCall.postCallHeader(BillPath,headerData,formdata).then(function(data){
 			
 			toaster.clear();
-			
-			console.log(data);
-			
-			
 			// Delete formdata  keys
 			// for (var key of formdata.keys()) {
 			   // formdata.delete(key); 
@@ -1303,8 +1300,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				toaster.clear();
 				if(apiResponse.noContent == data){
 					
-					if(angular.equals($scope.quickBill.EditBillData.lastPdf,{})){
-						toaster.pop('info', 'Plz Update Some Data Then Print');
+					if(angular.equals($scope.quickBill.EditBillData.lastPdf,{}) || generate == 'not'){
+						toaster.pop('info', 'Plz Change Your Data');
 					}
 					else{
 						//toaster.pop('wait', 'Printing...');
@@ -1588,8 +1585,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	//Set Multiple File In Formdata On Change
 	$scope.uploadFile = function(files) {
 		
-		//console.log(files);
-		//formdata.append("file[]", files[0]);
+		toaster.clear();
 		var flag = 0;
 		
 		for(var m=0;m<files.length;m++){
@@ -1597,9 +1593,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			if(parseInt(files[m].size) > maxImageSize){
 				
 				flag = 1;
-				toaster.clear();
-				//toaster.pop('alert','Image Size is Too Long','');
-				toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
 				formdata.delete('file[]');
 				angular.element("input[type='file']").val(null);
 				angular.element(".fileAttachLabel").html('');
@@ -1615,6 +1608,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			angular.forEach(files, function (value,key) {
 				formdata.append('file[]',value);
 			});
+		}
+		else{
+			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
 		}
 
 	};

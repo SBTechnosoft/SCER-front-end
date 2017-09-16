@@ -391,7 +391,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			 }
 			
 			
-			mywindow.document.write("<!--tr><td colspan='2' style='text-align:center;'><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </td></tr--> 	<tr>");
+			mywindow.document.write("<!--tr><td colspan='2' style='text-align:center;'><h2>" + arrayProductData.productName +' ('+ arrayProductData.color +' | '+ arrayProductData.size + ") </h2> </td></tr--><tr>");
 			
 			if($scope.barcodePrintData.multiQuantity > 0){
 				
