@@ -6,8 +6,8 @@
 <!-- START panel-->
 <div data-ng-controller="SettingClientProfessionController as form" class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
-   <div class="panel panel-primary">
-	  <div class="panel-heading">
+   <div class="panel panel-default" >
+	  <div class="panel-heading" data-ng-class="app.theme.brand">
 		 <div class="panel-title">Client Profession</div>
 	  </div>
       <div class="panel-body">
@@ -51,7 +51,7 @@
    </div>
    
    <div class="panel panel-primary">
-      <div class="panel-heading myFormHeading" >
+      <div class="panel-heading" data-ng-class="app.theme.brand" >
          <div class="panel-title">All Professions of Clients</div>
       </div>
 	  <tree-grid  col-defs="col_defs" expand-on="expanding_property" on-click="my_tree_handler(branch)" tree-data="tree_data"></tree-grid>

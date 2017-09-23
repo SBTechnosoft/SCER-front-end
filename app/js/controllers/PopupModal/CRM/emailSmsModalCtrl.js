@@ -9,7 +9,7 @@
 
 App.controller('emailSmsModalController',emailSmsModalController);
 
-function emailSmsModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,clientArrayData,emailSMS,maxImageSize,toaster,validationMessage) {
+function emailSmsModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,apiResponse,$timeout,clientArrayData,emailSMS,maxImageSize,toaster,validationMessage) {
   'use strict';
   
 	 var data = [];
@@ -65,11 +65,11 @@ function emailSmsModalController($scope, $modalInstance,$rootScope,$http,apiCall
 				formdata.append('subject',$scope.email.subject);
 				var conversation = $('#editor').html();
 				formdata.append('conversation',conversation);
-				formdata.append('conversationType',$scope.emailSMS);
+				// formdata.append('conversationType',$scope.emailSMS);
 				
 				if($scope.attachFile.length > 0){
 					
-					formdata.append('attachment[]',$scope.attachFile[0]);
+					formdata.append('file[]',$scope.attachFile[0]);
 				}
 				
 				var mailSmsPath = apiPath.sendEmail;
@@ -78,18 +78,35 @@ function emailSmsModalController($scope, $modalInstance,$rootScope,$http,apiCall
 				
 				var mailSmsPath = apiPath.sendSMS;
 				
-				formdata.append('conversationType','sms');
+				// formdata.append('conversationType','sms');
 				formdata.append('conversation',$scope.sms.conversation);
 				
 			}
 			
 			apiCall.postCall(mailSmsPath,formdata).then(function(response){
-				console.log(response);
-					$scope.email = [];
-					$scope.sms = [];
-					$('#editor').html('');
-					angular.element("input[type='file']").val(null);
-					$scope.attachFile = [];
+				if(apiResponse.ok == response){
+					if($scope.emailSMS == 'email'){
+						$modalInstance.close('emailSuccess');
+						$scope.email = [];
+						$('#editor').html('');
+						angular.element("input[type='file']").val(null);
+						$scope.attachFile = [];
+						
+					}
+					else{
+						$modalInstance.close('smsSuccess');
+						$scope.sms = [];
+					}
+				}
+				else{
+					if(angular.isArray(response)){
+						alert('Some Email Not Send');
+						console.log(response);
+					}
+					else{
+						alert(response);
+					}
+				}
 			});
 		}
 	
@@ -174,4 +191,4 @@ function emailSmsModalController($scope, $modalInstance,$rootScope,$http,apiCall
 	
 }
 
-emailSmsModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","clientArrayData","emailSMS","maxImageSize","toaster","validationMessage"];
+emailSmsModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","apiResponse","$timeout","clientArrayData","emailSMS","maxImageSize","toaster","validationMessage"];

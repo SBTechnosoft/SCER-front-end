@@ -17,7 +17,7 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 	 
 	 
 	 $scope.responseData = responseData;
-	
+	$scope.noOfDecimalPoints = parseInt($scope.responseData[0].company.noOfDecimalPoints);
 	$scope.dateFormats = $rootScope.dateFormats;
 		
 		$scope.stockModel=[];
@@ -130,7 +130,7 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 	// Addition With parse
 	$scope.parseFloatAddition = function(total,tax){
 		
-		return parseFloat(total)+parseFloat(tax);
+		return $filter('setDecimal')(parseFloat(total),$scope.noOfDecimalPoints);
 	}
 	
 	$scope.editDataViewSales = function(singleData){

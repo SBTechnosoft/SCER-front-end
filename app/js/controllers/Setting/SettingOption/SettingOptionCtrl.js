@@ -125,14 +125,14 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 	$scope.app = $rootScope.app;
 
 		  $scope.themes = [
-			{sidebar: 'bg-inverse', brand: 'bg-info', topbar:  'bg-white'},
+			{sidebar: 'bg-white br-inverse', brand: 'bg-info my-font-white', topbar:  'bg-inverse'},
 			{sidebar: 'bg-inverse', brand: 'bg-inverse', topbar:  'bg-white'},
 			{sidebar: 'bg-inverse', brand: 'bg-purple', topbar:  'bg-white'},
-			{sidebar: 'bg-inverse', brand: 'bg-success', topbar:  'bg-white'},
+			{sidebar: 'bg-white br-success', brand: 'bg-success my-font-white', topbar:  'bg-inverse'},
 			{sidebar: 'bg-white br', brand: 'bg-inverse', topbar:  'bg-inverse'},
 			{sidebar: 'bg-inverse', brand: 'bg-info', topbar:  'bg-info'},
 			{sidebar: 'bg-white br', brand: 'bg-purple', topbar:  'bg-purple'},
-			{sidebar: 'bg-white br', brand: 'bg-primary', topbar:  'my-Topbar-Color'}
+			{sidebar: 'bg-white br', brand: 'bg-primary my-font-white', topbar:  'my-Topbar-Color'}
 		  ];
 
 		  $scope.setTheme = function($idx) {

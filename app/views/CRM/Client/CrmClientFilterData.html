@@ -7,15 +7,21 @@
 <div class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
-      <div class="panel-heading myHeading" >
-         <div class="panel-title" id="allPro"> <h5> <b>{{clientName}}</b> Data Between {{::displayfromDate}} to {{::displaytoDate}} </h5> </div>
-		   
+      <div class="panel-heading" data-ng-class="app.theme.brand" >
+         <div class="panel-title" id="allPro">
+			<span ui-sref="app.CrmClientFilterView" class="btn-label" style="display:initial"><i class="fa fa-arrow-left"  ></i></span>
+			<b> Filtered Clients Data {{parentCheckBox}} </b>
+			 <span ng-if="clientContact"><b>Contact#: </b>{{::clientContact}}</span>
+			 <span ng-if="clientName"><b>Client Name: </b>{{::clientName}}</span> 
+			 <span ng-if="displayfromDate != '1-1-1970'"><b>Invoice Date: </b>{{::displayfromDate}} to {{::displaytoDate}}</span> 
+			 <span ng-if="displayJobCardFromDate != '1-1-1970'"><b>Jobcard Date: </b>{{::displayJobCardFromDate}} to {{::displayJobCardToDate}}</span>
+		 </div>
       </div>
 	   <div class="table-responsive">
 		  <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
 		
 			 <tbody >
-				<tr data-ng-repeat="user in ($parent.filteredItems = $data)" style="width:100%">
+				<tr data-ng-repeat="user in $data" style="width:100%">
 					<td style="text-align: left" header="'ng-table/headers/checkbox.html'" style="width:5%" >
 						<div class="checkbox c-checkbox">
 						  <label>
@@ -24,35 +30,36 @@
 						  </label>
 					   </div>
 					</td>
-					<td data-title="'#'"  style="width:3%" >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
-					<td data-title="'Client Name'" sortable="'clientName'" filter="{ 'clientName': 'text' }"  style="width:17%" >
-						<a ng-click="goToClientTransaction(user.clientId)" ui-sref="" href=""  tabindex="{{$index+1}}" style="text-transform:capitalize"   >
-							{{user.clientName}}
+					<td data-title="'#'"  style="width:1%" >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
+					<td data-title="'Client Name'" sortable="'clientName'" filter="{ 'clientName': 'text' }"  style="width:19%" >
+						<a ng-click="goToClientTransaction(user.clientId)" href=""  tabindex="{{$index+1}}" style="text-transform:capitalize"   >
+							{{::user.clientName}}
 						</a>
 					</td>
-					<td data-title="'Contact#'" sortable="'contactNo'"  filter="{ 'contactNo': 'text' }"  style="width:10%" >{{user.contactNo}}</td>
-					<td data-title="'Profession'" sortable="'professionName'"  filter="{ 'professionName': 'text' }"  style="width:15%" >{{user.professionName}}</td>
-					<td data-title="'Address'" sortable="'address1'"  filter="{ 'address1': 'text' }" style="width:18%" >{{user.address1}}</td>
+					<td data-title="'Contact#'" sortable="'contactNo'"  filter="{ 'contactNo': 'text' }"  style="width:8%" >{{user.contactNo}}</td>
+					<td data-title="'Profession'" sortable="'professionName'"  filter="{ 'professionName': 'text' }"  style="width:15%" >{{::user.professionName}}</td>
+					<td data-title="'Address'" sortable="'address1'"  filter="{ 'address1': 'text' }" style="width:16%" >{{::user.address1}}</td>
+					<td data-title="'Email'" sortable="'emailId'"  filter="{ 'emailId': 'text' }" style="width:10%" >{{::user.emailId}}</td>
 					 <!--td data-title="'EntryDate'"  filter="{ 'entryDate': 'text' }" >{{dateConvert(user.entryDate) | date:dateFormat}}</td-->
 					
-					<td data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  style="width:5%" >{{user.stateAbb}}</td>
-					<td data-title="'City'" sortable="'cityName'" filter="{ 'city': 'text' }"  style="width:8%" >{{user.cityName}}</td>
-					<td  data-title="'Email/SMS'" header="'ng-table/headers/checkboxIcon.html'" style="width:10%">
+					<td data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  style="width:5%" >{{::user.stateAbb}}</td>
+					<td data-title="'City'" sortable="'cityName'" filter="{ 'city': 'text' }"  style="width:8%" >{{::user.cityName}}</td>
+					<td  data-title="'Email/SMS'" header="'ng-table/headers/checkboxIcon.html'" style="width:8%">
 						<center>
-							<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'email')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;" > </i>
+							<i  ng-click="goToClientTransaction(user.clientId,'email')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;cursor:pointer" > </i>
 							&nbsp;
-							<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'sms')" class="fa fa-commenting" title="SMS" style="font-size:17px;color:#43a8eb;"  ></i>
-							&nbsp;
+							<i  ng-click="goToClientTransaction(user.clientId,'sms')" class="fa fa-commenting" title="SMS" style="font-size:17px;color:#43a8eb;cursor:pointer"  ></i>
 							<!--i ui-sref="" ng-click="goToClientTransaction(user.clientId)" class="fa fa-address-card" title="Sticker" style="font-size:17px;color:#43a8eb;" ></i-->
-							
 						</center>
 					</td>
-					<td data-title="'Sticker'"   style="width:10%" ng-init="user.qty=0" header="'ng-table/headers/stickerBox.html'" >
-						<input id="input-id-1"  name="quantity" ng-model="user.qty" type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/"  min="1" only-number />
+					<td data-title="'Sticker'"   style="width:4%" ng-init="user.qty=0" header="'ng-table/headers/stickerBox.html'" >
+						<input id="input-id-1"  name="quantity" ng-model="user.qty" type="text" placeholder="Qty." class="form-control input-sm" ng-pattern="/^[0-9]*$/"  min="1" only-number />
 					</td>
-					<td  data-title="'Print'" style="width:5%"  header="'ng-table/headers/stickerIcon.html'"> 
+					<td  data-title="'Print'" style="width:10%"  header="'ng-table/headers/stickerIcon.html'"> 
 						<center>
-							<i ui-sref="" title="Barcode" ng-click="singleStickerPrint(user)"  ng-if="user.qty>0" class="fa fa-print" style="font-size:17px;"> </i> 
+							<i  title="Barcode" ng-click="singleStickerPrint(user)"  ng-if="user.qty>0" class="fa fa-print" style="font-size:17px;cursor:pointer"> </i> 
+							&nbsp;
+							<i  ng-click="editClientData('lg',user)" class="fa fa-edit" style="font-size:17px;color:#10709f;cursor:pointer"> </i>
 						</center>
 					</td>
 				</tr>
@@ -73,18 +80,17 @@
  </script>
  <script type="text/ng-template" id="ng-table/headers/checkboxIcon.html">
       <center ng-if="selectedBoxArray.length > 0 || clientFlag == true">
-		<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'email','group')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;" > </i>
+		<i ng-click="goToClientTransaction(user.clientId,'email','group')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;cursor:pointer" > </i>
 		&nbsp;
-		<i ui-sref="" ng-click="goToClientTransaction(user.clientId,'sms','group')" class="fa fa-commenting" title="SMS" style="font-size:17px;color:#43a8eb;"  ></i>
+		<i ng-click="goToClientTransaction(user.clientId,'sms','group')" class="fa fa-commenting" title="SMS" style="font-size:17px;color:#43a8eb;cursor:pointer"  ></i>
 		&nbsp;
 	</center>
  </script>
  <script type="text/ng-template" id="ng-table/headers/stickerBox.html">
-       <input id="input-id-1"  name="quantity" ng-model="sticker.multiQty" ng-if="selectedBoxArray.length > 0 || clientFlag == true" type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/"  min="1" only-number />
+       <input id="input-id-1"  name="quantity" ng-model="sticker.multiQty" ng-if="selectedBoxArray.length > 0 || clientFlag == true" type="text" placeholder="Qty." class="form-control input-sm" ng-pattern="/^[0-9]*$/"  min="1" only-number />
  </script>
  <script type="text/ng-template" id="ng-table/headers/stickerIcon.html">
 		<center>
-		{{multiQty}}
-			<i ui-sref="" title="Print" ng-click="multiStickerPrint()" ng-if="sticker.multiQty > 0" class="fa fa-print" style="font-size:17px;"> </i> 
+			<i  title="Print" ng-click="multiStickerPrint()" ng-if="sticker.multiQty > 0" class="fa fa-print" style="font-size:17px;cursor:pointer"> </i> 
 		</center>
  </script>

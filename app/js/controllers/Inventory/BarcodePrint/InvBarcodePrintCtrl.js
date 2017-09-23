@@ -290,7 +290,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		for(var n=0;n<qty;n++){
 
 			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px;padding-left:35px;display: inline-block;'> ");
-			mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:14px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span><br /><span style='margin-left:5px;font-size:14px'><b>CustomerCare#:</b> "+pData.company.customerCare+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Email:</b> "+pData.company.emailId+"</span><br /><span style='margin-left:5px;font-size:14px'><b>MRP:</b> "+pData.mrp+"</span>");
+			mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:14px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span><br /><span style='margin-left:5px;font-size:14px'><b>Care#:</b> "+pData.company.customerCare+"  ("+pData.company.emailId+")</span><br /><span style='margin-left:5px;font-size:25px'><b>MRP:</b> "+pData.mrp+"</span>");
 			
 			if(n == qty-1){
 				
@@ -401,7 +401,6 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				var qtyLength = arrayProductData.barcodeQuantity;
 			}
 			
-			
 			if(qtyLength%2==0){
 				
 				var space = "";
@@ -411,16 +410,12 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				var space = "<td></td>";
 			}
 			
-			
 			for(var qtyIndex=0;qtyIndex<qtyLength;qtyIndex++){
 				
-				
-				
 				mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px ;padding-left:35px;display: inline-block;'> ");
-				mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:14px'>"+arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ")</span><br /><span style='margin-left:5px;font-size:14px'><b>CustomerCare#:</b> "+arrayProductData.company.customerCare+"</span><br /><span style='margin-left:5px;font-size:14px'><b>Email:</b> "+arrayProductData.company.emailId+"</span><br /><span style='margin-left:5px;font-size:14px'><b>MRP:</b> "+arrayProductData.mrp+"</span>");
+				mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:14px'>"+arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ")</span><br /><span style='margin-left:5px;font-size:14px'><b>Care#:</b> "+arrayProductData.company.customerCare+"  ("+arrayProductData.company.emailId+")</span><br /><span style='margin-left:5px;font-size:25px'><b>MRP:</b> "+arrayProductData.mrp+"</span>");
 				
 				if(qtyIndex == qtyLength-1){
-					
 					
 					mywindow.document.write("</td> "+ space );
 				}

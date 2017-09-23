@@ -80,12 +80,12 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		formdata.delete('isDealer');
 		
 		$scope.ledgerForm.amountType = 'debit';
-		$scope.ledgerForm.openingBal;
+		$scope.ledgerForm.openingBal = 0;
 		$scope.ledgerForm.isDealer = 'n';
 		
 		formdata.append('amountType',$scope.ledgerForm.amountType);
-		formdata.appned('amount',$scope.ledgerForm.openingBal);
-		formdata.appned('isDealer',$scope.ledgerForm.isDealer);
+		formdata.append('amount',$scope.ledgerForm.openingBal);
+		formdata.append('isDealer',$scope.ledgerForm.isDealer);
 		
 	}
 	

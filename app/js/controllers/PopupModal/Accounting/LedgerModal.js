@@ -69,7 +69,7 @@ function AccLedgerModalController($rootScope,$scope, $modalInstance,apiCall,apiP
 		$scope.ledgerForm.emailId = editLedgerData.emailId;
 		$scope.ledgerForm.alias = editLedgerData.alias;
 		$scope.ledgerForm.invAffect = editLedgerData.inventoryAffected;
-		$scope.ledgerForm.contact = editLedgerData.contactNo;
+		$scope.ledgerForm.contact = editLedgerData.contactNo == null || editLedgerData.contactNo == '' || editLedgerData.contactNo == 'NULL' ? '': editLedgerData.contactNo;
 		$scope.ledgerForm.address1 = editLedgerData.address1;
 		$scope.ledgerForm.address2 = editLedgerData.address2;
 		$scope.ledgerForm.tin = editLedgerData.tin;

@@ -6,8 +6,8 @@
 <!-- START panel-->
 <div data-ng-controller="SettingJobcardNumberController as form" class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
-   <div class="panel panel-info">
-	  <div class="panel-heading">
+   <div class="panel panel-default">
+	  <div class="panel-heading" data-ng-class="app.theme.brand" >
 		 <div class="panel-title">Jobcard# Setting</div>
 	  </div>
       <div class="panel-body">
@@ -86,8 +86,8 @@
       </div>
    </div>
    
-   <div class="panel panel-primary">
-      <div class="panel-heading" >
+   <div class="panel panel-default" >
+      <div class="panel-heading" data-ng-class="app.theme.brand" >
          <div class="panel-title">All Jobcard#</div>
       </div>
 	   <div class="table-responsive">

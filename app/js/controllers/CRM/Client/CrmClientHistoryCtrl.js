@@ -24,27 +24,45 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 	
 	/* VALIDATION END */
 	
+	$scope.openEMail = function(type){
+		$scope.emailSMS = type;
+		if(type == 'email'){
+			// angular.element('#input-btn-switch-default-email').attr('checked', true);
+			// angular.element('#input-btn-switch-default-sms').attr('checked', false);
+			$state.go('app.CrmClientHistory.compose');
+		}
+		else{
+			// angular.element('#input-btn-switch-default-sms').attr('checked', true);
+			// angular.element('#input-btn-switch-default-email').attr('checked', false);
+			$state.go('app.CrmClientHistory.sms');
+		}
+	}
+		
 	/** Display Company and date **/
 	
 		var clientFactory = getSetFactory.get();
 		getSetFactory.blank();
 		
-		
 		var clientId = clientFactory.id;
-		console.log(clientFactory);
-		console.log(clientId);
+		if(clientId == '' || clientId == null || clientId == undefined || clientId == 0){
+			$state.go('app.CrmClientFilterView');
+		}
+		// console.log(clientFactory);
+		// console.log(clientId);
 		
 		if(clientFactory.tab == 'email' || clientFactory.tab == 'sms'){
 			
 			$scope.activeDetail = false;
 			$scope.activeEmail = true;
 			
-			$scope.emailSMS = clientFactory.tab;
+			// $scope.emailSMS = clientFactory.tab;
+			$scope.openEMail(clientFactory.tab);
 		}
 		else{
 			$scope.activeDetail = true;
 			$scope.activeEmail = false;
-			$scope.emailSMS = 'email';
+			// $scope.emailSMS = 'email';
+			$scope.openEMail('email');
 		}
 		
 		apiCall.getCall(apiPath.getAllClient+'/'+clientId).then(function(res){
@@ -66,11 +84,8 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 	  // console.log($rootScope.accView.fromDate);
 	  // console.log($rootScope.accView.toDate);
 	 
-	
-	
   $scope.TableData = function(){
 	
-
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
@@ -172,30 +187,28 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 			
 			var formdata = new FormData();
 			
+			var clientData = $scope.ClientData;
+			formdata.set('client[0][clientId]',clientData.clientId);
 			
-				var clientData = $scope.ClientData;
-				formdata.append('client[0][clientId]',clientData.clientId);
-			
-				
 			if($scope.emailSMS == 'email'){
 				
 				if($scope.email.cc){
 					
-					formdata.append('ccEmailId',$scope.email.cc);
+					formdata.set('ccEmailId',$scope.email.cc);
 				}
 				if($scope.email.bcc){
 					
-					formdata.append('bccEmailId',$scope.email.bcc);
+					formdata.set('bccEmailId',$scope.email.bcc);
 				}
 				
-				formdata.append('subject',$scope.email.subject);
+				formdata.set('subject',$scope.email.subject);
 				var conversation = $('#editor').html();
-				formdata.append('conversation',conversation);
-				formdata.append('conversationType',$scope.emailSMS);
+				formdata.set('conversation',conversation);
+				// formdata.set('conversationType',$scope.emailSMS);
 				
 				if($scope.attachFile.length > 0){
 					
-					formdata.append('attachment[]',$scope.attachFile[0]);
+					formdata.set('file[]',$scope.attachFile[0]);
 				}
 				
 				var mailSmsPath = apiPath.sendEmail;
@@ -203,19 +216,26 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 			else{
 				
 				var mailSmsPath = apiPath.sendSMS;
+				// formdata.set('conversationType','sms');
+				formdata.set('conversation',$scope.sms.conversation);
 				
-				formdata.append('conversationType','sms');
-				formdata.append('conversation',$scope.sms.conversation);
+				clientData.contactNo != null || clientData.contactNo != undefined || clientData.contactNo != '' ? formdata.set('contactNo',clientData.contactNo) : '';
 				
 			}
 			
 			apiCall.postCall(mailSmsPath,formdata).then(function(response){
-				console.log(response);
+				if(apiResponse.ok == response){
 					$scope.email = [];
 					$scope.sms = [];
 					$('#editor').html('');
 					angular.element("input[type='file']").val(null);
 					$scope.attachFile = [];
+				}
+				else{
+					toaster.clear();
+					toaster.pop('warning',response);
+				}
+					
 			});
 		}
 		
@@ -250,9 +270,7 @@ function CrmClientHistoryController($rootScope,$scope, $filter, ngTableParams,ap
 
 		};
 	
-		$scope.openEMail = function(type){
-			$scope.emailSMS = type;
-		}
+		
 	/** End **/
 }
 CrmClientHistoryController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$timeout","getSetFactory","$state","$modal","$window","toaster","apiResponse","maxImageSize","validationMessage"];

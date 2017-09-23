@@ -27,9 +27,9 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="user in billData.file | orderBy:'documentId':true"   ng-if="user.documentFormat == 'pdf'" ng-init="startIndex = $index" >
-					<td>{{startIndex+1}}</td>
-					<td>{{user.documentId}}</td>
-					<td>{{user.documentName}}</td>
+					<td>{{::startIndex+1}}</td>
+					<td>{{::user.documentId}}</td>
+					<td>{{::user.documentName}}</td>
 					<td> 
 						<a  href="{{erpPath}}{{user.documentUrl}}/{{user.documentName}}" class="mr btn btn-labeled btn-default" target="_blank">Open
 						   <span class="btn-label btn-label-right"><i class="fa fa-arrow-right"></i>

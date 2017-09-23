@@ -150,11 +150,12 @@ App
 	'getJobcardNumber': 'crm/job-form-number',
 	'getLatestJobcardNumber': 'crm/job-form-number/company/',
 	'PostJobcard': 'crm/job-form',
-	'sendEmail': 'crm/conversastion/bulk-email',
-	'sendSMS': 'crm/conversastion/bulk-sms',
+	'sendEmail': 'crm/conversations/bulk-email',
+	'sendSMS': 'crm/conversations/bulk-sms',
 	'clientProfession' : 'settings/professions',
 	'postPurchaseBill' : 'accounting/purchase-bills',
-	'PurchaseBillByCompany' : 'accounting/purchase-bills/company/'
+	'PurchaseBillByCompany' : 'accounting/purchase-bills/company/',
+	'documentDelete' : 'documents/'
 	
   })
   //Api Path

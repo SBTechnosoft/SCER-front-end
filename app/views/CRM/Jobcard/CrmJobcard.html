@@ -45,7 +45,7 @@ h4 .control-label{
 					<input id="input-id-1" type="text" ng-model="quickBill.searchInvoiceNumber"  class="form-control" />
 				</div>
 				<div class="col-sm-2 contentOfForm" >
-					<button type="button" class="mr mb-sm btn btn-primary pull-left goButton"   ng-click="goInvoiceNumber()"  >Go</button>
+					<button type="button" class="mr mb-sm btn btn-default pull-left goButton" data-ng-class="app.theme.brand"   ng-click="goInvoiceNumber()"  >Go</button>
 				</div>
 				
 			 </div>
@@ -538,11 +538,11 @@ h4 .control-label{
 		
 		<div class="col-sm-12">
 			
-			<button type="button" class="mr mb-sm btn btn-danger pull-right" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" >New</button>
+			<button type="button" class="mr mb-sm btn btn-default pull-right" data-ng-class="app.theme.brand" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="cancel()" >New</button>
 			
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('generateBill')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" > <span ng-if="quickBill.EditBillData" >Update & Bill Generate </span> <span ng-if="!quickBill.EditBillData">Save & Bill Generate </span> </button>
+			<button type="button" class="mr mb-sm btn btn-default pull-right" data-ng-class="app.theme.brand" ng-click="pop('generateBill')" ng-disabled="formBill.$invalid || disableButton" tabIndex="5" > <span ng-if="quickBill.EditBillData" >Update & Bill Generate </span> <span ng-if="!quickBill.EditBillData">Save & Bill Generate </span> </button>
 			 
-			<button type="button" class="mr mb-sm btn btn-success pull-right" ng-click="pop('not')" ng-disabled="formBill.$invalid || disableButton" tabIndex="3" > <span ng-if="quickBill.EditBillData">Update</span> <span ng-if="!quickBill.EditBillData">Save</span> </button>
+			<button type="button" class="mr mb-sm btn btn-default pull-right" data-ng-class="app.theme.brand" ng-click="pop('not')" ng-disabled="formBill.$invalid || disableButton" tabIndex="3" > <span ng-if="quickBill.EditBillData">Update</span> <span ng-if="!quickBill.EditBillData">Save</span> </button>
 			
 			
 		</div>

@@ -17,7 +17,7 @@
 		<div class="panel-body">
 		<tabset>
             <tab heading="Sales Tax" active="false" >
-				<div class="panel-heading bg-primary" >
+				<div class="panel-heading bg-default" data-ng-class="app.theme.brand" >
 					 <div class="panel-title" id="allPro"> SalesTax of <b>{{displayCompany}}</b> Company Between {{::displayfromDate}} to {{::displaytoDate}} </div>
 				</div>
 			   <div class="table-responsive">
@@ -40,7 +40,7 @@
 			   <span ng-include="'app/views/partials/tableFooter/tableFooter.html'" >  </span>
 			</tab>
 			<tab heading="Purchase Tax" active="true" ng-click="refreshTable()"  >
-				<div class="panel-heading bg-primary" >
+				<div class="panel-heading bg-default" data-ng-class="app.theme.brand">
 					<div class="panel-title" id="allPro"> PurchaseTax of <b>{{displayCompany}}</b> Company Between {{::displayfromDate}} to {{::displaytoDate}} </div>
 				</div>
 				<div class="table-responsive">

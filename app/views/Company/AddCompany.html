@@ -28,7 +28,7 @@
 	</div>
 	<form  action="#" name="formCompany" class="form-validate form-horizontal">
 	   <div class="panel panel-default">
-		  <div class="panel-heading myFormHeading" >
+		  <div class="panel-heading" data-ng-class="app.theme.brand">
 			<div class="panel-title">
 				Basic Details
 			</div>
@@ -183,7 +183,7 @@
 		  </div>
 	   </div>
 	   <div class="panel panel-default">
-		   <div class="panel-heading myFormHeading" >
+		   <div class="panel-heading" data-ng-class="app.theme.brand">
 			<div class="panel-title">
 				Registration & Texation Details
 			</div>
@@ -304,7 +304,7 @@
 	   </div>
 	   <div class="panel panel-default">
 		  
-		   <div class="panel-heading myFormHeading" >
+		   <div class="panel-heading" data-ng-class="app.theme.brand">
 			<div class="panel-title">
 				Settings
 			</div>
@@ -402,7 +402,7 @@
 				<div class="col-md-6 col-md-offset-6">
 					<button type="button" style="visibility:hidden" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" class="mr mb-sm btn btn-danger pull-right" tabindex="3" ng-click="cancel()" >Cancel</button>
 					
-					<button type="button" class="mr mb-sm btn btn-success pull-right" tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="addCompanyForm(addCompany)" ng-disabled="formCompany.$invalid" >
+					<button type="button" class="mr mb-sm btn btn-success pull-right"  tabindex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" ng-click="addCompanyForm(addCompany)" ng-disabled="formCompany.$invalid" >
 					<span ng-if="!addCompany.cId">Insert</span>
 					<span ng-if="addCompany.cId">Update</span>
 					</button>

@@ -173,7 +173,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			vm.disableDecimal = true;
 			$scope.addCompany.curSymbol = editCompanyData.currencySymbol;
 			if(editCompanyData.printType == ''){
-				$scope.addCompany.printType = 'printed';
+				$scope.addCompany.printType = 'print';
 			}
 			else{
 				$scope.addCompany.printType = editCompanyData.printType;
@@ -249,11 +249,11 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			formdata.append('cityId',$scope.addCompany.cityDropDown.cityId);
 		
 		});
-			
-			
-			//vm.cityDrop = response4;
-			
-		  console.log('Not');
+		
+		$scope.addCompany.printType = 'print';
+		formdata.delete('printType');
+		formdata.set('printType',$scope.addCompany.printType);
+		
 	  }
   
 	}

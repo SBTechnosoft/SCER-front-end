@@ -6,7 +6,7 @@
 
 App.controller('AccViewController', AccViewController);
 
-function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType,validationMessage) {
+function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType,validationMessage,toaster) {
   'use strict';
   
   var vm = this; 
@@ -30,6 +30,7 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	$scope.accViewSales.salesType = 'All';
 	
 	$scope.companyApiLoad = function(){
+		loadingStart();
 		//Company Dropdown data
 		vm.companyDrop = [];
 		
@@ -40,6 +41,7 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 			//Set default Company
 			apiCall.getDefaultCompany().then(function(response){
 				
+				toaster.clear();
 				$scope.accViewSales.companyDropDown = response;
 				
 				//vm.branchDrop = [];
@@ -63,10 +65,11 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	
 	$scope.clientGetAllFunction = function(){
 		
+		loadingStart();
 		vm.clientSuggest = [];
 	
 		apiCall.getCall(apiPath.getAllClient).then(function(responseDrop){
-			
+			toaster.clear();
 			vm.clientSuggest = responseDrop;
 			
 		
@@ -84,8 +87,11 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	}
 	
 	if($scope.viewDataTypePath == 'CrmClientFilterView'){
-		
 		$scope.clientGetAllFunction();
+	}
+	
+	function loadingStart(){
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 	}
 	
   //Get All Branch on Company Change
@@ -219,13 +225,30 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 		
 	}
 	
+	
+	//Date Change Event
+	this.changeInvoiceDate = function(){
+		vm.dt1 == null ? vm.dt1 = new Date() : '';
+		vm.dt2 == null ? vm.dt2 = new Date() : '';
+	}
+
+	this.changeJobcardDate = function(){
+		vm.jobcardDate1 == null ? vm.jobcardDate1 = new Date() : '';
+		vm.jobcardDate2 == null ? vm.jobcardDate2 = new Date() : '';
+	}
+	
+	
   // Datepicker
   // ----------------------------------- 
 	this.minStart = new Date(0,0,1);
 	this.maxStart = new Date();
 	
   this.today = function() {
+	 
     this.dt1 = new Date();
+	if($scope.viewDataTypePath == 'CrmClientFilterView'){
+		this.dt1 = null;
+	}
   };
    
   
@@ -239,6 +262,9 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	else{
 		 this.dt2 = this.dt1;
 	}
+	if($scope.viewDataTypePath == 'CrmClientFilterView'){
+		this.dt2 = null;
+	}
   };
   this.today2();
 	
@@ -246,6 +272,9 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	
 		this.todayJobcard = function() {
 			this.jobcardDate1 = new Date();
+			if($scope.viewDataTypePath == 'CrmClientFilterView'){
+				this.jobcardDate1 = null;
+			}
 		};
 	   
 	  
@@ -253,6 +282,9 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	  
 		this.todayJobcard2 = function() {
 			this.jobcardDate2 = this.jobcardDate1;
+			if($scope.viewDataTypePath == 'CrmClientFilterView'){
+				this.jobcardDate2 = null;
+			}
 		};
 		this.todayJobcard2();
   
@@ -412,8 +444,6 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   ];
   
   
-
- 
   
 }
-AccViewController.$inject = ["$rootScope","$scope","apiCall","apiPath","$state","viewDataType","validationMessage"];
+AccViewController.$inject = ["$rootScope","$scope","apiCall","apiPath","$state","viewDataType","validationMessage","toaster"];

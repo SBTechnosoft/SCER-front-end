@@ -117,22 +117,27 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			else{
 				//console.log('else');
 				data = response;
-				console.table(data);
+				
 				for (var i = 0; i < data.length; i++) {
 					
-					var index = vm.productCategoryData.findIndex(x => x.productCategoryId==data[i].product.productCategoryId);
-					console.log(index);
+					var index = vm.productCategoryData.findIndex(x => parseInt(x.productCategoryId)== parseInt(data[i].product.productCategoryId));
+				
 					data[i].productCategoryName = ""; //initialization of new property 
 					data[i].productCategoryName =	vm.productCategoryData[index].productCategoryName;  //set the data from nested obj into new property
 					
-					var groupIndex = vm.productGroupData.findIndex(x => x.productGroupId==data[i].product.productGroupId);
+					var groupIndex = vm.productGroupData.findIndex(x => parseInt(x.productGroupId)==parseInt(data[i].product.productGroupId));
 					data[i].productGroupName = ""; //initialization of new property 
 					data[i].productGroupName = vm.productGroupData[groupIndex].productGroupName;  //set the data from nested obj into new property
 				  
 					data[i].productName = ""; //initialization of new property 
 					data[i].productName = data[i].product.productName;  //set the data from nested obj into new property
-					// data[i].productGroupName = ""; //initialization of new property 
-					// data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
+					
+					data[i].color = ""; 
+					data[i].color = data[i].product.color;
+					data[i].size = ""; 
+					data[i].size = data[i].product.size;
+					
+					data[i].qty = parseInt(data[i].qty);
 				}
 				
 				
@@ -175,7 +180,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 				  // alert('no');
 			  // }
 			  // use build-in angular filter
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") ))
+			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") || (typeof(params.$params.filter.qty) != "undefined" && params.$params.filter.qty != "")))
 			  {
 					 var orderedData = params.filter() ?
 					 $filter('filter')(data, params.filter()) :

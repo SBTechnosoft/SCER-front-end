@@ -16,7 +16,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
       App.constant   = $provide.constant;
       App.value      = $provide.value;
 
-	  //$compileProvider.debugInfoEnabled(false);
+	  // $compileProvider.debugInfoEnabled(false);
       // LAZY LOAD MODULES
       // ----------------------------------- 
 
@@ -276,7 +276,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewSales',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'sales';
 				}
@@ -298,7 +298,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewRetailSales',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'Retailsales';
 				}
@@ -320,7 +320,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewWholeSales',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'Wholesales';
 				}
@@ -364,7 +364,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewPurchase',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'purchase';
 				}
@@ -418,7 +418,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewSpecialJrnl',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'specialJournal';
 				}
@@ -446,7 +446,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewPayment',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'payment';
 				}
@@ -474,7 +474,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/AccViewReceipt',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'receipt';
 				}
@@ -527,7 +527,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccViewSalesTaxation',
 				templateUrl: basepath('Accounting/viewData/AccView.html'),
 				controller: 'AccViewController as form',
-				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 					viewDataType: function(){
 						return 'salesTaxation';
 					}
@@ -549,7 +549,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccViewPurchaseTaxation',
 				templateUrl: basepath('Accounting/viewData/AccView.html'),
 				controller: 'AccViewController as form',
-				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 					viewDataType: function(){
 						return 'purchaseTaxation';
 					}
@@ -571,7 +571,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccViewPurchaseDetailTaxation',
 				templateUrl: basepath('Accounting/viewData/AccView.html'),
 				controller: 'AccViewController as form',
-				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 					viewDataType: function(){
 						return 'purchaseDetailTaxation';
 					}
@@ -593,7 +593,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccViewGstReturn',
 				templateUrl: basepath('Accounting/viewData/AccView.html'),
 				controller: 'AccViewController as form',
-				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 					viewDataType: function(){
 						return 'GST Return';
 					}
@@ -693,7 +693,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/CrmClientFilterView',
 				templateUrl: basepath('Accounting/viewData/AccView.html'),
 				controller: 'AccViewController as form',
-				resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 					viewDataType: function(){
 						return 'CrmClientFilterView';
 					}
@@ -793,7 +793,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             url: '/ReportPolice',
             templateUrl: basepath('Accounting/viewData/AccView.html'),
 			controller: 'AccViewController as form',
-            resolve: angular.extend(requireDeps('moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+            resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
 				viewDataType: function(){
 					return 'PoliceReport';
 				}
@@ -943,7 +943,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 
         // Change here your views base path
         function basepath(uri) {
-          return 'app/views/' + uri + '?r='+Math.random();
+          return 'app/views/' + uri;
         }
 
         // Generates a resolve object by passing script names
@@ -1012,4 +1012,6 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
    // cfpLoadingBarProvider.parentSelector = '.app-container > section';
     cfpLoadingBarProvider.parentSelector = '.myTopBarPos';
 	//cfpLoadingBarProvider.spinnerTemplate = "<div><span class='fa fa-spinner'>Loading...</div>";
+}]).config(['$httpProvider', function($httpProvider) {
+	$httpProvider.useApplyAsync(true);
 }]);

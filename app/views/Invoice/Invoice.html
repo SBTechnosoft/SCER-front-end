@@ -7,7 +7,7 @@
 <div data-ng-controller="InvoiceController as form" class="container-fluid">
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
-		<div class="panel-heading myFormHeading" >
+		<div class="panel-heading" data-ng-class="app.theme.brand" >
 			<div class="panel-title">
 				Invoice Setting
 			</div>
@@ -46,7 +46,7 @@
 			<div class="col-md-6">
 				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
-					  <label for="input-id-1" class="col-sm-3 control-label">*Invoice Label</label>
+					  <label for="input-id-1" class="col-sm-3 control-label">Invoice Label</label>
 					  <div class="col-sm-9">
 						 <input id="input-id-1" tabindex="2" name="invoiceLabel" ng-pattern="/^[a-zA-Z &_`#().\'-\/]*$/"  ng-maxlength="35" ng-model="addInvoice.invoiceLabel" type="text" placeholder="Invoice Label" class="form-control" auto-focus/>
 						 
@@ -89,7 +89,7 @@
    </div>
    
    <div class="panel panel-default">
-      <div class="panel-heading myHeading" >
+      <div class="panel-heading" data-ng-class="app.theme.brand">
          <div class="panel-title">All Invoice</div>
 		 
       </div>

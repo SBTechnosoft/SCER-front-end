@@ -60,6 +60,11 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 					var kCount = response3[t].length;
 					for(var k=0;k<kCount;k++){
 						vm.clientNameDropCr.push(response3[t][k]);
+						if(updateId != null){
+							if(parseInt(response3[t][k].ledgerId) == parseInt(updateId)){
+								$scope.purchaseBill.ledgerEditableData = response3[t][k];
+							}
+						}
 					}
 				}
 			}
@@ -88,7 +93,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		$scope.purchaseBill.companyDropDown = response2;
 		
 		formdata.delete('companyId');
-		formdata.append('companyId',response2.companyId);
+		formdata.set('companyId',response2.companyId);
 		
 		$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints); //Set Decimal
 		
@@ -112,7 +117,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	$scope.ReloadAfterSave = function(response2){
 		$scope.purchaseBill.companyDropDown = response2;
 		formdata.delete('companyId');
-		formdata.append('companyId',response2.companyId);
+		formdata.set('companyId',response2.companyId);
 		$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
 		var id = response2.companyId;
 		$scope.clientGetAllFunction(id);
@@ -373,8 +378,10 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			angular.element("input[type='file']").val(null);
 			angular.element(".fileAttachLabel").html('');
 			formdata.delete('file[]');
-			if($scope.purchaseBill.EditBillData.file[0].documentName != '' && $scope.purchaseBill.EditBillData.file[0].documentName != null){
-				$scope.purchaseBill.documentData = $scope.purchaseBill.EditBillData.file;
+			if(copyData != 'copy'){
+				if($scope.purchaseBill.EditBillData.file[0].documentName != '' && $scope.purchaseBill.EditBillData.file[0].documentName != null){
+					$scope.purchaseBill.documentData = $scope.purchaseBill.EditBillData.file;
+				}
 			}
 			
 			//Remark
@@ -459,7 +466,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		}
 		var  date = new Date(vm.dt1);
 		var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
-		formdata.append(Fname,fdate);
+		formdata.set(Fname,fdate);
 	}
 	
 	$scope.changeInBill = function(Fname,value) {
@@ -468,7 +475,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			formdata.delete(Fname);
 		}
 		if(value != "" && value != undefined){
-			formdata.append(Fname,value);
+			formdata.set(Fname,value);
 		}
   	}
 	
@@ -479,7 +486,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value.ledgerId);
+		formdata.set(Fname,value.ledgerId);
 	}
 	
 	$scope.changePaymentInBill = function(Fname,value) {
@@ -492,7 +499,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			$scope.purchaseBill.BankName = "";
 			$scope.purchaseBill.chequeNo = "";
 		}
-		formdata.append(Fname,value);
+		formdata.set(Fname,value);
   	}
 	
   /* End */
@@ -525,7 +532,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			$scope.printButtonType = item.printType == '' ? 'print':item.printType;
 			
 			formdata.delete('companyId');
-			formdata.append('companyId',item.companyId);
+			formdata.set('companyId',item.companyId);
 		}
 	}
 	
@@ -544,22 +551,22 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			
 			var BillPath = apiPath.postPurchaseBill+'/'+$scope.purchaseBill.EditBillData.purchaseId;
 			 if($scope.changeProductArray){
-				formdata.append('balance',$scope.purchaseBill.balanceTable);
-				 formdata.append('grandTotal',$scope.grandTotalTable);
-				 $scope.purchaseBill.advance ? formdata.append('advance',$scope.purchaseBill.advance):formdata.append('advance',0);
+				formdata.set('balance',$scope.purchaseBill.balanceTable);
+				 formdata.set('grandTotal',$scope.grandTotalTable);
+				 $scope.purchaseBill.advance ? formdata.set('advance',$scope.purchaseBill.advance):formdata.set('advance',0);
 			
-				formdata.append('total',$scope.totalTable);
-				 formdata.append('tax',$scope.purchaseBill.tax);
+				formdata.set('total',$scope.totalTable);
+				 formdata.set('tax',$scope.purchaseBill.tax);
 				
 				formdata.delete('extraCharge');
 				
-				$scope.purchaseBill.extraCharge ? formdata.append('extraCharge',$scope.purchaseBill.extraCharge) : formdata.append('extraCharge',0);
+				$scope.purchaseBill.extraCharge ? formdata.set('extraCharge',$scope.purchaseBill.extraCharge) : formdata.set('extraCharge',0);
 			
 				formdata.delete('totalDiscounttype');
 				formdata.delete('totalDiscount');
 		
-				$scope.purchaseBill.overallDiscountType ? formdata.append('totalDiscounttype',$scope.purchaseBill.overallDiscountType):formdata.append('totalDiscounttype','flat');
-				$scope.purchaseBill.overallDiscount ? formdata.append('totalDiscount',$scope.purchaseBill.overallDiscount):formdata.append('totalDiscount',0);
+				$scope.purchaseBill.overallDiscountType ? formdata.set('totalDiscounttype',$scope.purchaseBill.overallDiscountType):formdata.set('totalDiscounttype','flat');
+				$scope.purchaseBill.overallDiscount ? formdata.set('totalDiscount',$scope.purchaseBill.overallDiscount):formdata.set('totalDiscount',0);
 			}
 		}
 		else{
@@ -570,55 +577,62 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 				
 			if(!formdata.has('companyId')){
-				formdata.append('companyId',$scope.purchaseBill.companyDropDown.companyId);
+				formdata.set('companyId',$scope.purchaseBill.companyDropDown.companyId);
 			}
+			console.log($scope.purchaseBill.ledgerEditableData);
+			if(!formdata.has('vendorId')){
+				formdata.set('vendorId',$scope.purchaseBill.ledgerEditableData.ledgerId);
+			}
+			
+			!formdata.has('billNumber') ? formdata.set('billNumber',$scope.purchaseBill.billNumber) : '';
 			
 			if(!formdata.has('entryDate')){
-				formdata.append('entryDate',fdate);
+				formdata.set('entryDate',fdate);
 			}
 			
-			 formdata.append('transactionDate',fdate);
+			 formdata.set('transactionDate',fdate);
 			
 				if(!formdata.has('paymentMode')){
-					formdata.append('paymentMode',$scope.purchaseBill.paymentMode);
+					formdata.set('paymentMode',$scope.purchaseBill.paymentMode);
 				}
 				
-				 formdata.append('grandTotal',$scope.grandTotalTable);
+				 formdata.set('grandTotal',$scope.grandTotalTable);
 				 	// console.log($scope.purchaseBill.advance);
 				if($scope.purchaseBill.advance){
 				
-					formdata.append('advance',$scope.purchaseBill.advance);
+					formdata.set('advance',$scope.purchaseBill.advance);
 				}
 				else{
 					
-					formdata.append('advance',0);
+					formdata.set('advance',0);
 				}
 				
-				formdata.append('balance',$scope.purchaseBill.balanceTable);
+				formdata.set('balance',$scope.purchaseBill.balanceTable);
 				
 				var BillPath = apiPath.postPurchaseBill;
 			
 			
-			formdata.append('total',$scope.totalTable);
-			formdata.append('tax',$scope.purchaseBill.tax);
+			formdata.set('total',$scope.totalTable);
+			formdata.set('tax',$scope.purchaseBill.tax);
 			
 			formdata.delete('totalDiscounttype');
 			formdata.delete('totalDiscount');
 			
-			$scope.purchaseBill.overallDiscountType ? formdata.append('totalDiscounttype',$scope.purchaseBill.overallDiscountType):formdata.append('totalDiscounttype','flat');
-			$scope.purchaseBill.overallDiscount ? formdata.append('totalDiscount',$scope.purchaseBill.overallDiscount):formdata.append('totalDiscount',0);
+			$scope.purchaseBill.overallDiscountType ? formdata.set('totalDiscounttype',$scope.purchaseBill.overallDiscountType):formdata.set('totalDiscounttype','flat');
+			$scope.purchaseBill.overallDiscount ? formdata.set('totalDiscount',$scope.purchaseBill.overallDiscount):formdata.set('totalDiscount',0);
 			
 			if($scope.purchaseBill.extraCharge){
 				
 				formdata.delete('extraCharge');
-				formdata.append('extraCharge',$scope.purchaseBill.extraCharge);
+				formdata.set('extraCharge',$scope.purchaseBill.extraCharge);
 			}
 			else{
 				formdata.delete('extraCharge');
-				formdata.append('extraCharge',0);
+				formdata.set('extraCharge',0);
 			}
-				
-			formdata.append('isDisplay','yes');
+			
+			formdata.delete('isDisplay');
+			formdata.set('isDisplay','yes');
 		}
 	 
 	 if($scope.changeProductArray){
@@ -626,20 +640,20 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		 var  date = new Date();
 		var tdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 			if(!formdata.has('transactionDate')){
-				formdata.append('transactionDate',tdate);
+				formdata.set('transactionDate',tdate);
 			}
 		  
 		 //Inventory
 		 var json2 = angular.copy(vm.AccBillTable);
 		 for(var i=0;i<json2.length;i++){
 			angular.forEach(json2[i], function (value,key) {
-				formdata.append('inventory['+i+']['+key+']',value);
+				formdata.set('inventory['+i+']['+key+']',value);
 			});	
 		 }
 	 }
 	 
 	 formdata.delete('transactionType');
-	 formdata.append('transactionType','purchase_tax');
+	 formdata.set('transactionType','purchase_tax');
 	 
 	var headerData = {'Content-Type': undefined};
 	
@@ -825,7 +839,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		if(flag == 0){
 			formdata.delete('file[]');
 			angular.forEach(files, function (value,key) {
-				formdata.append('file[]',value);
+				formdata.set('file[]',value);
 			});
 		}
 	};
@@ -941,6 +955,12 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	
 	/** Invoice **/
 		$scope.goInvoiceNumber = function(){
+			
+			toaster.clear();
+			if($scope.purchaseBill.searchInvoiceNumber == '' || angular.isUndefined($scope.purchaseBill.searchInvoiceNumber)){
+				toaster.pop('error', 'Search Box in Blank');
+				return false;
+			}
 			
 			toaster.pop('wait', 'Please Wait', 'Searching...',600000);
 			var BillPath = apiPath.PurchaseBillByCompany+$scope.purchaseBill.companyDropDown.companyId;
@@ -1082,7 +1102,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	$scope.editLedgerWithRedirect = function(){
 		
 		getSetFactory.blank();
-		console.log($scope.getLength($scope.purchaseBill.ledgerEditableData));
 		if($scope.getLength($scope.purchaseBill.ledgerEditableData) > 0){
 			getSetFactory.set($scope.purchaseBill.ledgerEditableData);
 			$scope.openLedger('lg');
@@ -1129,9 +1148,9 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				var ledId = data.index.ledger_id;
 				var ledName = data.index.ledger_name;
 			}
-			$scope.clientGetAllFunction($scope.purchaseBill.companyDropDown.companyId);
+			$scope.clientGetAllFunction($scope.purchaseBill.companyDropDown.companyId,ledId);
 			formdata.delete('vendorId');
-			formdata.append('vendorId',ledId);
+			formdata.set('vendorId',ledId);
 			$scope.purchaseBill.ledgerName = ledName;
 			
 			Modalopened = false;
@@ -1265,7 +1284,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				  
 				   var noIndex = ImgIndex;
 					 var ImgResponse = data[noIndex];
-					  formdata.append("scanFile["+srNo+"]",ImgResponse);
+					  formdata.set("scanFile["+srNo+"]",ImgResponse);
 					  srNo++;
 			  }
 			toaster.pop('success',data.length+' Document Scanned','');
@@ -1441,5 +1460,38 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				});
 		};
 		/** End History Modal **/
+		
+		$scope.openInNextTab = function(url){
+			$window.open(url,'_blank');
+		}
+		
+		$scope.documentDelete = function(item){
+			//alert('here');
+			item.ShowConfirm == true ? item.ShowConfirm = false : item.ShowConfirm = true;
+		}
+		
+		$scope.documentDeleteConfirm = function(item,index){
+			
+			var documentID = item.documentId;
+			
+			if(documentID == '' || documentID == null || documentID == undefined)
+			{
+				toaster.pop('error','Document Not Found');
+				return false;
+			}
+			
+			var headerData = {'Content-Type': undefined,'type':'purchase-bill'};
+			
+			apiCall.deleteCallHeader(apiPath.documentDelete+documentID,headerData).then(function(response){
+				if(response == apiResponse.ok){
+					toaster.pop('success','Document Successfully Deleted');
+					$scope.purchaseBill.documentData.splice(index,1);
+				}
+				else{
+					toaster.pop('warning',response);
+				}
+			});
+		}
+		
 }
 PurchaseBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","$filter","$state"];
