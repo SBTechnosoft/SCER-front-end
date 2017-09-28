@@ -8,9 +8,7 @@ App.factory('productArrayFactory', function() {
 		
 			var totalPercent = purchasePrice * percent/100;	
 		
-			var grandPrice = purchasePrice + totalPercent;
-			
-			return grandPrice;
+			return purchasePrice + totalPercent;
         },
 		calculateTax: function(mainPrice,vat,margin) {
 			
@@ -18,9 +16,7 @@ App.factory('productArrayFactory', function() {
 		   
 			var percent = parseFloat(vat)+parseFloat(margin);
 		
-			var totalPercent = purchasePrice * percent/100;	
-			
-			return totalPercent;
+			return purchasePrice * percent/100;	
         }
     };
 });

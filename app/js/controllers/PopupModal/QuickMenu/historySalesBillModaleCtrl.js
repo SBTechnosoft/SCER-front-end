@@ -3,10 +3,10 @@
  * Module: ModalController
  * Provides a simple way to implement bootstrap modals from templates
  =========================================================*/
-$.getScript('app/vendor/ng-table/ng-table.min.js');
-$.getScript('app/vendor/ng-table/ng-table.min.css');
-$.getScript('app/vendor/angularjs-toaster/toaster.js');
-$.getScript('app/vendor/angularjs-toaster/toaster.css');
+// $.getScript('app/vendor/ng-table/ng-table.min.js');
+// $.getScript('app/vendor/ng-table/ng-table.min.css');
+// $.getScript('app/vendor/angularjs-toaster/toaster.js');
+// $.getScript('app/vendor/angularjs-toaster/toaster.css');
 
 App.controller('historySalesBillModaleCtrl',historySalesBillModaleCtrl);
 

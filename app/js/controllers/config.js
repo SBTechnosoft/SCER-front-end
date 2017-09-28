@@ -4,10 +4,15 @@
  * App routes and resources configuration
  =========================================================*/
 
-App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$ocLazyLoadProvider', 'appDependencies',
-    function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $ocLazyLoadProvider,appDependencies) {
+App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$ocLazyLoadProvider', 'appDependencies','$httpProvider',
+    function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $ocLazyLoadProvider,appDependencies,$httpProvider) {
       'use strict';
-
+	  
+	$httpProvider.defaults.headers.common = {};
+	$httpProvider.defaults.headers.post = {};
+	$httpProvider.defaults.headers.put = {};
+	$httpProvider.defaults.headers.patch = {};
+	
       App.controller = $controllerProvider.register;
       App.directive  = $compileProvider.directive;
       App.filter     = $filterProvider.register;
@@ -15,7 +20,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
       App.service    = $provide.service;
       App.constant   = $provide.constant;
       App.value      = $provide.value;
-
+      
 	  // $compileProvider.debugInfoEnabled(false);
       // LAZY LOAD MODULES
       // ----------------------------------- 
@@ -693,7 +698,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/CrmClientFilterView',
 				templateUrl: basepath('Accounting/viewData/AccView.html'),
 				controller: 'AccViewController as form',
-				resolve: angular.extend(requireDeps('toaster','moment', 'inputmask', 'angular-chosen','getBranchSrv'),{
+				resolve: angular.extend(requireDeps('toaster','angular-chosen'),{
 					viewDataType: function(){
 						return 'CrmClientFilterView';
 					}
@@ -704,7 +709,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/CrmClientFilterData',
 				templateUrl: basepath('CRM/Client/CrmClientFilterData.html'),
 				controller: 'CrmClientFilterDataController as table',
-				resolve: requireDeps('ngTable','moment', 'inputmask', 'angular-chosen','toaster','getBranchSrv','wysiwyg')
+				resolve: requireDeps('ngTable','angular-chosen','wysiwyg')
 			})
 			//Client History
 			.state('app.CrmClientHistory', {
@@ -1013,5 +1018,6 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
     cfpLoadingBarProvider.parentSelector = '.myTopBarPos';
 	//cfpLoadingBarProvider.spinnerTemplate = "<div><span class='fa fa-spinner'>Loading...</div>";
 }]).config(['$httpProvider', function($httpProvider) {
+	
 	$httpProvider.useApplyAsync(true);
 }]);

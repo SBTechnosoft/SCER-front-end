@@ -59,7 +59,6 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 	if(Object.keys(getSetFactory.get()).length){
 
 		var editProductData = getSetFactory.get();
-		console.log(editProductData);
 		getSetFactory.blank();
 		
 		$scope.addModelProduct.getSetProductId = editProductData.productId;
@@ -249,6 +248,10 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		
 			if(apiResponse.ok == response5)
 			{
+				if($scope.addModelProduct.getSetProductId){
+					filterArray.productId = $scope.addModelProduct.getSetProductId;
+				}
+			
 				filterArray.index = $scope.productIndex;
 				filterArray.companyId = $scope.addModelProduct.company.companyId;
 				filterArray.productName = $scope.addModelProduct.productName;

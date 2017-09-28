@@ -32,23 +32,20 @@
    <!-- App Scripts-->
   
    <script src="app/js/base.js"></script>
-   
-    <script src="app/js/customeJS/ngMessage.js"></script>
-	<script src="app/js/customeJS/ngExport.js"></script>
-	<script src="app/js/customeJS/ngSanatize.js"></script>
-	<script src="app/js/customeJS/ngcsv.js"></script>
-	<script src="app/js/customeJS/googleReCaptcha.js"></script>
-	<script src="app/js/customeJS/ui-cropper.js"></script>
-	<!--script src="https://cdn.rawgit.com/CrackerakiUA/ui-cropper/master/compile/minified/ui-cropper.css"></script>
-	<script src="https://rawgit.com/CrackerakiUA/ui-cropper/master/compile/unminified/ui-cropper.js"></script-->
-	<!--script src="app/js/jQuery.print.js"></script-->
-	
+ 
 	<script src="app/js/app.js"></script>
 	<script src="app/js/controllers/appCtrl.js"></script>
     <script src="app/js/controllers/config.js"></script>
 	<script src="app/js/controllers/constants.js"></script>
-	
+	<script src="app/js/customeJS/googleReCaptcha.js"></script>
+		
 	<script src="app/js/controllers/Branch/getBranchFactory.js"></script>
+	
+	<script src="app/js/customeJS/ngMessage.js"></script>
+	<script src="app/js/customeJS/ngExport.js"></script>
+	<script src="app/js/customeJS/ngSanatize.js"></script>
+	<script src="app/js/customeJS/ngcsv.js"></script>
+	<script src="app/js/customeJS/ui-cropper.js"></script>
 	
 	<!--script src="app/js/controllers/calendarCtrl.js"></script>
 	<script src="app/js/controllers/mailboxCtrl.js"></script>
@@ -67,7 +64,7 @@
 	<script src="app/js/controllers/wysiwygDrt.js"></script>
 	<script src="app/js/controllers/climaconDrt.js"></script>
 	<script src="app/js/controllers/serviceSrv.js"></script>
-	<script src="app/js/controllers/headerNavCtrl.js?r=5002"></script>
+	<script src="app/js/controllers/headerNavCtrl.js"></script>
 	<!--script src="app/js/controllers/settingCtrl.js"></script>
 	<script src="app/js/controllers/summaryCtrl.js"></script>
 	<script src="app/js/controllers/googleMapCtrl.js"></script>
@@ -109,10 +106,15 @@
 	<script src="app/js/controllers/touchDragSrv.js"></script>
    
     <script src="app/js/controllers/page/loginCtrl.js"></script>
+	<!-- Default Dependancies -->
+	<script src="app/js/customeJS/onLoadDepts.js"></script>
+
    <!-- getter Setter Factory -->
-    <script src="app/js/controllers/Custom/GetSet/getSetFactory.js"></script>
-    <script src="app/js/controllers/Custom/GetSet/stateFactory.js"></script>
-    <script src="app/js/controllers/Custom/GetSet/productFactory.js"></script>
+		<script src="app/js/controllers/Custom/GetSet/fetchArrayService.js"></script>
+		<script src="app/js/controllers/Custom/GetSet/clientFactory.js"></script>
+		<script src="app/js/controllers/Custom/GetSet/getSetFactory.js"></script>
+		<script src="app/js/controllers/Custom/GetSet/stateFactory.js"></script>
+		<script src="app/js/controllers/Custom/GetSet/productFactory.js"></script>
    <!-- End -->
    
    <!-- Filters -->

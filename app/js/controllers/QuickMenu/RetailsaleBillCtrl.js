@@ -5,7 +5,7 @@
 
 App.controller('RetailsaleBillController', RetailsaleBillController);
 
-function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,$log,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,stateCityFactory,$filter,$state) {
+function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,stateCityFactory,$filter,$state,clientFactory) {
   'use strict';
  
 	var vm = this;
@@ -140,16 +140,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.clientGetAllFunction = function(){
 		
 		vm.clientSuggest = [];
-	
-		apiCall.getCall(apiPath.getAllClient).then(function(responseDrop){
-			
+		clientFactory.getClient().then(function(responseDrop){
 			vm.clientSuggest = responseDrop;
 		});
 		
 		vm.professionDrop = [];
-		
-		apiCall.getCall(apiPath.clientProfession).then(function(responseDrop){
-			
+		clientFactory.getProfession().then(function(responseDrop){
 			vm.professionDrop = responseDrop;
 		});
 	}
@@ -588,10 +584,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			if($scope.quickBill.EditBillData.client.hasOwnProperty('professionId')  && $scope.quickBill.EditBillData.client.professionId != '' && $scope.quickBill.EditBillData.client.professionId != null && parseInt($scope.quickBill.EditBillData.client.professionId) != 0){
 				
-				apiCall.getCall(apiPath.clientProfession+'/'+$scope.quickBill.EditBillData.client.professionId).then(function(response){
-				
+				clientFactory.getSingleProfession($scope.quickBill.EditBillData.client.professionId).then(function(response){
 					$scope.quickBill.professionDropDown = response;
-				
 				});
 			}
 			
@@ -720,6 +714,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		formdata.set(Fname,fdate);
 	}
 	
+	$scope.changeInClientData = false;
+	
 	$scope.changeInBill = function(Fname,value) {
 		if(formdata.has(Fname))
 		{
@@ -744,6 +740,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			$scope.quickBill.WorkNo = '';
 			$scope.quickBill.companyName = ''
+			$scope.quickBill.clientId = null;
 			$scope.quickBill.clientName = '';
 			$scope.quickBill.emailId = '';
 			$scope.quickBill.fisrtAddress = '';
@@ -755,6 +752,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			formdata.set('cityId',$scope.quickBill.cityId.cityId);
 			
 			$scope.clientSaveButton = true;
+		}
+		
+		if($scope.quickBill.EditBillData){
+			if(Fname == 'clientName' || Fname == 'address1' || Fname == 'stateAbb' || Fname == 'cityId' || Fname == 'emailId' || Fname == 'professionId'){
+				$scope.changeInClientData = true;
+			}
 		}
   	}
 	
@@ -782,7 +785,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			}
 			
 			
-			apiCall.postCall(apiPath.getAllClient,clientFormdata).then(function(data){
+			clientFactory.insertAndSetNewClient(clientFormdata).then(function(data){
 				//console.log(data);
 				if(angular.isObject(data)){
 					$scope.setClientSuggest('contactNo',data);
@@ -958,6 +961,18 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					$scope.quickBill.overallDiscount ? formdata.set('totalDiscount',$scope.quickBill.overallDiscount):formdata.set('totalDiscount',0);
 					
 				}
+				
+			if($scope.changeInClientData === true){
+				formdata.set('contactNo',$scope.quickBill.BillContact);
+				formdata.set('clientName',$scope.quickBill.clientName);
+				formdata.set('address1',$scope.quickBill.fisrtAddress);
+				formdata.set('stateAbb',$scope.quickBill.stateAbb.stateAbb);
+				formdata.set('cityId',$scope.quickBill.cityId.cityId);
+				formdata.set('emailId',$scope.quickBill.emailId);
+				if($scope.quickBill.professionDropDown){
+					formdata.set('professionId',$scope.quickBill.professionDropDown.professionId);
+				}
+			}
 		}
 		else{
 			toaster.clear();
@@ -1233,6 +1248,25 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				}
 			
 				var companyObject = $scope.quickBill.companyDropDown;
+				
+				/** Client Upadte **/
+					var contactNo = $scope.quickBill.BillContact;
+					var pushIt;
+	
+					clientFactory.getClient().then(function(response){
+						var indexClient = response.findIndex(function(o){
+							 return o.contactNo == contactNo;
+						});
+						
+						indexClient !== -1 ? pushIt = false : pushIt = true;
+						
+						clientFactory.getSetNewClientByContact(contactNo,pushIt).then(function(response){
+							$scope.clientGetAllFunction();
+						});
+					});		
+					
+				/** Client Upadte **/
+				
 				$scope.quickBill = [];
 				vm.dt1 = new Date();
 				vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
@@ -1243,11 +1277,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				$scope.changeProductArray = false;
 				$scope.changeProductAdvancePrice = false;
 				vm.disableCompany = false; 
-				
+				$scope.changeInClientData = false; //Client Data Give All in Update
 				// $scope.defaultComapny();
 				$scope.ReloadAfterSave(companyObject);
-				
-				$scope.clientGetAllFunction();
 				
 			//	$scope.getInitStateCity(); //get Default State and City
 				
@@ -1307,6 +1339,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$scope.quickBill = [];
 		
 		$scope.disableButton = false; 
+		$scope.changeInClientData = false; //Client Data Give All in Update
 		
 		angular.element("input[type='file']").val(null);
 		angular.element(".fileAttachLabel").html('');
@@ -1464,29 +1497,17 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 		$scope.clientSaveButton = false; //Save Button
 		
-		$scope.quickBill.cityId = {};
-		$scope.quickBill.stateAbb = {};
+		// $scope.quickBill.cityId = {};
+		// $scope.quickBill.stateAbb = {};
 		
 		//$scope.quickBill.WorkNo = data.workNo;
 		//$scope.quickBill.companyName = data.companyName;
+		$scope.quickBill.clientId = data.clientId;
 		$scope.quickBill.clientName = data.clientName;
 		$scope.quickBill.emailId = data.emailId;
 		
 		$scope.quickBill.fisrtAddress = data.address1;
 		//$scope.quickBill.secondAddress = data.address2;
-		
-		
-		//State DropDown Selection
-		// vm.statesDrop=[];
-		// vm.cityDrop=[];
-		// stateCityFactory.getState().then(function(response){
-			
-			// vm.statesDrop = response;
-			  // $scope.quickBill.stateAbb =  stateCityFactory.getDefaultState($scope.quickBill.EditBillData.client.stateAbb);
-			// vm.cityDrop = stateCityFactory.getDefaultStateCities($scope.quickBill.EditBillData.client.stateAbb);
-			// $scope.quickBill.cityId = stateCityFactory.getDefaultCity($scope.quickBill.EditBillData.client.cityId);
-		// });
-			
 		
 		$scope.quickBill.stateAbb = data.state;		
 		formdata.delete('stateAbb');
@@ -1508,9 +1529,19 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		}
 		
 		//Set Document Data
-		
-		if(data.file[0].clientId != '' && data.file[0].clientId != null){
-			$scope.quickBill.documentData = data.file;
+		if(data.hasOwnProperty('document')){
+			if(data.document.length > 0){
+				if(data.document[0].clientId != '' && data.document[0].clientId != null){
+					$scope.quickBill.documentData = data.document;
+				}
+			}
+		}
+		else if(data.hasOwnProperty('file')){
+			if(data.file.length > 0){
+				if(data.file[0].clientId != '' && data.file[0].clientId != null){
+					$scope.quickBill.documentData = data.file;
+				}
+			}
 		}
 		
 		
@@ -2180,34 +2211,45 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
-			//console.log(data);
-			 var UrlPath = apiPath.getProductByCompany+data.companyId;
+			var companyID = data.companyId;
+			var productIndex = data.index;
 			
-			// apiCall.getCall(UrlPath+'/branch').then(function(responseDrop){
-			
-				// vm.productNameDrop = responseDrop;
-		
-			// });
-			productFactory.blankProduct();
-			productFactory.getProductByCompany(data.companyId).then(function(response){
+			if(data.hasOwnProperty('productId')){
+				var productID = data.productId;
 				
-				vm.productNameDrop = response;
-				toaster.clear();
-			});
-			
-			
-			var headerSearch = {'Content-Type': undefined,'productName':data.productName,'color':data.color,'size':data.size};
-			
-			apiCall.getCallHeader(UrlPath,headerSearch).then(function(response){
+				productFactory.setUpdatedProduct(productID).then(function(response){
+					if(angular.isObject(response)){
+						productFactory.getProductByCompany(companyID).then(function(responseCompayWise){
+							vm.productNameDrop = responseCompayWise;
+							vm.AccBillTable[data.index].productName = response.productName;
+							$scope.setProductData(response,productIndex);
+							toaster.clear();
+						});
+					}
+					else{
+						toaster.pop('warning', response);
+					}
+				});
+			}
+			else{
+				var productName = data.productId;
+				var color = data.color;
+				var size = data.size;
 				
-				//console.log(response);
-				vm.AccBillTable[data.index].productName = response[0].productName;
-				//vm.AccBillTable[data.index].productId = response.productId;
-				
-				$scope.setProductData(response[0],data.index);
-				
-			});
-			
+				productFactory.setNewProduct(companyID,productName,color,size).then(function(response){
+					if(angular.isObject(response)){
+						productFactory.getProductByCompany(companyID).then(function(responseCompayWise){
+							vm.productNameDrop = responseCompayWise;
+							vm.AccBillTable[data.index].productName = response.productName;
+							$scope.setProductData(response,productIndex);
+							toaster.clear();
+						});
+					}
+					else{
+						toaster.pop('warning', response);
+					}
+				});
+			}
 			Modalopened = false;
 		
 		}, function () {
@@ -2603,4 +2645,4 @@ $scope.presssuburb = function(event){
   // return ($location.path().substr(0, path.length) === path) ? 'active' : '';
 // }
 }
-RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal", "$log","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","stateCityFactory","$filter","$state"];
+RetailsaleBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal","validationMessage","saleType","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","stateCityFactory","$filter","$state","clientFactory"];

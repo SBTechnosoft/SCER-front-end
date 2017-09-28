@@ -6,12 +6,13 @@
 
 App.controller('AccViewController', AccViewController);
 
-function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType,validationMessage,toaster) {
+function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType,validationMessage,toaster,clientFactory,stateCityFactory) {
   'use strict';
   
   var vm = this; 
   $scope.accViewSales = [];
-  
+  $scope.crmButtonHide = false;
+
   $scope.viewDataTypePath = viewDataType;
   var dateFormats = $rootScope.dateFormats; //Date Format
   
@@ -67,31 +68,35 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 		
 		loadingStart();
 		vm.clientSuggest = [];
-	
-		apiCall.getCall(apiPath.getAllClient).then(function(responseDrop){
-			toaster.clear();
+		clientFactory.getClient().then(function(responseDrop){
 			vm.clientSuggest = responseDrop;
-			
-		
 		});
 		
 		vm.professionDrop = [];
-		
-		apiCall.getCall(apiPath.clientProfession).then(function(responseDrop){
-			
+		clientFactory.getProfession().then(function(responseDrop){
 			vm.professionDrop = responseDrop;
-			
-		
 		});
 	
 	}
 	
 	if($scope.viewDataTypePath == 'CrmClientFilterView'){
+		$scope.crmButtonHide = true;
+
+		stateCityFactory.getState().then(function(){
+			$scope.crmButtonHide = false;
+			setTimeout(function() {
+				toaster.clear();
+			}, 1000);
+		});
+
 		$scope.clientGetAllFunction();
 	}
 	
 	function loadingStart(){
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		setTimeout(function() {
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',10000);
+		}, 500);
+		
 	}
 	
   //Get All Branch on Company Change
@@ -446,4 +451,4 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
   
   
 }
-AccViewController.$inject = ["$rootScope","$scope","apiCall","apiPath","$state","viewDataType","validationMessage","toaster"];
+AccViewController.$inject = ["$rootScope","$scope","apiCall","apiPath","$state","viewDataType","validationMessage","toaster","clientFactory","stateCityFactory"];

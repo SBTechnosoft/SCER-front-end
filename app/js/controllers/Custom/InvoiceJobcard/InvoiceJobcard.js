@@ -1,7 +1,4 @@
-App.factory('getLatestNumber', ["apiCall","apiPath", function (apiCall,apiPath) {
-	
-	//var erpPath = $rootScope.erpPath;
-	
+App.factory('getLatestNumber', [ function () {
 	
 	return  { 
 		 getInvoice : function(response){
@@ -9,13 +6,10 @@ App.factory('getLatestNumber', ["apiCall","apiPath", function (apiCall,apiPath) 
 			var label = response.invoiceLabel;
 			var invoiceEndAt = response.endAt;
 			if(response.invoiceType=='postfix'){
-				
 				latestNumber = label+invoiceEndAt;
 			}
 			else{
-				
 				latestNumber = invoiceEndAt+label;
-				
 			}
 		
 		return latestNumber;
@@ -30,9 +24,7 @@ App.factory('getLatestNumber', ["apiCall","apiPath", function (apiCall,apiPath) 
 				jobcardlatestNumber = label+jobcardEndAt;
 			}
 			else{
-				
 				jobcardlatestNumber = jobcardEndAt+label;
-				
 			}
 		
 		return jobcardlatestNumber;
@@ -47,12 +39,9 @@ App.factory('getLatestNumber', ["apiCall","apiPath", function (apiCall,apiPath) 
 				latestNumber = label+invoiceEndAt;
 			}
 			else{
-				
 				latestNumber = invoiceEndAt+label;
-				
 			}
-		
-		return latestNumber;
+			return latestNumber;
 			
 		}
 	};

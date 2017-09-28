@@ -1,149 +1,127 @@
-App.factory('productFactory',['apiCall','apiPath','$q', function(apiCall,apiPath,$q) {
-	var savedData = {};
+App.factory('productFactory',['apiCall','apiPath','apiResponse','$q','fetchArrayService', function(apiCall,apiPath,apiResponse,$q,fetchArrayService) {
+	 'use strict';
+	 
+	var savedData = null;
 	
- 
-	function setProduct(data) {
-		savedData = data;
+	function setUpdatedProduct(productId) {
+		var deferredMenu = $q.defer();
+			apiCall.getCall(apiPath.getAllProduct+'/'+productId).then(function(data){
+				if(angular.isObject(data)){
+					fetchArrayService.setUpdatedObject(savedData,data,productId,'productId');
+				}
+				deferredMenu.resolve(data);
+			});
+		return deferredMenu.promise;
 	}
  
+	function setNewProduct(companyId,productName,color,size,pushIt = true){
+		var deferredMenu = $q.defer();
+		// companyId == '' || productName == '' || color == '' || size == '' ? return 'Parameters are Mising or Wrong' : '';
+		var searchPath = apiPath.getProductByCompany+companyId;
+		var headerSearch = {'Content-Type': undefined,'productName':productName,'color':color,'size':size};
+			apiCall.getCallHeader(searchPath,headerSearch).then(function(response){
+				if(angular.isArray(response)){
+					if(pushIt === true){
+						savedData.push(response[0]);
+					}
+					deferredMenu.resolve(response[0]);
+				}
+				else{
+					deferredMenu.resolve(response);
+				}
+			});
+			
+		return deferredMenu.promise;
+	}
+	
 	function getProduct() {
 		
 	 var deferredMenu = $q.defer();
 	 
-		if(savedData.length > 0) {
+		if(savedData !== null) {
 			deferredMenu.resolve(savedData);
 		} else {
 			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
-				
 				if(angular.isArray(data)){
 					savedData = data;
 				}
-				
 				deferredMenu.resolve(data);
 			})
 		}
-
 		return deferredMenu.promise;
 	}
  
 	function blankProduct() {
-		savedData = {};
+		savedData = null;
 	}
  
-
 	function getSingleProduct(proId){
 		
 		var deferredMenu = $q.defer();
-		
-		if(savedData.length > 0) {
-			
-			var AllData = savedData;
-				var Cnt = AllData.length;
-				for(var y=0;y<Cnt;y++)
-				{
-					var stateData = AllData[y];
-					if(stateData.productId == proId){
-						deferredMenu.resolve(stateData);
-						break;
-					}
-				}
-				
+
+		if(savedData !== null) {
+			 deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(savedData,proId,'productId'));
 		} else {
+			
 			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
-				
 				if(angular.isArray(data)){
-					
 					savedData = data;
-					var AllData = data;
-					var Cnt = AllData.length;
-					for(var y=0;y<Cnt;y++)
-					{
-						var stateData = AllData[y];
-						if(stateData.productId == proId){
-							deferredMenu.resolve(stateData);
-							break;
-						}
-					}
-					
+					deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(data,proId,'productId'));
 				}
 				else{
 					deferredMenu.resolve(data);
 				}
-				
-			})
+			});
 		}
-		
 		return deferredMenu.promise;
-		
 	}
 	
 	function getProductByCompany(compId){
 		var deferredMenu = $q.defer();
 		
-		if(savedData.length > 0) {
-			
-			var AllData = savedData;
-			
-			var StateArray = [];
-			var Cnt = AllData.length;
-			for(var y=0;y<Cnt;y++)
-			{
-				var productArrayData = AllData[y];
-				
-				if(productArrayData.company.companyId == compId){
-					
-					StateArray.push(productArrayData);
-					
-				}
-			}
-			deferredMenu.resolve(StateArray);
-				
+		if(savedData !== null) {
+			deferredMenu.resolve(fetchArrayService.getfilteredArray(savedData,compId,'company','companyId'));
 		} else {
-				
+			apiCall.getCall(apiPath.getProductByCompany+compId).then(function(data) {
+				deferredMenu.resolve(data);
+			});
 			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
-				
-				var StateArray = [];
-				
-				if(angular.isArray(data)){
-					
-					savedData = data;
-					var AllData = data;
-					var StateArray = [];
-					var Cnt = AllData.length;
-					for(var y=0;y<Cnt;y++)
-					{
-						var productArrayData = AllData[y];
-						
-						if(productArrayData.company.companyId == compId){
-							
-							StateArray.push(productArrayData);
-							
-						}
-					}
-					deferredMenu.resolve(StateArray);
-				}
-				else{
-					deferredMenu.resolve(data);
-				}
-				
-				
-		
-				deferredMenu.resolve(StateArray);
-			})
+				savedData = data;
+				// deferredMenu.resolve(fetchArrayService.getfilteredArray(savedData,compId,'company','companyId'));
+			});
 		}
-		
-		
 		return deferredMenu.promise;
-		
 	}
 	
-		
+	function deleteSingleProduct(proId){
+		var deferredMenu = $q.defer();
+			if(proId != '' && proId != null && proId != undefined){
+				apiCall.deleteCall(apiPath.getAllProduct+'/'+proId).then(function(response){
+					if(apiResponse.ok == response){
+						/** Splice **/
+						var index = savedData.findIndex(function(o){
+							 return o.productId == proId;
+						})
+						if (index !== -1) savedData.splice(index,1);
+						/** Splice **/
+					}
+					deferredMenu.resolve(response);
+				});
+			}
+			else{
+				deferredMenu.resolve('Product Parameter Not Proper');
+			}
+		return deferredMenu.promise;
+	}
+	
  return {
-  setProduct: setProduct,
+  setUpdatedProduct: setUpdatedProduct,
+  setNewProduct: setNewProduct,
   getProduct: getProduct,
   blankProduct: blankProduct,
   getSingleProduct: getSingleProduct,
-  getProductByCompany: getProductByCompany
+  getProductByCompany: getProductByCompany,
+  deleteSingleProduct: deleteSingleProduct
  }
 
 }]);

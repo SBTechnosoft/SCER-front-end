@@ -55,7 +55,7 @@
 				  
 				  <label for="input-id-1" class="col-sm-1 control-label">*Color</label>
                   <div class="col-sm-2">
-                     <input id="input-id-1" name="productColor" ng-model="addModelProduct.color"  ng-change="changeInvProductData('color',addModelProduct.color)" type="text" placeholder="Color" tabindex="2" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 .\/-()]+$/" ng-maxlength="30" />
+                     <input id="input-id-1" name="productColor" ng-model="addModelProduct.color"  ng-change="changeInvProductData('color',addModelProduct.color)" type="text" placeholder="Color" tabindex="2" class="form-control" ng-required="true" ng-pattern="/^[a-zA-Z0-9 .\/()-]+$/" ng-maxlength="30" />
 					 
 					<span ng-messages="formProduct.productColor.$error" ng-if="formProduct.productColor.$dirty || formProduct.productColor.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>

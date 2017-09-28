@@ -1,7 +1,7 @@
 
 App.controller('PurchaseBillController', PurchaseBillController);
 
-function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,$location,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,$filter,$state) {
+function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,$filter,$state) {
   'use strict';
  
 	var vm = this;
@@ -1201,21 +1201,45 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
-			 var UrlPath = apiPath.getProductByCompany+data.companyId;
+			var companyID = data.companyId;
+			var productIndex = data.index;
 			
-			productFactory.blankProduct();
-			productFactory.getProductByCompany(data.companyId).then(function(response){
+			if(data.hasOwnProperty('productId')){
+				var productID = data.productId;
 				
-				vm.productNameDrop = response;
-				toaster.clear();
-			});
-			
-			var headerSearch = {'Content-Type': undefined,'productName':data.productName,'color':data.color,'size':data.size};
-			
-			apiCall.getCallHeader(UrlPath,headerSearch).then(function(response){
-				vm.AccBillTable[data.index].productName = response[0].productName;
-				$scope.setProductData(response[0],data.index);
-			});
+				productFactory.setUpdatedProduct(productID).then(function(response){
+					if(angular.isObject(response)){
+						productFactory.getProductByCompany(companyID).then(function(responseCompayWise){
+							vm.productNameDrop = responseCompayWise;
+							vm.AccBillTable[data.index].productName = response.productName;
+							$scope.setProductData(response,productIndex);
+							toaster.clear();
+						});
+					}
+					else{
+						toaster.pop('warning', response);
+					}
+				});
+			}
+			else{
+				var productName = data.productId;
+				var color = data.color;
+				var size = data.size;
+				
+				productFactory.setNewProduct(companyID,productName,color,size).then(function(response){
+					if(angular.isObject(response)){
+						productFactory.getProductByCompany(companyID).then(function(responseCompayWise){
+							vm.productNameDrop = responseCompayWise;
+							vm.AccBillTable[data.index].productName = response.productName;
+							$scope.setProductData(response,productIndex);
+							toaster.clear();
+						});
+					}
+					else{
+						toaster.pop('warning', response);
+					}
+				});
+			}
 			
 			Modalopened = false;
 		
@@ -1494,4 +1518,4 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		}
 		
 }
-PurchaseBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","$location","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","$filter","$state"];
+PurchaseBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","$filter","$state"];

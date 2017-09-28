@@ -18,11 +18,8 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	$scope.showProduct = function(){
 		
 		if($scope.stateCheck){
-			
 			flag = 1;
 			$scope.getProduct($scope.stateCheck.companyId);
-			
-			
 		}
 		else{
 			
@@ -49,19 +46,13 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 					  data[i].productGroupName = ""; //initialization of new property 
 					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
 					}
-					
-					
 				}
 				
 				vm.tableParams.reload();
 				vm.tableParams.page(1);
 				
 			});
-			
-			
 		}
-		
-		
 	}
 	
 	$scope.init = function (){
@@ -109,8 +100,6 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 					  data[i].productGroupName = ""; //initialization of new property 
 					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
 					}
-					
-					
 				}
 				
 				if(flag == 0){
@@ -144,43 +133,15 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
-			  // if()
-			  // {
-				  // alert('yes');
-			  // }
-			  // else{
-				  // alert('no');
-			  // }
-			  // use build-in angular filter
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") ))
-			  {
-					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
+			  var filteredData = params.filter() ?
+                  $filter('filter')(data, params.filter()) :
+                  data;
+          var orderedData = params.sorting() ?
+                  $filter('orderBy')(filteredData, params.orderBy()) :
+                  data;
 
-					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-					  params.total(orderedData.length); // set total for recalc pagination
-					  $defer.resolve(vm.users);
-			  
-
-			  }
-			else
-			{
-				   params.total(data.length);
-				  
-			}
-			 
-			 if(!$.isEmptyObject(params.$params.sorting))
-			  {
-				
-				 //alert('ggg');
-				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
-		  
-				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			  }
+          params.total(orderedData.length); // set total for recalc pagination
+          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 			
 			$scope.totalData = data.length;
 			$scope.pageNumber = params.page();
@@ -213,28 +174,15 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	    Modalopened = true;
 		
 		modalInstance.result.then(function () {
-		 
-		 console.log('ok');
-		 
-		// return false;
 		 /**Delete Code **/
-			apiCall.deleteCall(apiPath.getAllProduct+'/'+id).then(function(response){
-		
-				//console.log(response);
-				
+			productFactory.deleteSingleProduct(id).then(function(response){
 				if(apiResponse.ok == response){
-					
-					 productFactory.blankProduct();
 					$scope.showProduct();
 					toaster.pop('success', 'Title', 'Delete SuccessFully');
-					//vm.tableParams.reload();
-					
 				}
 				else{
-
 					toaster.pop('warning', 'Opps!!', response);
 				}
-
 			});
 		 /** End **/
 			 Modalopened = false;
@@ -283,57 +231,5 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		}
 	
    /** End **/
-   
-   
-  /** Barcode **/
-  
-	$scope.barcodePopup = function(size,id,pName,pColor,pSize)
-	{
-		//alert(id);
-		
-		// $('#allPro').print(2);
-		
-		// return false;
-		toaster.clear();
-		
-		var modalInstance = $modal.open({
-			  templateUrl: 'app/views/PopupModal/Inventory/productBarcodeModal.html',
-			  controller: productBarcodeModalCtrl,
-			  size: size,
-			  resolve:{
-				  productId: function(){
-					 
-					return id;
-				  },
-				  productName: function(){
-					 
-					return pName;
-				  },
-				  productColor: function(){
-					 
-					return pColor;
-				  },
-				  productSize: function(){
-					 
-					return pSize;
-				  }
-				  
-			  }
-			});
-
-		   
-		modalInstance.result.then(function () {
-		 
-		 console.log('ok');
-		
-		}, function () {
-		  console.log('Cancel');	
-		});
-			
-			
-	}
-  
-  /** End **/
-
 }
 InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal","productFactory"];

@@ -61,7 +61,7 @@
 						<div class="col-sm-5">
 							<div class="input-group m-b">
 								<span class="input-group-addon" style="padding-left: 6px;padding-right: 6px;">@</span>
-								<input type="email" name="emailId" ng-model="ledgerForm.emailId" ng-change="changeLedgerData('emailId',ledgerForm.emailId)" placeholder="Email ID" class="form-control"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
+								<input type="email" name="emailId" ng-model="clientForm.emailId" ng-change="changeInClientData('emailId',clientForm.emailId)" placeholder="Email ID" class="form-control"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" />
 							</div>
 							
 							<span ng-messages="formClient.emailId.$error" ng-if="formClient.emailId.$dirty || formClient.emailId.$touched"  role="alert">
@@ -92,7 +92,7 @@
 			</fieldset>
 			<div class="alert alert-warning" ng-if="form.errorMsg">{{form.errorMsg}}</div>
 			<fieldset class="my-fieldset-paddingBottom">
-				<button type="button"  class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="clickSave()" ng-disabled="formClient.$invalid" >
+				<button type="button"  class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="clickSave()" ng-disabled="formClient.$invalid || form.buttonHidden" >
 					<span ng-if="!clientForm.getSetClientId" >Save</span>
 					<span ng-if="clientForm.getSetClientId" >Update</span>
 				</button>
@@ -136,4 +136,7 @@
 
 <script type="text/ng-template" id="errorPatternThisSpecial&Number">
 	<span class="text-danger" ng-message="pattern">{{errorMessage.thisSpecialCharacterAndNumber}}</span>
+</script>
+<script type="text/ng-template" id="errorPatternNumberContact">
+	<span class="text-danger" ng-message="pattern">Only Number & Not Start With Zero</span>
 </script>

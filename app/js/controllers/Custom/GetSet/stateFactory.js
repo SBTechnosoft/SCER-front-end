@@ -1,85 +1,68 @@
-App.factory('stateCityFactory',['apiCall','apiPath','$q',function(apiCall,apiPath,$q) {
- var savedData = {};
- var cityData = {};
- 
- function getCity() {
-	 return cityData;
- }
- function getState() {
-	var deferredMenu = $q.defer();
+App.factory('stateCityFactory',['apiCall','apiPath','$q','fetchArrayService', function(apiCall,apiPath,$q,fetchArrayService) {
+	 'use strict';
 	 
-	if(savedData.length > 0) {
-		deferredMenu.resolve(savedData);
-	} else {
-		
-		apiCall.getCall(apiPath.getOneCity).then(function(data) {
-			cityData = data;
-			
-			apiCall.getCall(apiPath.getAllState).then(function(data) {
-				savedData = data;
-
-				deferredMenu.resolve(data);
-			});
-		});
+	 var savedData = null;
+	 var cityData = null;
+	 
+	 function getCity() {
+		 return cityData;
+	 }
+ 
+	function getState() {
+		var deferredMenu = $q.defer();
+			if(savedData !== null) {
+				deferredMenu.resolve(savedData);
+			} else {
+				apiCall.getCall(apiPath.getAllState).then(function(data) {
+					savedData = data;
+					apiCall.getCall(apiPath.getOneCity).then(function(response) {
+						deferredMenu.resolve(data);
+						cityData = response;
+					});
+				});
+			}
+		return deferredMenu.promise;
 	}
-
-	return deferredMenu.promise;
- }
  
- 
- function blankState() {
-   savedData = {};
- }
- function blankCity() {
-   cityData = {};
- }
+	 function blankState() {
+	   savedData = null;
+	 }
+	 function blankCity() {
+	   cityData = null;
+	 }
 
 	function getDefaultState(stateId){
-		
-		var Cnt = savedData.length;
-		for(var y=0;y<Cnt;y++)
-		{
-			var stateData = savedData[y];
-			if(stateData.stateAbb == stateId){
-				return stateData;
-				break;
-			}
-		}
-		
-		
+		return fetchArrayService.getfilteredSingleObject(savedData,stateId,'stateAbb');
 	}
 	
 	function getDefaultStateCities(stateId){
-
-		var StateArray = [];
-		var Cnt = cityData.length;
-		for(var y=0;y<Cnt;y++)
-		{
-			var cityArrayData = cityData[y];
-			
-			if(cityArrayData.state.stateAbb == stateId){
-				StateArray.push(cityArrayData);
-				//var index = cityData.findIndex(x => x.stateAbb==stateId);
-				//StateArray.push(cityData[index]);  
-				
-			}
-		}
-		return StateArray;
+		return continueExec(stateId);
 	}
 	
 	function getDefaultCity(cityId){
-		var Cnt = cityData.length;
-		for(var y=0;y<Cnt;y++)
-		{
-			var cityArrayData = cityData[y];
-			if(cityArrayData.cityId == cityId){
-				return cityArrayData;
-				break;
-			}
-		}
+		return continueExecForDefault(cityId);
 	}
 	
-		
+	function continueExec(stateId) {
+		//here is the trick, wait until var callbackCount is set number of callback functions
+		if (cityData === null) {
+			setTimeout(continueExec(stateId), 2000);
+			return;
+		}
+		//Finally, do what you need
+		return fetchArrayService.getfilteredArray(cityData,stateId,'state','stateAbb');
+	}
+	
+	function continueExecForDefault(cityId) {
+		//here is the trick, wait until var callbackCount is set number of callback functions
+		if (cityData === null) {
+			setTimeout(continueExecForDefault(cityId), 2000);
+			return;
+		}
+		//Finally, do what you need
+		return fetchArrayService.getfilteredSingleObject(cityData,cityId,'cityId');
+	}
+
  return {
   getState: getState,
   getCity: getCity,

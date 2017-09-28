@@ -6,7 +6,7 @@
 
 App.controller('SettingClientProfessionController', SettingClientProfessionController);
 
-function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,apiPath,toaster,apiResponse,validationMessage,$modal,$anchorScroll) {
+function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,apiPath,toaster,apiResponse,validationMessage,$modal,$anchorScroll,clientFactory) {
   'use strict';
  var vm = this;
  //var data = [{'professionName': 'Doctor'},{'professionName': 'Engineer'}];
@@ -58,7 +58,7 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 			{
 			field: "professionId",
 			displayName: "Action",
-			cellTemplate: "<i ui-sref=\"\" ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ui-sref=\"\" ng-click=\"cellTemplateScope.deleteCat(\'sm\',row.branch[col.field])\" class=\"fa fa-times-circle\" style=\"font-size:17px;color:red\"></i>",
+			cellTemplate: "<i ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit myCursorPointer\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ng-click=\"cellTemplateScope.deleteCat(\'sm\',row.branch[col.field])\" class=\"fa fa-times-circle myCursorPointer\" style=\"font-size:17px;color:red\"></i>",
 			cellTemplateScope: {
 				deleteCat: function(size,data) {         // this works too: $scope.someMethod;
 					//console.log(data);
@@ -80,13 +80,13 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 				toaster.pop('wait', 'Please Wait', 'Data Deleting....',60000);
 				// return false;
 				 /**Delete Code **/
-					apiCall.deleteCall(apiPath.clientProfession+'/'+data).then(function(response){
+					clientFactory.deleteSingleProfession(data).then(function(response){
 						
 						//console.log(response);
 						toaster.clear();
 						if(apiResponse.ok == response){
 							
-							toaster.pop('success', 'Title', 'Delete SuccessFully');
+							toaster.pop('success', 'Delete', 'Delete SuccessFully');
 							// vm.categoryDrop = [];
 							// apiCall.getCall(apiPath.clientProfession).then(function(response){
 							
@@ -120,10 +120,9 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 					toaster.pop('wait', 'Please Wait', 'Data Fetching....',60000);
 					
 					$scope.clientProfessionForm.id = data;
-					apiCall.getCall(apiPath.clientProfession+'/'+data).then(function(response){
+					clientFactory.getSingleProfession(data).then(function(response){
 						
 						toaster.clear();
-						
 						$scope.clientProfessionForm.professionName = response.professionName;
 						
 						//console.log(response);
@@ -132,7 +131,7 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 						}
 						else{
 							
-							apiCall.getCall(apiPath.clientProfession+'/'+response.professionParentId).then(function(response){
+							clientFactory.getSingleProfession(response.professionParentId).then(function(response){
 								$scope.clientProfessionForm.professionDropDown = response;
 							});
 						}
@@ -152,20 +151,15 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
 		
 		$scope.init = function(){
 			
-			var url = apiPath.clientProfession;
-			
 			vm.professionDrop = [];
-			apiCall.getCall(url).then(function(response){
-				
+			clientFactory.getProfession().then(function(response){
 				
 				if(angular.isArray(response)){
-					
-					vm.professionDrop = response;
-					var myTreeData2 = getTree(response, 'professionId', 'professionParentId');
+					var allProfession = angular.copy(response);
+					vm.professionDrop = allProfession;
+					var myTreeData2 = getTree(allProfession, 'professionId', 'professionParentId');
 					$scope.tree_data = myTreeData2;
 				}
-				
-				
 				toaster.clear();
 			});
 		
@@ -188,27 +182,29 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
   //Insert Client Profession
   $scope.insertProfessionData = function()
   {
+	var profId = null;
 	
 	if($scope.clientProfessionForm.id){
-		var url = apiPath.clientProfession+"/"+$scope.clientProfessionForm.id;
-	}
-	else{
-		var url = apiPath.clientProfession;
+		profId = $scope.clientProfessionForm.id;
 	}
 	
-	apiCall.postCall(url,formdata).then(function(response5){
+	clientFactory.insertAndUpdateProfession(formdata,profId).then(function(response5){
 		//console.log(response5);
 		if(apiResponse.ok == response5){
 			
-			toaster.pop('success', 'Title', 'Successfull');
-				
-			$scope.init();
-			
+			if($scope.clientProfessionForm.id){
+				toaster.pop('success', 'Updated', 'Profession Updated Successfully');
+				clientFactory.setGetUpdatedProfession(profId).then(function(response){
+					$scope.init();
+				});
+			}
+			else{
+				toaster.pop('success', 'Inserted', 'Profession Inserted Successfully');
+				$scope.init();
+			}
 			$scope.clientProfessionForm = [];
-	
-	
-			formdata.delete('professionParentId');
-			formdata.delete('professionName');
+			formdata = undefined;
+			formdata = new FormData();
 			
 		}
 		else{
@@ -268,4 +264,4 @@ function SettingClientProfessionController($rootScope,$scope,$filter,apiCall,api
         }
 		
 }
-SettingClientProfessionController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","toaster","apiResponse","validationMessage","$modal","$anchorScroll"];
+SettingClientProfessionController.$inject = ["$rootScope","$scope","$filter","apiCall","apiPath","toaster","apiResponse","validationMessage","$modal","$anchorScroll","clientFactory"];

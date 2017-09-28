@@ -3,17 +3,6 @@
  * Module: ModalController
  * Provides a simple way to implement bootstrap modals from templates
  =========================================================*/
-$.getScript('app/vendor/ng-table/ng-table.min.js');
-$.getScript('app/vendor/ng-table/ng-table.min.css');
-$.getScript('app/vendor/angularjs-toaster/toaster.js');
-$.getScript('app/vendor/angularjs-toaster/toaster.css');
-// $.getScript('app/vendor/Flot/jquery.flot.js');
-// $.getScript('app/vendor/flot.tooltip/js/jquery.flot.tooltip.min.js');
-// $.getScript('app/vendor/Flot/jquery.flot.resize.js');
-// $.getScript('app/vendor/Flot/jquery.flot.pie.js');
-// $.getScript('app/vendor/Flot/jquery.flot.time.js');
-// $.getScript('app/vendor/Flot/jquery.flot.categories.js');
-// $.getScript('app/vendor/flot-spline/js/jquery.flot.spline.min.js');
 
 App.controller('historyPurchaseModaleCtrl',historyPurchaseModaleCtrl);
 

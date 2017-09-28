@@ -1,5 +1,3 @@
-
-
 <h3>
 	
    <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> 
@@ -35,7 +33,7 @@
 
 	
    <div class="panel panel-default">
-      <div class="panel-heading myHeading" >
+      <div class="panel-heading" data-ng-class="app.theme.brand">
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
          <div class="panel-title" > All Product   </div>
 		 
@@ -57,7 +55,7 @@
 				<th>Product Name</th>
 				<th>Color</th>
 				<th>Size</th>
-				<th  style="width:10%;" ng-if="selectedBoxArray.length <= 0 && barcodeFlag!=1" >Quantity</th>
+				<th  style="width:3%;" ng-if="selectedBoxArray.length <= 0 && barcodeFlag!=1" >Quantity</th>
 				<th   ng-if="selectedBoxArray.length <= 0 && barcodeFlag!=1" >Print</th>
 				<th style="width:10%" ng-if="selectedBoxArray.length > 0 || barcodeFlag==1" ng-init="barcodePrintData.multiQuantity = 0" >
 					
@@ -78,19 +76,19 @@
 					<td>
 					</td>
 					<td>
-						<input type="text" class="input-filter form-control fa fa-search" ng-model="query.productCategoryName"  />
+						<input type="text" class="input-filter form-control" ng-model="query.productCategoryName"  />
 					</td>
 					<td>
-						<input type="text" class="input-filter form-control fa fa-search" ng-model="query.productGroupName"  />
+						<input type="text" class="input-filter form-control" ng-model="query.productGroupName"  />
 					</td>
 					<td>
-						<input type="text" class="input-filter form-control fa fa-search" ng-model="query.productName"  />
+						<input type="text" class="input-filter form-control" ng-model="query.productName"  />
 					</td>
 					<td>
-						<input type="text" class="input-filter form-control fa fa-search" ng-model="query.color"  />
+						<input type="text" class="input-filter form-control" ng-model="query.color"  />
 					</td>
 					<td>
-						<input type="text" class="input-filter form-control fa fa-search" ng-model="query.size"  />
+						<input type="text" class="input-filter form-control" ng-model="query.size"  />
 					</td>
 					<td colspan="2">
 					</td>
@@ -111,12 +109,14 @@
 				   
 					<td   filter="{ 'color': 'text' }" >{{::user.color}}</td>
 					<td    filter="{ 'size': 'text' }" >{{::user.size}}</td>
-					<td ng-init="user.barcodeQuantity=0"> <input id="input-id-1"  name="quantity" ng-model="user.barcodeQuantity" type="text" placeholder="Quantity" class="form-control" ng-pattern="/^[0-9]*$/"  ng-disabled="barcodePrintData.multiQuantity>0" ng-change="hideMiltiQuantity(user.barcodeQuantity,user.productId)"  min="1" only-number /> </td>
+					<td  ng-init="user.barcodeQuantity=0"> <input id="input-id-1"  name="quantity" ng-model="user.barcodeQuantity" type="text" placeholder="Quantity" class="form-control input-sm" ng-pattern="/^[0-9]*$/"  ng-disabled="barcodePrintData.multiQuantity>0" ng-change="hideMiltiQuantity(user.barcodeQuantity,user.productId)"  min="1" only-number /> </td>
 			
 				   <td  style="width:10%"> 
 						<center>
 							<!--i ui-sref="" title="Barcode" ng-click="barcodePopup('lg',user.productId,user.productName,user.color,user.size)" class="fa fa-barcode" style="font-size:17px;"> </i--> 
-							<i ui-sref="" title="Barcode" ng-click="singleBarcodePrint(user.barcodeQuantity,user)"  ng-if="user.barcodeQuantity>0"class="fa fa-print" style="font-size:17px;"> </i> 
+							<i  title="Barcode" ng-click="singleBarcodePrint(user.barcodeQuantity,user)"  ng-if="user.barcodeQuantity>0"class="fa fa-print myCursorPointer" style="font-size:17px;"> </i> 
+							&nbsp;
+							<i  title="Edit" ng-click="editProduct(user)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#10709f"> </i> 
 						</center>
 					</td>
 				</tr>

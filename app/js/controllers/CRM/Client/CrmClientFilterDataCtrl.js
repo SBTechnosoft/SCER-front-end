@@ -6,7 +6,7 @@
 
 App.controller('CrmClientFilterDataController', CrmClientFilterDataController);
 
-function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,apiResponse,toaster,getSetFactory,$window,$state,$modal) {
+function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,apiResponse,toaster,getSetFactory,$window,$state,$modal,clientFactory) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -45,8 +45,8 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 	// console.log('Jobcard: '+$rootScope.accView.jobCardNumber);
 	// console.log('fromdate: '+$rootScope.accView.fromDate);
 	// console.log('todate: '+$rootScope.accView.toDate);
-	// console.log('JobacrdFrom: '+$rootScope.accView.jobCardFromDate);
-	// console.log('JobcardTo: '+$rootScope.accView.jobCardToDate);
+	//console.log('JobacrdFrom: '+$rootScope.accView.jobCardFromDate);
+	//console.log('JobcardTo: '+$rootScope.accView.jobCardToDate);
 	
 	
 	/** Display Company and date **/
@@ -98,49 +98,65 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 				headerData.jobCardNumber = $scope.jobCardNumber;
 			}
 			
-			loadingStart();
-			
-			apiCall.getCallHeader(apiPath.getAllClient,headerData).then(function(res){
-			
-				toaster.clear();
-				//console.log(res);
-				
-				if(angular.isArray(res)){
+			if(Object.keys(headerData).length == 2 && headerData.hasOwnProperty('professionId')){
+				var proId = headerData.professionId;
+				clientFactory.getClientByProfession(proId).then(function(response){
+					var arrangeDataVar = angular.copy(response);
+					arrangeData(arrangeDataVar);
+				});
+			}
+			else{
+				loadingStart();
+				apiCall.getCallHeader(apiPath.getAllClient,headerData).then(function(res){
+					//console.log(res);
+					var arrangeDataVar = res;
+					arrangeData(arrangeDataVar);
 					
-					data = res;
-					var cnt = res.length;
-					
-					for(var i=0;i<cnt;i++){
-						
-						data[i].selected = false;
-						data[i].stateAbb = "";
-						data[i].stateAbb = res[i].state.stateName;
-						data[i].cityName = "";
-						data[i].cityName = res[i].city.cityName;
-						data[i].professionName = "";
-						data[i].professionName = res[i].profession.professionName;
-					}
-					
-				}
-				else{
-					if(res == ''){
-						toaster.pop('info', 'No Response From Server');
-					}
-					else{
-						toaster.pop('info', res);
-					}
-				}
-				
-				TableData();
-				
-			});
+				});
+			}
 		}
 		
 	getClientFilterData();
+	
+	
+	function arrangeData(res){
+
+		if(angular.isArray(res)){
+					
+			data = res;
+			var cnt = res.length;
+			
+			for(var i=0;i<cnt;i++){
+				
+				data[i].selected = false;
+				data[i].stateAbb = "";
+				data[i].stateAbb = res[i].state.stateName;
+				data[i].cityName = "";
+				data[i].cityName = res[i].city.cityName;
+				data[i].professionName = "";
+				data[i].professionName = res[i].profession.professionName;
+			}
+			toaster.clear();
+		}
+		else{
+			if(res == ''){
+				toaster.pop('info', 'No Response From Server');
+			}
+			else{
+				toaster.pop('info', res);
+			}
+		}
+		
+		TableData();
+
+	}
 	/** End **/
 	
 	function loadingStart(){
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
+		setTimeout(function() {
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',6000);
+		}, 500);
+		
 	}
 	// console.log($scope.filterCompanyId);
 	// console.log($scope.displayfromDate);
@@ -152,7 +168,7 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		
 		function TableData(){
 			 
-		  vm.tableParams = new ngTableParams({
+		  $scope.tableParams = new ngTableParams({
 			  page: 1,            // show first page
 			  count: 10,          // count per page
 			  sorting: {
@@ -163,34 +179,20 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			  total: data.length, // length of data
 			  getData: function($defer, params) {
 				 
-				  // use build-in angular filter
-				  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "")  || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.stateAbb) != "undefined" && params.$params.filter.stateAbb != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "") || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.professionName) != "undefined" && params.$params.filter.professionName != "") || (typeof(params.$params.filter.emailId) != "undefined" && params.$params.filter.emailId != "")))
-				  {
-						 var orderedData = params.filter() ?
-						 $filter('filter')(data, params.filter()) :
-						 data;
-						$scope.filteredItems = orderedData;
-						
-						  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-						  params.total(orderedData.length); // set total for recalc pagination
-						  $defer.resolve(vm.users);
+				  /** New Sort Code **/
+					  var filteredData = params.filter() ?
+                  $filter('filter')(data, params.filter()) :
+                  data;
 				  
+				  $scope.filteredItems = orderedData;
+				  
+				  var orderedData = params.sorting() ?
+						  $filter('orderBy')(filteredData, params.orderBy()) :
+						  data;
 
-				  }
-				else
-				{
-					   params.total(data.length);
-					 $scope.filteredItems = data;
-				}
-				 if(!$.isEmptyObject(params.$params.sorting))
-				  {
-					  var orderedData = params.sorting() ?
-							  $filter('orderBy')(data, params.orderBy()) :
-							  data;
-			  
-					  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-				  }
+				  params.total(orderedData.length); // set total for recalc pagination
+				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+				  /** End **/
 				
 				$scope.totalData = data.length;
 				$scope.pageNumber = params.page();
@@ -294,16 +296,20 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		if(clientEmailId != ''){
 			textEmail = "<br /><span style='font-size:12px'><b style='font-size:18px; vertical-align:middle'>&#x2709; </b>&nbsp;"+clientEmailId+"</span>";
 		}
+		var paddingButtom = '0px';
 		
 		for(var n=0;n<qty;n++){
-			console.log('in');
+		
+			if(n != 0){
+				paddingButtom = '5px';
+			}
 			mywindow.document.write('<html><!--head><title>' + document.title  + '</title>');
 		
 			mywindow.document.write("</head--> <style type='text/css' media='print'>@page {size: auto;margin: 0mm;} @media print {html, body {width: 7.4cm;height: 3.8cm;  }</style><body>");
 			mywindow.document.write('<!--center> <h1> Barcode of Company </h1> </center-->');
 			mywindow.document.write("<table><tr>");
 		
-			mywindow.document.write("<td style='display:inline-block;padding-top:0px;padding-bottom:5px;'> ");
+			mywindow.document.write("<td style='display:inline-block;padding-top:0px;padding-bottom:"+paddingButtom+";'> ");
 			
 			mywindow.document.write("<span style='font-size:14px'><b>"+pData.clientName +"</b></span>"+textAddress+textContactNo+textEmail+"</td>");
 				
@@ -312,7 +318,6 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			
 			if(n == qty-1){
 				/** Next Code **/
-						console.log('End');
 					if (is_chrome) {
 						
 					   setTimeout(function () { // wait until all resources loaded 
@@ -349,7 +354,9 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		var mywindow = window.open('', 'PRINT', 'height=850,width=850');
 	
 		 var is_chrome = Boolean(mywindow.chrome);
-
+		 
+		var paddingButtom = '0px';
+		
 		for(var dataIndex=0;dataIndex<dataArrayLength;dataIndex++){
 			
 			if($scope.clientFlag == 1){
@@ -388,13 +395,17 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			
 			for(var qtyIndex=0;qtyIndex<qtyLength;qtyIndex++){
 				
+				if(n != 0){
+					paddingButtom = '5px';
+				}
+			
 				mywindow.document.write('<html>');
 		
 				mywindow.document.write("<style type='text/css' media='print'>@page {size: auto;margin: 0mm;} @media print {html, body {width: 7.4cm;height: 3.8cm;  }</style><body>");
 				mywindow.document.write('<!--center> <h1> Barcode of Company </h1> </center-->');
 				mywindow.document.write("<table><tr>");
 		
-				mywindow.document.write("<td style='display:inline-block;padding-top:5px;padding-bottom:5px;'> ");
+				mywindow.document.write("<td style='display:inline-block;padding-top:5px;padding-bottom:"+paddingButtom+";'> ");
 				
 				mywindow.document.write("<span style='font-size:14px'><b>"+arrayProductData.clientName +"</b></span>"+textAddress+textContactNo+textEmail+"</td>");
 				
@@ -503,10 +514,18 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 				toaster.clear();
 			});
 		
-				modalInstance.result.then(function (data) {
+				modalInstance.result.then(function (returnModalData) {
 					Modalopened = false;
-					if(data == 'success'){
+					if(angular.isObject(returnModalData)){
+						var cId = returnModalData.clientId;
+						var index = data.findIndex(function(o){
+							 return o.clientId == cId;
+						});
+						if (index !== -1){
+							data[index] = returnModalData;
+						}
 						toaster.pop('success','Updated Successfully');
+						$scope.tableParams.reload();
 					}
 					
 				}, function () {
@@ -568,4 +587,4 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 	/*** End Pdf ***/
 
 }
-CrmClientFilterDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","apiResponse","toaster","getSetFactory","$window","$state","$modal"];
+CrmClientFilterDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","apiResponse","toaster","getSetFactory","$window","$state","$modal","clientFactory"];

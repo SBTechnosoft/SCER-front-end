@@ -101,9 +101,9 @@
                             return void 0;
                         };
 
-                        attrs.iconExpand = attrs.iconExpand ? attrs.iconExpand : 'icon-plus  glyphicon glyphicon-plus  fa fa-plus';
-                        attrs.iconCollapse = attrs.iconCollapse ? attrs.iconCollapse : 'icon-minus glyphicon glyphicon-minus fa fa-minus';
-                        attrs.iconLeaf = attrs.iconLeaf ? attrs.iconLeaf : 'icon-file  glyphicon glyphicon-file  fa fa-file';
+                        attrs.iconExpand = attrs.iconExpand ? attrs.iconExpand : 'fa fa-plus';
+                        attrs.iconCollapse = attrs.iconCollapse ? attrs.iconCollapse : 'fa fa-minus';
+                        attrs.iconLeaf = attrs.iconLeaf ? attrs.iconLeaf : 'fa fa-file';
                         attrs.sortedAsc = attrs.sortedAsc ? attrs.sortedAsc : 'icon-file  glyphicon glyphicon-chevron-up  fa angle-up';
                         attrs.sortedDesc = attrs.sortedDesc ? attrs.sortedDesc : 'icon-file  glyphicon glyphicon-chevron-down  fa angle-down';
                         attrs.expandLevel = attrs.expandLevel ? attrs.expandLevel : '0';

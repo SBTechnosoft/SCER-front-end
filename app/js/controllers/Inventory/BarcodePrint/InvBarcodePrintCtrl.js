@@ -119,8 +119,6 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				    $scope.completedQueries[i].productGroupName = ""; //initialization of new property 
 				    $scope.completedQueries[i].productGroupName =   $scope.completedQueries[i].productGroup.productGroupName;  //set the data from nested obj into new property
 				}
-				
-				
 			}
 			
 			if(flag == 0){
@@ -136,6 +134,12 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			
 			 
 		});
+	}
+
+	$scope.editProduct = function(id)
+	{
+		getSetFactory.set(id);
+		$state.go('app.AddInvProduct');
 	}
 	
 	$scope.query = {
@@ -286,11 +290,16 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			
 			var space = "<td></td>";
 		}
+			var paddingTop = '10px';
 			
 		for(var n=0;n<qty;n++){
-
-			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px;padding-left:35px;display: inline-block;'> ");
-			mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:14px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span><br /><span style='margin-left:5px;font-size:14px'><b>Care#:</b> "+pData.company.customerCare+"  ("+pData.company.emailId+")</span><br /><span style='margin-left:5px;font-size:25px'><b>MRP:</b> "+pData.mrp+"</span>");
+			
+			if(n != 0){
+				paddingTop = '16px';
+			}
+			
+			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top:"+paddingTop+";padding-left:35px;display: inline-block;'> ");
+			mywindow.document.write("<span style='margin-left:14%;font-size:14px;'>www.swaminarayancycles.com</span><br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='font-size:14px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span><br /><span style='font-size:43px'><b>MRP:</b> "+pData.mrp+"</span>");
 			
 			if(n == qty-1){
 				
@@ -375,10 +384,16 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		mywindow.document.write('<!--center> <h1> Barcode of ' + CompanyNamePrint  + ' Company </h1> </center-->');
 		
 		
+	
+		var paddingTop = '10px';
 		
 		
 		
 		for(var dataIndex=0;dataIndex<dataArrayLength;dataIndex++){
+			
+			if(dataIndex != 0){
+				paddingTop = '16px';
+			}
 			
 			mywindow.document.write("<table style='width:100%;margin: 0 auto;'>");
 			
@@ -412,8 +427,10 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			
 			for(var qtyIndex=0;qtyIndex<qtyLength;qtyIndex++){
 				
-				mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top: 23px ;padding-left:35px;display: inline-block;'> ");
-				mywindow.document.write("<embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' /> <br /> <span style='margin-left:5px;font-size:14px'>"+arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ")</span><br /><span style='margin-left:5px;font-size:14px'><b>Care#:</b> "+arrayProductData.company.customerCare+"  ("+arrayProductData.company.emailId+")</span><br /><span style='margin-left:5px;font-size:25px'><b>MRP:</b> "+arrayProductData.mrp+"</span>");
+				mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top:"+paddingTop+";padding-left:35px;display: inline-block;'> ");
+				mywindow.document.write("<span style='margin-left:14%;font-size:14px;'>www.swaminarayancycles.com</span><br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' /> <br /> <span style='font-size:14px'>"+arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ")</span><br /><span style='font-size:43px'><b>MRP:</b> "+arrayProductData.mrp+"</span>");
+				
+				
 				
 				if(qtyIndex == qtyLength-1){
 					

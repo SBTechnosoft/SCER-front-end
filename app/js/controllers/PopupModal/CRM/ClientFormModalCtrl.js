@@ -1,7 +1,7 @@
 
 App.controller('clientFormModalController', clientFormModalController);
 
-function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,clientEditData,validationMessage,stateCityFactory,apiResponse) {
+function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,clientEditData,validationMessage,stateCityFactory,apiResponse,clientFactory) {
   'use strict';
   
   var vm = this;
@@ -24,7 +24,7 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 		$scope.clientForm.emailId = clientEditData.emailId;
 		$scope.clientForm.fisrtAddress = clientEditData.address1;
 		
-		apiCall.getCall(apiPath.clientProfession).then(function(response){
+		clientFactory.getProfession().then(function(response){
 			vm.professionDrop = response;
 			$scope.clientForm.professionDropDown = clientEditData.profession;
 		});
@@ -47,7 +47,7 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 			$scope.clientForm.stateDropDown = stateCityFactory.getDefaultState($rootScope.defaultState);
 			formdata.delete('stateAbb');
 			formdata.set('stateAbb',$rootScope.defaultState);
-			$scope.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
+			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
 			$scope.clientForm.cityDrop = stateCityFactory.getDefaultCity($rootScope.defaultCity);
 			formdata.delete('cityId');
 			formdata.set('cityId',$rootScope.defaultCity);
@@ -57,7 +57,7 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 	$scope.ChangeState = function(Fname,state)
 	 {
 		//Get City
-		$scope.cityDrop = stateCityFactory.getDefaultStateCities(state);
+		vm.cityDrop = stateCityFactory.getDefaultStateCities(state);
 			if(formdata.has(Fname))
 			{
 				formdata.delete(Fname);
@@ -77,34 +77,35 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 	
     $scope.clickSave = function () {
 	
+		vm.buttonHidden = true;
+		
 		if(changeFlag == 0){
 			
 			vm.errorMsg = 'Plese Change Some Data Then Click Update';
 			return false;
 		}
+		var clientId = null;
 		
 		if($scope.clientForm.getSetClientId){
 			
-			var clientPath = apiPath.getAllClient+'/'+$scope.clientForm.getSetClientId;
-		}
-		else{
-			var clientPath = apiPath.getAllClient;
+			var clientId = $scope.clientForm.getSetClientId;
 		}
 		
-		apiCall.postCall(clientPath,formdata).then(function(response5){
+		clientFactory.insertAndSetNewClient(formdata,clientId,false).then(function(response){
 		
 			//console.log(response5);
 			if($scope.clientForm.getSetClientId){
-				if(response5 == apiResponse.ok){
+				if(angular.isObject(response)){
 					
-					$modalInstance.close('success');
+					$modalInstance.close(response);
 					
 					$scope.clientForm = [];
 				}
 				else{
-					vm.errorMsg = response5;
+					vm.errorMsg = response;
 				}
 			}
+			vm.buttonHidden = false;
 		
 		});
 		
@@ -116,4 +117,4 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 	
   
 }
-clientFormModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","clientEditData","validationMessage","stateCityFactory","apiResponse"];
+clientFormModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","clientEditData","validationMessage","stateCityFactory","apiResponse","clientFactory"];

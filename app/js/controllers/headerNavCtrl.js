@@ -4,7 +4,7 @@
  * Controls the header navigation
  =========================================================*/
 
-App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse','$modal','stateCityFactory','productFactory', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse,$modal,stateCityFactory,productFactory) {
+App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse','$modal', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse,$modal) {
   'use strict';
   
 	if($rootScope.$storage.authUser){
@@ -245,9 +245,6 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			 $scope.headerMenuCollapsed = false;
 	  };
 	  
-	  
-	  
-	  
 	  var Modalopened = false;
 	  
 	   /**
@@ -292,55 +289,20 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	  Calculator Model End
 	  **/
   
-	/** Set Data In Factory **/
-		
-		//apiCall.getCall(apiPath.getJrnlNext).then(function(response){
-			
-			//console.log(response);
-			//stateCityFactory.setState(response);
-			
-		//});
-		
-		//apiCall.getCall(apiPath.getOneCity).then(function(response){
-			
-			//console.log(response);
-			//stateCityFactory.setCity(response);
-			
-		//});
-		
-		//apiCall.getCall(apiPath.getAllProduct).then(function(response){
-			
-			//console.log(response);
-			//productFactory.setProduct(response);
-			
-		//});
-		
-	/** End **/
-	
 	  $scope.logout = function(){
 		  
 		//alert('in');2e7719b36240c051e694a88cc511d4a6  d29ac73b666a3be3fc463448fdc5d9fc
-		
-		    
 		apiCall.deleteCall(apiPath.deleteToken+$rootScope.$storage.authUser.userId).then(function(deleteres){
 			
 			if(apiResponse.ok == deleteres){
-				
 				$rootScope.$storage.$reset();
 				$state.go("page.login");
-				
 			}
 			else{
-				
 				alert('Opps!, Problem Occure');
 			}
 		 
 		});
-		
 		$state.go("page.login");
-		  
 	  }
-	  
-	  
-
 }]);

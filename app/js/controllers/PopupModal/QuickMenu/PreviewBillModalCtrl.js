@@ -9,7 +9,7 @@
 
 App.controller('previewBillModalController',previewBillModalController);
 
-function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,companyId,apiResponse,$sce,billData,inventoryData,taxData,total,totalTax,grandTotal,advance,balance,remark,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate,saleType) {
+function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,companyId,apiResponse,$sce,billData,inventoryData,taxData,total,totalTax,grandTotal,advance,balance,remark,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate,saleType,productFactory) {
   'use strict';
   
 	 var data = [];
@@ -251,7 +251,12 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	for(var productArray=0;productArray<inventoryCount;productArray++){
 		
 		var productData = $scope.inventoryData[productArray];
-		
+		var allProductMst = productFactory.getSingleProduct(productData.productId).then(function(response){
+				console.log(response);
+				return response;
+		});
+		console.log(allProductMst);
+
 		if(productData.productId != ""){
 			
 			var trClose = "</td></tr>";
@@ -283,8 +288,9 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 				
 				
 			}
+
 			if(angular.isUndefined(productData.hsn)){
-				var hsnNo = '';
+				var hsnNo = 'No';
 			}
 			else{
 				var hsnNo = productData.hsn;
@@ -296,7 +302,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			 
 			}
 			else{
-				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height:  0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 14px; height: 0.7cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ hsnNo +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 14px;   height:  0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 14px; height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ vat +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 14px; height: 0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height: 0.7cm; text-align: right; padding:0 5px 0 0;'>"+ productTotal;
+				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height:  0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 14px; height: 0.7cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;text-align:center'>"+ hsnNo +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 14px;   height:  0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 14px; height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ vat +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 14px; height: 0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height: 0.7cm; text-align: right; padding:0 5px 0 0;'>"+ productTotal;
 			}
 			   
 			
@@ -406,4 +412,4 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	
 }
 
-previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","companyId","apiResponse","$sce","billData","inventoryData","taxData","total","totalTax","grandTotal","advance","balance","remark","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate","saleType"];
+previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","companyId","apiResponse","$sce","billData","inventoryData","taxData","total","totalTax","grandTotal","advance","balance","remark","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate","saleType","productFactory"];

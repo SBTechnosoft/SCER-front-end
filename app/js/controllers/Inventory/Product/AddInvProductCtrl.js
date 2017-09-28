@@ -83,7 +83,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	if(Object.keys(getSetFactory.get()).length > 0){
 	//if(getSetFactory.get() > 0){
 		var editProductData = getSetFactory.get();
-		console.log(editProductData);
+		// console.log(editProductData);
 		getSetFactory.blank();
 		
 		$scope.addInvProduct.getSetProductId = editProductData.productId;
@@ -165,6 +165,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 		
 		$scope.addInvProduct.measureUnit = 'piece';
 		formdata.append('measurementUnit',$scope.addInvProduct.measureUnit);
+		
+		productFactory.getProduct();
 	}
 
   // Datepicker
@@ -331,53 +333,47 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	$scope.pop = function() {
 	
 		if($scope.addInvProduct.getSetProductId){
-			
+			toaster.clear();
+			toaster.pop('wait','Data Updating...','',60000);
 			//formdata.append('branchId',1);
 			formdata.append('isDisplay','yes');
 			var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
 			apiCall.postCall(editProduct,formdata).then(function(response5){
-			
-				//console.log(response5);
+				toaster.clear();
 				if(apiResponse.ok == response5){
-					
-					$state.go('app.InvProduct');
 					toaster.pop('success', 'Title', 'SuccessFull');
-					productFactory.blankProduct();
+					productFactory.setUpdatedProduct($scope.addInvProduct.getSetProductId).then(function(response){
+						window.history.back();
+					});
 				}
 				else{
 					formdata.delete('isDisplay');
 					toaster.pop('warning', 'Opps!!', response5);
 				}
-			
 			});
 		}
 		else{
 			
-			//formdata.append('branchId',1);
-			// if(!formdata.has('companyId')){
-				
-				// formdata.append('companyId',$scope.addInvProduct.company.companyId);
-			// }
+			toaster.clear();
+			toaster.pop('wait','Data Inserting...','',60000);
 			formdata.append('isDisplay','yes');
 			apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
-			
+				toaster.clear();
 				//console.log(response5);
 				if(apiResponse.ok == response5){
-					
 					toaster.pop('success', 'Title', 'SuccessFull');
-					
-					$state.go('app.InvProduct');
-					productFactory.blankProduct();
+					productFactory.setNewProduct($scope.addInvProduct.company.companyId,$scope.addInvProduct.name,$scope.addInvProduct.color,$scope.addInvProduct.size).then(function(response){
+						if(angular.isArray(response)){
+							$state.go('app.InvProduct');
+						}
+					});
 				}
 				else{
 					formdata.delete('isDisplay');
 					toaster.pop('warning', 'Opps!!', response5);
 				}
-				
 			});
 		}
-		//$scope.addInvProduct = [];
-		
 	};
   
   $scope.cancel = function() {
@@ -422,13 +418,6 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 
 		});
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 }
 AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory"];

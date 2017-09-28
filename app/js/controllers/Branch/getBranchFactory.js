@@ -4,10 +4,8 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 	
 	return {
 		 getCall : function(url){
-			 
-			var deferred = $q.defer();
-			
-			$http({
+
+			return $http({
 				url: apiRootPath+url,
 				method: 'get',
 				processData: false,
@@ -21,16 +19,12 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 					$state.go('page.login');
 				}
 				
-				deferred.resolve(response.data);
+				return response.data;
 			});
-
-			return deferred.promise;
-			
 		},
 		postCall : function(url,formdata){
-			 var deferred = $q.defer();
-			 
-			$http({
+			
+			return $http({
 				url: apiRootPath+url,
 				method: 'post',
 				processData: false,
@@ -43,15 +37,12 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
 					$state.go('page.login');
 				}
-				deferred.resolve(response.data);
+				return response.data;
 			});
-			
-			return deferred.promise;
 		},
 		patchCall : function(url,formdata){
-			 var deferred = $q.defer();
-			 
-			$http({
+			
+			return $http({
 				url: apiRootPath+url,
 				method: 'patch',
 				processData: false,
@@ -64,19 +55,15 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
 					$state.go('page.login');
 				}
-				deferred.resolve(response.data);
+				return response.data;
 			});
-			
-			return deferred.promise;
 		},
 		getCallHeader : function(url,headerData){
 			
 			//var headerDataIn = headerData;
 			headerData.authenticationToken = $rootScope.$storage.authToken;
 			
-			var deferred = $q.defer();
-			
-			$http({
+			return $http({
 				url: apiRootPath+url,
 				method: 'get',
 				processData: false,
@@ -88,23 +75,18 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
 					$state.go('page.login');
 				}
-				deferred.resolve(response.data);
+				return response.data;
 			}).catch(function (reason) {
 				
-			  deferred.resolve(reason);
+			 return  reason;
 			  
 		   });
-
-			return deferred.promise;
-			
 		},
 		postCallHeader : function(url,headerData,formdata){
 			
 			headerData.authenticationToken = $rootScope.$storage.authToken;
 			
-			var deferred = $q.defer();
-			 
-			$http({
+			return $http({
 				url: apiRootPath+url,
 				method: 'post',
 				processData: false,
@@ -119,20 +101,16 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 					
 				}
 				
-				deferred.resolve(response.data);
+				return response.data;
 			}).catch(function (reason) {
 				
-			  deferred.resolve(reason);
+			 return reason;
 			  
 		   });
-			
-			return deferred.promise;
 		},
 		deleteCall : function(url){
 			 
-			var deferred = $q.defer();
-			
-			$http({
+			return $http({
 				url: apiRootPath+url,
 				method: 'delete',
 				processData: false,
@@ -142,20 +120,15 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
 					$state.go('page.login');
 				}
-				deferred.resolve(response.data);
-				
+				return response.data;
 			});
 
-			return deferred.promise;
-			
 		},
 		deleteCallHeader : function(url,headerData){
 			 
 			headerData.authenticationToken = $rootScope.$storage.authToken;
 			
-			var deferred = $q.defer();
-			
-			$http({
+			return $http({
 				url: apiRootPath+url,
 				method: 'delete',
 				processData: false,
@@ -165,12 +138,9 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
 					$state.go('page.login');
 				}
-				deferred.resolve(response.data);
+				return response.data;
 				
 			});
-
-			return deferred.promise;
-			
 		},
 		getDefaultCompany : function(){
 			 
@@ -188,21 +158,16 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
 					$state.go('page.login');
 				}
-				console.time('loop');
 				var companyCnt = response.data.length;
-				for(var i=0;i<companyCnt;i++){
-					
-					if(response.data[i].isDefault == 'ok')
+				var j=0;
+				while(j<companyCnt){
+					if(response.data[j].isDefault == 'ok')
 					{
-						deferred.resolve(response.data[i]);
-						console.timeEnd('loop');
+						deferred.resolve(response.data[j]);
 						break;
 					}
+					j++;
 				}
-				console.time('func');
-				var companyIndex = response.data.findIndex( x => x.isDefault == 'ok');
-				console.log(response.data[companyIndex]);
-				console.timeEnd('func');
 			});
 
 			return deferred.promise;
@@ -225,12 +190,14 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 					$state.go('page.login');
 				}
 				var branchCnt = response.data.length;
-				for(var i=0;i<branchCnt;i++){
+				var i=0;
+				while(i<branchCnt){
 					if(response.data[i].isDefault == 'ok')
 					{
 						deferred.resolve(response.data[i]);
 						break;
 					}
+					i++;
 				}
 			});
 

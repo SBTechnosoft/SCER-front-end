@@ -11,14 +11,14 @@
          <div class="panel-title" id="allPro">
 			<span ui-sref="app.CrmClientFilterView" class="btn-label" style="display:initial"><i class="fa fa-arrow-left"  ></i></span>
 			<b> Filtered Clients Data {{parentCheckBox}} </b>
-			 <span ng-if="clientContact"><b>Contact#: </b>{{::clientContact}}</span>
-			 <span ng-if="clientName"><b>Client Name: </b>{{::clientName}}</span> 
-			 <span ng-if="displayfromDate != '1-1-1970'"><b>Invoice Date: </b>{{::displayfromDate}} to {{::displaytoDate}}</span> 
-			 <span ng-if="displayJobCardFromDate != '1-1-1970'"><b>Jobcard Date: </b>{{::displayJobCardFromDate}} to {{::displayJobCardToDate}}</span>
+			 <span ng-if="clientContact"><b>~Contact#: </b>{{::clientContact}}</span>
+			 <span ng-if="clientName"><b>~Client Name: </b>{{::clientName}}</span> 
+			 <span ng-if="displayfromDate != '1-1-1970'"><b>~Invoice Date: </b>{{::displayfromDate}} to {{::displaytoDate}}</span> 
+			 <span ng-if="displayJobCardFromDate != '1-1-1970' && displayJobCardFromDate != undefined"><b>~Jobcard Date: </b>{{::displayJobCardFromDate}} to {{::displayJobCardToDate}}</span>
 		 </div>
       </div>
 	   <div class="table-responsive">
-		  <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
+		  <table data-ng-table="tableParams" show-filter="true" class="table table-bordered table-hover">
 		
 			 <tbody >
 				<tr data-ng-repeat="user in $data" style="width:100%">
@@ -40,16 +40,13 @@
 					<td data-title="'Profession'" sortable="'professionName'"  filter="{ 'professionName': 'text' }"  style="width:15%" >{{::user.professionName}}</td>
 					<td data-title="'Address'" sortable="'address1'"  filter="{ 'address1': 'text' }" style="width:16%" >{{::user.address1}}</td>
 					<td data-title="'Email'" sortable="'emailId'"  filter="{ 'emailId': 'text' }" style="width:10%" >{{::user.emailId}}</td>
-					 <!--td data-title="'EntryDate'"  filter="{ 'entryDate': 'text' }" >{{dateConvert(user.entryDate) | date:dateFormat}}</td-->
-					
 					<td data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  style="width:5%" >{{::user.stateAbb}}</td>
-					<td data-title="'City'" sortable="'cityName'" filter="{ 'city': 'text' }"  style="width:8%" >{{::user.cityName}}</td>
+					<td data-title="'City'" sortable="'cityName'" filter="{ 'cityName': 'text' }"  style="width:8%" >{{::user.cityName}}</td>
 					<td  data-title="'Email/SMS'" header="'ng-table/headers/checkboxIcon.html'" style="width:8%">
 						<center>
 							<i  ng-click="goToClientTransaction(user.clientId,'email')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;cursor:pointer" > </i>
 							&nbsp;
 							<i  ng-click="goToClientTransaction(user.clientId,'sms')" class="fa fa-commenting" title="SMS" style="font-size:17px;color:#43a8eb;cursor:pointer"  ></i>
-							<!--i ui-sref="" ng-click="goToClientTransaction(user.clientId)" class="fa fa-address-card" title="Sticker" style="font-size:17px;color:#43a8eb;" ></i-->
 						</center>
 					</td>
 					<td data-title="'Sticker'"   style="width:4%" ng-init="user.qty=0" header="'ng-table/headers/stickerBox.html'" >
