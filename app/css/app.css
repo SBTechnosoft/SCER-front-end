@@ -2423,7 +2423,7 @@ body{overflow-x:hidden;}
 .topnavbar > .navbar-header{position:relative;}
 @media only screen and (min-width:768px){.topnavbar > .navbar-header{width:190px;background-image:none;z-index:1;}
 }
-.topnavbar > .navbar-header > .navbar-brand{display:block;padding:15px;float:none;text-align:center;}
+.topnavbar > .navbar-header > .navbar-brand{display:block;padding:5px;/* 15px */float:none;text-align:center;}
 .topnavbar > .navbar-header > .navbar-brand img{max-height:100%;width:auto;}
 .topnavbar > .navbar-header .brand-logo{display:inline-block;}
 .topnavbar > .navbar-header .brand-logo-collapsed{display:none;}
@@ -4429,7 +4429,7 @@ body .jvectormap-zoomout{top:30px;}
 .my-fieldset-paddingBottom{padding-bottom:0px !important;}
 .my-fieldset-paddingTopBottom{padding-top:5px !important;padding-bottom:5px !important;}
 .my-fieldset-marginBottom{margin-bottom:5px !important;}
-.my-table-paddingTopBottom{}
+.my-table-paddingTopBottom{padding-top:5px !important;padding-bottom:5px !important;}
 .my-button-paddingLeftRight{padding-left:15px !important;padding-right:15px !important;}
 .my-textbox-paddingLeftRight{padding-left:10px !important;padding-right:10px !important;}
 .my-colMd-paddingLeftRight{padding-left:0px !important;padding-right:10px !important;}

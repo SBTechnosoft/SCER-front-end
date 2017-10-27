@@ -6,7 +6,7 @@
 
 App.controller('InvGroupController', InvGroupController);
 
-function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams,apiCall,apiPath,$anchorScroll,toaster,apiResponse,validationMessage,$modal) {
+function InvGroupController($scope,$filter,$timeout,$templateCache,apiCall,apiPath,$anchorScroll,toaster,apiResponse,validationMessage,$modal) {
 	
   'use strict';
   var vm = this;
@@ -67,7 +67,7 @@ function InvGroupController($scope,$filter,$timeout,$templateCache,ngTableParams
 			{
 			field: "productGroupId",
 			displayName: "Action",
-			cellTemplate: "<i ui-sref=\"\" ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ui-sref=\"\" ng-click=\"cellTemplateScope.deleteCat(\'sm\',row.branch[col.field])\" class=\"fa fa-times-circle\" style=\"font-size:17px;color:red\"></i>",
+			cellTemplate: "<i ng-click=\"cellTemplateScope.editCat(row.branch[col.field])\" class=\"fa fa-edit myCursorPointer\" style=\"font-size:17px;color:#10709f\"></i>&nbsp; &nbsp;<i ng-click=\"cellTemplateScope.deleteCat(\'sm\',row.branch[col.field])\" class=\"fa fa-times-circle myCursorPointer\" style=\"font-size:17px;color:red\"></i>",
 			cellTemplateScope: {
 				deleteCat: function(size,data) {         // this works too: $scope.someMethod;
 					//console.log(data);
@@ -261,63 +261,7 @@ $scope.branchF = [
       {pop: "Branch2" }
   ];
   
-  var data = [
-      {name: "Staff1",  address: "1/3227 , GokulDham Society", mobile: "9564587458", city: "Surat"  },
-      {name: "Staff2", address: "1/3227 , GokulDham Society", mobile: "857456987", city: "Surat"  },
-      {name: "Staff3",   address: "1/3227 , GokulDham Society", mobile: "9996587221", city: "Surat"  },
-      {name: "Staff4",   address: "1/3227 , GokulDham Society", mobile: "9745222222", city: "Surat"  },
-      {name: "Staff5",    address: "1/3227 , GokulDham Society", mobile: "8885964754", city: "Surat" }
-  ];
   
- 
-  
-  //alert(branchF);
-
-  vm.tableParams = new ngTableParams({
-      page: 1,            // show first page
-      count: 10,          // count per page
-      sorting: {
-          name: 'asc'     // initial sorting
-      }
-  }, {
-      total: data.length, // length of data
-      getData: function($defer, params) {
-		 // console.log(params.$params);
-		  // if()
-		  // {
-			  // alert('yes');
-		  // }
-		  // else{
-			  // alert('no');
-		  // }
-          // use build-in angular filter
-		  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.name) != "undefined" && params.$params.filter.name != "")  || (typeof(params.$params.filter.address) != "undefined" && params.$params.filter.address != "") || (typeof(params.$params.filter.mobile) != "undefined" && params.$params.filter.mobile != "") || (typeof(params.$params.filter.city) != "undefined" && params.$params.filter.city != "")))
-		  {
-				 var orderedData = params.filter() ?
-                 $filter('filter')(data, params.filter()) :
-                 data;
-
-				  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-				  params.total(orderedData.length); // set total for recalc pagination
-				  $defer.resolve(vm.users);
-		  
-
-		  }
-		 
-		 if(!$.isEmptyObject(params.$params.sorting))
-		  {
-			
-			 //alert('ggg');
-			  var orderedData = params.sorting() ?
-					  $filter('orderBy')(data, params.orderBy()) :
-					  data;
-	  
-			  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-		  }
-      }
-  });
-
   
   $scope.openCategoryBatchModal = function(){
 		
@@ -395,4 +339,4 @@ $scope.branchF = [
   
 
 }
-InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","ngTableParams","apiCall","apiPath","$anchorScroll","toaster","apiResponse","validationMessage","$modal"];
+InvGroupController.$inject = ["$scope", "$filter","$timeout","$templateCache","apiCall","apiPath","$anchorScroll","toaster","apiResponse","validationMessage","$modal"];

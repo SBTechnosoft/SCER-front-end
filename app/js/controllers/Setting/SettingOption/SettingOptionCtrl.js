@@ -19,8 +19,8 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.barcodeData = [];
 		$scope.insertUpdateLabel;
 		
-		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1","1.5","2"];
-		vm.barcodeHeightDrop = ["40","50","60","70","80","90","100"];
+		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1","1.5","2"];  // Default-> 1.5
+		vm.barcodeHeightDrop = ["40","50","60","70","80","90","100"];          // Default-> 40
 		
 		$scope.getOptionSettingData = function(){
 			
@@ -126,12 +126,12 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 
 		  $scope.themes = [
 			{sidebar: 'bg-white br-inverse', brand: 'bg-info my-font-white', topbar:  'bg-inverse'},
-			{sidebar: 'bg-inverse', brand: 'bg-inverse', topbar:  'bg-white'},
-			{sidebar: 'bg-inverse', brand: 'bg-purple', topbar:  'bg-white'},
+			{sidebar: 'bg-inverse', brand: 'bg-inverse my-font-white', topbar:  'bg-white'},
+			{sidebar: 'bg-inverse', brand: 'bg-purple my-font-white', topbar:  'bg-white'},
 			{sidebar: 'bg-white br-success', brand: 'bg-success my-font-white', topbar:  'bg-inverse'},
-			{sidebar: 'bg-white br', brand: 'bg-inverse', topbar:  'bg-inverse'},
-			{sidebar: 'bg-inverse', brand: 'bg-info', topbar:  'bg-info'},
-			{sidebar: 'bg-white br', brand: 'bg-purple', topbar:  'bg-purple'},
+			{sidebar: 'bg-white br', brand: 'bg-inverse my-font-white', topbar:  'bg-inverse'},
+			{sidebar: 'bg-inverse', brand: 'bg-info my-font-white', topbar:  'bg-info'},
+			{sidebar: 'bg-white br', brand: 'bg-purple my-font-white', topbar:  'bg-purple'},
 			{sidebar: 'bg-white br', brand: 'bg-primary my-font-white', topbar:  'my-Topbar-Color'}
 		  ];
 

@@ -6,7 +6,7 @@
 
 App.controller('InvBarcodePrintController', InvBarcodePrintController);
 
-function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal,productFactory) {
+function InvBarcodePrintController($scope,$rootScope, $filter, $state,ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal,productFactory,fetchArrayService) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -52,43 +52,35 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				else{
 					
 					  $scope.completedQueries = response;
-					for (var i = 0; i <$scope.completedQueries.length; i++) {
-					    $scope.completedQueries[i].productCategoryName = ""; //initialization of new property 
-					    $scope.completedQueries[i].productCategoryName =   $scope.completedQueries[i].productCategory.productCategoryName;  //set the   $scope.completedQueries from nested obj into new property
-					    $scope.completedQueries[i].productGroupName = ""; //initialization of new property 
-					    $scope.completedQueries[i].productGroupName =   $scope.completedQueries[i].productGroup.productGroupName;  //set the   $scope.completedQueries from nested obj into new property
-					}
-					
-					
+						filterDataForTable();
 				}
 				
 				 vm.tableParams.reload();
 				  vm.tableParams.page(1);
 				
 			});
-			
-			
 		}
-		
-		
 	}
 	
+	function filterDataForTable(){
+		var count = $scope.completedQueries.length;
+		while(count--) {
+		 	$scope.completedQueries[count].productCategoryName = ""; //initialization of new property 
+			$scope.completedQueries[count].productCategoryName = $scope.completedQueries[count].productCategory.productCategoryName;  //set the $scope.completedQueries from nested obj into new property
+			$scope.completedQueries[count].productGroupName = ""; //initialization of new property 
+			$scope.completedQueries[count].productGroupName = $scope.completedQueries[count].productGroup.productGroupName;  //set the $scope.completedQueries from nested obj into new property
+		}
+	}
+
 	$scope.init = function (){
 			
 		vm.states=[];
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 			
 			vm.states = response2;
-			
 			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
-				
-				$scope.stateCheck = response;
-				
-				$scope.getProduct(response.companyId);
-				
-			});
-		 
+			$scope.stateCheck = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
+			$scope.getProduct($scope.stateCheck.companyId);
 		});
 		 
 	}
@@ -113,12 +105,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			else{
 				//console.log('else');
 				  $scope.completedQueries = response;
-				for (var i = 0; i <$scope.completedQueries.length; i++) {
-				    $scope.completedQueries[i].productCategoryName = ""; //initialization of new property 
-				    $scope.completedQueries[i].productCategoryName =   $scope.completedQueries[i].productCategory.productCategoryName;  //set the   $scope.completedQueries from nested obj into new property
-				    $scope.completedQueries[i].productGroupName = ""; //initialization of new property 
-				    $scope.completedQueries[i].productGroupName =   $scope.completedQueries[i].productGroup.productGroupName;  //set the data from nested obj into new property
-				}
+					filterDataForTable();
 			}
 			
 			if(flag == 0){
@@ -164,44 +151,6 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 		  total:   $scope.completedQueries.length, // length of data
 		  getData: function($defer, params) {
 			 
-			  // if()
-			  // {
-				  // alert('yes');
-			  // }
-			  // else{
-				  // alert('no');
-			  // }
-			  // use build-in angular filter
-			  // if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") ))
-			  // {
-					 // var orderedData = params.filter() ?
-					 // $filter('filter')(data, params.filter()) :
-					 // data;
-
-					  // vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-					  // params.total(orderedData.length); // set total for recalc pagination
-					  // $defer.resolve(vm.users);
-			  
-
-			  // }
-			// else
-			// {
-				   // params.total(data.length);
-				  
-			// }
-			 
-			 // if(!$.isEmptyObject(params.$params.sorting))
-			  // {
-				
-				// alert('ggg');
-				  // var orderedData = params.sorting() ?
-						  // $filter('orderBy')(data, params.orderBy()) :
-						  // data;
-		  
-				  // $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			  // }
-			
 			var orderedData = params.sorting() ?
                     $filter('orderBy')($scope.completedQueries, params.orderBy()) :
                     data;
@@ -291,15 +240,18 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 			var space = "<td></td>";
 		}
 			var paddingTop = '10px';
-			
+		
+		var websiteName = pData.company.websiteName == null || pData.company.websiteName == undefined || pData.company.websiteName == '' ? '' : pData.company.websiteName;
+
 		for(var n=0;n<qty;n++){
 			
 			if(n != 0){
 				paddingTop = '16px';
 			}
 			
+			// margin-left: 14% (www.swaminarayancycles.com)
 			mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top:"+paddingTop+";padding-left:35px;display: inline-block;'> ");
-			mywindow.document.write("<span style='margin-left:14%;font-size:14px;'>www.swaminarayancycles.com</span><br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='font-size:14px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span><br /><span style='font-size:43px'><b>MRP:</b> "+pData.mrp+"</span>");
+			mywindow.document.write("<span style='margin-left:23%;font-size:14px;'>"+websiteName+"</span><br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' /> <br /> <span style='font-size:14px'>"+pData.productName +" ("+ pData.color +" | "+ pData.size + ")</span><br /><span style='font-size:43px'><b>MRP: "+pData.mrp+"</b></span>");
 			
 			if(n == qty-1){
 				
@@ -424,12 +376,13 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				
 				var space = "<td></td>";
 			}
-			
+			// margin-left: 14% (www.swaminarayancycles.com)
+			var websiteName = arrayProductData.company.websiteName == null || arrayProductData.company.websiteName == undefined || arrayProductData.company.websiteName == '' ? '' : arrayProductData.company.websiteName;
+
 			for(var qtyIndex=0;qtyIndex<qtyLength;qtyIndex++){
 				
 				mywindow.document.write("<td style='position:relative;float:left; width: 100%;padding-top:"+paddingTop+";padding-left:35px;display: inline-block;'> ");
-				mywindow.document.write("<span style='margin-left:14%;font-size:14px;'>www.swaminarayancycles.com</span><br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' /> <br /> <span style='font-size:14px'>"+arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ")</span><br /><span style='font-size:43px'><b>MRP:</b> "+arrayProductData.mrp+"</span>");
-				
+				mywindow.document.write("<span style='margin-left:23%;font-size:14px;'>"+websiteName+"</span><br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+arrayProductData.documentName+"' /> <br /> <span style='font-size:14px'>"+arrayProductData.productName +" ("+ arrayProductData.color +" | "+ arrayProductData.size + ")</span><br /><span style='font-size:43px'><b>MRP: "+arrayProductData.mrp+"</b></span>");
 				
 				
 				if(qtyIndex == qtyLength-1){
@@ -439,8 +392,6 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
 				else{
 					mywindow.document.write("</td>");
 				}
-				
-			
 			}
 			mywindow.document.write("</tr></table>");
 			
@@ -567,4 +518,4 @@ function InvBarcodePrintController($scope,$rootScope, $filter, ngTableParams,api
   /** End **/
 
 }
-InvBarcodePrintController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal","productFactory"];
+InvBarcodePrintController.$inject = ["$scope","$rootScope","$filter","$state", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal","productFactory","fetchArrayService"];

@@ -3,29 +3,26 @@
  * Module: ModalController
  * Provides a simple way to implement bootstrap modals from templates
  =========================================================*/
-//$.getScript('app/vendor/ng-table/ng-table.min.js');
-//$.getScript('app/vendor/ng-table/ng-table.min.css');
-
 
 App.controller('previewBillModalController',previewBillModalController);
 
-function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,companyId,apiResponse,$sce,billData,inventoryData,taxData,total,totalTax,grandTotal,advance,balance,remark,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate,saleType,productFactory) {
+function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,$timeout,$state,apiResponse,$sce,billData,inventoryData,total,grandTotal,entryDate,$filter,productArrayFactory,buttonValidation,insertOrUpdate,saleType,productFactory,productHsn) {
   'use strict';
   
 	 var data = [];
 	 var vm = this;
 	
-	 $scope.companyData = companyId;
-	 $scope.noOfDecimalPoints = parseInt($scope.companyData.noOfDecimalPoints);
 	 $scope.billData = billData;
+	 $scope.companyData = $scope.billData.companyId;
+	 $scope.noOfDecimalPoints = parseInt($scope.companyData.noOfDecimalPoints);
 	 $scope.inventoryData = inventoryData;
-	 $scope.taxData = taxData;
+	 var allProductHsn = productHsn;
 	 $scope.total = total;
 	 $scope.grandTotal = grandTotal;
-	 $scope.totalTax = totalTax;
-	 $scope.advance = advance;
-	 $scope.balance = balance;
-	 $scope.remark = remark;
+	 $scope.totalTax = $scope.billData.tax;
+	 $scope.advance = $scope.billData.advance;
+	 $scope.balance = $scope.billData.balanceTable;
+	 $scope.remark = $scope.billData.remark;
 	 $scope.companyLogo = $rootScope.templateCompanyLogo;
 	 /** Button Validation **/
 		
@@ -43,8 +40,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	 //console.log( $scope.inventoryData);
 	$scope.TemplateDisplay;
 	
-	var tags = ['Company','ClientName','INVID','CLIENTADD','OrderDate','Mobile','Description','Total','TotalInWord','TotalQty','TotalTax','REMAINAMT'];
-	
+	var tags = ['Company','ClientName','INVID','CLIENTADD','OrderDate','Mobile','Description','Total','TotalInWord','TotalQty','TotalTax','REMAINAMT','gstSummary'];
 	
 	/** Digit to Words **/
 		function test_value(secondNum) {
@@ -235,6 +231,16 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 		$modalInstance.dismiss();
     };
 	
+	function checkGSTValue(value){
+		
+		if(angular.isUndefined(value) || value == '' || isNaN(value)){
+			return 0;
+		}
+		else{
+			return parseFloat(value);
+		}
+	}
+
 	// var obj = {name: 'misko', gender: 'male'};
 	// var log = [];
 	// angular.forEach(obj, function(value, key) {
@@ -244,69 +250,137 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	var inventoryCount = $scope.inventoryData.length;
 	var descTotalCM = 10.4;
 	var output = "";
+	var gstOutput = "";
 	var totalQty = 0;
 	var totalDiscount = 0;
 	var srNumber = 1;
-	
+	var gstSummarySizeManage = 0;
+	var gstSummaryArray = [];
+	var trClose = "</td></tr>";
+	var totalAmount = 0;
+
 	for(var productArray=0;productArray<inventoryCount;productArray++){
 		
 		var productData = $scope.inventoryData[productArray];
-		var allProductMst = productFactory.getSingleProduct(productData.productId).then(function(response){
-				console.log(response);
-				return response;
-		});
-		console.log(allProductMst);
 
 		if(productData.productId != ""){
-			
-			var trClose = "</td></tr>";
+
 			if(productArray==0)
 			{
 			 output = output+trClose;
 			}
 			
 			var mainPrice = parseFloat(productData.price)*parseInt(productData.qty);
+
+			totalAmount = totalAmount + parseFloat(productData.amount);
 			//productData.amount
-			var vat = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,$scope.taxData[productArray].tax,0),$scope.noOfDecimalPoints);
-			
-			var aTax = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,$scope.taxData[productArray].additionalTax,0),$scope.noOfDecimalPoints);
-			
+			//Single Product GST Percentage
+			var cgstPercentage = checkGSTValue(productData.cgstPercentage);
+			var sgstPercentage = checkGSTValue(productData.sgstPercentage);
+			var igstPercentage = checkGSTValue(productData.igstPercentage);
+
+			//Total tax in percentage
+			var totalTaxInPercentage = cgstPercentage + sgstPercentage + igstPercentage;
+
+			var discountInPercentage = "-";
+			var discount = 0;
+
 			if(productData.discountType == 'percentage'){
 				
-				var discount = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,productData.discount,0),$scope.noOfDecimalPoints);
+				discount = $filter('setDecimal')(productArrayFactory.calculateTax(mainPrice,productData.discount,0),$scope.noOfDecimalPoints);
+
+				discountInPercentage = productData.discount+'%'; //Discount in %
+
 				totalDiscount = totalDiscount + discount;
-				// var productTotal = (mainPrice - discount) + vat + aTax;
-				var productTotal = $filter('setDecimal')((mainPrice - discount) + vat + aTax,$scope.noOfDecimalPoints);
+				
 				
 			}
 			else{
 				
-				var discount =  $filter('setDecimal')(productData.discount,$scope.noOfDecimalPoints);
+				discount =  $filter('setDecimal')(productData.discount,$scope.noOfDecimalPoints);
 				totalDiscount = totalDiscount + discount;
-				// var productTotal = (mainPrice - discount) + vat + aTax;
-				var productTotal = $filter('setDecimal')((mainPrice - discount) + vat + aTax,$scope.noOfDecimalPoints);
-				
-				
 			}
 
-			if(angular.isUndefined(productData.hsn)){
-				var hsnNo = 'No';
+			//Taxable Value
+			var taxableValue = $filter('setDecimal')(mainPrice - discount,$scope.noOfDecimalPoints);
+
+			//var cgstAmt = $filter('setDecimal')(productArrayFactory.calculateTax(taxableValue,cgstPercentage,0),$scope.noOfDecimalPoints);
+			//var sgstAmt = $filter('setDecimal')(productArrayFactory.calculateTax(taxableValue,sgstPercentage,0),$scope.noOfDecimalPoints);
+			//var igstAmt = $filter('setDecimal')(productArrayFactory.calculateTax(taxableValue,igstPercentage,0),$scope.noOfDecimalPoints);
+
+			var cgstAmt = checkGSTValue(productData.cgstAmount);
+			var sgstAmt = checkGSTValue(productData.sgstAmount);
+			var igstAmt = checkGSTValue(productData.igstAmount);
+
+			//Total Value
+			var productTotal = $filter('setDecimal')((mainPrice - discount) + cgstAmt + sgstAmt + igstAmt,$scope.noOfDecimalPoints);
+
+			if(allProductHsn[productArray] == '' || allProductHsn[productArray] == undefined || allProductHsn[productArray] == null){
+				var hsnNo = '-';
 			}
 			else{
-				var hsnNo = productData.hsn;
+				var hsnNo = allProductHsn[productArray];
 			}
 			
-			if($scope.saleType == "QuotationPrint"){
-				
-				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height: 0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: 0.7cm; text-align:center; padding:0 0 0 0;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;' colspan='2'>"+ productData.color +"|"+ productData.size +"</td><td class='tg-ullm thsrno' style='font-size: 12px;  height: 0.7cm; padding:0 0 0 0;'>"+ productData.frameNo +"</td><td class='tg-ullm thsrno' style='font-size: 12px;   height: 0.7cm; text-align: center; padding:0 0 0 0;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 12px; height: 0.7cm; text-align: right; padding:0 0 0 0;' colspan='2' >"+ productData.price +"</td><td class='tg-ullm thamt' style='font-size: 12px;   height: 0.7cm; text-align: right; padding:0 0 0 0;'>PCS</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ productTotal;
+				output = output+"<tr  style='font-family: Calibri; text-align: left; height:  0.7cm; background-color: transparent;'><td  style='font-size: 12px; height: 0.7cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ srNumber +
+				"</td><td colspan='3' style='font-size: 12px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' >&nbsp;"
+				+ productData.productName +
+				"</td><td  style='font-size: 12px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);text-align:center'>"+ hsnNo +
+				"</td><td colspan='2' style='font-size: 12px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);text-align:center'>"+ productData.color +" | "+ productData.size +
+				"</td><td  style='font-size: 12px;  height:  0.7cm; padding:0 0 0 0; text-align: center;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ productData.frameNo +
+				"</td><td  style='font-size: 12px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);text-align:center'>"+ productData.qty +
+				"</td><td  style='font-size: 12px;   height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ $filter('number')(productData.price,$scope.noOfDecimalPoints) +
+				"&nbsp;</td><td  style='font-size: 12px;   height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ $filter('number')(mainPrice,$scope.noOfDecimalPoints) +
+				"&nbsp;</td><td  style='font-size: 12px; height:  0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ discountInPercentage +
+				"</td><td class='tg-ullm thamt' style='font-size: 12px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ $filter('number')(discount,$scope.noOfDecimalPoints) +
+				"&nbsp;</td><td class='tg-ullm thamt' style='font-size: 12px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ $filter('number')(taxableValue,$scope.noOfDecimalPoints) +
+				"&nbsp;</td><td class='tg-ullm thamt' style='font-size: 12px; height: 0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);'>"+ totalTaxInPercentage +
+				"%</td><td class='tg-ullm thamt' style='font-size: 12px;  height: 0.7cm; text-align: right; padding:0 0 0 0;'>"+ $filter('number')(productData.amount,$scope.noOfDecimalPoints)+"&nbsp;";
+			
 			 
-			}
-			else{
-				output = output+"<tr class='trhw' style='font-family: Calibri; text-align: left; height:  0.7cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 14px; height: 0.7cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;'>"+ srNumber +"</td><td class='tg-m36b theqp' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;' colspan='3'>"+ productData.productName +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;text-align:center'>"+ hsnNo +"</td><td class='tg-ullm thsrno' style='font-size: 14px;  height:  0.7cm; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.qty +"</td><td class='tg-ullm thsrno' style='font-size: 14px;   height:  0.7cm; text-align: center; padding:0 0 0 0;border-right: 1px solid black;'>"+ productData.price +"</td><td class='tg-ullm thsrno' style='font-size: 14px; height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].tax +"%</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ vat +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height:  0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ $scope.taxData[productArray].additionalTax  +"%</td><td class='tg-ullm thamt' style='font-size: 14px; height: 0.7cm; text-align: right; padding:0 0 0 0;border-right: 1px solid black;'>"+ aTax +"</td><td class='tg-ullm thamt' style='font-size: 14px;  height: 0.7cm; text-align: right; padding:0 5px 0 0;'>"+ productTotal;
-			}
-			   
-			
-			   
+			  var copyFlag = 0;
+
+			  var summaryLength = gstSummaryArray.length;
+			  if(summaryLength > 1 && hsnNo != '-'){
+			  
+			  		var summaryIndex = 0;
+			  		while(summaryIndex < summaryLength){
+			  			var singleObject = gstSummaryArray[summaryIndex];
+			  			if(singleObject.hsnNo == allProductHsn[productArray]){
+			  				
+			  					copyFlag = 1;
+
+							  gstSummaryArray[summaryIndex].taxableValue = gstSummaryArray[summaryIndex].taxableValue + taxableValue;
+							  //gstSummaryArray[summaryIndex].cgstPercentage += productData.cgstPercentage;
+							  gstSummaryArray[summaryIndex].cgstAmt = (gstSummaryArray[summaryIndex].taxableValue * gstSummaryArray[summaryIndex].cgstPercentage)/100;
+							  //gstSummaryArray[summaryIndex].sgstPercentage += productData.sgstPercentage;
+							  gstSummaryArray[summaryIndex].sgstAmt = (gstSummaryArray[summaryIndex].taxableValue * gstSummaryArray[summaryIndex].sgstPercentage)/100;
+							  //gstSummaryArray[summaryIndex].igstPercentage += productData.igstPercentage;
+							  gstSummaryArray[summaryIndex].igstAmt =  (gstSummaryArray[summaryIndex].taxableValue * gstSummaryArray[summaryIndex].igstPercentage)/100;
+							  break;
+			  			}
+			  			summaryIndex++;
+			  		}
+			  }
+
+			 	if(copyFlag == 0){
+			 		if(cgstPercentage > 0 || sgstPercentage > 0 || igstPercentage > 0){
+			 			var summaryTempObject = {};
+						summaryTempObject.hsnNo = hsnNo;
+						summaryTempObject.taxableValue = taxableValue;
+						summaryTempObject.cgstPercentage = cgstPercentage;
+						summaryTempObject.cgstAmt = cgstAmt;
+						summaryTempObject.sgstPercentage = sgstPercentage;
+						summaryTempObject.sgstAmt = sgstAmt;
+						summaryTempObject.igstPercentage = igstPercentage;
+						summaryTempObject.igstAmt = igstAmt;
+
+						gstSummaryArray.push(summaryTempObject);
+
+						gstSummarySizeManage++;
+					}
+			 	}
+			  	 
 			if(productArray != inventoryCount-1)
 			{
 				output = output+trClose;
@@ -314,68 +388,141 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 			
 			if(productArray == inventoryCount-1)
 			{
-				var totalProductSpace = parseInt(srNumber)*0.7;
+				var lastManageSpace = parseInt(srNumber) + gstSummarySizeManage;
+				var totalProductSpace = lastManageSpace*0.7;
 				var finalProductBlankSpace = parseFloat(descTotalCM) - parseFloat(totalProductSpace);
 				
-				output = output + "<tr class='trhw' style='font-family: Calibri; text-align: left; height:"+finalProductBlankSpace+"cm; background-color: transparent;'><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' colspan='3' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td><td class='tg-m36b thsrno' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid black;' ></td></tr>";
+				output = output + "<tr  style='height:"+finalProductBlankSpace+"cm; background-color: transparent;'><td style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' colspan='3' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td colspan='2' style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, .3);' ></td><td  style='font-size: 12px; height: "+finalProductBlankSpace+"cm; text-align:center; padding:0 0 0 0;border-right: 1px solid rgba(0, 0, 0, 1);' ></td></tr>";
 			}
 			 srNumber++;
 			totalQty = totalQty + parseInt(productData.qty);
-			
+
 		}
-		
-		
+
 	}
-	
-	
+
+	var totalTaxableAmt = 0;
+	var totalCgst = 0;
+	var totalCgstAmt = 0;
+	var totalSgst = 0;
+	var totalSgstAmt = 0;
+	var totalIgst = 0;
+	var totalIgstAmt = 0;
+
+	var gstIndex = 0;
+	var gstCnt = gstSummaryArray.length;
+	while(gstIndex < gstCnt){
+
+		var singleGstData = gstSummaryArray[gstIndex];
+
+		totalTaxableAmt = totalTaxableAmt+singleGstData.taxableValue;
+		totalCgst = totalCgst+singleGstData.cgstPercentage;
+		totalCgstAmt = totalCgstAmt+singleGstData.cgstAmt;
+		totalSgst = totalSgst+singleGstData.sgstPercentage;
+		totalSgstAmt = totalSgstAmt+singleGstData.sgstAmt;
+		totalIgst = totalIgst+singleGstData.igstPercentage;
+		totalIgstAmt = totalIgstAmt+singleGstData.igstAmt;
+
+		if(gstIndex==0)
+		{
+		 gstOutput = gstOutput+trClose;
+		}
+
+		//gstSummary Array
+			gstOutput = gstOutput + '<tr style="background-color: transparent; height: 15px;"><td colspan=2  align="center" valign=middle  style="border-right: 1px solid rgba(0, 0, 0, .3); font-size:12px">'
+			+ singleGstData.hsnNo+
+			'</td><td colspan=2 align="right" valign=bottom  style="border-right: 1px solid rgba(0, 0, 0, .3);font-size:12px ">'
+			+ $filter('number')(singleGstData.taxableValue,$scope.noOfDecimalPoints) +
+			'&nbsp;</td><td align="center" valign=bottom  style="border-right: 1px solid rgba(0, 0, 0, .3);font-size:12px ">'
+			+ singleGstData.cgstPercentage+
+			'</td><td colspan=2 align="right" valign=bottom  style="border-right: 1px solid rgba(0, 0, 0, .3); font-size:12px">'
+			+ $filter('number')(singleGstData.cgstAmt,$scope.noOfDecimalPoints)+
+			'&nbsp;</td><td align="center" valign=bottom style="border-right: 1px solid rgba(0, 0, 0, .3); font-size:12px">'
+			+ singleGstData.sgstPercentage+
+			'</td><td colspan=2 align="right" valign=bottom style="border-right: 1px solid rgba(0, 0, 0, .3);font-size:12px ">'
+			+ $filter('number')(singleGstData.sgstAmt,$scope.noOfDecimalPoints)+
+			'&nbsp;</td><td align="center" valign=bottom style="border-right: 1px solid rgba(0, 0, 0, .3); font-size:12px" >'
+			+singleGstData.igstPercentage+
+			'</td><td colspan=2 align="right" valign=bottom style="border-right: 1px solid rgba(0, 0, 0, .3); font-size:12px" >'
+			+ $filter('number')(singleGstData.igstAmt,$scope.noOfDecimalPoints)+
+			'&nbsp;</td><td align="center" valign=bottom style="border-right: 1px solid rgba(0, 0, 0, .3); font-size:12px" ></td><td colspan=2 align="right" valign=bottom  >&nbsp;</td>';
+
+		//End
+
+		if(gstIndex != gstCnt-1)
+		{
+			gstOutput = gstOutput+trClose;
+		}
+		gstIndex++;
+	}
+
 	var  date = new Date(entryDate);
 	var fdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 	date.setMonth(date.getMonth() + 1);
 	var Lastdate  = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear();
 			
+	//E.Charge
+	var extraCharge = checkGSTValue($scope.billData.extraCharge);
+
 	//OverAll Discount
 	var overAllDiscount = 0;
 		if($scope.billData.overallDiscountType == 'percentage'){
-			overAllDiscount = $filter('setDecimal')(productArrayFactory.calculateTax($scope.total,$scope.billData.overallDiscount,0),$scope.noOfDecimalPoints);
-			totalDiscount = totalDiscount + overAllDiscount;
+			overAllDiscount = $filter('setDecimal')(productArrayFactory.calculateTax(totalAmount+extraCharge,$scope.billData.overallDiscount,0),$scope.noOfDecimalPoints);
+			totalDiscount =  overAllDiscount;
 		}
 		else{
 			overAllDiscount =  $filter('setDecimal')($scope.billData.overallDiscount,$scope.noOfDecimalPoints);
-			totalDiscount = totalDiscount + overAllDiscount;
+			totalDiscount = overAllDiscount;
 		}
-	
-	$scope.RoundTotal = Math.round($scope.total);
-	$scope.RoundFigure =  $filter('setDecimal')($scope.RoundTotal - $scope.total,$scope.noOfDecimalPoints);
+
+	var roundableAmount = (totalAmount+extraCharge)-totalDiscount;
+	$scope.RoundTotal = Math.round(roundableAmount);
+	$scope.RoundFigure =  $filter('setDecimal')($scope.RoundTotal - roundableAmount,$scope.noOfDecimalPoints);
 			
+
 	var billArrayTag = {};
 	
 	billArrayTag.CMPLOGO = $scope.companyLogo;
 	billArrayTag.Company = $scope.companyData.companyName;
+	billArrayTag.CompanyWebsite = $scope.companyData.websiteName == undefined || $scope.companyData.websiteName == '' ? '' : $scope.companyData.websiteName;
+	billArrayTag.CompanyContact = $scope.companyData.customerCare == undefined || $scope.companyData.customerCare == '' ? '' : $scope.companyData.customerCare;
+	billArrayTag.CompanyEmail = $scope.companyData.emailId == 'undefined' || $scope.companyData.emailId == '' ? '' : $scope.companyData.emailId;
 	billArrayTag.CompanyAdd = $scope.companyData.address1 == 'undefined' ? '' : $scope.companyData.address1 +' '+ $scope.companyData.address2 == 'undefined' ? '' : ', '+$scope.companyData.address2;
 	billArrayTag.CreditCashMemo = "CASH";
-	billArrayTag.RetailOrTax = "RETAIL";
+	billArrayTag.BILLLABEL = $scope.saleType == 'QuotationPrint' ? 'Quotation' : 'Tax Invoice';
 	billArrayTag.ClientName = $scope.billData.clientName;
 	billArrayTag.INVID = $scope.billData.invoiceNumber;
 	billArrayTag.ChallanNo = " ";
 	billArrayTag.ChallanDate = " ";
-	billArrayTag.CLIENTADD = $scope.billData.fisrtAddress+','+$scope.billData.secondAddress;
+	billArrayTag.CLIENTADD = $scope.billData.fisrtAddress == '' || $scope.billData.fisrtAddress == undefined ? '' : $scope.billData.fisrtAddress;
 	billArrayTag.OrderDate = fdate;
 	billArrayTag.Mobile = $scope.billData.BillContact;
 	//billArrayTag.Total = $scope.grandTotal;
-	billArrayTag.Total = $scope.total;
-	billArrayTag.RoundTotal = $scope.RoundTotal;
+	billArrayTag.ExtraCharge = $filter('number')(extraCharge,$scope.noOfDecimalPoints);
+	billArrayTag.Total = $filter('number')(totalAmount,$scope.noOfDecimalPoints);
+	billArrayTag.TotalRoundableAmount = $filter('number')(roundableAmount,$scope.noOfDecimalPoints);
+	billArrayTag.RoundTotal = $filter('number')($scope.RoundTotal,$scope.noOfDecimalPoints);
 	billArrayTag.RoundFigure = $scope.RoundFigure;
 	billArrayTag.TotalTax = $scope.billData.tax;
-	billArrayTag.TotalDiscount = totalDiscount;
+	billArrayTag.TotalDiscount = $filter('number')(totalDiscount,$scope.noOfDecimalPoints);
 	billArrayTag.TotalQty = totalQty;
 	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.total);
 	billArrayTag.REMAINAMT = $scope.balance;
 	billArrayTag.REMARK = angular.isUndefined($scope.remark) ? '': $scope.remark;
 	billArrayTag.Description = output;
+	billArrayTag.gstSummary = gstOutput;
+	billArrayTag.TotalTaxableAmt = $filter('number')(totalTaxableAmt,$scope.noOfDecimalPoints);
+	billArrayTag.TotalCgst = totalCgst;
+	billArrayTag.TotalCgstAmt = $filter('number')(totalCgstAmt,$scope.noOfDecimalPoints);
+	billArrayTag.TotalSgst = totalSgst;
+	billArrayTag.TotalSgstAmt = $filter('number')(totalSgstAmt,$scope.noOfDecimalPoints);
+	billArrayTag.TotalIgst = totalIgst;
+	billArrayTag.TotalIgstAmt = $filter('number')(totalIgstAmt,$scope.noOfDecimalPoints);
 	billArrayTag.ExpireDate = Lastdate;
 	billArrayTag.CompanySGST = $scope.companyData.sgst;
 	billArrayTag.CompanyCGST = $scope.companyData.cgst;
 	billArrayTag.CLIENTTINNO = " ";
+	billArrayTag.PONO = $scope.billData.poNumber == '' || $scope.billData.poNumber == undefined ? '': $scope.billData.poNumber;
 	
 	
 	apiCall.getCall(apiPath.getTemplateByCompany+$scope.companyData.companyId).then(function(responseTemp){
@@ -412,4 +559,4 @@ function previewBillModalController($scope, $modalInstance,$rootScope,$http,apiC
 	
 }
 
-previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","$http","apiCall","apiPath","$timeout","$state","companyId","apiResponse","$sce","billData","inventoryData","taxData","total","totalTax","grandTotal","advance","balance","remark","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate","saleType","productFactory"];
+previewBillModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","$timeout","$state","apiResponse","$sce","billData","inventoryData","total","grandTotal","entryDate","$filter","productArrayFactory","buttonValidation","insertOrUpdate","saleType","productFactory","productHsn"];

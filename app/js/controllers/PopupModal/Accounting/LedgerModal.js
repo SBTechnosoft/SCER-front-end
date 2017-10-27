@@ -41,6 +41,26 @@ function AccLedgerModalController($rootScope,$scope, $modalInstance,apiCall,apiP
 		$scope.underWhat = response3;
 	
 	});
+
+	//Get Banks
+	$scope.bankDrop=[];
+	$scope.bankBranchDrop=[];
+	apiCall.getCall(apiPath.getAllBank).then(function(response){
+		$scope.bankDrop = response;
+	});
+	
+	$scope.changeBank = function(key,value){
+		formdata.set(key,value);
+		apiCall.getCall(apiPath.getBankBranch+value).then(function(response){
+			$scope.bankBranchDrop=response;
+		})
+	}
+
+	$scope.changeBankBranch = function(key,value){
+		formdata.set(key,value.bankBranchId);
+		$scope.ledgerForm.bankIfsc = value.ifsc;
+	}
+
 	
 	$scope.getInitStateCity = function(){
 		

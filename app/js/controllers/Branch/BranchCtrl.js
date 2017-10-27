@@ -6,7 +6,7 @@
 
 App.controller('BranchController', BranchController);
 
-function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster,$modal,getSetFactory) {
+function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,$state,apiResponse,toaster,$modal,getSetFactory,fetchArrayService) {
   'use strict';
   var vm = this;
   var data = [];
@@ -22,6 +22,17 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 	
   }
   
+  	function filterDataForTable(){
+		var count = data.length;
+		while(count--) {
+		  data[count].cityName = ""; //initialization of new property 
+		  data[count].cityName = data[count].city.cityName;  //set the data from nested obj into new property
+		  
+		  data[count].companyName = ""; //initialization of new property 
+		  data[count].companyName = data[count].company.companyName;  //set the data from nested obj into new property
+		}
+	}
+
 	$scope.showBranches = function(){
 		
 		toaster.clear();
@@ -33,33 +44,19 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 				
 				toaster.clear();
 				//console.log(response);
-				if(apiResponse.noContent == response)
+				if(angular.isArray(response))
 				{
+					data = response;
+					filterDataForTable();
+					vm.tableParams.reload();
+					vm.tableParams.page(1);
+				}
+				else{
 					data = [];
 					vm.tableParams.reload();
 					toaster.pop('info', 'Message', 'Data Not Available');
 				}
-				else{
-					
-					data = response;
-				
-					for (var i = 0; i < data.length; i++) {
-					  data[i].cityName = ""; //initialization of new property 
-					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-					  
-					  data[i].companyName = ""; //initialization of new property 
-					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-					  
-					}
-					
-					 vm.tableParams.reload();
-					  vm.tableParams.page(1);
-				}
-				
 			});
-			
-			
-			
 		}
 		else{
 			
@@ -69,102 +66,62 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 				
 				toaster.clear();
 				//console.log(response);
-				if(apiResponse.noContent == response)
+				if(angular.isArray(response))
 				{
+					data = response;
+					filterDataForTable();
+					vm.tableParams.reload();
+					vm.tableParams.page(1);
+				}
+				else{
 					data = [];
 					vm.tableParams.reload();
 					toaster.pop('info', 'Message', 'Data Not Available');
 				}
-				else{
-					data = response;
-					
-					for (var i = 0; i < data.length; i++) {
-						
-					  data[i].cityName = ""; //initialization of new property 
-					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-					  
-					  data[i].companyName = ""; //initialization of new property 
-					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-					  
-					}
-					
-					 vm.tableParams.reload();
-					  vm.tableParams.page(1);
-				}
 			});
 		}
-		
-		
 	}
 	
 	//Company
 	$scope.init = function (){
-		
-		
 		vm.states=[];
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 			
-		toaster.clear();
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
-			
+			toaster.clear();
 			vm.states = response2;
-			
+
+			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
-				
-				$scope.stateCheck = response;
-				
-				$scope.getBranch(response.companyId);
-				
-			});
-		 
+			$scope.stateCheck = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
+			$scope.getBranch($scope.stateCheck.companyId);
 		});
-		 
 	}
 	
 	$scope.init();
-	
 	//End
   
 	$scope.getBranch = function(id){
 		
-	
 		apiCall.getCall(apiPath.getOneBranch+id).then(function(response){
 			//console.log(response);
 			toaster.clear();
 			
-			if(apiResponse.noContent == response)
+			if(angular.isArray(response))
 			{
+				data = response;
+				filterDataForTable();
+				$scope.TableData();
+			}
+			else{
+				
 				data = [];
 				$scope.TableData();
 				toaster.pop('info', 'Message', 'Data Not Available');
 			}
-			else{
-				
-				data = response;
-				
-				for (var i = 0; i < data.length; i++) {
-				  data[i].cityName = ""; //initialization of new property 
-				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-				  
-				  data[i].companyName = ""; //initialization of new property 
-					data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-					  
-				}
-				
-				
-				 $scope.TableData();
-			}
-
 		});
-		
-		// vm.tableParams.reload();
-		
 	}
 	
   $scope.TableData = function(){
-	
-	
 	
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
@@ -176,17 +133,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 		   counts: [],
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
-			  //console.log(params.$params);
-			  // if()
-			  // {
-				  // alert('yes');
-			  // }
-			  // else{
-				  // alert('no');
-			  // }
-			  // use build-in angular filter
-			 // console.log("Length: .."+params.$params.filter.city);
-			  
+			 
 			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.companyName) != "undefined" && params.$params.filter.companyName != "") || (typeof(params.$params.filter.branchName) != "undefined" && params.$params.filter.branchName != "")  || (typeof(params.$params.filter.address1) != "undefined" && params.$params.filter.address1 != "") || (typeof(params.$params.filter.address2) != "undefined" && params.$params.filter.address2 != "") || (typeof(params.$params.filter.pincode) != "undefined" && params.$params.filter.pincode != "") || (typeof(params.$params.filter.cityName) != "undefined" && params.$params.filter.cityName != "")))
 			  {
 					 var orderedData = params.filter() ?
@@ -201,15 +148,11 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 
 			  }
 			  else{
-				  
 				   params.total(data.length);
-				  
 			  }
 			 
 			 if(!$.isEmptyObject(params.$params.sorting))
 			  {
-				
-				 //alert('ggg');
 				  var orderedData = params.sorting() ?
 						  $filter('orderBy')(data, params.orderBy()) :
 						  data;
@@ -223,9 +166,6 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 			
 		  }
 	  });
-	  
-	 
-	  
   }
 
   // FILTERS
@@ -282,37 +222,7 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
       // console.info(user);
   };
 
-  // EXPORT CSV
-  // -----------------------------------  
-
-  var data4 = [{name: "Moroni", age: 50},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34},
-      {name: "Tiancum", age: 43},
-      {name: "Jacob", age: 27},
-      {name: "Nephi", age: 29},
-      {name: "Enos", age: 34}];
-
-  vm.tableParams4 = new ngTableParams({
-      page: 1,            // show first page
-      count: 10           // count per page
-  }, {
-      total: data4.length, // length of data4
-      getData: function($defer, params) {
-          $defer.resolve(data4.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-      }
-  });
-  
+ 
   $scope.isDefault_branch = function(id)
   {
 	
@@ -386,10 +296,6 @@ function BranchController($rootScope,$scope, $filter, ngTableParams,apiCall,apiP
 				Modalopened = false;
 				
 		});
-		
-	
   }
-  
-
 }
-BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster","$modal","getSetFactory"];
+BranchController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","$state","apiResponse","toaster","$modal","getSetFactory","fetchArrayService"];

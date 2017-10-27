@@ -6,7 +6,7 @@
 
 App.controller('AddStaffController', AddStaffController);
 
-function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,apiResponse,validationMessage,getSetFactory,stateCityFactory) {
+function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,apiResponse,validationMessage,getSetFactory,stateCityFactory,fetchArrayService) {
   'use strict';
 
 	var vm = this;
@@ -52,23 +52,20 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 			vm.companyDrop = responseCompanyDrop;
 			
 			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
+			var defaultCompanyData = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
 				
-				$scope.addStaff.company = response;
+				$scope.addStaff.company = defaultCompanyData;
 				
-				formdata.append('companyId',response.companyId);
+				formdata.append('companyId',defaultCompanyData.companyId);
 				
 				vm.branchDrop = [];
-				var getAllBranch = apiPath.getOneBranch+response.companyId;
+				var getAllBranch = apiPath.getOneBranch+defaultCompanyData.companyId;
 				//Get Branch
 				apiCall.getCall(getAllBranch).then(function(response4){
 					
 					vm.branchDrop = response4;
 						
 				});
-			});
-			
-		
 		});
 		
 	}
@@ -124,8 +121,6 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 			$scope.addStaff.pincode = editStaffData.pincode;
 			// user Type
 			$scope.addStaff.userType = editStaffData.userType;
-			
-			$scope.addStaff.stateDropDown = editStaffData.state;
 			
 			 vm.statesDrop=[];
 			 vm.cityDrop=[];
@@ -410,4 +405,4 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
     {value: 5, name: 'Huge'}
   ];
 }
-AddStaffController.$inject = ["$scope","$rootScope","toaster","apiCall","apiPath","$state","apiResponse","validationMessage","getSetFactory","stateCityFactory"];
+AddStaffController.$inject = ["$scope","$rootScope","toaster","apiCall","apiPath","$state","apiResponse","validationMessage","getSetFactory","stateCityFactory","fetchArrayService"];

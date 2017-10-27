@@ -6,7 +6,7 @@
 
 App.controller('SettingJobcardNumberController', SettingJobcardNumberController);
 
-function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,apiCall,apiPath,toaster,apiResponse,validationMessage) {
+function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,apiCall,apiPath,toaster,apiResponse,validationMessage,fetchArrayService) {
   'use strict';
  var vm = this;
  var data = [];
@@ -24,14 +24,19 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
 	
 	/* VALIDATION END */
 	
+	function filterDataForTable(){
+		var count = data.length;
+		while(count--) {
+		  data[count].companyName = ""; //initialization of new property 
+		  data[count].companyName = data[count].company.companyName;  //set the data from nested obj into new property
+		}
+	}
+
 	// Get All Invoice Call 
 	apiCall.getCall(JobcardGetApiPath).then(function(response){
 		//console.log(response);
 		data = response;
-		for (var i = 0; i < data.length; i++) {
-		  data[i].companyName = ""; //initialization of new property 
-		  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-		}
+		filterDataForTable();
 		 $scope.TableData();
 	});
 	
@@ -98,32 +103,17 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
 	}
 	  
 	
-	$scope.defaultCompany = function(){
-		
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
-			
-			$scope.jobcardForm.companyDrop = response;
-			
-		});
-		
-	}
-	  
- //End Table
-  // Chosen data
-  // ----------------------------------- 
-	vm.invoiceCompanyDrop= [];
-	// Get All Invoice Call 
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-		
-		vm.invoiceCompanyDrop = responseCompanyDrop;
-		
-		$scope.defaultCompany();
-		
-	});
-	
+	function defaultCompany(){
 
-  
+		vm.invoiceCompanyDrop= [];
+		// Get All Invoice Call 
+		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+			vm.invoiceCompanyDrop = responseCompanyDrop;
+			$scope.jobcardForm.companyDrop = fetchArrayService.getfilteredSingleObject(responseCompanyDrop,'ok','isDefault');
+		});
+	}
+	defaultCompany();
+	  
   //Insert Invoice
   $scope.insertInvoiceData = function(jobcardForm)
   {
@@ -152,12 +142,7 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
 					
 				apiCall.getCall(JobcardGetApiPath).then(function(response){
 					data = response;
-					for (var i = 0; i < data.length; i++) {
-					  data[i].companyName = ""; //initialization of new property 
-					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-					}
-					
-					
+					filterDataForTable();
 					vm.tableParams.reload();
 					  vm.tableParams.page(1);
 				});
@@ -167,7 +152,7 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
 				$scope.jobcardForm.startAt = '';
 				$scope.jobcardForm.jobCardNumberType = 'prefix';
 				
-				$scope.defaultCompany();
+				defaultCompany();
 			}
 			else{
 			
@@ -182,11 +167,6 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
 			formdata.delete('jobCardNumberType');
 		
 	});
-	
-	
-	
-	
-	
   }
   
 	$scope.cancel = function(){
@@ -196,7 +176,7 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
 		$scope.jobcardForm.startAt = '';
 		$scope.jobcardForm.jobCardNumberType = 'prefix';
 		
-		$scope.defaultCompany();
+		defaultCompany();
 		
 		formdata.delete('companyId');
 		formdata.delete('jobCardNumberLabel');
@@ -205,4 +185,4 @@ function SettingJobcardNumberController($rootScope,$scope,$filter,ngTableParams,
 		formdata.delete('jobCardNumberType');
 	}
 }
-SettingJobcardNumberController.$inject = ["$rootScope","$scope","$filter","ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage"];
+SettingJobcardNumberController.$inject = ["$rootScope","$scope","$filter","ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage","fetchArrayService"];

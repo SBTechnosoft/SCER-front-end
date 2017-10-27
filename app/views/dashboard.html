@@ -1,12 +1,13 @@
 <h3>
    <div class="pull-right">
-      <button type="button" data-ng-click="$state.go('app.documentation')" class="btn btn-info">
+      <!--button type="button" data-ng-click="$state.go('app.documentation')" class="btn btn-info">
          <em class="fa fa-info"></em>
-      </button>
+      </button-->
    </div>Dashboard
    <small data-ng-bind="app.name + ' - ' + app.description"></small>
 </h3>
 <div data-ng-controller="DashboardController" class="row">
+   <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <!-- START dashboard content-->
    <div class="col-lg-9 fw-boxed">
       <div class="row">
@@ -140,6 +141,7 @@
                            <p>500k of 500k -
                               <a href="#">
                                  <em class="text-primary fa fa-dropbox"></em>
+                                 <i class="text-primary fa fa-dropbox"></i>
                               </a>
                            </p>
                            <progressbar value="100" type="success" class="progress-xs"></progressbar>
@@ -352,74 +354,48 @@
             <div class="panel panel-info">
                <div class="panel-heading">
                   <div class="panel-title bg-info">
-                     <em class="icon-clock fa-lg pull-right text-muted"></em>Activity</div>
+                     <em class="fa fa-birthday-cake fa-lg pull-right text-muted"></em>Client's Special Dates</div>
                </div>
                <div class="panel-body">
                   <div class="smoothy">
                      <scrollable>
                         <!-- START timeline-->
                         <ul class="timeline-alt">
-                           <li data-datetime="14 Oct" class="timeline-separator"></li>
+                           <li data-datetime="Birthday" class="timeline-separator myCursorPointer" ng-click="emailSmsPopup('lg','sms','birthDate')"></li>
                            <!-- START timeline item-->
-                           <li>
-                              <div class="timeline-badge timeline-badge-sm thumb-32 bg-purple">
-                                 <em class="fa fa-users"></em>
+                           <li ng-repeat="item in ::filtredClientBirthData track by item.clientId" >
+                             
+                              <div class="timeline-badge timeline-badge-sm thumb-32 myCursorPointer"  >
+                                 <ng-letter-avatar  data="{{::item.clientName}}" shape="round" height="30" width="30" fontsize="16" fontWeight="400" ></ng-letter-avatar>
                               </div>
-                              <div class="timeline-date">
-                                 <time datetime="10m"></time>
+                               <div class="timeline-date">
                               </div>
                               <div class="timeline-panel">
-                                 <strong>Client Meeting</strong>
-                                 <div class="text-muted">Green Offfice - Av 123 St Floor 2</div>
-                              </div>
-                           </li>
-                           <!-- END timeline item-->
-                           <!-- START timeline item-->
-                           <li>
-                              <div class="timeline-badge timeline-badge-sm bg-turquoise">
-                                 <em class="fa fa-phone"></em>
-                              </div>
-                              <div class="timeline-date">
-                                 <time datetime="1h"></time>
-                              </div>
-                              <div class="timeline-panel">
-                                 <strong>Call</strong>
-                                 <div class="text-muted">From: <a href="tel:+011231987">Michael</a>.
-                                    <em>No message left.</em>
+                                 <strong ng-bind="::item.clientName" ></strong>
+                                 <div class="text-muted"  >
+                                    {{::item.profession.professionName}}
+                                      <em class="fa fa-commenting fa-lg fa-fw myCursorPointer text-primary" title="SMS" ng-click="emailSmsPopup('lg','sms','birthDate',item)" ></em>
+                                     <em class="fa fa-envelope fa-lg fa-fw myCursorPointer text-primary" title="Email" ng-click="emailSmsPopup('lg','email','birthDate',item)" ></em>
                                  </div>
+
                               </div>
                            </li>
                            <!-- END timeline item-->
+                            <li data-datetime="Anniversary" class="timeline-separator myCursorPointer" ng-click="emailSmsPopup('lg','sms','anniversaryDate')" ></li>
                            <!-- START timeline item-->
-                           <li>
-                              <div class="timeline-badge timeline-badge-sm bg-info">
-                                 <em class="fa fa-envelope"></em>
+                           <li ng-repeat="item in ::filtredClientAnnivData track by item.clientId" >
+                               <div class="timeline-date">
                               </div>
-                              <div class="timeline-date">
-                                 <time datetime="3h"></time>
+                              <div class="timeline-badge timeline-badge-sm thumb-32">
+                                 <ng-letter-avatar  data="{{::item.clientName}}" shape="round" height="30" width="30" fontsize="16" fontWeight="400" ></ng-letter-avatar>
                               </div>
                               <div class="timeline-panel">
-                                 <strong>New invitation</strong>
-                                 <div class="text-muted">From:
-                                    <strong>UX Design Team</strong>
+                                 <strong ng-bind="::item.clientName" ></strong>
+                                 <div class="text-muted" >
+                                    {{::item.profession.professionName}}
+                                      <em class="fa fa-commenting fa-lg fa-fw myCursorPointer text-primary" title="SMS" ng-click="emailSmsPopup('lg','sms','anniversaryDate',item)" ></em>
+                                      <em class="fa fa-envelope fa-lg fa-fw myCursorPointer text-primary" title="Email" ng-click="emailSmsPopup('lg','email','anniversaryDate',item)" ></em>
                                  </div>
-                              </div>
-                           </li>
-                           <!-- END timeline item-->
-                           <li data-datetime="13 Oct" class="timeline-separator"></li>
-                           <!-- START timeline item-->
-                           <li>
-                              <div class="timeline-badge timeline-badge-sm bg-warning">
-                                 <em class="fa fa-upload"></em>
-                              </div>
-                              <div class="timeline-date">
-                                 <time datetime="9am"></time>
-                              </div>
-                              <div class="timeline-panel">
-                                 <strong>File upload</strong>
-                                 <a href="#">
-                                    <div class="text-bold">angular+bs.zip</div>
-                                 </a>
                               </div>
                            </li>
                            <!-- END timeline item-->

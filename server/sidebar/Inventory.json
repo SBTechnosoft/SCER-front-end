@@ -30,15 +30,6 @@
     "type": "separator"
   },
   {
-    "text": "Order/Notes",
-    "sref": "#",
-    "icon": "icon-ribbon",
-    "subnav": [
-      { "text": "Purchase Order",  "sref": "app.InvPurchase", "translate": "" },
-      { "text": "Sales Order", "sref": "app.InvSales", "translate": "" }
-    ]
-  },
-  {
     "text": "Stock Register",
     "sref": "app.AddInvStock",
     "icon": "icon-stack"

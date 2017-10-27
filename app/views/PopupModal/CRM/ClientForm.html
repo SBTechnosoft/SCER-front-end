@@ -5,6 +5,15 @@
 .chosen-container .chosen-drop{
 	display: block !imporatant;
 }
+.hackyhack {
+  position: relative;
+}
+.hackyhack .dropdown-menu {
+   top: auto !important;
+   bottom: 0px;
+   left:auto!important;
+   right:0;
+ }
 </style>
 <div class="modal-header"  data-ng-class="app.theme.brand" >
 		<button type="button" data-dismiss="modal" data-ng-click="cancel()" aria-hidden="true" class="close text-md" ><i class="fa fa-times" style="color:white"></i></button>  
@@ -81,7 +90,7 @@
 			   <div class="form-group">
 					<label for="input-id-1" class="col-sm-1 control-label">Address</label>
 				  <div class="col-sm-11">
-						<textarea rows="1" name="firstAddress" ng-model="clientForm.fisrtAddress" placeholder="Enter Address"  class="form-control  ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('address1',clientForm.fisrtAddress)" ng-maxlength="200" style="height:38px;" ></textarea>
+						<textarea rows="1" name="firstAddress" ng-model="clientForm.address1" placeholder="Enter Address"  class="form-control  ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('address1',clientForm.address1)" ng-maxlength="200" style="height:38px;" ></textarea>
 						<span ng-messages="formClient.firstAddress.$error" ng-if="formClient.firstAddress.$dirty || formClient.firstAddress.$touched" role="alert">
 							<span ng-messages-include="errorRequired"></span>
 							<span ng-messages-include="errorPatternThisSpecial"></span>
@@ -90,9 +99,38 @@
 				  </div>
 			   </div>
 			</fieldset>
+
+			<fieldset class="my-fieldset-paddingBottom">
+				<div class="form-group">
+					<label  class="col-sm-2 control-label" title="Birth Date" >BirthDate</label>
+						<div class="col-sm-4">
+							<div class="input-group hackyhack" >
+							<input type="text"  datepicker-popup="{{form.format}}" name="birthDate" data-ng-model="form.birthDate" is-open="form.openedStartBirth" min-date="false" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" ng-change="changeDate('birthDate',form.birthDate)" close-text="Close" class="form-control input-sm" id="birthDate"  tooltip="Birth Date" tooltip-trigger="focus" tooltip-placement="top" readonly/>
+							<span class="input-group-btn">
+							   <button type="button" data-ng-click="form.openStartBirth($event)" id="datepickerButton"  class="btn btn-default  btn-sm">
+								  <em class="fa fa-calendar"></em>
+							   </button>
+							</span>
+					 </div>
+					</div>
+					
+					<label class="col-sm-2 control-label" title="Anniversory Date">Annivar. Date</label>
+					<div class="col-sm-4">
+						<div class="input-group hackyhack" >
+						<input type="text" datepicker-popup="{{form.format}}" name="anniversaryDate"  data-ng-model="form.anniversaryDate" is-open="form.openedStartAnivarSary" min-date="false" max-date="false" datepicker-options="form.dateOptions" date-disabled="form.disabled(form.date, form.mode)" ng-change="changeDate('anniversaryDate',form.anniversaryDate)" close-text="Close" class="form-control input-sm" id="anniversaryDate" tooltip="Anniversary date" tooltip-trigger="focus" tooltip-placement="top" readonly/>
+						<span class="input-group-btn">
+						   <button type="button" data-ng-click="form.openStartAnivarSary($event)" id="AniversarydatepickerButton"  class="btn btn-default  btn-sm">
+							  <em class="fa fa-calendar"></em>
+						   </button>
+						</span>
+					 </div>
+					</div>
+			    </div>
+			</fieldset>
+
 			<div class="alert alert-warning" ng-if="form.errorMsg">{{form.errorMsg}}</div>
 			<fieldset class="my-fieldset-paddingBottom">
-				<button type="button"  class="mr mb-sm btn btn-success pull-right" tabindex="2" ng-click="clickSave()" ng-disabled="formClient.$invalid || form.buttonHidden" >
+				<button type="button"  class="mr mb-sm btn btn-success pull-right" ng-click="clickSave()" ng-disabled="formClient.$invalid || form.buttonHidden" >
 					<span ng-if="!clientForm.getSetClientId" >Save</span>
 					<span ng-if="clientForm.getSetClientId" >Update</span>
 				</button>

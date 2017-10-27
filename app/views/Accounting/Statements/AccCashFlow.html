@@ -1,7 +1,5 @@
 <h3>
-	
    <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Cash Flow</small>
-  
 </h3>
 <div   class="container-fluid" >
 	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
@@ -27,21 +25,21 @@
 	</div>
 </div>
 	 <!-- First -->
-   <div class="panel panel-default" ng-show="firstLayout">
+   <div class="panel panel-default" ng-if="firstLayout">
       <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
 		  <!--a  class="btn btn-sm btn-labeled btn-primary pull-right" ng-click="changeLayout()" >
                <span class="btn-label"><i class="icon icon-layout"></i>
                </span>Change Layout</a-->
-			    <i class="material-icons pull-right" ui-sref="." ng-click="oneSide()" style="color:#43a8eb;" >&#xE8F3;</i>
-				 <i class="material-icons pull-right" ui-sref="." ng-click="twoSide()" style="margin-right: 5px;color:#43a8eb;" >&#xE8EF;</i>
+			    <i class="material-icons pull-right myCursorPointer"  ng-click="oneSide()" style="color:#43a8eb;" >&#xE8F3;</i>
+				 <i class="material-icons pull-right myCursorPointer"  ng-click="twoSide()" style="margin-right: 5px;color:#43a8eb;" >&#xE8EF;</i>
 				 
 		 <a ng-click="generatePdf('pdf')" class="pull-right btn btn-sm btn-primary"  style="margin-right: 5px;" data-ng-class="app.theme.brand" >Generate Pdf</a> 
 		 <a ng-click="generatePdf('excel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;" data-ng-class="app.theme.brand" >Export to Excel</a>
 		
          <div class="panel-title"><b> <i>{{displayCompany}}</i> Statement of Cash Flows For The Year Ended <i>{{displayDate | date: dateFormat}}</i> </b></div>
       </div>
-	   <div class="table-responsive">
+	   <div  class="table-responsive">
 		  <table  export-csv="csv"   show-filter="true" class="table table-bordered table-striped" >
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 		  	<div class="input-group m-b"> 
@@ -54,26 +52,26 @@
 				<th>Credit</th>
 			</thead>
 			 <tbody  >
-				<tr data-ng-repeat="user in myArrayData | filter:query" >
+				<tr data-ng-repeat="user in myArrayData | filter:query track by $index" >
 				
-					<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a ng-click="goToLedgerTransaction(user.ledgerId)" ui-sref="" style="text-transform:capitalize" href=""  tabindex="0" >{{user.ledgerName}}</a></td>
-					<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-center">{{user.debitAmount  | number: noOfDecimalPoints}}</td>
-					<td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:right" header-class="text-center">{{user.creditAmount  | number: noOfDecimalPoints}}</td>
+					<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user.ledgerId)" style="text-transform:capitalize"  tabindex="0"  ng-bind="::user.ledgerName"></a></td>
+					<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-center" ng-bind="::user.debitAmount  | number: noOfDecimalPoints"></td>
+					<td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:right" header-class="text-center" ng-bind="::user.creditAmount  | number: noOfDecimalPoints"></td>
 					
 				</tr>
 			 </tbody>
 			 <tfoot>
 				<tr>
 					<td><b>Total</b></td>
-					<td style="text-align:right"><b>{{TotalofDebit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right"><b ng-bind="TotalofDebit | number: noOfDecimalPoints"></b></td>
 					
-					<td style="text-align:right"><b>{{TotalofCredit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right"><b ng-bind="TotalofCredit | number: noOfDecimalPoints"></b></td>
 				</tr>
 				<tr>
 					<td><b>Diffrence</b></td>
-					<td style="text-align:right" ><b ng-if="TotalofDebit > TotalofCredit">{{TotalofDebit - TotalofCredit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right" ><b ng-if="TotalofDebit > TotalofCredit" ng-bind="TotalofDebit - TotalofCredit | number: noOfDecimalPoints"></b></td>
 					
-					<td style="text-align:right"><b ng-if="TotalofDebit < TotalofCredit" >{{TotalofCredit - TotalofDebit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right"><b ng-if="TotalofDebit < TotalofCredit"  ng-bind="TotalofCredit - TotalofDebit | number: noOfDecimalPoints"></b></td>
 				</tr>
 			 </tfoot>
 		  </table>
@@ -81,14 +79,14 @@
    </div>
    
    <!-- Second -->
-   <div class="panel panel-default" ng-show="secondLayout">
+   <div class="panel panel-default" ng-if="secondLayout">
       <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
 		  <!--a  class="btn btn-sm btn-labeled btn-primary pull-right" ng-click="changeLayout()" >
                <span class="btn-label "><i class="icon icon-layout"></i>
                </span>Change Layout</a-->	
-			  <i class="material-icons pull-right" ui-sref="." ng-click="oneSide()" style="color:#43a8eb;" >&#xE8F3;</i>
-				 <i class="material-icons pull-right" ui-sref="." ng-click="twoSide()" style="margin-right: 5px;color:#43a8eb;" >&#xE8EF;</i>
+			  <i class="material-icons pull-right myCursorPointer"  ng-click="oneSide()" style="color:#43a8eb;" >&#xE8F3;</i>
+				 <i class="material-icons pull-right myCursorPointer"  ng-click="twoSide()" style="margin-right: 5px;color:#43a8eb;" >&#xE8EF;</i>
 		 <a ng-click="generatePdf('twoSidePdf')" class="pull-right btn btn-sm btn-primary"  style="margin-right: 5px;" >Generate Pdf</a> 
 		 <a ng-click="generatePdf('twoSideExcel')" class="pull-right btn btn-sm btn-primary" style="margin-right: 5px;">Export to Excel</a>
 		 
@@ -109,28 +107,28 @@
 				<th>Credit</th>
 			</thead>
 			 <tbody  >
-				<tr data-ng-repeat="user in mySecondArrayData | filter:query" >
+				<tr data-ng-repeat="user in mySecondArrayData | filter:query track by $index" >
 					
-					<td ><a ng-click="goToLedgerTransaction(user[1].ledgerId)" ui-sref="" style="text-transform:capitalize" href="" tabindex="1" ng-if="user[1].ledgerName" >{{user[1].ledgerName}}</a></td>
-					 <td style="text-align:right" header-class="text-center">{{user[1].debitAmount  | number: noOfDecimalPoints}}</td>
+					<td ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user[1].ledgerId)"  style="text-transform:capitalize" href="" tabindex="1" ng-if="user[1].ledgerName"  ng-bind="::user[1].ledgerName"></a></td>
+					 <td style="text-align:right" header-class="text-center" ng-bind="::user[1].debitAmount  | number: noOfDecimalPoints"></td>
 					 
-					<td ><a ng-click="goToLedgerTransaction(user[0].ledgerId)" ui-sref="" style="text-transform:capitalize" href=""  tabindex="1" ng-if="user[0].ledgerName" >{{user[0].ledgerName}}</a></td>
-					<td style="text-align:right" header-class="text-center">{{user[0].creditAmount  | number: noOfDecimalPoints}}</td>
+					<td ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user[0].ledgerId)"  style="text-transform:capitalize" href=""  tabindex="1" ng-if="user[0].ledgerName"  ng-bind="::user[0].ledgerName"></a></td>
+					<td style="text-align:right" header-class="text-center" ng-bind="::user[0].creditAmount  | number: noOfDecimalPoints"></td>
 					
 				</tr>
 			 </tbody>
 			 <tfoot>
 				<tr>
 					<td><b>Total</b></td>
-					<td style="text-align:right"><b>{{TotalofDebit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right"><b ng-bind="TotalofDebit | number: noOfDecimalPoints"></b></td>
 					<td><b>Total</b></td>
-					<td style="text-align:right"><b>{{TotalofCredit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right"><b ng-bind="TotalofCredit | number: noOfDecimalPoints"></b></td>
 				</tr>
 				<tr>
 					<td><b>Diffrence</b></td>
-					<td style="text-align:right" ><b ng-if="TotalofDebit > TotalofCredit">{{TotalofDebit - TotalofCredit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right" ><b ng-if="TotalofDebit > TotalofCredit" ng-bind="TotalofDebit - TotalofCredit | number: noOfDecimalPoints" ></b></td>
 					<td><b>Diffrence</b></td>
-					<td style="text-align:right"><b ng-if="TotalofDebit < TotalofCredit" >{{TotalofCredit - TotalofDebit | number: noOfDecimalPoints}}</b></td>
+					<td style="text-align:right"><b ng-if="TotalofDebit < TotalofCredit" ng-bind="TotalofCredit - TotalofDebit | number: noOfDecimalPoints" ></b></td>
 				</tr>
 			 </tfoot>
 		  </table>

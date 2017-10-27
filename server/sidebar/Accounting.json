@@ -20,7 +20,23 @@
     ]
   },
   {
+    "text": "Sales Order",
+    "sref": "app.AccSalesOrder",
+    "icon": "fa fa-credit-card"
+  },
+  {
+    "text": "Quotation",
+    "sref": "app.QuotationPrint",
+    "icon": "fa fa-quora"
+  },
+  {
     "type": "separator"
+  },
+  {
+    "text": "Notes of Account",
+    "sref": "#",
+    "icon": "icon-ribbon",
+    "type": "heading"
   },
   {
     "text": "Credit Notes",
@@ -41,6 +57,9 @@
     ]
   },
   {
+    "type": "separator"
+  },
+  {
     "text": "Special Journal",
     "sref": "#",
     "icon": "icon-book",
@@ -48,9 +67,6 @@
       { "text": "View",  "sref": "app.AccViewSpecialJrnl", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccSpecialJrnl", "translate": "" }
     ]
-  },
-  {
-    "type": "separator"
   },
   {
     "text": "Payment",

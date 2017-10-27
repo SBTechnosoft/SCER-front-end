@@ -6,7 +6,7 @@
 
 App.controller('AddBranchController', AddBranchController);
 
-function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$location,apiResponse,validationMessage,getSetFactory,stateCityFactory) {
+function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$state,$location,apiResponse,validationMessage,getSetFactory,stateCityFactory,fetchArrayService) {
   'use strict';
   var vm = this;
   var formdata = new FormData();
@@ -55,8 +55,6 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		//$location.path('app/AddBranch'); 
 	}
 	
-   
- 
 	vm.cityDrop=[];
 	//get Company
 	vm.companyDrop=[];
@@ -68,41 +66,23 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		if(!$scope.addBranch.bId){
 			
 			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
+				var defaultCompanyData = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
+				$scope.addBranch.companyDropDown = defaultCompanyData;
+				$scope.addBranch.companyDropDown2 = defaultCompanyData;
 				
-				$scope.addBranch.companyDropDown = response;
-				$scope.addBranch.companyDropDown2 = response;
-				
-				formdata.append('companyId',response.companyId);
+				formdata.append('companyId',defaultCompanyData.companyId);
 				
 				vm.branchDrop = [];
-				var getAllBranch = apiPath.getOneBranch+response.companyId;
+				var getAllBranch = apiPath.getOneBranch+defaultCompanyData.companyId;
 				//Get Branch
 				apiCall.getCall(getAllBranch).then(function(response4){
 					
 					vm.branchDrop = response4;
 						
 				});
-			});
-		
 		}
 	
 	});
-		
-	//Get Branch
-	// vm.branchDrop=[];
-	// apiCall.getCall(apiPath.getAllBranch).then(function(response){
-		// vm.branchDrop = response;
-			
-	// });
-  
-	//Get State
-	
-	// apiCall.getCall(apiPath.getAllState).then(function(response3){
-		// vm.statesDrop = response3;
-	
-	// });
-		
 	
 	vm.sdfg;
 	$scope.AddEditFunction = function(){
@@ -163,12 +143,7 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 				//vm.cityDrop = res5;
 				//$scope.addBranch.cityDropDown = editBranchData.city;
 			//});
-			
-			
-			
-		
 		//});
-	  
 	  }
 	  else{
 		  
@@ -197,76 +172,6 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   $scope.AddEditFunction();
   
-  // Datepicker
-  // ----------------------------------- 
-
-  this.today = function() {
-    this.dt = new Date();
-  };
-  this.today();
-
-  this.clear = function () {
-    this.dt = null;
-  };
-
-  // Disable weekend selection
-  this.disabled = function(date, mode) {
-    return false; //( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  };
-
-  this.toggleMin = function() {
-    this.minDate = this.minDate ? null : new Date();
-  };
-  this.toggleMin();
-
-  this.open = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-
-    this.opened = true;
-  };
-
-  this.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
-
-  this.initDate = new Date('2016-15-20');
-  this.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  this.format = this.formats[0];
-
-  // Timepicker
-  // ----------------------------------- 
-  this.mytime = new Date();
-
-  this.hstep = 1;
-  this.mstep = 15;
-
-  this.options = {
-    hstep: [1, 2, 3],
-    mstep: [1, 5, 10, 15, 25, 30]
-  };
-
-  this.ismeridian = true;
-  this.toggleMode = function() {
-    this.ismeridian = ! this.ismeridian;
-  };
-
-  this.update = function() {
-    var d = new Date();
-    d.setHours( 14 );
-    d.setMinutes( 0 );
-    this.mytime = d;
-  };
-
-  this.changed = function () {
-    console.log('Time changed to: ' + this.mytime);
-  };
-
-  this.clear = function() {
-    this.mytime = null;
-  };
-
   // Input mask
   // ----------------------------------- 
 
@@ -311,21 +216,6 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
       return ["[1-]AAA-999", "[1-]999-AAA"];
   }};
 
-  // Bootstrap Wysiwyg
-  // ----------------------------------- 
- 
-  this.editorFontFamilyList = [
-    'Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
-    'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact',
-    'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
-    'Times New Roman', 'Verdana'
-  ];
-  
-  this.editorFontSizeList = [
-    {value: 1, name: 'Small'},
-    {value: 3, name: 'Normal'},
-    {value: 5, name: 'Huge'}
-  ];
   
   $scope.ChangeCity = function(Fname,state)
   {
@@ -351,8 +241,6 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   //Insert Branch
 
   $scope.pop = function(addBranch) {
-	  
-	   
 	 // console.log(addBranch.companyDropDown2);
 	// formdata.append('branchName',addBranch.branchName);
 	// formdata.append('address1',addBranch.fisrtAddress);
@@ -371,9 +259,6 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
 		
 		apiCall.postCall(editBranch,formdata).then(function(response5){
 		
-			//console.log(response5);
-			
-			
 			if(apiResponse.ok == response5){
 				
 				toaster.pop('success', 'Title', 'Update Successfully');
@@ -429,4 +314,4 @@ function AddBranchController($rootScope,$scope,toaster,$http,apiCall,apiPath,$st
   
   
 }
-AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$location","apiResponse","validationMessage","getSetFactory","stateCityFactory"];
+AddBranchController.$inject = ["$rootScope","$scope","toaster","$http","apiCall","apiPath","$state","$location","apiResponse","validationMessage","getSetFactory","stateCityFactory","fetchArrayService"];

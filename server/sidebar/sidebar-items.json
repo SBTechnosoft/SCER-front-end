@@ -61,7 +61,8 @@
     "subnav": [
       {"text": "Option", "sref": "app.SettingOption", "icon": "fa fa-barcode", "translate": "" },
       {"text": "Jobcard#", "sref": "app.SettingJobcardNumber", "icon": "fa fa-barcode", "translate": "" },
-      {"text": "Client Profession", "sref": "app.SettingClientProfession", "icon": "fa fa-suitcase", "translate": "" }
+      {"text": "Client Profession", "sref": "app.SettingClientProfession", "icon": "fa fa-suitcase", "translate": "" },
+      {"text": "Reminders", "sref": "app.SettingReminders", "icon": "fa fa-bell-o", "translate": "" }
     ],
     "translate": ""
   }

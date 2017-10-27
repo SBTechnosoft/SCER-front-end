@@ -107,6 +107,20 @@
 				
 				<fieldset class="my-fieldset-paddingBottom">
 					<div class="form-group">
+						<label class="col-sm-2 control-label">Website Name</label>
+						<div class="col-sm-8">
+						   <input type="text" name="websiteName" tabindex="2" ng-model="addCompany.websiteName" ng-change="changeCompanyData('websiteName',addCompany.websiteName)" placeholder="Website Name" class="form-control" />
+						   
+						   <span ng-messages="formCompany.websiteName.$error" ng-if="formCompany.websiteName.$dirty || formCompany.websiteName.$touched" role="alert">
+								<span ng-messages-include="errorRequired"></span>
+							</span>
+						</div>
+					</div>
+				</fieldset>
+				
+				
+				<fieldset class="my-fieldset-paddingBottom">
+					<div class="form-group">
 						<label for="input-id-1" class="col-sm-2 control-label">*First Address</label>
 						<div class="col-sm-8">
 							<textarea style="" tabindex="2" name="firstAddress"   placeholder="Your First address" data-ng-model="addCompany.address1" ng-change="changeCompanyData('address1',addCompany.address1)" class="form-control ng-pristine ng-valid ng-touched" required=""  ng-pattern="/^[a-zA-Z0-9 *,-\/_`#\[\]().\']+$/" ></textarea>
@@ -146,7 +160,7 @@
 					  </div>
 				   </div>
 				</fieldset>
-				<fieldset>
+				<fieldset class="my-fieldset-paddingBottom">
 				   <div class="form-group">
 					  <label class="col-sm-2 control-label">*City</label>
 					  <div class="col-sm-5">

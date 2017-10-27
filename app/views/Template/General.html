@@ -80,22 +80,22 @@
 			
 			<select chosen="" tabindex="1"  ng-model="generalTempList.companyDropDownList"  ng-options="s.companyName for s in form.companyDrop track by s.companyId" class="form-control chosen-select" ng-change="changeTemplateList(generalTempList.companyDropDownList.companyId)" ng-required="true" ></select>
 			
-			<span ng-repeat="item in form.AllTempRight" >
+			<span ng-repeat="item in form.AllTempRight track by item.templateId" >
 				<br />
 				
-				<a ui-sref="" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'invoice'" ><h4 style="text-align:center;"   >Invoice</h4></a>
+				<a class="myCursorPointer" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'invoice'" ><h4 style="text-align:center;"   >Invoice</h4></a>
 				
-				<a ui-sref="" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'quotation'" ><h4 style="text-align:center;"  >Quotation</h4></a>
+				<a class="myCursorPointer" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'quotation'" ><h4 style="text-align:center;"  >Quotation</h4></a>
 				
-				<a ui-sref="" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'payment'" ><h4 style="text-align:center;"  >Payment</h4></a>
+				<a class="myCursorPointer" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'payment'" ><h4 style="text-align:center;"  >Payment</h4></a>
 				
-				<a ui-sref="" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'email'" ><h4 style="text-align:center;"  >Email</h4></a>
+				<a class="myCursorPointer" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'email'" ><h4 style="text-align:center;"  >Email</h4></a>
 				
-				<a ui-sref="" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'sms'" ><h4 style="text-align:center;"  >SMS</h4></a>
+				<a class="myCursorPointer" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'sms'" ><h4 style="text-align:center;"  >SMS</h4></a>
 				
-				<a ui-sref="" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'blank'" ><h4 style="text-align:center;"  >Blank</h4></a>
+				<a class="myCursorPointer" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'blank'" ><h4 style="text-align:center;"  >Blank</h4></a>
 				
-				<a ui-sref="" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'job_card'" ><h4 style="text-align:center;"  >Jobcard</h4></a>
+				<a class="myCursorPointer" ng-click="EditTemplate(item.templateId)" ng-if="item.templateType == 'job_card'" ><h4 style="text-align:center;"  >Jobcard</h4></a>
 				
 			</span>
 			

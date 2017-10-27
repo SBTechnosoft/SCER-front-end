@@ -6,7 +6,7 @@
 
 App.controller('StaffController', StaffController);
 
-function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory,$modal) {
+function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory,$modal,fetchArrayService) {
   'use strict';
   var vm = this;
 	var data = [];
@@ -26,17 +26,15 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		vm.companyDrop = response2;
 		
 		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		var defaultCompanyData = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
 			
-			$scope.showStaff.companyDropDown = response;
+			$scope.showStaff.companyDropDown = defaultCompanyData;
 			
-			var headerDataOnLoad = {'Content-Type': undefined,'companyId':response.companyId};
+			var headerDataOnLoad = {'Content-Type': undefined,'companyId':defaultCompanyData.companyId};
 			
 			apiCall.getCallHeader(apiPath.getAllStaff,headerDataOnLoad).then(function(response){
 			
 				toaster.clear();
-				
-				
 				if(apiResponse.noContent == response){
 					
 					data = [];
@@ -46,17 +44,8 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 					
 				}
 				else{
-					
 					data = response;
-				
-					for (var i = 0; i < data.length; i++) {
-					  data[i].cityName = ""; //initialization of new property 
-					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-					}
-					
-					 
-					 
-					 
+					filterDataForTable();
 				}
 				flag = 1;
 				$scope.TableData();
@@ -65,18 +54,22 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 	
 	
 			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			var getAllBranch = apiPath.getOneBranch+defaultCompanyData.companyId;
 			//Get Branch
 			apiCall.getCall(getAllBranch).then(function(response4){
 				
 				vm.branchDrop = response4;
 					
 			});
-		});
-		
-		
 	});
 	
+	function filterDataForTable(){
+		var count = data.length;
+		while(count--) {
+		  data[count].cityName = ""; //initialization of new property 
+		  data[count].cityName = data[count].city.cityName;  //set the data from nested obj into new property
+		}
+	}
 	//Change Branch On Select Company
 	$scope.changeCompany = function(state)
 	{
@@ -113,8 +106,6 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 			apiCall.getCallHeader(apiPath.getAllStaff,headerData).then(function(response){
 				
 					toaster.clear();
-					
-				
 				if(apiResponse.noContent == response){
 					
 					data = [];
@@ -122,22 +113,13 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 					toaster.pop('alert', 'Opps!!', 'No Staff Available');
 				}
 				else{
-					
-					
 					data = response;
-			
-					for (var i = 0; i < data.length; i++) {
-					  data[i].cityName = ""; //initialization of new property 
-					  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-					}
-					
-					
+					filterDataForTable();
 				}
 				
 				if(flag == 0){
 					
 					$scope.TableData();
-					
 					flag = 1;
 				}
 				else{
@@ -158,9 +140,6 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 	  {pop: "Branch1" },
 	  {pop: "Branch2" }
 	];
-  
- 
-	
   
   //alert(branchF);
 	$scope.TableData = function(){
@@ -272,4 +251,4 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 	}
 
 }
-StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal"];
+StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal","fetchArrayService"];

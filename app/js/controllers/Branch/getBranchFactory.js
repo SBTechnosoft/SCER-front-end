@@ -1,24 +1,21 @@
-App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiResponse", function ($http,$q,apiPath,$rootScope,$state,apiResponse) {
+App.factory('apiCall', ["$http","$q","apiPath","$rootScope","apiResponse", function ($http,$q,apiPath,$rootScope,apiResponse) {
 	
 	var apiRootPath = $rootScope.erpPath;
-	
+
 	return {
 		 getCall : function(url){
 
 			return $http({
 				url: apiRootPath+url,
-				method: 'get',
-				processData: false,
-				contentType: false,
+				method: 'GET',
 				crossDomain:true,
 				cache:false,
-				// dataType: 'jsonp',
+				//dataType: 'jsonp',
 			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken}
 			}).then(function(response) {
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
-				
 				return response.data;
 			});
 		},
@@ -26,7 +23,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			return $http({
 				url: apiRootPath+url,
-				method: 'post',
+				method: 'POST',
 				processData: false,
 				contentType: false,
 				crossDomain:true,
@@ -35,7 +32,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				data:formdata
 			}).then(function(response) {
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
 				return response.data;
 			});
@@ -44,7 +41,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			return $http({
 				url: apiRootPath+url,
-				method: 'patch',
+				method: 'PATCH',
 				processData: false,
 				contentType: false,
 				crossDomain:true,
@@ -53,7 +50,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				data:formdata
 			}).then(function(response) {
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
 				return response.data;
 			});
@@ -65,7 +62,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			return $http({
 				url: apiRootPath+url,
-				method: 'get',
+				method: 'GET',
 				processData: false,
 				contentType: false,
 				crossDomain:true,
@@ -73,7 +70,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			   headers: headerData
 			}).then(function(response) {
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
 				return response.data;
 			}).catch(function (reason) {
@@ -88,7 +85,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			return $http({
 				url: apiRootPath+url,
-				method: 'post',
+				method: 'POST',
 				processData: false,
 				contentType: false,
 				crossDomain:true,
@@ -97,7 +94,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 				data:formdata
 			}).then(function(response) {
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 					
 				}
 				
@@ -112,13 +109,12 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			 
 			return $http({
 				url: apiRootPath+url,
-				method: 'delete',
-				processData: false,
+				method: 'DELETE',
 				headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken},
 			}).then(function(response) {
 				
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
 				return response.data;
 			});
@@ -130,13 +126,15 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			return $http({
 				url: apiRootPath+url,
-				method: 'delete',
+				method: 'DELETE',
 				processData: false,
+				crossDomain:true,
+				cache:false,
 				headers: headerData,
 			}).then(function(response) {
 				
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
 				return response.data;
 				
@@ -148,7 +146,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			$http({
 				url: apiRootPath+apiPath.getAllCompany,
-				method: 'get',
+				method: 'GET',
 				processData: false,
 				crossDomain:true,
 				cache:false,
@@ -156,7 +154,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			}).then(function(response) {
 				
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
 				var companyCnt = response.data.length;
 				var j=0;
@@ -179,7 +177,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			
 			$http({
 				url: apiRootPath+apiPath.getAllBranch,
-				method: 'get',
+				method: 'GET',
 				processData: false,
 				crossDomain:true,
 				cache:false,
@@ -187,7 +185,7 @@ App.factory('apiCall', ["$http","$q","apiPath","$rootScope","$state","apiRespons
 			}).then(function(response) {
 				
 				if(apiResponse.noMatch == response.data || apiResponse.tokenExpired == response.data || apiResponse.notExists == response.data){
-					$state.go('page.login');
+					$rootScope.$state.go('page.login');
 				}
 				var branchCnt = response.data.length;
 				var i=0;

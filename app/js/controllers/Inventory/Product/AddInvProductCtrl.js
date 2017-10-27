@@ -6,7 +6,7 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$state,apiResponse,validationMessage,getSetFactory,$modal,productFactory) {
+function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$state,apiResponse,validationMessage,getSetFactory,$modal,productFactory,fetchArrayService,maxImageSize) {
   'use strict';
   
   var vm = this;
@@ -33,21 +33,18 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	$scope.defaultCompany  = function(){
 			
 		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		apiCall.getCall(apiPath.getAllCompany).then(function(response){
 		
-			$scope.addInvProduct.company = response;
+			$scope.addInvProduct.company = fetchArrayService.getfilteredSingleObject(response,'ok','isDefault');
 			
 			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+response.companyId;
+			var getAllBranch = apiPath.getOneBranch+$scope.addInvProduct.company.companyId;
 			//Get Branch
 			apiCall.getCall(getAllBranch).then(function(response4){
-				
 				vm.branchDrop = response4;
-					
 			});
 			
 			formdata.append('companyId',$scope.addInvProduct.company.companyId);
-			
 		});
 	}
 		
@@ -55,10 +52,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	vm.companyDrop = [];
 	
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-		
 		vm.companyDrop = responseCompanyDrop;
-		
-	
 	});
 	
 	//Category Dropdown data
@@ -88,8 +82,6 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 		
 		$scope.addInvProduct.getSetProductId = editProductData.productId;
 		
-		
-		
 		//var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
 	
 		//apiCall.getCall(editProduct).then(function(res){
@@ -100,8 +92,6 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 			$scope.addInvProduct.productDescription = editProductData.productDescription;
 			$scope.addInvProduct.color = editProductData.color;
 			$scope.addInvProduct.size = editProductData.size;
-			
-			
 			
 			$scope.addInvProduct.company = editProductData.company;
 			
@@ -122,8 +112,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 			
 			//Measure DropDown Selection
 			
-				$scope.addInvProduct.measureUnit = editProductData.measurementUnit;
-			
+			$scope.addInvProduct.measureUnit = editProductData.measurementUnit;
 			
 			$scope.addInvProduct.purchasePrice = editProductData.purchasePrice;
 			$scope.addInvProduct.wholesaleMarginFlat = editProductData.wholesaleMarginFlat;
@@ -385,7 +374,8 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 		// for (var key of formdata.keys()) {
 		   // formdata.delete(key); 
 		// }
-		  var formdata = new FormData();
+		  var formdata = undefined;
+		  formdata = new FormData();
 		
 		$scope.defaultCompany();
 		
@@ -418,6 +408,41 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 
 		});
 	}
+
+	$scope.uploadFile = function(files) {
+	  
+		if(parseInt(files[0].size) <= maxImageSize){
+			
+			angular.element("img.showImg").css("display","block");
+			
+			console.log('Small File');
+			formdata.delete('file[]');
+		
+			formdata.append("file[]", files[0]);
+			
+			var reader = new FileReader();
+
+			reader.onload = function(event) {
+				$scope.image_source = event.target.result
+				$scope.$digest();
+
+			}
+			// when the file is read it triggers the onload event above.
+			reader.readAsDataURL(files[0]);
+		
+		}
+		else{
+			
+			formdata.delete('file[]');
+			toaster.clear();
+			//toaster.pop('alert','Image Size is Too Long','');
+			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+			
+			angular.element("input[type='file']").val(null);
+			angular.element("img.showImg").css("display","none");
+			$scope.$digest();
+		}
+	};
 	
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory"];
+AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory","fetchArrayService","maxImageSize"];

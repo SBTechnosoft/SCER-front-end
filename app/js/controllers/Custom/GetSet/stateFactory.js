@@ -10,14 +10,18 @@ App.factory('stateCityFactory',['apiCall','apiPath','$q','fetchArrayService', fu
  
 	function getState() {
 		var deferredMenu = $q.defer();
-			if(savedData !== null) {
+			if(savedData !== null && cityData !== null) {
 				deferredMenu.resolve(savedData);
 			} else {
 				apiCall.getCall(apiPath.getAllState).then(function(data) {
-					savedData = data;
+					if(angular.isArray(data)){
+						savedData = data;
+					}
 					apiCall.getCall(apiPath.getOneCity).then(function(response) {
-						deferredMenu.resolve(data);
-						cityData = response;
+						deferredMenu.resolve(savedData);
+						if(angular.isArray(data)){
+							cityData = response;
+						}
 					});
 				});
 			}

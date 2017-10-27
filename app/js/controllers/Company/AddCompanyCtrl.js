@@ -65,7 +65,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			vm.companyDrop = response2;
 			 if(!$scope.addCompany.cId){
 				//Set default Company
-				console.log('in');
+				//console.log('in');
 				apiCall.getDefaultCompany().then(function(response){
 				
 					if(!$scope.addCompany.cId){
@@ -137,7 +137,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	
 		//apiCall.getCall(editCompany).then(function(res){
 		
-			console.log(editCompanyData);
+			//console.log(editCompanyData);
 			vm.sdfg = editCompanyData.companyId;
 			
 			$scope.addCompany.companyDropDown2 = editCompanyData;
@@ -147,6 +147,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			$scope.addCompany.displayName = editCompanyData.companyDisplayName;
 			
 			$scope.addCompany.customerCare = editCompanyData.customerCare;
+			$scope.addCompany.websiteName = editCompanyData.websiteName;
 			$scope.addCompany.emailId = editCompanyData.emailId;
 			
 			$scope.addCompany.address1 = editCompanyData.address1;
@@ -203,7 +204,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			/** End **/
 			
 			//$scope.addCompany.statesDropDown = editCompanyData.state;
-			 console.log('stateDone');
+			// console.log('stateDone');
 			
 			//City DropDown
 			// var cityAllDropPath = apiPath.getAllCity+editCompanyData.state.stateAbb;
@@ -403,7 +404,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			
 			angular.element("img.showImg").css("display","block");
 			
-			console.log('Small File');
+			//console.log('Small File');
 			formdata.delete('file[]');
 		
 			formdata.append("file[]", files[0]);
@@ -412,7 +413,7 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 
 			reader.onload = function(event) {
 				$scope.image_source = event.target.result
-				$scope.$apply()
+				$scope.$digest();
 
 			}
 			// when the file is read it triggers the onload event above.
@@ -428,11 +429,8 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 			
 			angular.element("input[type='file']").val(null);
 			angular.element("img.showImg").css("display","none");
-			$scope.$apply()
-			
-			
+			$scope.$digest();
 		}
-
 	};
 	
 	$scope.changeCompanyData = function(Fname,value){

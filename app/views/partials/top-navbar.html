@@ -362,19 +362,6 @@ height:39px;
                         </div>
                     </div>
                   </a>
-				   <a ui-sref="app.QuotationPrint" data-ng-click="offcontent1 = false" class="p">
-                     <!-- START media preview-->
-                    <div class="media">
-					    <div class="pull-left">
-                            <div class="point-pin">
-								<i class="fa fa-quora"></i>
-                            </div>
-                        </div>
-                        <div class="media-body clearfix">
-                           <p class="m0">Quotation</p>
-                        </div>
-                    </div>
-                  </a>
                </li>
 			 
                <!-- START list item-->
@@ -413,7 +400,7 @@ height:39px;
 		<li dropdown="" class="dropdown dropdown-list my-topNav-padding">
             <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle my-ancher-topbar-select" style="text-transform:capitalize;text-align:center;">
 			 <img data-ng-src="{{user.picture}}" alt="" class="center-block img-circle img-responsive thumb32" ng-if="app.topbar.isCollapsed" />
-			  <span ng-if="userName" >{{::userName}}</span>
+			  <span ng-if="userName" ng-bind="::userName" ></span>
                <div class="point-pin">
                   <em class="fa fa-caret-down"></em>
                </div>

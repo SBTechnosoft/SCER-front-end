@@ -6,7 +6,7 @@
 
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage,stateCityFactory) {
+function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage,stateCityFactory,fetchArrayService) {
   'use strict';
   
 	var vm = this;
@@ -19,6 +19,8 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 	$scope.trueData = false;
 	$scope.alertData = true;
 	
+	$scope.getLegderCompany = [];
+
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -44,14 +46,14 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		$scope.alertData = false;
 		
 		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		apiCall.getCall(apiPath.getAllCompany).then(function(response){
 			
-			$scope.ledgerForm.companyDropDown = response;
+			$scope.ledgerForm.companyDropDown = fetchArrayService.getfilteredSingleObject(response,'ok','isDefault');
 			if(formdata.has('companyId')){
 				
 				formdata.delete('companyId');
 			}
-			formdata.append('companyId',response.companyId);
+			formdata.append('companyId',$scope.ledgerForm.companyDropDown.companyId);
 			
 		});
 		
@@ -67,13 +69,9 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		$scope.ledgerForm.cityDrop = stateCityFactory.getDefaultCity($rootScope.defaultCity);
 		
 		if(formdata.has('cityId')){
-			
 			formdata.delete('cityId');
-		
-		
 		}
 		formdata.append('cityId',$scope.ledgerForm.cityDrop.cityId);
-		
 		
 		formdata.delete('amountType');
 		formdata.delete('amount');
@@ -102,7 +100,8 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			$scope.ledgerForm.emailId = response.emailId;
 			$scope.ledgerForm.alias = response.alias;
 			$scope.ledgerForm.invAffect = response.inventoryAffected;
-			$scope.ledgerForm.contact = response.contactNo;
+			$scope.ledgerForm.contact = response.contactNo == 'NULL' || response.contactNo == undefined ? '':response.contactNo;
+			$scope.ledgerForm.outstandingLimit = response.outstandingLimit;
 			$scope.ledgerForm.address1 = response.address1;
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
@@ -146,7 +145,8 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			$scope.ledgerForm.emailId = response.emailId;
 			$scope.ledgerForm.alias = response.alias;
 			$scope.ledgerForm.invAffect = response.inventoryAffected;
-			$scope.ledgerForm.contact = response.contactNo;
+			$scope.ledgerForm.contact = response.contactNo == 'NULL' || response.contactNo == undefined ? '':response.contactNo;
+			$scope.ledgerForm.outstandingLimit = response.outstandingLimit;
 			$scope.ledgerForm.address1 = response.address1;
 			$scope.ledgerForm.address2 = response.address2;
 			$scope.ledgerForm.tin = response.tin;
@@ -174,97 +174,14 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			// $scope.ledgerForm.ledgerName = response.ledgerName;
 		
 		});
-		
-		
 	}
 	
-	 //this.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel", "francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit", "guillaume", "nicolas", "joseph"];
-	
- //Table
-	var data = [
-      {company_name: "Moroni",label:"dsf/1945/", fix:"Prefix", started_at: 2 },
-      {company_name: "Tiancum",label:"dsf/1945/",fix:"Postfix", started_at: 6 },
-      {company_name: "Jacob", label:"dsf/1945/", fix:"Prefix", started_at: 27  },
-      {company_name: "Nephi",label:"dsf/1945/",  fix:"Prefix", started_at: 29   },
-      {company_name: "Enos",  label:"dsf/1945/",fix:"Prefix",  started_at: 34 },
-      {company_name: "Tiancum",label:"dsf/1945/",fix:"Postfix", started_at: 43 },
-      {company_name: "Jacob",label:"dsf/1945/", fix:"Prefix",  started_at: 54  },
-      {company_name: "Nephi", label:"dsf/1945/",fix:"Prefix",  started_at: 29  },
-      {company_name: "Enos",  label:"dsf/1945/", fix:"Postfix", started_at: 34 },
-      {company_name: "Tiancum",label:"dsf/1945/",fix:"Prefix", started_at: 10 },
-      {company_name: "Jacob", label:"dsf/1945/",fix:"Prefix",  started_at: 27  },
-      {company_name: "Nephi",  label:"dsf/1945/",fix:"Prefix", started_at: 29  },
-      {company_name: "Enos",  label:"dsf/1945/", fix:"Postfix", started_at: 34 },
-      {company_name: "Tiancum", label:"dsf/1945/",fix:"Prefix",started_at: 43 },
-      {company_name: "Jacob", label:"dsf/1945/", fix:"Prefix", started_at: 27  },
-      {company_name: "Nephi", label:"dsf/1945/", fix:"Postfix", started_at: 29 },
-      {company_name: "Enos", label:"dsf/1945/",  fix:"Postfix", started_at: 34 }
-  ];
-  
-  vm.tableParams = new ngTableParams({
-		  page: 1,            // show first page
-		  count: 10,          // count per page
-		  sorting: {
-			  company_name: 'asc'     // initial sorting
-		  }
-	  }, {
-		  total: data.length, // length of data
-		  getData: function($defer, params) {
-			  //console.log(params.$params);
-			  // if()
-			  // {
-				  // alert('yes');
-			  // }
-			  // else{
-				  // alert('no');
-			  // }
-			  // use build-in angular filter
-			 // console.log("Length: .."+params.$params.filter.city);
-			  
-			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.company_name) != "undefined" && params.$params.filter.company_name != "")  || (typeof(params.$params.filter.label) != "undefined" && params.$params.filter.label != "") || (typeof(params.$params.filter.fix) != "undefined" && params.$params.filter.fix != "") || (typeof(params.$params.filter.started_at) != "undefined" && params.$params.filter.started_at != "")))
-			  {
-					 var orderedData = params.filter() ?
-					 $filter('filter')(data, params.filter()) :
-					 data;
 
-					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-					  params.total(orderedData.length); // set total for recalc pagination
-					  $defer.resolve(vm.users);
-			  
-
-			  }
-			  else{
-				  
-				   params.total(data.length);
-				  
-			  }
-			 
-			 if(!$.isEmptyObject(params.$params.sorting))
-			  {
-				
-				 //alert('ggg');
-				  var orderedData = params.sorting() ?
-						  $filter('orderBy')(data, params.orderBy()) :
-						  data;
-		  
-				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-			  }
-			
-		  }
-	  });
-	  
-	  
-	  
-	  
- //End Table
   // Chosen data
   // ----------------------------------- 
 	vm.underWhat=[];
 	apiCall.getCall(apiPath.getAllLedgerGroup).then(function(response3){
-		
 		vm.underWhat = response3;
-	
 	});
   
   this.invAffectDrop = [
@@ -277,16 +194,6 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 	'credit'
   ];
   
-  
-	 
-	//Get Company
-	vm.companyDrop=[];
-	apiCall.getCall(apiPath.getAllCompany).then(function(response3){
-		
-		vm.companyDrop = response3;
-	
-	});
-	
 	//Get State
 	vm.statesDrop=[];
 	//apiCall.getCall(apiPath.getAllState).then(function(response3){
@@ -295,7 +202,26 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		vm.statesDrop = response;
 		
 	});
+
+	//Get Banks
+	vm.bankDrop=[];
+	vm.bankBranchDrop=[];
+	apiCall.getCall(apiPath.getAllBank).then(function(response){
+		vm.bankDrop = response;
+	});
 	
+	$scope.changeBank = function(key,value){
+		formdata.set(key,value);
+		apiCall.getCall(apiPath.getBankBranch+value).then(function(response){
+			vm.bankBranchDrop=response;
+		})
+	}
+
+	$scope.changeBankBranch = function(key,value){
+		formdata.set(key,value.bankBranchId);
+		$scope.ledgerForm.bankIfsc = value.ifsc;
+	}
+
 	$scope.setPcode = function(Fname,value) {
   		//console.log(value.ledgerGroupId);
 		if(formdata.has(Fname))
@@ -307,16 +233,9 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 	
 	$scope.ChangeState = function(Fname,state)
 	 {
-		
 		var getonecity = apiPath.getAllCity+state;
-		
 		//vm.cityDrop = [];
 		vm.cityDrop = stateCityFactory.getDefaultStateCities(state);
-		//Get City
-		// apiCall.getCall(getonecity).then(function(response4){
-			// vm.cityDrop = response4;
-				
-		// });
 		
 		if(formdata.has(Fname))
 		{
@@ -326,7 +245,6 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		formdata.append(Fname,state);
 	}
 	
-  
 	//Changed Data When Update
 	$scope.changeLedgerData = function(Fname,value){
 		
@@ -338,92 +256,66 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 		formdata.append(Fname,value);
 		
 		if(formdata.get(Fname) == 'undefined'){
-			
-			
 			formdata.delete(Fname);
-			
 		}
-		
-		
-		
 	}
 	
-	$scope.getLegderCompany = [];
-	
-	vm.allLedgerData = [];
 	
 	//Set default Company
-	apiCall.getDefaultCompany().then(function(response){
-	
+	vm.companyDrop = [];
+	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompany){
+		
 		toaster.clear();
+
+		vm.companyDrop = responseCompany;
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
-		$scope.getLegderCompany.companyDropDown = response;
-		$scope.ledgerForm.companyDropDown = response;
-		
-		//Auto suggest Client Name For Debit
-		var jsuggestPath = apiPath.getLedgerJrnl+response.companyId;
-		
-		apiCall.getCall(jsuggestPath).then(function(response3){
-			
-			vm.allLedgerData = response3;
-			toaster.clear();
-		});
-		
+		var companyData = fetchArrayService.getfilteredSingleObject(responseCompany,'ok','isDefault');
+		$scope.getLegderCompany.companyDropDown = companyData;
+		$scope.ledgerForm.companyDropDown = companyData;
+		getLedgerByCompany(companyData.companyId);
 	});
 	
-	//Get Data When Company Change
-	$scope.changeCompanyToGetList = function(value){
-		
-		
-		toaster.pop('wait', 'Please Wait', 'Data Loading....',1000);
-		
+	vm.allLedgerData = [];
+
+	function getLedgerByCompany(id){
 		//Auto suggest Client Name For Debit
-		var jsuggestPath = apiPath.getLedgerJrnl+value;
+		var jsuggestPath = apiPath.getLedgerJrnl+id;
 		
 		apiCall.getCall(jsuggestPath).then(function(response3){
 			
-			//console.log(response3);
 			toaster.clear();
 			
-			if(apiResponse.noContent == response3){
-				
-				vm.allLedgerData = [];
-			}
-			else{
-				
+			if(angular.isArray(response3)){
 				vm.allLedgerData = response3;
 			}
-			
+			else{
+				vm.allLedgerData = [];
+				toaster.pop('info','No Data Available');
+			}
 		});
+	}
+
+	//Get Data When Company Change
+	$scope.changeCompanyToGetList = function(value){
+		toaster.pop('wait', 'Please Wait', 'Data Loading....',1000);
+		getLedgerByCompany(value);
 	}
 	
 	$scope.addUpLedger = function()
 	{
 		
-		//formdata.append('companyId',10);
-		
 		if($scope.ledgerEditId.id)
 		{
 			var ledgerPath = apiPath.getAllLedger+'/'+$scope.ledgerEditId.id;
-			
-			
 		}
 		else{
-			
 			var ledgerPath = apiPath.getAllLedger;
 			formdata.append('balanceFlag','opening');
 		}
 		
-		
 		apiCall.postCall(ledgerPath,formdata).then(function(response5){
 		
-			//$location.path('app/AccLedger');
-			//console.log(response5);
-			
-				
-					
-				
 					if(angular.isArray(response5) || apiResponse.ok == response5){
 						
 						toaster.pop('success', 'Title', 'Successfull');
@@ -450,7 +342,9 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 						formdata.delete('address1');
 						formdata.delete('address2');
 					
-				
+						formdata = undefined;
+						formdata = new FormData();
+
 						$scope.trueData = false;
 						$scope.alertData = true;
 						vm.disableCompanyValue = false;
@@ -463,8 +357,6 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 						
 						toaster.pop('warning', 'Opps!!', response5);
 					}
-				
-			
 		});
 	}
 
@@ -598,4 +490,4 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$rootScope","$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","getSetFactory","$state","apiResponse","validationMessage","stateCityFactory"];
+AccLedgerController.$inject = ["$rootScope","$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","getSetFactory","$state","apiResponse","validationMessage","stateCityFactory","fetchArrayService"];

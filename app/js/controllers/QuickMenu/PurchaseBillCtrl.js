@@ -1,7 +1,7 @@
 
-App.controller('PurchaseBillController', PurchaseBillController);
+angular.module('purchaseBill',[]).controller('PurchaseBillController', PurchaseBillController);
 
-function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,$filter,$state) {
+function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,validationMessage,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,$filter,$state,fetchArrayService,bankFactory) {
   'use strict';
  
 	var vm = this;
@@ -56,13 +56,13 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			
 			if(angular.isArray(response3)){
 				var tCount = response3.length;
-				for(var t=0;t<tCount;t++){
-					var kCount = response3[t].length;
-					for(var k=0;k<kCount;k++){
-						vm.clientNameDropCr.push(response3[t][k]);
+				while(tCount--){
+					var kCount = response3[tCount].length;
+					while(kCount--){
+						vm.clientNameDropCr.push(response3[tCount][kCount]);
 						if(updateId != null){
-							if(parseInt(response3[t][k].ledgerId) == parseInt(updateId)){
-								$scope.purchaseBill.ledgerEditableData = response3[t][k];
+							if(parseInt(response3[tCount][kCount].ledgerId) == parseInt(updateId)){
+								$scope.purchaseBill.ledgerEditableData = response3[tCount][kCount];
 							}
 						}
 					}
@@ -84,8 +84,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	$scope.defaultComapny = function(){
 		
 		vm.loadData = true;
-		var companyIndex = vm.companyDrop.findIndex(x => x.isDefault=='ok');
-		var  response2= vm.companyDrop[companyIndex];
+		var  response2= fetchArrayService.myIndexOfObject(vm.companyDrop,'ok','isDefault');
 
 		toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
@@ -125,12 +124,11 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	
 	//get Bank
 	vm.bankDrop=[];
-	apiCall.getCall(apiPath.getAllBank).then(function(response2){
-			//console.log(response2);
-			for(var p=0;p<response2.length;p++){
-				
-				vm.bankDrop.push(response2[p].bankName);
-			}
+	bankFactory.getBank().then(function(response){
+		var count = response.length;
+		while(count--){
+			vm.bankDrop.push(response[count].bankName);
+		}
 	});
 	
 	/* Table */
@@ -221,8 +219,8 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		
 		var total = 0;
 		var count = vm.AccBillTable.length;
-		for(var i = 0; i < count; i++){
-			var product = vm.AccBillTable[i];
+		while(count--){
+			var product = vm.AccBillTable[count];
 			var totaltax = checkGSTValue(product.cgstPercentage) + checkGSTValue(product.sgstPercentage) + checkGSTValue(product.igstPercentage);
 			if(product.discountType == 'flat') {
 				
@@ -240,8 +238,8 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		
 		var total = 0;
 		var count = vm.AccBillTable.length;
-		for(var i = 0; i < count; i++){
-			var product = vm.AccBillTable[i];
+		while(count--){
+			var product = vm.AccBillTable[count];
 			total += parseFloat(product.amount);
 		}
 		
@@ -318,7 +316,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		
 		setTimeout(function () { // wait until all resources loaded 
 			$scope.purchaseBill.advance = $filter('setDecimal')($scope.totalTable,2);
-			$scope.$apply();
+			$scope.$digest();
 		 }, 1000);
 	}
 	
@@ -329,7 +327,8 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		//if(Object.keys(getSetFactory.get()).length){
 		if(Object.keys(getSetFactory.get()).length){
 			
-			var formdata = new FormData();
+			var formdata = undefined;
+			formdata = new FormData();
 			
 			$scope.purchaseBill.EditBillData = getSetFactory.get();
 			//console.log($scope.purchaseBill.EditBillData);
@@ -392,10 +391,8 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			vm.AccBillTable = angular.copy(jsonProduct.inventory);
 			var EditProducArray = angular.copy(jsonProduct.inventory);
 			var count = EditProducArray.length;
+			var d = 0; // For Overcome Duplication 
 			for(var w=0;w<count;w++){
-				
-				var d = 0; // For Overcome Duplication 
-
 				productFactory.getSingleProduct(EditProducArray[w].productId).then(function(resData){
 					/** Tax **/
 						vm.AccBillTable[d].productName = resData.productName;
@@ -753,7 +750,8 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		
 		$scope.purchaseBill = [];
 		$scope.disableButton = false; 
-		var formdata = new FormData();
+		var formdata = undefined;
+		formdata = new FormData();
 		
 		angular.element("input[type='file']").val(null);
 		angular.element(".fileAttachLabel").html('');
@@ -1398,7 +1396,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 								toaster.clear();
 								toaster.pop('success', 'Barcode Scanned', '');	
 								
-								$scope.$apply();
+								$scope.$digest();
 							}
 					}
 				/** End loop **/
@@ -1518,4 +1516,4 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		}
 		
 }
-PurchaseBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","$filter","$state"];
+PurchaseBillController.$inject = ["$rootScope","$scope","apiCall","apiPath","$http","$window","$modal","validationMessage","productArrayFactory","getSetFactory","toaster","apiResponse","$anchorScroll","maxImageSize","$sce","$templateCache","getLatestNumber","productFactory","$filter","$state","fetchArrayService","bankFactory"];

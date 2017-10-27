@@ -4,7 +4,7 @@
 
 App.controller('tempGeneralController', tempGeneralController);
 
-function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResponse,validationMessage,$templateCache) {
+function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResponse,validationMessage,$templateCache,fetchArrayService) {
   'use strict';
   var vm = this;
   $scope.generalTemp = [];
@@ -18,7 +18,7 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 	
 	/* VALIDATION END */
 	
-	 $rootScope.$on('$viewContentLoaded', function() {
+	 $scope.$on('$viewContentLoaded', function() {
 		$templateCache.remove('app/views/Template/General.html');
 		$templateCache.remove('app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js');
 		$templateCache.remove('app/vendor/tinymce/js/tinymce/tinymce.min.js');
@@ -360,7 +360,7 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 		vm.AllTempRight = [];
 		apiCall.getCall(apiPath.getAllTemplate+'/company/'+id).then(function(responseTemp){
 			
-			console.log(responseTemp);
+			//console.log(responseTemp);
 			vm.AllTempRight = responseTemp;
 		
 		});
@@ -368,19 +368,15 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 	}
 	
 	
-	$scope.defaultCompany = function(){
+	$scope.defaultCompany = function(defaultCompany){
 		
 		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
 			
-			$scope.generalTemp.companyDropDown = response;
-			$scope.generalTempList.companyDropDownList = response;
+			$scope.generalTemp.companyDropDown = defaultCompany;
+			$scope.generalTempList.companyDropDownList = defaultCompany;
 			
-			$scope.getCompanyWiseTemplate(response.companyId);
+			$scope.getCompanyWiseTemplate(defaultCompany.companyId);
 			
-			//console.log(response.companyId);
-		});
-	
 		
 	}
 	
@@ -395,8 +391,9 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 		
 		//console.log(response2);
 		vm.companyDrop = response2;
-		
-		$scope.defaultCompany();
+		var defaultCompany = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
+		$scope.defaultCompany(defaultCompany);
+
 	});
 		
 	//Save Tempalte ID For Update
@@ -428,6 +425,7 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 	{
 		if($scope.tempID){
 			
+      var selectedCompany = $scope.generalTemp.companyDropDown;
 			formdata.append('companyId',$scope.generalTemp.companyDropDown.companyId);
 			formdata.append('templateName',$scope.generalTemp.tempName);
 			
@@ -439,7 +437,7 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 				if(apiResponse.ok == responseTemp){
 					
 					toaster.pop('success', '', 'Updated Successfully');
-					$scope.generalTemp = [];
+				   $scope.generalTemp = [];
 					tinyMCE.get('textdesc').setContent('');
 					$scope.tempID = '';
 					formdata.delete('companyId');
@@ -452,7 +450,8 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 		
 					// });
 					
-					$scope.defaultCompany();
+					$scope.defaultCompany(selectedCompany);
+           
 				}
 				else{
 			
@@ -475,7 +474,6 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 				if(apiResponse.ok == responseTemp){
 					
 					toaster.pop('success', '', 'Insert Successfully');
-					$scope.generalTemp = [];
 					tinyMCE.get('textdesc').setContent('');
 					formdata.delete('companyId');
 					formdata.delete('templateName');
@@ -488,7 +486,8 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
 		
 					// });
 					
-					$scope.defaultCompany();
+					$scope.defaultCompany($scope.generalTemp.companyDropDown);
+          $scope.generalTemp = [];
 				}
 				else{
 			
@@ -644,4 +643,4 @@ function tempGeneralController($rootScope,$scope,apiCall,apiPath,toaster,apiResp
     {value: 5, name: 'Huge'}
   ];
 }
-tempGeneralController.$inject = ["$rootScope","$scope","apiCall","apiPath","toaster","apiResponse","validationMessage","$templateCache"];
+tempGeneralController.$inject = ["$rootScope","$scope","apiCall","apiPath","toaster","apiResponse","validationMessage","$templateCache","fetchArrayService"];

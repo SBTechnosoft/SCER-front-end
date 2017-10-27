@@ -8,7 +8,7 @@ App
   .constant('appDependencies', {
     // jQuery based and standalone scripts
     scripts: {
-      'animate':            ['app/vendor//animate.css/animate.min.css'],
+      'animate':            ['app/vendor/animate.css/animate.min.css'],
       'icons':              ['app/vendor/fontawesome/css/font-awesome.min.css',
                              'app/vendor/weather-icons/css/weather-icons.min.css',
                              'app/vendor/feather/webfont/feather-webfont/feather.css'],
@@ -37,23 +37,21 @@ App
       'inputmask':          ['app/vendor/jquery.inputmask/dist/jquery.inputmask.bundle.min.js'],
       'flatdoc':            ['app/vendor/flatdoc/flatdoc.js'],
       'gcal':               ['app/vendor/fullcalendar/dist/gcal.js'],
-	  'treeGrid':          ['app/vendor/tree-grid/treeGrid.css',
-							 'app/vendor/tree-grid/tree-grid-directive.js'],
-	'PriceListTreeGrid':          ['app/vendor/PriceListTreeGrid/treeGrid.css',
-							 'app/vendor/PriceListTreeGrid/tree-grid-directive.js'],
-	'getBranchSrv':			['app/js/controllers/Branch/getBranchFactory.js'],
-	'tinymce':				['app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js',
-							'app/vendor/tinymce/js/tinymce/tinymce.min.js'],
-	'printJS':     ['app/js/jQuery.print.js'],
-	'barcodeScanner' :                 ['app/js/customeJS/qrCodeLib.js',
-							'app/js/customeJS/webcodecamjquery.js'],
-	'twain'				:['app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.initiate.js',
-						 'app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js'],
-	'importExcel'		:    ['app/js/customeJS/excel/xlsx.full.min.js',
-							'app/js/customeJS/excel/ods.js',
-							'app/js/customeJS/excel/ui-grid.min.js',
-							'app/js/customeJS/excel/ui-grid.min.css'],
-	'exportExcel'		:   ['https://cdn.jsdelivr.net/alasql/0.3/alasql.min.js']
+    	'PriceListTreeGrid':  ['app/vendor/PriceListTreeGrid/treeGrid.css',
+    							           'app/vendor/PriceListTreeGrid/tree-grid-directive.js'],
+    	'getBranchSrv':			  ['app/js/controllers/Branch/getBranchFactory.js'],
+    	'tinymce':				    ['app/vendor/tinymce/js/tinymce/jquery.tinymce.min.js',
+    							           'app/vendor/tinymce/js/tinymce/tinymce.min.js'],
+    	'printJS':            ['app/js/jQuery.print.js'],
+    	'barcodeScanner':     ['app/js/customeJS/qrCodeLib.js',
+    							           'app/js/customeJS/webcodecamjquery.js'],
+    	'twain'	:             ['app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.initiate.js',
+    						             'app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js'],
+    	'importExcel':        ['app/js/customeJS/excel/xlsx.full.min.js',
+    							           'app/js/customeJS/excel/ods.js',
+    							           'app/js/customeJS/excel/ui-grid.min.js',
+    							           'app/js/customeJS/excel/ui-grid.min.css'],
+    	'exportExcel':        ['https://cdn.jsdelivr.net/alasql/0.3/alasql.min.js']
     },
     // Angular based script (use the right module name)
     modules: [
@@ -71,7 +69,18 @@ App
       {name: 'AngularGM',         files: ['app/vendor/AngularGM/angular-gm.min.js']},
       {name: 'ui.calendar',       files: ['app/vendor/fullcalendar/dist/fullcalendar.min.js',
                                           'app/vendor/fullcalendar/dist/fullcalendar.css',
-                                          'app/vendor/angular-ui-calendar/src/calendar.js']}
+                                          'app/vendor/angular-ui-calendar/src/calendar.js']},
+      {name: 'ngTableToCsv',      files: ['app/js/customeJS/ngExport.js']},
+      {name: 'ngLetterAvatar',    files: ['app/js/customeJS/ngletteravatar.min.js']},
+      {name: 'uiCropper',         files: ['app/js/customeCSS/ui-cropper.css',
+                                          'app/js/customeJS/ui-cropper.js']},
+      {name: 'treeGrid',          files: ['app/vendor/tree-grid/treeGrid.css',
+                                          'app/vendor/tree-grid/tree-grid-directive.js']},
+      {name: 'pusher-angular',    files: ['https://js.pusher.com/4.1/pusher.min.js',
+                                          '//cdn.jsdelivr.net/npm/pusher-angular@latest/lib/pusher-angular.min.js',
+                                          'app/js/customeJS/pusher/pusherConfig.js']},
+      {name: 'taxInvoice',         files: ['app/js/controllers/QuickMenu/RetailsaleBillCtrl.js'] },
+      {name: 'purchaseBill',         files: ['app/js/controllers/QuickMenu/PurchaseBillCtrl.js'] }
     ]
 
   })
@@ -116,7 +125,8 @@ App
 	'getJrnlNext': 'accounting/journals/next',
 	'postJrnl': 'accounting/journals',
 	'getAllClient': 'clients',
-	'getAllBank': 'banks',
+  'getAllBank': 'banks',
+	'getAllBankBranch': 'bankBranch',
 	'postBill': 'accounting/bills',
 	'postQuotationBill': 'accounting/quotations',
 	'getLatestInvoice1': 'settings/invoice-numbers/company/',
@@ -155,8 +165,8 @@ App
 	'clientProfession' : 'settings/professions',
 	'postPurchaseBill' : 'accounting/purchase-bills',
 	'PurchaseBillByCompany' : 'accounting/purchase-bills/company/',
-	'documentDelete' : 'documents/'
-	
+	'documentDelete' : 'documents/',
+  'getSetDraft' : 'accounting/bills/draft-bill'
   })
   //Api Path
   .constant('apiResponse', {
@@ -169,6 +179,8 @@ App
 	'contentNotProper': 'content: not proper content',
 	'mappingError': 'mapping field is missing'
   })
+  //API Date Formate
+  .constant('apiDateFormate','DD-MM-YYYY')
   //Validation Pattern
   .constant('maxImageSize',2097152)
   //Validation Pattern
@@ -198,6 +210,7 @@ App
    // Back End Url
   .constant('hostUrl', {
     'localhost': 'http://localhost/',
+    'arihant': 'http://api.siliconbrain.in/',
     'swaminarayan': 'http://api.swaminarayancycles.com/',
     'v2erpKey': 'http://v2api.siliconbrain.in/',
     'siliconbrain':  'http://api.siliconbrain.co.in/',
@@ -209,6 +222,7 @@ App
   // front-end Url
   .constant('hostFrontUrl', {
     'localhost': 'http://localhost/',
+    'arihant': 'http://arihant.siliconbrain.in/',
     'swaminarayan': 'http://erp.swaminarayancycles.com/',
     'v2erpKey': 'http://v2erp.siliconbrain.in/',
     'siliconbrain':  'http://erp.siliconbrain.co.in/',
@@ -220,6 +234,7 @@ App
   // Google Captcha Site Key
   .constant('googleSiteKey', {
     'localhost': '6Ld6HSYTAAAAADSDPt5td0Te37OIgB2R10JvAgQg',
+    'arihant': '6Lex4jQUAAAAAL_5SEoYozXVeC-WYzDeORO64Rfw',
     'swaminarayan': '6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C',
     'v2erpKey': '6LfxfhwUAAAAAL3B7C6bI-_ZCuCYvO1vNFu4f4-6',
     'siliconbrain':  '6LchHRoUAAAAAIZHW5kSReJ6ZLRJ1gmT4D36Kdhv',
@@ -227,4 +242,16 @@ App
 	'arnexim':  '6LdUHDAUAAAAAAVe8YkqlUm79uLJTtcXqEFLYdO0',
 	'arnknits':  '6LcNHDAUAAAAAGSxm7_laHly5BVFrzNNDckUIBb9',
 	'demoPrabandhak': '6LddYzAUAAAAAFby3EOjaHBvNDI9p4nVbq8R1MIi'
+  })
+  // front-end Url
+  .constant('pusherKey', {
+    'localhost': '0948d2ac6b0e6180a3c7',
+    'arihant': '0948d2ac6b0e6180a3c7',
+    'swaminarayan': '0948d2ac6b0e6180a3c7@',
+    'v2erpKey': '0948d2ac6b0e6180a3c7@',
+    'siliconbrain':  '0948d2ac6b0e6180a3c7',
+    'prabandhak':  '0948d2ac6b0e6180a3c7@',
+  'arnexim':  '0948d2ac6b0e6180a3c7@',
+  'arnknits':  '0948d2ac6b0e6180a3c7@',
+  'demoPrabandhak': '0948d2ac6b0e6180a3c7@'
   });

@@ -1,33 +1,18 @@
 
-/**=========================================================
- * Module: ModalController
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
-// $.getScript('app/vendor/ng-table/ng-table.min.js');
-// $.getScript('app/vendor/ng-table/ng-table.min.css');
-// $.getScript('app/vendor/angularjs-toaster/toaster.js');
-// $.getScript('app/vendor/angularjs-toaster/toaster.css');
-
 App.controller('historySalesBillModaleCtrl',historySalesBillModaleCtrl);
 
-function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,$state,responseData,toaster) {
+function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, ngTableParams,$http,apiCall,apiPath,flotOptions, colors,$timeout,$state,responseData,toaster,getSetFactory,draftOrSalesOrder,apiResponse) {
   'use strict';
   
 	 var data = [];
 	 
-	 
 	 $scope.responseData = responseData;
 	$scope.noOfDecimalPoints = parseInt($scope.responseData[0].company.noOfDecimalPoints);
 	$scope.dateFormats = $rootScope.dateFormats;
-		
+	$scope.draftOrSalesOrder = draftOrSalesOrder;
+	
 		$scope.stockModel=[];
  
-	if($rootScope.ArraystockModel)
-	{
-		$scope.stockModel.state=$rootScope.ArraystockModel.state;
-		$scope.stockModel.state2=$rootScope.ArraystockModel.state2;
-		$scope.stockModel.state3=$rootScope.ArraystockModel.state3;
-	}
   // $scope.stockModel.state;
 
     $scope.ok = function () {
@@ -41,13 +26,6 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 	
     $scope.cancel = function () {
 	
-		if($scope.stockModel)
-		 {
-			$rootScope.ArraystockModel=[];
-			$rootScope.ArraystockModel.state=$scope.stockModel.state;
-			$rootScope.ArraystockModel.state2=$scope.stockModel.state2;
-			$rootScope.ArraystockModel.state3=$scope.stockModel.state3;
-		 }
 		$modalInstance.dismiss();
     };
 	
@@ -134,13 +112,31 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 	}
 	
 	$scope.editDataViewSales = function(singleData){
-		$modalInstance.close(singleData);
+		getSetFactory.blank();
+		getSetFactory.set(singleData);
+		$modalInstance.close();
 	}
-	
-	
+
 	/**
 		End
 	**/
+
+	/** Set No of Product **/
+	$scope.setLength = function(userProductArray){
+		var jsonProductArray = angular.fromJson(userProductArray);
+		return jsonProductArray.inventory.length;
+	}
+	/** End **/
+
+	$scope.deleteDraft = function(uData){
+
+		apiCall.deleteCall(apiPath.getSetDraft+'/'+uData.saleId).then(function(resonse){
+			if(resonse == apiResponse.ok){
+				data.splice(uData,1);
+				$scope.tableParams.reload();
+			}
+		});
+	}
 }
 
-historySalesBillModaleCtrl.$inject = ["$scope", "$modalInstance","$rootScope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","$state","responseData","toaster"];
+historySalesBillModaleCtrl.$inject = ["$scope", "$modalInstance","$rootScope", "$filter", "ngTableParams","$http","apiCall","apiPath","flotOptions","colors","$timeout","$state","responseData","toaster","getSetFactory","draftOrSalesOrder","apiResponse"];

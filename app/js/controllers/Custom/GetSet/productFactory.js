@@ -4,51 +4,44 @@ App.factory('productFactory',['apiCall','apiPath','apiResponse','$q','fetchArray
 	var savedData = null;
 	
 	function setUpdatedProduct(productId) {
-		var deferredMenu = $q.defer();
-			apiCall.getCall(apiPath.getAllProduct+'/'+productId).then(function(data){
-				if(angular.isObject(data)){
-					fetchArrayService.setUpdatedObject(savedData,data,productId,'productId');
-				}
-				deferredMenu.resolve(data);
-			});
-		return deferredMenu.promise;
+		return apiCall.getCall(apiPath.getAllProduct+'/'+productId).then(function(data){
+			if(angular.isObject(data)){
+				fetchArrayService.setUpdatedObject(savedData,data,productId,'productId');
+			}
+			return data;
+		});
 	}
  
 	function setNewProduct(companyId,productName,color,size,pushIt = true){
-		var deferredMenu = $q.defer();
 		// companyId == '' || productName == '' || color == '' || size == '' ? return 'Parameters are Mising or Wrong' : '';
 		var searchPath = apiPath.getProductByCompany+companyId;
 		var headerSearch = {'Content-Type': undefined,'productName':productName,'color':color,'size':size};
-			apiCall.getCallHeader(searchPath,headerSearch).then(function(response){
+			return apiCall.getCallHeader(searchPath,headerSearch).then(function(response){
 				if(angular.isArray(response)){
 					if(pushIt === true){
 						savedData.push(response[0]);
 					}
-					deferredMenu.resolve(response[0]);
+					return response[0];
 				}
 				else{
-					deferredMenu.resolve(response);
+					return response;
 				}
 			});
-			
-		return deferredMenu.promise;
 	}
 	
 	function getProduct() {
-		
-	 var deferredMenu = $q.defer();
-	 
 		if(savedData !== null) {
-			deferredMenu.resolve(savedData);
+			var deferredMenu = $q.defer();
+				deferredMenu.resolve(savedData);
+			return deferredMenu.promise;
 		} else {
-			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
+			return apiCall.getCall(apiPath.getAllProduct).then(function(data) {
 				if(angular.isArray(data)){
 					savedData = data;
 				}
-				deferredMenu.resolve(data);
+				return data;
 			})
 		}
-		return deferredMenu.promise;
 	}
  
 	function blankProduct() {
@@ -56,64 +49,55 @@ App.factory('productFactory',['apiCall','apiPath','apiResponse','$q','fetchArray
 	}
  
 	function getSingleProduct(proId){
-		
-		var deferredMenu = $q.defer();
-
 		if(savedData !== null) {
-			 deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(savedData,proId,'productId'));
+			var deferredMenu = $q.defer();
+			 	deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(savedData,proId,'productId'));
+			 return deferredMenu.promise;
 		} else {
-			
-			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
+			return apiCall.getCall(apiPath.getAllProduct).then(function(data) {
 				if(angular.isArray(data)){
 					savedData = data;
-					deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(data,proId,'productId'));
+					return fetchArrayService.getfilteredSingleObject(data,proId,'productId');
 				}
 				else{
-					deferredMenu.resolve(data);
+					return data;
 				}
 			});
 		}
-		return deferredMenu.promise;
 	}
 	
 	function getProductByCompany(compId){
-		var deferredMenu = $q.defer();
-		
 		if(savedData !== null) {
-			deferredMenu.resolve(fetchArrayService.getfilteredArray(savedData,compId,'company','companyId'));
+			var deferredMenu = $q.defer();
+				deferredMenu.resolve(fetchArrayService.getfilteredArray(savedData,compId,'company','companyId'));
+			return deferredMenu.promise;
 		} else {
-			apiCall.getCall(apiPath.getProductByCompany+compId).then(function(data) {
-				deferredMenu.resolve(data);
-			});
-			apiCall.getCall(apiPath.getAllProduct).then(function(data) {
-				savedData = data;
-				// deferredMenu.resolve(fetchArrayService.getfilteredArray(savedData,compId,'company','companyId'));
+			getProduct();
+			return apiCall.getCall(apiPath.getProductByCompany+compId).then(function(data) {
+				return data;
 			});
 		}
-		return deferredMenu.promise;
 	}
 	
 	function deleteSingleProduct(proId){
-		var deferredMenu = $q.defer();
-			if(proId != '' && proId != null && proId != undefined){
-				apiCall.deleteCall(apiPath.getAllProduct+'/'+proId).then(function(response){
-					if(apiResponse.ok == response){
-						/** Splice **/
-						var index = savedData.findIndex(function(o){
-							 return o.productId == proId;
-						})
-						if (index !== -1) savedData.splice(index,1);
-						/** Splice **/
-					}
-					deferredMenu.resolve(response);
-				});
-			}
-			else{
+		if(proId != '' && proId != null && proId != undefined){
+			return apiCall.deleteCall(apiPath.getAllProduct+'/'+proId).then(function(response){
+				if(apiResponse.ok == response){
+					/** Splice **/
+					var index = fetchArrayService.myIndexOf(savedData,proId,'productId');
+					if (index !== -1) savedData.splice(index,1);
+					/** Splice **/
+				}
+				return response;
+			});
+		}
+		else{
+			var deferredMenu = $q.defer();
 				deferredMenu.resolve('Product Parameter Not Proper');
-			}
-		return deferredMenu.promise;
+			return deferredMenu.promise;
+		}
 	}
-	
+
  return {
   setUpdatedProduct: setUpdatedProduct,
   setNewProduct: setNewProduct,

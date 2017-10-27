@@ -6,7 +6,7 @@
 
 App.controller('InvoiceController', InvoiceController);
 
-function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,apiResponse,validationMessage) {
+function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,apiResponse,validationMessage,fetchArrayService) {
   'use strict';
  var vm = this;
  var data = [];
@@ -21,14 +21,19 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 	
 	/* VALIDATION END */
 	
+	function filterDataForTable(){
+		var count = data.length;
+		while(count--) {
+		  data[count].companyName = ""; //initialization of new property 
+		  data[count].companyName = data[count].company.companyName;  //set the data from nested obj into new property
+		}
+	}
+
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllInvoice).then(function(response){
 		//console.log(response);
 		data = response;
-		for (var i = 0; i < data.length; i++) {
-		  data[i].companyName = ""; //initialization of new property 
-		  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-		}
+		filterDataForTable();
 		 $scope.TableData();
 	});
 	
@@ -95,32 +100,18 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 	}
 	  
 	
-	$scope.defaultCompany = function(){
+	function defaultCompany(){
 		
-		//Set default Company
-		apiCall.getDefaultCompany().then(function(response){
-			
-			$scope.addInvoice.companyDrop = response;
-			
+		vm.invoiceCompanyDrop= [];
+		// Get All Invoice Call 
+		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+			vm.invoiceCompanyDrop = responseCompanyDrop;
+			$scope.addInvoice.companyDrop = fetchArrayService.getfilteredSingleObject(responseCompanyDrop,'ok','isDefault');
 		});
-		
 	}
-	  
- //End Table
-  // Chosen data
-  // ----------------------------------- 
-	vm.invoiceCompanyDrop= [];
-	// Get All Invoice Call 
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-		
-		vm.invoiceCompanyDrop = responseCompanyDrop;
-		
-		$scope.defaultCompany();
-		
-	});
-	
 
-  
+	defaultCompany();
+
   //Insert Invoice
   $scope.insertInvoiceData = function(addInvoice)
   {
@@ -149,12 +140,7 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 					
 				apiCall.getCall(apiPath.getAllInvoice).then(function(response){
 					data = response;
-					for (var i = 0; i < data.length; i++) {
-					  data[i].companyName = ""; //initialization of new property 
-					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-					}
-					
-					
+					filterDataForTable();
 					vm.tableParams.reload();
 					  vm.tableParams.page(1);
 				});
@@ -164,7 +150,7 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 				$scope.addInvoice.startAt = '';
 				$scope.addInvoice.invoiceType = 'prefix';
 				
-				$scope.defaultCompany();
+				defaultCompany();
 			}
 			else{
 			
@@ -179,11 +165,6 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 			formdata.delete('invoiceType');
 		
 	});
-	
-	
-	
-	
-	
   }
   
 	$scope.cancel = function(){
@@ -193,7 +174,7 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 		$scope.addInvoice.startAt = '';
 		$scope.addInvoice.invoiceType = 'prefix';
 		
-		$scope.defaultCompany();
+		defaultCompany();
 		
 		formdata.delete('companyId');
 		formdata.delete('invoiceLabel');
@@ -202,4 +183,4 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 		formdata.delete('invoiceType');
 	}
 }
-InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage"];
+InvoiceController.$inject = ["$scope","$filter","ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage","fetchArrayService"];

@@ -516,17 +516,7 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		
 				modalInstance.result.then(function (returnModalData) {
 					Modalopened = false;
-					if(angular.isObject(returnModalData)){
-						var cId = returnModalData.clientId;
-						var index = data.findIndex(function(o){
-							 return o.clientId == cId;
-						});
-						if (index !== -1){
-							data[index] = returnModalData;
-						}
-						toaster.pop('success','Updated Successfully');
-						$scope.tableParams.reload();
-					}
+					afterEditClient(returnModalData);
 					
 				}, function () {
 				  console.log('Cancel');
@@ -537,6 +527,26 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		}
 	/** End **/
 	
+	//After Edit Client
+	function afterEditClient(returnModalData){
+		if(angular.isObject(returnModalData)){
+			returnModalData.stateAbb = "";
+			returnModalData.stateAbb = returnModalData.state.stateName;
+			returnModalData.cityName = "";
+			returnModalData.cityName = returnModalData.city.cityName;
+			returnModalData.professionName = "";
+			returnModalData.professionName = returnModalData.profession.professionName;
+			var cId = returnModalData.clientId;
+			var index = data.findIndex(function(o){
+				 return o.clientId == cId;
+			});
+			if (index !== -1){
+				data[index] = returnModalData;
+			}
+			toaster.pop('success','Updated Successfully');
+			$scope.tableParams.reload();
+		}
+	}
 	//Date Convert
 	
 	$scope.dateConvert = function(entryDate){
@@ -546,45 +556,5 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 		return entDate; 
 	}
 	
-  /*** Pdf ***/
-	
-		$scope.generatePdf = function(operation){
-			
-			toaster.clear();
-			toaster.pop('wait', 'Please Wait', operation.toUpperCase()+' Loading...');
-			var getData = {"Content-Type": undefined,'fromDate':$scope.displayfromDate,'toDate':$scope.displaytoDate};
-			getData.operation = operation;
-			
-			apiCall.getCallHeader(getJrnlPath,getData).then(function(responseDrop){
-			
-				//console.log(responseDrop);
-				toaster.clear();
-				
-				if(angular.isObject(responseDrop)  && responseDrop.hasOwnProperty('documentPath')){
-				
-					var pdfPath = erpPath+responseDrop.documentPath;
-					
-					$window.open(pdfPath,"_self");
-					
-				}
-				else{
-					
-					if(responseDrop.status == 500){
-						
-						toaster.pop('warning', 'Opps!', responseDrop.statusText);
-					}
-					else{
-						
-						toaster.pop('warning', 'Opps!', responseDrop);
-					}
-					
-					//alert('Something Wrong');
-				}
-			
-			});
-		}
-	
-	/*** End Pdf ***/
-
 }
 CrmClientFilterDataController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","apiCall","apiPath","apiResponse","toaster","getSetFactory","$window","$state","$modal","clientFactory"];

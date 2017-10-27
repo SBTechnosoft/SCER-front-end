@@ -6,7 +6,7 @@
 
 App.controller('QuotationController', QuotationController);
 
-function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toaster,apiResponse,validationMessage) {
+function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toaster,apiResponse,validationMessage,fetchArrayService) {
   'use strict';
  	var vm = this;
 	var data =[];
@@ -20,15 +20,19 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	//$scope.validationPattern = validationPattern; //pattern
 	
 	/* VALIDATION END */
-	
+	function filterDataForTable(){
+		var count = data.length;
+		while(count--) {
+		  data[count].companyName = ""; //initialization of new property 
+		  data[count].companyName = data[count].company.companyName;  //set the data from nested obj into new property
+		}
+	}
+
 	// Get All Invoice Call 
 	apiCall.getCall(apiPath.getAllQuotation).then(function(response){
 		//console.log(response);
 		data = response;
-		for (var i = 0; i < data.length; i++) {
-		  data[i].companyName = ""; //initialization of new property 
-		  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-		}
+		filterDataForTable();
 		 $scope.TableData();
 	});
   
@@ -94,28 +98,20 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 	  });
   }
 	  
-	$scope.defaultCompany = function(){
+	function defaultCompany(){
 		 
-		 //Set default Company
-		apiCall.getDefaultCompany().then(function(response){
+		 vm.quotationCompanyDrop= [];
+		// Get All Invoice Call 
+		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
 			
-			$scope.addquotation.companyDrop = response;
+			vm.quotationCompanyDrop = responseCompanyDrop;
+			
+			$scope.addquotation.companyDrop = fetchArrayService.getfilteredSingleObject(responseCompanyDrop,'ok','isDefault');
 		});
+		
 	}
- //End Table
-  // Chosen data
-  // ----------------------------------- 
-	vm.quotationCompanyDrop= [];
-	// Get All Invoice Call 
-	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-		
-		vm.quotationCompanyDrop = responseCompanyDrop;
-		
-		$scope.defaultCompany();
-	});
+ 	defaultCompany();
 
-  
-  
   $scope.insertQuotationData = function(addquotation)
   {
 	  var formdata = new FormData();
@@ -146,12 +142,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 				
 				apiCall.getCall(apiPath.getAllQuotation).then(function(response){
 					data = response;
-					
-					for (var i = 0; i < data.length; i++) {
-					  data[i].companyName = ""; //initialization of new property 
-					  data[i].companyName = data[i].company.companyName;  //set the data from nested obj into new property
-					}
-					
+					filterDataForTable();
 					vm.tableParams.reload();
 					  vm.tableParams.page(1);
 				});
@@ -161,7 +152,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 				$scope.addquotation.startAt = '';
 				$scope.addquotation.quotationType = 'prefix';
 				
-				$scope.defaultCompany();
+				defaultCompany();
 			}
 			else{
 			
@@ -187,7 +178,7 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		$scope.addquotation.startAt = '';
 		$scope.addquotation.quotationType = 'prefix';
 		
-		$scope.defaultCompany();
+		defaultCompany();
 		
 		formdata.delete('companyId');
 		formdata.delete('quotationLabel');
@@ -197,4 +188,4 @@ function QuotationController($scope,$filter, ngTableParams,apiCall,apiPath,toast
 		
 	}
 }
-QuotationController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage"];
+QuotationController.$inject = ["$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","apiResponse","validationMessage","fetchArrayService"];

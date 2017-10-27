@@ -65,10 +65,17 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	}
 	
 	$scope.clientGetAllFunction = function(){
-		
+		$scope.crmButtonHide = true;
 		loadingStart();
+
 		vm.clientSuggest = [];
 		clientFactory.getClient().then(function(responseDrop){
+			
+			$scope.crmButtonHide = false;
+			setTimeout(function() {
+				toaster.clear();
+			}, 1000);
+
 			vm.clientSuggest = responseDrop;
 		});
 		
@@ -80,14 +87,14 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	}
 	
 	if($scope.viewDataTypePath == 'CrmClientFilterView'){
-		$scope.crmButtonHide = true;
-
-		stateCityFactory.getState().then(function(){
-			$scope.crmButtonHide = false;
-			setTimeout(function() {
-				toaster.clear();
-			}, 1000);
-		});
+		//$scope.crmButtonHide = true;
+		stateCityFactory.getState();
+		//stateCityFactory.getState().then(function(){
+			//$scope.crmButtonHide = false;
+			//setTimeout(function() {
+			//	toaster.clear();
+			//}, 1000);
+		//});
 
 		$scope.clientGetAllFunction();
 	}

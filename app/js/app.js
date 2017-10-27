@@ -9,7 +9,7 @@
  */
 if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript requires jQuery'); }
 
-var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages','ngTableToCsv',"ngSanitize", "ngCsv","vcRecaptcha","uiCropper"])
+var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages',"ngSanitize", "ngCsv","vcRecaptcha"])
     .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','hostUrl','googleSiteKey','hostFrontUrl', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,hostUrl,googleSiteKey,hostFrontUrl) {
 		
 		
@@ -49,7 +49,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       themeId: 7,
       theme: {
         sidebar: 'bg-white br',
-        brand:   'bg-primary',
+        brand:   'bg-primary my-font-white',
         topbar:  'my-Topbar-Color'
       }
     };
@@ -65,6 +65,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	$rootScope.googleSiteKey = googleSiteKey;
 	
 	$rootScope.erpPath = hostUrl.siliconbrain;
+	//$rootScope.erpPath = hostUrl.arihant;
 	// $rootScope.erpPath = hostUrl.swaminarayan;
 	// $rootScope.erpPath = hostUrl.v2erpKey;
 	 //$rootScope.erpPath = hostUrl.arnexim;
@@ -74,13 +75,14 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	var hostFrontUrls = hostFrontUrl;
 
 	$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.siliconbrain+"app/img/aksLogo.png' height='100%' width='100%' />";
+	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.arihant+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.swaminarayan+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.v2erpKey+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.arnexim+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.arnknits+"app/img/aksLogo.png' height='100%' width='100%' />";
 	// $rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.demoPrabandhak+"app/img/aksLogo.png' height='100%' width='100%' />";
 	
-	/** Silicon **/
+	/** Silicon & arihant **/
 	$rootScope.defaultState = "IN-GJ";
 	$rootScope.defaultCity = 31;
 	

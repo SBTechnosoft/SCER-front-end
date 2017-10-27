@@ -215,7 +215,7 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 			//console.log(files[0]);
 		}
 		
-		$scope.$apply();
+		$scope.$digest();
 		
 		//vm.gridOptions.core.handleWindowResize();
 	}

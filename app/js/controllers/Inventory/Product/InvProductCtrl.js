@@ -6,7 +6,7 @@
 
 App.controller('InvProductController', InvProductController);
 
-function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory,$modal,productFactory) {
+function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory,$modal,productFactory,fetchArrayService) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -38,14 +38,8 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 					
 				}
 				else{
-					
 					data = response;
-					for (var i = 0; i < data.length; i++) {
-					  data[i].productCategoryName = ""; //initialization of new property 
-					  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-					  data[i].productGroupName = ""; //initialization of new property 
-					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
-					}
+					filterDataForTable();
 				}
 				
 				vm.tableParams.reload();
@@ -55,22 +49,24 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		}
 	}
 	
+	function filterDataForTable(){
+		var count = data.length;
+		while(count--) {
+		 	data[count].productCategoryName = ""; //initialization of new property 
+			data[count].productCategoryName = data[count].productCategory.productCategoryName;  //set the data from nested obj into new property
+			data[count].productGroupName = ""; //initialization of new property 
+			data[count].productGroupName = data[count].productGroup.productGroupName;  //set the data from nested obj into new property
+		}
+	}
+
 	$scope.init = function (){
 			
 		vm.states=[];
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 			
 			vm.states = response2;
-			
-			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
-				
-				$scope.stateCheck = response;
-				
-				$scope.getProduct(response.companyId);
-				
-			});
-		 
+			$scope.stateCheck = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
+			$scope.getProduct($scope.stateCheck.companyId);
 		});
 		 
 	}
@@ -82,24 +78,15 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			productFactory.getProductByCompany(id).then(function(response){
-				
 				toaster.clear();
-				//console.log(response.length);
-				if(response.length <= 0){
-						
-					data = [];
-					toaster.pop('alert', 'Opps!!', 'No Product Available');
-					
+				if(angular.isArray(response)){
+					data = response;
+					filterDataForTable();
 				}
 				else{
-					//console.log('else');
-					data = response;
-					for (var i = 0; i < data.length; i++) {
-					  data[i].productCategoryName = ""; //initialization of new property 
-					  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-					  data[i].productGroupName = ""; //initialization of new property 
-					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
-					}
+					
+					data = [];
+					toaster.pop('alert', 'Opps!!', 'No Product Available');
 				}
 				
 				if(flag == 0){
@@ -232,4 +219,4 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	
    /** End **/
 }
-InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal","productFactory"];
+InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal","productFactory","fetchArrayService"];

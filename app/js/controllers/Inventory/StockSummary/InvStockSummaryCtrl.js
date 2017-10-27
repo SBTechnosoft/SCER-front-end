@@ -6,7 +6,7 @@
 
 App.controller('InvStockSummaryController', InvStockSummaryController);
 
-function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,$modal) {
+function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,fetchArrayService) {
   'use strict';
   var vm = this;
 	//$scope.brandradio="";
@@ -14,14 +14,37 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
   var data = [];
 	var flag = 0;
 	
+	function filterDataForTable(){
+		console.time();
+		var count = data.length;
+		while(count--) {
+		  	var index = fetchArrayService.myIndexOfObject(vm.productCategoryData,data[count].product.productCategoryId,'productCategoryId');
+				
+			data[count].productCategoryName = ""; //initialization of new property 
+			data[count].productCategoryName =	index.productCategoryName;  //set the data from nested obj into new property
+			
+			var groupIndex = fetchArrayService.myIndexOfObject(vm.productGroupData,data[count].product.productGroupId,'productGroupId');
+			
+			data[count].productGroupName = ""; //initialization of new property 
+			data[count].productGroupName = groupIndex.productGroupName;  //set the data from nested obj into new property
+		  
+			data[count].productName = ""; //initialization of new property 
+			data[count].productName = data[count].product.productName;  //set the data from nested obj into new property
+			
+			data[count].color = ""; 
+			data[count].color = data[count].product.color;
+			data[count].size = ""; 
+			data[count].size = data[count].product.size;
+			
+			data[count].qty = parseInt(data[count].qty);
+		}
+		console.timeEnd();
+	}
+
 	$scope.showProduct = function(){
 		
 		if($scope.stateCheck){
-			
-		
 			$scope.getProduct($scope.stateCheck.companyId);
-			
-			
 		}
 		else{
 			
@@ -31,35 +54,19 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			apiCall.getCall(apiPath.getAllProduct).then(function(response){
 				
 				toaster.clear();
-				
-				if(apiResponse.noContent == response){
-					
-					data = [];
-					toaster.pop('alert', 'Opps!!', 'No Product Available');
-					
+				if(angular.isArray(response)){
+					data = response;
+					filterDataForTable();
 				}
 				else{
-					
-					data = response;
-					for (var i = 0; i < data.length; i++) {
-					  data[i].productCategoryName = ""; //initialization of new property 
-					  data[i].productCategoryName = data[i].productCategory.productCategoryName;  //set the data from nested obj into new property
-					  data[i].productGroupName = ""; //initialization of new property 
-					  data[i].productGroupName = data[i].productGroup.productGroupName;  //set the data from nested obj into new property
-					}
-					
-					
+					data = [];
+					toaster.pop('alert', 'Opps!!', 'No Product Available');
 				}
 				
 				 vm.tableParams.reload();
-				  vm.tableParams.page(1);
-				
+				 vm.tableParams.page(1);
 			});
-			
-			
 		}
-		
-		
 	}
 	
 	$scope.init = function (){
@@ -68,39 +75,26 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 		apiCall.getCall(apiPath.getAllCompany).then(function(response2){
 			
 			vm.states = response2;
-			
 			//Set default Company
-			apiCall.getDefaultCompany().then(function(response){
-				
-				$scope.stateCheck = response;
-				
-				$scope.getProduct(response.companyId);
-				
-			});
-		 
+			$scope.stateCheck = fetchArrayService.myIndexOfObject(response2,'ok','isDefault');
+			$scope.getProduct($scope.stateCheck.companyId);
 		});
 		
 		vm.productCategoryData=[];
 		apiCall.getCall(apiPath.getAllCategory).then(function(response2){
-			
 			vm.productCategoryData = response2;
-		 
 		});
 		
 		vm.productGroupData=[];
 		apiCall.getCall(apiPath.getAllGroup).then(function(response2){
-			
 			vm.productGroupData = response2;
-		 
 		});
 		
-		 
 	}
 	$scope.init();
 	
 	$scope.getProduct = function(id){
 		
-		console.log(vm.productCategoryData);
 		toaster.clear();
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 			
@@ -108,43 +102,16 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			
 			toaster.clear();
 			
-			if(apiResponse.noContent == response){
-					
-				data = [];
-				toaster.pop('alert', 'Opps!!', 'No Product Available');
-				
+			if(angular.isArray(response)){
+				data = response;
+				filterDataForTable();
 			}
 			else{
-				//console.log('else');
-				data = response;
-				
-				for (var i = 0; i < data.length; i++) {
-					
-					var index = vm.productCategoryData.findIndex(x => parseInt(x.productCategoryId)== parseInt(data[i].product.productCategoryId));
-				
-					data[i].productCategoryName = ""; //initialization of new property 
-					data[i].productCategoryName =	vm.productCategoryData[index].productCategoryName;  //set the data from nested obj into new property
-					
-					var groupIndex = vm.productGroupData.findIndex(x => parseInt(x.productGroupId)==parseInt(data[i].product.productGroupId));
-					data[i].productGroupName = ""; //initialization of new property 
-					data[i].productGroupName = vm.productGroupData[groupIndex].productGroupName;  //set the data from nested obj into new property
-				  
-					data[i].productName = ""; //initialization of new property 
-					data[i].productName = data[i].product.productName;  //set the data from nested obj into new property
-					
-					data[i].color = ""; 
-					data[i].color = data[i].product.color;
-					data[i].size = ""; 
-					data[i].size = data[i].product.size;
-					
-					data[i].qty = parseInt(data[i].qty);
-				}
-				
-				
+				data = [];
+				toaster.pop('alert', 'Opps!!', 'No Product Available');
 			}
 			
 			if(flag == 0){
-					
 				//console.log('zero');
 				$scope.TableData();
 			}
@@ -153,14 +120,11 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 				 vm.tableParams.reload();
 				 vm.tableParams.page(1);
 			}
-			
-			 
 		});
 	}
 	
 	$scope.TableData = function(){
 		 
-		
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
@@ -172,13 +136,6 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
-			  // if()
-			  // {
-				  // alert('yes');
-			  // }
-			  // else{
-				  // alert('no');
-			  // }
 			  // use build-in angular filter
 			  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")  || (typeof(params.$params.filter.productCategoryName) != "undefined" && params.$params.filter.productCategoryName != "") || (typeof(params.$params.filter.productGroupName) != "undefined" && params.$params.filter.productGroupName != "") || (typeof(params.$params.filter.color) != "undefined" && params.$params.filter.color != "") || (typeof(params.$params.filter.size) != "undefined" && params.$params.filter.size != "") || (typeof(params.$params.filter.qty) != "undefined" && params.$params.filter.qty != "")))
 			  {
@@ -190,18 +147,15 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 
 					  params.total(orderedData.length); // set total for recalc pagination
 					  $defer.resolve(vm.users);
-			  
-
 			  }
 			else
 			{
-				   params.total(data.length);
+				params.total(data.length);
 				  
 			}
 			 
 			 if(!$.isEmptyObject(params.$params.sorting))
 			  {
-				
 				 //alert('ggg');
 				  var orderedData = params.sorting() ?
 						  $filter('orderBy')(data, params.orderBy()) :
@@ -217,14 +171,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			
 		  }
 	  });
-	  
 		flag = 1;
 	}
-
-
-  
-  
-  
-
 }
-InvStockSummaryController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","$modal"];
+InvStockSummaryController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","getSetFactory","fetchArrayService"];

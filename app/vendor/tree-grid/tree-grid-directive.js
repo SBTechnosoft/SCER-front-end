@@ -1,11 +1,11 @@
 (function () {
     angular
-        .module('app/views/Inventory/Category/InvCategory.html', [])
+        .module('app/vendor/tree-grid/treeGrid.html', [])
         .run([
             '$templateCache',
             function ($templateCache) {
                 
-				 $templateCache.put('app/views/Inventory/Category/InvCategory.html',
+				 $templateCache.put('app/vendor/tree-grid/treeGrid.html',
                     "<div class=\"table-responsive\">\n" +
                     " <table class=\"table tree-grid\">\n" +
                     "   <thead>\n" +
@@ -37,7 +37,7 @@
 
     angular
         .module('treeGrid', [
-            'app/views/Inventory/Category/InvCategory.html'
+            'app/vendor/tree-grid/treeGrid.html'
         ])
 
         .directive('compile', [
@@ -685,7 +685,7 @@
 
         .provider('treegridTemplate', function () {
 			
-            var templatePath = 'app/views/Inventory/Category/InvCategory.html';
+            var templatePath = 'app/vendor/tree-grid/treeGrid.html';
 
             this.setPath = function (path) {
                 templatePath = path;

@@ -24,7 +24,15 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	 
 	}
 	
-	
+	function filterData(){
+		var cnt = data.length;
+		var i = 0; 
+		while(i < cnt) {
+		  data[i].cityName = ""; //initialization of new property 
+		  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
+		  i++;
+		}
+	}
 	
 	var data = [];
 	
@@ -38,10 +46,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		else{
 			
 			data = response;
-			for (var i = 0; i < data.length; i++) {
-			  data[i].cityName = ""; //initialization of new property 
-			  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-			}
+			filterData();
 			
 		}
 		$scope.TableData();
@@ -60,14 +65,8 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 				toaster.pop('info', '', 'Data Not Available');
 			}
 			else{
-				
-				data = [];
 				data = response;
-				for (var i = 0; i < data.length; i++) {
-				  data[i].cityName = ""; //initialization of new property 
-				  data[i].cityName = data[i].city.cityName;  //set the data from nested obj into new property
-				}
-				
+				filterData();
 			}			
 			
 			vm.tableParams.reload();
@@ -128,9 +127,8 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	}
 
   
-  $scope.isDefault_comp = function(id,companyStatus)
+  $scope.isDefault_comp = function(id,companyStatus,returnData)
   {
-	
 	  toaster.clear();
 	  
 	  if(companyStatus == 'not'){
@@ -220,7 +218,6 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			
 		});
 		
-	
   }
   
   /** Sticker Single **/
@@ -252,7 +249,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		for(var n=0;n<qty;n++){
 
 			mywindow.document.write("<td style='position:relative;float:left; width: 280px;padding-top: 23px;padding-left:35px;display: inline-block;font-family: Microsoft New Tai Lue'> ");
-			mywindow.document.write("<span style='margin-left:5px;font-size:12px;text-transform:uppercase;'><b>"+pData.companyName+"</b></span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.address1+"</span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.address2+"</span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.cityName+"- PIN "+pData.pincode+"</span><br /><span style='margin-left:5px;font-size:12px;text-transform:uppercase;'>"+pData.customerCare+"</span>");
+			mywindow.document.write("<span style='font-size:12px;text-transform:uppercase;'><b>"+pData.companyName+"</b></span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.address1+"</span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.address2+"</span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.cityName+"- PIN "+pData.pincode+"</span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.customerCare+"</span>");
 			
 			if(n == qty-1){
 				
@@ -289,9 +286,6 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			else{
 				mywindow.document.write("</td>");
 			}
-			// mywindow.document.write("<div style='position:relative;float:left; width: 50%;'> ");
-			// mywindow.document.write($scope.stateCheck.companyName+"<br /><embed type='image/svg+xml' src='"+$scope.erpPath+"Storage/Barcode/"+pData.documentName+"' />");
-			// mywindow.document.write("</div>");
 		}
 	}
 	

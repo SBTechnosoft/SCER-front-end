@@ -66,7 +66,7 @@
 				</th>
 				<th  ng-if="selectedBoxArray.length > 0 || barcodeFlag==1" >
 				
-				<i ui-sref="" title="Print All Barcode" ng-click="multipleBarcodePrint()"  class="fa fa-print" style="font-size:17px;"> </i> 
+				<i  title="Print All Barcode" ng-click="multipleBarcodePrint()"  class="fa fa-print myCursorPointer" style="font-size:17px;"> </i> 
 				</th>
 			
 			</thead>
@@ -93,7 +93,7 @@
 					<td colspan="2">
 					</td>
 				</tr>
-				<tr data-ng-repeat="user in ($parent.filteredItems = $data)">
+				<tr data-ng-repeat="user in ($parent.filteredItems = $data) track by user.productId">
 				<!--tr data-ng-repeat="user in $data" -->
 					<td>
 					   <div class="checkbox c-checkbox">
@@ -103,18 +103,18 @@
 						  </label>
 					   </div>
 					</td>
-					<td  sortable="'productCategoryName'"  >{{::user.productCategory.productCategoryName}}</td>
-					<td   sortable="'productGroupName'"  >{{::user.productGroup.productGroupName}}</td>
-					<td   sortable="'productName'"  >{{::user.productName}}</td>
+					<td  sortable="'productCategoryName'" ng-bind="::user.productCategory.productCategoryName" ></td>
+					<td   sortable="'productGroupName'"  ng-bind="::user.productGroup.productGroupName"></td>
+					<td   sortable="'productName'"  ng-bind="::user.productName"></td>
 				   
-					<td   filter="{ 'color': 'text' }" >{{::user.color}}</td>
-					<td    filter="{ 'size': 'text' }" >{{::user.size}}</td>
+					<td   filter="{ 'color': 'text' }" ng-bind="::user.color"></td>
+					<td    filter="{ 'size': 'text' }" ng-bind="::user.size"></td>
 					<td  ng-init="user.barcodeQuantity=0"> <input id="input-id-1"  name="quantity" ng-model="user.barcodeQuantity" type="text" placeholder="Quantity" class="form-control input-sm" ng-pattern="/^[0-9]*$/"  ng-disabled="barcodePrintData.multiQuantity>0" ng-change="hideMiltiQuantity(user.barcodeQuantity,user.productId)"  min="1" only-number /> </td>
 			
 				   <td  style="width:10%"> 
 						<center>
 							<!--i ui-sref="" title="Barcode" ng-click="barcodePopup('lg',user.productId,user.productName,user.color,user.size)" class="fa fa-barcode" style="font-size:17px;"> </i--> 
-							<i  title="Barcode" ng-click="singleBarcodePrint(user.barcodeQuantity,user)"  ng-if="user.barcodeQuantity>0"class="fa fa-print myCursorPointer" style="font-size:17px;"> </i> 
+							<i  title="Barcode" ng-click="singleBarcodePrint(user.barcodeQuantity,user)"  ng-if="user.barcodeQuantity>0" class="fa fa-print myCursorPointer" style="font-size:17px;"> </i> 
 							&nbsp;
 							<i  title="Edit" ng-click="editProduct(user)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#10709f"> </i> 
 						</center>

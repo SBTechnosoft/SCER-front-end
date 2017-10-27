@@ -6,57 +6,55 @@ App.factory('clientFactory',['apiCall','apiPath','apiResponse','$q','fetchArrayS
 	var URL = apiPath.getAllClient;
 	var professionUrl = apiPath.clientProfession;
 	
+	/*var channel = pusherFactory.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      console.log('Here');
+      console.log(data.message);
+    });*/
+
 	/** Cleint **/
 		function setUpdatedClient(clientId,formdata) {
-			var deferredMenu = $q.defer();
-				apiCall.postCall(URL+'/'+clientId,formdata).then(function(data){
-					if(angular.isObject(data)){
-						fetchArrayService.setUpdatedObject(clientData,data,clientId,'clientId');
-					}
-					deferredMenu.resolve(data);
-				});
-			return deferredMenu.promise;
+			return apiCall.postCall(URL+'/'+clientId,formdata).then(function(data){
+				if(angular.isObject(data)){
+					fetchArrayService.setUpdatedObject(clientData,data,clientId,'clientId');
+				}
+				return data;
+			});
 		}
 	 
 		function insertAndSetNewClient(formdata,cId = null,pushIt = true){
-			var deferredMenu = $q.defer();
-				var intUpdatePath = cId === null ? URL : URL+'/'+cId;
-				apiCall.postCall(intUpdatePath,formdata).then(function(response){
-					if(angular.isObject(response)){
-						pushIt === true ? clientData.push(response) : fetchArrayService.setUpdatedObject(clientData,response,response.clientId,'clientId');;
-					}
-					deferredMenu.resolve(response);
-				});
-			return deferredMenu.promise;
+			var intUpdatePath = cId === null ? URL : URL+'/'+cId;
+			return apiCall.postCall(intUpdatePath,formdata).then(function(response){
+				if(angular.isObject(response)){
+					pushIt === true ? clientData.push(response) : fetchArrayService.setUpdatedObject(clientData,response,response.clientId,'clientId');;
+				}
+				return response;
+			});
 		}
 		
 		function getSetNewClientByContact(contactNo,pushIt = true){
-			var deferredMenu = $q.defer();
-				var headerSearch = {'Content-Type': undefined,'contactNo':contactNo};
-				apiCall.getCallHeader(URL,headerSearch).then(function(response){
-					if(angular.isArray(response)){
-						pushIt === true ? clientData.push(response[0]) : fetchArrayService.setUpdatedObject(clientData,response[0],response[0].clientId,'clientId');;
-					}
-					deferredMenu.resolve(response);
-				});
-			return deferredMenu.promise;
+			var headerSearch = {'Content-Type': undefined,'contactNo':contactNo};
+			return apiCall.getCallHeader(URL,headerSearch).then(function(response){
+				if(angular.isArray(response)){
+					pushIt === true ? clientData.push(response[0]) : fetchArrayService.setUpdatedObject(clientData,response[0],response[0].clientId,'clientId');;
+				}
+				return response;
+			});
 		}
 		
 		function getClient() {
-			
-		 var deferredMenu = $q.defer();
-		 
 			if(clientData !== null) {
-				deferredMenu.resolve(clientData);
+				 var deferredMenu = $q.defer();
+					deferredMenu.resolve(clientData);
+				return deferredMenu.promise;
 			} else {
-				apiCall.getCall(URL).then(function(data) {
+				return apiCall.getCall(URL).then(function(data) {
 					if(angular.isArray(data)){
 						clientData = data;
 					}
-					deferredMenu.resolve(data);
+					return data;
 				})
 			}
-			return deferredMenu.promise;
 		}
 	 
 		function blankClient() {
@@ -64,18 +62,16 @@ App.factory('clientFactory',['apiCall','apiPath','apiResponse','$q','fetchArrayS
 		}
 	 
 		function getSingleClient(cId){
-			
-			var deferredMenu = $q.defer();
-			
 			if(clientData !== null) {
-				deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(clientData,cId,'clientId'));
+				var deferredMenu = $q.defer();
+					deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(clientData,cId,'clientId'));
+				return deferredMenu.promise;
 			} else {
-				apiCall.getCall(URL+'/'+cId).then(function(data) {
-					deferredMenu.resolve(data);
-				});
 				getClient();
+				return apiCall.getCall(URL+'/'+cId).then(function(data) {
+					return data;
+				});
 			}
-			return deferredMenu.promise;
 		}
 		
 		function getClientByProfession(profId){
@@ -93,57 +89,50 @@ App.factory('clientFactory',['apiCall','apiPath','apiResponse','$q','fetchArrayS
 	
 	/** Cleint Profession **/
 		function setGetUpdatedProfession(profId) {
-			var deferredMenu = $q.defer();
-				apiCall.getCall(professionUrl+'/'+profId).then(function(data){
-					if(angular.isObject(data)){
-						fetchArrayService.setUpdatedObject(clientProfessionData,data,profId,'professionId');
-					}
-					deferredMenu.resolve(data);
-				});
-			return deferredMenu.promise;
+			return apiCall.getCall(professionUrl+'/'+profId).then(function(data){
+				if(angular.isObject(data)){
+					fetchArrayService.setUpdatedObject(clientProfessionData,data,profId,'professionId');
+				}
+				return data;
+			});
 		}
 		
 		function getSingleProfession(profId){
-			
-			var deferredMenu = $q.defer();
-			
 			if(clientProfessionData !== null) {
-				deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(clientProfessionData,profId,'professionId'));
+				var deferredMenu = $q.defer();
+					deferredMenu.resolve(fetchArrayService.getfilteredSingleObject(clientProfessionData,profId,'professionId'));
+				return deferredMenu.promise;
 			} else {
-				apiCall.getCall(professionUrl+'/'+profId).then(function(data) {
-					deferredMenu.resolve(data);
-				});
 				getProfession();
+				return apiCall.getCall(professionUrl+'/'+profId).then(function(data) {
+					return data;
+				});
 			}
-			return deferredMenu.promise;
 		}
 		
 		function getProfession() {
-			var deferredMenu = $q.defer();
-		 
 			if(clientProfessionData !== null) {
-				deferredMenu.resolve(clientProfessionData);
+				var deferredMenu = $q.defer();
+					deferredMenu.resolve(clientProfessionData);
+				return deferredMenu.promise;
 			} else {
-				apiCall.getCall(professionUrl).then(function(data) {
+				return apiCall.getCall(professionUrl).then(function(data) {
 					if(angular.isArray(data)){
 						clientProfessionData = data;
 					}
-					deferredMenu.resolve(data);
+					return data;
 				})
 			}
-			return deferredMenu.promise;
 		}
 		
 		function insertAndUpdateProfession(formdata,profId = null){
-			var deferredMenu = $q.defer();
 				var profPath = profId === null ? professionUrl : professionUrl+'/'+profId;
-				apiCall.postCall(profPath,formdata).then(function(response){
+				return apiCall.postCall(profPath,formdata).then(function(response){
 					if(apiResponse.ok == response){
 						profId === null ? blankProfession() : '';
 					}
-					deferredMenu.resolve(response);
+					return response;
 				});
-			return deferredMenu.promise;
 		}
 		
 		function blankProfession() {
@@ -151,9 +140,8 @@ App.factory('clientFactory',['apiCall','apiPath','apiResponse','$q','fetchArrayS
 		}
 		
 		function deleteSingleProfession(profId){
-			var deferredMenu = $q.defer();
 				if(profId != '' && profId != null && profId != undefined && profId != 0){
-					apiCall.deleteCall(professionUrl+'/'+profId).then(function(response){
+					return apiCall.deleteCall(professionUrl+'/'+profId).then(function(response){
 						if(apiResponse.ok == response){
 							/** Splice **/
 							var index = clientProfessionData.findIndex(function(o){
@@ -162,13 +150,14 @@ App.factory('clientFactory',['apiCall','apiPath','apiResponse','$q','fetchArrayS
 							if (index !== -1) clientProfessionData.splice(index,1);
 							/** Splice **/
 						}
-						deferredMenu.resolve(response);
+						return response;
 					});
 				}
 				else{
-					deferredMenu.resolve('Product Parameter Not Proper');
+					var deferredMenu = $q.defer();
+						deferredMenu.resolve('Product Parameter Not Proper');
+					return deferredMenu.promise;
 				}
-			return deferredMenu.promise;
 		}
 	/** End Cleint Profession **/
 	

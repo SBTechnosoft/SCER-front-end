@@ -1,7 +1,7 @@
 
 App.controller('clientFormModalController', clientFormModalController);
 
-function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,clientEditData,validationMessage,stateCityFactory,apiResponse,clientFactory) {
+function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,clientEditData,validationMessage,stateCityFactory,apiResponse,clientFactory,apiDateFormate) {
   'use strict';
   
   var vm = this;
@@ -12,18 +12,25 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 	var formdata = new FormData();
 	$scope.clientForm = [];	
 	 
+
+	 var dateFormats = $rootScope.dateFormats; //Date Format
+
 	/* VALIDATION */
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
 	/* VALIDATION END */
-	
+	//1990-02-09T00:00:00+05:30
+
 	if(angular.isObject(clientEditData)){
-		
+
 		$scope.clientForm.clientContact = clientEditData.contactNo == null || clientEditData.contactNo == '' || clientEditData.contactNo == 'NULL' ? '': clientEditData.contactNo;
 		$scope.clientForm.getSetClientId = clientEditData.clientId;  // Client ID
 		$scope.clientForm.clientName = clientEditData.clientName;
 		$scope.clientForm.emailId = clientEditData.emailId;
-		$scope.clientForm.fisrtAddress = clientEditData.address1;
+		$scope.clientForm.address1 = clientEditData.address1;
+		vm.birthDate = moment(clientEditData.birthDate,apiDateFormate).format() == 'Invalid date' ? null : new Date(moment(clientEditData.birthDate,apiDateFormate).format('YYYY-MM-DD'));
+		vm.anniversaryDate = moment(clientEditData.anniversaryDate,apiDateFormate).format() == 'Invalid date' ? null : new Date(moment(clientEditData.anniversaryDate,apiDateFormate).format('YYYY-MM-DD'));
 		
+
 		clientFactory.getProfession().then(function(response){
 			vm.professionDrop = response;
 			$scope.clientForm.professionDropDown = clientEditData.profession;
@@ -75,6 +82,18 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 		changeFlag = 1;
 	}
 	
+	//Changed Date
+	$scope.changeDate = function(Fname,value){
+	
+		if(value == null){
+			formdata.set(Fname,'00-00-000');
+		}
+		else{
+			formdata.set(Fname,moment(value).format(apiDateFormate));
+		}
+		changeFlag = 1;
+	}
+
     $scope.clickSave = function () {
 	
 		vm.buttonHidden = true;
@@ -115,6 +134,63 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 		$modalInstance.dismiss();
     };
 	
+
+  // Datepicker
+  // ----------------------------------- 
+	this.minStart = new Date('1990-01-01');
+
+  this.today = function() {
+    this.birthDate = new Date();
+    this.anniversaryDate = new Date();
+  };
+
+
+  this.clear = function () {
+    //this.birthDate = null;
+  };
+
+  // Disable weekend selection
+  this.disabled = function(date, mode) {
+    return false; //( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+  };
+
+  this.toggleMin = function() {
+    this.minDate = this.minDate ? null : new Date();
+  };
+  this.toggleMin();
+
+  this.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    this.opened = true;
+  };
+	
+	this.openStartBirth = function($event) {
+	  
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    this.openedStartBirth = true;
+  };
+
+  this.openStartAnivarSary = function($event) {
+	  
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    this.openedStartAnivarSary = true;
+  };
+  
+  this.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1,
+    initDate : new Date('1990-01-01')
+  };
+
+  // this.formats = ['dd-MMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  this.format = dateFormats;
+
   
 }
-clientFormModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","clientEditData","validationMessage","stateCityFactory","apiResponse","clientFactory"];
+clientFormModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","clientEditData","validationMessage","stateCityFactory","apiResponse","clientFactory","apiDateFormate"];
