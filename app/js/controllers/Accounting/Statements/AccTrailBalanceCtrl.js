@@ -75,8 +75,6 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
   
 	$scope.getBranch = function(id){
 		
-	
-	
 		apiCall.getCall(apiPath.getTrailBalance+id).then(function(response){
 			
 			//console.log(response);
@@ -198,12 +196,8 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 				flag =1;
 			}
 			else{
-				
 				vm.tableParams.reload();
 			}
-			
-			
-
 		});
 		
 		// vm.tableParams.reload();

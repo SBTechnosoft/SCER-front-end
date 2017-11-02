@@ -10,53 +10,31 @@ margin-top: 0px !important;
 margin-left: 0px !important;
 }
 </style>
-<!--script src="app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js?r=541554"  ></script>
-<script src="app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.initiate.js?r=54654" ></script-->
-
-
-<!--script src="Resources/addon/dynamsoft.webtwain.addon.pdf.js"></script-->
-
-<!--link rel="stylesheet" href="app/views/QuickMenu/DocumentScan/Style/ds.demo.css"-->
-
-
 <div class="modal-header">
-		
 	<button type="button" data-dismiss="modal" data-ng-click="closeButton()" aria-hidden="true" class="close pull-right">×</button>  
 		  <h4 id="myModalLabel" class="modal-title">Crop Scan Document</h4>
-			
 			<center>
-		
 			<!--button type="button" class="mr mb-sm btn btn-primary btn-sm"  ng-click="DWT_AcquireImage();" > Scan </button>
 			<button type="button" class="mr mb-sm btn btn-primary btn-sm"  ng-click="ShowImageEditor();" > Edit </button-->
-			
 			<button type="button" class="mr mb-sm btn btn-success btn-sm"  ng-click="doneButton();" > Done </button>
-			
 			<!--button type="button" class="mr mb-sm btn btn-danger btn-sm"  ng-click="ClearScanned();" > Clear All </button-->
-			
-			
-			
 		 </center>
-			 
-		
 	</div>
 	
 	<div class="modal-body my-model-body"  >
 		<table >
 			<td>
 				<div class="cropArea">
-				  <ui-cropper image="myImage" area-type="rectangle" result-image="myCroppedImage" ></ui-cropper>
+				  <ui-cropper image="myImage" area-type="rectangle" result-image="myCroppedImage" result-image-size='{w: 400,h: 450}' ></ui-cropper>
 				</div>
 				</td>
 			<td>
 				<div>Cropped Image:</div>
 				<div><img ng-src="{{myCroppedImage}}" />
-			   
 				</div>
 			</td>
 		</table>
-		
 	</div>
-
 <!--script src="app/views/QuickMenu/DocumentScan/Scripts/script.js"></script-->
 
 

@@ -678,7 +678,6 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 				resolve: angular.extend(requireDeps('angular-chosen','toaster','twain'),{
 					saleType: function(){
-						
 						return 'RetailsaleBill';
 					}
 				})
@@ -699,7 +698,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/PurchaseBill',
 				templateUrl: basepath('QuickMenu/PurchaseBill.html'),
 				controller: 'PurchaseBillController as form',
-				resolve: requireDeps('purchaseBill','toaster','angular-chosen','twain','ngTable','uiCropper')
+				resolve: requireDeps('purchaseBill','toaster','angular-chosen','twain','ngTable','uiCropper','jquery-ui')
 			})
 			//Quotation Print
 			.state('app.QuotationPrint', {
@@ -708,7 +707,6 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				controller: 'RetailsaleBillController as form',
 				resolve: angular.extend(requireDeps('taxInvoice','angular-chosen','toaster','ngTable'),{
 					saleType: function(){
-						
 						return 'QuotationPrint';
 					}
 				})
@@ -753,13 +751,11 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 						return 'CrmClientFilterView';
 					},
                     ClientLoad: function(clientFactory){
-                       
                         return clientFactory.getClient().then(function(response){
                            return response;
                         });
                     },
                     ProfessionLoad: function(clientFactory){
-                       
                         return clientFactory.getProfession().then(function(response){
                            return response;
                         });

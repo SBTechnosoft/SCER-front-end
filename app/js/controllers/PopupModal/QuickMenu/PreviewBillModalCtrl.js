@@ -502,9 +502,9 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 	billArrayTag.Total = $filter('number')(totalAmount,$scope.noOfDecimalPoints);
 	billArrayTag.TotalRoundableAmount = $filter('number')(roundableAmount,$scope.noOfDecimalPoints);
 	billArrayTag.RoundTotal = $filter('number')($scope.RoundTotal,$scope.noOfDecimalPoints);
-	billArrayTag.RoundFigure = $scope.RoundFigure;
+	billArrayTag.RoundFigure = isNaN($scope.RoundFigure) ? 0 :  $scope.RoundFigure;
 	billArrayTag.TotalTax = $scope.billData.tax;
-	billArrayTag.TotalDiscount = $filter('number')(totalDiscount,$scope.noOfDecimalPoints);
+	billArrayTag.TotalDiscount = totalDiscount != undefined ? $filter('number')(totalDiscount,$scope.noOfDecimalPoints) : 0;
 	billArrayTag.TotalQty = totalQty;
 	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.total);
 	billArrayTag.REMAINAMT = $scope.balance;

@@ -6,7 +6,7 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
   
 	 var data = [];
 	 
-	 $scope.responseData = responseData;
+	$scope.responseData = responseData;
 	$scope.noOfDecimalPoints = parseInt($scope.responseData[0].company.noOfDecimalPoints);
 	$scope.dateFormats = $rootScope.dateFormats;
 	$scope.draftOrSalesOrder = draftOrSalesOrder;
@@ -32,11 +32,7 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 	/**
 		Page Code
 	**/
-	
-	
 		data = $scope.responseData;
-			
-	
 		toaster.clear();
 
 	  $scope.tableParams = new ngTableParams({
@@ -50,7 +46,6 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 		  total: data.length, // length of data
 		  getData: function($defer, params) {
 			 
-			  
 			  var orderedData;
 
 			if(params.sorting().date === 'asc'){
@@ -83,7 +78,6 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 			  } else {
 				orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
 			  }
-			  
 			}
 
 			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
@@ -102,7 +96,6 @@ function historySalesBillModaleCtrl($scope, $modalInstance,$rootScope, $filter, 
 	$scope.dateConvert = function(entryDate){
 		
 		var entDate = entryDate.split("-").reverse().join("-");
-		
 		return entDate; 
 	}
 	// Addition With parse

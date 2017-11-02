@@ -207,10 +207,10 @@
 			<script type="text/ng-template" id="customTemplate.html">
 				<a><span ng-bind-html="match.label | typeaheadHighlight:query"></span> ({{match.model.color}} | {{match.model.size}})</a>
 			</script>
-			<tbody >
-				<tr id="addAfter" ng-repeat="item in form.AccBillTable track by $index" data-ng-class="app.tableAnimation">
-					<td style="text-align:center">
-						<strong>{{::$index+1}}</strong>
+			<tbody portlet="" >
+				<tr id="panelPortlet{{$index+1}}" ng-repeat="item in form.AccBillTable track by $index" data-ng-class="app.tableAnimation">
+					<td style="text-align:center" class="portlet-handler" >
+						<strong ng-bind="$index+1"></strong>
 					</td>
 					<td>
 						<div class="input-group mytypeDrop">
@@ -222,7 +222,7 @@
 						</div>
 					</td>
 					<td>
-						<h6>{{form.productHsn[$index]}}</h6>
+						<h6 ng-bind="form.productHsn[$index]"></h6>
 					</td>
 					<td style="text-align:center;">
 						<input placeholder="Color" type="text" ng-model="item.color"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;" ng-change="changeProductTable()"  /> 
@@ -250,43 +250,37 @@
 					</td>
 					<td style="text-align:right">
 						<input id="price" type="text" ng-model="item.cgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
-						<span ng-if="item.cgstAmount > 0" > {{item.cgstAmount}} </span>
+						<span ng-if="item.cgstAmount > 0" ng-bind="item.cgstAmount"></span>
 					</td>
 					<td style="text-align:right">
 						<input id="price" type="text" ng-model="item.sgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
-						<span ng-if="item.sgstAmount > 0" >{{item.sgstAmount}}</span>
+						<span ng-if="item.sgstAmount > 0" ng-bind="item.sgstAmount"></span>
 					</td>
 					<td style="text-align:right">
 						<input id="price" type="text" ng-model="item.igstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%" ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
-						<span ng-if="item.igstAmount > 0" >{{item.igstAmount}}</span>
+						<span ng-if="item.igstAmount > 0" ng-bind="item.igstAmount"></span>
 					</td>
 					<td>
 						<input placeholder="(&#x20b9;)Amount" type="text" ng-model="item.amount"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage,$index);" only-number /> 
 						
 					</td>
-					<td style="">
+					<td >
 					<center>
-						<a href="#" ng-click="addRow($index)"> 
+						<a href="javascript:void(0)" ng-click="addRow($index)"> 
 							<i  class="fa fa-plus myCursorPointer" style="font-size:20px;"   ></i>
 						</a>
 						&nbsp;
-						<a  class="text-danger" href="#" ng-click="removeRow($index)" ng-if="$index!=0">
+						<a  class="text-danger" href="javascript:void(0)" ng-click="removeRow($index)" ng-if="$index!=0">
 							<i  class="fa fa-times myCursorPointer" style="font-size:20px;" title="Delete"> </i>
 						</a>
 					</center>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5"></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td colspan="5"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
 				</tr>
+			</tbody>
+			<tfoot>
 				<tr>
 					<td style="text-align:right" title="Extra Charge" colspan="6" ><!--span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span--><strong>E.Charge<strong></td>
 					<td ng-init="quickBill.extraCharge = 0">
@@ -302,10 +296,10 @@
 						</select>
 						<input  type="text" ng-model="quickBill.totalDiscount"  class="form-control input-sm" style="padding-left: 5px;padding-right: 5px;width:40%;" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();advanceValueUpdate()"  ng-attr-max="{{quickBill.totalDiscounttype == 'percentage' && '100' || ''}}" only-number /> 
 					</td>
-					<td colspan="3" style="text-align:right" >{{quickBill.tax = getTotalTax() ? (getTotalTax() | setDecimal: noOfDecimalPoints) : 0}}</td>
-					<td style="text-align:right">{{total = getTotal() ? (getTotal() | setDecimal: noOfDecimalPoints) : 0}}</td>
+					<td colspan="3" style="text-align:right" ng-bind="quickBill.tax = getTotalTax() ? (getTotalTax() | setDecimal: noOfDecimalPoints) : 0"></td>
+					<td style="text-align:right" ng-bind="total = getTotal() ? (getTotal() | setDecimal: noOfDecimalPoints) : 0" ></td>
 					<!--td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td-->
-					<td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = (totalTable | setDecimal: noOfDecimalPoints)}}<span>
+					<td style="text-align:right"><span style="visibility:hidden" ng-bind="grandTotalTable = (totalTable | setDecimal: noOfDecimalPoints)" ><span>
 					</td>
 				</tr>
 				<tr ng-if="saleType != 'QuotationPrint'">
@@ -317,9 +311,9 @@
 						</span>
 					</td>
 					<td style="text-align:left"> <strong> Balance </strong></td>
-					<td style="text-align:right" >{{quickBill.balance = (total - (quickBill.advance ? quickBill.advance*1 : 0) | setDecimal: noOfDecimalPoints)}}</td>
+					<td style="text-align:right" ng-bind="quickBill.balance = (total - (quickBill.advance ? quickBill.advance*1 : 0) | setDecimal: noOfDecimalPoints)" ></td>
 				</tr>
-			</tbody>
+			</tfoot>
 		</table>
 	</div>
 	
@@ -445,8 +439,8 @@
 	 <!--object  data="{{content}}" type="application/pdf" id="printMyPdf" ></object-->
    <!-- END panel-->
 </div>
-	<div   style="display:none" >
-		<div id="dwtcontrolContainer" style="display:block"></div>
+	<div id="myTwain">
+		<div id="dwtcontrolContainer" ></div>
 	</div>
 <script type="text/ng-template" id="errorRequired">
 	<span class="text-danger" ng-message="required">{{errorMessage.require}}</span>

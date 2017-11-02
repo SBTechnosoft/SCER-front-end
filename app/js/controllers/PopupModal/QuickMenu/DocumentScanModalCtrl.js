@@ -1,13 +1,4 @@
 
-/**=========================================================
- * Module: ModalController
- * Provides a simple way to implement bootstrap modals from templates
- =========================================================*/
-//$.getScript('app/vendor/ng-table/ng-table.min.js');
-//$.getScript('app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.initiate.js');
-//$.getScript('app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js');
-
-
 App.controller('documentScanController',documentScanController);
 
 function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,apiPath,$timeout,$state,$templateCache,$window,imageUrl) {
@@ -79,6 +70,9 @@ function documentScanController($scope, $modalInstance,$rootScope,$http,apiCall,
 //	$scope.myImage='https://raw.githubusercontent.com/CrackerakiUA/ui-cropper/master/screenshots/live.jpg';
 	 $scope.myImage = imageUrl;
     $scope.myCroppedImage='';
+
+   
+    	console.log(imageUrl);
 
 	/** End  **/
 }

@@ -21,7 +21,7 @@ App.directive('portlet', ["$timeout", function($timeout) {
 
       element.sortable({
         connectWith:          '[portlet]',
-        items:                'div.panel',
+        items:                'tr.myTable',
         handle:               '.portlet-handler',
         opacity:              0.7,
         placeholder:          'portlet box-placeholder',

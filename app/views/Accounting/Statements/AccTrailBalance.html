@@ -59,9 +59,9 @@
 			 <tbody >
 				<tr  ng-repeat="user in myArrayData | filter:query" >
 				
-					<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user.ledgerId)" href=""  tabindex="{{::$index+1}}" style="text-transform:capitalize"    bo-bind="user.ledgerName" ></a></td>
-					<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-center" bo-bind="user.debitAmount  | number: noOfDecimalPoints" ></td>
-					<td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:right" header-class="text-center" bo-bind="user.creditAmount  | number: noOfDecimalPoints" ></td>
+					<td  sortable="'ledgerName'" filter="{ 'ledgerName': 'text' }"  ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user.ledgerId)" href=""  tabindex="{{::$index+1}}" style="text-transform:capitalize"    ng-bind="user.ledgerName" ></a></td>
+					<td  sortable="'debitAmount'" filter="{ 'debitAmount': 'text' }" style="text-align:right" header-class="text-center" ng-bind="user.debitAmount  | number: noOfDecimalPoints" ></td>
+					<td  sortable="'creditAmount'" filter="{ 'creditAmount': 'text' }" style="text-align:right" header-class="text-center" ng-bind="user.creditAmount  | number: noOfDecimalPoints" ></td>
 					
 				</tr>
 			 </tbody>
@@ -111,11 +111,11 @@
 			 <tbody  >
 				<tr data-ng-repeat="user in mySecondArrayData | filter:query" >
 					
-					<td ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user[1].ledgerId)" style="text-transform:capitalize" href="" tabindex="1" bo-if="user[1].ledgerName" bo-bind="user[1].ledgerName"></a></td>
-					<td style="text-align:right" header-class="text-center" bo-bind="user[1].debitAmount  | number: noOfDecimalPoints"></td>
+					<td ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user[1].ledgerId)" style="text-transform:capitalize" href="" tabindex="1" ng-if="user[1].ledgerName" ng-bind="user[1].ledgerName"></a></td>
+					<td style="text-align:right" header-class="text-center" ng-bind="user[1].debitAmount  | number: noOfDecimalPoints"></td>
 					
-					<td ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user[0].ledgerId)" style="text-transform:capitalize" href=""  tabindex="1" bo-if="user[0].ledgerName" bo-bind="user[0].ledgerName"></a></td>
-					<td style="text-align:right" header-class="text-center" bo-bind="user[0].creditAmount  | number: noOfDecimalPoints"></td>
+					<td ><a class="myCursorPointer" ng-click="goToLedgerTransaction(user[0].ledgerId)" style="text-transform:capitalize" href=""  tabindex="1" ng-if="user[0].ledgerName" ng-bind="user[0].ledgerName"></a></td>
+					<td style="text-align:right" header-class="text-center" ng-bind="user[0].creditAmount  | number: noOfDecimalPoints"></td>
 					
 					
 				</tr>

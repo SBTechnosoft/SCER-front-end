@@ -106,10 +106,10 @@
 			<script type="text/ng-template" id="customTemplate.html">
 				<a><span ng-bind-html="match.label | typeaheadHighlight:query"></span> ({{match.model.color}} | {{match.model.size}})</a>
 			</script>
-			<tbody >
-				<tr id="addAfter" ng-repeat="item in form.AccBillTable track by $index" data-ng-class="app.tableAnimation">
-					<td style="text-align:center">
-						<strong>{{::$index+1}}</strong>
+			<tbody portlet="" >
+				<tr id="panelPortlet{{$index+1}}" ng-repeat="item in form.AccBillTable track by $index" class="myTable" data-ng-class="app.tableAnimation">
+					<td style="text-align:center" class="portlet-handler">
+						<strong ng-bind="$index+1"></strong>
 					</td>
 					<td>
 						<div class="input-group mytypeDrop">
@@ -161,11 +161,11 @@
 					</td>
 					<td style="">
 					<center>
-						<a href="#" ng-click="addRow($index)"> 
-							<i  class="fa fa-plus myCursorPointer" style="font-size:20px;"   ></i>
+						<a href="javascript:void(0)" ng-click="addRow($index)">
+							<i  class="fa fa-plus myCursorPointer" style="font-size:20px;"  ></i>
 						</a>
 						&nbsp;
-						<a  class="text-danger" href="#" ng-click="removeRow($index)" ng-if="$index!=0">
+						<a  class="text-danger" href="javascript:void(0)" ng-click="removeRow($index)" ng-if="$index!=0">
 							<i  class="fa fa-times myCursorPointer" style="font-size:20px;" title="Delete"> </i>
 						</a>
 					</center>
@@ -182,6 +182,8 @@
 					<td></td>
 					<td></td>
 				</tr>
+			</tbody>
+			<tfoot>
 				<tr>
 					<td style="text-align:right" title="Extra Charge" colspan="6" ><span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span><strong>E.Charge<strong></td>
 					<td ng-init="purchaseBill.extraCharge = 0">
@@ -214,7 +216,7 @@
 					<td style="text-align:left"> <strong> Balance </strong></td>
 					<td style="text-align:right" >{{purchaseBill.balanceTable = (totalTable - (purchaseBill.advance ? purchaseBill.advance*1 : 0) | setDecimal: noOfDecimalPoints)}}</td>
 				</tr>
-			</tbody>
+			</tfoot>
 		</table>
 	</div>
 	

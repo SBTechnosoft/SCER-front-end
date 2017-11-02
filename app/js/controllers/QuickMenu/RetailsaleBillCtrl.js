@@ -1375,7 +1375,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			alert('Sorry, something went wrong')
 		});
 		/** End **/
-					
 	}
 	
 	
@@ -1578,12 +1577,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		else{
 			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
 		}
-
 	};
 
-	
 	/** Next Previews **/
-	
 		$scope.goToNextPrevious = function(nextPre){
 			formdata= undefined;
 				
@@ -2089,8 +2085,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			getSetFactory.set(response);
 			$scope.openProduct('lg',index);
 		});
-		
-		
 	}
   /**
 	Product Redirect Edit
@@ -2100,8 +2094,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   Product Model Start
   **/
   $scope.openProduct = function (size,index) {
-	
-	
+
 	if (Modalopened) return;
 	
 	toaster.pop('wait', 'Please Wait', 'popup opening....',600000);
@@ -2218,7 +2211,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		var modalInstance = $modal.open({
 		  templateUrl: 'app/views/QuickMenu/DocumentScan/DWT_Upload_Download_Demo.html?buster='+Math.random(),
 		  controller: documentScanController,
-		  size: 'lg',
+		  size: 'flg',
 		  resolve:{
 			  imageUrl: function(){
 				  return imageUrl;
@@ -2263,7 +2256,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					
 			  }
 			toaster.pop('success',data.length+' Document Scanned','');
-				
 		}
 			  
 			Modalopened = false;
@@ -2296,16 +2288,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   }
   
   $scope.SetBarcodData = function(Bcode){
-	  
-	
 					
 					//console.log('Code 128');
-					
 					//var proBarcode = result.code;
 					var proBarcode = Bcode;
 					
 					//Api
-						
 						var headerSearch = {'Content-Type': undefined,'productCode':proBarcode};
 				
 						apiCall.getCallHeader(apiPath.getAllProduct,headerSearch).then(function(response){
@@ -2323,8 +2311,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 										if(companyId == response.company.companyId){
 											
 											if(arrayData.productId == response.productId){
-												
-												
 												toaster.clear();
 												toaster.pop('info', 'Product Already Selected', '');
 								
@@ -2364,8 +2350,6 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 												//console.log(arrayData);
 												break;
 											}
-
-											
 										}
 										
 										var nextindex = parseInt(cnt)-1;
@@ -2388,13 +2372,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 										}
 								}
 							/** End loop **/
-							
 						});
-								
 					//End Api
-					
-					
-				
   }
   
 $scope.presssuburb = function(event){
@@ -2405,11 +2384,12 @@ $scope.presssuburb = function(event){
 			$scope.SetBarcodData(event.target.value);
 	 }
 }
-	
+	$('#myTwain').hide();
+	var DWObject;
 	 $scope.DWT_AcquireImage= function(){
 			
-			var DWObject = $window.Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-			
+			//var DWObject = Dynamsoft.WebTwainEnv.CreateDWTObject('dwtcontrolContainer');
+			DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
 				 DWObject.RemoveAllImages();
              // var DWObject = Dynamsoft.WebTwainEnv;
 			//DWObject.IfDisableSourceAfterAcquire = true; 
@@ -2419,23 +2399,18 @@ $scope.presssuburb = function(event){
 						DWObject.OpenSource();
 						DWObject.IfShowUI = false;
 						// DWObject.IfFeederEnabled = true;
-
 						// DWObject.IfAutoFeed = true;
-
 					 DWObject.XferCount = -1;
 					//DWObject.PageSize = EnumDWT_CapSupportedSizes.TWSS_USLEGAL;
 					// DWObject.Unit = EnumDWT_UnitType.TWUN_INCHES;
 					//DWObject.SetImageLayout(0, 0, 5, 5);
+					DWObject.Resolution = 200;
 					 DWObject.AcquireImage(); //using ADF  for scanning
-
-					
 
 						DWObject.IfShowFileDialog = false;
 
-						 if (DWObject.ErrorCode != 0) {  
-
+						 if (DWObject.ErrorCode != 0) {
 							 alert (DWObject.ErrorString);
-
 						 }
 						 
 						DWObject.RegisterEvent("OnPostAllTransfers", function () {
@@ -2443,13 +2418,10 @@ $scope.presssuburb = function(event){
 							if(imageUrl != ''){
 								$scope.openScanPopup(imageUrl);
 							}
-							
 							//console.log(imageUrl);
 						 });
 				}
     }
-
-	
 	 /**
 		History Modal 
 		**/
@@ -2483,20 +2455,16 @@ $scope.presssuburb = function(event){
 				});
 
 				modalInstance.result.then(function () {
-				 console.log('OK');
+				 //console.log('OK');
 					toaster.clear();
 					Modalopened = false;
-					draftOrSalesOrder === undefined ? $scope.EditAddBill() : $scope.EditAddBill('copy','draft');
+					draftOrSalesOrder === undefined || draftOrSalesOrder === 'SalesOrder' ? $scope.EditAddBill() : $scope.EditAddBill('copy','draft');
 					$anchorScroll();
 				}, function () {
-					
-					console.log('Cancel');
-					toaster.clear();	
-					
+					//console.log('Cancel');
+					toaster.clear();
 					Modalopened = false;
-				  
 				});
-		
 		};
 		
 		/**
