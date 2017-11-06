@@ -687,7 +687,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/WholesaleBill',
 				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 				controller: 'RetailsaleBillController as form',
-				resolve: angular.extend(requireDeps('taxInvoice','twain','toaster','angular-chosen','ngTable','uiCropper','moment'),{
+				resolve: angular.extend(requireDeps('taxInvoice','twain','toaster','angular-chosen','ngTable','uiCropper','moment','jquery-ui'),{
 					saleType: function(){
 						return 'WholesaleBill';
 					}
@@ -705,7 +705,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/QuotationPrint',
 				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 				controller: 'RetailsaleBillController as form',
-				resolve: angular.extend(requireDeps('taxInvoice','angular-chosen','toaster','ngTable'),{
+				resolve: angular.extend(requireDeps('taxInvoice','angular-chosen','toaster','ngTable','jquery-ui'),{
 					saleType: function(){
 						return 'QuotationPrint';
 					}
@@ -720,7 +720,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
                     saleType: function(){
                         return 'SalesOrder';
                     }
-                },requireDeps('taxInvoice','twain','toaster','angular-chosen','ngTable','uiCropper','moment'))
+                },requireDeps('taxInvoice','twain','toaster','angular-chosen','ngTable','uiCropper','moment','jquery-ui'))
             })
 		/*** End Quick Menu ***/
 		

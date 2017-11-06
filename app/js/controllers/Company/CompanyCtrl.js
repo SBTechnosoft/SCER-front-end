@@ -249,7 +249,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		for(var n=0;n<qty;n++){
 
 			mywindow.document.write("<td style='position:relative;float:left; width: 280px;padding-top: 23px;padding-left:35px;display: inline-block;font-family: Microsoft New Tai Lue'> ");
-			mywindow.document.write("<span style='font-size:12px;text-transform:uppercase;'><b>"+pData.companyName+"</b></span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.address1+"</span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.address2+"</span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.cityName+"- PIN "+pData.pincode+"</span><br /><span style='font-size:12px;text-transform:uppercase;'>"+pData.customerCare+"</span>");
+			mywindow.document.write("<span style='font-size:12px;text-transform:uppercase;'><b>"+pData.companyName+"</b></span><br /><span style='font-size:12px;text-transform:uppercase;margin-left:5px;'>"+pData.address1+"</span><br /><span style='font-size:12px;text-transform:uppercase;margin-left:5px;'>"+pData.address2+"</span><br /><span style='font-size:12px;text-transform:uppercase;margin-left:5px;'>"+pData.cityName+"- PIN "+pData.pincode+"</span><br /><span style='font-size:12px;text-transform:uppercase;margin-left:5px;'>"+pData.customerCare+"</span>");
 			
 			if(n == qty-1){
 				

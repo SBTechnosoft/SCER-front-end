@@ -3,7 +3,21 @@
 //$.getScript('app/views/QuickMenu/DocumentScan/Resources/dynamsoft.webtwain.config.js');
 //$.getScript('app/views/QuickMenu/DocumentScan/Scripts/script.js');
 
-angular.module('taxInvoice',[]).controller('RetailsaleBillController', RetailsaleBillController);
+var taxInvoice = angular.module('taxInvoice',[]);
+
+taxInvoice.directive('stateList',function(){
+	return{
+		required:'E',
+		scope:{
+			dataSet:'=dataSet',
+			selectedState:'@',
+			changeFunction: '&'
+		},
+		template:'<select chosen="" data-ng-model="selectedState" data-ng-options="s.stateName for s in dataSet track by s.stateAbb" ng-change="changeFunction" class="form-control input-sm chosen-select" ng-required="true" ></select>'
+	}
+});
+
+taxInvoice.controller('RetailsaleBillController', RetailsaleBillController);
 
 function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$window,$modal,validationMessage,saleType,productArrayFactory,getSetFactory,toaster,apiResponse,$anchorScroll,maxImageSize,$sce,$templateCache,getLatestNumber,productFactory,stateCityFactory,$filter,$state,clientFactory,fetchArrayService,bankFactory) {
   'use strict';
@@ -419,7 +433,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			//console.log($scope.quickBill.EditBillData);
 			getSetFactory.blank();
 			
-			draft !== null ? formdata.set('isDraft',$scope.quickBill.EditBillData.saleId) : '';
+			draft == 'draft' ? formdata.set('isDraft',$scope.quickBill.EditBillData.saleId) : '';
+			draft == 'SalesOrder' ? formdata.set('isSalesOrderUpdate','ok') : '';
 
 			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
 			
@@ -1129,12 +1144,18 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		var headerData = {'Content-Type': undefined};
 	
 		if($scope.saleType == 'WholesaleBill' || $scope.saleType == 'SalesOrder'){
-			headerData.salesType = 'whole_sales';
 			if(generate == 'preprint'){
 				headerData.operation = 'preprint';
 			}
 			if($scope.saleType == 'SalesOrder'){
 				headerData.isSalesOrder = 'ok';
+				//headerData.isSalesOrderUpdate = 'ok';
+			}
+			else if($scope.saleType == 'WholesaleBill'){
+				headerData.salesType = 'whole_sales';
+			}
+			else if(formdata.has('isSalesOrderUpdate')){
+				headerData.isSalesOrderUpdate = 'ok';
 			}
 		}
 		
@@ -2458,7 +2479,7 @@ $scope.presssuburb = function(event){
 				 //console.log('OK');
 					toaster.clear();
 					Modalopened = false;
-					draftOrSalesOrder === undefined || draftOrSalesOrder === 'SalesOrder' ? $scope.EditAddBill() : $scope.EditAddBill('copy','draft');
+					draftOrSalesOrder == undefined || draftOrSalesOrder == 'SalesOrder' ? $scope.EditAddBill('','SalesOrder') : $scope.EditAddBill('copy','draft');
 					$anchorScroll();
 				}, function () {
 					//console.log('Cancel');

@@ -1,9 +1,31 @@
+//Directive
+App.directive('ledgerlist', function() {
+    var directive = {};
 
-/**=========================================================
- * Module: AddStaffController.js
- * Controller for input components
- =========================================================*/
+    directive.restrict = 'E';
 
+    directive.template = '<table class="table  table-striped" >'
+    					+ '<tr data-ng-repeat="item in ledgerdata | filter:query track by item.ledgerId" >'
+						+ '<td >'
+					 +'<span style="letter-spacing: .025em;font-weight: bold;cursor:pointer" ng-click="viewLedgerDetails(item.ledgerId)"> <i class="sidebar-item-icon icon-layers" ></i> {{::item.ledgerName}}</span>'
+				+'</td>'
+				+'<td>'
+					+'<i  title="Edit" ng-click="editLedgerData(item.ledgerId)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#17A1E5"> </i>'
+				+'</td>'
+				+'<td>'
+					+'<i  title="View" ng-click="viewReadOlny(item.ledgerId)" class="fa fa-list-alt myCursorPointer" style="font-size:17px;color:#17A1E5"></i>'
+				+'</td>'
+			+'</tr>'
+		+'</table>';
+
+	directive.scope = {
+        ledgerdata : "=ledgerdata"
+    }
+
+    return directive;
+});
+
+//Controller
 App.controller('AccLedgerController', AccLedgerController);
 
 function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage,stateCityFactory,fetchArrayService) {
@@ -212,9 +234,9 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 	
 	$scope.changeBank = function(key,value){
 		formdata.set(key,value);
-		apiCall.getCall(apiPath.getBankBranch+value).then(function(response){
+		apiCall.getCall(apiPath.getAllBankBranch+value).then(function(response){
 			vm.bankBranchDrop=response;
-		})
+		});
 	}
 
 	$scope.changeBankBranch = function(key,value){

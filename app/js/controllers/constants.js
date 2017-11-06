@@ -126,7 +126,7 @@ App
 	'postJrnl': 'accounting/journals',
 	'getAllClient': 'clients',
   'getAllBank': 'banks',
-	'getAllBankBranch': 'bankBranch',
+	'getAllBankBranch': 'bankBranch/',
 	'postBill': 'accounting/bills',
 	'postQuotationBill': 'accounting/quotations',
 	'getLatestInvoice1': 'settings/invoice-numbers/company/',

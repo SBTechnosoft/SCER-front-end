@@ -208,7 +208,7 @@
 				<a><span ng-bind-html="match.label | typeaheadHighlight:query"></span> ({{match.model.color}} | {{match.model.size}})</a>
 			</script>
 			<tbody portlet="" >
-				<tr id="panelPortlet{{$index+1}}" ng-repeat="item in form.AccBillTable track by $index" data-ng-class="app.tableAnimation">
+				<tr id="panelPortlet{{$index+1}}" ng-repeat="item in form.AccBillTable track by $index" class="myTable" data-ng-class="app.tableAnimation">
 					<td style="text-align:center" class="portlet-handler" >
 						<strong ng-bind="$index+1"></strong>
 					</td>
@@ -266,11 +266,11 @@
 					</td>
 					<td >
 					<center>
-						<a href="javascript:void(0)" ng-click="addRow($index)"> 
+						<a ng-click="addRow($index)"> 
 							<i  class="fa fa-plus myCursorPointer" style="font-size:20px;"   ></i>
 						</a>
 						&nbsp;
-						<a  class="text-danger" href="javascript:void(0)" ng-click="removeRow($index)" ng-if="$index!=0">
+						<a  class="text-danger"  ng-click="removeRow($index)" ng-if="$index!=0">
 							<i  class="fa fa-times myCursorPointer" style="font-size:20px;" title="Delete"> </i>
 						</a>
 					</center>
@@ -299,7 +299,7 @@
 					<td colspan="3" style="text-align:right" ng-bind="quickBill.tax = getTotalTax() ? (getTotalTax() | setDecimal: noOfDecimalPoints) : 0"></td>
 					<td style="text-align:right" ng-bind="total = getTotal() ? (getTotal() | setDecimal: noOfDecimalPoints) : 0" ></td>
 					<!--td style="text-align:right"><span style="visibility:hidden">{{grandTotalTable = ((totalTable -- quickBill.tax) + (quickBill.extraCharge ? quickBill.extraCharge*1 : 0) | setDecimal: noOfDecimalPoints)}}<span></td-->
-					<td style="text-align:right"><span style="visibility:hidden" ng-bind="grandTotalTable = (totalTable | setDecimal: noOfDecimalPoints)" ><span>
+					<td style="text-align:right"><span style="visibility:hidden" ng-bind="grandTotalTable = (total | setDecimal: noOfDecimalPoints)" ><span>
 					</td>
 				</tr>
 				<tr ng-if="saleType != 'QuotationPrint'">
