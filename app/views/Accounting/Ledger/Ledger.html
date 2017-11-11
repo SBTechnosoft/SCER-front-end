@@ -242,23 +242,23 @@
            <div class="form-group">
               <label  class="col-sm-1 control-label">Bank</label>
               <div class="col-sm-5">
-                 <select chosen="" id="selectId_chzn" data-ng-model="ledgerForm.bankName" data-ng-options="s.bankName for s in form.bankDrop track by s.bankId" class="form-control input-sm chosen-select" size="5" ng-change="changeBank('bankName',ledgerForm.bankName.bankId)" ng-disabled="form.disableValue" tabindex="2" ></select>
+                 <select chosen="" id="selectId_chzn" ng-model="ledgerForm.bankName" ng-options="s.bankName for s in form.bankDrop track by s.bankId" class="form-control input-sm chosen-select" size="5" ng-change="changeBank('bankId',ledgerForm.bankName.bankId)" ng-disabled="form.disableValue" tabindex="2" ></select>
               </div>
 			  
 			   <label  class="col-sm-1 control-label">Branch</label>
               <div class="col-sm-5">
-                  <select chosen="" data-ng-model="ledgerForm.bankBranch" data-ng-options="s for s in form.bankBranchDrop" class="form-control input-sm chosen-select" ng-change="changeBankBranch('bankBranch',ledgerForm.bankBranch)" ng-disabled="form.disableValue" tabindex="2" ></select>
+                  <select chosen="" ng-model="ledgerForm.bankBranch" ng-options="s.branchName for s in form.bankBranchDrop track by s.bankDtlId" class="form-control input-sm chosen-select" ng-change="changeBankBranch('bankDtlId',ledgerForm.bankBranch)" ng-disabled="form.disableValue" tabindex="2" ></select>
               </div>
             </div>
             <div class="form-group">
                 <label  class="col-sm-1 control-label">IFSC</label>
               <div class="col-sm-5">
-                 <input ng-model="ledgerForm.bankIfsc" tabindex="2" ng-change="changeLedgerData('bankIfsc',ledgerForm.bankIfsc)"  masked="" type="text" ng-disabled="form.disableValue" placeholder="IFSC Code" class="form-control"   />
+                 <input ng-model="ledgerForm.bankIfsc" tabindex="2"  masked="" type="text" ng-disabled="true" placeholder="IFSC Code" class="form-control"   />
               </div>
 
               <label  class="col-sm-1 control-label">MICR</label>
               <div class="col-sm-5">
-                 <input ng-model="ledgerForm.bankMicr" tabindex="2" ng-change="changeLedgerData('bankMicr',ledgerForm.bankMicr)"  masked="" type="text" ng-disabled="form.disableValue" placeholder="MICR Code" class="form-control"   />
+                 <input ng-model="ledgerForm.bankMicr" tabindex="2" ng-change="changeLedgerData('micrCode',ledgerForm.bankMicr)"  masked="" type="text" ng-disabled="form.disableValue" placeholder="MICR Code" class="form-control"   />
               </div>
 
            	</div>
@@ -299,7 +299,7 @@
 	  </div>
       <div class="panel-body" style="overflow-y: scroll !important;
 max-height: calc(100vh - 300px) !important;">
-		<ledgerlist ledgerdata="form.allLedgerData"></ledgerlist>
+		<ledgerlist ledgerdata="form.allLedgerData" querydata="query" viewledgerdetail="viewLedgerDetails(ledgerId)" viewdata="viewReadOlny(ledgerId)" editdata="editLedgerData(ledgerId)" ></ledgerlist>
       </div>
    </div>
 </div>

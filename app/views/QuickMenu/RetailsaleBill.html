@@ -266,11 +266,11 @@
 					</td>
 					<td >
 					<center>
-						<a ng-click="addRow($index)"> 
+						<a href="javascript:void(0)" ng-click="addRow($index)"> 
 							<i  class="fa fa-plus myCursorPointer" style="font-size:20px;"   ></i>
 						</a>
 						&nbsp;
-						<a  class="text-danger"  ng-click="removeRow($index)" ng-if="$index!=0">
+						<a href="javascript:void(0)" class="text-danger"  ng-click="removeRow($index)" ng-if="$index!=0">
 							<i  class="fa fa-times myCursorPointer" style="font-size:20px;" title="Delete"> </i>
 						</a>
 					</center>
@@ -387,7 +387,7 @@
 			</div>
 			
 			<div class="col-sm-12" >
-				<div  ng-click="openInNextTab(erpPath+item.documentUrl+item.documentName)"  ng-repeat="item in quickBill.documentData"   ng-if="item.documentFormat != 'pdf'" class="imageAncher" data-ng-class="app.tableAnimation" class="myCursorPointer" >
+				<div  ng-click="openInNextTab(erpPath+item.documentUrl+item.documentName)"  ng-repeat="item in quickBill.documentData track by item.documentId"   ng-if="item.documentFormat != 'pdf'" class="imageAncher" data-ng-class="app.tableAnimation" class="myCursorPointer" >
 					<i class="fa fa-window-close myCrossDesign myCursorPointer" data-ng-class="app.tableAnimation" ng-click="documentDelete(item);$event.stopPropagation();"  ng-if="!item.ShowConfirm" ></i>
 					<i class="fa fa-check documentRight myCursorPointer" data-ng-class="app.tableAnimation" ng-click="documentDeleteConfirm(item,$index);$event.stopPropagation()" ng-if="item.ShowConfirm" ></i>
 					<i class="fa fa-times documentCross myCursorPointer" data-ng-class="app.tableAnimation" ng-click="documentDelete(item);$event.stopPropagation();" ng-if="item.ShowConfirm" ></i>

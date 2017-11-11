@@ -435,7 +435,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			
 			draft == 'draft' ? formdata.set('isDraft',$scope.quickBill.EditBillData.saleId) : '';
 			draft == 'SalesOrder' ? formdata.set('isSalesOrderUpdate','ok') : '';
-
+			
 			var jsonProduct = angular.fromJson($scope.quickBill.EditBillData.productArray);
 			
 			vm.disableCompany = false;
@@ -452,8 +452,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 						vm.disableCompany = true;
 					}
 			});
-			
-			var clientDataIndex = clientFactory.getSingleClient($scope.quickBill.EditBillData.client.clientId);
+
+			var clientDataIndex;
+
+			clientFactory.getSingleClient($scope.quickBill.EditBillData.client.clientId).then(function(docData){
+					clientDataIndex = docData;
+			});
 			//console.log(clientDataIndex);
 			// var clientDataIndex = vm.clientSuggest.findIndex(x => x.clientId==$scope.quickBill.EditBillData.client.clientId);
 			// var clientAllData = vm.clientSuggest;
@@ -476,12 +480,11 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 							return options.documentFormat == "pdf";
 						}).reduce(function(max, x) {
 							return x.documentId > max.documentId ? x : max;
-						},0);
+						});
 						$scope.quickBill.EditBillData.lastPdf = articleWithMaxNumber || {};
 					}
 				}
-				
-				
+
 				setTimeout(function(){ 
 				
 					var clientUpdateData = clientDataIndex;
@@ -1151,11 +1154,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				headerData.isSalesOrder = 'ok';
 				//headerData.isSalesOrderUpdate = 'ok';
 			}
+			else if($scope.saleType == 'WholesaleBill' && formdata.has('isSalesOrderUpdate')){
+				headerData.isSalesOrderUpdate = 'ok';
+				formdata.delete('isSalesOrderUpdate');
+			}
 			else if($scope.saleType == 'WholesaleBill'){
 				headerData.salesType = 'whole_sales';
-			}
-			else if(formdata.has('isSalesOrderUpdate')){
-				headerData.isSalesOrderUpdate = 'ok';
 			}
 		}
 		
@@ -1294,7 +1298,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			else{
 				toaster.clear();
 				if(apiResponse.noContent == data){
-					
+					console.log($scope.quickBill.EditBillData.lastPdf);
 					if(angular.equals($scope.quickBill.EditBillData.lastPdf,{}) || generate == 'not'){
 						toaster.pop('info', 'Plz Change Your Data');
 					}

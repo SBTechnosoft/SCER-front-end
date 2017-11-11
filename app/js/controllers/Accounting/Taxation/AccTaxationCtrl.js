@@ -28,7 +28,6 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 		apiCall.getCall(apiPath.getAllCompany+'/'+$scope.filterCompanyId).then(function(res){
 			
 			$scope.displayCompany = res.companyName;
-			
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',30000);
 			

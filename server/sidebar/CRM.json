@@ -7,7 +7,8 @@
 		  {"text": "All", "sref": "app.CrmAllJobcard", "translate": "" },
 		  {"text": "Add/Edit", "sref": "app.CrmJobcard", "translate": "" }
 		],
-		"translate": ""
+		"translate": "",
+    "permission": "jobcard"
   },
   {
     "text": "Clients",
@@ -16,6 +17,7 @@
 		"subnav": [
 		  {"text": "List of Clients", "sref": "app.CrmClientFilterView", "translate": "" }
 		],
-		"translate": ""
+		"translate": "",
+    "permission": "clients"
   }
 ]

@@ -61,7 +61,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       job:      'Developer',
       picture:  'app/img/user/08.jpg'
     };
-	
+
 	$rootScope.googleSiteKey = googleSiteKey;
 	
 	$rootScope.erpPath = hostUrl.siliconbrain;
@@ -115,5 +115,12 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	$rootScope.accView.fromDate = accModifyDate; // FromDate
 	$rootScope.accView.toDate = accModifyDate; // TODate
 	
+	//Route Change Event to check User Authotize and permission
+		//$rootScope.$on("$stateChangeStart", function(event, next, current) {
+	      //	if(next.name != "page.login"){
+
+	      	//}
+	   // });
+
   }
 ]);

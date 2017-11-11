@@ -292,7 +292,7 @@
 				</div>
 			</div>
 			<div class="col-sm-12" >
-				<a href="javascript:void(0)" ng-click="openInNextTab(erpPath+item.documentUrl+item.documentName)"  ng-repeat="item in purchaseBill.documentData"  class="imageAncher" ng-if="item.documentFormat != 'pdf'" data-ng-class="app.tableAnimation" >
+				<a href="javascript:void(0)" ng-click="openInNextTab(erpPath+item.documentUrl+item.documentName)"  ng-repeat="item in purchaseBill.documentData track by item.documentId"  class="imageAncher" ng-if="item.documentFormat != 'pdf'" data-ng-class="app.tableAnimation" >
 					<i class="fa fa-window-close myCrossDesign" data-ng-class="app.tableAnimation" ng-click="documentDelete(item);$event.stopPropagation();"  ng-if="!item.ShowConfirm" ></i>
 					<i class="fa fa-check documentRight" data-ng-class="app.tableAnimation" ng-click="documentDeleteConfirm(item,$index);$event.stopPropagation()" ng-if="item.ShowConfirm" ></i>
 					<i class="fa fa-times documentCross" data-ng-class="app.tableAnimation" ng-click="documentDelete(item);$event.stopPropagation();" ng-if="item.ShowConfirm" ></i>
@@ -301,7 +301,7 @@
 			</div>
 			
 		<div class="col-sm-12">
-			<div class="col-sm-7">
+			<div class="col-sm-6">
 				<button type="button" class="mr-sm mb-sm btn btn-sm pull-left" data-ng-class="app.theme.brand" ng-click="pop('not')" ng-disabled="formBill.$invalid || disableButton"  > <span ng-if="purchaseBill.EditBillData">Update</span> <span ng-if="!purchaseBill.EditBillData">Save</span> </button>
 				
 				<button type="button" class="mr-sm mb-sm btn btn-sm pull-left" data-ng-class="app.theme.brand"  ng-click="cancel()"   >New</button>
@@ -311,7 +311,7 @@
 				<button type="button" class="mr-sm mb-sm btn btn-sm pull-left"  data-ng-class="app.theme.brand" ng-if="purchaseBill.EditBillData"  ng-click="cancel('copy')"  >Copy</button>
 			</div>
 			
-			<div class="col-sm-5" >
+			<div class="col-sm-6" >
 				 <button type="button" class="mr-sm mb-sm btn btn-sm" data-ng-class="app.theme.brand" ng-click="DWT_AcquireImage();"  >Scan ({{countScannedDocumet}})</button>
 				 
 				<button type="button" class="mr-sm mb-sm btn btn-sm" ng-click="goToNextPrevious('first')"  data-ng-class="app.theme.brand"    > First </button>

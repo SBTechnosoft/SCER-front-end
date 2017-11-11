@@ -175,7 +175,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.Staff', {
             url: '/Staff',
             templateUrl: basepath('Staff/Staff.html'),
-            resolve: requireDeps('ngTable', 'ngTableExport','angular-chosen','toaster')
+            resolve: requireDeps('ngTable','angular-chosen','toaster')
         })
 		//Add Staff
 		.state('app.AddStaff', {
@@ -301,7 +301,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
             templateUrl: basepath('Inventory/Group/InvGroup.html'),
             resolve: requireDeps('angular-chosen','treeGrid','toaster','ngTableToCsv','importExcel','exportExcel')
         })
-		//Srock Summary
+		//Stock Summary
 		.state('app.InvStockSummary', {
             url: '/InvStockSummary',
             templateUrl: basepath('Inventory/StockSummary/InvStockSummary.html'),
@@ -584,7 +584,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccSalesTaxation',
 				templateUrl: basepath('Accounting/Taxation/AccSalesTaxation.html'),
 				controller: 'AccTaxationController as table',
-				resolve: angular.extend(requireDeps('angular-chosen','toaster'),{
+				resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
 					headerType: function(){
 						return 'salesTaxation';
 					}
@@ -606,7 +606,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccPurchaseTaxation',
 				templateUrl: basepath('Accounting/Taxation/AccPurchaseTaxation.html'),
 				controller: 'AccTaxationController as table',
-				resolve: angular.extend(requireDeps('angular-chosen','toaster'),{
+				resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
 					headerType: function(){
 						return 'purchaseTaxation';
 					}
@@ -628,7 +628,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccPurchaseDetailTaxation',
 				templateUrl: basepath('Accounting/Taxation/AccPurchaseDetailTaxation.html'),
 				controller: 'AccTaxationController as table',
-				resolve: angular.extend(requireDeps('angular-chosen','toaster'),{
+				resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
 					headerType: function(){
 						return 'purchaseDetailTaxation';
 					}
@@ -650,7 +650,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/AccDataGstReturn',
 				templateUrl: basepath('Accounting/Taxation/AccGstReturn.html'),
 				controller: 'AccTaxationController as table',
-				resolve: angular.extend(requireDeps('angular-chosen','toaster'),{
+				resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
 					headerType: function(){
 						return 'GST Return';
 					}
@@ -662,7 +662,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AccLedger', {
             url: '/AccLedger',
             templateUrl: basepath('Accounting/Ledger/Ledger.html'),
-            resolve: requireDeps('inputmask', 'angular-chosen','ngTable', 'ngTableExport','toaster')
+            resolve: requireDeps('inputmask', 'angular-chosen','ngTable','toaster')
         })
 		//Accounting Data Ledger
 		.state('app.AccDataLedger', {

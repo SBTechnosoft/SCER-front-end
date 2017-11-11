@@ -2,7 +2,8 @@
   {
     "text": "Dashboard",
     "sref": "app.dashboard",
-    "icon": "icon-bar-graph"
+    "icon": "icon-bar-graph",
+    "permission": "dashboard"
   },
   {
     "text": "Companies",
@@ -11,7 +12,8 @@
     "subnav": [
       {"text": "All", "sref": "app.Company" },
       {"text": "Modify", "sref": "app.AddCompany" }
-    ]
+    ],
+    "permission": "companies"
   },
   {
     "text": "Branches",
@@ -21,38 +23,45 @@
       {"text": "All", "sref": "app.Branch", "translate": "" },
       {"text": "Modify", "sref": "app.AddBranch", "translate": "" }
     ],
-    "translate": ""
+    "translate": "",
+    "permission": "branches"
   },
   {
     "text": "Staff",
     "sref": "#",
     "icon": "fa fa-users",
     "subnav": [
-      {"text": "All", "sref": "app.Staff", "translate": "" },
+      {"text": "All", "sref": "app.Staff", "translate": "","icon": "fa fa-users"},
       {"text": "Add/Modify", "sref": "app.AddStaff", "translate": "" }
     ],
-    "translate": ""
+    "translate": "",
+    "permission": "staff"
   },
   {
-    "type": "separator"
+    "type": "separator",
+    "permission": "invoiceNumber"
   },
   {
     "text": "Invoice#",
     "sref": "app.Invoice",
-    "icon": "icon-paper"
+    "icon": "icon-paper",
+    "permission": "invoiceNumber"
   },
   {
     "text": "Quotation#",
     "sref": "app.Quotation",
-    "icon": "fa fa-quora"
+    "icon": "fa fa-quora",
+    "permission": "quotationNumber "
   },
   {
     "text": "Template",
     "sref": "app.tempGeneral",
-    "icon": "fa fa-text-height"
+    "icon": "fa fa-text-height",
+    "permission": "template"
   },
   {
-    "type": "separator"
+    "type": "separator",
+    "permission": "setting"
   },
   {
     "text": "Setting",
@@ -64,6 +73,7 @@
       {"text": "Client Profession", "sref": "app.SettingClientProfession", "icon": "fa fa-suitcase", "translate": "" },
       {"text": "Reminders", "sref": "app.SettingReminders", "icon": "fa fa-bell-o", "translate": "" }
     ],
-    "translate": ""
+    "translate": "",
+    "permission": "setting"
   }
 ]

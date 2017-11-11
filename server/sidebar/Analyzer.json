@@ -5,6 +5,7 @@
 	"icon": "icon-paper",
 	"subnav": [
 	 {"text": "Police Report","sref": "app.ReportPolice","translate": "" }
-	]
+	],
+    "permission": "reports"
 	}
 ]

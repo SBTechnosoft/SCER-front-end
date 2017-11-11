@@ -7,7 +7,8 @@
       { "text": "View",  "sref": "app.AccViewSales", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccSales", "translate": "" },
       { "text": "Tax Invoice", "sref": "app.AccViewWholeSales", "translate": "" }
-    ]
+    ],
+    "permission":"sales"
   },
   {
     "text": "Purchase",
@@ -17,26 +18,31 @@
       { "text": "View",  "sref": "app.AccViewPurchase", "translate": "" },
       { "text": "Purchase", "sref": "app.AccPurchase", "translate": "" },
       { "text": "Tax Purchase", "sref": "app.AccTaxPurchase", "translate": "" }
-    ]
+    ],
+    "permission":"purchase"
   },
   {
     "text": "Sales Order",
     "sref": "app.AccSalesOrder",
-    "icon": "fa fa-credit-card"
+    "icon": "fa fa-credit-card",
+    "permission":"salesOrder"
   },
   {
     "text": "Quotation",
     "sref": "app.QuotationPrint",
-    "icon": "fa fa-quora"
+    "icon": "fa fa-quora",
+    "permission":"quotation"
   },
   {
-    "type": "separator"
+    "type": "separator",
+    "permission":"creditNote"
   },
   {
     "text": "Notes of Account",
     "sref": "#",
     "icon": "icon-ribbon",
-    "type": "heading"
+    "type": "heading",
+    "permission":"creditNote"
   },
   {
     "text": "Credit Notes",
@@ -45,7 +51,8 @@
     "subnav": [
       { "text": "View",  "sref": "app.AccViewCreditNotes", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccCreditNotes", "translate": "" }
-    ]
+    ],
+    "permission":"creditNote"
   },
   {
     "text": "Debit Notes",
@@ -54,10 +61,12 @@
     "subnav": [
       { "text": "View",  "sref": "app.AccViewDebitNotes", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccDebitNotes", "translate": "" }
-    ]
+    ],
+    "permission":"debitNote"
   },
   {
-    "type": "separator"
+    "type": "separator",
+    "permission":"specialJournal"
   },
   {
     "text": "Special Journal",
@@ -66,7 +75,8 @@
     "subnav": [
       { "text": "View",  "sref": "app.AccViewSpecialJrnl", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccSpecialJrnl", "translate": "" }
-    ]
+    ],
+    "permission":"specialJournal"
   },
   {
     "text": "Payment",
@@ -75,7 +85,8 @@
     "subnav": [
       { "text": "View",  "sref": "app.AccViewPayment", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccPayment", "translate": "" }
-    ]
+    ],
+    "permission":"payment"
   },
   {
     "text": "Receipt",
@@ -84,10 +95,12 @@
     "subnav": [
       { "text": "View",  "sref": "app.AccViewReceipt", "translate": "" },
       { "text": "Add/Edit", "sref": "app.AccReceipt", "translate": "" }
-    ]
+    ],
+    "permission":"receipt"
   },
   {
-    "type": "separator"
+    "type": "separator",
+    "permission":"statements"
   },
   {
     "text": "Statements",
@@ -98,7 +111,8 @@
       { "text": "Cash Flow",  "sref": "app.AccCashFlow", "translate": "" },
       { "text": "P&L", "sref": "app.AccProfitLoss", "translate": "" },
       { "text": "Balance Sheet", "sref": "app.AccBalanceSheet", "translate": "" }
-    ]
+    ],
+    "permission":"statements"
   },
   {
     "text": "Taxation",
@@ -109,11 +123,13 @@
       { "text": "PurchaseTax", "sref": "app.AccViewPurchaseTaxation", "translate": "" },
       { "text": "Purchase Details", "sref": "app.AccViewPurchaseDetailTaxation", "translate": "" },
       { "text": "GST Return", "sref": "app.AccViewGstReturn", "translate": "" }
-    ]
+    ],
+    "permission":"taxation"
   },
   {
     "text": "Ledgers",
     "sref": "app.AccLedger",
-    "icon": "icon-stack"
+    "icon": "icon-stack",
+    "permission":"ledger"
   }
 ]

@@ -489,14 +489,24 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 	billArrayTag.CompanyEmail = $scope.companyData.emailId == 'undefined' || $scope.companyData.emailId == '' ? '' : $scope.companyData.emailId;
 	billArrayTag.CompanyAdd = $scope.companyData.address1 == 'undefined' ? '' : $scope.companyData.address1 +' '+ $scope.companyData.address2 == 'undefined' ? '' : ', '+$scope.companyData.address2;
 	billArrayTag.CreditCashMemo = "CASH";
-	billArrayTag.BILLLABEL = $scope.saleType == 'QuotationPrint' ? 'Quotation' : 'Tax Invoice';
+	if($scope.saleType == 'QuotationPrint'){
+		billArrayTag.BILLLABEL = 'Quotation';
+	}
+	else if($scope.saleType == 'SalesOrder'){
+		billArrayTag.BILLLABEL = 'Sales Order';
+	}
+	else{
+		billArrayTag.BILLLABEL = 'Tax Invoice';
+	}
+	console.log($scope.billData);
+	//billArrayTag.BILLLABEL = $scope.saleType == 'QuotationPrint' ? 'Quotation' : 'Tax Invoice';
 	billArrayTag.ClientName = $scope.billData.clientName;
 	billArrayTag.INVID = $scope.billData.invoiceNumber;
 	billArrayTag.ChallanNo = " ";
 	billArrayTag.ChallanDate = " ";
-	billArrayTag.CLIENTADD = $scope.billData.fisrtAddress == '' || $scope.billData.fisrtAddress == undefined ? '' : $scope.billData.fisrtAddress;
+	billArrayTag.CLIENTADD = $scope.billData.address1 == '' || $scope.billData.address1 == undefined ? '' : $scope.billData.address1;
 	billArrayTag.OrderDate = fdate;
-	billArrayTag.Mobile = $scope.billData.BillContact;
+	billArrayTag.Mobile = $scope.billData.contactNo;
 	//billArrayTag.Total = $scope.grandTotal;
 	billArrayTag.ExtraCharge = $filter('number')(extraCharge,$scope.noOfDecimalPoints);
 	billArrayTag.Total = $filter('number')(totalAmount,$scope.noOfDecimalPoints);

@@ -15,7 +15,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 	var flag = 0;
 	
 	function filterDataForTable(){
-		console.time();
+		//console.time();
 		var count = data.length;
 		while(count--) {
 		  	var index = fetchArrayService.myIndexOfObject(vm.productCategoryData,data[count].product.productCategoryId,'productCategoryId');
@@ -38,7 +38,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			
 			data[count].qty = parseInt(data[count].qty);
 		}
-		console.timeEnd();
+		//console.timeEnd();
 	}
 
 	$scope.showProduct = function(){

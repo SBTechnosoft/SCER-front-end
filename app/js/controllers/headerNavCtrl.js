@@ -4,7 +4,7 @@
  * Controls the header navigation
  =========================================================*/
 
-App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse','$modal', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse,$modal) {
+App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateCache','$state','apiPath','apiCall','apiResponse','$modal','userPermisionKey', function($scope,$rootScope,$http,$templateCache,$state,apiPath,apiCall,apiResponse,$modal,userPermisionKey) {
   'use strict';
   
 	if($rootScope.$storage.authUser){
@@ -13,14 +13,28 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 		
 	}
 	else{
-		
 		$rootScope.$storage.$reset();
 		$state.go("page.login");
 	}
 	
   
-  $scope.headerMenuCollapsed = false;
-	
+  	$scope.headerMenuCollapsed = false;
+
+  	$scope.userPermisionKey = userPermisionKey;
+	//Permission Array
+	var permissionArray = $rootScope.$storage.permissionArray[0];
+
+	//Topbar Icon hide/Show by permission
+	//-----------------------------	
+		$scope.permissionCheck = function(name){
+			if(Object.keys(permissionArray[name]).length){
+				return true;
+			}
+		}
+
+		$scope.taxInvoicePermission = permissionArray[$scope.userPermisionKey.quickMenu]['taxInvoice'];
+		$scope.taxPurchasePermission = permissionArray[$scope.userPermisionKey.quickMenu]['taxPurchase'];
+
 	$scope.myClass = $rootScope.app.theme.sidebar;
 	
 	  $scope.toggleHeaderMenu = function() {
@@ -38,7 +52,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	
 		return 'active';
 	 }
-  
+
   $scope.getsidebar = function(){
 	  
 	  // $templateCache.removeAll();
@@ -57,16 +71,11 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	
       $http.get(menuURL)
         .success(function(items) {
-			//$rootScope.menuItems=[];
-           $rootScope.menuItems = items;
-		   //alert('done');
-		  
-		  
+          	$rootScope.menuItems = items;
+		  	$rootScope.permissionKey = $scope.userPermisionKey.accounting;
         })
         .error(function(data, status, headers, config) {
-
           alert('Failure loading menu');
-
         });
 		
 		 //$scope.toggleHeaderMenu();
@@ -74,10 +83,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
   };
   
   $scope.configuration = function(){
-	  // $templateCache.removeAll();
-	   // $templateCache.remove('/front-end/#/app/form-inputs');
-	    //$templateCache.removeAll();
-		 //location.reload();
+	
 		$scope.accountSelected = false;
 	  $scope.invetorySelected = false;
 	  $scope.stockSummarySelected = false;
@@ -90,17 +96,11 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	
       $http.get(menuURL)
         .success(function(items) {
-			//$rootScope.menuItems=[];
            $rootScope.menuItems = items;
-		   //alert('done');
-		   console.log(items);
-		   
-		  
+		   $rootScope.permissionKey = $scope.userPermisionKey.configuration;
         })
         .error(function(data, status, headers, config) {
-
           alert('Failure loading menu');
-
         });
 		
 	 //$scope.toggleHeaderMenu();
@@ -111,6 +111,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	  // GET Inventory Sidebar
 	  $scope.getInventory = function(){
 		 
+		 $state.go('app.InvStockSummary');
 		 $scope.accountSelected = false;
 	  $scope.invetorySelected = true;
 	  $scope.stockSummarySelected = false;
@@ -125,7 +126,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.success(function(items) {
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
-			   
+			   $rootScope.permissionKey = $scope.userPermisionKey.inventory;
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -153,7 +154,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.success(function(items) {
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
-			   
+			   $rootScope.permissionKey = $scope.userPermisionKey.pricelist;
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -180,7 +181,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.success(function(items) {
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
-			   
+			   $rootScope.permissionKey = $scope.userPermisionKey.analyzer;
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -208,7 +209,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.success(function(items) {
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
-			   
+			   $rootScope.permissionKey = $scope.userPermisionKey.inventory;
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -235,7 +236,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 			.success(function(items) {
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
-			   
+			   $rootScope.permissionKey = $scope.userPermisionKey.crm;
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');

@@ -17,7 +17,9 @@ App.service('fetchArrayService',[function() {
 		while(productIndex--){
 			var singleProductData = arrayData[productIndex];
 			var compareId = secondParam !== null ? singleProductData[firstParam][secondParam] : singleProductData[firstParam];
-			if(compareId == id) return arrayData[productIndex];
+			if(compareId == id){
+				return arrayData[productIndex];
+			}
 		}
 	}
 	

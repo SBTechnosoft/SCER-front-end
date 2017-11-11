@@ -1,5 +1,4 @@
 <h3>
-	
    <small><a ui-sref="app.dashboard" ><i class="fa fa-home"></i>Home</a> >> Staff</small>
 </h3>
 <div data-ng-controller="StaffController as table" class="container-fluid">
@@ -36,7 +35,7 @@
 		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="app.AddStaff" ng-if="allowedAdd == 'admin' || allowedAdd == 'superadmin'" data-ng-class="app.theme.brand" >
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 		Add Staff</button>
-         <div class="panel-title">All Staff</div>
+         <div class="panel-title"><b>All Staff</b></div>
       </div>
 	   <div class="table-responsive">
 		  <table data-ng-table="table.tableParams" show-filter="true"  class="table table-bordered table-striped">
@@ -53,8 +52,9 @@
 					<td data-title="'Action'" sortable="'action'">
 					
 						<center ng-if="allowedAdd == 'superadmin'">
-							<i  ng-click="editStaff(user)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#10709f" ng-if="allowedId != user.userId"> </i> &nbsp; &nbsp;
-							<i ng-click="deleteStaff('sm',user.userId)" class="fa fa-times-circle myCursorPointer" style="font-size:17px;color:red" ng-if="allowedId != user.userId"></i>
+							<i  ng-click="editStaff(user)" class="fa fa-edit myCursorPointer mr-sm" style="font-size:17px;color:#10709f" ng-if="allowedId != user.userId"> </i>
+							<i ng-click="deleteStaff('sm',user.userId)" class="fa fa-times-circle myCursorPointer mr-sm" style="font-size:17px;color:red" ng-if="allowedId != user.userId"></i>
+							<i ng-click="openPermission('lg',user)" class="fa fa-cog myCursorPointer" style="font-size:17px;color:#10709f" ng-if="allowedId != user.userId"></i>
 						</center>
 						
 						<center ng-if="allowedAdd == 'admin' && user.userType != 'superadmin'">

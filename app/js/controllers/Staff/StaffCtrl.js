@@ -246,9 +246,32 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 		  console.log('Cancel');
 			 toaster.clear();
 		});
-		
-		
 	}
+
+	/** Permission Modal **/
+		$scope.openPermission = function(size,userData){
+			toaster.clear();
+	
+		 	var modalInstance = $modal.open({
+			  templateUrl: 'app/views/PopupModal/Staff/permissionModal.html',
+			  controller: permissionModalController,
+			  size: size,
+			  resolve: {
+			  	userData: function(){
+			  		return userData;
+			 		}
+			 	}
+			});
+
+			modalInstance.result.then(function () {
+			 	console.log('ok');
+			
+			}, function () {
+			  console.log('Cancel');
+				 toaster.clear();
+			});
+		}
+	/** End **/
 
 }
 StaffController.$inject = ["$scope","$rootScope","$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal","fetchArrayService"];

@@ -57,10 +57,8 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 	
 	$scope.login = function(){
 		
-		
 		//console.log(vcRecaptchaService.getResponse($scope.widgetId));
 		//return false;
-			
 			if($scope.rightCaptcha){
 				
 				/**Login Code **/
@@ -80,24 +78,17 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 						data:formdata
 					}).success(function(response, status, headers, config) {
 						
-						//console.log(response);
-						//$rootScope.authenticate.authToken = response.authenticationToken;
-						
-						//console.log(response.authenticationToken);
-						
-						
-						
 						//if($rootScope.$storage.authToken){
 						if(angular.isObject(response)){
 							
 							//$rootScope.$storage.authToken = response.authenticationToken;
 							$rootScope.$storage.authToken = response.token;
 							$rootScope.$storage.authUser = response.user;
+							$rootScope.$storage.permissionArray = [{"configuration":{"dashboard":true,"companies":true,"branches":true,"staff":true,"invoiceNumber":true,"quotationNumber ":true,"template":true,"setting":true},"accounting":{"sales":true,"purchase":true,"salesOrder":true,"quotation":true,"creditNote":true,"debitNote":true,"specialJournal":true,"payment":true,"receipt":true,"statements":true,"taxation":true,"ledger":true},"inventory":{"brand":true,"category":true,"product":true,"barcodePrint":true,"stockRegister":true,"stockSummary":true},"crm":{"jobcard":true,"clients":true},"analyzer":{"reports":true},"pricelist":{"tax":true},"quickMenu":{"taxInvoice":true,"taxPurchase":true}}];
 							//$rootScope.loggedUser = $rootScope.$storage.authUser;
 							//console.log($rootScope.loggedUser);
 							// $state.go("app.Company");
 							$state.go("app.dashboard");
-							
 						}
 						else{
 							vm.loaderIcon = false;
@@ -113,8 +104,6 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 				$scope.errorCaptcha = true;
 				vm.loaderIcon = false;
 			}
-			
-               
         }
 	
 	
@@ -122,7 +111,6 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 		
 		$scope.notMatch = false;
 	}
-
 
 }
 loginController.$inject = ["$rootScope","$scope","hostFrontUrl","$http","apiPath","$state","apiResponse","vcRecaptchaService"];

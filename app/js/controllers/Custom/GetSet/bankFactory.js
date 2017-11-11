@@ -12,13 +12,13 @@ App.factory('bankFactory',['apiCall','apiPath','$q','fetchArrayService', functio
 				deferredMenu.resolve(bankData);
 			return deferredMenu.promise;
 		} else {
-			getAllBankBranch();
+			//getAllBankBranch();
 			return apiCall.getCall(Url).then(function(data) {
 				if(angular.isArray(data)){
 					bankData = data;
 				}
 				return data;
-			})
+			});
 		}
 	}
  
@@ -41,15 +41,12 @@ App.factory('bankFactory',['apiCall','apiPath','$q','fetchArrayService', functio
 	function getBranchByBank(bankId){
 		if(branchData !== null) {
 			var deferredMenu = $q.defer();
-				deferredMenu.resolve(fetchArrayService.myIndexOfObject(branchData,bankId,'bankId'));
+				deferredMenu.resolve(fetchArrayService.getfilteredArray(branchData,bankId,'bankId'));
 			return deferredMenu.promise;
 		} else {
-			getAllBankBranch();
+			//getAllBankBranch();
 			return apiCall.getCall(branchUrlBy+bankId).then(function(data) {
-				if(angular.isArray(data))
-					return fetchArrayService.myIndexOfObject(data,bankId,'bankId');
-				else
-					return data;
+				return data;
 			});
 		}
 	}

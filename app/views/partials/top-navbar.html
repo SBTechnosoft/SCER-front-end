@@ -6,16 +6,11 @@ padding-top:2px !important;
 .upDownIcon{
 height:39px;
 }
-
 </style>
 
 <!-- START Top Navbar-->
 <nav role="navigation" data-ng-controller="HeaderNavController" class="navbar topnavbar">
 	<!--My -->
-	
-	
-   <!-- END Nav wrapper-->
-	<!-- End My -->
    <!-- START navbar header-->
    <!--div data-ng-class="app.theme.brand" class="navbar-header" style="background-color: #17A1E5 !important;height:81px" -->
 	<div data-ng-class="app.theme.brand" class="navbar-header" style="height:81px"	ng-if="app.topbar.isCollapsed">
@@ -68,27 +63,20 @@ height:39px;
             <a href="#" data-ng-click="app.sidebar.isCollapsed = !app.sidebar.isCollapsed" class="hidden-xs my-topbar-select my-ancher-topbar-select" data-ng-class="app.topbar.isCollapsed ? 'upDownIcon' : 'upDownIconSmall'">
                <em data-ng-class="app.sidebar.isCollapsed ? 'fa-caret-right':'fa-caret-left'" class="fa"></em>
             </a>
-			
-			 
-			
         </li>
-		 
-          
-          
-        
       </ul>
       <!-- END Left navbar-->
       <!-- START Top navbar search form-->
       <!-- Header Link Start -->
 	  <ul class="nav navbar-nav navbar-left" data-ng-class="app.topbar.isCollapsed ? 'topbarWithIcon' : 'topbarWithoutIcon'" >
-		<li class="my-topbar-select" >
-            <a ui-sref="app.dashboard"   popover="Dashboard" popover-trigger="mouseenter" popover-placement="bottom" popover-animation="true" class="my-ancher-topbar-select" >
+		<li class="my-topbar-select" ng-if="permissionCheck(userPermisionKey.configuration)">
+            <a ng-click="$state.go('app.dashboard');configuration()"   popover="Dashboard" popover-trigger="mouseenter" popover-placement="bottom" popover-animation="true" class="my-ancher-topbar-select myCursorPointer" >
 				<center ng-if="app.topbar.isCollapsed" ><i class="fa fa-dashboard" style="font-size:28px;" ></i> <br /> Dashboard  </center>
 				<center ng-if="!app.topbar.isCollapsed"><i class="fa fa-dashboard" style="font-size:28px;" ></i></center>
 			
 			</a>
         </li>
-		<li  class="my-topbar-select"  data-ng-class="accountSelected ? app.theme.brand:''" >
+		<li  class="my-topbar-select"  data-ng-class="accountSelected ? app.theme.brand:''"  ng-if="permissionCheck(userPermisionKey.accounting)" >
 		 <!--a ng-click="getsidebar()" ui-sref="app.table-ngtable" href="/app/table-ngtable" -->
             <a ui-sref="." ng-click="getsidebar()" popover="Accounting" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" class="my-ancher-topbar-select"  >
 				<center ng-if="app.topbar.isCollapsed" ><i class="fa fa-inr" style="font-size:28px;" ></i> <br />  Accounting </center>
@@ -97,35 +85,35 @@ height:39px;
 			</a>
         </li>
 		<!--li  class="my-topbar-select {{invetorySelected?'set-my-topbar-select':''}}"  -->
-		<li  class="my-topbar-select " data-ng-class="invetorySelected ? app.theme.brand:''" >
-            <a ui-sref="." ng-click="getInventory()"  popover="Inventory" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" class="my-ancher-topbar-select" >
+		<li  class="my-topbar-select " data-ng-class="invetorySelected ? app.theme.brand:''" ng-if="permissionCheck(userPermisionKey.inventory)" >
+            <a ui-sref="." ng-click="getInventory();"  popover="Inventory" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" class="my-ancher-topbar-select" >
 			<center ng-if="app.topbar.isCollapsed"><i class="fa fa-file-text-o" style="font-size:28px;" ></i> <br />  Inventory</center>
 			<center ng-if="!app.topbar.isCollapsed"><i class="fa fa-file-text-o" style="font-size:28px;" ></i></center>
              
 			</a>
         </li>
-		<li  class="my-topbar-select " data-ng-class="stockSummarySelected ? app.theme.brand:''" >
+		<!--li  class="my-topbar-select " data-ng-class="stockSummarySelected ? app.theme.brand:''" >
             <a ui-sref="app.InvStockSummary" ng-click="getStockSummary()"  popover="Stock Summary" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" class="my-ancher-topbar-select" >
 			<center ng-if="app.topbar.isCollapsed"><i class="material-icons" style="font-size:32px;" >&#xE563;</i> <br /> Stock Summary</center>
 			<center ng-if="!app.topbar.isCollapsed"><i class="material-icons" style="font-size:32px;" >&#xE563;</i></center>
              
 			</a>
-        </li>
-		<li  class="my-topbar-select"  data-ng-class="crmSelected ? app.theme.brand:''" >
+        </li-->
+		<li  class="my-topbar-select"  data-ng-class="crmSelected ? app.theme.brand:''" ng-if="permissionCheck(userPermisionKey.crm)">
             <a ui-sref="."  ng-click="getCRM()" popover="CRM" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" class="my-ancher-topbar-select" >
 			<center ng-if="app.topbar.isCollapsed" ><i class="fa fa-users" style="font-size:28px;" ></i> <br /> CRM </center>
 			<center ng-if="!app.topbar.isCollapsed"><i class="fa fa-users" style="font-size:28px;" ></i></center>
               
 			</a>
         </li>
-		<li  class="my-topbar-select" data-ng-class="analyzerSelected ? app.theme.brand:''" >
+		<li  class="my-topbar-select" data-ng-class="analyzerSelected ? app.theme.brand:''" ng-if="permissionCheck(userPermisionKey.analyzer)" >
             <a ui-sref="."  ng-click="getAnalyzer()"  popover="Analyzer" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" class="my-ancher-topbar-select"  >
 			<center ng-if="app.topbar.isCollapsed" ><i class="fa icon-bar-graph-2" style="font-size:28px;" ></i> <br /> Analyzer </center>
 			<center ng-if="!app.topbar.isCollapsed" ><i class="fa icon-bar-graph-2" style="font-size:28px;" ></i></center>
               
 			</a>
         </li>
-		<li  class="my-topbar-select" data-ng-class="priceListSelected ? app.theme.brand:''" >
+		<li  class="my-topbar-select" data-ng-class="priceListSelected ? app.theme.brand:''" ng-if="permissionCheck(userPermisionKey.pricelist)" >
             <a ui-sref="." ng-click="getPriceList()" popover="Price List" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" class="my-ancher-topbar-select"  >
 			<center ng-if="app.topbar.isCollapsed" ><i class="fa fa-list" style="font-size:28px;" ></i> <br /> Price List</center>
 			<center ng-if="!app.topbar.isCollapsed" ><i class="fa fa-list" style="font-size:28px;" ></i></center>
@@ -301,7 +289,7 @@ height:39px;
             </ul>
          </li-->
 		 <!--Quick Menu -->
-		 <li dropdown="" class="dropdown dropdown-list my-topNav-padding" style="padding-top:10px">
+		 <li dropdown="" class="dropdown dropdown-list my-topNav-padding" style="padding-top:10px" ng-if="permissionCheck(userPermisionKey.quickMenu)">
             <a href="" dropdown-animate="" dropdown-toggle="" class="dropdown-toggle my-ancher-topbar-select" popover="Quick Access" popover-trigger="mouseenter" popover-placement="bottom"  popover-animation="true" style="text-align:center;" >
                <div class="point-pin" >
                   <em class="fa fa-ellipsis-h"></em>
@@ -336,7 +324,7 @@ height:39px;
                         </div>
                     </div>
                   </a-->
-				   <a ui-sref="app.WholesaleBill" data-ng-click="offcontent1 = false" class="p">
+				   <a ui-sref="app.WholesaleBill" data-ng-click="offcontent1 = false" class="p" ng-if="taxInvoicePermission">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">
@@ -348,8 +336,8 @@ height:39px;
                            <p class="m0">Tax Invoice</p>
                         </div>
                     </div>
-                  </a>
-				  <a ui-sref="app.PurchaseBill" data-ng-click="offcontent1 = false" class="p">
+               </a>
+				  <a ui-sref="app.PurchaseBill" data-ng-click="offcontent1 = false" class="p" ng-if="taxPurchasePermission">
                      <!-- START media preview-->
                     <div class="media">
 					    <div class="pull-left">
@@ -424,7 +412,7 @@ height:39px;
                   </a>
                </li>
                <!-- START list item-->
-               <li   class="bt">
+               <li   class="bt" ng-if="permissionCheck(userPermisionKey.configuration)">
                   <a href="#"  ng-click="configuration()" class="p ">
                      <!-- START media preview-->
                     <div class="media">

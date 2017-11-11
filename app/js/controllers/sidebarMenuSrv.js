@@ -1,10 +1,5 @@
 
-/**=========================================================
- * Module: FlotChartOptionsServices.js
- * Make an http request to load the menu structure
- =========================================================*/
-
-App.service('sidebarMemu', ["$rootScope", "$http", function($rootScope, $http) {
+App.service('sidebarMemu', ["$rootScope", "$http","userPermisionKey", function($rootScope, $http,userPermisionKey) {
   'use strict';
   var menuJson = 'server/sidebar/sidebar-items.json',
       menuURL  = menuJson + '?v=' + (new Date().getTime()); // jumps cache
@@ -17,6 +12,7 @@ App.service('sidebarMemu', ["$rootScope", "$http", function($rootScope, $http) {
         .success(function(items) {
 
            $rootScope.menuItems = items;
+           $rootScope.permissionKey = userPermisionKey.configuration;
 
         })
         .error(function(data, status, headers, config) {

@@ -5,21 +5,25 @@ App.directive('ledgerlist', function() {
     directive.restrict = 'E';
 
     directive.template = '<table class="table  table-striped" >'
-    					+ '<tr data-ng-repeat="item in ledgerdata | filter:query track by item.ledgerId" >'
+    					+ '<tr data-ng-repeat="item in ledgerdata | filter:querydata track by item.ledgerId" >'
 						+ '<td >'
-					 +'<span style="letter-spacing: .025em;font-weight: bold;cursor:pointer" ng-click="viewLedgerDetails(item.ledgerId)"> <i class="sidebar-item-icon icon-layers" ></i> {{::item.ledgerName}}</span>'
+					 +'<span style="letter-spacing: .025em;font-weight: bold;cursor:pointer" ng-click="viewledgerdetail({ledgerId:item.ledgerId})"> <i class="sidebar-item-icon icon-layers" ></i> {{::item.ledgerName}}</span>'
 				+'</td>'
 				+'<td>'
-					+'<i  title="Edit" ng-click="editLedgerData(item.ledgerId)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#17A1E5"> </i>'
+					+'<i  title="Edit" ng-click="editdata({ledgerId:item.ledgerId})" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#17A1E5"> </i>'
 				+'</td>'
 				+'<td>'
-					+'<i  title="View" ng-click="viewReadOlny(item.ledgerId)" class="fa fa-list-alt myCursorPointer" style="font-size:17px;color:#17A1E5"></i>'
+					+'<i  title="View" ng-click="viewdata({ledgerId:item.ledgerId})" viewData class="fa fa-list-alt myCursorPointer" style="font-size:17px;color:#17A1E5"></i>'
 				+'</td>'
 			+'</tr>'
 		+'</table>';
 
 	directive.scope = {
-        ledgerdata : "=ledgerdata"
+        ledgerdata : "=ledgerdata",
+        editdata   : "&",
+        viewdata   : "&",
+        viewledgerdetail : "&",
+        querydata: "=querydata"
     }
 
     return directive;
@@ -28,7 +32,7 @@ App.directive('ledgerlist', function() {
 //Controller
 App.controller('AccLedgerController', AccLedgerController);
 
-function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage,stateCityFactory,fetchArrayService) {
+function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,apiPath,toaster,getSetFactory,$state,apiResponse,validationMessage,stateCityFactory,fetchArrayService,bankFactory) {
   'use strict';
   
 	var vm = this;
@@ -148,8 +152,30 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 				vm.disableValue = true;
 				vm.disableCompanyValue = true;
 			/** End **/
+
+			if(response.bankId != null && response.bankId != ""){
+
+				bankFactory.getSingleBank(response.bankId).then(function(bankData){
+					$scope.ledgerForm.bankName = bankData;
+				});
+
+				bankFactory.getBranchByBank(response.bankId).then(function(bankBranchData){
+					if(angular.isArray(bankBranchData)){
+						vm.bankBranchDrop = bankBranchData;
+						var singleBranchData = fetchArrayService.myIndexOfObject(bankBranchData,response.bankDtlId,'bankDtlId');
+						$scope.ledgerForm.bankBranch = singleBranchData;
+						$scope.ledgerForm.bankIfsc = singleBranchData.ifscCode;
+					}
+					else{
+						vm.bankBranchDrop=[];
+					}
+				});
+			}
+
+			$scope.ledgerForm.bankMicr = response.micrCode != null && response.micrCode != "" ? response.micrCode : '';
 			
 		});
+
 		//vm.disableValue = true;
 	}
 	
@@ -190,10 +216,26 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 			vm.cityDrop = stateCityFactory.getDefaultStateCities(response.state.stateAbb);
 			$scope.ledgerForm.cityDrop = response.city;
 
-			// $scope.ledgerForm.ledgerName = response.ledgerName;
-			// $scope.ledgerForm.ledgerName = response.ledgerName;
-			// $scope.ledgerForm.ledgerName = response.ledgerName;
-			// $scope.ledgerForm.ledgerName = response.ledgerName;
+			if(response.bankId != null && response.bankId != ""){
+
+				bankFactory.getSingleBank(response.bankId).then(function(bankData){
+					$scope.ledgerForm.bankName = bankData;
+				});
+
+				bankFactory.getBranchByBank(response.bankId).then(function(bankBranchData){
+					if(angular.isArray(bankBranchData)){
+						vm.bankBranchDrop = bankBranchData;
+						var singleBranchData = fetchArrayService.myIndexOfObject(bankBranchData,response.bankDtlId,'bankDtlId');
+						$scope.ledgerForm.bankBranch = singleBranchData;
+						$scope.ledgerForm.bankIfsc = singleBranchData.ifscCode;
+					}
+					else{
+						vm.bankBranchDrop=[];
+					}
+				});
+			}
+
+			$scope.ledgerForm.bankMicr = response.micrCode != null && response.micrCode != "" ? response.micrCode : '';
 		
 		});
 	}
@@ -227,21 +269,30 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 
 	//Get Banks
 	vm.bankDrop=[];
-	vm.bankBranchDrop=[];
-	apiCall.getCall(apiPath.getAllBank).then(function(response){
+	bankFactory.getBank().then(function(response){
 		vm.bankDrop = response;
 	});
 	
 	$scope.changeBank = function(key,value){
+	
 		formdata.set(key,value);
-		apiCall.getCall(apiPath.getAllBankBranch+value).then(function(response){
-			vm.bankBranchDrop=response;
+		vm.bankBranchDrop=[];
+		bankFactory.getBranchByBank(value).then(function(response){
+			if(angular.isArray(response)){
+				vm.bankBranchDrop = response;
+			}
+			else{
+				toaster.pop('info','No branch available for this bank','',5000);
+			}
 		});
+		$scope.ledgerForm.bankIfsc = "";
 	}
 
 	$scope.changeBankBranch = function(key,value){
-		formdata.set(key,value.bankBranchId);
-		$scope.ledgerForm.bankIfsc = value.ifsc;
+		if(value != null && value != ""){
+			formdata.set(key,value.bankDtlId);
+			$scope.ledgerForm.bankIfsc = value.ifscCode;
+		}
 	}
 
 	$scope.setPcode = function(Fname,value) {
@@ -288,7 +339,6 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
 	apiCall.getCall(apiPath.getAllCompany).then(function(responseCompany){
 		
 		toaster.clear();
-
 		vm.companyDrop = responseCompany;
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',60000);
 		
@@ -512,4 +562,4 @@ function AccLedgerController($rootScope,$scope,$filter, ngTableParams,apiCall,ap
     {value: 5, name: 'Huge'}
   ];
 }
-AccLedgerController.$inject = ["$rootScope","$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","getSetFactory","$state","apiResponse","validationMessage","stateCityFactory","fetchArrayService"];
+AccLedgerController.$inject = ["$rootScope","$scope","$filter", "ngTableParams","apiCall","apiPath","toaster","getSetFactory","$state","apiResponse","validationMessage","stateCityFactory","fetchArrayService","bankFactory"];

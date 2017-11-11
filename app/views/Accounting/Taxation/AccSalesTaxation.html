@@ -5,20 +5,7 @@
    Sales Tax</small>
 </h3>
 <div class="container-fluid">
-	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true,'time-out': 10000}"></toaster-container>
-	<!--div class="panel panel-default">
-		<div class="panel-body">
-			<div class="form-group">
-				<label class="col-sm-1 control-label"> Company </label>
-					<div class="col-sm-7">
-						<select chosen=""  ng-model="stateCheck" ng-options="s.companyName for s in table.states track by s.companyId" class="form-control chosen-select" >
-						</select>
-					</div>
-				<button type="button" class="mr mb-sm btn btn-primary"  ng-click="showProduct()"  data-ng-class="app.theme.brand">Go</button>
-			</div>
-		</div>
-	</div-->
-	
+	<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
    <div class="panel panel-default">
       <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
@@ -28,22 +15,17 @@
       </div>
 	   <div class="table-responsive">
 		  <table data-ng-table="table.tableParams" show-filter="false" class="table table-bordered table-striped">
-		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 			 <tbody>
 				<tr data-ng-repeat="user in $data">
-					<td data-title="'#'"  >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
-					<td data-title="'Invoice#'"  filter="{ 'invoiceNumber': 'text' }" >{{user.invoiceNumber}}</td>
-					 <td data-title="'EntryDate'"  filter="{ 'entryDate': 'text' }" >{{dateConvert(user.entryDate) | date:dateFormat}}</td>
-					<td data-title="'Client Name'"  filter="{ 'clientName': 'text' }" >{{user.clientName}}</td>
-				   
-					<td data-title="'SalesType'"  filter="{ 'salesType': 'text' }" >{{user.salesType}}</td>
-					<td data-title="'Tax'"  filter="{ 'tax': 'text' }" style="text-align:right" >{{user.tax}}</td>
-					<td data-title="'AdditionalTax'"  filter="{ 'additionalTax': 'text' }" style="text-align:right" >{{user.additionalTax}}</td>
-					<td data-title="'Total'"  filter="{ 'total': 'text' }" style="text-align:right" >{{user.total}}</td>
-					<td data-title="'GrandTotal'"  filter="{ 'grandTotal': 'text' }" style="text-align:right" >{{user.grandTotal}}</td>
-					<!--td data-title="'Advance'"  filter="{ 'advance': 'text' }" >{{user.advance}}</td>
-					<td data-title="'Balance'"  filter="{ 'balance': 'text' }" >{{user.balance}}</td>
-					<td data-title="'Refund'"  filter="{ 'refund': 'text' }" >{{user.refund}}</td-->
+					<td data-title="'#'"  ng-bind="(itemsPerPage * (pageNumber-1)) + $index+1"></td>
+					<td data-title="'Invoice#'"  filter="{ 'invoiceNumber': 'text' }" ng-bind="::user.invoiceNumber" ></td>
+					 <td data-title="'EntryDate'"  filter="{ 'entryDate': 'text' }" ng-bind="::dateConvert(user.entryDate) | date:dateFormat" ></td>
+					<td data-title="'Client Name'"  filter="{ 'clientName': 'text' }" ng-bind="::user.client.clientName" ></td>
+					<td data-title="'SalesType'"  filter="{ 'salesType': 'text' }" ng-bind="::user.salesType" ></td>
+					<td data-title="'Tax'"  filter="{ 'tax': 'text' }" style="text-align:right" ng-bind="::user.tax" ></td>
+					<td data-title="'AdditionalTax'"  filter="{ 'additionalTax': 'text' }" style="text-align:right" ng-bind="::user.additionalTax" ></td>
+					<td data-title="'Total'"  filter="{ 'total': 'text' }" style="text-align:right" ng-bind="::user.total" ></td>
+					<td data-title="'GrandTotal'"  filter="{ 'grandTotal': 'text' }" style="text-align:right" ng-bind="::user.grandTotal" ></td>
 				</tr>
 			 </tbody>
 		  </table>

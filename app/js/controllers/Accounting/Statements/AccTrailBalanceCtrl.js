@@ -34,10 +34,6 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 		$scope.getBranch($scope.stateCheck.companyId);
 		
 		$scope.displayCompany = $scope.stateCheck.companyName;
-		
-		
-		
-		
 	}
 	
 	//Company
@@ -77,7 +73,7 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 		
 		apiCall.getCall(apiPath.getTrailBalance+id).then(function(response){
 			
-			//console.log(response);
+			console.log(response);
 			//data = response;
 			toaster.clear();
 			
@@ -88,7 +84,9 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 			var totalcredit = 0;
 			var dataLength = response.length-1;
 			
-			for (var i = 0; i < response.length; i++) {
+			var countData = response.length;
+			
+			for (var i = 0; i < countData; i++) {
 			  
 			  var dataOfTrial = response[i];
 			  
@@ -133,8 +131,6 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 						secondLayoutArrayData.push(innerArray);
 					}
 				/** End **/
-					
-					
 			  }
 			  else{
 				  
@@ -155,7 +151,6 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 								trailArrayData[0] = trailObject;
 								break;
 							}
-						
 						}
 						
 						if(inFlag == 0){
@@ -239,19 +234,13 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 
 					  params.total(orderedData.length); // set total for recalc pagination
 					  $defer.resolve(vm.users);
-			  
-
 			  }
 			  else{
-				  
 				   params.total($scope.myArrayData.length);
-				  
 			  }
 			 
 			 if(!$.isEmptyObject(params.$params.sorting))
 			  {
-				
-				 //alert('ggg');
 				  var orderedData = params.sorting() ?
 						  $filter('orderBy')($scope.myArrayData, params.orderBy()) :
 						  $scope.myArrayData;
@@ -261,21 +250,11 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 			
 		  }
 	  });
-	  
-	 
-	  
   }
   
-  
 	$scope.goToLedgerTransaction = function(ledgerId){
-		
-		//alert(ledgerId);
-		
 		getSetFactory.set(ledgerId);
-		
 		$state.go("app.AccDataLedger");
-		
-	  
 	}
 	
 	 $scope.firstLayout = true;
@@ -303,8 +282,7 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 	$scope.secondLayout = true;
 		
 	}
-	
-  
+
 	/*** Pdf ***/
 	
 		$scope.generatePdf = function(operation){
@@ -333,19 +311,14 @@ function AccTrailBalanceController($rootScope,$scope, $filter, ngTableParams,api
 				else{
 					
 					if(responseDrop.status == 500){
-						
 						toaster.pop('warning', 'Opps!', responseDrop.statusText);
 					}
 					else{
-						
 						toaster.pop('warning', 'Opps!', responseDrop);
 					}
-					
 					//alert('Something Wrong');
 				}
-			
 			});
-			
 		}
 	
 	/*** End Pdf ***/
