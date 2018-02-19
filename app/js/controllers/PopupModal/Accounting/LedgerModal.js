@@ -105,7 +105,12 @@ function AccLedgerModalController($rootScope,$scope, $modalInstance,apiCall,apiP
 		$scope.ledgerForm.under = editLedgerData.ledgerGroup.ledgerGroupName;
 		
 		$scope.ledgerForm.companyDropDown = editLedgerData.company;
-		
+		//get bank-data
+		apiCall.getCall(apiPath.getAllBank+'/'+editLedgerData.bankId).then(function(response){
+			$scope.ledgerForm.bankName = response;
+		});
+		$scope.ledgerForm.bankMicr = editLedgerData.micrCode;
+
 		/** State/City **/
 		stateCityFactory.getState().then(function(response){
 			$scope.statesDrop = response;

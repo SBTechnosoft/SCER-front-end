@@ -77,8 +77,99 @@
 			</div>
 				
 		</div >
+
+		<div class="panel panel-primary" >
+			<div class="panel-heading" data-ng-class="app.theme.brand">
+				<div class="panel-title">
+					<i class="fa fa-barcode" ></i> Service-Date 
+				</div>
+			</div>
+			<div class="panel-body">
+				 <form  action="#" name="formServiceDate" class="form-validate form-horizontal">
+						<div class="col-sm-4">
+							<fieldset class="my-fieldset-paddingBottom">
+							   <div class="form-group">
+							   	<label class="col-sm-2 col-xs-6 col-md-4 control-label pt-sm">Enable/Disable</label>
+								    <div class="col-sm-2 col-xs-6 col-md-4">
+										<label class="switch switch-lg switch-success pull-right ph-lg">
+				                       		 <input type="checkbox" data-ng-model="enableDisableValue" />
+				                       		 <span></span>
+				                    	 </label>
+									</div>
+								  
+							   </div>
+							</fieldset >
+						</div>
+						<div class="col-sm-4" ng-if="enableDisableValue">
+							<fieldset class="my-fieldset-paddingBottom">
+							   <div class="form-group" >
+							   	<label for="input-id-1" class="col-sm-2 col-md-4 control-label" >After no of days</label>
+								  <div class="col-sm-6">
+									<input ng-model="serviceData.noOfDays" name="noOfDays"  type="text" placeholder="0" class="form-control input-sm" ng-pattern="/^[0-9]*$/" ng-maxlength="5" only-number ng-change="changeInServiceData('noOfDays',noOfDays)"/>
+							 		<span ng-messages="formServiceDate.noOfDays.$error" ng-if="formServiceDate.noOfDays.$dirty || formServiceDate.noOfDays.$touched" role="alert">
+										<span ng-messages-include="errorRequired"></span>
+										<span ng-messages-include="errorPatternAlpha"></span>
+										<span ng-messages-include="errorLonglength"></span>
+									</span>		
+								  </div>
+							   </div>
+							</fieldset >
+						</div>
+						
+						<div class="col-sm-1" ng-if="enableDisableValue">
+							<fieldset class="my-fieldset-paddingBottom">
+							   <div class="form-group">
+								   <button type="button" class="mr mb-sm btn btn-primary pull-right" tabIndex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  ng-click="AddUpdateServiceDateSetting()" ng-disabled="formServiceDate.$invalid"  data-ng-class="app.theme.brand" >{{insertUpdateServiceLabel}}</button>
+							   </div>
+							</fieldset>
+						</div>
+						<div class="col-sm-3">
+						</div>
+					
+				</form>
+			</div>
+				
+		</div >
+
+		<!-- cheque number setting -->
+		<div class="panel panel-primary" >
+			<div class="panel-heading" data-ng-class="app.theme.brand">
+				<div class="panel-title">
+					<i class="fa fa-barcode" ></i> Cheque Number
+				</div>
+			</div>
+			<div class="panel-body">
+				 <form  action="#" name="formChequeNo" class="form-validate form-horizontal">
+						<div class="col-sm-4">
+							<fieldset class="my-fieldset-paddingBottom">
+							   <div class="form-group">
+							   	<label class="col-sm-2 col-xs-6 col-md-4 control-label pt-sm">Enable/Disable</label>
+								    <div class="col-sm-2 col-xs-6 col-md-4">
+										<label class="switch switch-lg switch-success pull-right ph-lg">
+				                       		 <input type="checkbox" data-ng-model="enableDisableChequeNoValue" ng-change="changeInChequeNo('enableDisableChequeNoValue',enableDisableChequeNoValue)"/>
+				                       		 <span></span>
+				                    	 </label>
+									</div>
+								  
+							   </div>
+							</fieldset >
+						</div>
+						<div class="col-sm-1" ng-if="enableDisableValue">
+							<fieldset class="my-fieldset-paddingBottom">
+							   <div class="form-group">
+								   <button type="button" class="mr mb-sm btn btn-primary pull-right" tabIndex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  ng-click="AddUpdateChequeNoSetting()" ng-disabled="formServiceDate.$invalid"  data-ng-class="app.theme.brand" >{{insertUpdateChequeNoLabel}}</button>
+							   </div>
+							</fieldset>
+						</div>
+						<div class="col-sm-3">
+						</div>
+					
+				</form>
+			</div>
+				
+		</div >
+
 		<!-- COlor -->
-		
 		<div class="panel panel-purple">
 			<div class="panel-heading">
 			<div class="panel-title">

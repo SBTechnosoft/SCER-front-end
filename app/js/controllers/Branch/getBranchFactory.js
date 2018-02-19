@@ -1,7 +1,7 @@
 App.factory('apiCall', ["$http","$q","apiPath","$rootScope","apiResponse", function ($http,$q,apiPath,$rootScope,apiResponse) {
 	
 	var apiRootPath = $rootScope.erpPath;
-
+	
 	return {
 		 getCall : function(url){
 

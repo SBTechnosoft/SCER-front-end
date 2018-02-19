@@ -1,7 +1,7 @@
 
 App.controller('permissionModalController', permissionModalController);
 
-function permissionModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,apiResponse,userData) {
+function permissionModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,apiResponse,userData,toaster) {
   'use strict';
   
   var vm = this;
@@ -10,19 +10,18 @@ function permissionModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 	
 	var userData = userData;
 	console.log(userData);
-	$scope.permissionArray = [{"configuration":{},"accounting":{},"inventory":{},"crm":{},"analyzer":{},"pricelist":{},"quickMenu":{},}];
-
+	$scope.permissionArray = [{"configuration":{},"accounting":{},"inventory":{},"crm":{},"analyzer":{},"pricelist":{},"quickMenu":{}}];
 	if(userData.permissionArray != null && userData.permissionArray.length > 0){
-		$scope.permissionArray[0].configuration = userData.permissionArray.configuration;
-		$scope.permissionArray[0].accounting = userData.permissionArray.accounting;
-		$scope.permissionArray[0].inventory = userData.permissionArray.inventory;
-		$scope.permissionArray[0].crm = userData.permissionArray.crm;
-		$scope.permissionArray[0].analyzer = userData.permissionArray.analyze;
-		$scope.permissionArray[0].pricelist = userData.permissionArray.pricelist;
-		$scope.permissionArray[0].quickMenu = userData.permissionArray.quickMenu;
+		$scope.permissionArray[0].configuration = userData.permissionArray[0].configuration;
+		$scope.permissionArray[0].accounting = userData.permissionArray[0].accounting;
+		$scope.permissionArray[0].inventory = userData.permissionArray[0].inventory;
+		$scope.permissionArray[0].crm = userData.permissionArray[0].crm;
+		$scope.permissionArray[0].analyzer = userData.permissionArray[0].analyzer;
+		$scope.permissionArray[0].pricelist = userData.permissionArray[0].pricelist;
+		$scope.permissionArray[0].quickMenu = userData.permissionArray[0].quickMenu;
 	}
 
-	$scope.permissionArray = $rootScope.$storage.permissionArray;
+	// $scope.permissionArray = $rootScope.$storage.permissionArray;
 
 	$scope.clientForm = [];	
 	 
@@ -45,7 +44,20 @@ function permissionModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 			formdata.set('permissionArray',angular.toJson($scope.permissionArray));
 
 			apiCall.postCall(apiPath.getOneStaff+userData.userId,formdata).then(function(response){
+				if(response==apiResponse.ok)
+				{
+					$modalInstance.close();
+					
+					
+				}
+				else
+				{
+					$modalInstance.dismiss();
+					// toaster.clear();
+					// toaster.pop('warning', response);
+				}
 				console.log(response);
+				// }
 			});
 		}
 	/* End */
@@ -113,4 +125,4 @@ function permissionModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 
   
 }
-permissionModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","apiResponse","userData"];
+permissionModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","apiResponse","userData","toaster"];

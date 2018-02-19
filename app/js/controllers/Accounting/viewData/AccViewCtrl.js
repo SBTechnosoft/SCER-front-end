@@ -225,6 +225,14 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 			
 			$state.go("app.AccDataGstReturn");
 		}
+		else if($scope.viewDataTypePath == 'GST Return2'){
+			
+			$state.go("app.AccDataGstReturn2");
+		}
+		else if($scope.viewDataTypePath == 'GST Return3'){
+			
+			$state.go("app.AccDataGstReturn3");
+		}
 		else if($scope.viewDataTypePath == 'PoliceReport'){
 			
 			$state.go("app.ReportPoliceData");

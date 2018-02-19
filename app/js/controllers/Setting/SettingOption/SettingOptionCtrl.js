@@ -6,7 +6,13 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
   var vm = this;
  
   var formdata = new FormData();
-  
+  	
+
+  	/*service-date */
+  	$scope.enableDisableValue=false;
+  	$scope.enableDisableChequeNoValue=false;
+  	$scope.serviceData = [];
+
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -14,56 +20,96 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 	/* VALIDATION END */
 	
 	/** Barcode Code **/
-	
 		//var barcodeFormData = new FormData();
 		$scope.barcodeData = [];
 		$scope.insertUpdateLabel;
+		$scope.insertUpdateServiceLabel;
+		$scope.insertUpdateChequeNoLabel;
 		
 		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1","1.5","2"];  // Default-> 1.5
 		vm.barcodeHeightDrop = ["40","50","60","70","80","90","100"];          // Default-> 40
-		
 		$scope.getOptionSettingData = function(){
-			
 			toaster.clear();
-			
 			apiCall.getCall(apiPath.settingOption).then(function(response2){
-			
-				if(apiResponse.noContent == response2){
-					
-					$scope.insertUpdateLabel = "Insert";
-				}
-				else{
-					
-					$scope.insertUpdateLabel = "Update";
-					
-					//console.log(response2);
-					var cnt = response2.length;
-					for(var ind = 0;ind<cnt;ind++){
-						
-						var arrayData = response2[ind];
-						
-						if(arrayData.settingType == "barcode"){
-							
-							$scope.barcodeData.barcodeHeight = arrayData.barcodeHeight;
-							$scope.barcodeData.barcodeWidth = arrayData.barcodeWidth;
-							
-							break;
+				var responseLength = response2.length;
+				// console.log(response2);
+				for(var arrayData=0;arrayData<responseLength;arrayData++)
+				{
+					if(angular.isObject(response2) || angular.isArray(response2))
+					{
+						if(response2[arrayData].hasOwnProperty("barcodeWidth")){
+							$scope.insertUpdateLabel = "Update";
+							var arrayData1 = response2[arrayData];
+							if(arrayData1.settingType == "barcode"){
+								$scope.barcodeData.barcodeHeight = arrayData1.barcodeHeight;
+								$scope.barcodeData.barcodeWidth = arrayData1.barcodeWidth;
+							}
 						}
-						
+						else
+						{
+							$scope.insertUpdateLabel = "Insert";
+						}
+						if(response2[arrayData].hasOwnProperty("servicedateNoOfDays"))
+						{
+							$scope.insertUpdateServiceLabel = "Update";
+							var arrayData1 = response2[arrayData];
+							if(arrayData1.settingType == "servicedate"){
+								$scope.enableDisableValue=true;
+								$scope.serviceData.noOfDays = arrayData1.servicedateNoOfDays;
+							}
+						}
+						else
+						{
+							$scope.insertUpdateServiceLabel = "Insert";
+						}
+
+						if(response2[arrayData].hasOwnProperty("chequeno"))
+						{
+							$scope.insertUpdateChequeNoLabel = "Update";
+							var arrayData1 = response2[arrayData];
+							if(arrayData1.settingType == "chequeno"){
+								console.log(arrayData1.chequeno);
+								$scope.enableDisableChequeNoValue = arrayData1.chequeno=="enable" ? true : false;
+							}
+						}
+						else
+						{
+							$scope.insertUpdateChequeNoLabel = "Insert";
+						}
 					}
-					
 				}
-			
 			});
-		
 		}
 		
 		$scope.getOptionSettingData();
 		
 		$scope.flag = 0;
+		$scope.serviceDataflag = 1;
+		$scope.chequeNoflag = 1;
 		$scope.changeInBarcodeData = function(key,value){
 			
 			$scope.flag = 1;
+			// if(barcodeFormData.has(key)){
+				
+				// barcodeFormData.delete(key);
+			// }
+			
+			// barcodeFormData.append(key,value);
+		}
+		$scope.changeInServiceData = function(key,value){
+			
+			$scope.serviceDataflag = 1;
+			// if(barcodeFormData.has(key)){
+				
+				// barcodeFormData.delete(key);
+			// }
+			
+			// barcodeFormData.append(key,value);
+		}
+
+		$scope.changeInChequeNo = function(key,value){
+			
+			$scope.chequeNoflag = 1;
 			// if(barcodeFormData.has(key)){
 				
 				// barcodeFormData.delete(key);
@@ -112,6 +158,98 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 			else{
 				
 				toaster.pop('info','Barcode','Please Change Data');
+			}
+			
+		
+			//console.log($scope.barcodeData);
+		}
+
+		//Add-Update service-date data
+		$scope.AddUpdateServiceDateSetting = function(){
+			
+			toaster.clear();
+			if($scope.serviceDataflag == 1){
+				
+				var serviceDateFormData = new FormData();
+				
+				serviceDateFormData.append('servicedateNoOfDays',$scope.serviceData.noOfDays);
+				//barcodeFormData.append('settingType','barcode');
+				
+				if($scope.insertUpdateServiceLabel == "Update"){
+					var apiPostPatchCall = apiCall.patchCall;
+				}
+				else{
+					var apiPostPatchCall = apiCall.postCall;
+				}
+				
+				apiPostPatchCall(apiPath.settingOption,serviceDateFormData).then(function(response){
+				
+					if(apiResponse.ok == response){
+						
+						
+						$scope.getOptionSettingData();
+						
+						toaster.pop('success','Service-Date',$scope.insertUpdateServiceLabel+' Successfull');
+						$scope.serviceDataflag = 0 ;
+						
+					}
+					else{
+						
+						toaster.pop('warning','Opps!!',response);
+					}
+				
+				});
+			}
+			else{
+				
+				toaster.pop('info','Service-Date','Please Change Data');
+			}
+			
+		
+			//console.log($scope.barcodeData);
+		}
+		
+		/** End **/
+
+		//Add-Update cheque-no data
+		$scope.AddUpdateChequeNoSetting = function(){
+			
+			toaster.clear();
+			if($scope.chequeNoflag == 1){
+				var chequeNoFormData = new FormData();
+				if($scope.enableDisableChequeNoValue==true)
+				{
+					chequeNoFormData.append('chequeno','enable');
+				}
+				else if($scope.enableDisableChequeNoValue==false)
+				{
+					chequeNoFormData.append('chequeno','disable');
+				}
+				if($scope.insertUpdateChequeNoLabel == "Update"){
+					var apiPostPatchCall = apiCall.patchCall;
+				}
+				else{
+					var apiPostPatchCall = apiCall.postCall;
+				}
+				
+				apiPostPatchCall(apiPath.settingOption,chequeNoFormData).then(function(response){
+					if(apiResponse.ok == response){
+						
+						$scope.getOptionSettingData();
+						toaster.pop('success','Cheque-Number',$scope.insertUpdateChequeNoLabel+' Successfull');
+						$scope.chequeNoflag = 0;
+						
+					}
+					else{
+						
+						toaster.pop('warning','Opps!!',response);
+					}
+				
+				});
+			}
+			else{
+				
+				toaster.pop('info','Cheque-Number','Please Change Data');
 			}
 			
 		

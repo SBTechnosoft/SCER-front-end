@@ -51,7 +51,7 @@
     "text": "Quotation#",
     "sref": "app.Quotation",
     "icon": "fa fa-quora",
-    "permission": "quotationNumber "
+    "permission": "quotationNumber"
   },
   {
     "text": "Template",
@@ -71,7 +71,8 @@
       {"text": "Option", "sref": "app.SettingOption", "icon": "fa fa-barcode", "translate": "" },
       {"text": "Jobcard#", "sref": "app.SettingJobcardNumber", "icon": "fa fa-barcode", "translate": "" },
       {"text": "Client Profession", "sref": "app.SettingClientProfession", "icon": "fa fa-suitcase", "translate": "" },
-      {"text": "Reminders", "sref": "app.SettingReminders", "icon": "fa fa-bell-o", "translate": "" }
+      {"text": "Reminders", "sref": "app.SettingReminders", "icon": "fa fa-bell-o", "translate": "" },
+      {"text": "Expenses", "sref": "app.SettingExpenses", "icon": "fa fa-bell-o", "translate": "" }
     ],
     "translate": "",
     "permission": "setting"

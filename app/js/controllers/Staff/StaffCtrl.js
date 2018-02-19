@@ -251,8 +251,8 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 	/** Permission Modal **/
 		$scope.openPermission = function(size,userData){
 			toaster.clear();
-	
-		 	var modalInstance = $modal.open({
+			console.log(userData);
+			var modalInstance = $modal.open({
 			  templateUrl: 'app/views/PopupModal/Staff/permissionModal.html',
 			  controller: permissionModalController,
 			  size: size,
@@ -265,6 +265,10 @@ function StaffController($scope,$rootScope, $filter, ngTableParams,apiCall,apiPa
 
 			modalInstance.result.then(function () {
 			 	console.log('ok');
+			 	// toaster.clear();
+				setTimeout(function() {
+					// toaster.pop('success', 'Updated Successfully');	
+				}, 2000);
 			
 			}, function () {
 			  console.log('Cancel');

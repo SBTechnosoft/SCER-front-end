@@ -6,7 +6,7 @@
 
 App.controller('loginController', loginController);
 
-function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,apiResponse,vcRecaptchaService,googleSiteKey) {
+function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,apiResponse,vcRecaptchaService,googleSiteKey,$timeout) {
   'use strict';
   var vm = this;
  
@@ -17,11 +17,12 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 	$scope.errorCaptcha = false;
 	
 	var googleSiteKeys = $rootScope.googleSiteKey;
-	 var hostName = "http://"+window.location.hostname+"/";
+	 var hostName = "http://"+window.location.hostname+"/front-end/";
 	 
 	angular.forEach(hostFrontUrl, function(value, key) {
 		//console.log(value);
 		if(value == hostName){
+			//console.log('in');
 			vm.googleSiteKey = googleSiteKeys[key];
 		}
 	});
@@ -80,14 +81,26 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 						
 						//if($rootScope.$storage.authToken){
 						if(angular.isObject(response)){
-							
 							//$rootScope.$storage.authToken = response.authenticationToken;
 							$rootScope.$storage.authToken = response.token;
 							$rootScope.$storage.authUser = response.user;
-							$rootScope.$storage.permissionArray = [{"configuration":{"dashboard":true,"companies":true,"branches":true,"staff":true,"invoiceNumber":true,"quotationNumber ":true,"template":true,"setting":true},"accounting":{"sales":true,"purchase":true,"salesOrder":true,"quotation":true,"creditNote":true,"debitNote":true,"specialJournal":true,"payment":true,"receipt":true,"statements":true,"taxation":true,"ledger":true},"inventory":{"brand":true,"category":true,"product":true,"barcodePrint":true,"stockRegister":true,"stockSummary":true},"crm":{"jobcard":true,"clients":true},"analyzer":{"reports":true},"pricelist":{"tax":true},"quickMenu":{"taxInvoice":true,"taxPurchase":true}}];
-							//$rootScope.loggedUser = $rootScope.$storage.authUser;
-							//console.log($rootScope.loggedUser);
-							// $state.go("app.Company");
+							if(response.user['userType']=='superadmin' || response.user['userType']=='admin')
+							{
+								$rootScope.$storage.permissionArray = [{"configuration":{"dashboard":true,"companies":true,"branches":true,"staff":true,"invoiceNumber":true,"quotationNumber":true,"template":true,"setting":true},"accounting":{"sales":true,"purchase":true,"salesOrder":true,"quotation":true,"creditNote":true,"debitNote":true,"specialJournal":true,"payment":true,"receipt":true,"statements":true,"taxation":true,"ledger":true},"inventory":{"brand":true,"category":true,"product":true,"barcodePrint":true,"stockRegister":true,"stockSummary":true},"crm":{"jobcard":true,"clients":true},"analyzer":{"reports":true},"pricelist":{"tax":true},"quickMenu":{"taxInvoice":true,"taxPurchase":true}}];
+								//$rootScope.loggedUser = $rootScope.$storage.authUser;
+								//console.log($rootScope.loggedUser);
+								// $state.go("app.Company");
+							}
+							else
+							{
+								$rootScope.$storage.permissionArray = response.user['permissionArray'];
+								$rootScope.loggedUser = $rootScope.$storage.authUser;
+								//console.log($rootScope.loggedUser);
+								// $state.go("app.Company");
+							}
+							$rootScope.app.sidebar.isCollapsed = true;
+							$rootScope.app.sidebar.sidebar_hide = false;
+							$rootScope.app.sidebar.sidebar_from_topbar = true;
 							$state.go("app.dashboard");
 						}
 						else{
@@ -112,5 +125,9 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 		$scope.notMatch = false;
 	}
 
+	$scope.getUserData = function()
+	{
+		console.log("hiopppp");
+	}
 }
-loginController.$inject = ["$rootScope","$scope","hostFrontUrl","$http","apiPath","$state","apiResponse","vcRecaptchaService"];
+loginController.$inject = ["$rootScope","$scope","hostFrontUrl","$http","apiPath","$state","apiResponse","vcRecaptchaService","$timeout"];

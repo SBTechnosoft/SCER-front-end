@@ -43,7 +43,7 @@ function AccReceiptController($rootScope,$scope,apiCall,apiPath,toaster,$modal,a
 	var headerCr = {'Content-Type': undefined,'ledgerGroup':[9,12]};
 	 
 	vm.tableNameDrop=[];
-	var headerDr = {'Content-Type': undefined,'ledgerGroup':[31]};
+	var headerDr = {'Content-Type': undefined,'ledgerGroup':[32]};
 	
 	
 	 // Chosen data

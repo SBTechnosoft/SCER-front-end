@@ -8,12 +8,14 @@ App.controller('InvProductController', InvProductController);
 
 function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$state,apiResponse,toaster,getSetFactory,$modal,productFactory,fetchArrayService) {
   'use strict';
-  var vm = this;
-	//$scope.brandradio="";
+  	var vm = this;
+  	$scope.filteredItems;
 
-  var data = [];
+	//$scope.brandradio="";
+	
+ 	var data = [];
 	var flag = 0;
-	 var Modalopened = false;
+	var Modalopened = false;
 	 
 	$scope.showProduct = function(){
 		
@@ -42,8 +44,8 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 					filterDataForTable();
 				}
 				
-				vm.tableParams.reload();
-				vm.tableParams.page(1);
+				$scope.tableParams.reload();
+				$scope.tableParams.page(1);
 				
 			});
 		}
@@ -78,10 +80,19 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			productFactory.getProductByCompany(id).then(function(response){
+				// console.log("get updated data = ",response);
 				toaster.clear();
 				if(angular.isArray(response)){
-					data = response;
+					
+					// $scope.$digest(function() {
+						data=[];
+						data = angular.copy(response);
+				        // $scope.tableParams.reload();
+				        // $scope.tableParams.reloadPages();
+					   
+					// });
 					filterDataForTable();
+
 				}
 				else{
 					
@@ -96,8 +107,10 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 				}
 				else{
 					//console.log('one');
-					 vm.tableParams.reload();
-					 vm.tableParams.page(1);
+					 // $scope.tableParams.reload();
+					 // $scope.tableParams.reloadPages();
+					$scope.tableParams= {reload:function(){},settings:function(){return {}}};
+
 				}
 				
 			});
@@ -109,7 +122,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	
 	$scope.TableData = function(){
 		 
-	  vm.tableParams = new ngTableParams({
+	  $scope.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
 		  sorting: {
@@ -187,7 +200,6 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		$scope.openProductBatchModal = function(){
 			
 			if (Modalopened) return;
-			
 			var modalInstance = $modal.open({
 				
 				templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
@@ -218,5 +230,109 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		}
 	
    /** End **/
+
+   /** Batch Update**/
+   
+		$scope.openProductBatchUpdateModal = function(){
+			
+			if (Modalopened) return;
+			$scope.selectedBoxArray=[];
+			var checkboxes = document.getElementsByName('check');
+ 			for (var i = 0; i < checkboxes.length; i++) 
+ 			{
+			   if(checkboxes[i].checked == true)
+			   {
+			   		$scope.selectedBoxArray.push($scope.filteredItems[i]);
+			   }
+			}
+			if($scope.selectedBoxArray.length==0)
+			{
+				toaster.pop('alert', 'Opps!!', 'No Product Selected');
+				return false;
+			}
+			var modalInstance = $modal.open({
+				
+				templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchUpdateModal.html',
+				controller: 'InventoryBatchModalUpdateController as form',
+				size: 'flg',
+				resolve:{
+					productData: function(){
+						
+						return $scope.selectedBoxArray;
+					}
+				}
+			});
+			
+			 Modalopened = true;
+			 
+			modalInstance.result.then(function (data1) {
+			  console.log('Ok');
+			  productFactory.blankProduct();
+			  // $scope.showProduct();	
+			  Modalopened = false;
+			  
+			  var count =   data.length;
+				$scope.productFlag=0;
+				for(var sat=0;sat<count;sat++){
+					var dataSet =   data[sat];	
+					dataSet.selected = false;	
+				}
+				$scope.parentCheckBox=false;
+				// $scope.tableParams.reload();
+				// $scope.tableParams.page(1);
+			  $scope.init();
+			  
+			
+			}, function (data1) {
+			  console.log('Cancel');	
+				Modalopened = false;
+				
+			});
+		}
+	
+   /** End **/
+
+    /*checkbox code*/
+    $scope.parentCheckBox;
+   	$scope.selectedBoxArray = [];
+	$scope.productFlag = 0;
+	// $scope.changeBox = function(box1,pData){
+	// 	if(box1 == true)
+	// 	{
+	// 		$scope.selectedBoxArray.push(pData);
+	// 	}
+	// 	else
+	// 	{	
+	// 		console.log("else");
+	// 		var index = $scope.selectedBoxArray.indexOf(pData);
+	// 		$scope.selectedBoxArray.splice(index,1);
+	// 	}
+	// 	console.log("special console = ",$scope.selectedBoxArray);
+	// }
+	$scope.changeAllBox = function(box)
+	{		
+		if(box == false){
+			var count =   data.length;
+			$scope.productFlag=0;
+			for(var sat=0;sat<count;sat++){
+				var dataSet =   data[sat];	
+				dataSet.selected = false;	
+			}
+			$scope.selectedBoxArray = [];	
+		}
+		else{
+			$scope.productFlag=1;
+			var count =   data.length;
+			// $scope.productFlag=0;
+			for(var sat=0;sat<count;sat++){
+				// console.log("data = ",data[sat]);
+				var dataSet =   data[sat];	
+				dataSet.selected = true;	
+			}
+			$scope.selectedBoxArray = $scope.filteredItems;
+		}
+		// console.log("rrr = ",$scope.selectedBoxArray);
+	}
+   /*End*/
 }
 InvProductController.$inject = ["$scope", "$filter", "ngTableParams","apiCall","apiPath","$state","apiResponse","toaster","getSetFactory","$modal","productFactory","fetchArrayService"];

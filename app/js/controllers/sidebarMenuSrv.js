@@ -6,11 +6,20 @@ App.service('sidebarMemu', ["$rootScope", "$http","userPermisionKey", function($
 	  
 
   return {
-    load: function() {
+    load: function(pURL = null) {
+      console.log(pURL);
+      var baseUrl;
+      
+      if(pURL != null ){
+        baseUrl = pURL;
+      }
+      else{
+        baseUrl = menuURL;
+      }
 
-      $http.get(menuURL)
+      $http.get(baseUrl)
         .success(function(items) {
-
+          console.log('service..');
            $rootScope.menuItems = items;
            $rootScope.permissionKey = userPermisionKey.configuration;
 

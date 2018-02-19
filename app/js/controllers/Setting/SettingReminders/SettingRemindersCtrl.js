@@ -5,9 +5,15 @@ function settingRemindersController($rootScope,$scope,apiCall,apiPath,toaster,ap
   'use strict';
   var vm = this;
  
-  vm.reminder = {};
+  $scope.birthReminder = {};
+  $scope.anniReminder = {};
+  $scope.paymentDate = {};
+  $scope.birthReminder.birthday={};
+  $scope.anniReminder.annivesary={};
+  $scope.paymentDate.payment={};
   var formdata = new FormData();
-  
+
+  $scope.anniReminder.annivesary.notify = 'sms';
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -16,14 +22,223 @@ function settingRemindersController($rootScope,$scope,apiCall,apiPath,toaster,ap
 	
 	// Birthday
   	// ----------------------------------- 
-		vm.reminderHour = ["1","2","4","6","12","24"];         
-		vm.beforeAfterTime = ["BEFORE","AFTER"];         
-		
-		vm.updateReminder = function(){
-			alert('Work in Progress');
+		vm.reminderHour = ["1 hour","2 hour","4 hour","6 hour","12 hour","24 hour"];         
+		vm.beforeAfterTime = ["before","after"];  
+    var formdata = new FormData();       
+		// Birthday
+		vm.updateBirthReminder = function(birthReminder){
+      console.log("birth reminder data = ",birthReminder);
+      
+      formdata.append('birthreminderNotifyBy',birthReminder.birthday.notify);
+      formdata.append('birthreminderType',birthReminder.birthday.prefixTime);
+      formdata.append('birthreminderTime',birthReminder.birthday.time);
+      if(birthReminder.birthday.toggle)
+      {
+        formdata.append('birthreminderStatus',"on");
+      }
+      else
+      {
+        formdata.append('birthreminderStatus',"off");
+      }
+      var reminderApiPath = apiPath.settingOption;
+      
+      if($scope.birthDateButton == "Update")
+      {
+        $scope.updateReminderData(reminderApiPath,"birth");
+      }
+      else
+      {
+        $scope.insertReminderData(reminderApiPath,"birth");
+      }
+    }
+
+    //AnniversaryDate
+    vm.updateAnniReminder = function(anniReminder){
+			formdata.append('annireminderNotifyBy',anniReminder.annivesary.notify);
+      formdata.append('annireminderType',anniReminder.annivesary.prefixTime);
+      formdata.append('annireminderTime',anniReminder.annivesary.time);
+      if(anniReminder.annivesary.toggle)
+      {
+        formdata.append('annireminderStatus',"on");
+      }
+      else
+      {
+        formdata.append('annireminderStatus',"off");
+      }
+      var reminderApiPath = apiPath.settingOption;
+      
+      if($scope.anniDateButton == "Update")
+      {
+        $scope.updateReminderData(reminderApiPath,"anni");
+      }
+      else
+      {
+        $scope.insertReminderData(reminderApiPath,"anni");
+      }
 		}
-	// Birthday
-	
+
+    //paymentdata
+    vm.updatepaymentData = function(paymentData)
+    {
+        formdata.append('paymentdateNoOfDays',paymentData.payment.noOfDays);
+        if(paymentData.payment.toggle)
+        {
+          formdata.append('paymentdateStatus',"on");
+        }
+        else
+        {
+          formdata.append('paymentdateStatus',"off");
+        }
+        var reminderApiPath = apiPath.settingOption;
+        if($scope.paymentButton == "Update")
+        {
+          $scope.updateReminderData(reminderApiPath,"paymentData");
+        }
+        else
+        {
+          $scope.insertReminderData(reminderApiPath,"paymentData");
+        }
+    }
+
+    //insert reminder data
+    $scope.insertReminderData = function(reminderApiPath,type)
+    {
+      //api call for saving birthdate-anniversarydate
+      apiCall.postCall(reminderApiPath,formdata).then(function(reminderResponseData)
+      {
+          if(apiResponse.ok == reminderResponseData)
+          {
+              if(type==="anni")
+              {
+                $scope.anniDateButton="Update";  
+              }
+              else if(type==="birth")
+              {
+                $scope.birthDateButton="Update";
+              }
+              else if(type == "paymentData")
+              {
+                $scope.paymentButton="Update";
+              }
+              toaster.pop('success', 'Title', 'Successfull');
+              formdata = new FormData();
+              //get reminder-data
+              $scope.getReminderData();
+          }
+          else
+          {
+            toaster.pop('warning', 'Opps!!', reminderResponseData);
+          }
+          formdata.delete('birthreminderNotifyBy');
+          formdata.delete('birthreminderType');
+          formdata.delete('birthreminderTime');
+          formdata.delete('annireminderNotifyBy');
+          formdata.delete('annireminderType');
+          formdata.delete('annireminderTime');
+          formdata.delete('paymentdateNoOfDays');
+          formdata.delete('paymentdateStatus');
+          formdata.delete('annireminderStatus');
+          formdata.delete('birthreminderStatus');
+      }); 
+    }
+
+    //update reminder data
+    $scope.updateReminderData = function(reminderApiPath,type)
+    {
+      //api call for saving birthdate-anniversarydate
+      apiCall.patchCall(reminderApiPath,formdata).then(function(reminderResponseData)
+      {
+          if(apiResponse.ok == reminderResponseData)
+          {
+              if(type==="anni")
+              {
+                $scope.anniDateButton="Update";  
+              }
+              else if(type==="birth")
+              {
+                $scope.birthDateButton="Update";
+              }
+              else if(type == "paymentData")
+              {
+                $scope.paymentButton="Update";
+              }
+              toaster.pop('success', 'Title', 'Successfull');
+              formdata = new FormData();
+              //get reminder-data
+              $scope.getReminderData();
+
+          }
+          else
+          {
+            toaster.pop('warning', 'Opps!!', reminderResponseData);
+          }
+          formdata.delete('birthreminderNotifyBy');
+          formdata.delete('birthreminderType');
+          formdata.delete('birthreminderTime');
+          formdata.delete('annireminderNotifyBy');
+          formdata.delete('annireminderType');
+          formdata.delete('annireminderTime');
+          formdata.delete('paymentdateNoOfDays');
+          formdata.delete('paymentdateStatus');
+          formdata.delete('annireminderStatus');
+          formdata.delete('birthreminderStatus');
+      }); 
+    }
+
+    $scope.getReminderData = function()
+    {
+      var reminderApiPath = apiPath.settingOption;
+      apiCall.getCall(reminderApiPath).then(function(getResponse){
+          
+          var dataArrayLength = getResponse.length;
+          var birthFlag=0;
+          var anniFlag=0;
+          var paymentFlag=0;
+          for(var dataArray=0;dataArray<dataArrayLength;dataArray++)
+          {
+            if(getResponse[dataArray].settingType == "birthreminder")
+            {
+              $scope.birthDateButton="Update";
+              birthFlag=1;
+              $scope.birthReminder.birthday.toggle = getResponse[dataArray].birthreminderStatus==="on" ? true :false;
+              $scope.birthReminder.birthday.notify = getResponse[dataArray].birthreminderNotifyBy;
+              $scope.birthReminder.birthday.time = getResponse[dataArray].birthreminderTime;
+              $scope.birthReminder.birthday.prefixTime = getResponse[dataArray].birthreminderType;
+              $scope.birthReminder.birthday.settingId = getResponse[dataArray].settingId;
+            }
+            if(getResponse[dataArray].settingType == "annireminder")
+            {
+              $scope.anniDateButton="Update";
+              anniFlag=1;
+              $scope.anniReminder.annivesary.toggle = getResponse[dataArray].annireminderStatus==="on" ? true :false;
+              $scope.anniReminder.annivesary.notify = getResponse[dataArray].annireminderNotifyBy;
+              $scope.anniReminder.annivesary.time = getResponse[dataArray].annireminderTime;
+              $scope.anniReminder.annivesary.prefixTime = getResponse[dataArray].annireminderType;
+              $scope.anniReminder.annivesary.settingId = getResponse[dataArray].settingId;
+            }
+            if(getResponse[dataArray].settingType == "paymentdate")
+            {
+              $scope.paymentButton="Update";
+              paymentFlag=1;
+              $scope.paymentDate.payment.toggle = getResponse[dataArray].paymentdateStatus==="on" ? true :false;
+              $scope.paymentDate.payment.noOfDays = getResponse[dataArray].paymentdateNoOfDays;
+            }
+          }
+          if(birthFlag==0)
+          {
+            $scope.birthDateButton="Save";
+          }
+          if(anniFlag==0)
+          {
+            $scope.anniDateButton="Save";
+          }
+          if(paymentFlag==0)
+          {
+            $scope.paymentButton="Save";
+          }
+      });
+    }
+    $scope.getReminderData();
   // Datepicker
   // ----------------------------------- 
 

@@ -17,26 +17,29 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 	function filterDataForTable(){
 		//console.time();
 		var count = data.length;
-		while(count--) {
-		  	var index = fetchArrayService.myIndexOfObject(vm.productCategoryData,data[count].product.productCategoryId,'productCategoryId');
-				
-			data[count].productCategoryName = ""; //initialization of new property 
-			data[count].productCategoryName =	index.productCategoryName;  //set the data from nested obj into new property
+		var iIndex = 0;
+		while(iIndex < count) {
+		  	var index = fetchArrayService.myIndexOfObject(vm.productCategoryData,data[iIndex].product.productCategoryId,'productCategoryId');
 			
-			var groupIndex = fetchArrayService.myIndexOfObject(vm.productGroupData,data[count].product.productGroupId,'productGroupId');
+			data[iIndex].productCategoryName = ""; //initialization of new property 
+			data[iIndex].productCategoryName =	index.productCategoryName;  //set the data from nested obj into new property
 			
-			data[count].productGroupName = ""; //initialization of new property 
-			data[count].productGroupName = groupIndex.productGroupName;  //set the data from nested obj into new property
+			var groupIndex = fetchArrayService.myIndexOfObject(vm.productGroupData,data[iIndex].product.productGroupId,'productGroupId');
+			
+			data[iIndex].productGroupName = ""; //initialization of new property 
+			data[iIndex].productGroupName = groupIndex.productGroupName;  //set the data from nested obj into new property
 		  
-			data[count].productName = ""; //initialization of new property 
-			data[count].productName = data[count].product.productName;  //set the data from nested obj into new property
+			data[iIndex].productName = ""; //initialization of new property 
+			data[iIndex].productName = data[iIndex].product.productName;  //set the data from nested obj into new property
 			
-			data[count].color = ""; 
-			data[count].color = data[count].product.color;
-			data[count].size = ""; 
-			data[count].size = data[count].product.size;
+			data[iIndex].color = ""; 
+			data[iIndex].color = data[iIndex].product.color;
+			data[iIndex].size = ""; 
+			data[iIndex].size = data[iIndex].product.size;
 			
-			data[count].qty = parseInt(data[count].qty);
+			data[iIndex].qty = parseInt(data[iIndex].qty);
+
+			iIndex++;
 		}
 		//console.timeEnd();
 	}

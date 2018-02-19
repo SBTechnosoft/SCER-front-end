@@ -15,7 +15,8 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 	$scope.dateFormat =  $rootScope.dateFormats; //Date Format
 	
   var data = [];
-  var data2 = [];
+  $scope.data2 = [];
+  $scope.data3 = [];
 	var flag = 0;
 	
 	$scope.headerType = headerType;
@@ -53,26 +54,108 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 				toaster.clear();
 				
 				if(angular.isArray(response)){
-					flag == 1 ? data2=response : data=response;
+					if(flag == 1)
+					{
+						data=response;
+					}
+					else if(flag==2)
+					{
+						$scope.data2=response;
+					}
+					else if(flag==3)
+					{
+						$scope.data3=response;
+					}
 					// console.log(data2);
 					// console.log(data);
 					$scope.exportPdfHidden = true;
 				}
+				else if(angular.isObject(response))
+				{
+					if(response.hasOwnProperty('imps'))
+					{
+						$scope.data2 = response.imps;
+					}
+					
+					if(response.hasOwnProperty('b2b')){
+						data = response.b2b;
+						$scope.data3 = response.b2b;
+						$scope.TableData2();
+						$scope.TableData3();
+					}
+					if(response.hasOwnProperty('gstr1Invoice')){
+						data = response.gstr1Invoice;
+						console.log(response);
+						$scope.data3 = response.gstr1Invoice;
+						$scope.TableData2();
+						$scope.TableData3();
+					}
+
+					$scope.exportPdfHidden = true;
+
+				}
 				else{
 					if(apiResponse.noContent == response || apiResponse.notFound == response){
-						flag == 1 ? data2=[] : data=[];
+						if(flag==1)
+						{
+							data=[];
+							// data3=[];
+						}
+						else if(flag==2)
+						{
+							$scope.data2=[];	
+							// data3=[];	
+						}
+						else if(flag==3)
+						{
+							$scope.data3=[];	
+							// data2=[];
+						}
 						toaster.pop('alert', 'Opps!!', 'No Data Available');
 						$scope.exportPdfHidden = false;
 					}
 				}
-				flag == 1 ? $scope.TableData2() : $scope.TableData();
-				
+				if(flag == 1)
+				{
+					$scope.TableData();
+				}
+				else if(flag==2)
+				{
+					$scope.TableData2();
+				}
+				else if(flag==3)
+				{
+					$scope.TableData3();
+				}
+			});
+
+		}
+		$scope.getIncomeExpenseData = function(path,headerData)
+		{
+			apiCall.getCallHeader(path,headerData).then(function(response){
+				if(angular.isArray(response) || angular.isObject(response)){
+					$scope.incomeExpenseDetail = response;
+				}
+				else 
+				{
+					if(apiResponse.noContent == response || apiResponse.notFound == response)
+					{
+						$scope.incomeExpenseDetail = 0;
+					}
+				}
+				console.log(response);
 			});
 		}
-		
+		$scope.additionOfValue = function(value1,value2)
+		{
+			return parseFloat(value1)+parseFloat(value2);
+	}
+		$scope.substractionOfValue = function(value1,value2,value3)
+		{
+			return (parseFloat(value1)+parseFloat(value2))-parseFloat(value3);
+		}
 		$scope.TableData = function(){
-			 
-		  vm.tableParams = new ngTableParams({
+		  $scope.tableParams = new ngTableParams({
 			  page: 1,            // show first page
 			  count: 10,          // count per page
 			  sorting: {
@@ -82,7 +165,7 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  counts: [],
 			  total: data.length, // length of data
 			  getData: function($defer, params) {
-				  // use build-in angular filter
+			  	// use build-in angular filter
 				  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.invoiceNumber) != "undefined" && params.$params.filter.invoiceNumber != "")  || (typeof(params.$params.filter.salesType) != "undefined" && params.$params.filter.salesType != "") || (typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "") || (typeof(params.$params.filter.advance) != "undefined" && params.$params.filter.advance != "") || (typeof(params.$params.filter.balance) != "undefined" && params.$params.filter.balance != "") || (typeof(params.$params.filter.tax) != "undefined" && params.$params.filter.tax != "") || (typeof(params.$params.filter.grandTotal) != "undefined" && params.$params.filter.grandTotal != "")))
 				  {
 						 var orderedData = params.filter() ?
@@ -115,7 +198,7 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 		
 		$scope.TableData2 = function(){
 			 
-		  vm.tableParams2 = new ngTableParams({
+		  $scope.tableParams2 = new ngTableParams({
 			  page: 1,            // show first page
 			  count: 10,          // count per page
 			  sorting: {
@@ -123,32 +206,32 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 			  }
 		  }, {
 			  counts: [],
-			  total: data2.length, // length of data
+			  total: $scope.data2.length, // length of data
 			  getData: function($defer, params) {
 				  // use build-in angular filter
 				  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.billNumber) != "undefined" && params.$params.filter.billNumber != "")  || (typeof(params.$params.filter.salesType) != "undefined" && params.$params.filter.salesType != "") || (typeof(params.$params.filter.clientName) != "undefined" && params.$params.filter.clientName != "") || (typeof(params.$params.filter.advance) != "undefined" && params.$params.filter.advance != "") || (typeof(params.$params.filter.balance) != "undefined" && params.$params.filter.balance != "") || (typeof(params.$params.filter.tax) != "undefined" && params.$params.filter.tax != "") || (typeof(params.$params.filter.grandTotal) != "undefined" && params.$params.filter.grandTotal != "") || (typeof(params.$params.filter.additionalTax) != "undefined" && params.$params.filter.additionalTax != "")))
 				  {
 						 var orderedData = params.filter() ?
-						 $filter('filter')(data2, params.filter()) :
-						 data2;
+						 $filter('filter')($scope.data2, params.filter()) :
+						 $scope.data2;
 						  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 						  params.total(orderedData.length); // set total for recalc pagination
 						  $defer.resolve(vm.users);
 				  }
 				else
 				{
-					params.total(data2.length);
+					params.total($scope.data2.length);
 				}
 				 
 				 if(!$.isEmptyObject(params.$params.sorting))
 				  {
 					  var orderedData = params.sorting() ?
-							  $filter('orderBy')(data2, params.orderBy()) :
-							  data2;
+							  $filter('orderBy')($scope.data2, params.orderBy()) :
+							  $scope.data2;
 					  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 				  }
 				
-				$scope.totalData2 = data2.length;
+				$scope.totalData2 = $scope.data2.length;
 				$scope.pageNumber2 = params.page();
 				$scope.itemsPerPage2 = params.count();
 				$scope.totalPages2 = Math.ceil($scope.totalData2/params.count());
@@ -156,52 +239,101 @@ function AccTaxationController($rootScope,$scope, $filter, ngTableParams,apiCall
 		  });
 		}
 		
+
+		$scope.TableData3 = function(){
+			 // console.log($scope.data3);
+		  $scope.tableParams3 = new ngTableParams({
+			  page: 1,            // show first page
+			  count: 1000,          // count per page
+			  sorting: {
+				  productName: 'desc'     // initial sorting
+			  }
+		  }, {
+			  counts: [],
+			  total: $scope.data3.length, // length of data
+			  getData: function($defer, params) {
+				  // use build-in angular filter
+				  if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.productName) != "undefined" && params.$params.filter.productName != "")))
+				  {
+						 var orderedData = params.filter() ?
+						 $filter('filter')($scope.data3, params.filter()) :$scope.data3;
+						  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+						  params.total(orderedData.length); // set total for recalc pagination
+						  $defer.resolve(vm.users);
+				  }
+				else
+				{
+					params.total($scope.data3.length);
+				}
+				 
+				 if(!$.isEmptyObject(params.$params.sorting))
+				  {
+					  var orderedData = params.sorting() ?
+							  $filter('orderBy')($scope.data3, params.orderBy()) :
+							  $scope.data3;
+					  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+				  }
+				
+				$scope.totalData3 = $scope.data3.length;
+				$scope.pageNumber3 = params.page();
+				$scope.itemsPerPage3 = params.count();
+				$scope.totalPages3 = Math.ceil($scope.totalData3/params.count());
+				  }
+		  });
+		}
 	/** End **/
 	var headerData = {'Content-Type': undefined,'fromDate':$scope.displayfromDate,'toDate':$scope.displaytoDate};
 	var getJrnlPath;
 	if($scope.headerType == 'salesTaxation'){
 		
 		getJrnlPath = apiPath.getSalesTax+$scope.filterCompanyId;
-		$scope.getProduct(getJrnlPath,headerData);
+		$scope.getProduct(getJrnlPath,headerData,1);
 	}
 	else if($scope.headerType == 'purchaseTaxation'){
 		
 		getJrnlPath = apiPath.getPurchaseTax+$scope.filterCompanyId;
-		$scope.getProduct(getJrnlPath,headerData);
+		$scope.getProduct(getJrnlPath,headerData,1);
 	}
 	else if($scope.headerType == 'purchaseDetailTaxation'){
 		
 		getJrnlPath = apiPath.getPurchaseDetail+$scope.filterCompanyId;
-		$scope.getProduct(getJrnlPath,headerData);
+		$scope.getProduct(getJrnlPath,headerData,1);
 	}
 	else if($scope.headerType == 'GST Return'){
-		
 		getJrnlPath = apiPath.getGstReturn+$scope.filterCompanyId;
 		
 		var getJrnlPath2 = apiPath.getPurchaseTax+$scope.filterCompanyId;
-		$scope.getProduct(getJrnlPath2,headerData,1);
+		$scope.getProduct(getJrnlPath2,headerData,2);
 		
 		var getJrnlPath3 = apiPath.getSalesTax+$scope.filterCompanyId;
-		$scope.getProduct(getJrnlPath3,headerData);
+		$scope.getProduct(getJrnlPath3,headerData,1);
 		
+		var getJrnlPath4 = apiPath.getStockData+$scope.filterCompanyId;
+		$scope.getProduct(getJrnlPath4,headerData,3);
+
+		var getJrnlPath5 = apiPath.getIncomeExpenseData+$scope.filterCompanyId;
+		$scope.getIncomeExpenseData(getJrnlPath5,headerData);
 	}
-  
-	/** Demo **/
-		apiCall.getCallHeader('accounting/taxation/stock-detail/company/'+$scope.filterCompanyId,headerData).then(function(res){
-			
-			console.log('Reema, Your Testing Response is Below :)');
-			console.log(res);
-			console.log('Your Testing Response is Finish');
-			
-		});
-		
-	/** End **/
+	else if($scope.headerType == 'GST Return2')
+	{
+		getJrnlPath = apiPath.getGstReturn2+$scope.filterCompanyId;
+		$scope.getProduct(getJrnlPath,headerData,1);
+	}
+	else if($scope.headerType == 'GST Return3')
+	{
+		getJrnlPath = apiPath.getGstReturn3+$scope.filterCompanyId;
+		$scope.getProduct(getJrnlPath,headerData,1);
+	}
 	
+
 	$scope.refreshTable = function(){
 		
-		vm.tableParams.reload();
-		vm.tableParams2.reload();
-		console.log(data2);
+		// $scope.tableParams.reload();
+		// $scope.tableParams.page(1);
+		// $scope.tableParams2.reload();
+		// $scope.tableParams2.page(1);
+		// $scope.tableParams3.reload();
+		//$scope.tableParams3.page(1);
 	}
 	//Date Convert
 	

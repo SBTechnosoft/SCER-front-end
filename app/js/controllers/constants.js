@@ -158,9 +158,13 @@ App
 	'getProfitLoss'         : 'accounting/profit-loss/company/',
 	'getCashFlow'           : 'accounting/cash-flow/company/',
 	'getSalesTax'           : 'accounting/taxation/sale-tax/company/',
-	'getPurchaseTax'        : 'accounting/taxation/purchase-tax/company/',
-	'getPurchaseDetail'     : 'accounting/taxation/purchase-detail/company/',
-	'getGstReturn'          : 'accounting/taxation/gst-return/company/',
+  'getPurchaseTax'        : 'accounting/taxation/purchase-tax/company/',
+  'getStockData'          : 'accounting/taxation/stock-detail/company/',
+  'getIncomeExpenseData'  : 'accounting/taxation/income-expense/company/',
+  'getPurchaseDetail'     : 'accounting/taxation/purchase-detail/company/',
+  'getGstReturn'          : 'accounting/taxation/gst-return/company/',
+  'getGstReturn2'         : 'accounting/taxation/gst-r2/company/',
+	'getGstReturn3'         : 'accounting/taxation/gst-r3/company/',
 	'batchBrand'            : 'product-categories/batch',
 	'batchCategory'         : 'product-groups/batch',
 	'batchProduct'          : 'products/batch',
@@ -172,7 +176,8 @@ App
 	'PostJobcard'           : 'crm/job-form',
 	'sendEmail'             : 'crm/conversations/bulk-email',
 	'sendSMS'               : 'crm/conversations/bulk-sms',
-	'clientProfession'      : 'settings/professions',
+  'clientProfession'      : 'settings/professions',
+	'settingExpense'        : 'settings/expenses',
 	'postPurchaseBill'      : 'accounting/purchase-bills',
 	'PurchaseBillByCompany' : 'accounting/purchase-bills/company/',
 	'documentDelete'        : 'documents/',
@@ -219,7 +224,8 @@ App
   })
    // Back End Url
   .constant('hostUrl', {
-    'localhost': 'http://localhost/',
+    'localhost': 'http://localhost/SCER-back-end/',
+    'scerp1': 'http://www.scerp1.com/',
     'arihant': 'http://api.siliconbrain.in/',
     'swaminarayan': 'http://api.swaminarayancycles.com/',
     'v2erpKey': 'http://v2api.siliconbrain.in/',
@@ -231,7 +237,8 @@ App
   })
   // front-end Url
   .constant('hostFrontUrl', {
-    'localhost': 'http://localhost/',
+    'localhost': 'http://localhost/SCER-back-end/public/front-end/',
+    'scerp1': 'http://www.scerp1.com/front-end/',
     'arihant': 'http://arihant.siliconbrain.in/',
     'swaminarayan': 'http://erp.swaminarayancycles.com/',
     'v2erpKey': 'http://v2erp.siliconbrain.in/',
@@ -244,8 +251,9 @@ App
   // Google Captcha Site Key
   .constant('googleSiteKey', {
     'localhost': '6Ld6HSYTAAAAADSDPt5td0Te37OIgB2R10JvAgQg',
+    'scerp1': '6LcedD4UAAAAANmxR1qBspyC3Xh_Ii0xYHn5CYn_',
     'arihant': '6Lex4jQUAAAAAL_5SEoYozXVeC-WYzDeORO64Rfw',
-    'swaminarayan': '6LetFRoUAAAAAESKewnFkYr88sVgYCSPxugTgo7C',
+    'swaminarayan': '6Leb_z8UAAAAADbbEgHvvgi3i5Bilm27tASJCPUd',
     'v2erpKey': '6LfxfhwUAAAAAL3B7C6bI-_ZCuCYvO1vNFu4f4-6',
     'siliconbrain':  '6LchHRoUAAAAAIZHW5kSReJ6ZLRJ1gmT4D36Kdhv',
     'prabandhak':  '6Leghh0UAAAAAEr155Ro63rus07_jm0kJ0qWWhUH',
@@ -256,6 +264,7 @@ App
   // front-end Url
   .constant('pusherKey', {
     'localhost': '0948d2ac6b0e6180a3c7',
+    // 'localhost': '0948d2ac6b0e6180a3c7',
     'arihant': '0948d2ac6b0e6180a3c7',
     'swaminarayan': '0948d2ac6b0e6180a3c7@',
     'v2erpKey': '0948d2ac6b0e6180a3c7@',

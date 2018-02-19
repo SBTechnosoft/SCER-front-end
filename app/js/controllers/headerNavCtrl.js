@@ -21,19 +21,48 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
   	$scope.headerMenuCollapsed = false;
 
   	$scope.userPermisionKey = userPermisionKey;
+  	// console.log($scope.userPermisionKey);
 	//Permission Array
-	var permissionArray = $rootScope.$storage.permissionArray[0];
-
+	if(angular.isArray($rootScope.$storage.permissionArray))
+	{
+		var permissionArray = $rootScope.$storage.permissionArray[0];
+	}
+	else
+	{
+		var permissionArray = {};
+	}
+	// console.log(permissionArray);
 	//Topbar Icon hide/Show by permission
 	//-----------------------------	
 		$scope.permissionCheck = function(name){
-			if(Object.keys(permissionArray[name]).length){
-				return true;
+			if(name!=undefined && name!=null && name!='undefined' && name!='null' && name!="")
+			{
+				if(permissionArray[name]!=undefined && permissionArray[name]!=null && permissionArray[name]!='undefined' && permissionArray[name]!='null' && permissionArray[name]!="")
+				{
+					if(Object.keys(permissionArray[name]).length){
+						return true;
+						// console.log("success");
+					}	
+				}
 			}
+			
 		}
 
-		$scope.taxInvoicePermission = permissionArray[$scope.userPermisionKey.quickMenu]['taxInvoice'];
-		$scope.taxPurchasePermission = permissionArray[$scope.userPermisionKey.quickMenu]['taxPurchase'];
+		$scope.taxInvoicePermission = false;
+		$scope.taxPurchasePermission = false;
+		if(permissionArray.hasOwnProperty('quickMenu'))
+		{
+			if(permissionArray.quickMenu.hasOwnProperty('taxInvoice'))
+			{
+				$scope.taxInvoicePermission = permissionArray[$scope.userPermisionKey.quickMenu]['taxInvoice'];
+			}
+
+			if(permissionArray.quickMenu.hasOwnProperty('taxPurchase'))
+			{
+				$scope.taxPurchasePermission = permissionArray[$scope.userPermisionKey.quickMenu]['taxPurchase'];
+			}
+		}
+		
 
 	$scope.myClass = $rootScope.app.theme.sidebar;
 	
@@ -54,7 +83,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	 }
 
   $scope.getsidebar = function(){
-	  
+	  $scope.show_sidebar();
 	  // $templateCache.removeAll();
 	   // $templateCache.remove('/front-end/#/app/form-inputs');
 	    //$templateCache.removeAll();
@@ -71,8 +100,10 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	
       $http.get(menuURL)
         .success(function(items) {
+
           	$rootScope.menuItems = items;
 		  	$rootScope.permissionKey = $scope.userPermisionKey.accounting;
+		  	
         })
         .error(function(data, status, headers, config) {
           alert('Failure loading menu');
@@ -96,8 +127,10 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	
       $http.get(menuURL)
         .success(function(items) {
+        	$scope.show_sidebar();
            $rootScope.menuItems = items;
 		   $rootScope.permissionKey = $scope.userPermisionKey.configuration;
+		   
         })
         .error(function(data, status, headers, config) {
           alert('Failure loading menu');
@@ -107,6 +140,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
    $scope.headerMenuCollapsed = false;
 		
   };
+
   
 	  // GET Inventory Sidebar
 	  $scope.getInventory = function(){
@@ -127,6 +161,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
 			   $rootScope.permissionKey = $scope.userPermisionKey.inventory;
+			   $scope.show_sidebar();
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -155,6 +190,7 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
 			   $rootScope.permissionKey = $scope.userPermisionKey.pricelist;
+			   $scope.show_sidebar();
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -182,6 +218,9 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
 			   $rootScope.permissionKey = $scope.userPermisionKey.analyzer;
+
+			   $scope.show_sidebar();
+
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -210,6 +249,8 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
 			   $rootScope.permissionKey = $scope.userPermisionKey.inventory;
+
+			   $scope.show_sidebar();
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -237,6 +278,8 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 				//$rootScope.menuItems=[];
 			   $rootScope.menuItems = items;
 			   $rootScope.permissionKey = $scope.userPermisionKey.crm;
+
+			   $scope.show_sidebar();
 			})
 			.error(function(data, status, headers, config) {
 			  alert('Failure loading menu');
@@ -289,8 +332,18 @@ App.controller('HeaderNavController', ['$scope','$rootScope','$http','$templateC
 	  /**
 	  Calculator Model End
 	  **/
-  
-	  $scope.logout = function(){
+
+	  	/** Show Side bar **/
+	  	$scope.show_sidebar = function()
+	  	{
+	  		$rootScope.app.sidebar.sidebar_from_topbar = true;
+  			$rootScope.app.sidebar.isCollapsed = false;
+	  		$rootScope.app.sidebar.sidebar_hide = true;
+	  	}
+	  	/* End **/
+
+	  $scope.logout = function()
+	  {
 		  
 		//alert('in');2e7719b36240c051e694a88cc511d4a6  d29ac73b666a3be3fc463448fdc5d9fc
 		apiCall.deleteCall(apiPath.deleteToken+$rootScope.$storage.authUser.userId).then(function(deleteres){

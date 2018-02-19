@@ -1,5 +1,6 @@
 <!-- START Sidebar-->
 <div data-ng-controller="SidebarController" class="sidebar-wrapper">
+   
    <side-bar >
       <!--div class="sidebar-nav" style="background-color: white !important;"-->
       <div class="sidebar-nav" >
@@ -25,7 +26,7 @@
          </div-->
          <!-- END sidebar buttons-->
          <!-- START sidebar nav-->
-         <ul class="nav" >
+         <ul class="nav" data-ng-class="app.topbar.isCollapsed ? 'my-topbar-margin':'' ">
             <!-- Iterates over all sidebar items-->
 			<li data-ng-class="[getSidebarItemClass(item),'ng-fadeInUp']" data-ng-repeat="item in menuItems" data-ng-include="'sidebar-items.html'" data-ng-click="toggleCollapse($index)" data-ng-switch="item.type" data-ng-if="$storage.permissionArray[0][permissionKey][item.permission]" ></li>
 				<!--li class="nav-heading"><a > <i class="fa fa-home" ></i><span class="ng-scope ng-binding" >QWERTY</span></a></li-->

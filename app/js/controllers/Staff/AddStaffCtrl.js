@@ -11,6 +11,7 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 
 	var vm = this;
 	$scope.addStaff = [];
+	$scope.insertPermissionArray = [{"configuration":{"dashboard":true,"companies":true,"branches":true,"staff":true,"invoiceNumber":true,"quotationNumber":true,"template":true,"setting":true},"accounting":{"sales":true,"purchase":true,"salesOrder":true,"quotation":true,"creditNote":true,"debitNote":true,"specialJournal":true,"payment":true,"receipt":true,"statements":true,"taxation":true,"ledger":true},"inventory":{"brand":true,"category":true,"product":true,"barcodePrint":true,"stockRegister":true,"stockSummary":true},"crm":{"jobcard":true,"clients":true},"analyzer":{"reports":true},"pricelist":{"tax":true},"quickMenu":{"taxInvoice":true,"taxPurchase":true}}];
 	var formdata = new FormData();
 	
 	$scope.allowedType = $rootScope.$storage.authUser.userType; //Logged user Type (Admin/Staff)
@@ -52,7 +53,7 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 			vm.companyDrop = responseCompanyDrop;
 			
 			//Set default Company
-			var defaultCompanyData = fetchArrayService.getfilteredSingleObject(response2,'ok','isDefault');
+			var defaultCompanyData = fetchArrayService.getfilteredSingleObject(responseCompanyDrop,'ok','isDefault');
 				
 				$scope.addStaff.company = defaultCompanyData;
 				
@@ -214,7 +215,8 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 			var popUp = "Update Successfully";
 		}
 		else{
-			
+			formdata.set('permissionArray',angular.toJson($scope.insertPermissionArray));
+
 			var addEditPath = apiPath.getAllStaff;
 			var popUp = "Insert Successfully";
 		}

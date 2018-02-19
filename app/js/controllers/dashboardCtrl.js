@@ -1,8 +1,9 @@
-App.controller('DashboardController', ['$scope', 'colors', 'flotOptions','apiPath','apiCall','apiResponse','apiDateFormate','fetchArrayService','clientFactory','$modal','toaster', function($scope, colors, flotOptions,apiPath,apiCall,apiResponse,apiDateFormate,fetchArrayService,clientFactory,$modal,toaster) {
+App.controller('DashboardController', ['$rootScope','$scope', '$filter','colors', 'flotOptions','apiPath','apiCall','apiResponse','apiDateFormate','fetchArrayService','clientFactory','$modal','toaster','ngTableParams', function($rootScope,$scope,$filter, colors, flotOptions,apiPath,apiCall,apiResponse,apiDateFormate,fetchArrayService,clientFactory,$modal,toaster,ngTableParams) {
   'use strict';
   // KNOB Charts
   // ----------------------------------- 
-
+  var vm = this;
+  var data=[];
   $scope.knobLoaderData1 = 75;
   $scope.knobLoaderOptions1 = {
       width: '80%', // responsive
@@ -24,7 +25,9 @@ App.controller('DashboardController', ['$scope', 'colors', 'flotOptions','apiPat
       lineCap : 'round',
       thickness : 0.1
     };
-
+    
+    // $scope.remainingPayment=[];
+  // $scope.remainingPayment = $rootScope.remainingPaymentData; 
 
   // Dashboard charts
   // ----------------------------------- 
@@ -174,6 +177,64 @@ App.controller('DashboardController', ['$scope', 'colors', 'flotOptions','apiPat
     }
     
   /** End **/
-  
+    if($scope.$storage.authUser)
+    {
+      apiCall.getCall(apiPath.settingOption+'/payment').then(function(response){
+          data=response;
+          console.log("app",data);
+          $scope.TableData();
+      });
+    }
 
+    $scope.TableData = function()
+  {
+    
+    $scope.tableParams = new ngTableParams({
+      page: 1,            // show first page
+      count: 10,          // count per page
+      sorting: {
+        ledgerName: 'asc'     // initial sorting
+      }
+    }, {
+       counts: [],
+      total: data.length, // length of data
+      getData: function($defer, params) {
+        
+        // use build-in angular filter
+         if(!$.isEmptyObject(params.$params.filter) && ((typeof(params.$params.filter.ledgerName) != "undefined" && params.$params.filter.ledgerName != "")  || (typeof(params.$params.filter.contactNo) != "undefined" && params.$params.filter.contactNo != "") || (typeof(params.$params.filter.emailId) != "undefined" && params.$params.filter.emailId != "") || (typeof(params.$params.filter.remainingAmountType) != "undefined" && params.$params.filter.remainingAmountType != "") || (typeof(params.$params.filter.remainingAmount) != "undefined" && params.$params.filter.remainingAmount != "")))
+        {
+           var orderedData = params.filter() ?
+           $filter('filter')(data, params.filter()) :
+           data;
+
+            vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+            params.total(orderedData.length); // set total for recalc pagination
+            $defer.resolve(vm.users);
+        
+
+        }
+        else{
+          
+           params.total(data.length);
+          
+        }
+       
+       if(!$.isEmptyObject(params.$params.sorting))
+        {
+        
+         //alert('ggg');
+          var orderedData = params.sorting() ?
+              $filter('orderBy')(data, params.orderBy()) :
+              data;
+      
+          $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+        }
+      $scope.totalData = data.length;
+      $scope.pageNumber = params.page();
+            $scope.itemsPerPage = params.count();
+            $scope.totalPages = Math.ceil($scope.totalData/params.count());
+      }
+    });
+  }
 }]);

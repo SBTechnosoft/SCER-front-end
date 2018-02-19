@@ -4,16 +4,17 @@
  * Controller for input components
  =========================================================*/
 
-App.controller('AddInvProductController', AddInvProductController);
+App.controller('InventoryBatchModalUpdateController', InventoryBatchModalUpdateController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$state,apiResponse,validationMessage,getSetFactory,$modal,productFactory,fetchArrayService,maxImageSize) {
+function InventoryBatchModalUpdateController($scope,toaster,apiCall,apiPath,$stateParams,$modalInstance,$state,apiResponse,validationMessage,getSetFactory,$modal,productFactory,fetchArrayService,maxImageSize,productData) {
   'use strict';
   
   var vm = this;
+  $scope.productData = productData;
   $scope.addInvProduct = [];
   var formdata = new FormData();
   var Modalopened = false;
-
+  console.log(productData);
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant
@@ -27,26 +28,26 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
     'piece',
     'pair'
   ];
+	console.log("measureUnit",this.measureUnitDrop);
 	
 	
-	
-	$scope.defaultCompany  = function(){
+	// $scope.defaultCompany  = function(){
 			
-		//Set default Company
-		apiCall.getCall(apiPath.getAllCompany).then(function(response){
+	// 	//Set default Company
+	// 	apiCall.getCall(apiPath.getAllCompany).then(function(response){
 		
-			$scope.addInvProduct.company = fetchArrayService.getfilteredSingleObject(response,'ok','isDefault');
+	// 		$scope.addInvProduct.company = fetchArrayService.getfilteredSingleObject(response,'ok','isDefault');
 			
-			vm.branchDrop = [];
-			var getAllBranch = apiPath.getOneBranch+$scope.addInvProduct.company.companyId;
-			//Get Branch
-			apiCall.getCall(getAllBranch).then(function(response4){
-				vm.branchDrop = response4;
-			});
+	// 		vm.branchDrop = [];
+	// 		var getAllBranch = apiPath.getOneBranch+$scope.addInvProduct.company.companyId;
+	// 		//Get Branch
+	// 		apiCall.getCall(getAllBranch).then(function(response4){
+	// 			vm.branchDrop = response4;
+	// 		});
 			
-			formdata.append('companyId',$scope.addInvProduct.company.companyId);
-		});
-	}
+	// 		formdata.append('companyId',$scope.addInvProduct.company.companyId);
+	// 	});
+	// }
 		
 	//Company Dropdown data
 	vm.companyDrop = [];
@@ -150,7 +151,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	}
 	else{
 		
-		$scope.defaultCompany();
+		// $scope.defaultCompany();
 		
 		$scope.addInvProduct.measureUnit = 'piece';
 		formdata.append('measurementUnit',$scope.addInvProduct.measureUnit);
@@ -306,7 +307,6 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
   
 	//Changed Data When Update
 	$scope.changeInvProductData = function(Fname,value){
-		//console.log(Fname+'..'+value);
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
@@ -320,52 +320,46 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	}
 
 	$scope.pop = function() {
+		$scope.productId=[];
+		var productLength = $scope.productData.length;
+		for(var productArray=0;productArray<productLength;productArray++)
+		{
+			$scope.productId[productArray] = $scope.productData[productArray].productId;
+			formdata.append('product['+[productArray]+']',$scope.productId[productArray]);
+		}
 	
-		if($scope.addInvProduct.getSetProductId){
+		toaster.clear();
+		toaster.pop('wait','Data Updating...','',60000);
+		//formdata.append('branchId',1);
+		
+		formdata.append('isDisplay','yes');
+		// console.log("success");
+		var editProduct = apiPath.getAllProduct+'/batchupdate';
+		apiCall.postCall(editProduct,formdata).then(function(response5){
 			toaster.clear();
-			toaster.pop('wait','Data Updating...','',60000);
-			//formdata.append('branchId',1);
-			formdata.append('isDisplay','yes');
-			var editProduct = apiPath.getAllProduct+'/'+$scope.addInvProduct.getSetProductId;
-			apiCall.postCall(editProduct,formdata).then(function(response5){
-				toaster.clear();
-				if(apiResponse.ok == response5){
-					toaster.pop('success', 'Title', 'SuccessFull');
-					productFactory.setUpdatedProduct($scope.addInvProduct.getSetProductId).then(function(response){
-						window.history.back();
-					});
-				}
-				else{
-					formdata.delete('isDisplay');
-					toaster.pop('warning', 'Opps!!', response5);
-				}
-			});
-		}
-		else{
-			
-			toaster.clear();
-			toaster.pop('wait','Data Inserting...','',60000);
-			formdata.append('isDisplay','yes');
-			apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
-				toaster.clear();
-				//console.log(response5);
-				if(apiResponse.ok == response5){
-					toaster.pop('success', 'Title', 'SuccessFull');
-					productFactory.setNewProduct($scope.addInvProduct.company.companyId,$scope.addInvProduct.name,$scope.addInvProduct.color,$scope.addInvProduct.size).then(function(response){
-						if(angular.isArray(response)){
-							$state.go('app.InvProduct');
-						}
-					});
-				}
-				else{
-					formdata.delete('isDisplay');
-					toaster.pop('warning', 'Opps!!', response5);
-				}
-			});
-		}
+			console.log("responese = ",response5);
+			if(apiResponse.ok == response5){
+				toaster.pop('success', 'Title', 'SuccessFully Updated');
+				var formdata = undefined;
+		  		formdata = new FormData();
+				$modalInstance.close();	
+			}
+			else{
+				formdata.delete('isDisplay');
+				toaster.pop('warning', 'Opps!!', response5);
+			}
+		});
 	};
   
-  $scope.cancel = function() {
+  	$scope.ok = function () {
+      $modalInstance.close('closed');
+    };
+	$scope.closeButton = function () {
+
+		$modalInstance.dismiss();
+	};
+
+	$scope.cancel = function() {
 	  
 		$scope.addInvProduct = [];
 		
@@ -377,37 +371,37 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 		  var formdata = undefined;
 		  formdata = new FormData();
 		
-		$scope.defaultCompany();
+		// $scope.defaultCompany();
 		
 		toaster.pop('info', 'Form Reset', 'Message');
-  };
+	};
   
-  $scope.openCategoryBatchModal = function(){
+ //  $scope.openCategoryBatchModal = function(){
 		
-		var modalInstance = $modal.open({
+	// 	var modalInstance = $modal.open({
 			
-			templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
-			controller: 'InventoryBatchModalController as vm',
-			size: 'lg',
-			resolve:{
-				inventoryType: function(){
+	// 		templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
+	// 		controller: 'InventoryBatchModalController as vm',
+	// 		size: 'lg',
+	// 		resolve:{
+	// 			inventoryType: function(){
 					
-					return "Product";
-				}
-			}
-		});
+	// 				return "Product";
+	// 			}
+	// 		}
+	// 	});
 		
-		modalInstance.result.then(function (data) {
+	// 	modalInstance.result.then(function (data) {
 		 
-		  console.log('Ok');	
-		  $scope.init();
+	// 	  console.log('Ok');	
+	// 	  $scope.init();
 		  
 		
-		}, function (data) {
-		  console.log('Cancel');	
+	// 	}, function (data) {
+	// 	  console.log('Cancel');	
 
-		});
-	}
+	// 	});
+	// }
 
 	$scope.uploadFile = function(files) {
 	  
@@ -482,4 +476,4 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	
    /** End **/
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory","fetchArrayService","maxImageSize"];
+InventoryBatchModalUpdateController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$modalInstance","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory","fetchArrayService","maxImageSize","productData"];

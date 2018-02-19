@@ -232,7 +232,7 @@
                <div class="form-group">
 				 <label  class="col-sm-1 control-label">Bank</label>
 	              <div class="col-sm-5">
-	                 <select chosen="" id="selectId_chzn" data-ng-model="ledgerForm.bankName" data-ng-options="s.bankName for s in bankDrop track by s.bankId" class="form-control input-sm chosen-select" size="5" ng-change="changeBank('bankName',ledgerForm.bankName.bankId)"  tabindex="2" ></select>
+	                 <select chosen="" id="selectId_chzn" data-ng-model="ledgerForm.bankName" data-ng-options="s.bankName for s in bankDrop track by s.bankId" class="form-control input-sm chosen-select" size="5" ng-change="changeBank('bankId',ledgerForm.bankName.bankId)"  tabindex="2" ></select>
 	              </div>
 				  
 				   <label  class="col-sm-1 control-label">Branch</label>
@@ -243,12 +243,12 @@
 	            <div class="form-group">
 	                <label  class="col-sm-1 control-label">IFSC</label>
 	              <div class="col-sm-5">
-	                 <input ng-model="ledgerForm.bankIfsc" tabindex="2" ng-change="changeLedgerData('bankIfsc',ledgerForm.bankIfsc)"  masked="" type="text"  placeholder="IFSC Code" class="form-control"   />
+	                 <input ng-model="ledgerForm.bankIfsc" tabindex="2" ng-change="changeLedgerData('bankIfsc',ledgerForm.bankIfsc)" readonly="readonly" masked="" type="text"  placeholder="IFSC Code" class="form-control"   />
 	              </div>
 
 	              <label  class="col-sm-1 control-label">MICR</label>
 	              <div class="col-sm-5">
-	                 <input ng-model="ledgerForm.bankMicr" tabindex="2" ng-change="changeLedgerData('bankMicr',ledgerForm.bankMicr)"  masked="" type="text"  placeholder="MICR Code" class="form-control"   />
+	                 <input ng-model="ledgerForm.bankMicr" tabindex="2" ng-change="changeLedgerData('micrCode',ledgerForm.bankMicr)"  masked="" type="text"  placeholder="MICR Code" class="form-control"   />
 	              </div>
                </div>
 			

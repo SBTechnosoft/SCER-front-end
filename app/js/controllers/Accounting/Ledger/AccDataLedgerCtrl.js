@@ -6,7 +6,7 @@
 
 App.controller('AccDataLedgerController', AccDataLedgerController);
 
-function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http,apiCall,apiPath,$location,getSetFactory,flotOptions, colors,$timeout,toaster) {
+function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http,$modal,$state,apiCall,apiPath,$location,getSetFactory,flotOptions, colors,$timeout,toaster,clientFactory,productFactory,stateCityFactory) {
   'use strict';
   var vm = this;
   var data = [];
@@ -401,5 +401,164 @@ function AccDataLedgerController($rootScope,$scope, $filter, ngTableParams,$http
 	});
   }
 
+  $scope.open_bill_ledger =function(user){
+  	console.log("useeeerrr = ",user);
+  	if(user.ledger.contactNo!=null && user.ledger.contactNo!=undefined && user.ledger.contactNo!='undefined')
+  	{	
+  		var BillPath = apiPath.getBill+user.ledger.companyId;
+		var preHeaderData = {'Content-Type': undefined,'invoiceNumber':user.ledger.contactNo};
+		preHeaderData.salesType = 'whole_sales';
+		
+		apiCall.getCallHeader(BillPath,preHeaderData).then(function(response){
+		// console.log('starting');
+		// console.log(response);
+		toaster.clear();
+		if(angular.isArray(response)){
+			
+			if(response.length > 1){
+				
+				//console.log('Multiple');
+				$scope.openBillHistoryModal('lg',response);
+
+			}
+			else{
+				var index="";
+		  		//set ledger object in factory
+		  		getSetFactory.blank();
+		  		var ledgerId = user.ledger.ledgerId;
+		  		apiCall.getCall(apiPath.getAllLedger+"/"+ledgerId).then(function(response2){
+
+		  			getSetFactory.set(response2);
+		  			$scope.openLedger('lg',index = 'purchaseBill',user.ledger.companyId);
+		  		});
+			}
+		}
+		else{
+			
+			if(apiResponse.noContent == response || apiResponse.notFound == response){
+				toaster.clear();
+				toaster.pop('info', 'Opps!!', 'Data Not Available');
+			}
+			else if(response.status == 500){
+				toaster.clear();
+				toaster.pop('warning', 'Something Wrong', response.statusText);
+			}
+			else{
+				toaster.clear();
+				toaster.pop('warning', 'Something Wrong', response);
+			}
+			
+		}
+		
+	});
+  	}
+  	else
+  	{
+  		var index="";
+  		//set ledger object in factory
+  		getSetFactory.blank();
+  		var ledgerId = user.ledger.ledgerId;
+  		apiCall.getCall(apiPath.getAllLedger+"/"+ledgerId).then(function(response2){
+
+  			getSetFactory.set(response2);
+  			$scope.openLedger('lg',index = 'purchaseBill',user.ledger.companyId);
+  		});
+  	}
+  }
+
+  	var Modalopened = false;
+	/** Ledger Redirect Edit **/
+
+	/* Ledger Model Start */
+	$scope.openLedger = function (size,index = 'purchaseBill',companyId) {
+
+	if (Modalopened) return;
+	//get Company
+	$scope.companyDrop=[];
+	apiCall.getCall(apiPath.getAllCompany+"/"+companyId).then(function(response2){
+			//console.log(response2);
+			$scope.companyDrop = response2;
+			if($scope.companyDrop)
+			{
+
+				  var modalInstance = $modal.open({
+				  templateUrl: 'app/views/PopupModal/Accounting/ledgerModal.html',
+				  controller: AccLedgerModalController,
+				  size: size,
+				  resolve:{
+					  ledgerIndex: function(){
+						  return index;
+					  },
+					  companyId: function(){
+						return $scope.companyDrop;
+					  }
+				  }
+				});
+				
+				Modalopened = true;
+				
+				var state = $('#modal-state');
+				modalInstance.result.then(function (data) {
+					console.log("dataaaaa = ",data);
+					Modalopened = false;
+				
+				}, function (data) {
+					console.log("errror = ",data);
+					Modalopened = false;
+				});
+			}
+			else{
+				
+				alert('Please Select Company');
+			}
+	});
+	
+	}
+  	/* Ledger Model End */
+
+  	/**
+		History Modal 
+	**/
+		
+	$scope.openBillHistoryModal = function (size,responseData,draftOrSalesOrder) {
+
+		toaster.clear();
+       // console.log(responseData);
+		if (Modalopened) return;
+
+			toaster.pop('wait', 'Please Wait', 'Modal Data Loading....',60000);
+			var modalInstance = $modal.open({
+			  templateUrl: 'app/views/PopupModal/QuickMenu/myHistorySalesBillModalContent.html',
+			  controller: historySalesBillModaleCtrl,
+			  size: size,
+			  resolve:{
+				  responseData: function(){
+					return responseData;
+				  },
+				  draftOrSalesOrder: function(){
+					return draftOrSalesOrder;
+				  }
+			  }
+			});
+			Modalopened = true;
+		   
+		   modalInstance.opened.then(function() {
+				toaster.clear();
+			});
+
+			modalInstance.result.then(function () {
+
+			 // console.log('OK',data);
+				toaster.clear();
+				Modalopened = false;
+				$state.go("app.WholesaleBill");
+				// draftOrSalesOrder == undefined || draftOrSalesOrder == 'SalesOrder' ? $scope.EditAddBill('','SalesOrder') : $scope.EditAddBill('copy','draft');
+				// $anchorScroll();
+			}, function () {
+				console.log('Cancel');
+				toaster.clear();
+				Modalopened = false;
+			});
+	};
 }
-AccDataLedgerController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","apiCall","apiPath","$location","getSetFactory","flotOptions","colors","$timeout","toaster"];
+AccDataLedgerController.$inject = ["$rootScope","$scope", "$filter", "ngTableParams","$http","$modal","$state","apiCall","apiPath","$location","getSetFactory","flotOptions","colors","$timeout","toaster","clientFactory","productFactory","stateCityFactory"];

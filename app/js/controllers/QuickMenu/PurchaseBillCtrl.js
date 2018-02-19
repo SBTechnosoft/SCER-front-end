@@ -11,7 +11,8 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	 var dateFormats = $rootScope.dateFormats; //Date Format
 	 
 	$scope.purchaseBill = [];
-	
+	vm.AccExpense = [];
+
 	vm.disableCompany = false;
 	var Modalopened = false;
 	
@@ -31,6 +32,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	
 	$scope.purchaseBill.tax = 0; //Tax
 	
+	$scope.totalTable_without_expense;
 	$scope.totalTable;
 	$scope.grandTotalTable;
 	$scope.purchaseBill.balanceTable;
@@ -79,7 +81,37 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			}
 		});
 	}
-	
+
+	$scope.expenseAmount=[];
+	$scope.getExpenseValue = function(index)
+	{
+		var expenseType = vm.AccExpense[index].expenseType;
+		var expenseValue = vm.AccExpense[index].expenseValue;
+		var totalData=0;
+		if(index==0)
+		{
+			totalData = parseFloat($scope.totalTable_without_expense);
+		}
+		else
+		{
+			totalData = parseFloat($scope.expenseAmount[index-1]);
+		}
+		// console.log("% value -----",(((parseFloat(expenseValue)/100)*parseFloat($scope.total)) + parseFloat(totalData)));
+		var totalExpense = expenseType=="flat" ? parseFloat(expenseValue)+ parseFloat(totalData) : (((parseFloat(expenseValue)/100)*parseFloat($scope.totalTable_without_expense)) + parseFloat(totalData));
+		// console.log("total expense...",totalExpense);
+		$scope.totalTable = $scope.expenseAmount[$scope.expenseAmount.length-1];
+		return totalExpense;
+		// $scope.expenseAmount[index]=totalExpense;
+		// console.log("value........",$scope.expenseAmount);
+		// console.log("flat value........",$scope.expenseAmount);
+	}
+
+	$scope.openExpenseRawData=false;
+	//open expense raw
+	$scope.openExpenseRaw = function()
+	{
+		$scope.openExpenseRawData=true;
+	}
 	//Default Company Function
 	$scope.defaultComapny = function(){
 		
@@ -153,7 +185,30 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		$scope.changeProductArray = true;
 		
     };
-	
+	$scope.addExpenseRow = function(index){
+		
+		var plusOne = index+1;
+		
+		var data = {};
+		data.expenseType = 'flat';
+		//vm.AccBillTable.push(data);
+		vm.AccExpense.splice(plusOne,0,data);
+		$scope.changeProductArray = true;
+    };
+
+
+	$scope.removeExpenseRow = function (idx) {
+		vm.AccExpense.splice(idx,1);
+		$scope.expenseAmount.splice(idx,1);
+		$scope.changeProductArray = true;
+		//vm.productTax.splice(idx, 1);
+		
+		// vm.productHsn.splice(idx,1);
+		
+		// $scope.changeProductArray = true;
+		
+		$scope.advanceValueUpdate();
+	};
 	
 	$scope.setProductData = function(item,index)
 	{
@@ -191,7 +246,25 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			$scope.advanceValueUpdate();
 		}
 	}
-	
+	var expenseGetApiPath = apiPath.settingExpense;
+	$scope.expenseData=[];
+	// Get All Expense Call 
+	apiCall.getCall(expenseGetApiPath).then(function(response){
+		// console.log(response);
+		$scope.expenseData = response;
+		console.log($scope.expenseData);
+	});
+
+	//save expense-name in expense-data
+	$scope.setExpenseData = function(item,index)
+	{
+		vm.AccExpense[index].expenseName = item.expenseName;
+		vm.AccExpense[index].expenseId = item.expenseId;
+		vm.AccExpense[index].expenseValue = item.expenseValue;
+		vm.AccExpense[index].expenseType = item.expenseType;
+		$scope.changeProductArray = true;
+	}
+
 	$scope.removeRow = function (idx) {
 		vm.AccBillTable.splice(idx,1);
 		vm.productHsn.splice(idx,1);
@@ -315,7 +388,17 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	$scope.advanceValueUpdate = function(){
 		
 		setTimeout(function () { // wait until all resources loaded 
-			$scope.purchaseBill.advance = $filter('setDecimal')($scope.totalTable,2);
+			var expenseData;
+			if($scope.openExpenseRawData)
+			{
+				expenseData = $scope.expenseAmount[$scope.expenseAmount.length-1];
+			}
+			else
+			{
+				expenseData = $scope.totalTable_without_expense;
+			}
+
+			$scope.purchaseBill.advance = $filter('setDecimal')(expenseData,2);
 			$scope.$digest();
 		 }, 1000);
 	}
@@ -385,10 +468,22 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			
 			//Remark
 			$scope.purchaseBill.remark = $scope.purchaseBill.EditBillData.remark;
-			
+			var jsonExpense = angular.fromJson($scope.purchaseBill.EditBillData.expense);
+			if(jsonExpense.length>0)
+			{
+				$scope.openExpenseRawData=true;
+				vm.AccExpense = angular.copy(jsonExpense);
+			}
+			else
+			{
+				$scope.openExpenseRawData=false;
+				vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
+			}
+
 			//Product Array
 			var jsonProduct = angular.fromJson($scope.purchaseBill.EditBillData.productArray);
 			vm.AccBillTable = angular.copy(jsonProduct.inventory);
+			
 			var EditProducArray = angular.copy(jsonProduct.inventory);
 			var count = EditProducArray.length;
 			var d = 0; // For Overcome Duplication 
@@ -435,6 +530,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			
 			//vm.AccBillTable = [];
 			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+			vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
 			vm.productHsn = [];
 			
 			$scope.purchaseBill.overallDiscountType = 'flat';
@@ -647,6 +743,22 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				formdata.set('inventory['+i+']['+key+']',value);
 			});	
 		 }
+		if(vm.AccExpense.length>0)
+		{
+			if(vm.AccExpense[0].expenseValue!=0)
+			{
+				  //copy expense data
+				  var json3 = angular.copy(vm.AccExpense);
+				
+				for(var i=0;i<json3.length;i++){
+				 
+					angular.forEach(json3[i], function (value,key) {
+					
+					formdata.set('expense['+i+']['+key+']',value);
+					});
+				}
+			}
+		}
 	 }
 	 
 	 formdata.delete('transactionType');
@@ -666,6 +778,15 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				});
 			}
 			
+			var json4 = angular.copy(vm.AccExpense);
+			for(var i=0;i<json4.length;i++){
+					angular.forEach(json4[i], function (value,key) {
+					formdata.delete('expense['+i+']['+key+']');
+				});
+			}
+			
+			
+
 			if(!$scope.purchaseBill.EditBillData){
 				formdata.delete('entryDate');
 			}
@@ -703,7 +824,10 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				var companyObject = $scope.purchaseBill.companyDropDown;
 				$scope.purchaseBill = [];
 				vm.dt1 = new Date();
+				$scope.openExpenseRawData=false;
 				vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+				vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
+				
 				vm.productHsn = [];
 				//vm.cityDrop = [];
 				
@@ -750,6 +874,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		
 		$scope.purchaseBill = [];
 		$scope.disableButton = false; 
+		$scope.openExpenseRawData=false;
 		var formdata = undefined;
 		formdata = new FormData();
 		
@@ -785,6 +910,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				
 		vm.dt1 = new Date();
 		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
+		vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
 		vm.productHsn = [];
 		$scope.purchaseBill.overallDiscountType = 'flat';
 		$scope.changeProductArray = false;
@@ -968,6 +1094,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				
 				toaster.clear();
 				if(angular.isArray(response)){
+
 					if(response.length > 1){
 						$scope.openBillHistoryModal('lg',response);
 					}
@@ -979,7 +1106,6 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 					}
 				}
 				else{
-					
 					if(apiResponse.noContent == response || apiResponse.notFound == response){
 						toaster.clear();
 						toaster.pop('info', 'Opps!!', 'Data Not Available');
@@ -1452,9 +1578,9 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		
 		$scope.openBillHistoryModal = function (size,responseData) {
 			
+			toaster.clear();
 			if (Modalopened) return;
-			
-				toaster.clear();
+				
 				toaster.pop('wait', 'Please Wait', 'Modal Data Loading....',60000);
 				
 				var modalInstance = $modal.open({
@@ -1464,16 +1590,21 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				  resolve:{
 					  responseData: function(){
 						return responseData;
+					  },
+					  draftOrSalesOrder: function(){
+						return 'draft';
 					  }
 				  }
 				});
-
+				
 			   Modalopened = true;
-			   
-				modalInstance.result.then(function (singleData) {
+			   modalInstance.opened.then(function() {
+					toaster.clear();
+				});
+				modalInstance.result.then(function () {
 					toaster.clear();
 					Modalopened = false;
-					getSetFactory.set(singleData);
+					// getSetFactory.set(singleData);
 					$scope.EditAddBill();
 					$anchorScroll();
 				}, function () {

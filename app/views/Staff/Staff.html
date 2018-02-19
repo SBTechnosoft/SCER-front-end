@@ -57,9 +57,10 @@
 							<i ng-click="openPermission('lg',user)" class="fa fa-cog myCursorPointer" style="font-size:17px;color:#10709f" ng-if="allowedId != user.userId"></i>
 						</center>
 						
-						<center ng-if="allowedAdd == 'admin' && user.userType != 'superadmin'">
-							<i  ng-click="editStaff(user)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
+						<center ng-if="allowedAdd == 'admin'">
+							<i  ng-click="editStaff(user)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#10709f"> </i>
 							<i  ng-click="deleteStaff('sm',user.userId)" class="fa fa-times-circle myCursorPointer" style="font-size:17px;color:red" ng-if="allowedId != user.userId"></i>
+							<i ng-click="openPermission('lg',user)" class="fa fa-cog myCursorPointer" style="font-size:17px;color:#10709f" ng-if="allowedId != user.userId"></i>
 						</center>
 						
 						<center ng-if="allowedId == user.userId && allowedAdd == 'staff' && user.userType != 'superadmin'">

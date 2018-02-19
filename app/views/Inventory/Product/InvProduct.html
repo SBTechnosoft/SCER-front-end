@@ -27,28 +27,62 @@
    <div class="panel panel-default">
       <div class="panel-heading myHeading" >
          <!--button data-ng-click="table.tableParams.sorting({})" class="pull-right btn btn-default btn-sm">Clear sorting</button-->
-		 <button type="button" class="btn btn-primary pull-right btn-sm" ng-click="openProductBatchModal()"  data-ng-class="app.theme.brand" > Batch </button> 
+		 <button type="button" class="btn btn-primary pull-right btn-sm" ng-click="openProductBatchUpdateModal()"  data-ng-class="app.theme.brand" > Mass Update </button>
+		 <button type="button" class="btn btn-primary pull-right btn-sm" ng-click="openProductBatchModal()"  data-ng-class="app.theme.brand" style="margin-right:5px"> Mass Insertion </button> 
 		 <button class="btn btn-labeled btn-primary pull-right btn-sm" ui-sref="app.AddInvProduct" data-ng-class="app.theme.brand" style="margin-right:5px">
 			<span class="btn-label"><i class="fa fa-plus"></i></span>
 		Add Product</button>
          <div class="panel-title" id="allPro">All Product  </div>
       </div>
 	   <div class="table-responsive">
-		  <table data-ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
+		  <table data-ng-table="tableParams" show-filter="true" class="table table-bordered table-striped">
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
-			 <tbody>
-				<tr  data-ng-repeat="user in $data track by user.productId">
-					<td data-title="'Brand'" sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" ng-bind="::user.productCategory.productCategoryName" ></td>
-					 <td data-title="'Category'" sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" ng-bind="::user.productGroup.productGroupName" ></td>
-					<td data-title="'Product Name'" sortable="'productName'" filter="{ 'productName': 'text' }" ng-bind="::user.productName" ></td>
-					<td data-title="'Color'"  filter="{ 'color': 'text' }" ng-bind="::user.color" ></td>
-					<td data-title="'Size'"  filter="{ 'size': 'text' }" ng-bind="::user.size" ></td>
-				   <td data-title="'Action'" style="width:10%"> 
+			<thead>
+				 <th check-all="check-all">
+				   <div data-toggle="tooltip" data-title="Check All" class="checkbox c-checkbox">
+					  <label>
+						 <input type="checkbox" ng-model="parentCheckBox" ng-change="changeAllBox(parentCheckBox)" />
+						 <span class="fa fa-check"></span>
+					  </label>
+				   </div>
+				</th>
+				<th  sortable="'productCategoryName'"  >Brand</th>
+				<th>Category</th>
+				<th>Product Name</th>
+				<th>Color</th>
+				<th>Size</th>
+				<th>HSN/SAC</th>
+				<th>CGST</th>
+				<th>SGST</th>
+				<th>IGST</th>
+				<th>Action</th>
+			</thead>
+			<tbody>
+				<tr  data-ng-repeat="user in ($parent.filteredItems = $data) track by user.productId">
+					<td>
+					   <div class="checkbox c-checkbox">
+						  <label>
+							 <input type="checkbox" ng-model="user.selected" name="check" ng-change="changeBox(user.selected,user)" />
+							 <span class="fa fa-check"></span>
+						  </label>
+					   </div>
+					</td>
+					<td sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" ng-bind="::user.productCategory.productCategoryName" ></td>
+					<td sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" ng-bind="::user.productGroup.productGroupName" ></td>
+					<td sortable="'productName'" filter="{ 'productName': 'text' }" ng-bind="::user.productName" ></td>
+					<td  filter="{ 'color': 'text' }" ng-bind="::user.color" ></td>
+					<td  filter="{ 'size': 'text' }" ng-bind="::user.size" ></td>
+					<td   filter="{ 'size': 'text' }" ng-bind="::user.hsn" ></td>
+					<td  filter="{ 'vat': 'text' }" ng-bind="::user.vat | setDecimal: user.company.noOfDecimalPoints" ></td>
+					<td  filter="{ 'additionalTax': 'text' }" ng-bind="::user.additionalTax | setDecimal: user.company.noOfDecimalPoints" ></td>
+					<td  filter="{ 'igst': 'text' }" ng-bind="::user.igst | setDecimal: user.company.noOfDecimalPoints" ></td>
+				   <td style="width:10%"> 
 						<center>
 							<i  title="Edit" ng-click="editProduct(user)" class="fa fa-edit myCursorPointer" style="font-size:17px;color:#10709f"> </i> &nbsp; &nbsp;
 							<i title="Delete" ng-click="deleteProduct('sm',user.productId)" class="fa fa-times-circle myCursorPointer" style="font-size:17px;color:red"></i>
 						</center>
 					</td>
+
 				</tr>
 			 </tbody>
 		  </table>

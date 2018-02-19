@@ -79,7 +79,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
         .state('app.dashboard', {
             url: '/dashboard',
             templateUrl: basepath('dashboard.html'),
-            resolve: requireDeps('flot-chart','flot-chart-plugins','moment','ngLetterAvatar','wysiwyg')
+            resolve: requireDeps('ngTable','angular-chosen','flot-chart','flot-chart-plugins','moment','ngLetterAvatar','wysiwyg')
         })
         .state('app.buttons', {
             url: '/buttons',
@@ -251,6 +251,12 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
                 url: '/SettingReminders',
                 templateUrl: basepath('Setting/SettingReminders/SettingReminders.html'),
                 resolve: requireDeps('angular-chosen','toaster')
+            })
+            //Expense
+            .state('app.SettingExpenses', {
+                url: '/SettingExpenses',
+                templateUrl: basepath('Setting/SettingExpenses/SettingExpense.html'),
+                resolve: requireDeps('ngTable','angular-chosen','toaster')
             })
 		/*** End Setting ***/
 		//Add Inventory Product
@@ -635,24 +641,72 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				})
 			})
 			//GST Return View
-			.state('app.AccViewGstReturn', {
-				url: '/AccViewGstReturn',
+            .state('app.AccViewGstReturn', {
+                url: '/AccViewGstReturn',
+                templateUrl: basepath('Accounting/viewData/AccView.html'),
+                controller: 'AccViewController as form',
+                resolve: angular.extend(requireDeps('toaster','angular-chosen'),{
+                    viewDataType: function(){
+                        return 'GST Return';
+                    }
+                })
+            })
+            
+            //GST Return Data
+            .state('app.AccDataGstReturn', {
+                url: '/AccDataGstReturn',
+                templateUrl: basepath('Accounting/Taxation/AccGstReturn.html'),
+                controller: 'AccTaxationController as table',
+                resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
+                    headerType: function(){
+                        return 'GST Return';
+                    }
+                })
+            })
+
+            //GST Return2 View
+            .state('app.AccViewGstR2', {
+                url: '/AccViewGstR2',
+                templateUrl: basepath('Accounting/viewData/AccView.html'),
+                controller: 'AccViewController as form',
+                resolve: angular.extend(requireDeps('toaster','angular-chosen'),{
+                    viewDataType: function(){
+                        return 'GST Return2';
+                    }
+                })
+            })
+            //GST Return2 Data
+            .state('app.AccDataGstReturn2', {
+                url: '/AccDataGstReturn2',
+                templateUrl: basepath('Accounting/Taxation/AccGstR2.html'),
+                controller: 'AccTaxationController as table',
+                resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
+                    headerType: function(){
+                        return 'GST Return2';
+                    }
+                })
+            })
+
+            //GST Return3 View
+			.state('app.AccViewGstR3', {
+				url: '/AccViewGstR3',
 				templateUrl: basepath('Accounting/viewData/AccView.html'),
 				controller: 'AccViewController as form',
 				resolve: angular.extend(requireDeps('toaster','angular-chosen'),{
 					viewDataType: function(){
-						return 'GST Return';
+						return 'GST Return3';
 					}
 				})
 			})
-			//GST Return Data
-			.state('app.AccDataGstReturn', {
-				url: '/AccDataGstReturn',
-				templateUrl: basepath('Accounting/Taxation/AccGstReturn.html'),
+            
+			//GST Return3 Data
+			.state('app.AccDataGstReturn3', {
+				url: '/AccDataGstReturn3',
+				templateUrl: basepath('Accounting/Taxation/AccGstR3.html'),
 				controller: 'AccTaxationController as table',
 				resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
 					headerType: function(){
-						return 'GST Return';
+						return 'GST Return3';
 					}
 				})
 			})
@@ -685,7 +739,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 			//WholeSale Bill
 			.state('app.WholesaleBill', {
 				url: '/WholesaleBill',
-				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
+				templateUrl: basepath('QuickMenu/RetailsaleBill.html'), 
 				controller: 'RetailsaleBillController as form',
 				resolve: angular.extend(requireDeps('taxInvoice','twain','toaster','angular-chosen','ngTable','uiCropper','moment','jquery-ui'),{
 					saleType: function(){
@@ -867,7 +921,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 			url: '/ReportPoliceData',
 			templateUrl: basepath('Analyzer/Reports/ReportPoliceData.html'),
 			controller: 'PoliceReportController as table',
-			resolve: angular.extend(requireDeps('angular-chosen','toaster'),{
+			resolve: angular.extend(requireDeps('ngTable','angular-chosen','toaster'),{
 				headerType: function(){
 					return 'PoliceReport';
 				}

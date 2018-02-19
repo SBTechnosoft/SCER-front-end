@@ -36,7 +36,7 @@
 						
 							
 								<td  >{{user[1].entryDate}}</td>
-								<td    >{{user[1].ledgerName}}</td>
+								<td  ng-click="open_bill_ledger()">{{user[1].ledgerName}}</td>
 								<td   style="text-align:right" ><span >{{user[1].debitAmount}}</span></td>
 								
 								<td  >{{user[0].entryDate}}</td>
@@ -79,7 +79,11 @@
 									<td data-title="'Sr. No.'"  >{{$index+1}}</td>
 								
 									<td data-title="'Entry Date'" sortable="'date'" filter="{ 'entryDate': 'text' }" >{{user.entryDate}}</td>
-									<td data-title="'Perticular'"  filter="{ 'ledgerName': 'text' }" >{{user.ledger.ledgerName}}</td>
+									<td data-title="'Perticular'"  filter="{ 'ledgerName': 'text' }" >
+										<a href="#" ng-click="open_bill_ledger(user)" >
+											{{user.ledger.ledgerName}}
+										</a>
+									</td>
 									<td data-title="'Debit'"  filter="{ 'amountTypeDebit': 'text' }" style="text-align:right" ><span ng-if="user.amountType=='debit'">{{user.amount}}</span></td>
 									<td data-title="'Credit'"  filter="{ 'amountTypeCredit': 'text' }" style="text-align:right" ><span ng-if="user.amountType=='credit'">{{user.amount}}</span></td>
 									<!--td data-title="'Amount'" sortable="'amount'" filter="{ 'amount': 'text' }" ><span style="float:right">{{user.amount}}</span></td-->

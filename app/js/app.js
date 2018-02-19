@@ -10,7 +10,7 @@
 if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript requires jQuery'); }
 
 var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages',"ngSanitize", "ngCsv","vcRecaptcha"])
-    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','hostUrl','googleSiteKey','hostFrontUrl', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,hostUrl,googleSiteKey,hostFrontUrl) {
+    .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','hostUrl','googleSiteKey','hostFrontUrl','apiPath', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,hostUrl,googleSiteKey,hostFrontUrl,apiPath) {
 		
 		
 		//$templateCache.removeAll();
@@ -25,6 +25,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
     $rootScope.$stateParams = $stateParams;
     $rootScope.$storage = $localStorage;
 
+    $rootScope.sidebar_hide_on_Login = false;
 		
     // Scope Globals
     // ----------------------------------- 
@@ -41,7 +42,9 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
       },
       sidebar: {
         isCollapsed: false,
-        slide: false
+        slide: false,
+        sidebar_hide: true,
+        sidebar_from_topbar: false
       },
 	   topbar: {
         isCollapsed: false
@@ -53,8 +56,7 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
         topbar:  'my-Topbar-Color'
       }
     };
-	
-	 
+
     // User information
     $rootScope.user = {
       name:     'Jimmie Stevens-7016944320',
@@ -64,7 +66,8 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 
 	$rootScope.googleSiteKey = googleSiteKey;
 	
-	$rootScope.erpPath = hostUrl.siliconbrain;
+	// $rootScope.erpPath = hostUrl.siliconbrain;
+	$rootScope.erpPath = hostUrl.scerp1;
 	//$rootScope.erpPath = hostUrl.arihant;
 	// $rootScope.erpPath = hostUrl.swaminarayan;
 	// $rootScope.erpPath = hostUrl.v2erpKey;
@@ -74,7 +77,8 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 
 	var hostFrontUrls = hostFrontUrl;
 
-	$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.siliconbrain+"app/img/aksLogo.png' height='100%' width='100%' />";
+	// $rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.siliconbrain+"app/img/aksLogo.png' height='100%' width='100%' />";
+	$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.scerp1+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.arihant+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.swaminarayan+"app/img/aksLogo.png' height='100%' width='100%' />";
 	//$rootScope.templateCompanyLogo = "<img src='"+hostFrontUrls.v2erpKey+"app/img/aksLogo.png' height='100%' width='100%' />";
@@ -115,12 +119,31 @@ var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCo
 	$rootScope.accView.fromDate = accModifyDate; // FromDate
 	$rootScope.accView.toDate = accModifyDate; // TODate
 	
-	//Route Change Event to check User Authotize and permission
-		//$rootScope.$on("$stateChangeStart", function(event, next, current) {
-	      //	if(next.name != "page.login"){
 
-	      	//}
-	   // });
+	setInterval(function() {
 
+		$rootScope.app.sidebar.sidebar_from_topbar = false;
+
+		if($rootScope.$storage.authUser)
+		{
+			$http({
+				url: $rootScope.erpPath+'users',
+				method: 'GET',
+				crossDomain:true,
+				cache:false,
+				//dataType: 'jsonp',
+			   headers: {'Content-Type': undefined,'authenticationToken':$rootScope.$storage.authToken}
+			}).success(function(response) {
+				if(angular.isObject(response))
+				{
+					if(response.userType=='staff')
+					{
+						$rootScope.$storage.permissionArray = response.permissionArray;
+					}
+				}
+				
+			});
+		}
+	}, 5000);
   }
 ]);
