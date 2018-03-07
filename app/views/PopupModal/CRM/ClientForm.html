@@ -87,9 +87,18 @@
 			</fieldset>
 			
 			<fieldset class="my-fieldset-paddingBottom">
-			   <div class="form-group">
+				<div class="form-group">
+					<label  class="col-sm-1 control-label">GST#</label>
+					<div class="col-sm-5">
+						<input rows="1" name="gst" ng-model="clientForm.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('gst',clientForm.gst)" ng-maxlength="50" style="height:38px;" >
+						<span ng-messages="formClient.gst.$error" ng-if="formClient.gst.$dirty || formClient.gst.$touched" role="alert">
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+								<span ng-messages-include="errorLonglength"></span>
+							</span>
+					</div>
+						
 					<label for="input-id-1" class="col-sm-1 control-label">Address</label>
-				  <div class="col-sm-11">
+				  	<div class="col-sm-5">
 						<textarea rows="1" name="firstAddress" ng-model="clientForm.address1" placeholder="Enter Address"  class="form-control  ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('address1',clientForm.address1)" ng-maxlength="200" style="height:38px;" ></textarea>
 						<span ng-messages="formClient.firstAddress.$error" ng-if="formClient.firstAddress.$dirty || formClient.firstAddress.$touched" role="alert">
 							<span ng-messages-include="errorRequired"></span>

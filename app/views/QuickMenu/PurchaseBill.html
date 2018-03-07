@@ -1,5 +1,14 @@
 <style>
 .hackyhack{position:relative}.hackyhack .dropdown-menu{left:auto!important;right:0}h4 .control-label{font-size:13px!important}.contentOfForm{padding-left:11px;padding-right:7px}.goButton{padding:6px 16px}.imageAncher{position:relative;vertical-align:middle;display:inline-block}.myCrossDesign{position:absolute;top:0;right:0;height:20px;width:20px;color:#eb615f;font-size:20px}.myCrossDesign:hover{color:red}.documentRight{display:block;position:absolute;top:10%;right:60%;font-size:40px;color:#88bf57}.documentRight:hover{color:green}.documentCross{display:block;position:absolute;font-size:40px;color:#eb615f;top:10%;right:20%}.documentCross:hover{color:red}.input-file{position:relative;margin:60px 60px 0}.input-file .input-group-addon{border:0;padding:0}.input-file .input-group-addon .btn{border-radius:0 4px 4px 0}.input-file .input-group-addon input{cursor:pointer;position:absolute;width:72px;z-index:2;top:0;right:0;filter:alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent}
+.productColorSizeDesign{
+	width:50%;
+	padding-left: 6px;
+	padding-right: 6px;
+	float:left;
+}
+.productColorSizeWidth{
+	width:100%;
+}
 </style>
 <!-- START panel-->
 <div class="container-fluid"   >
@@ -92,7 +101,11 @@
 					<th class="header my-table-paddingTopBottom" style="width:1%;padding-top:5px !important;padding-bottom:5px !important;">#</th>
 					<th class="header my-table-paddingTopBottom" style="width:30%;padding-top:5px !important;padding-bottom:5px !important;min-width:150px;" >Name of Item</th>
 					<th class="header my-table-paddingTopBottom" style="width:3%;padding-top:5px !important;padding-bottom:5px !important;">HSN</th>
-					<th class="header my-table-paddingTopBottom" style="width:11%;padding-top:5px !important;padding-bottom:5px !important;text-align:center">Color | Size</th>
+					<th ng-if="divTag" class="header my-table-paddingTopBottom" style="width:11%;padding-top:5px !important;padding-bottom:5px !important;text-align:center">
+						<span  ng-if="enableDisableColor">Color  </span> 
+						<span ng-if="enableDisableColor && enableDisableSize"> | </span>
+						<span ng-if="enableDisableSize">Size</span>
+					</th>
 					<th class="header my-table-paddingTopBottom" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame#</th>
 					<th class="header my-table-paddingTopBottom" style="width:4%;padding-top:5px !important;padding-bottom:5px !important;" >Qty.</th>
 					<th class="header my-table-paddingTopBottom" style="width:10%;padding-top:5px !important;padding-bottom:5px !important;" >Rate</th>
@@ -124,9 +137,9 @@
 					<td>
 						<h6>{{form.productHsn[$index]}}</h6>
 					</td>
-					<td style="text-align:center;">
-						<input placeholder="Color"  type="text" ng-model="item.color"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;"  ng-change="changeProductTable()"  /> 
-						<input placeholder="Size"  type="text" ng-model="item.size"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;"  ng-change="changeProductTable()"  />
+					<td style="text-align:center;" ng-if="divTag">
+						<input ng-if="enableDisableColor" placeholder="Color"  type="text" ng-model="item.color"  class="form-control input-sm" ng-class="enableDisableSize && enableDisableColor ? 'productColorSizeDesign' : 'productColorSizeWidth'"  ng-change="changeProductTable()"  /> 
+						<input ng-if="enableDisableSize" placeholder="Size"  type="text" ng-model="item.size"  class="form-control input-sm" ng-class="enableDisableSize && enableDisableColor ? 'productColorSizeDesign' : 'productColorSizeWidth'"  ng-change="changeProductTable()"  />
 					</td>
 					<td>
 						<input placeholder="Frame No"  type="text" ng-model="item.frameNo"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
@@ -173,20 +186,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5"></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td colspan="{{totalTd}}"></td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td style="text-align:right" title="Extra Charge" colspan="6" ><span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span><strong>E.Charge<strong></td>
+					<td style="text-align:right" title="Extra Charge" colspan="{{colspanValue}}" ><span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span><strong>E.Charge<strong></td>
 					<td ng-init="purchaseBill.extraCharge = 0">
 						<input placeholder="(&#x20b9;)Extra Charge" type="text" name="extraCharge" ng-model="purchaseBill.extraCharge"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();advanceValueUpdate()" style="padding-left: 6px;padding-right: 6px;" only-number /> 
 						<span ng-messages="formBill.extraCharge.$error" ng-if="formBill.extraCharge.$dirty || formBill.extraCharge.$touched"  role="alert">
@@ -211,7 +216,7 @@
 				</tr> 
 				<tr  ng-repeat="item in form.AccExpense track by $index" ng-if="openExpenseRawData">
 
-					<td colspan="7">
+					<td colspan="{{colspanExpenseValue}}">
 						<!-- <span style="width: 30%;float: right;">
 							<select chosen="" data-ng-model="item.expenseId" data-ng-options="s.expenseId as s.expenseName for s in expenseData track by s.expenseId" ng-change="ChangeExpense('expenseId',expenseData.expenseId)" class="form-control input-sm chosen-select" ></select>
 						</span> -->
@@ -245,14 +250,14 @@
 								<i  class="fa fa-plus myCursorPointer" style="font-size:20px;"   ></i>
 							</a>
 							&nbsp;
-							<a href="javascript:void(0)" class="text-danger"  ng-click="removeExpenseRow($index)" ng-if="$index!=0">
+							<a href="javascript:void(0)" class="text-danger"  ng-click="removeExpenseRow($index)">
 								<i  class="fa fa-times myCursorPointer" style="font-size:20px;" title="Delete"> </i>
 							</a>
 						</center>
 					</td>
 				</tr>
 				<tr >
-					<td style="text-align:right" colspan="9" > <strong> Advance </strong> </td>
+					<td style="text-align:right" colspan="{{colspanAdvanceValue}}" > <strong> Advance </strong> </td>
 					<td colspan="2" > 
 						<input placeholder="(&#x20b9;)Advance" type="text" name="advance"  ng-model="purchaseBill.advance"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;padding-bottom: 8px;padding-top: 8px;" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">

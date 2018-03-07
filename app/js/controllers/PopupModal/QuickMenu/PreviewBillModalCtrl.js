@@ -23,6 +23,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 	 $scope.advance = $scope.billData.advance;
 	 $scope.balance = $scope.billData.balanceTable;
 	 $scope.remark = $scope.billData.remark;
+	 $scope.serviceDate = $scope.billData.serviceDate;
 	 $scope.companyLogo = $rootScope.templateCompanyLogo;
 	 /** Button Validation **/
 		
@@ -40,7 +41,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 	 //console.log( $scope.inventoryData);
 	$scope.TemplateDisplay;
 	
-	var tags = ['Company','ClientName','INVID','CLIENTADD','OrderDate','Mobile','Description','Total','TotalInWord','TotalQty','TotalTax','REMAINAMT','gstSummary'];
+	var tags = ['Company','ClientName','INVID','CLIENTADD','OrderDate','Mobile','Description','Total','TotalInWord','TotalQty','TotalTax','REMAINAMT','gstSummary','serviceDate','CLIENTTINNO'];
 	
 	/** Digit to Words **/
 		function test_value(secondNum) {
@@ -264,7 +265,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 		var productData = $scope.inventoryData[productArray];
 
 		if(productData.productId != ""){
-
+			console.log("product = ",productData);
 			if(productArray==0)
 			{
 			 output = output+trClose;
@@ -498,7 +499,8 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 	else{
 		billArrayTag.BILLLABEL = 'Tax Invoice';
 	}
-	console.log($scope.billData);
+
+	console.log("bill-data = ",$scope.billData);
 	//billArrayTag.BILLLABEL = $scope.saleType == 'QuotationPrint' ? 'Quotation' : 'Tax Invoice';
 	billArrayTag.ClientName = $scope.billData.clientName;
 	billArrayTag.INVID = $scope.billData.invoiceNumber;
@@ -514,6 +516,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 	billArrayTag.RoundTotal = $filter('number')($scope.RoundTotal,$scope.noOfDecimalPoints);
 	billArrayTag.RoundFigure = isNaN($scope.RoundFigure) ? 0 :  $scope.RoundFigure;
 	billArrayTag.TotalTax = $scope.billData.tax;
+	billArrayTag.serviceDate = $scope.billData.EditBillData.serviceDate;
 	billArrayTag.TotalDiscount = totalDiscount != undefined ? $filter('number')(totalDiscount,$scope.noOfDecimalPoints) : 0;
 	billArrayTag.TotalQty = totalQty;
 	billArrayTag.TotalInWord = convert_amount_into_rupees_paisa($scope.total);
@@ -531,7 +534,7 @@ function previewBillModalController($scope, $modalInstance,$rootScope,apiCall,ap
 	billArrayTag.ExpireDate = Lastdate;
 	billArrayTag.CompanySGST = $scope.companyData.sgst;
 	billArrayTag.CompanyCGST = $scope.companyData.cgst;
-	billArrayTag.CLIENTTINNO = " ";
+	billArrayTag.CLIENTTINNO = $scope.billData.gst;
 	billArrayTag.PONO = $scope.billData.poNumber == '' || $scope.billData.poNumber == undefined ? '': $scope.billData.poNumber;
 	
 	

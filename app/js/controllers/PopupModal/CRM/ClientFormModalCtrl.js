@@ -26,6 +26,7 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 		$scope.clientForm.getSetClientId = clientEditData.clientId;  // Client ID
 		$scope.clientForm.clientName = clientEditData.clientName;
 		$scope.clientForm.emailId = clientEditData.emailId;
+		$scope.clientForm.gst = clientEditData.gst;
 		$scope.clientForm.address1 = clientEditData.address1;
 		vm.birthDate = moment(clientEditData.birthDate,apiDateFormate).format() == 'Invalid date' ? null : new Date(moment(clientEditData.birthDate,apiDateFormate).format('YYYY-MM-DD'));
 		vm.anniversaryDate = moment(clientEditData.anniversaryDate,apiDateFormate).format() == 'Invalid date' ? null : new Date(moment(clientEditData.anniversaryDate,apiDateFormate).format('YYYY-MM-DD'));

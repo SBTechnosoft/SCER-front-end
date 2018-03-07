@@ -9,6 +9,18 @@
     bottom: 20px;
     top: auto !important;
 }
+.productColorSizeDesign{
+	width:50%;
+	padding-left: 6px;
+	padding-right: 6px;
+	float:left;
+}
+.productColorSizeWidth{
+	width:100%;
+}
+.tableTopCss{
+	border-top: #b8c1cf 1px solid !important;
+}
 </style>
 <!-- START panel-->
 <div class="container-fluid"  >
@@ -162,7 +174,7 @@
 						</div>
 					</fieldset>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-2">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group">
 							<label class="col-sm-2 control-label" > *City </label>
@@ -172,11 +184,25 @@
 						</div>
 					</fieldset>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-2">
+					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
+						<div class="form-group">
+							<label  class="col-sm-3 control-label">GST#</label>
+							<div class="col-sm-9">
+								<input rows="1" name="gst" ng-model="quickBill.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('gst',quickBill.gst)" ng-maxlength="50" style="height:38px;" >
+								<span ng-messages="formBill.gst.$error" ng-if="formBill.gst.$dirty || formBill.gst.$touched" role="alert">
+										<span ng-messages-include="errorPatternThisSpecial"></span>
+										<span ng-messages-include="errorLonglength"></span>
+									</span>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<div class="col-sm-2">
 					 <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 					   <div class="form-group">
-						  <label  class="col-sm-2 control-label">Email</label>
-							<div class="col-sm-10">
+						  <label  class="col-sm-3 control-label">Email</label>
+							<div class="col-sm-9">
 								<div class="input-group m-b">
 									<input ng-model="quickBill.emailId" name="emailId" type="email" placeholder="Email ID" class="form-control input-sm"  ng-pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/" ng-change="changeInBill('emailId',quickBill.emailId)" />
 									<span popover="Resend Email" popover-trigger="mouseenter" ng-if="quickBill.emailId && quickBill.EditBillData" ng-click="form.resendEmail()"  class="input-group-addon myCursorPointer" data-ng-class="app.theme.brand" style="padding-left: 8px;padding-right: 8px;" ><i class="fa fa-paper-plane-o" aria-hidden="true" ></i></span>
@@ -193,8 +219,8 @@
 				<div class="col-sm-3">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group" >
-							<label  class="col-sm-3 control-label" ng-class="clientSaveButton ? 'col-sm-3':'col-sm-3'" >Profession</label>
-							<div class="col-sm-9" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'" >
+							<label  class="col-sm-4 control-label" ng-class="clientSaveButton ? 'col-sm-3':'col-sm-3'" >Profession</label>
+							<div class="col-sm-8" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'" >
 								<select chosen="" data-ng-model="quickBill.professionId" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId" ng-change="changeInBill('professionId',quickBill.professionId.professionId)" class="form-control input-sm chosen-select" ></select>
 							</div>
 							
@@ -210,13 +236,17 @@
   
      <!-- <div class="table-responsive"> -->
      <div >
-		<table  class="table table-bordered table-striped" >
+		<table  class="table table-bordered table-striped tableTopCss" >
 			<thead>
 				<tr>
 					<th class="header" style="width:1%;padding-top:5px !important;padding-bottom:5px !important;">#</th>
 					<th class="header" style="width:28%;padding-top:5px !important;padding-bottom:5px !important;min-width:150px;" >Name of Item</th>
 					<th class="header" style="width:3%;padding-top:5px !important;padding-bottom:5px !important;">HSN</th>
-					<th class="header" style="width:11%;padding-top:5px !important;padding-bottom:5px !important;text-align:center">Color | Size</th>
+					<th ng-if="divTag" class="header" style="width:11%;padding-top:5px !important;padding-bottom:5px !important;text-align:center">
+						<span  ng-if="enableDisableColor">Color  </span> 
+						<span ng-if="enableDisableColor && enableDisableSize"> | </span>
+						<span ng-if="enableDisableSize">Size</span>
+					</th>
 					<th class="header" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame#</th>
 					<th class="header" style="width:4%;padding-top:5px !important;padding-bottom:5px !important;" >Qty.</th>
 					<th class="header" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;" >Rate</th>
@@ -243,14 +273,20 @@
 								 <button type="button" class="btn btn-default btn-sm" ng-if="item.productId" ng-click="editProductWithRedirect($index)"><i class="fa fa-edit fa-lg" style="color:#17A1E5;"></i></button>
 							   <button type="button" class="btn btn-default btn-sm" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus fa-lg" style="color:#17A1E5;"></i></button>
 							</span>
+							<span class="input-group-btn">
+							   	<button type="button" class="btn btn-default btn-sm" data-ng-click="openProductList('lg',$index)">
+							   		A
+							   	</button>
+							</span>
 						</div>
 					</td>
 					<td>
 						<h6 ng-bind="form.productHsn[$index]"></h6>
 					</td>
-					<td style="text-align:center;">
-						<input placeholder="Color" type="text" ng-model="item.color"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;" ng-change="changeProductTable()"  /> 
-						<input placeholder="Size" type="text" ng-model="item.size"  class="form-control input-sm" style="width:50%;padding-left: 6px;padding-right: 6px;float:left;" ng-change="changeProductTable()"  />
+					<td style="text-align:center;" ng-if="divTag">
+						<input  ng-if="enableDisableColor" placeholder="Color" type="text" ng-model="item.color"  class="form-control input-sm " ng-class="enableDisableSize && enableDisableColor ? 'productColorSizeDesign' : 'productColorSizeWidth'"  ng-change="changeProductTable()" /> 
+						<input ng-if="enableDisableSize" placeholder="Size" type="text" ng-model="item.size"  class="form-control input-sm "
+						ng-class="enableDisableSize && enableDisableColor ? 'productColorSizeDesign' : 'productColorSizeWidth'"  ng-change="changeProductTable()"  />
 						<!--input  type="text" ng-model="item.color"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"    ng-pattern="/^[a-z-A-Z]*$/" ng-change="changeProductTable()"  /--> 
 					</td>
 					<td>
@@ -301,12 +337,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="5"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+					<td colspan="{{totalTd}}"></td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td style="text-align:right" title="Extra Charge" colspan="6" ><!--span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span--><strong>E.Charge<strong></td>
+					<td style="text-align:right" title="Extra Charge" colspan="{{colspanValue}}" ><!--span style="visibility:hidden">{{totalRoundValue = (getTotal() | number: 0)}}</span--><strong>E.Charge<strong></td>
 					<td ng-init="quickBill.extraCharge = 0">
 						<input placeholder="(&#x20b9;)Extra Charge" type="text" name="extraCharge" ng-model="quickBill.extraCharge"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();advanceValueUpdate()" style="padding-left: 6px;padding-right: 6px;" only-number /> 
 						<span ng-messages="formBill.extraCharge.$error" ng-if="formBill.extraCharge.$dirty || formBill.extraCharge.$touched"  role="alert">
@@ -331,7 +367,7 @@
 				</tr>
 				<tr  ng-repeat="item in form.AccExpense track by $index" ng-if="openExpenseRawData">
 
-					<td colspan="7">
+					<td colspan="{{colspanAdvanceValue}}">
 						<!-- <span style="width: 30%;float: right;">
 							<select chosen="" data-ng-model="item.expenseId" data-ng-options="s.expenseId as s.expenseName for s in expenseData track by s.expenseId" ng-change="ChangeExpense('expenseId',expenseData.expenseId)" class="form-control input-sm chosen-select" ></select>
 						</span> -->
@@ -365,7 +401,7 @@
 								<i  class="fa fa-plus myCursorPointer" style="font-size:20px;"   ></i>
 							</a>
 							&nbsp;
-							<a href="javascript:void(0)" class="text-danger"  ng-click="removeExpenseRow($index)" ng-if="$index!=0">
+							<a href="javascript:void(0)" class="text-danger"  ng-click="removeExpenseRow($index)">
 								<i  class="fa fa-times myCursorPointer" style="font-size:20px;" title="Delete"> </i>
 							</a>
 						</center>
@@ -384,7 +420,7 @@
 						</div>
 
 					</td>
-					<td style="text-align:right" colspan="7" > <strong> Advance </strong> </td>
+					<td style="text-align:right" colspan="{{colspanAdvanceValue}}" > <strong> Advance </strong> </td>
 					<td colspan="2"> 
 						<input placeholder="(&#x20b9;)Advance" type="text" name="advance"  ng-model="quickBill.advance"  class="form-control input-sm"   ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable()" style="height:30px;padding-left: 6px;padding-right: 6px;padding-bottom: 8px;padding-top: 8px;" only-number /> 
 						<span ng-messages="formBill.advance.$error" ng-if="formBill.advance.$dirty || formBill.advance.$touched"  role="alert">

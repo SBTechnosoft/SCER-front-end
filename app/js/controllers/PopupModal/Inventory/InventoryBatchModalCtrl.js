@@ -121,10 +121,18 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 			{"key":"marginFlat","value":"MarginFlat"},
 			{"key":"additionalTax","value":"Add.Tax"},
 			{"key":"mrp","value":"MRP"},
-			{"key":"minimumStockLevel","value":"minimumStock"}
+			{"key":"minimumStockLevel","value":"minimumStock"},
+			{"key":"productMenu","value":"ProductMenu"},
+			{"key":"productType","value":"ProductType"},
+			{"key":"maxSaleQty","value":"MaxSaleQty"},
+			{"key":"notForSale","value":"NotForSale"},
+			{"key":"bestBeforeTime","value":"BestBeforeTime"},
+			{"key":"bestBeforeType","value":"BestBeforeType"},
+			{"key":"cessFlat","value":"CessFlat"},
+			{"key":"cessPercentage","value":"CessPercentage"}
 			];
 			
-			MappingData = ['companyId','branchId','productCategoryId','productGroupId','productName','color','size','productDescription','measurementUnit','purchasePrice','wholesaleMargin','wholesaleMarginFlat','semiWholesaleMargin','vat','margin','marginFlat','additionalTax','mrp','minimumStockLevel'];
+			MappingData = ['companyId','branchId','productCategoryId','productGroupId','productName','color','size','productDescription','measurementUnit','purchasePrice','wholesaleMargin','wholesaleMarginFlat','semiWholesaleMargin','vat','margin','marginFlat','additionalTax','mrp','minimumStockLevel','productMenu','productType','maxSaleQty','notForSale','bestBeforeTime','bestBeforeType','cessFlat','cessPercentage'];
 			
 			$scope.dropdownData.brandName = vm.batchdropdown[0];
 			$scope.dropdownData.description = vm.batchdropdown[1];
@@ -145,6 +153,14 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 			$scope.dropdownData.additionalTax = vm.batchdropdown[16];
 			$scope.dropdownData.mrp = vm.batchdropdown[17];
 			$scope.dropdownData.minimumStock = vm.batchdropdown[18];
+			$scope.dropdownData.productMenu = vm.batchdropdown[19];
+			$scope.dropdownData.productType = vm.batchdropdown[20];
+			$scope.dropdownData.maxSaleQty = vm.batchdropdown[21];
+			$scope.dropdownData.notForSale = vm.batchdropdown[22];
+			$scope.dropdownData.bestBeforeTime = vm.batchdropdown[23];
+			$scope.dropdownData.bestBeforeType = vm.batchdropdown[24];
+			$scope.dropdownData.cessFlat = vm.batchdropdown[25];
+			$scope.dropdownData.cessPercentage = vm.batchdropdown[26];
 		}
 		
 		
@@ -492,7 +508,16 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				innerObject.AdditionalTax = $scope.keyExists('AdditionalTax',excelData[i]);
 				
 				innerObject.MRP = $scope.keyExists('MRP',excelData[i]);
-				innerObject.MinimumStock = $scope.keyExists('MinimumStock',excelData[i]);
+				innerObject.minimumStock = $scope.keyExists('minimumStock',excelData[i]);
+				innerObject.ProductMenu = $scope.keyExists('ProductMenu',excelData[i]);
+				innerObject.ProductType = $scope.keyExists('ProductType',excelData[i]);
+				innerObject.MaxSaleQty = $scope.keyExists('MaxSaleQty',excelData[i]);
+				innerObject.NotForSale = $scope.keyExists('NotForSale',excelData[i]);
+				innerObject.BestBeforeTime = $scope.keyExists('BestBeforeTime',excelData[i]);
+				innerObject.BestBeforeType = $scope.keyExists('BestBeforeType',excelData[i]);
+				innerObject.CessFlat = $scope.keyExists('CessFlat',excelData[i]);
+				innerObject.CessPercentage = $scope.keyExists('CessPercentage',excelData[i]);
+				// innerObject.MinimumStock = $scope.keyExists('MinimumStock',excelData[i]);
 				
 				
 				

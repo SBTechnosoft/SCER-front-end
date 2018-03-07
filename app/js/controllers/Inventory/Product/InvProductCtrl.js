@@ -20,11 +20,12 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	$scope.showProduct = function(){
 		
 		if($scope.stateCheck){
+			// console.log("iff");
 			flag = 1;
 			$scope.getProduct($scope.stateCheck.companyId);
 		}
 		else{
-			
+			// console.log("else");
 			toaster.clear();
 			toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
@@ -44,8 +45,8 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 					filterDataForTable();
 				}
 				
-				$scope.tableParams.reload();
-				$scope.tableParams.page(1);
+				vm.tableParams.reload();
+				vm.tableParams.page(1);
 				
 			});
 		}
@@ -54,6 +55,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	function filterDataForTable(){
 		var count = data.length;
 		while(count--) {
+			// console.log("dataaaa = ",data);
 		 	data[count].productCategoryName = ""; //initialization of new property 
 			data[count].productCategoryName = data[count].productCategory.productCategoryName;  //set the data from nested obj into new property
 			data[count].productGroupName = ""; //initialization of new property 
@@ -80,7 +82,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		toaster.pop('wait', 'Please Wait', 'Data Loading....',600000);
 			
 			productFactory.getProductByCompany(id).then(function(response){
-				// console.log("get updated data = ",response);
+				 console.log("get updated data = ",response);
 				toaster.clear();
 				if(angular.isArray(response)){
 					
@@ -106,10 +108,8 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 					$scope.TableData();
 				}
 				else{
-					//console.log('one');
-					 // $scope.tableParams.reload();
-					 // $scope.tableParams.reloadPages();
-					$scope.tableParams= {reload:function(){},settings:function(){return {}}};
+					 vm.tableParams.reload();
+					vm.tableParams.page(1);
 
 				}
 				
@@ -119,12 +119,23 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 			
 		// });
 	}
-	
+	$scope.query = {
+		productCategoryName: undefined,
+		productGroupName: undefined,
+		productName: undefined,
+		color: undefined,
+		size: undefined,
+		hsn: undefined,
+		vat:undefined,
+		additionalTax:undefined,
+		igst:undefined
+	};
 	$scope.TableData = function(){
 		 
-	  $scope.tableParams = new ngTableParams({
+	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
+		  filter: $scope.query,
 		  sorting: {
 			  productCategoryName: 'asc'     // initial sorting
 		  }
@@ -153,6 +164,33 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 	}
 
 
+	$scope.enableDisableColor = true;
+	$scope.enableDisableSize = true;
+	// $scope.enableDisableBestBefore = true;
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			var responseLength = response.length;
+			console.log(response);
+			for(var arrayData=0;arrayData<responseLength;arrayData++)
+			{
+				if(angular.isObject(response) || angular.isArray(response))
+				{
+					if(response[arrayData].settingType=="product")
+					{
+						var arrayData1 = response[arrayData];
+						$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
+						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+						// $scope.enableDisableBestBefore = arrayData1.productBestBeforeStatus=="enable" ? true : false;
+					}
+				}
+			}
+		});
+	}
+
+	$scope.getOptionSettingData();
+
   $scope.editProduct = function(id)
   {
 	getSetFactory.set(id);
@@ -177,6 +215,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		 /**Delete Code **/
 			productFactory.deleteSingleProduct(id).then(function(response){
 				if(apiResponse.ok == response){
+					console.log("successccccccccccccccccc");
 					$scope.showProduct();
 					toaster.pop('success', 'Title', 'Delete SuccessFully');
 				}
@@ -271,15 +310,15 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 			  // $scope.showProduct();	
 			  Modalopened = false;
 			  
-			  var count =   data.length;
-				$scope.productFlag=0;
-				for(var sat=0;sat<count;sat++){
-					var dataSet =   data[sat];	
-					dataSet.selected = false;	
-				}
-				$scope.parentCheckBox=false;
-				// $scope.tableParams.reload();
-				// $scope.tableParams.page(1);
+			 //  var count =   data.length;
+				// $scope.productFlag=0;
+				// for(var sat=0;sat<count;sat++){
+				// 	var dataSet =   data[sat];	
+				// 	dataSet.selected = false;	
+				// }
+				// $scope.parentCheckBox=false;
+				// vm.tableParams.reload();
+				// vm.tableParams.page(1);
 			  $scope.init();
 			  
 			

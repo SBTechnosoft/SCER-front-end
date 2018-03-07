@@ -35,7 +35,7 @@
          <div class="panel-title" id="allPro">All Product  </div>
       </div>
 	   <div class="table-responsive">
-		  <table data-ng-table="tableParams" show-filter="true" class="table table-bordered table-striped">
+		  <table ng-table="table.tableParams" show-filter="true" class="table table-bordered table-striped">
 		  <!--input type="text" class="input-filter form-control fa fa-search" ng-model="query" placeholder="SEARCH FOR ANY KIND OF DETAIL"/-->
 			<thead>
 				 <th check-all="check-all">
@@ -49,8 +49,8 @@
 				<th  sortable="'productCategoryName'"  >Brand</th>
 				<th>Category</th>
 				<th>Product Name</th>
-				<th>Color</th>
-				<th>Size</th>
+				<th ng-if="enableDisableColor">Color</th>
+				<th ng-if="enableDisableSize">Size</th>
 				<th>HSN/SAC</th>
 				<th>CGST</th>
 				<th>SGST</th>
@@ -58,6 +58,39 @@
 				<th>Action</th>
 			</thead>
 			<tbody>
+				<tr>
+					<td>
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.productCategoryName"  />
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.productGroupName"  />
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.productName"  />
+					</td>
+					<td ng-if="enableDisableColor" >
+						<input type="text"  class="input-filter form-control" ng-model="query.color" />
+					</td>
+					<td  ng-if="enableDisableSize" >
+						<input type="text" class="input-filter form-control" ng-model="query.size"/>
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.hsn"  />
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.vat"  />
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.additionalTax"  />
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.igst"  />
+					</td>
+					<td colspan="1">
+					</td>
+				</tr>
 				<tr  data-ng-repeat="user in ($parent.filteredItems = $data) track by user.productId">
 					<td>
 					   <div class="checkbox c-checkbox">
@@ -70,8 +103,8 @@
 					<td sortable="'productCategoryName'" filter="{ 'productCategoryName': 'text' }" ng-bind="::user.productCategory.productCategoryName" ></td>
 					<td sortable="'productGroupName'" filter="{ 'productGroupName': 'text' }" ng-bind="::user.productGroup.productGroupName" ></td>
 					<td sortable="'productName'" filter="{ 'productName': 'text' }" ng-bind="::user.productName" ></td>
-					<td  filter="{ 'color': 'text' }" ng-bind="::user.color" ></td>
-					<td  filter="{ 'size': 'text' }" ng-bind="::user.size" ></td>
+					<td  filter="{ 'color': 'text' }" ng-bind="::user.color" ng-if="enableDisableColor"></td>
+					<td  filter="{ 'size': 'text' }" ng-bind="::user.size" ng-if="enableDisableSize"></td>
 					<td   filter="{ 'size': 'text' }" ng-bind="::user.hsn" ></td>
 					<td  filter="{ 'vat': 'text' }" ng-bind="::user.vat | setDecimal: user.company.noOfDecimalPoints" ></td>
 					<td  filter="{ 'additionalTax': 'text' }" ng-bind="::user.additionalTax | setDecimal: user.company.noOfDecimalPoints" ></td>

@@ -263,7 +263,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 		.state('app.AddInvProduct', {
             url: '/AddInvProduct',
             templateUrl: basepath('Inventory/Product/AddInvProduct.html'),
-            resolve: requireDeps('angular-chosen','toaster')
+            resolve: requireDeps('angular-chosen','toaster','ngTableToCsv','importExcel','exportExcel')
         })
 		//Show Inventory Product
 		.state('app.InvProduct', {
@@ -759,7 +759,7 @@ App.config(['$stateProvider','$urlRouterProvider', '$controllerProvider', '$comp
 				url: '/QuotationPrint',
 				templateUrl: basepath('QuickMenu/RetailsaleBill.html'),
 				controller: 'RetailsaleBillController as form',
-				resolve: angular.extend(requireDeps('taxInvoice','angular-chosen','toaster','ngTable','jquery-ui'),{
+				resolve: angular.extend(requireDeps('taxInvoice','angular-chosen','toaster','ngTable','uiCropper','moment','jquery-ui'),{
 					saleType: function(){
 						return 'QuotationPrint';
 					}

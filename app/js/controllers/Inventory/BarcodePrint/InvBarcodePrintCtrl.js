@@ -123,6 +123,30 @@ function InvBarcodePrintController($scope,$rootScope, $filter, $state,ngTablePar
 		});
 	}
 
+	$scope.enableDisableColor = true;
+	$scope.enableDisableSize = true;
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			var responseLength = response.length;
+			console.log(response);
+			for(var arrayData=0;arrayData<responseLength;arrayData++)
+			{
+				if(angular.isObject(response) || angular.isArray(response))
+				{
+					if(response[arrayData].settingType=="product")
+					{
+						var arrayData1 = response[arrayData];
+						$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
+						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+					}
+				}
+			}
+		});
+	}
+	$scope.getOptionSettingData();
+	
 	$scope.editProduct = function(id)
 	{
 		getSetFactory.set(id);

@@ -53,8 +53,8 @@
 				<th  sortable="'productCategoryName'"  >Brand</th>
 				<th>Category</th>
 				<th>Product Name</th>
-				<th>Color</th>
-				<th>Size</th>
+				<th ng-if="enableDisableColor">Color</th>
+				<th ng-if="enableDisableSize">Size</th>
 				<th  style="width:3%;" ng-if="selectedBoxArray.length <= 0 && barcodeFlag!=1" >Quantity</th>
 				<th   ng-if="selectedBoxArray.length <= 0 && barcodeFlag!=1" >Print</th>
 				<th style="width:10%" ng-if="selectedBoxArray.length > 0 || barcodeFlag==1" ng-init="barcodePrintData.multiQuantity = 0" >
@@ -84,10 +84,10 @@
 					<td>
 						<input type="text" class="input-filter form-control" ng-model="query.productName"  />
 					</td>
-					<td>
+					<td ng-if="enableDisableColor">
 						<input type="text" class="input-filter form-control" ng-model="query.color"  />
 					</td>
-					<td>
+					<td ng-if="enableDisableSize">
 						<input type="text" class="input-filter form-control" ng-model="query.size"  />
 					</td>
 					<td colspan="2">
@@ -107,8 +107,8 @@
 					<td   sortable="'productGroupName'"  ng-bind="::user.productGroup.productGroupName"></td>
 					<td   sortable="'productName'"  ng-bind="::user.productName"></td>
 				   
-					<td   filter="{ 'color': 'text' }" ng-bind="::user.color"></td>
-					<td    filter="{ 'size': 'text' }" ng-bind="::user.size"></td>
+					<td  ng-if="enableDisableColor" filter="{ 'color': 'text' }" ng-bind="::user.color"></td>
+					<td  ng-if="enableDisableSize"  filter="{ 'size': 'text' }" ng-bind="::user.size"></td>
 					<td  ng-init="user.barcodeQuantity=0"> <input id="input-id-1"  name="quantity" ng-model="user.barcodeQuantity" type="text" placeholder="Quantity" class="form-control input-sm" ng-pattern="/^[0-9]*$/"  ng-disabled="barcodePrintData.multiQuantity>0" ng-change="hideMiltiQuantity(user.barcodeQuantity,user.productId)"  min="1" only-number /> </td>
 			
 				   <td  style="width:10%"> 

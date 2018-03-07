@@ -6,7 +6,7 @@
 
 App.controller('AddInvProductController', AddInvProductController);
 
-function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$state,apiResponse,validationMessage,getSetFactory,$modal,productFactory,fetchArrayService,maxImageSize) {
+function AddInvProductController($scope,toaster,$filter,apiCall,apiPath,$stateParams,$state,apiResponse,validationMessage,getSetFactory,$modal,productFactory,fetchArrayService,maxImageSize) {
   'use strict';
   
   var vm = this;
@@ -26,6 +26,16 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
   this.measureUnitDrop = [
     'piece',
     'pair'
+  ];
+  this.productTypeDrop = [
+    'product',
+    'accessories',
+    'service'
+  ];
+  this.bestBeforeDrop = [
+    'day',
+    'month',
+    'year'
   ];
 	
 	
@@ -72,12 +82,40 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 		vm.groupDrop = responseDrop;
 	
 	});
+
+	$scope.enableDisableColor = true;
+	$scope.addDiv=false;
+	$scope.enableDisableSize = true;
+	$scope.enableDisableBestBefore = true;
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			var responseLength = response.length;
+			console.log(response);
+			for(var arrayData=0;arrayData<responseLength;arrayData++)
+			{
+				if(angular.isObject(response) || angular.isArray(response))
+				{
+					if(response[arrayData].settingType=="product")
+					{
+						var arrayData1 = response[arrayData];
+						$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
+						$scope.addDiv = $scope.enableDisableColor==false? true :false;
+						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+						$scope.enableDisableBestBefore = arrayData1.productBestBeforeStatus=="enable" ? true : false;
+					}
+				}
+			}
+		});
+	}
+	$scope.getOptionSettingData();
 	
 	//Edit Product
 	if(Object.keys(getSetFactory.get()).length > 0){
 	//if(getSetFactory.get() > 0){
 		var editProductData = getSetFactory.get();
-		// console.log(editProductData);
+		console.log("product-data",editProductData);
 		getSetFactory.blank();
 		
 		$scope.addInvProduct.getSetProductId = editProductData.productId;
@@ -105,13 +143,9 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 				$scope.addInvProduct.branch = editProductData.branch;
 				
 			});
-			
 			$scope.addInvProduct.category = editProductData.productCategory;
 			$scope.addInvProduct.group = editProductData.productGroup;
-			
-			
 			//Measure DropDown Selection
-			
 			$scope.addInvProduct.measureUnit = editProductData.measurementUnit;
 			
 			$scope.addInvProduct.purchasePrice = editProductData.purchasePrice;
@@ -124,27 +158,31 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 			$scope.addInvProduct.marginFlat = editProductData.marginFlat;
 			$scope.addInvProduct.margin = editProductData.margin;
 			
-			
 			if(editProductData.hsn == null){
 				$scope.addInvProduct.hsn = '';
 			}
 			else{
 				$scope.addInvProduct.hsn = editProductData.hsn;
 			}
-			
-			
 			if(editProductData.igst == null){
 				$scope.addInvProduct.igst = '';
 			}
 			else{
 				$scope.addInvProduct.igst = editProductData.igst;
 			}
-			
-			// $scope.addInvProduct.purchaseCgst = editProductData.purchaseCgst == null ? '' : editProductData.purchaseCgst;
-			// $scope.addInvProduct.purchaseSgst = editProductData.purchaseSgst == null ? '' : editProductData.purchaseSgst;
-			// $scope.addInvProduct.purchaseIgst = editProductData.purchaseIgst == null ? '' : editProductData.purchaseIgst;
+			$scope.addInvProduct.purchaseCgst = editProductData.purchaseCgst == null ? '' : editProductData.purchaseCgst;
+			$scope.addInvProduct.purchaseSgst = editProductData.purchaseSgst == null ? '' : editProductData.purchaseSgst;
+			$scope.addInvProduct.purchaseIgst = editProductData.purchaseIgst == null ? '' : editProductData.purchaseIgst;
 			
 			$scope.addInvProduct.minimumStockLevel = editProductData.minimumStockLevel;
+			$scope.addInvProduct.productType = editProductData.productType;
+			$scope.addInvProduct.productMenu = editProductData.productMenu;
+			$scope.addInvProduct.bestBeforeType = editProductData.bestBeforeType;
+			$scope.addInvProduct.bestBeforeTime = editProductData.bestBeforeTime;
+			$scope.addInvProduct.cessFlat = editProductData.cessFlat;
+			$scope.addInvProduct.cessPercentage = editProductData.cessPercentage;
+			$scope.addInvProduct.maxSaleQty = editProductData.maxSaleQty;
+			$scope.addInvProduct.notForSale = editProductData.notForSale== "true" ? true : false;
 			
 		//});
 	}
@@ -154,7 +192,16 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 		
 		$scope.addInvProduct.measureUnit = 'piece';
 		formdata.append('measurementUnit',$scope.addInvProduct.measureUnit);
-		
+		$scope.addInvProduct.productType ='accessories';
+		formdata.append('productType',$scope.addInvProduct.productType);
+		$scope.addInvProduct.bestBeforeType ='day';
+		formdata.append('bestBeforeType',$scope.addInvProduct.bestBeforeType);
+		$scope.addInvProduct.notForSale = 'false';
+		formdata.append('notForSale',$scope.addInvProduct.notForSale);
+		$scope.addInvProduct.productMenu = 'not';
+		formdata.append('productMenu',$scope.addInvProduct.productMenu);
+		$scope.addInvProduct.bestBeforeTime=0;
+		formdata.append('bestBeforeTime',$scope.addInvProduct.bestBeforeTime);
 		productFactory.getProduct();
 	}
 
@@ -306,12 +353,12 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
   
 	//Changed Data When Update
 	$scope.changeInvProductData = function(Fname,value){
-		//console.log(Fname+'..'+value);
+		console.log(Fname+'..'+value);
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
-		formdata.append(Fname,value);
+		formdata.set(Fname,value);
 	}
 
 	$scope.displayParseFloat=function(val) {
@@ -320,7 +367,6 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	}
 
 	$scope.pop = function() {
-	
 		if($scope.addInvProduct.getSetProductId){
 			toaster.clear();
 			toaster.pop('wait','Data Updating...','',60000);
@@ -345,6 +391,9 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 			
 			toaster.clear();
 			toaster.pop('wait','Data Inserting...','',60000);
+			// console.log("product   == ",$scope.addInvProduct);
+			// formdata.append('productType',$scope.addInvProduct.productType);
+			// formdata.append('bestBeforeType',$scope.addInvProduct.bestBeforeType);
 			formdata.append('isDisplay','yes');
 			apiCall.postCall(apiPath.getAllProduct,formdata).then(function(response5){
 				toaster.clear();
@@ -352,7 +401,7 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 				if(apiResponse.ok == response5){
 					toaster.pop('success', 'Title', 'SuccessFull');
 					productFactory.setNewProduct($scope.addInvProduct.company.companyId,$scope.addInvProduct.name,$scope.addInvProduct.color,$scope.addInvProduct.size).then(function(response){
-						if(angular.isArray(response)){
+						if(angular.isObject(response)){
 							$state.go('app.InvProduct');
 						}
 					});
@@ -409,31 +458,32 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 		});
 	}
 
+	//single image cover-image validation and add it to formdata
 	$scope.uploadFile = function(files) {
-	  
-		if(parseInt(files[0].size) <= maxImageSize){
+	  	if(parseInt(files[0].size) <= maxImageSize){
 			
 			angular.element("img.showImg").css("display","block");
 			
 			console.log('Small File');
-			formdata.delete('file[]');
-		
-			formdata.append("file[]", files[0]);
+			formdata.delete('coverImage[]');
+			
+			formdata.append("coverImage[]", files[0]);
 			
 			var reader = new FileReader();
-
 			reader.onload = function(event) {
 				$scope.image_source = event.target.result
 				$scope.$digest();
 
 			}
+			// console.log('Small File vv');
 			// when the file is read it triggers the onload event above.
 			reader.readAsDataURL(files[0]);
+			// console.log('Small File aa');
 		
 		}
 		else{
 			
-			formdata.delete('file[]');
+			formdata.delete('coverImage[]');
 			toaster.clear();
 			//toaster.pop('alert','Image Size is Too Long','');
 			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
@@ -441,6 +491,37 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 			angular.element("input[type='file']").val(null);
 			angular.element("img.showImg").css("display","none");
 			$scope.$digest();
+		}
+	};
+
+	//multiple images validation and add it to formdata
+	$scope.uploadMultipleFile = function(files) {
+		toaster.clear();
+		var flag = 0;
+		
+		for(var m=0;m<files.length;m++){
+			
+			if(parseInt(files[m].size) > maxImageSize){
+				
+				flag = 1;
+				formdata.delete('file[]');
+				angular.element("input[type='file']").val(null);
+				angular.element(".multipleFileAttachLabel").html('');
+				break;
+			}
+			
+		}
+		
+		if(flag == 0){
+			
+			formdata.delete('file[]');
+			
+			angular.forEach(files, function (value,key) {
+				formdata.append('file[]',value);
+			});
+		}
+		else{
+			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
 		}
 	};
 	
@@ -482,4 +563,4 @@ function AddInvProductController($scope,toaster,apiCall,apiPath,$stateParams,$st
 	
    /** End **/
 }
-AddInvProductController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory","fetchArrayService","maxImageSize"];
+AddInvProductController.$inject = ["$scope","toaster","$filter","apiCall","apiPath","$stateParams","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory","fetchArrayService","maxImageSize"];

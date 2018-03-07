@@ -28,6 +28,16 @@ function InventoryBatchModalUpdateController($scope,toaster,apiCall,apiPath,$sta
     'piece',
     'pair'
   ];
+  this.productTypeDrop = [
+    'product',
+    'accessories',
+    'service'
+  ];
+  this.bestBeforeDrop = [
+    'day',
+    'month',
+    'year'
+  ];
 	console.log("measureUnit",this.measureUnitDrop);
 	
 	
@@ -74,6 +84,28 @@ function InventoryBatchModalUpdateController($scope,toaster,apiCall,apiPath,$sta
 	
 	});
 	
+	$scope.enableDisableBestBefore = true;
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			var responseLength = response.length;
+			console.log(response);
+			for(var arrayData=0;arrayData<responseLength;arrayData++)
+			{
+				if(angular.isObject(response) || angular.isArray(response))
+				{
+					if(response[arrayData].settingType=="product")
+					{
+						var arrayData1 = response[arrayData];
+						$scope.enableDisableBestBefore = arrayData1.productBestBeforeStatus=="enable" ? true : false;
+					}
+				}
+			}
+		});
+	}
+	$scope.getOptionSettingData();
+
 	//Edit Product
 	if(Object.keys(getSetFactory.get()).length > 0){
 	//if(getSetFactory.get() > 0){
@@ -155,7 +187,16 @@ function InventoryBatchModalUpdateController($scope,toaster,apiCall,apiPath,$sta
 		
 		$scope.addInvProduct.measureUnit = 'piece';
 		formdata.append('measurementUnit',$scope.addInvProduct.measureUnit);
-		
+		$scope.addInvProduct.productType ='accessories';
+		formdata.append('productType',$scope.addInvProduct.productType);
+		$scope.addInvProduct.bestBeforeType ='day';
+		formdata.append('bestBeforeType',$scope.addInvProduct.bestBeforeType);
+		$scope.addInvProduct.notForSale = 'false';
+		formdata.append('notForSale',$scope.addInvProduct.notForSale);
+		$scope.addInvProduct.productMenu = 'not';
+		formdata.append('productMenu',$scope.addInvProduct.productMenu);
+		$scope.addInvProduct.bestBeforeTime=0;
+		formdata.append('bestBeforeTime',$scope.addInvProduct.bestBeforeTime);
 		productFactory.getProduct();
 	}
 
@@ -342,7 +383,18 @@ function InventoryBatchModalUpdateController($scope,toaster,apiCall,apiPath,$sta
 				toaster.pop('success', 'Title', 'SuccessFully Updated');
 				var formdata = undefined;
 		  		formdata = new FormData();
-				$modalInstance.close();	
+		  		for(var productArray=0;productArray<productLength;productArray++)
+				{
+					productFactory.setUpdatedProduct($scope.productData[productArray].productId).then(function(response){
+						// console.log("get response");
+						// if((productLength-1)==productArray)
+						// {
+						// 	console.log("in if");
+							$modalInstance.close();
+						// }
+					});
+				}
+		  		console.log("end");		
 			}
 			else{
 				formdata.delete('isDisplay');

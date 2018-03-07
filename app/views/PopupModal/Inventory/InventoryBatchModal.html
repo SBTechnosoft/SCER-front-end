@@ -165,6 +165,38 @@
 					  <select chosen ng-model="dropdownData.minimumStock"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('18',dropdownData.minimumStock.key)"  class="form-control chosen-select" >
 						 <option value=""></option>
 					 </select>
+
+					 <select chosen ng-model="dropdownData.productMenu"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('19',dropdownData.productMenu.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
+
+					 <select chosen ng-model="dropdownData.productType"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('20',dropdownData.productType.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
+
+					 <select chosen ng-model="dropdownData.maxSaleQty"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('21',dropdownData.maxSaleQty.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
+
+					 <select chosen ng-model="dropdownData.notForSale"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('22',dropdownData.notForSale.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
+
+					 <select chosen ng-model="dropdownData.bestBeforeTime"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('23',dropdownData.bestBeforeTime.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
+
+					 <select chosen ng-model="dropdownData.bestBeforeType"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('24',dropdownData.bestBeforeType.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
+
+					 <select chosen ng-model="dropdownData.cessFlat"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('25',dropdownData.cessFlat.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
+
+					 <select chosen ng-model="dropdownData.cessPercentage"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('26',dropdownData.cessPercentage.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
                  
               </div>
 			   
@@ -323,6 +355,54 @@
 										 <option value=""></option>
 									 </select>
 								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.productMenu"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('19',dropdownData.productMenu.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.productType"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('20',dropdownData.productType.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.maxSaleQty"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('21',dropdownData.maxSaleQty.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.notForSale"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('22',dropdownData.notForSale.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.bestBeforeTime"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('23',dropdownData.bestBeforeTime.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.bestBeforeType"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('24',dropdownData.bestBeforeType.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.cessFlat"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('25',dropdownData.cessFlat.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
+
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.cessPercentage"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('26',dropdownData.cessPercentage.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
 							</tr>
 							<tr ng-if="inventoryType == 'Product'">
 								<th>CompanyName</th>
@@ -343,7 +423,15 @@
 								<th>MarginFlat</th>
 								<th>AdditionalTax</th>
 								<th>MRP</th>
-								<th>MinimumStock</th>
+								<th>minimumStock</th>
+								<th>ProductMenu</th>
+								<th>ProductType</th>
+								<th>MaxSaleQty</th>
+								<th>NotForSale</th>
+								<th>BestBeforeTime</th>
+								<th>BestBeforeType</th>
+								<th>cessFlat</th>
+								<th>cessPercentage</th>
 							</tr>
 						</thead>
 						 <tbody ng-if="inventoryType == 'Brand'">
@@ -380,7 +468,15 @@
 								<td>{{item.marginFlat}}</td>
 								<td>{{item.AdditionalTax}}</td>
 								<td>{{item.MRP}}</td>
-								<td>{{item.MinimumStock}}</td>
+								<td>{{item.minimumStock}}</td>
+								<td>{{item.ProductMenu}}</td>
+								<td>{{item.ProductType}}</td>
+								<td>{{item.MaxSaleQty}}</td>
+								<td>{{item.NotForSale}}</td>
+								<td>{{item.BestBeforeTime}}</td>
+								<td>{{item.BestBeforeType}}</td>
+								<td>{{item.CessFlat}}</td>
+								<td>{{item.CessPercentage}}</td>
 							</tr>
 						 </tbody>
 					</table>

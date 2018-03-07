@@ -82,6 +82,40 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		});
 	}
 
+	$scope.enableDisableColor = true;
+	$scope.enableDisableSize = true;
+	$scope.divTag = true;
+	$scope.colspanValue = '6';
+	$scope.colspanAdvanceValue = '9';
+	$scope.colspanExpenseValue = '7';
+	$scope.totalTd = '13';
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			var responseLength = response.length;
+			console.log(response);
+			for(var arrayData=0;arrayData<responseLength;arrayData++)
+			{
+				if(angular.isObject(response) || angular.isArray(response))
+				{
+					if(response[arrayData].settingType=="product")
+					{
+						var arrayData1 = response[arrayData];
+						$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
+						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+						$scope.divTag = $scope.enableDisableColor == false && $scope.enableDisableSize == false ? false : true;
+						$scope.colspanValue = $scope.divTag==false ? '5' : '6';
+						$scope.totalTd = $scope.divTag==false ? '12' : '13';
+						$scope.colspanAdvanceValue = $scope.divTag==false ? '8' : '9';
+						$scope.colspanExpenseValue = $scope.divTag==false ? '6' : '7';
+					}
+				}
+			}
+		});
+	}
+	$scope.getOptionSettingData();
+	
 	$scope.expenseAmount=[];
 	$scope.getExpenseValue = function(index)
 	{
@@ -111,6 +145,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 	$scope.openExpenseRaw = function()
 	{
 		$scope.openExpenseRawData=true;
+		$scope.addExpenseRow(-1);
 	}
 	//Default Company Function
 	$scope.defaultComapny = function(){

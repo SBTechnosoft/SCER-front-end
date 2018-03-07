@@ -11,6 +11,9 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
   	/*service-date */
   	$scope.enableDisableValue=false;
   	$scope.enableDisableChequeNoValue=false;
+  	$scope.enableDisableBestBefore=false;
+  	$scope.enableDisableColor=false;
+  	$scope.enableDisableSize=false;
   	$scope.serviceData = [];
 
 	/* VALIDATION */
@@ -25,6 +28,7 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.insertUpdateLabel;
 		$scope.insertUpdateServiceLabel;
 		$scope.insertUpdateChequeNoLabel;
+		$scope.insertUpdateProductLabel;
 		
 		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1","1.5","2"];  // Default-> 1.5
 		vm.barcodeHeightDrop = ["40","50","60","70","80","90","100"];          // Default-> 40
@@ -68,13 +72,28 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 							$scope.insertUpdateChequeNoLabel = "Update";
 							var arrayData1 = response2[arrayData];
 							if(arrayData1.settingType == "chequeno"){
-								console.log(arrayData1.chequeno);
+								// console.log(arrayData1.chequeno);
 								$scope.enableDisableChequeNoValue = arrayData1.chequeno=="enable" ? true : false;
 							}
 						}
 						else
 						{
 							$scope.insertUpdateChequeNoLabel = "Insert";
+						}
+						// console.log("status =",response2[arrayData]);
+						if(response2[arrayData].settingType=="product")
+						{
+							// console.log("status =");
+							$scope.insertUpdateProductLabel = "Update";
+							var arrayData1 = response2[arrayData];
+							$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
+							$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+							$scope.enableDisableBestBefore = arrayData1.productBestBeforeStatus=="enable" ? true : false;
+							
+						}
+						else
+						{
+							$scope.insertUpdateProductLabel = "Insert";
 						}
 					}
 				}
@@ -84,8 +103,9 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.getOptionSettingData();
 		
 		$scope.flag = 0;
-		$scope.serviceDataflag = 1;
-		$scope.chequeNoflag = 1;
+		$scope.serviceDataflag = 0;
+		$scope.chequeNoflag = 0;
+		$scope.productFlag = 0;
 		$scope.changeInBarcodeData = function(key,value){
 			
 			$scope.flag = 1;
@@ -116,6 +136,10 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 			// }
 			
 			// barcodeFormData.append(key,value);
+		}
+		$scope.changeInProduct = function(key,value){
+			
+			$scope.productFlag = 1;
 		}
 		
 		$scope.AddUpdateBarcodeSetting = function(){
@@ -256,7 +280,68 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 			//console.log($scope.barcodeData);
 		}
 		
-	/** End **/
+		/** End **/
+		
+		//Add-Update product data
+		$scope.AddUpdateProductSetting = function(){
+			toaster.clear();
+			if($scope.productFlag == 1){
+				var productData = new FormData();
+				if($scope.enableDisableBestBefore==true)
+				{
+					productData.append('productBestBeforeStatus','enable');
+				}
+				else if($scope.enableDisableBestBefore==false)
+				{
+					productData.append('productBestBeforeStatus','disable');
+				}
+
+				if($scope.enableDisableColor==true)
+				{
+					productData.append('productColorStatus','enable');
+				}
+				else if($scope.enableDisableColor==false)
+				{
+					productData.append('productColorStatus','disable');
+				}
+
+				if($scope.enableDisableSize==true)
+				{
+					productData.append('productSizeStatus','enable');
+				}
+				else if($scope.enableDisableSize==false)
+				{
+					productData.append('productSizeStatus','disable');
+				}
+
+				if($scope.insertUpdateProductLabel == "Update"){
+					var apiPostPatchCall = apiCall.patchCall;
+				}
+				else{
+					var apiPostPatchCall = apiCall.postCall;
+				}
+				
+				apiPostPatchCall(apiPath.settingOption,productData).then(function(response){
+					if(apiResponse.ok == response){
+						
+						$scope.getOptionSettingData();
+						toaster.pop('success','Product-Data',$scope.insertUpdateProductLabel+' Successfull');
+						$scope.productFlag = 0;
+						
+					}
+					else{
+						
+						toaster.pop('warning','Opps!!',response);
+					}
+				
+				});
+			}
+			else{
+				
+				toaster.pop('info','Product-Data','Please Change Data');
+			}
+		}
+		/** End **/
 	
 	/** Color **/
 	

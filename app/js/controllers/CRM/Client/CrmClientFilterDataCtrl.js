@@ -184,16 +184,16 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
                   $filter('filter')(data, params.filter()) :
                   data;
 				  
-				  $scope.filteredItems = orderedData;
+				  
 				  
 				  var orderedData = params.sorting() ?
 						  $filter('orderBy')(filteredData, params.orderBy()) :
 						  data;
-
+						  
 				  params.total(orderedData.length); // set total for recalc pagination
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
 				  /** End **/
-				
+				$scope.filteredItems = orderedData;	
 				$scope.totalData = data.length;
 				$scope.pageNumber = params.page();
 				$scope.itemsPerPage = params.count();
@@ -252,8 +252,9 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 	}
   
 	$scope.changeAllBox = function(box){
-		
+		// console.log("innn change all box");
 		if(box == false){
+			// console.log("iff");
 			$scope.clientFlag=0;
 			$scope.selectedBoxArray = [];
 			var cnt  = data.length;
@@ -262,13 +263,19 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 			}
 		}
 		else{
+			// console.log("else");
 			$scope.clientFlag=1;
 			$scope.selectedBoxArray = [];
 			$scope.selectedBoxArray = $scope.filteredItems;
-			var cnt  = $scope.selectedBoxArray.length;
-			for(var k=0;k<cnt;k++){
-				$scope.selectedBoxArray[k].selected = true;
+			// console.log("consoldeeeeadsada  ",$scope.selectedBoxArray);
+			if(Array.isArray($scope.selectedBoxArray))
+			{
+				var cnt  = $scope.selectedBoxArray.length;
+				for(var k=0;k<cnt;k++){
+					$scope.selectedBoxArray[k].selected = true;
+				}
 			}
+			
 		}
 	}
 	

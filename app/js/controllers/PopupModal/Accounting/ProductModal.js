@@ -6,7 +6,7 @@
 
 App.controller('AccProductModalController', AccProductModalController);
 
-function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId,validationMessage,apiResponse,getSetFactory) {
+function AccProductModalController($scope,toaster, $modalInstance,$rootScope,apiCall,apiPath,productIndex,companyId,validationMessage,apiResponse,getSetFactory,maxImageSize) {
   'use strict';
   
   $scope.stockModel=[];
@@ -24,6 +24,17 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 	$scope.measureUnitDrop = [
     'piece',
     'pair'
+  ];
+
+  $scope.productTypeDrop = [
+    'product',
+    'accessories',
+    'service'
+  ];
+  $scope.bestBeforeDrop = [
+    'day',
+    'month',
+    'year'
   ];
   
 	$scope.defaultCompany = companyId;
@@ -60,7 +71,8 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 
 		var editProductData = getSetFactory.get();
 		getSetFactory.blank();
-		
+		console.log('modal p',editProductData);
+
 		$scope.addModelProduct.getSetProductId = editProductData.productId;
 		
 		$scope.addModelProduct.productName = editProductData.productName;
@@ -94,6 +106,15 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		$scope.addModelProduct.additionalTax = editProductData.additionalTax;
 		$scope.addModelProduct.marginFlat = editProductData.marginFlat;
 		$scope.addModelProduct.margin = editProductData.margin;
+
+		$scope.addModelProduct.productType = editProductData.productType;
+		$scope.addModelProduct.productMenu = editProductData.productMenu;
+		$scope.addModelProduct.bestBeforeType = editProductData.bestBeforeType;
+		$scope.addModelProduct.bestBeforeTime = editProductData.bestBeforeTime;
+		$scope.addModelProduct.cessFlat = editProductData.cessFlat;
+		$scope.addModelProduct.cessPercentage = editProductData.cessPercentage;
+		$scope.addModelProduct.maxSaleQty = editProductData.maxSaleQty;
+		$scope.addModelProduct.notForSale = editProductData.notForSale=="true"?true : false;
 		
 		if(editProductData.hsn == null){
 			$scope.addModelProduct.hsn = '';
@@ -139,8 +160,108 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 		
 		$scope.addModelProduct.measureUnit = 'piece';
 		formdata.append('measurementUnit',$scope.addModelProduct.measureUnit);
+		$scope.addModelProduct.productType ='accessories';
+		$scope.addModelProduct.bestBeforeType ='day';
+		$scope.addModelProduct.productMenu = 'not';
+		$scope.addModelProduct.notForSale = 'false';
+		$scope.addModelProduct.bestBeforeTime=0;
 	}
 	
+	$scope.enableDisableColor = true;
+	$scope.addDiv=false;
+	$scope.enableDisableSize = true;
+	$scope.enableDisableBestBefore = true;
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			var responseLength = response.length;
+			console.log(response);
+			for(var arrayData=0;arrayData<responseLength;arrayData++)
+			{
+				if(angular.isObject(response) || angular.isArray(response))
+				{
+					if(response[arrayData].settingType=="product")
+					{
+						var arrayData1 = response[arrayData];
+						$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
+						$scope.addDiv = $scope.enableDisableColor==false? true :false;
+						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+						$scope.enableDisableBestBefore = arrayData1.productBestBeforeStatus=="enable" ? true : false;
+					}
+				}
+			}
+		});
+	}
+	$scope.getOptionSettingData();
+
+	//single image cover-image validation and add it to formdata
+	$scope.uploadFile = function(files) {
+	  	if(parseInt(files[0].size) <= maxImageSize){
+			
+			angular.element("img.showImg").css("display","block");
+			
+			console.log('Small File');
+			formdata.delete('coverImage[]');
+			
+			formdata.append("coverImage[]", files[0]);
+			
+			var reader = new FileReader();
+			reader.onload = function(event) {
+				$scope.image_source = event.target.result
+				$scope.$digest();
+
+			}
+			// console.log('Small File vv');
+			// when the file is read it triggers the onload event above.
+			reader.readAsDataURL(files[0]);
+			// console.log('Small File aa');
+		
+		}
+		else{
+			
+			formdata.delete('coverImage[]');
+			toaster.clear();
+			//toaster.pop('alert','Image Size is Too Long','');
+			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+			
+			angular.element("input[type='file']").val(null);
+			angular.element("img.showImg").css("display","none");
+			$scope.$digest();
+		}
+	};
+
+	//multiple images validation and add it to formdata
+	$scope.uploadMultipleFile = function(files) {
+		toaster.clear();
+		var flag = 0;
+		
+		for(var m=0;m<files.length;m++){
+			
+			if(parseInt(files[m].size) > maxImageSize){
+				
+				flag = 1;
+				formdata.delete('file[]');
+				angular.element("input[type='file']").val(null);
+				angular.element(".multipleFileAttachLabel").html('');
+				break;
+			}
+			
+		}
+		
+		if(flag == 0){
+			
+			formdata.delete('file[]');
+			
+			angular.forEach(files, function (value,key) {
+				formdata.append('file[]',value);
+			});
+		}
+		else{
+			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+		}
+	};
+	
+
 	$scope.changeCompany = function(state)
 	{
 		$scope.branchDrop = [];
@@ -164,12 +285,19 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 	
 	//Changed Data When Update
 	$scope.changeInvProductData = function(Fname,value){
+		console.log(Fname,value);
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
+
+		if(Fname == 'notForSale'){
+			formdata.set(Fname,value);
+		}
+
 		if(value != undefined && value != ''){
-			formdata.append(Fname,value);
+			console.log('form append');
+			formdata.set(Fname,value);
 		}
 	}
 	
@@ -249,9 +377,10 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
 			if(apiResponse.ok == response5)
 			{
 				if($scope.addModelProduct.getSetProductId){
+					//console.log("innnn");
 					filterArray.productId = $scope.addModelProduct.getSetProductId;
 				}
-			
+				//console.log("hhhh");
 				filterArray.index = $scope.productIndex;
 				filterArray.companyId = $scope.addModelProduct.company.companyId;
 				filterArray.productName = $scope.addModelProduct.productName;
@@ -301,4 +430,4 @@ function AccProductModalController($scope, $modalInstance,$rootScope,apiCall,api
     };
   
 }
-AccProductModalController.$inject = ["$scope", "$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId","validationMessage","apiResponse","getSetFactory"];
+AccProductModalController.$inject = ["$scope","toaster","$modalInstance","$rootScope","apiCall","apiPath","productIndex","companyId","validationMessage","apiResponse","getSetFactory","maxImageSize"];
