@@ -36,10 +36,10 @@
 
 		</tab>
 		<tab heading="Accessories Detail">
-			<!-- <div class="table-responsive">
-				<table data-ng-table="table.tableParams1"   class="table table-bordered table-striped">
+			<div class="table-responsive">
+				<table data-ng-table="tableParams1"   class="table table-bordered table-striped">
 					<tbody >
-						<tr data-ng-repeat="user in $data track by $index" ng-if="user.productType=='accessories'">
+						<tr data-ng-repeat="user in ($parent.filteredItems1 = $data) track by $index" ng-if="user.productType=='accessories'">
 							<td style="text-align: left" header="'ng-table/headers/checkbox.html'" style="width:5%" >
 								<div class="checkbox c-checkbox">
 								  <label>
@@ -60,13 +60,13 @@
 					</tbody>
 				</table>
 				<span ng-include="'app/views/partials/tableFooter/tableFooter.html'" >  </span> 
-			</div> -->
+			</div>
 		</tab>
 		<tab heading="Services Detail">
-			<!-- <div class="table-responsive">
-				<table data-ng-table="table.tableParams2"   class="table table-bordered table-striped">
+			<div class="table-responsive">
+				<table data-ng-table="tableParams2"   class="table table-bordered table-striped">
 					<tbody >
-						<tr data-ng-repeat="user in $data track by $index" ng-if="user.productType=='serive'">
+						<tr data-ng-repeat="user in ($parent.filteredItems1 = $data) track by $index" ng-if="user.productType=='service'">
 							<td style="text-align: left" header="'ng-table/headers/checkbox.html'" style="width:5%" >
 								<div class="checkbox c-checkbox">
 								  <label>
@@ -87,7 +87,7 @@
 					</tbody>
 				</table>
 				<span ng-include="'app/views/partials/tableFooter/tableFooter.html'" >  </span> 
-			</div> -->
+			</div>
 		</tab>
 	</tabset>
 </div>

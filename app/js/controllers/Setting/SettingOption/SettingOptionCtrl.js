@@ -14,6 +14,13 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
   	$scope.enableDisableBestBefore=false;
   	$scope.enableDisableColor=false;
   	$scope.enableDisableSize=false;
+  	$scope.enableDisableFrameno=false;
+  	
+  	$scope.enableDisableWorkno=false;
+  	$scope.enableDisableAddress=false;
+  	$scope.enableDisableState=false;
+  	$scope.enableDisableCity=false;
+  	$scope.enableDisableEmailId=false;
   	$scope.serviceData = [];
 
 	/* VALIDATION */
@@ -29,19 +36,25 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.insertUpdateServiceLabel;
 		$scope.insertUpdateChequeNoLabel;
 		$scope.insertUpdateProductLabel;
+		$scope.insertUpdateClientLabel;
 		
-		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1","1.5","2"];  // Default-> 1.5
+		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1.0","1.5","2.0"];  // Default-> 1.5
 		vm.barcodeHeightDrop = ["40","50","60","70","80","90","100"];          // Default-> 40
 		$scope.getOptionSettingData = function(){
 			toaster.clear();
 			apiCall.getCall(apiPath.settingOption).then(function(response2){
 				var responseLength = response2.length;
-				// console.log(response2);
+				var barcodeFlag=0;
+				var serviceDateFlag=0;
+				var chequenoFlag=0;
+				var productFlag=0;
+				var clientFlag=0;
 				for(var arrayData=0;arrayData<responseLength;arrayData++)
 				{
 					if(angular.isObject(response2) || angular.isArray(response2))
 					{
 						if(response2[arrayData].hasOwnProperty("barcodeWidth")){
+							barcodeFlag=1;
 							$scope.insertUpdateLabel = "Update";
 							var arrayData1 = response2[arrayData];
 							if(arrayData1.settingType == "barcode"){
@@ -49,12 +62,9 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 								$scope.barcodeData.barcodeWidth = arrayData1.barcodeWidth;
 							}
 						}
-						else
-						{
-							$scope.insertUpdateLabel = "Insert";
-						}
 						if(response2[arrayData].hasOwnProperty("servicedateNoOfDays"))
 						{
+							serviceDateFlag=1;
 							$scope.insertUpdateServiceLabel = "Update";
 							var arrayData1 = response2[arrayData];
 							if(arrayData1.settingType == "servicedate"){
@@ -62,40 +72,60 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 								$scope.serviceData.noOfDays = arrayData1.servicedateNoOfDays;
 							}
 						}
-						else
-						{
-							$scope.insertUpdateServiceLabel = "Insert";
-						}
-
 						if(response2[arrayData].hasOwnProperty("chequeno"))
 						{
+							chequenoFlag=1;
 							$scope.insertUpdateChequeNoLabel = "Update";
 							var arrayData1 = response2[arrayData];
 							if(arrayData1.settingType == "chequeno"){
-								// console.log(arrayData1.chequeno);
 								$scope.enableDisableChequeNoValue = arrayData1.chequeno=="enable" ? true : false;
 							}
 						}
-						else
-						{
-							$scope.insertUpdateChequeNoLabel = "Insert";
-						}
-						// console.log("status =",response2[arrayData]);
 						if(response2[arrayData].settingType=="product")
 						{
-							// console.log("status =");
+							// console.log("vvv");
+							productFlag=1;
 							$scope.insertUpdateProductLabel = "Update";
 							var arrayData1 = response2[arrayData];
 							$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
 							$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
 							$scope.enableDisableBestBefore = arrayData1.productBestBeforeStatus=="enable" ? true : false;
+							$scope.enableDisableFrameno = arrayData1.productFrameNoStatus=="enable" ? true : false;
 							
 						}
-						else
+						if(response2[arrayData].settingType=="client")
 						{
-							$scope.insertUpdateProductLabel = "Insert";
+							clientFlag=1;
+							$scope.insertUpdateClientLabel = "Update";
+							var arrayData1 = response2[arrayData];
+							$scope.enableDisableWorkno = arrayData1.clientWorkNoStatus=="enable" ? true : false;
+							$scope.enableDisableAddress = arrayData1.clientAddressStatus=="enable" ? true : false;
+							$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
+							$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
+							$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+							
 						}
 					}
+				}
+				if(barcodeFlag==0)
+				{	
+					$scope.insertUpdateLabel = "Insert";
+				}
+				if(serviceDateFlag==0)
+				{
+					$scope.insertUpdateServiceLabel = "Insert";
+				}
+				if(chequenoFlag==0)
+				{
+					$scope.insertUpdateChequeNoLabel = "Insert";
+				}
+				if(productFlag==0)
+				{
+					$scope.insertUpdateProductLabel = "Insert";
+				}
+				if(clientFlag==0)
+				{
+					$scope.insertUpdateClientLabel = "Insert";
 				}
 			});
 		}
@@ -106,6 +136,7 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.serviceDataflag = 0;
 		$scope.chequeNoflag = 0;
 		$scope.productFlag = 0;
+		$scope.clientFlag = 0;
 		$scope.changeInBarcodeData = function(key,value){
 			
 			$scope.flag = 1;
@@ -140,6 +171,10 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.changeInProduct = function(key,value){
 			
 			$scope.productFlag = 1;
+		}
+		$scope.changeInClient = function(key,value){
+			
+			$scope.clientFlag = 1;
 		}
 		
 		$scope.AddUpdateBarcodeSetting = function(){
@@ -313,6 +348,14 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 				{
 					productData.append('productSizeStatus','disable');
 				}
+				if($scope.enableDisableFrameno==true)
+				{
+					productData.append('productFrameNoStatus','enable');
+				}
+				else if($scope.enableDisableFrameno==false)
+				{
+					productData.append('productFrameNoStatus','disable');
+				}
 
 				if($scope.insertUpdateProductLabel == "Update"){
 					var apiPostPatchCall = apiCall.patchCall;
@@ -339,6 +382,83 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 			else{
 				
 				toaster.pop('info','Product-Data','Please Change Data');
+			}
+		}
+		/** End **/
+
+		//Add-Update client data
+		$scope.AddUpdateClientSetting = function(){
+			toaster.clear();
+			if($scope.clientFlag == 1){
+				var clientData = new FormData();
+				if($scope.enableDisableWorkno==true)
+				{
+					clientData.append('clientWorkNoStatus','enable');
+				}
+				else if($scope.enableDisableWorkno==false)
+				{
+					clientData.append('clientWorkNoStatus','disable');
+				}
+
+				if($scope.enableDisableAddress==true)
+				{
+					clientData.append('clientAddressStatus','enable');
+				}
+				else if($scope.enableDisableAddress==false)
+				{
+					clientData.append('clientAddressStatus','disable');
+				}
+
+				if($scope.enableDisableState==true)
+				{
+					clientData.append('clientStateStatus','enable');
+				}
+				else if($scope.enableDisableState==false)
+				{
+					clientData.append('clientStateStatus','disable');
+				}
+				if($scope.enableDisableCity==true)
+				{
+					clientData.append('clientCityStatus','enable');
+				}
+				else if($scope.enableDisableCity==false)
+				{
+					clientData.append('clientCityStatus','disable');
+				}
+				if($scope.enableDisableEmailId==true)
+				{
+					clientData.append('clientEmailIdStatus','enable');
+				}
+				else if($scope.enableDisableEmailId==false)
+				{
+					clientData.append('clientEmailIdStatus','disable');
+				}
+
+				if($scope.insertUpdateClientLabel == "Update"){
+					var apiPostPatchCall = apiCall.patchCall;
+				}
+				else{
+					var apiPostPatchCall = apiCall.postCall;
+				}
+				
+				apiPostPatchCall(apiPath.settingOption,clientData).then(function(response){
+					if(apiResponse.ok == response){
+						
+						$scope.getOptionSettingData();
+						toaster.pop('success','Client-Data',$scope.insertUpdateClientLabel+' Successfull');
+						$scope.clientFlag = 0;
+						
+					}
+					else{
+						
+						toaster.pop('warning','Opps!!',response);
+					}
+				
+				});
+			}
+			else{
+				
+				toaster.pop('info','Client-Data','Please Change Data');
 			}
 		}
 		/** End **/

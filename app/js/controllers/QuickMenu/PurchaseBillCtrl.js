@@ -84,6 +84,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 
 	$scope.enableDisableColor = true;
 	$scope.enableDisableSize = true;
+	$scope.enableDisableFrameNo = true;
 	$scope.divTag = true;
 	$scope.colspanValue = '6';
 	$scope.colspanAdvanceValue = '9';
@@ -104,6 +105,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 						var arrayData1 = response[arrayData];
 						$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
 						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+						$scope.enableDisableFrameNo = arrayData1.productFrameNoStatus=="enable" ? true : false;
 						$scope.divTag = $scope.enableDisableColor == false && $scope.enableDisableSize == false ? false : true;
 						$scope.colspanValue = $scope.divTag==false ? '5' : '6';
 						$scope.totalTd = $scope.divTag==false ? '12' : '13';
@@ -130,14 +132,16 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		{
 			totalData = parseFloat($scope.expenseAmount[index-1]);
 		}
-		// console.log("% value -----",(((parseFloat(expenseValue)/100)*parseFloat($scope.total)) + parseFloat(totalData)));
-		var totalExpense = expenseType=="flat" ? parseFloat(expenseValue)+ parseFloat(totalData) : (((parseFloat(expenseValue)/100)*parseFloat($scope.totalTable_without_expense)) + parseFloat(totalData));
-		// console.log("total expense...",totalExpense);
+		if(vm.AccExpense[index].expenseOperation=="plus")
+		{
+			var totalExpense = expenseType=="flat" ? parseFloat(expenseValue)+ parseFloat(totalData) : (((parseFloat(expenseValue)/100)*parseFloat($scope.totalTable_without_expense)) + parseFloat(totalData));
+		}
+		else
+		{
+			var totalExpense = expenseType=="flat" ? parseFloat(totalData) - parseFloat(expenseValue) : (parseFloat(totalData) - ((parseFloat(expenseValue)/100)*parseFloat($scope.totalTable_without_expense)));
+		}
 		$scope.totalTable = $scope.expenseAmount[$scope.expenseAmount.length-1];
 		return totalExpense;
-		// $scope.expenseAmount[index]=totalExpense;
-		// console.log("value........",$scope.expenseAmount);
-		// console.log("flat value........",$scope.expenseAmount);
 	}
 
 	$scope.openExpenseRawData=false;
@@ -226,6 +230,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		
 		var data = {};
 		data.expenseType = 'flat';
+		data.expenseOperation = 'plus';
 		//vm.AccBillTable.push(data);
 		vm.AccExpense.splice(plusOne,0,data);
 		$scope.changeProductArray = true;
@@ -297,6 +302,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 		vm.AccExpense[index].expenseId = item.expenseId;
 		vm.AccExpense[index].expenseValue = item.expenseValue;
 		vm.AccExpense[index].expenseType = item.expenseType;
+		vm.AccExpense[index].expenseOperation = 'plus';
 		$scope.changeProductArray = true;
 	}
 
@@ -512,7 +518,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			else
 			{
 				$scope.openExpenseRawData=false;
-				vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
+				vm.AccExpense = [];
 			}
 
 			//Product Array
@@ -565,7 +571,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 			
 			//vm.AccBillTable = [];
 			vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-			vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
+			vm.AccExpense = [];
 			vm.productHsn = [];
 			
 			$scope.purchaseBill.overallDiscountType = 'flat';
@@ -861,7 +867,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				vm.dt1 = new Date();
 				$scope.openExpenseRawData=false;
 				vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-				vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
+				vm.AccExpense = [];
 				
 				vm.productHsn = [];
 				//vm.cityDrop = [];
@@ -945,7 +951,7 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 				
 		vm.dt1 = new Date();
 		vm.AccBillTable = [{"productId":"","productName":"","color":"","frameNo":"","discountType":"flat","price":0,"discount":"","qty":1,"amount":"","size":""}];
-		vm.AccExpense = [{"expenseType":"flat","expenseValue":0}];
+		vm.AccExpense = [];
 		vm.productHsn = [];
 		$scope.purchaseBill.overallDiscountType = 'flat';
 		$scope.changeProductArray = false;

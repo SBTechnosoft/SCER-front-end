@@ -104,6 +104,62 @@ function AccProductListModalController($scope,toaster,productFactory,fetchArrayS
 		  }
 	  });
 
+	$scope.tableParams1 = new ngTableParams({
+		  page: 1,            // show first page
+		  count: 10        // count per page
+		  
+	  }, {
+		  counts: [],
+		  total: data.length, // length of data
+		  getData: function($defer, params) {
+			 
+			var filteredData = params.filter() ?
+			  $filter('filter')(data, params.filter()) :
+			  data;
+			 // $scope.filteredItems1 = orderedData;
+			var orderedData = params.sorting() ?
+			  $filter('orderBy')(filteredData, params.orderBy()) :
+			  data;
+			   
+			params.total(orderedData.length); // set total for recalc pagination
+			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+
+			$scope.totalData = data.length;
+			$scope.pageNumber = params.page();
+			$scope.itemsPerPage = params.count();
+			$scope.totalPages = Math.ceil($scope.totalData/params.count());
+			
+		  }
+	  });
+
+	$scope.tableParams2 = new ngTableParams({
+		  page: 1,            // show first page
+		  count: 10        // count per page
+		  
+	  }, {
+		  counts: [],
+		  total: data.length, // length of data
+		  getData: function($defer, params) {
+			 
+			var filteredData = params.filter() ?
+			  $filter('filter')(data, params.filter()) :
+			  data;
+			 // $scope.filteredItems1 = orderedData;
+			var orderedData = params.sorting() ?
+			  $filter('orderBy')(filteredData, params.orderBy()) :
+			  data;
+			   
+			params.total(orderedData.length); // set total for recalc pagination
+			$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+
+			$scope.totalData = data.length;
+			$scope.pageNumber = params.page();
+			$scope.itemsPerPage = params.count();
+			$scope.totalPages = Math.ceil($scope.totalData/params.count());
+			
+		  }
+	  });
+
 	// vm.tableParams1 = new ngTableParams({
 	// 	  page: 1,            // show first page
 	// 	  count: 10        // count per page

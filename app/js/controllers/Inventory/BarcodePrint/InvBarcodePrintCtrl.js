@@ -270,7 +270,7 @@ function InvBarcodePrintController($scope,$rootScope, $filter, $state,ngTablePar
 		for(var n=0;n<qty;n++){
 			
 			if(n != 0){
-				paddingTop = '16px';
+				paddingTop = '20px';
 			}
 			
 			// margin-left: 14% (www.swaminarayancycles.com)

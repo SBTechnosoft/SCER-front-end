@@ -247,7 +247,7 @@
 						<span ng-if="enableDisableColor && enableDisableSize"> | </span>
 						<span ng-if="enableDisableSize">Size</span>
 					</th>
-					<th class="header" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame#</th>
+					<th ng-if="enableDisableFrameNo" class="header" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;">Frame#</th>
 					<th class="header" style="width:4%;padding-top:5px !important;padding-bottom:5px !important;" >Qty.</th>
 					<th class="header" style="width:8%;padding-top:5px !important;padding-bottom:5px !important;" >Rate</th>
 					<th class="header" style="width:9%;padding-top:5px !important;padding-bottom:5px !important;">Discount</th>
@@ -290,7 +290,7 @@
 						<!--input  type="text" ng-model="item.color"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"    ng-pattern="/^[a-z-A-Z]*$/" ng-change="changeProductTable()"  /--> 
 					</td>
 					<td>
-						<input placeholder="Frame No" type="text" ng-model="item.frameNo"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
+						<input ng-if="enableDisableFrameNo" placeholder="Frame No" type="text" ng-model="item.frameNo"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
 					</td>
 					<td>
 						<input  type="text" ng-model="item.qty"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
@@ -372,13 +372,17 @@
 							<select chosen="" data-ng-model="item.expenseId" data-ng-options="s.expenseId as s.expenseName for s in expenseData track by s.expenseId" ng-change="ChangeExpense('expenseId',expenseData.expenseId)" class="form-control input-sm chosen-select" ></select>
 						</span> -->
 						<div class="input-group mytypeDrop" style="width: 30%;float: right;">
-							<input typeahead="item.expenseName for item in expenseData | filter:$viewValue | limitTo:10" ng-model="item.expenseName" typeahead-on-select="setExpenseData($item,$index);" type="text" class="form-control input-sm" autocomplete="off" placeholder="*Enter Expense Name"  typeahead-editable="false" ng-required="true" style="padding-left: 6px;padding-right: 6px;" ng-disabled="form.loadData"/>	
+								<select  ng-model="item.expenseOperation"  class="form-control input-sm" style="width:25%;float:right;" ng-required="true">
+									<option value="plus" selected="selected">+</option>
+									<option value="minus">-</option>
+							    </select>
+								<input typeahead="item.expenseName for item in expenseData | filter:$viewValue | limitTo:10" ng-model="item.expenseName" typeahead-on-select="setExpenseData($item,$index);" type="text" class="form-control input-sm" autocomplete="off" placeholder="*Enter Expense Name"  typeahead-editable="false" ng-required="true" style="float:right;padding-left: 5px;width:75%;" ng-disabled="form.loadData"/>
 							<!-- <span class="input-group-btn">
 								 <button type="button" class="btn btn-default btn-sm" ng-if="item.productId" ng-click="editProductWithRedirect($index)"><i class="fa fa-edit fa-lg" style="color:#17A1E5;"></i></button>
 							   <button type="button" class="btn btn-default btn-sm" data-ng-click="openProduct('lg',$index)"><i class="fa fa-plus fa-lg" style="color:#17A1E5;"></i></button>
 							</span> -->
 						</div>
-						<label class="control-label" style="width: 30%;float: right;padding-right: 10px"> Expense Name </label>
+						<label class="control-label" style="width: 30%;float: right;padding-right: 5px;"> Expense Name </label>
 
 					</td>
 					

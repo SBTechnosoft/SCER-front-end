@@ -359,6 +359,8 @@ function AddInvProductController($scope,toaster,$filter,apiCall,apiPath,$statePa
 			formdata.delete(Fname);
 		}
 		formdata.set(Fname,value);
+		
+		
 	}
 
 	$scope.displayParseFloat=function(val) {
