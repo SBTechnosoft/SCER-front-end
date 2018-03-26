@@ -109,7 +109,7 @@
 					   </div>
 					</fieldset >
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-3" ng-if="enableDisableWorkNo">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 					   <div class="form-group">
 						  <label  class="col-sm-2 control-label" style="padding-left: 2px;">Work#</label>
@@ -147,7 +147,7 @@
 					   </div>
 					</fieldset>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-3" ng-if="enableDisableAddress">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group">
 							<label  class="col-sm-3 control-label">Address</label>
@@ -164,7 +164,7 @@
 				</div>
 			</div>
 			<div class="col-sm-12">
-				<div class="col-sm-3">
+				<div class="col-sm-3" ng-if="enableDisableState">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group">
 							<label class="col-sm-2 control-label"> *State </label>
@@ -174,7 +174,7 @@
 						</div>
 					</fieldset>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-2" ng-if="enableDisableCity">
 					<fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 						<div class="form-group">
 							<label class="col-sm-2 control-label" > *City </label>
@@ -198,7 +198,7 @@
 						</div>
 					</fieldset>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-2" ng-if="enableDisableEmailId">
 					 <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom">
 					   <div class="form-group">
 						  <label  class="col-sm-3 control-label">Email</label>

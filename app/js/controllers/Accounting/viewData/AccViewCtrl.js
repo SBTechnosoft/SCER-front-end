@@ -27,7 +27,8 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 	'Retailsales',
 	'Wholesales'
   ];
-  
+  //'Retailsales',
+	// 'Wholesales'
 	$scope.accViewSales.salesType = 'All';
 	
 	$scope.companyApiLoad = function(){

@@ -100,36 +100,68 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.enableDisableColor = false;
 	$scope.enableDisableSize = false;
 	$scope.enableDisableFrameNo = false;
+
+	$scope.enableDisableAddress = false;
+	$scope.enableDisableWorkNo = false;
+	$scope.enableDisableState = false;
+	$scope.enableDisableCity = false;
+	$scope.enableDisableEmailId = false;
+	
 	$scope.divTag = false;
 	$scope.colspanValue = '6';
 	$scope.colspanAdvanceValue = '7';
 	$scope.totalTd = '13';
+	var settingResponse = [];
 	//get setting data
 	$scope.getOptionSettingData = function(){
 		toaster.clear();
 		apiCall.getCall(apiPath.settingOption).then(function(response){
-			var responseLength = response.length;
-			console.log("setting response",response);
-			for(var arrayData=0;arrayData<responseLength;arrayData++)
-			{
-				if(angular.isObject(response) || angular.isArray(response))
-				{
-					if(response[arrayData].settingType=="product")
-					{
-						var arrayData1 = response[arrayData];
-						$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
-						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
-						$scope.enableDisableFrameNo = arrayData1.productFrameNoStatus=="enable" ? true : false;
-						$scope.divTag = $scope.enableDisableColor == false && $scope.enableDisableSize == false ? false : true;
-						$scope.colspanValue = $scope.divTag==false ? '5' : '6';
-						$scope.totalTd = $scope.divTag==false ? '12' : '13';
-						$scope.colspanAdvanceValue = $scope.divTag==false ? '6' : '7';
-					}
-				}
-			}
+			settingResponse = response;
+			getSettingData(response);
 		});
 	}
 	$scope.getOptionSettingData();
+
+	function getSettingData(response)
+	{
+		var responseLength = response.length;
+		console.log("setting response",response);
+		for(var arrayData=0;arrayData<responseLength;arrayData++)
+		{
+			if(angular.isObject(response) || angular.isArray(response))
+			{
+				if(response[arrayData].settingType=="product")
+				{
+					var arrayData1 = response[arrayData];
+					$scope.enableDisableColor = arrayData1.productColorStatus=="enable" ? true : false;
+					$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
+					$scope.enableDisableFrameNo = arrayData1.productFrameNoStatus=="enable" ? true : false;
+					$scope.divTag = $scope.enableDisableColor == false && $scope.enableDisableSize == false ? false : true;
+					$scope.colspanValue = $scope.divTag==false ? '5' : '6';
+					$scope.totalTd = $scope.divTag==false ? '12' : '13';
+					$scope.colspanAdvanceValue = $scope.divTag==false ? '6' : '7';
+				}
+				else if(response[arrayData].settingType=="client")
+				{
+					var arrayData1 = response[arrayData];
+					$scope.enableDisableAddress = arrayData1.clientAddressStatus=="enable" ? true : false;
+					$scope.enableDisableWorkNo = arrayData1.clientWorkNoStatus=="enable" ? true : false;
+					$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
+					$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
+					$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+					if(arrayData1.clientStateStatus=="disable")
+					{
+						$scope.quickBill.stateAbb = {};
+					}
+					if(arrayData1.clientCityStatus=="disable")
+					{
+						$scope.quickBill.cityId = {};
+					}
+				}
+			}
+		}
+	}
+
 
 	$scope.getInvoiceAndJobcardNumber = function(id){
 		
@@ -297,7 +329,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
 			$scope.quickBill.cityId = stateCityFactory.getDefaultCity($rootScope.defaultCity);
-				
+			if(count(settingResponse)!=0)
+			{
+				getSettingData(settingResponse);
+			}	
 				//console.log('state Inn');
 		});
 	}
