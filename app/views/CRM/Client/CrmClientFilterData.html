@@ -21,8 +21,8 @@
 		  <table data-ng-table="tableParams" show-filter="true" class="table table-bordered table-hover">
 		
 			 <tbody >
-				<tr data-ng-repeat="user in $data" style="width:100%">
-					<td style="text-align: left" header="'ng-table/headers/checkbox.html'" style="width:5%" >
+				<tr data-ng-repeat="user in $data">
+					<td style="text-align: left" header="'ng-table/headers/checkbox.html'" >
 						<div class="checkbox c-checkbox">
 						  <label>
 							 <input type="checkbox" ng-model="user.selected" ng-change="changeBox(user.selected,user)" />
@@ -30,18 +30,18 @@
 						  </label>
 					   </div>
 					</td>
-					<td data-title="'#'"  style="width:1%" >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
-					<td data-title="'Client Name'" sortable="'clientName'" filter="{ 'clientName': 'text' }"  style="width:19%" >
+					<td data-title="'#'"  >{{ (itemsPerPage * (pageNumber-1)) + $index+1 }}</td>
+					<td data-title="'Client Name'" sortable="'clientName'" filter="{ 'clientName': 'text' }"  >
 						<a ng-click="goToClientTransaction(user.clientId)" href=""  tabindex="{{$index+1}}" style="text-transform:capitalize"   >
 							{{::user.clientName}}
 						</a>
 					</td>
 					<td data-title="'Contact#'" sortable="'contactNo'"  filter="{ 'contactNo': 'text' }"  style="width:8%" >{{user.contactNo}}</td>
 					<td data-title="'Profession'" sortable="'professionName'"  filter="{ 'professionName': 'text' }"  style="width:15%" >{{::user.professionName}}</td>
-					<td data-title="'Address'" sortable="'address1'"  filter="{ 'address1': 'text' }" style="width:16%" >{{::user.address1}}</td>
-					<td data-title="'Email'" sortable="'emailId'"  filter="{ 'emailId': 'text' }" style="width:10%" >{{::user.emailId}}</td>
-					<td data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  style="width:5%" >{{::user.stateAbb}}</td>
-					<td data-title="'City'" sortable="'cityName'" filter="{ 'cityName': 'text' }"  style="width:8%" >{{::user.cityName}}</td>
+					<td ng-show="enableDisableAddress" data-title="'Address'" sortable="'address1'"  filter="{ 'address1': 'text' }"  >{{::user.address1}}</td>
+					<td ng-show="enableDisableEmailId" data-title="'Email'" sortable="'emailId'"  filter="{ 'emailId': 'text' }"  >{{::user.emailId}}</td>
+					<td ng-show="enableDisableState" data-title="'State'" sortable="'stateAbb'" filter="{ 'stateAbb': 'text' }"  >{{::user.stateAbb}}</td>
+					<td ng-show="enableDisableCity" data-title="'City'" sortable="'cityName'" filter="{ 'cityName': 'text' }"  >{{::user.cityName}}</td>
 					<td  data-title="'Email/SMS'" header="'ng-table/headers/checkboxIcon.html'" style="width:8%">
 						<center>
 							<i  ng-click="goToClientTransaction(user.clientId,'email')" class="fa fa-envelope" title="Email" style="font-size:17px;color:#43a8eb;cursor:pointer" > </i>

@@ -15,7 +15,38 @@ function AccViewController($rootScope,$scope,apiCall,apiPath,$state,viewDataType
 
   $scope.viewDataTypePath = viewDataType;
   var dateFormats = $rootScope.dateFormats; //Date Format
-  
+
+$scope.enableDisableAddress = false;
+$scope.enableDisableEmailId = false;
+  var settingResponse = [];
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			settingResponse = response;
+			getSettingData(response);
+		});
+	}
+	$scope.getOptionSettingData();
+
+	function getSettingData(response)
+	{
+		var responseLength = response.length;
+		// console.log("setting response",response);
+		for(var arrayData=0;arrayData<responseLength;arrayData++)
+		{
+			if(angular.isObject(response) || angular.isArray(response))
+			{
+				if(response[arrayData].settingType=="client")
+				{
+					var arrayData1 = response[arrayData];
+					$scope.enableDisableAddress = arrayData1.clientAddressStatus=="enable" ? true : false;
+					$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+					
+				}
+			}
+		}
+	}
 	/* VALIDATION */
 	
 	$scope.errorMessage = validationMessage; //Error Messages In Constant

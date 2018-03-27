@@ -103,7 +103,7 @@
 				</div>
 			</div>
 			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
-				<div class="col-sm-4">
+				<div class="col-sm-4" ng-if="enableDisableEmailId">
 					 <fieldset class="my-fieldset-paddingBottom " >
 					   <div class="form-group">
 						  <label class="col-sm-3 control-label">EmailID</label>
@@ -150,7 +150,7 @@
 				</div>
 				
 			</div>
-			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView'" >
+			<div class="col-sm-12" ng-if="viewDataTypePath == 'CrmClientFilterView' && enableDisableAddress" >
 				<div class="col-sm-12">
 					 <fieldset class="my-fieldset-paddingBottom " >
 					   <div class="form-group">

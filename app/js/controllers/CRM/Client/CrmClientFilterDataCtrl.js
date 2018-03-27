@@ -36,7 +36,48 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 	$scope.displayJobCardFromDate = $rootScope.accView.jobCardFromDate;  // Jobcard
 	$scope.displayJobCardToDate = $rootScope.accView.jobCardToDate;		// Jobcard
 	
+
+	$scope.enableDisableAddress = false;
+	// $scope.enableDisableWorkNo = false;
+	$scope.enableDisableState = false;
+	$scope.enableDisableCity = false;
+	$scope.enableDisableEmailId = false;
 	
+	// $scope.divTag = false;
+	// $scope.colspanValue = '6';
+	// $scope.colspanAdvanceValue = '7';
+	// $scope.totalTd = '13';
+	var settingResponse = [];
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			settingResponse = response;
+			getSettingData(response);
+		});
+	}
+	$scope.getOptionSettingData();
+
+	function getSettingData(response)
+	{
+		var responseLength = response.length;
+		// console.log("setting response",response);
+		for(var arrayData=0;arrayData<responseLength;arrayData++)
+		{
+			if(angular.isObject(response) || angular.isArray(response))
+			{
+				if(response[arrayData].settingType=="client")
+				{
+					var arrayData1 = response[arrayData];
+					$scope.enableDisableAddress = arrayData1.clientAddressStatus=="enable" ? true : false;
+					// $scope.enableDisableWorkNo = arrayData1.clientWorkNoStatus=="enable" ? true : false;
+					$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
+					$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
+					$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+				}
+			}
+		}
+	}
 	// console.log('Contact: '+$rootScope.accView.clientContact);
 	// console.log('Name: '+$rootScope.accView.clientName);
 	// console.log('Email: '+$rootScope.accView.emailId);
