@@ -2565,6 +2565,51 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
   **/
 
   /**
+  Client Model Start
+  **/
+  $scope.openClient = function (size,index) {
+
+	if (Modalopened) return;
+	
+	toaster.pop('wait', 'Please Wait', 'popup opening....',600000);
+	
+	if($scope.quickBill.companyId){
+		
+		var modalInstance = $modal.open({
+		  templateUrl: 'app/views/PopupModal/Client/clientModal.html',
+		  controller: 'ClientModalController as form',
+		  size: size,
+		  resolve:{
+			  productIndex: function(){
+				  return index;
+			  }
+		  }
+		});
+
+		Modalopened = true;
+		
+		modalInstance.opened.then(function() {
+			toaster.clear();
+		});
+
+		modalInstance.result.then(function (data) {
+		 	
+			Modalopened = false;
+		
+		}, function () {
+		 // console.log('Cancel');	
+		  Modalopened = false;
+		});
+	}
+	else{
+		alert('Please Select Company');
+	}
+  };
+  /**
+  Product Model End
+  **/
+
+  /**
   Product Model Start
   **/
   $scope.openProductList = function (size,index) {
