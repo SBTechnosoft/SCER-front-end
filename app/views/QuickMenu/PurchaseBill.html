@@ -141,8 +141,8 @@
 						<input ng-if="enableDisableColor" placeholder="Color"  type="text" ng-model="item.color"  class="form-control input-sm" ng-class="enableDisableSize && enableDisableColor ? 'productColorSizeDesign' : 'productColorSizeWidth'"  ng-change="changeProductTable()"  /> 
 						<input ng-if="enableDisableSize" placeholder="Size"  type="text" ng-model="item.size"  class="form-control input-sm" ng-class="enableDisableSize && enableDisableColor ? 'productColorSizeDesign' : 'productColorSizeWidth'"  ng-change="changeProductTable()"  />
 					</td>
-					<td>
-						<input ng-if="enableDisableFrameNo" placeholder="Frame No"  type="text" ng-model="item.frameNo"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
+					<td ng-if="enableDisableFrameNo">
+						<input placeholder="Frame No"  type="text" ng-model="item.frameNo"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"   ng-pattern="/^[a-z-A-Z0-9 ]*$/" ng-change="changeProductTable()" /> 
 					</td>
 					<td>
 						<input  type="text" ng-model="item.qty"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[1-9]+[0-9]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 

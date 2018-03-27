@@ -107,10 +107,31 @@ function PurchaseBillController($rootScope,$scope,apiCall,apiPath,$http,$window,
 						$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
 						$scope.enableDisableFrameNo = arrayData1.productFrameNoStatus=="enable" ? true : false;
 						$scope.divTag = $scope.enableDisableColor == false && $scope.enableDisableSize == false ? false : true;
-						$scope.colspanValue = $scope.divTag==false ? '5' : '6';
-						$scope.totalTd = $scope.divTag==false ? '12' : '13';
-						$scope.colspanAdvanceValue = $scope.divTag==false ? '8' : '9';
+						// $scope.colspanValue = $scope.divTag==false ? '5' : '6';
+						// $scope.totalTd = $scope.divTag==false ? '12' : '13';
+						// $scope.colspanAdvanceValue = $scope.divTag==false ? '8' : '9';
 						$scope.colspanExpenseValue = $scope.divTag==false ? '6' : '7';
+						if($scope.divTag==false && $scope.enableDisableFrameNo==false)
+						{
+							$scope.colspanAdvanceValue = '7';
+							$scope.colspanValue = '4';
+							$scope.totalTd = '11';
+							$scope.colspanExpenseValue='5';
+						}
+						else if($scope.divTag==false || $scope.enableDisableFrameNo==false)
+						{
+							$scope.colspanAdvanceValue = '8';
+							$scope.colspanValue = '5';
+							$scope.totalTd = '12';
+							$scope.colspanExpenseValue='6';
+						}
+						else
+						{
+							$scope.colspanAdvanceValue = '9';
+							$scope.colspanValue = '6';
+							$scope.totalTd = '13';
+							$scope.colspanExpenseValue='7';
+						}
 					}
 				}
 			}

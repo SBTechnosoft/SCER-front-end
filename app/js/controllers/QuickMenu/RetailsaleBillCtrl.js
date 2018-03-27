@@ -125,7 +125,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	function getSettingData(response)
 	{
 		var responseLength = response.length;
-		console.log("setting response",response);
+		// console.log("setting response",response);
 		for(var arrayData=0;arrayData<responseLength;arrayData++)
 		{
 			if(angular.isObject(response) || angular.isArray(response))
@@ -137,9 +137,28 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					$scope.enableDisableSize = arrayData1.productSizeStatus=="enable" ? true : false;
 					$scope.enableDisableFrameNo = arrayData1.productFrameNoStatus=="enable" ? true : false;
 					$scope.divTag = $scope.enableDisableColor == false && $scope.enableDisableSize == false ? false : true;
-					$scope.colspanValue = $scope.divTag==false ? '5' : '6';
-					$scope.totalTd = $scope.divTag==false ? '12' : '13';
-					$scope.colspanAdvanceValue = $scope.divTag==false ? '6' : '7';
+					// $scope.colspanValue = $scope.divTag==false ? '5' : '6';
+					// $scope.totalTd = $scope.divTag==false ? '12' : '13';
+					if($scope.divTag==false && $scope.enableDisableFrameNo==false)
+					{
+						$scope.colspanAdvanceValue = '5';
+						$scope.colspanValue = '4';
+						$scope.totalTd = '11';
+					}
+					else if($scope.divTag==false || $scope.enableDisableFrameNo==false)
+					{
+						$scope.colspanAdvanceValue = '6';
+						$scope.colspanValue = '5';
+						$scope.totalTd = '12';
+					}
+					else
+					{
+						$scope.colspanAdvanceValue = '7';
+						$scope.colspanValue = '6';
+						$scope.totalTd = '13';
+					}
+					// $scope.colspanAdvanceValue = $scope.divTag==false ? '6' : '7';
+					// $scope.colspanAdvanceValue = $scope.divTag==false && $scope.enableDisableFrameNo==false ? '5' : '6';
 				}
 				else if(response[arrayData].settingType=="client")
 				{
@@ -329,7 +348,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				
 			vm.cityDrop = stateCityFactory.getDefaultStateCities($rootScope.defaultState);
 			$scope.quickBill.cityId = stateCityFactory.getDefaultCity($rootScope.defaultCity);
-			if(count(settingResponse)!=0)
+			if(settingResponse.length!=0)
 			{
 				getSettingData(settingResponse);
 			}	
@@ -677,11 +696,19 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				}
 				
 				$scope.quickBill.EditBillData.lastPdf = {};
+				// console.log("company = ",setCompanyData);
+				
 				if($scope.quickBill.EditBillData.hasOwnProperty('file')){
 					if($scope.quickBill.EditBillData.file[0].documentId != '' && $scope.quickBill.EditBillData.file[0].documentId != 0){
+						var printType = setCompanyData.printType=="preprint" ? "preprint-bill" : "bill";
+						// console.log("print ",setCompanyData.printType);
+						// console.log("file ",$scope.quickBill.EditBillData.file);
 						var articleWithMaxNumber = $scope.quickBill.EditBillData.file.filter(function(options){
-							return options.documentFormat == "pdf";
+							
+							// console.log("option = ",options);
+							return options.documentFormat == "pdf" && options.documentType == printType;
 						}).reduce(function(max, x) {
+							// console.log("max = ",max," x = ",x);
 							return x.documentId > max.documentId ? x : max;
 						});
 						$scope.quickBill.EditBillData.lastPdf = articleWithMaxNumber || {};
@@ -1602,9 +1629,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				console.log("fail");
 				toaster.clear();
 				if(apiResponse.noContent == data){
-					console.log($scope.quickBill.EditBillData.lastPdf);
+					console.log("last pdf =",$scope.quickBill.EditBillData.lastPdf);
 					if(angular.equals($scope.quickBill.EditBillData.lastPdf,{}) || generate == 'not'){
-						toaster.pop('info', 'Plz Change Your Data');
+						toaster.pop('info', 'Please Change Your Data');
 					}
 					else{
 						//toaster.pop('wait', 'Printing...');
@@ -1849,7 +1876,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 			toaster.clear();
 
 			if(angular.equals(vm.clientEditData,{})){
-				toaster.pop('info','Plz Select Client');
+				toaster.pop('info','Please Select Client');
 				return;
 			}
 

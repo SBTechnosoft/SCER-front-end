@@ -84,9 +84,9 @@ function loginController($rootScope,$scope,hostFrontUrl,apiCall,$http,apiPath,fe
 							//$rootScope.$storage.authToken = response.authenticationToken;
 							$rootScope.$storage.authToken = response.token;
 							$rootScope.$storage.authUser = response.user;
-							console.log("before");
+							// console.log("before");
 							defaultCompany();
-							console.log("after");
+							// console.log("after");
 							// $rootScope.$storage.defaultCompany = response.user;
 							if(response.user['userType']=='superadmin' || response.user['userType']=='admin')
 							{
@@ -136,27 +136,11 @@ function loginController($rootScope,$scope,hostFrontUrl,apiCall,$http,apiPath,fe
 	function defaultCompany()
 	{
 		//Company Dropdown data
-		// vm.companyDrop = [];
-		
 		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
-			
-			// vm.companyDrop = responseCompanyDrop;
-			console.log("all company = ",responseCompanyDrop);
+			// console.log("all company = ",responseCompanyDrop);
 			//Set default Company
 			$rootScope.$storage.defaultCompany = fetchArrayService.getfilteredSingleObject(responseCompanyDrop,'ok','isDefault');
-			console.log("default company",$rootScope.$storage.defaultCompany);	
-				// $scope.addStaff.company = defaultCompanyData;
-				
-				// formdata.append('companyId',defaultCompanyData.companyId);
-				
-				// vm.branchDrop = [];
-				// var getAllBranch = apiPath.getOneBranch+defaultCompanyData.companyId;
-				// //Get Branch
-				// apiCall.getCall(getAllBranch).then(function(response4){
-					
-				// 	vm.branchDrop = response4;
-						
-				// });
+			// console.log("default company",$rootScope.$storage.defaultCompany);	
 		});
 		
 	}
