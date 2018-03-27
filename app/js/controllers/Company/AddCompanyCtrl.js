@@ -398,40 +398,42 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 
   
   
-  $scope.uploadFile = function(files) {
+ //  $scope.uploadFile = function(files) {
 	  
-		if(parseInt(files[0].size) <= maxImageSize){
+	//   	// console.log("fileee",files[0]);
+	//   	// console.log("compress image",$scope.image1);
+	// 	if(parseInt(files[0].size) <= maxImageSize){
 			
-			angular.element("img.showImg").css("display","block");
+	// 		// angular.element("img.showImg").css("display","block");
 			
-			//console.log('Small File');
-			formdata.delete('file[]');
+	// 		// //console.log('Small File');
+	// 		// formdata.delete('file[]');
 		
-			formdata.append("file[]", files[0]);
+	// 		// formdata.append("file[]", files[0]);
 			
-			var reader = new FileReader();
+	// 		// var reader = new FileReader();
 
-			reader.onload = function(event) {
-				$scope.image_source = event.target.result
-				$scope.$digest();
+	// 		// reader.onload = function(event) {
+	// 		// 	$scope.image_source = event.target.result
+	// 		// 	$scope.$digest();
 
-			}
-			// when the file is read it triggers the onload event above.
-			reader.readAsDataURL(files[0]);
+	// 		// }
+	// 		// // when the file is read it triggers the onload event above.
+	// 		// reader.readAsDataURL(files[0]);
 		
-		}
-		else{
+	// 	}
+	// 	else{
 			
-			formdata.delete('file[]');
-			toaster.clear();
-			//toaster.pop('alert','Image Size is Too Long','');
-			toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+	// 		formdata.delete('file[]');
+	// 		toaster.clear();
+	// 		//toaster.pop('alert','Image Size is Too Long','');
+	// 		toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
 			
-			angular.element("input[type='file']").val(null);
-			angular.element("img.showImg").css("display","none");
-			$scope.$digest();
-		}
-	};
+	// 		angular.element("input[type='file']").val(null);
+	// 		angular.element("img.showImg").css("display","none");
+	// 		$scope.$digest();
+	// 	}
+	// };
 	
 	$scope.changeCompanyData = function(Fname,value){
 		//console.log(Fname+'..'+value);
@@ -451,10 +453,22 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 		
 		}
 	}
-	
+	function dataURLtoFile(dataurl, filename) {
+	    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+	        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+	    while(n--){
+	        u8arr[n] = bstr.charCodeAt(n);
+	    }
+	    return new File([u8arr], filename, {type:mime});
+	}
+
   $scope.addCompanyForm = function(addCompany)
   {
 	
+	// var URI = $scope.image1.compressed.dataURL;
+	var file = dataURLtoFile($scope.image1.compressed.dataURL, $scope.image1.file.name);
+	// console.log("actual file",file);
+
 	// formdata.append('companyName',addCompany.Name);
 	// formdata.append('companyDisplayName',addCompany.displayName);
 	// formdata.append('address1',addCompany.address1);
@@ -472,8 +486,38 @@ function AddCompanyController($rootScope,$scope,$filter,apiCall,apiPath,$state,t
 	// formdata.append('currencySymbol',addCompany.curSymbol);
 	// formdata.append('isDefault','not');
 	// formdata.append('isDisplay','no');
+	if(parseInt(file.size) <= maxImageSize){
+			
+		angular.element("img.showImg").css("display","block");
+		
+		//console.log('Small File');
+		formdata.delete('file[]');
 	
+		formdata.append("file[]", file);
+		
+		var reader = new FileReader();
+
+		reader.onload = function(event) {
+			$scope.image_source = event.target.result
+			$scope.$digest();
+
+		}
+		// when the file is read it triggers the onload event above.
+		reader.readAsDataURL(file);
 	
+	}
+	else{
+		
+		formdata.delete('file[]');
+		toaster.clear();
+		//toaster.pop('alert','Image Size is Too Long','');
+		toaster.pop('alert', 'Opps!!', 'Image Size is Too Long');
+		
+		angular.element("input[type='file']").val(null);
+		angular.element("img.showImg").css("display","none");
+		$scope.$digest();
+	}
+	// console.log("compress-image",$scope.image1);
 	if($scope.addCompany.cId)
 	{
 		var editCompany2 = apiPath.getAllCompany+'/'+$scope.addCompany.cId;

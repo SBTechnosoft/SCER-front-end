@@ -46,6 +46,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 		else{
 			
 			data = response;
+			$rootScope.$storage.defaultCompany = fetchArrayService.getfilteredSingleObject(response,'ok','isDefault');
 			filterData();
 			
 		}
@@ -66,9 +67,9 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			}
 			else{
 				data = response;
-				console.log("vvv");
+				// console.log("vvv");
 				$rootScope.$storage.defaultCompany = fetchArrayService.getfilteredSingleObject(response,'ok','isDefault');
-				console.log("mmm",$rootScope.$storage.defaultCompany);
+				// console.log("mmm",$rootScope.$storage.defaultCompany);
 				filterData();
 			}			
 			
