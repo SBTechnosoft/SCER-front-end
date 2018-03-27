@@ -6,7 +6,7 @@
 
 App.controller('loginController', loginController);
 
-function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,apiResponse,vcRecaptchaService,googleSiteKey,$timeout) {
+function loginController($rootScope,$scope,hostFrontUrl,apiCall,$http,apiPath,fetchArrayService,$state,apiResponse,vcRecaptchaService,googleSiteKey,$timeout) {
   'use strict';
   var vm = this;
  
@@ -84,6 +84,10 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 							//$rootScope.$storage.authToken = response.authenticationToken;
 							$rootScope.$storage.authToken = response.token;
 							$rootScope.$storage.authUser = response.user;
+							console.log("before");
+							defaultCompany();
+							console.log("after");
+							// $rootScope.$storage.defaultCompany = response.user;
 							if(response.user['userType']=='superadmin' || response.user['userType']=='admin')
 							{
 								$rootScope.$storage.permissionArray = [{"configuration":{"dashboard":true,"companies":true,"branches":true,"staff":true,"invoiceNumber":true,"quotationNumber":true,"template":true,"setting":true},"accounting":{"sales":true,"purchase":true,"salesOrder":true,"quotation":true,"creditNote":true,"debitNote":true,"specialJournal":true,"payment":true,"receipt":true,"statements":true,"taxation":true,"ledger":true},"inventory":{"brand":true,"category":true,"product":true,"barcodePrint":true,"stockRegister":true,"stockSummary":true},"crm":{"jobcard":true,"clients":true},"analyzer":{"reports":true},"pricelist":{"tax":true},"quickMenu":{"taxInvoice":true,"taxPurchase":true}}];
@@ -129,5 +133,32 @@ function loginController($rootScope,$scope,hostFrontUrl,$http,apiPath,$state,api
 	{
 		console.log("hiopppp");
 	}
+	function defaultCompany()
+	{
+		//Company Dropdown data
+		// vm.companyDrop = [];
+		
+		apiCall.getCall(apiPath.getAllCompany).then(function(responseCompanyDrop){
+			
+			// vm.companyDrop = responseCompanyDrop;
+			console.log("all company = ",responseCompanyDrop);
+			//Set default Company
+			$rootScope.$storage.defaultCompany = fetchArrayService.getfilteredSingleObject(responseCompanyDrop,'ok','isDefault');
+			console.log("default company",$rootScope.$storage.defaultCompany);	
+				// $scope.addStaff.company = defaultCompanyData;
+				
+				// formdata.append('companyId',defaultCompanyData.companyId);
+				
+				// vm.branchDrop = [];
+				// var getAllBranch = apiPath.getOneBranch+defaultCompanyData.companyId;
+				// //Get Branch
+				// apiCall.getCall(getAllBranch).then(function(response4){
+					
+				// 	vm.branchDrop = response4;
+						
+				// });
+		});
+		
+	}
 }
-loginController.$inject = ["$rootScope","$scope","hostFrontUrl","$http","apiPath","$state","apiResponse","vcRecaptchaService","$timeout"];
+loginController.$inject = ["$rootScope","$scope","hostFrontUrl","apiCall","$http","apiPath","fetchArrayService","$state","apiResponse","vcRecaptchaService","$timeout"];

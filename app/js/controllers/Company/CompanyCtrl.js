@@ -6,7 +6,7 @@
 
 App.controller('CompanyController', CompanyController);
 
-function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,$modal,getSetFactory) {
+function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,apiPath,fetchArrayService,$location,apiResponse,toaster,$modal,getSetFactory) {
   'use strict';
   var vm = this;
    var formdata = new FormData();
@@ -66,6 +66,9 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			}
 			else{
 				data = response;
+				console.log("vvv");
+				$rootScope.$storage.defaultCompany = fetchArrayService.getfilteredSingleObject(response,'ok','isDefault');
+				console.log("mmm",$rootScope.$storage.defaultCompany);
 				filterData();
 			}			
 			
@@ -138,7 +141,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 			
 			apiCall.postCall(editCompany2,formdata).then(function(response5){
 			
-				console.log(response5);
+				// console.log("default response = ",response5);
 				
 				//$location.path('app/Company');
 				if(apiResponse.ok == response5){
@@ -200,6 +203,7 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 					toaster.pop('success', 'Title', 'Delete Successfully');
 					
 					$scope.getAllCompanyFunction();
+
 				}
 				else{
 					
@@ -291,4 +295,4 @@ function CompanyController($rootScope,$scope, $filter, ngTableParams,apiCall,api
 	
 
 }
-CompanyController.$inject = ["$rootScope","$scope", "$filter","ngTableParams","apiCall","apiPath","$location","apiResponse","toaster","$modal","getSetFactory"];
+CompanyController.$inject = ["$rootScope","$scope", "$filter","ngTableParams","apiCall","apiPath","fetchArrayService","$location","apiResponse","toaster","$modal","getSetFactory"];

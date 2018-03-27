@@ -9,7 +9,7 @@
  */
 if (typeof $ === 'undefined') { throw new Error('This application\'s JavaScript requires jQuery'); }
 
-var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages',"ngSanitize", "ngCsv","vcRecaptcha"])
+var App = angular.module('singular', ['ngRoute', 'ngAnimate', 'ngStorage', 'ngCookies', 'pascalprecht.translate', 'ui.bootstrap', 'ui.router', 'oc.lazyLoad', 'cfp.loadingBar', 'ui.utils','ngMessages',"ngSanitize", "ngCsv","vcRecaptcha","ngImageCompress"])
     .run(["$rootScope", "$state", "$stateParams", '$localStorage','$templateCache','$http','hostUrl','googleSiteKey','hostFrontUrl','apiPath', function ($rootScope, $state, $stateParams, $localStorage,$templateCache,$http,hostUrl,googleSiteKey,hostFrontUrl,apiPath) {
 		
 		
