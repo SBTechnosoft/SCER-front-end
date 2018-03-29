@@ -21,6 +21,9 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
   	$scope.enableDisableState=false;
   	$scope.enableDisableCity=false;
   	$scope.enableDisableEmailId=false;
+  	$scope.enableDisableProfession=false;
+
+  	$scope.enableDisableSalesmanValue=false;
   	$scope.serviceData = [];
 
 	/* VALIDATION */
@@ -37,6 +40,7 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.insertUpdateChequeNoLabel;
 		$scope.insertUpdateProductLabel;
 		$scope.insertUpdateClientLabel;
+		$scope.insertUpdateBillLabel;
 		
 		vm.barcodeWidthDrop = ["0.5","0.6","0.7","0.8","0.9","1.0","1.5","2.0"];  // Default-> 1.5
 		vm.barcodeHeightDrop = ["40","50","60","70","80","90","100"];          // Default-> 40
@@ -49,6 +53,7 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 				var chequenoFlag=0;
 				var productFlag=0;
 				var clientFlag=0;
+				var billFlag=0;
 				for(var arrayData=0;arrayData<responseLength;arrayData++)
 				{
 					if(angular.isObject(response2) || angular.isArray(response2))
@@ -103,6 +108,16 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 							$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
 							$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
 							$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+							$scope.enableDisableProfession = arrayData1.clientProfessionStatus=="enable" ? true : false;
+							
+						}
+						if(response2[arrayData].settingType=="bill")
+						{
+							billFlag=1;
+							$scope.insertUpdateBillLabel = "Update";
+							var arrayData1 = response2[arrayData];
+							$scope.enableDisableSalesmanValue = arrayData1.billSalesmanStatus=="enable" ? true : false;
+							
 							
 						}
 					}
@@ -127,6 +142,10 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 				{
 					$scope.insertUpdateClientLabel = "Insert";
 				}
+				if(billFlag==0)
+				{
+					$scope.insertUpdateBillLabel = "Insert";
+				}
 			});
 		}
 		
@@ -137,6 +156,7 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.chequeNoflag = 0;
 		$scope.productFlag = 0;
 		$scope.clientFlag = 0;
+		$scope.billFlag = 0;
 		$scope.changeInBarcodeData = function(key,value){
 			
 			$scope.flag = 1;
@@ -175,6 +195,10 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 		$scope.changeInClient = function(key,value){
 			
 			$scope.clientFlag = 1;
+		}
+		$scope.changeInBill = function(key,value){
+			
+			$scope.billFlag = 1;
 		}
 		
 		$scope.AddUpdateBarcodeSetting = function(){
@@ -433,7 +457,14 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 				{
 					clientData.append('clientEmailIdStatus','disable');
 				}
-
+				if($scope.enableDisableProfession==true)
+				{
+					clientData.append('clientProfessionStatus','enable');
+				}
+				else if($scope.enableDisableProfession==false)
+				{
+					clientData.append('clientProfessionStatus','disable');
+				}
 				if($scope.insertUpdateClientLabel == "Update"){
 					var apiPostPatchCall = apiCall.patchCall;
 				}
@@ -462,7 +493,46 @@ function settingOptionController($rootScope,$scope,apiCall,apiPath,toaster,apiRe
 			}
 		}
 		/** End **/
-	
+		
+		//Add-Update bill data
+		$scope.AddUpdateBillSetting = function(){
+			
+			toaster.clear();
+			if($scope.billFlag == 1){
+				var billFormData = new FormData();
+				if($scope.enableDisableSalesmanValue==true)
+				{
+					billFormData.append('billSalesmanStatus','enable');
+				}
+				else if($scope.enableDisableSalesmanValue==false)
+				{
+					billFormData.append('billSalesmanStatus','disable');
+				}
+				if($scope.insertUpdateBillLabel == "Update"){
+					var apiPostPatchCall = apiCall.patchCall;
+				}
+				else{
+					var apiPostPatchCall = apiCall.postCall;
+				}
+				apiPostPatchCall(apiPath.settingOption,billFormData).then(function(response){
+					if(apiResponse.ok == response){
+						
+						$scope.getOptionSettingData();
+						toaster.pop('success','Bill Data',$scope.insertUpdateBillLabel+' Successfull');
+						$scope.billFlag = 0;
+					}
+					else{
+						toaster.pop('warning','Opps!!',response);
+					}
+				});
+			}
+			else{
+				toaster.pop('info','Bill Data','Please Change Data');
+			}
+		}
+		
+		/** End **/
+
 	/** Color **/
 	
 	$scope.app = $rootScope.app;

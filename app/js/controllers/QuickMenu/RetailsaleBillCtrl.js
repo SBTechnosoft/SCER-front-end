@@ -704,13 +704,10 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 						// console.log("print ",setCompanyData.printType);
 						// console.log("file ",$scope.quickBill.EditBillData.file);
 						var articleWithMaxNumber = $scope.quickBill.EditBillData.file.filter(function(options){
-							
-							// console.log("option = ",options);
 							return options.documentFormat == "pdf" && options.documentType == printType;
 						}).reduce(function(max, x) {
-							// console.log("max = ",max," x = ",x);
 							return x.documentId > max.documentId ? x : max;
-						});
+						},0);
 						$scope.quickBill.EditBillData.lastPdf = articleWithMaxNumber || {};
 					}
 				}

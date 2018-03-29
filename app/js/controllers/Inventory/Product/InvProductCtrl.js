@@ -306,9 +306,12 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 			 
 			modalInstance.result.then(function (data1) {
 			  console.log('Ok');
-			  productFactory.blankProduct();
+
+			  // productFactory.blankProduct();
 			  // $scope.showProduct();	
 			  Modalopened = false;
+			  console.log("state reload");
+			  $state.go($state.current, {}, {reload: true});
 			  
 			 //  var count =   data.length;
 				// $scope.productFlag=0;

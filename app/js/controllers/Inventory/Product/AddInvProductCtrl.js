@@ -378,8 +378,9 @@ function AddInvProductController($scope,toaster,$filter,apiCall,apiPath,$statePa
 			apiCall.postCall(editProduct,formdata).then(function(response5){
 				toaster.clear();
 				if(apiResponse.ok == response5){
-					toaster.pop('success', 'Title', 'SuccessFull');
+					
 					productFactory.setUpdatedProduct($scope.addInvProduct.getSetProductId).then(function(response){
+						toaster.pop('success', 'Title', 'SuccessFull');
 						window.history.back();
 					});
 				}

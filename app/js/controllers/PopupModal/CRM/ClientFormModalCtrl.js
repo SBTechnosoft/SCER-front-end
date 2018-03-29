@@ -1,16 +1,62 @@
 
 App.controller('clientFormModalController', clientFormModalController);
 
-function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,clientEditData,validationMessage,stateCityFactory,apiResponse,clientFactory,apiDateFormate) {
+function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,toaster,clientEditData,validationMessage,stateCityFactory,apiResponse,clientFactory,apiDateFormate) {
   'use strict';
   
-  var vm = this;
-  
+	var vm = this;
 	var clientEditData = clientEditData;
 	var changeFlag = 0;
-	
+
 	var formdata = new FormData();
 	$scope.clientForm = [];	
+
+  	$scope.enableDisableAddress = false;
+	// $scope.enableDisableWorkNo = false;
+	$scope.enableDisableState = false;
+	$scope.enableDisableCity = false;
+	$scope.enableDisableEmailId = false;
+	
+	var settingResponse = [];
+	//get setting data
+	$scope.getOptionSettingData = function(){
+		toaster.clear();
+		apiCall.getCall(apiPath.settingOption).then(function(response){
+			settingResponse = response;
+			getSettingData(response);
+		});
+	}
+	$scope.getOptionSettingData();
+
+	function getSettingData(response)
+	{
+		var responseLength = response.length;
+		// console.log("setting response",response);
+		for(var arrayData=0;arrayData<responseLength;arrayData++)
+		{
+			if(angular.isObject(response) || angular.isArray(response))
+			{
+				if(response[arrayData].settingType=="client")
+				{
+					var arrayData1 = response[arrayData];
+					$scope.enableDisableAddress = arrayData1.clientAddressStatus=="enable" ? true : false;
+					// $scope.enableDisableWorkNo = arrayData1.clientWorkNoStatus=="enable" ? true : false;
+					$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
+					$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
+					$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+					if(arrayData1.clientStateStatus=="disable")
+					{
+						$scope.clientForm.stateDropDown = {};
+					}
+					if(arrayData1.clientCityStatus=="disable")
+					{
+						$scope.clientForm.cityDrop = {};
+					}
+				}
+			}
+		}
+	}
+	
 	 
 
 	 var dateFormats = $rootScope.dateFormats; //Date Format
@@ -194,4 +240,4 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 
   
 }
-clientFormModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","clientEditData","validationMessage","stateCityFactory","apiResponse","clientFactory","apiDateFormate"];
+clientFormModalController.$inject = ["$rootScope","$scope", "$modalInstance","apiCall","apiPath","toaster","clientEditData","validationMessage","stateCityFactory","apiResponse","clientFactory","apiDateFormate"];

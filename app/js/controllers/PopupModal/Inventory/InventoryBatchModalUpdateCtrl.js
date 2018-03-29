@@ -489,43 +489,5 @@ function InventoryBatchModalUpdateController($scope,toaster,apiCall,apiPath,$sta
 			$scope.$digest();
 		}
 	};
-	
-
-	/** Batch **/
-   
-		$scope.openProductBatchModal = function(){
-			
-			if (Modalopened) return;
-			
-			var modalInstance = $modal.open({
-				
-				templateUrl: 'app/views/PopupModal/Inventory/InventoryBatchModal.html',
-				controller: 'InventoryBatchModalController as vm',
-				size: 'flg',
-				resolve:{
-					inventoryType: function(){
-						
-						return "Product";
-					}
-				}
-			});
-			
-			 Modalopened = true;
-			 
-			modalInstance.result.then(function (data) {
-			 
-			  console.log('Ok');	
-			  productFactory.blankProduct();
-			  $scope.init();
-			  Modalopened = false;
-			
-			}, function (data) {
-			  console.log('Cancel');	
-				Modalopened = false;
-				
-			});
-		}
-	
-   /** End **/
 }
 InventoryBatchModalUpdateController.$inject = ["$scope","toaster","apiCall","apiPath","$stateParams","$modalInstance","$state","apiResponse","validationMessage","getSetFactory","$modal","productFactory","fetchArrayService","maxImageSize","productData"];

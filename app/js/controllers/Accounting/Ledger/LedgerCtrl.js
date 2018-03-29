@@ -15,6 +15,9 @@ App.directive('ledgerlist', function() {
 				+'<td>'
 					+'<i  title="View" ng-click="viewdata({ledgerId:item.ledgerId})" viewData class="fa fa-list-alt myCursorPointer" style="font-size:17px;color:#17A1E5"></i>'
 				+'</td>'
+				+'<td>'
+					+'<i  title="Balance" ng-click="viewledgerdetail({ledgerId:item.ledgerId})" viewLedgerData class="sidebar-item-icon icon-stack myCursorPointer" style="font-size:17px;color:#17A1E5"></i>'
+				+'</td>'
 			+'</tr>'
 		+'</table>';
 

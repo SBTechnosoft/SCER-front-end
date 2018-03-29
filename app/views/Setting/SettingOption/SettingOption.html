@@ -331,6 +331,19 @@
 									</div>
 								</fieldset >
 							</div>
+							<div class="col-sm-2">
+								<fieldset class="my-fieldset-paddingBottom">
+								   <div class="form-group">
+								   	<label class="col-sm-2 col-xs-6 col-md-5 control-label pt-sm">Profession</label>
+									    <div class="col-sm-2 col-xs-6 col-md-4">
+											<label class="switch switch-lg switch-success pull-right ph-lg">
+					                       		 <input type="checkbox" data-ng-model="enableDisableProfession" ng-change="changeInClient('enableDisableProfession',enableDisableProfession)"/>
+					                       		 <span></span>
+					                    	 </label>
+										</div>
+									</div>
+								</fieldset>
+							</div>
 						<!-- </div> -->
 						<div class="col-sm-1" ng-if="enableDisableValue">
 							<fieldset class="my-fieldset-paddingBottom">
@@ -346,7 +359,43 @@
 			</div>
 				
 		</div >
-
+		<!-- cheque number setting -->
+		<div class="panel panel-primary" >
+			<div class="panel-heading" data-ng-class="app.theme.brand">
+				<div class="panel-title">
+					<i class="fa fa-barcode" ></i> Salesman In Bill Validation
+				</div>
+			</div>
+			<div class="panel-body">
+				 <form  action="#" name="formChequeNo" class="form-validate form-horizontal">
+						<div class="col-sm-4">
+							<fieldset class="my-fieldset-paddingBottom">
+							   <div class="form-group">
+							   	<label class="col-sm-2 col-xs-6 col-md-6 control-label pt-sm">Required/Not Required</label>
+								    <div class="col-sm-2 col-xs-6 col-md-4">
+										<label class="switch switch-lg switch-success pull-right ph-lg">
+				                       		 <input type="checkbox" data-ng-model="enableDisableSalesmanValue" ng-change="changeInBill('enableDisableSalesmanValue',enableDisableSalesmanValue)"/>
+				                       		 <span></span>
+				                    	 </label>
+									</div>
+								  
+							   </div>
+							</fieldset >
+						</div>
+						<div class="col-sm-1">
+							<fieldset class="my-fieldset-paddingBottom">
+							   <div class="form-group">
+								   <button type="button" class="mr mb-sm btn btn-primary pull-right" tabIndex="3" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id"  ng-click="AddUpdateBillSetting()" ng-disabled="formServiceDate.$invalid"  data-ng-class="app.theme.brand" >{{insertUpdateBillLabel}}</button>
+							   </div>
+							</fieldset>
+						</div>
+						<div class="col-sm-3">
+						</div>
+					
+				</form>
+			</div>
+				
+		</div >
 		<!-- COlor -->
 		<div class="panel panel-purple">
 			<div class="panel-heading">
