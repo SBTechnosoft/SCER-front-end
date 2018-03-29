@@ -97,6 +97,8 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		}
 	});
 
+	
+
 	$scope.enableDisableColor = false;
 	$scope.enableDisableSize = false;
 	$scope.enableDisableFrameNo = false;
@@ -106,6 +108,9 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.enableDisableState = false;
 	$scope.enableDisableCity = false;
 	$scope.enableDisableEmailId = false;
+	$scope.enableDisableProfession = false;
+	
+	$scope.enableDisableSalesman = false;
 	
 	$scope.divTag = false;
 	$scope.colspanValue = '6';
@@ -168,6 +173,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
 					$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
 					$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+					$scope.enableDisableProfession = arrayData1.clientProfessionStatus=="enable" ? true : false;
 					if(arrayData1.clientStateStatus=="disable")
 					{
 						$scope.quickBill.stateAbb = {};
@@ -176,6 +182,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 					{
 						$scope.quickBill.cityId = {};
 					}
+				}
+				else if(response[arrayData].settingType=="bill")
+				{
+					var arrayData1 = response[arrayData];
+					$scope.enableDisableSalesman = arrayData1.billSalesmanStatus=="enable" ? true : false;
+					
 				}
 			}
 		}
@@ -262,7 +274,7 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 		formdata.delete('companyId');
 		formdata.set('companyId',response2.companyId);
-		
+		getUserData(response2.companyId);
 		$scope.noOfDecimalPoints = parseInt(response2.noOfDecimalPoints);
 		
 		$scope.getInvoiceAndJobcardNumber(id); // Invoice#
@@ -279,6 +291,41 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		$scope.printButtonType = response2.printType == '' ? 'print':response2.printType;
 	}
 	
+	function getUserData(companyId)
+	{
+		var headerDataOnLoad = {'Content-Type': undefined,'companyId':companyId};
+		apiCall.getCallHeader(apiPath.getAllStaff,headerDataOnLoad).then(function(response){
+		
+			toaster.clear();
+			if(apiResponse.noContent == response){
+				
+				// data = [];
+				toaster.pop('alert', 'Opps!!', 'No Staff Available');
+				// vm.tableParams.reload();
+				  // vm.tableParams.page(1);
+				
+			}
+			else{
+				vm.userDrop = response;
+
+				$scope.quickBill.userId =  $rootScope.$storage.authUser;
+				// data = response;
+				// filterDataForTable();
+			}
+			// flag = 1;
+			// $scope.TableData();
+			
+		});
+	}
+
+	$scope.filterStaff = function(value , index , array ){
+		// console.log("innnnnnnnnnnnnnnnnn",value.userType);
+		if (value.userType == "salesman"){
+            return true;
+         }
+
+      }
+
 	$scope.ReloadAfterSave = function(response2){
 		
 		$scope.quickBill.companyId = response2;
@@ -694,6 +741,12 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 				if($scope.quickBill.EditBillData.hasOwnProperty('poNumber')){
 					$scope.quickBill.poNumber = $scope.quickBill.EditBillData.poNumber=="" || $scope.quickBill.EditBillData.poNumber==null || $scope.quickBill.EditBillData.poNumber==undefined ? "" : $scope.quickBill.EditBillData.poNumber;
 				}
+
+				if($scope.quickBill.EditBillData.hasOwnProperty('user')){
+					// console.log("user = ",$scope.quickBill.EditBillData);
+					// return false;
+					$scope.quickBill.userId = $scope.quickBill.EditBillData.user.userId=="" || $scope.quickBill.EditBillData.user.userId==null || $scope.quickBill.EditBillData.user.userId==undefined ? "" : $scope.quickBill.EditBillData.user;
+				}
 				
 				$scope.quickBill.EditBillData.lastPdf = {};
 				// console.log("company = ",setCompanyData);
@@ -996,12 +1049,21 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.changeInClientData = false;
 	
 	$scope.changeInBill = function(Fname,value) {
+		// console.log("fname valueeeee",Fname,value);
 		if(formdata.has(Fname))
 		{
 			formdata.delete(Fname);
 		}
 		if(value != "" && value != undefined){
-			formdata.set(Fname,value);
+			if(Fname=="userId")
+			{
+				formdata.set(Fname,value.userId);
+			}
+			else
+			{
+				formdata.set(Fname,value);
+			}
+			
 		}
 		
 		if(Fname == 'contactNo')

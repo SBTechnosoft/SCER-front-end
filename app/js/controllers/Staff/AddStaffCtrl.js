@@ -40,7 +40,7 @@ function AddStaffController($scope,$rootScope,toaster,apiCall,apiPath,$state,api
 	// });
 	
 	//User Type 
-	vm.userTypeDrop = ['admin','staff'];
+	vm.userTypeDrop = ['admin','staff','salesman'];
 	
 	
 	$scope.defaultCompany = function(){
