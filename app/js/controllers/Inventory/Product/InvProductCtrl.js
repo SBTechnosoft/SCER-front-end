@@ -42,6 +42,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 				}
 				else{
 					data = response;
+					// console.log("response = ",response);
 					filterDataForTable();
 				}
 				

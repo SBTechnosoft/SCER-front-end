@@ -51,7 +51,10 @@
 				<th>Product Name</th>
 				<th ng-if="enableDisableColor">Color</th>
 				<th ng-if="enableDisableSize">Size</th>
+				<th>Purchase-Price</th>
+				<th>Mrp</th>
 				<th>HSN/SAC</th>
+				<th>Barcode</th>
 				<th>CGST</th>
 				<th>SGST</th>
 				<th>IGST</th>
@@ -77,7 +80,16 @@
 						<input type="text" class="input-filter form-control" ng-model="query.size"/>
 					</td>
 					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.purchasePrice"  />
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.mrp"  />
+					</td>
+					<td>
 						<input type="text" class="input-filter form-control" ng-model="query.hsn"  />
+					</td>
+					<td>
+						<input type="text" class="input-filter form-control" ng-model="query.productCode"  />
 					</td>
 					<td>
 						<input type="text" class="input-filter form-control" ng-model="query.vat"  />
@@ -105,7 +117,11 @@
 					<td sortable="'productName'" filter="{ 'productName': 'text' }" ng-bind="::user.productName" ></td>
 					<td  filter="{ 'color': 'text' }" ng-bind="::user.color" ng-if="enableDisableColor"></td>
 					<td  filter="{ 'size': 'text' }" ng-bind="::user.size" ng-if="enableDisableSize"></td>
-					<td   filter="{ 'size': 'text' }" ng-bind="::user.hsn" ></td>
+					<td   filter="{ 'purchasePrice': 'text' }" ng-bind="::user.purchasePrice | setDecimal: user.company.noOfDecimalPoints"" ></td>
+					<td  filter="{ 'mrp': 'text' }" ng-bind="::user.mrp | setDecimal: user.company.noOfDecimalPoints" ></td>
+
+					<td   filter="{ 'hsn': 'text' }" ng-bind="::user.hsn" ></td>
+					<td   filter="{ 'productCode': 'text' }" ng-bind="::user.productCode" ></td>
 					<td  filter="{ 'vat': 'text' }" ng-bind="::user.vat | setDecimal: user.company.noOfDecimalPoints" ></td>
 					<td  filter="{ 'additionalTax': 'text' }" ng-bind="::user.additionalTax | setDecimal: user.company.noOfDecimalPoints" ></td>
 					<td  filter="{ 'igst': 'text' }" ng-bind="::user.igst | setDecimal: user.company.noOfDecimalPoints" ></td>

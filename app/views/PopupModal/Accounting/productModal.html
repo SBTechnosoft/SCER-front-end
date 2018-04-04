@@ -301,12 +301,12 @@
 				</div>
 			</fieldset>
 			
-			<h5 class="panel-heading myHeading">GST</h5>
+			<h5 class="panel-heading myHeading">Taxation</h5>
 			<fieldset class="my-fieldset-paddingBottom">
                <div class="form-group">
                   <label for="input-id-1" class="col-sm-1 control-label ">CGST(%)</label>
                   <div class="col-sm-3">
-                     <input id="input-id-1" name="vat" ng-model="addModelProduct.vat" ng-change="changeInvProductData('vat',addModelProduct.vat)"  type="text" placeholder="CGST(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
+                     <input id="input-id-1" name="vat" ng-model="addModelProduct.vat" ng-change="changeInvProductData('vat',addModelProduct.vat);addModelProduct.additionalTax=addModelProduct.vat;"  type="text" placeholder="CGST(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="6" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.vat.$error" ng-if="formProduct.vat.$dirty || formProduct.vat.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -318,7 +318,7 @@
 				  
 				   <label for="input-id-1" class="col-sm-1 control-label my-padding-textbox">SGST(%)</label>
                   <div class="col-sm-3">
-                     <input id="input-id-1" name="additionalTax"  ng-model="addModelProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addModelProduct.additionalTax)" type="text" placeholder="SGST(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" tabindex="2" only-number />
+                     <input id="input-id-1" name="additionalTax"  ng-model="addModelProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addModelProduct.additionalTax);addModelProduct.vat=addModelProduct.additionalTax;" type="text" placeholder="SGST(%)" class="form-control"  ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" tabindex="2" only-number />
 					 
 					<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
 						<span ng-messages-include="errorRequired"></span>
@@ -342,20 +342,9 @@
 				  
                </div>
             </fieldset>
-			<h4 class="panel-heading bg-default myHeading">Other</h4>
-			<fieldset>
-				<div class="form-group">
-					<label for="input-id-1" class="col-sm-2 control-label">Minimum Stock</label>
-                 	<div class="col-sm-4">
-						<input id="input-id-1" name="minimumStockLevel"  ng-model="addModelProduct.minimumStockLevel" ng-change="changeInvProductData('minimumStockLevel',addModelProduct.minimumStockLevel)" type="text" placeholder="Minimum Stock" class="form-control"  ng-pattern="/^[0-9]*$/"  ng-maxlength="10" tabindex="2" only-number />
-
-						<span ng-messages="formProduct.minimumStockLevel.$error" ng-if="formProduct.minimumStockLevel.$dirty || formProduct.minimumStockLevel.$touched"  role="alert">
-							<span ng-messages-include="errorRequired"></span>
-							<span ng-messages-include="errorLonglength"></span>
-							<span ng-messages-include="errorPatternThisSpecial"></span>
-						</span>
-					</div>
-					<label for="input-id-1" class="col-sm-2 control-label">HSN/SAC#</label>
+            <fieldset>
+            	<div class="form-group">
+            		<label for="input-id-1" class="col-sm-2 control-label">HSN/SAC#</label>
                   	<div class="col-sm-4">
                      	<input id="input-id-1" name="hsn" ng-model="addModelProduct.hsn"  type="text" ng-change="changeInvProductData('hsn',addModelProduct.hsn)" placeholder="HSN/SAC Number" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="2"/>
 					 
@@ -364,23 +353,6 @@
 							<span ng-messages-include="errorLonglength"></span>
 							<span ng-messages-include="errorPatternThisSpecial"></span>
 					 	</span>
-					
-                  	</div>
-
-				</div>
-			</fieldset>
-			<fieldset>
-				<div class="form-group">
-					<label class="col-sm-2 control-label">Quantity Rate</label>
-					<div class="col-sm-4">
-						<!-- <input id="input-id-1" name="qtyRate" ng-model="addModelProduct.qtyRate" ng-change="changeInvProductData('qtyRate',addModelProduct.qtyRate)" type="text" placeholder="Per PCS Quantity Rate" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="26"/> -->
-					 
-					<!-- <span ng-messages="formProduct.qtyRate.$error" ng-if="formProduct.qtyRate.$dirty || formProduct.qtyRate.$touched"  role="alert">
-						<span ng-messages-include="errorRequired"></span>
-						<span ng-messages-include="errorLonglength"></span>
-						<span ng-messages-include="errorPatternThisSpecial"></span>
-					 </span> -->
-					
 					</div>
 					<label class="col-sm-2 control-label"><b>CESS</b></label>
 					<div class="col-sm-1">
@@ -404,9 +376,43 @@
 						{{ (displayParseFloat(addModelProduct.cessFlat) + (displayParseFloat(addModelProduct.purchasePrice) * displayParseFloat(addModelProduct.cessPercentage) / 100)) |  currency:"&#8377; "}}
 						</p>
 					</div>
-					<!-- <label class="col-sm-1 control-label-left" ></label> -->
+            	</div>
+
+            </fieldset>
+			<h4 class="panel-heading bg-default myHeading">Other</h4>
+			<fieldset>
+				<div class="form-group">
+					<label for="input-id-1" class="col-sm-2 control-label">Minimum Stock</label>
+                 	<div class="col-sm-4">
+						<input id="input-id-1" name="minimumStockLevel"  ng-model="addModelProduct.minimumStockLevel" ng-change="changeInvProductData('minimumStockLevel',addModelProduct.minimumStockLevel)" type="text" placeholder="Minimum Stock" class="form-control"  ng-pattern="/^[0-9]*$/"  ng-maxlength="10" tabindex="2" only-number />
+
+						<span ng-messages="formProduct.minimumStockLevel.$error" ng-if="formProduct.minimumStockLevel.$dirty || formProduct.minimumStockLevel.$touched"  role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+						</span>
+					</div>
+					<label class="col-sm-2 control-label">Quantity Rate</label>
+					<div class="col-sm-4">
+						<!-- <input id="input-id-1" name="qtyRate" ng-model="addModelProduct.qtyRate" ng-change="changeInvProductData('qtyRate',addModelProduct.qtyRate)" type="text" placeholder="Per PCS Quantity Rate" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="26"/> -->
+					 
+					<!-- <span ng-messages="formProduct.qtyRate.$error" ng-if="formProduct.qtyRate.$dirty || formProduct.qtyRate.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+					 </span> -->
+					
+					</div>
+
 				</div>
 			</fieldset>
+			<!-- <fieldset>
+				<div class="form-group">
+					
+					
+					<label class="col-sm-1 control-label-left" ></label>
+				</div>
+			</fieldset> -->
 			<fieldset>
 				<div class="form-group">
 					<label class="col-sm-2 control-label">Product-Menu</label>
@@ -441,6 +447,34 @@
 						</label>
 					</div>
 					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="form-group">
+					<div class="col-md-6" >
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Opening</label>
+						  <div class="col-sm-9">
+							 <input id="input-id-1" name="opening"  ng-model="addModelProduct.opening" ng-change="changeInvProductData('opening',addModelProduct.opening)" type="text" placeholder="Opening Stock" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
+							 
+							<span ng-messages="formProduct.opening.$error" ng-if="formProduct.opening.$dirty || formProduct.opening.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+							
+						  </div>
+					   </div>
+					</div>
+					<div class="col-md-6" >
+						<div class="form-group">
+							<label  class="col-sm-3 control-label">Remark</label>
+							<div class="col-sm-9">
+								<textarea rows="1" ng-model="addModelProduct.remark" name="address"  placeholder="Remark" class="form-control input-sm ng-pristine ng-valid ng-touched" ng-change="changeInvProductData('remark',addModelProduct.remark)" style="height:38px;" ></textarea>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</fieldset>
 			<!--h5 class="panel-heading myHeading"> Purchase GST</h5>

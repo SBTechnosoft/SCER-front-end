@@ -173,7 +173,10 @@ function CrmClientFilterDataController($rootScope,$scope, $filter, ngTableParams
 				data[i].stateAbb = "";
 				data[i].stateAbb = res[i].state.stateName;
 				data[i].cityName = "";
-				data[i].cityName = res[i].city.cityName;
+				if(angular.isArray(res[i].city))
+				{
+					data[i].cityName = res[i].city.cityName;
+				}
 				data[i].professionName = "";
 				data[i].professionName = res[i].profession.professionName;
 			}

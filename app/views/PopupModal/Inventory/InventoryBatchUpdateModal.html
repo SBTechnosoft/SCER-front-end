@@ -172,13 +172,13 @@
 				</div>
 			
 				
-			<h4 class="panel-heading bg-default myHeading">GST</h4>
+			<h4 class="panel-heading bg-default myHeading">Taxation</h4>
 				<div class="panel-body">
 					<div class="col-md-4" >
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">CGST(%)</label>
 						  <div class="col-sm-9">
-							 <input id="input-id-1" name="vat" ng-model="addInvProduct.vat" ng-change="changeInvProductData('vat',addInvProduct.vat)" type="text" placeholder="CGST(%)" class="form-control" tabindex="18" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+							 <input id="input-id-1" name="vat" ng-model="addInvProduct.vat" ng-change="changeInvProductData('vat',addInvProduct.vat);addInvProduct.additionalTax=addInvProduct.vat;" type="text" placeholder="CGST(%)" class="form-control" tabindex="18" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 							 
 							<span ng-messages="formProduct.vat.$error" ng-if="formProduct.vat.$dirty || formProduct.vat.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -193,7 +193,7 @@
 					   <div class="form-group">
 						  <label for="input-id-1" class="col-sm-3 control-label">SGST(%)</label>
 						  <div class="col-sm-9">
-							 <input id="input-id-1" name="additionalTax" ng-model="addInvProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addInvProduct.additionalTax)" type="text" placeholder="SGST(%)" class="form-control" tabindex="19" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
+							 <input id="input-id-1" name="additionalTax" ng-model="addInvProduct.additionalTax" ng-change="changeInvProductData('additionalTax',addInvProduct.additionalTax);addInvProduct.vat=addInvProduct.additionalTax;" type="text" placeholder="SGST(%)" class="form-control" tabindex="19" ng-pattern="/^[0-9 .]*$/" ng-maxlength="8" max="100" only-number />
 							 
 							<span ng-messages="formProduct.additionalTax.$error" ng-if="formProduct.additionalTax.$dirty || formProduct.additionalTax.$touched"  role="alert">
 								<span ng-messages-include="errorRequired"></span>
@@ -216,6 +216,48 @@
 								<span ng-messages-include="errorPatternThisSpecial"></span>
 							 </span>
 						  </div>
+					   </div>
+					</div>
+					<div class="col-md-6" >
+						<div class="form-group">
+							<label for="input-id-1" class="col-sm-2 control-label">HSN/SAC#</label>
+							<div class="col-sm-10">
+								<input id="input-id-1" name="hsn" ng-model="addInvProduct.hsn" ng-change="changeInvProductData('hsn',addInvProduct.hsn)" type="text" placeholder="HSN/SAC Number" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="24"/>
+							 
+							<span ng-messages="formProduct.hsn.$error" ng-if="formProduct.hsn.$dirty || formProduct.hsn.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+							
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6" >
+						<div class="form-group">
+			   				<label class="col-sm-2 control-label"><b>CESS</b></label>
+							<div class="col-sm-3">
+							 	<input id="input-id-1" name="cessFlat"  ng-model="addInvProduct.cessFlat" ng-change="changeInvProductData('cessFlat',addInvProduct.cessFlat)" type="text" placeholder="Flat" class="form-control" tabindex="28" ng-pattern="/^[0-9 .]*$/"  ng-maxlength="8"  only-number />
+							 
+								<span ng-messages="formProduct.cessFlat.$error" ng-if="formProduct.cessFlat.$dirty || formProduct.cessFlat.$touched"  role="alert">
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 	</span>
+							</div>
+						  	<div class="col-sm-3">
+							    <input id="input-id-1" name="cess"  ng-model="addInvProduct.cess" ng-change="changeInvProductData('cessPercentage',addInvProduct.cess)" type="text" placeholder="(%)Per." class="form-control" tabindex="29"  ng-pattern="/^[0-9 .]*$/"  ng-maxlength="8" max="100" only-number />
+							 
+								<span ng-messages="formProduct.cess.$error" ng-if="formProduct.cess.$dirty || formProduct.cess.$touched"  role="alert">
+									<span ng-messages-include="errorLonglength"></span>
+									<span ng-messages-include="errorPatternThisSpecial"></span>
+								</span>
+							</div>
+						  	<div class="col-sm-3">
+								<p class="form-control-static">
+								{{ (displayParseFloat(addInvProduct.cessFlat) + (displayParseFloat(addInvProduct.purchasePrice) * displayParseFloat(addInvProduct.cessPercentage) / 100)) |  currency:"&#8377; "}}
+								</p>
+							</div>
+							<label class="col-sm-3 control-label-left" ></label>
 					   </div>
 					</div>
 				</div>
@@ -272,7 +314,7 @@
 				<div class="panel-body">
 					<div class="col-md-6" >
 					   <div class="form-group">
-						  <label for="input-id-1" class="col-sm-3 control-label">Minimum Stock</label>
+						  <label  class="col-sm-3 control-label">Minimum Stock</label>
 						  <div class="col-sm-9">
 							 <input id="input-id-1" name="minimumStockLevel"  ng-model="addInvProduct.minimumStockLevel" ng-change="changeInvProductData('minimumStockLevel',addInvProduct.minimumStockLevel)" type="text" placeholder="Minimum Stock" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
 							 
@@ -285,34 +327,7 @@
 						  </div>
 					   </div>
 					</div>
-					<div class="col-md-6" >
-						<div class="form-group">
-			   				<label class="col-sm-3 control-label"><b>CESS</b></label>
-							<div class="col-sm-3">
-							 	<input id="input-id-1" name="cessFlat"  ng-model="addInvProduct.cessFlat" ng-change="changeInvProductData('cessFlat',addInvProduct.cessFlat)" type="text" placeholder="Flat" class="form-control" tabindex="28" ng-pattern="/^[0-9 .]*$/"  ng-maxlength="8"  only-number />
-							 
-								<span ng-messages="formProduct.cessFlat.$error" ng-if="formProduct.cessFlat.$dirty || formProduct.cessFlat.$touched"  role="alert">
-								<span ng-messages-include="errorLonglength"></span>
-								<span ng-messages-include="errorPatternThisSpecial"></span>
-							 	</span>
-							</div>
-						  	<div class="col-sm-3">
-							    <input id="input-id-1" name="cess"  ng-model="addInvProduct.cess" ng-change="changeInvProductData('cessPercentage',addInvProduct.cess)" type="text" placeholder="(%)Per." class="form-control" tabindex="29"  ng-pattern="/^[0-9 .]*$/"  ng-maxlength="8" max="100" only-number />
-							 
-								<span ng-messages="formProduct.cess.$error" ng-if="formProduct.cess.$dirty || formProduct.cess.$touched"  role="alert">
-									<span ng-messages-include="errorLonglength"></span>
-									<span ng-messages-include="errorPatternThisSpecial"></span>
-								</span>
-							</div>
-						  	<div class="col-sm-3">
-								<p class="form-control-static">
-								{{ (displayParseFloat(addInvProduct.cessFlat) + (displayParseFloat(addInvProduct.purchasePrice) * displayParseFloat(addInvProduct.cessPercentage) / 100)) |  currency:"&#8377; "}}
-								</p>
-							</div>
-							<label class="col-sm-3 control-label-left" ></label>
-					   </div>
-					</div>
-					<div class="col-md-6" >
+					<div class="col-md-5" >
 					    <div class="form-group">
 							<label class="col-sm-3 control-label">Product-Menu</label>
 							 <div class="col-sm-9">
@@ -327,6 +342,20 @@
 									   <span class="fa fa-check"></span>Not Required</label>
 								</div>
 							</div>
+					   </div>
+					</div>
+					<div class="col-md-6" >
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Opening</label>
+						  <div class="col-sm-9">
+							 <input id="input-id-1" name="opening"  ng-model="addInvProduct.opening" ng-change="changeInvProductData('opening',addInvProduct.opening)" type="text" placeholder="Opening Stock" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
+							 
+							<span ng-messages="formProduct.opening.$error" ng-if="formProduct.opening.$dirty || formProduct.opening.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+						   </div>
 					   </div>
 					</div>
 					<div class="col-md-6" >
@@ -350,35 +379,7 @@
 								</div>
 						</div>
 					</div>
-					<div class="col-md-6" >
-					   <div class="form-group">
-						  <label for="input-id-1" class="col-sm-3 control-label">Opening</label>
-						  <div class="col-sm-9">
-							 <input id="input-id-1" name="opening"  ng-model="addInvProduct.opening" ng-change="changeInvProductData('opening',addInvProduct.opening)" type="text" placeholder="Opening Stock" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
-							 
-							<span ng-messages="formProduct.opening.$error" ng-if="formProduct.opening.$dirty || formProduct.opening.$touched"  role="alert">
-								<span ng-messages-include="errorRequired"></span>
-								<span ng-messages-include="errorLonglength"></span>
-								<span ng-messages-include="errorPatternThisSpecial"></span>
-							 </span>
-						   </div>
-					   </div>
-					</div>
-					<div class="col-md-6" >
-						<div class="form-group">
-							<label for="input-id-1" class="col-sm-3 control-label">HSN/SAC#</label>
-							<div class="col-sm-9">
-								<input id="input-id-1" name="hsn" ng-model="addInvProduct.hsn" ng-change="changeInvProductData('hsn',addInvProduct.hsn)" type="text" placeholder="HSN/SAC Number" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="24"/>
-							 
-							<span ng-messages="formProduct.hsn.$error" ng-if="formProduct.hsn.$dirty || formProduct.hsn.$touched"  role="alert">
-								<span ng-messages-include="errorRequired"></span>
-								<span ng-messages-include="errorLonglength"></span>
-								<span ng-messages-include="errorPatternThisSpecial"></span>
-							 </span>
-							
-							</div>
-						</div>
-					</div>
+					
 				</div>
 
 
