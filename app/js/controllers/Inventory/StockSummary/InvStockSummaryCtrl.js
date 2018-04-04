@@ -9,6 +9,7 @@ App.controller('InvStockSummaryController', InvStockSummaryController);
 function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPath,$location,apiResponse,toaster,getSetFactory,fetchArrayService) {
   'use strict';
   var vm = this;
+  $scope.filteredItems=[];
 	//$scope.brandradio="";
 	$scope.enableDisableColor = true;
 	$scope.enableDisableSize = true;
@@ -44,12 +45,12 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 		var count = data.length;
 		var iIndex = 0;
 		while(iIndex < count) {
-		  	var index = fetchArrayService.myIndexOfObject(vm.productCategoryData,data[iIndex].product.productCategoryId,'productCategoryId');
-			
+		  	var index = fetchArrayService.myIndexOfObject(vm.productCategoryData,data[iIndex].product.productCategory.productCategoryId,'productCategoryId');
+			// console.log("prrrrrrrrrrrrrroooooooooooooodcut = ",data[iIndex].product);
 			data[iIndex].productCategoryName = ""; //initialization of new property 
 			data[iIndex].productCategoryName =	index.productCategoryName;  //set the data from nested obj into new property
 			
-			var groupIndex = fetchArrayService.myIndexOfObject(vm.productGroupData,data[iIndex].product.productGroupId,'productGroupId');
+			var groupIndex = fetchArrayService.myIndexOfObject(vm.productGroupData,data[iIndex].product.productGroup.productGroupId,'productGroupId');
 			
 			data[iIndex].productGroupName = ""; //initialization of new property 
 			data[iIndex].productGroupName = groupIndex.productGroupName;  //set the data from nested obj into new property
@@ -63,10 +64,29 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			data[iIndex].size = data[iIndex].product.size;
 			
 			data[iIndex].qty = parseInt(data[iIndex].qty);
-
+			// $scope.totalQty = $scope.totalQty+data[iIndex].qty;
 			iIndex++;
 		}
 		//console.timeEnd();
+	}
+
+	$scope.totalQty=0;
+	//calculate total qty
+	$scope.calculateQty = function(){
+		$scope.totalQty=0;
+
+		// vm.eventChannel = new ngTableEventsChannel.onAfterDataFiltered(function(tableParams, filteredData){
+		// 	console.log("innn");
+  //           //DO SOMETHING
+  //       });
+
+		// console.log("daaaaaaaaaatadadatdadad = ",self.tableParams);
+		var dataLength = data.length;
+		for(var index=0;index<dataLength;index++)
+		{
+			$scope.totalQty = $scope.totalQty+data[index].qty;
+		}
+		return $scope.totalQty;
 	}
 
 	$scope.showProduct = function(){
@@ -151,6 +171,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 		});
 	}
 	
+
 	$scope.TableData = function(){
 		 
 	  vm.tableParams = new ngTableParams({
@@ -196,7 +217,6 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			$scope.pageNumber = params.page();
             $scope.itemsPerPage = params.count();
             $scope.totalPages = Math.ceil($scope.totalData/params.count());
-			
 		  }
 	  });
 		flag = 1;

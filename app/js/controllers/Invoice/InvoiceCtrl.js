@@ -24,9 +24,10 @@ function InvoiceController($scope,$filter,ngTableParams,apiCall,apiPath,toaster,
 	function filterDataForTable(){
 		var count = data.length;
 		while(count--) {
+		console.log("eeee = ",data[count]);
 		  data[count].companyName = ""; //initialization of new property 
 		  data[count].companyName = data[count].company.companyName;  //set the data from nested obj into new property
-		}
+		}	
 	}
 
 	// Get All Invoice Call 

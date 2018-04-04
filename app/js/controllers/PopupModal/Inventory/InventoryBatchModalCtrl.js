@@ -116,10 +116,10 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 			{"key":"wholesaleMargin","value":"TaxMargin"},
 			{"key":"wholesaleMarginFlat","value":"TaxMarginFlat"},
 			{"key":"semiWholesaleMargin","value":"semiTaxMargin"},
-			{"key":"vat","value":"Vat"},
+			{"key":"vat","value":"Cgst"},
 			{"key":"margin","value":"Margin"},
 			{"key":"marginFlat","value":"MarginFlat"},
-			{"key":"additionalTax","value":"Add.Tax"},
+			{"key":"additionalTax","value":"Sgst"},
 			{"key":"mrp","value":"MRP"},
 			{"key":"minimumStockLevel","value":"minimumStock"},
 			{"key":"productMenu","value":"ProductMenu"},
@@ -129,10 +129,11 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 			{"key":"bestBeforeTime","value":"BestBeforeTime"},
 			{"key":"bestBeforeType","value":"BestBeforeType"},
 			{"key":"cessFlat","value":"CessFlat"},
-			{"key":"cessPercentage","value":"CessPercentage"}
+			{"key":"cessPercentage","value":"CessPercentage"},
+			{"key":"opening","value":"opening"}
 			];
 			
-			MappingData = ['companyId','branchId','productCategoryId','productGroupId','productName','color','size','productDescription','measurementUnit','purchasePrice','wholesaleMargin','wholesaleMarginFlat','semiWholesaleMargin','vat','margin','marginFlat','additionalTax','mrp','minimumStockLevel','productMenu','productType','maxSaleQty','notForSale','bestBeforeTime','bestBeforeType','cessFlat','cessPercentage'];
+			MappingData = ['companyId','branchId','productCategoryId','productGroupId','productName','color','size','productDescription','measurementUnit','purchasePrice','wholesaleMargin','wholesaleMarginFlat','semiWholesaleMargin','vat','margin','marginFlat','additionalTax','mrp','minimumStockLevel','productMenu','productType','maxSaleQty','notForSale','bestBeforeTime','bestBeforeType','cessFlat','cessPercentage','opening'];
 			
 			$scope.dropdownData.brandName = vm.batchdropdown[0];
 			$scope.dropdownData.description = vm.batchdropdown[1];
@@ -161,6 +162,8 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 			$scope.dropdownData.bestBeforeType = vm.batchdropdown[24];
 			$scope.dropdownData.cessFlat = vm.batchdropdown[25];
 			$scope.dropdownData.cessPercentage = vm.batchdropdown[26];
+			$scope.dropdownData.opening = vm.batchdropdown[27];
+			console.log("key    ====",$scope.dropdownData.vat);
 		}
 		
 		
@@ -216,9 +219,13 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 		 
 		var validExts = new Array(".xlsx", ".xls",".csv");
 		var fileExt = files[0].name;
+		// console.log("file = ",files[0].type);
+		// var fileType1 = files[0].type;
+		// alert("type =",fileType1);
+		// return false;
 		fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
 		
-		if (validExts.indexOf(fileExt) < 0) {
+		if (validExts.indexOf(fileExt) < 0 && files[0].type!="application/vnd.ms-excel") {
 			
 			alert("Invalid file selected, valid files are of " +
 				   validExts.toString() + " types.");
@@ -463,7 +470,7 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 	/** Product **/
 	
 		$scope.insertProductData = function(response){
-			
+			// console.log("excel response =",response);
 			var excelData = response;
 			var countOFData = excelData.length;
 			
@@ -517,6 +524,7 @@ function InventoryBatchModalController($scope, $modalInstance,$rootScope,$http,a
 				innerObject.BestBeforeType = $scope.keyExists('BestBeforeType',excelData[i]);
 				innerObject.CessFlat = $scope.keyExists('CessFlat',excelData[i]);
 				innerObject.CessPercentage = $scope.keyExists('CessPercentage',excelData[i]);
+				innerObject.opening = $scope.keyExists('opening',excelData[i]);
 				// innerObject.MinimumStock = $scope.keyExists('MinimumStock',excelData[i]);
 				
 				

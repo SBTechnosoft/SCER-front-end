@@ -217,6 +217,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 				if(apiResponse.ok == response){
 					console.log("successccccccccccccccccc");
 					$scope.showProduct();
+					$state.go($state.current, {}, {reload: true});
 					toaster.pop('success', 'Title', 'Delete SuccessFully');
 				}
 				else{
@@ -275,15 +276,15 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		$scope.openProductBatchUpdateModal = function(){
 			
 			if (Modalopened) return;
-			$scope.selectedBoxArray=[];
-			var checkboxes = document.getElementsByName('check');
- 			for (var i = 0; i < checkboxes.length; i++) 
- 			{
-			   if(checkboxes[i].checked == true)
-			   {
-			   		$scope.selectedBoxArray.push($scope.filteredItems[i]);
-			   }
-			}
+			// $scope.selectedBoxArray=[];
+			// var checkboxes = document.getElementsByName('check');
+ 		// 	for (var i = 0; i < checkboxes.length; i++) 
+ 		// 	{
+			//    if(checkboxes[i].checked == true)
+			//    {
+			//    		$scope.selectedBoxArray.push($scope.filteredItems[i]);
+			//    }
+			// }
 			if($scope.selectedBoxArray.length==0)
 			{
 				toaster.pop('alert', 'Opps!!', 'No Product Selected');
@@ -338,19 +339,19 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
     $scope.parentCheckBox;
    	$scope.selectedBoxArray = [];
 	$scope.productFlag = 0;
-	// $scope.changeBox = function(box1,pData){
-	// 	if(box1 == true)
-	// 	{
-	// 		$scope.selectedBoxArray.push(pData);
-	// 	}
-	// 	else
-	// 	{	
-	// 		console.log("else");
-	// 		var index = $scope.selectedBoxArray.indexOf(pData);
-	// 		$scope.selectedBoxArray.splice(index,1);
-	// 	}
-	// 	console.log("special console = ",$scope.selectedBoxArray);
-	// }
+	$scope.changeBox = function(box1,pData){
+		if(box1 == true)
+		{
+			$scope.selectedBoxArray.push(pData);
+		}
+		else
+		{	
+			console.log("else");
+			var index = $scope.selectedBoxArray.indexOf(pData);
+			$scope.selectedBoxArray.splice(index,1);
+		}
+		console.log("special console = ",$scope.selectedBoxArray);
+	}
 	$scope.changeAllBox = function(box)
 	{		
 		if(box == false){
@@ -364,6 +365,7 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 		}
 		else{
 			$scope.productFlag=1;
+			// console.log("daaadtaa = ",data);
 			var count =   data.length;
 			// $scope.productFlag=0;
 			for(var sat=0;sat<count;sat++){
@@ -371,7 +373,9 @@ function InvProductController($scope, $filter, ngTableParams,apiCall,apiPath,$st
 				var dataSet =   data[sat];	
 				dataSet.selected = true;	
 			}
-			$scope.selectedBoxArray = $scope.filteredItems;
+			// console.log("filter array data =",$scope.filteredItems);
+			// console.log(" data =",data);
+			$scope.selectedBoxArray = data;
 		}
 		// console.log("rrr = ",$scope.selectedBoxArray);
 	}

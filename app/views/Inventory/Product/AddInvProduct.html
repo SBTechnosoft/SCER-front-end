@@ -458,10 +458,25 @@
 						  </div>
 					   </div>
 					</div>
-				    <div class="col-md-6" >
+					<div class="col-md-6" >
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Opening</label>
+						  <div class="col-sm-9">
+							 <input id="input-id-1" name="opening"  ng-model="addInvProduct.opening" ng-change="changeInvProductData('opening',addInvProduct.opening)" type="text" placeholder="Opening Stock" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
+							 
+							<span ng-messages="formProduct.opening.$error" ng-if="formProduct.opening.$dirty || formProduct.opening.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+							
+						  </div>
+					   </div>
+					</div>
+				    <!-- <div class="col-md-6" >
 						<div class="form-group">
 							<label class="col-sm-3 control-label">Quantity Rate</label>
-							<div class="col-sm-9">
+							<div class="col-sm-9"> -->
 								<!-- <input id="input-id-1" name="qtyRate" ng-model="addInvProduct.qtyRate" ng-change="changeInvProductData('qtyRate',addInvProduct.qtyRate)" type="text" placeholder="Per PCS Quantity Rate" class="form-control"  ng-pattern="/^[0-9 .]+$/" ng-maxlength="15" tabindex="26"/> -->
 							 
 							<!-- <span ng-messages="formProduct.qtyRate.$error" ng-if="formProduct.qtyRate.$dirty || formProduct.qtyRate.$touched"  role="alert">
@@ -470,9 +485,9 @@
 								<span ng-messages-include="errorPatternThisSpecial"></span>
 							 </span> -->
 							
-							</div>
+							<!-- </div>
 						</div>
-					</div>
+					</div> -->
 					<div class="col-md-6" >
 						<div class="form-group">
 			   				<label class="col-sm-3 control-label"><b>CESS</b></label>

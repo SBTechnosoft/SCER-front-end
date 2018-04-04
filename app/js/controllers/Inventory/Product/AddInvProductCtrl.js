@@ -181,6 +181,7 @@ function AddInvProductController($scope,toaster,$filter,apiCall,apiPath,$statePa
 			$scope.addInvProduct.bestBeforeTime = editProductData.bestBeforeTime;
 			$scope.addInvProduct.cessFlat = editProductData.cessFlat;
 			$scope.addInvProduct.cessPercentage = editProductData.cessPercentage;
+			$scope.addInvProduct.opening = editProductData.opening;
 			$scope.addInvProduct.maxSaleQty = editProductData.maxSaleQty;
 			$scope.addInvProduct.notForSale = editProductData.notForSale== "true" ? true : false;
 			

@@ -189,9 +189,9 @@
 				</div>
 				<div class="col-md-3">
 				<img src="{{erpPath}}{{addCompany.documentUrl}}{{addCompany.documentName}}"  onerror="this.style.display='none'" height="100%" width="100%" class="brand-logo-collapsed"/>
-				<img ng-src="{{image1.compressed.dataURL}}"    onerror="this.style.display='none'" class="brand-logo-collapsed showImg" />
-				<input id="input-id-1" type="file" tabindex="1" image="image1"   accept="image/png,image/gif,image/jpeg,image/jpg" resize-max-height="100" resize-max-width="100" resize-quality="0.7" resize-type="image/jpg" ng-image-compress/>
-				<!-- onchange="angular.element(this).scope().uploadFile(this.files)" -->
+				<img ng-src="{{image_source}}"  height="100%" width="100%"  onerror="this.style.display='none'" class="brand-logo-collapsed showImg" />
+				<input id="input-id-1" type="file" tabindex="1" onchange="angular.element(this).scope().uploadFile(this.files)"  accept="image/png,image/gif,image/jpeg,image/jpg" />
+				
 				</div>
 		   
 		  </div>

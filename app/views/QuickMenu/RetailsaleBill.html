@@ -21,6 +21,9 @@
 .tableTopCss{
 	border-top: #b8c1cf 1px solid !important;
 }
+.col-md-3{
+	    min-height: 55px !important;
+}
 </style>
 <!-- START panel-->
 <div class="container-fluid"  >
@@ -28,7 +31,7 @@
 	<form  action="#" name="formBill" class="form-validate form-horizontal" autocomplete="off" novalidate>
 	<div class="panel panel-default">
 		<h4 class="panel-heading col-sm-12" style="padding:5px 1px;" >	
-			<div style="padding: 0 5px 0 5px;"  ng-class="saleType == 'QuotationPrint' ? 'col-sm-3': 'col-sm-2'" >
+			<div style="padding: 0 5px 0 5px;"  ng-class="saleType == 'QuotationPrint' ? 'col-sm-5': 'col-sm-4'" >
 
 				<label  class="control-label" ng-if="saleType == 'WholesaleBill' || saleType == 'SalesOrder'" style="font-size:18px !important;float: left;text-align: left;padding-top: 3px;padding-left: 1px;padding-right: 0px;">
 					<a tooltip="back" tooltip-trigger="focus" tooltip-placement="top" ng-click="goBack()"><i class="fa fa-arrow-left" ></i></a>
@@ -41,7 +44,7 @@
 		 	<div class="col-sm-2" ng-if="enableDisableSalesman">
 		 		<label  class="col-sm-4 control-label" style="padding-left: 2px;">SalesMan</label>
 				<div class="col-sm-8 contentOfForm" >
-					<select chosen="" data-ng-model="quickBill.userId" name="userDropDown" data-ng-options="s.userName for s in form.userDrop | filter : filterStaff track by s.userId " ng-change="changeInBill('userId',quickBill.userId)" class="form-control input-sm chosen-select btn-sm" ng-required="true"></select>
+					<select chosen="" data-ng-model="quickBill.userId" name="userDropDown" data-ng-options="s.userName for s in form.userDrop | filter : filterStaff track by s.userId " ng-change="changeInBill('userId',quickBill.userId)" class="form-control input-sm chosen-select btn-sm" ></select>
 				</div>
 			</div>
 		 	<div class="col-sm-2" >
@@ -121,9 +124,9 @@
 					   </div>
 					<!-- </fieldset > -->
 				</div>
-				<div class="col-md-3" ng-if="enableDisableWorkNo">
+				<div class="col-md-2" ng-if="enableDisableWorkNo">
 					<!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-					   <div class="form-group" style="margin-bottom: 0px";>
+					   <div class="form-group" style="margin-bottom: 0px">
 						  <label  class="col-sm-2 control-label" style="padding-left: 2px;">Work#</label>
 						 	 <div class="col-sm-10">
 							  	<div class="input-group mytypeDrop">
@@ -144,7 +147,7 @@
 				</div>
 				<div class="col-md-3">
 					<!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-					   <div class="form-group" style="margin-bottom: 0px";>
+					   <div class="form-group" style="margin-bottom: 0px">
 						  <label  class="col-sm-2 control-label">*Name</label>
 						  <div class="col-sm-10">
 							 <input ng-model="quickBill.clientName" name="clientName"  type="text" placeholder="Client Name" class="form-control input-sm"  ng-required="true" ng-pattern="/^[a-zA-Z0-9 &_`#().\'-]*$/" ng-maxlength="100" ng-change="changeInBill('clientName',quickBill.clientName)" only-alpha />
@@ -161,7 +164,7 @@
 				</div>
 				<div class="col-md-3" ng-if="enableDisableAddress">
 					<!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-						<div class="form-group" style="margin-bottom: 0px";>
+						<div class="form-group" style="margin-bottom: 0px">
 							<label  class="col-sm-3 control-label">Address</label>
 							<div class="col-sm-9">
 								<textarea rows="1" name="firstAddress" ng-model="quickBill.address1" placeholder="Enter Address"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('address1',quickBill.address1)" ng-maxlength="200" style="height:31px;" ></textarea>
@@ -178,17 +181,17 @@
 			<div class="col-sm-12"> -->
 				<div class="col-md-3" ng-if="enableDisableState">
 					<!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-						<div class="form-group">
-							<label class="col-sm-2 control-label"> *State </label>
+						<div class="form-group" style="margin-bottom: 0px">
+							<label class="col-sm-2 control-label style="padding-left: 2px"> *State </label>
 							<div class="col-sm-10">
-								<select chosen="" data-ng-model="quickBill.stateAbb" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',quickBill.stateAbb.stateAbb)" class="form-control input-sm chosen-select" ng-required="true" ></select>
+								<select chosen="" data-ng-model="quickBill.stateAbb" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',quickBill.stateAbb.stateAbb)"  class="form-control input-sm chosen-select" ng-required="true" style="height:31px;font-size:15px;"></select>
 							</div>
 						</div>
 					<!-- </fieldset> -->
 				</div>
 				<div class="col-md-2" ng-if="enableDisableCity">
 					<!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-						<div class="form-group">
+						<div class="form-group" style="margin-bottom: 0px">
 							<label class="col-sm-2 control-label" > *City </label>
 							<div class="col-sm-10" >
 								<select chosen="" data-ng-model="quickBill.cityId" data-ng-options="s.cityName for s in form.cityDrop track by s.cityId"  class="form-control chosen-select" ng-required="true" ng-change="changeInBill('cityId',quickBill.cityId.cityId)" ></select>
@@ -198,10 +201,10 @@
 				</div>
 				<div class="col-md-2">
 					<!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-						<div class="form-group" style="margin-bottom: 0px";>
+						<div class="form-group" style="margin-bottom: 0px">
 							<label  class="col-sm-3 control-label">GST#</label>
 							<div class="col-sm-9">
-								<input rows="1" name="gst" ng-model="quickBill.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('gst',quickBill.gst)" ng-maxlength="50" style="height:38px;" >
+								<input rows="1" name="gst" ng-model="quickBill.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('gst',quickBill.gst)" ng-maxlength="50" style="height:31px;" >
 								<span ng-messages="formBill.gst.$error" ng-if="formBill.gst.$dirty || formBill.gst.$touched" role="alert">
 										<span ng-messages-include="errorPatternThisSpecial"></span>
 										<span ng-messages-include="errorLonglength"></span>
@@ -212,7 +215,7 @@
 				</div>
 				<div class="col-md-2" ng-if="enableDisableEmailId">
 					 <!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-					   <div class="form-group" style="margin-bottom: 0px";>
+					   <div class="form-group" style="margin-bottom: 0px">
 						  <label  class="col-sm-3 control-label">Email</label>
 							<div class="col-sm-9">
 								<div class="input-group m-b">
@@ -230,10 +233,10 @@
 				
 				<div class="col-md-3">
 					<!-- <fieldset class="my-fieldset-paddingBottom my-fieldset-marginBottom"> -->
-						<div class="form-group" >
-							<label  class="col-sm-3 control-label" ng-class="clientSaveButton ? 'col-sm-3':'col-sm-3'"  ng-if="enableDisableProfession">Profession</label>
+						<div class="form-group" style="margin-bottom: 0px">
+							<label  class="col-sm-3 control-label" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'"  ng-if="enableDisableProfession">Profession</label>
 							<div  ng-if="enableDisableProfession" class="col-sm-6" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'" >
-								<select chosen="" data-ng-model="quickBill.professionId" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId" ng-change="changeInBill('professionId',quickBill.professionId.professionId)" class="form-control input-sm chosen-select" ></select>
+								<select chosen="" data-ng-model="quickBill.professionId" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId" ng-change="changeInBill('professionId',quickBill.professionId.professionId)" class="form-control input-sm chosen-select"  style="height:31px;"></select>
 							</div>
 							
 							<div class="col-sm-3 contentOfForm" ng-if="clientSaveButton">
@@ -321,16 +324,16 @@
 						
 					</td>
 					<td style="text-align:right">
-						<input id="price" type="text" ng-model="item.cgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
-						<span ng-if="item.cgstAmount > 0" ng-bind="item.cgstAmount"></span>
+						<input id="price" type="text" ng-disabled="csgstDisable" ng-model="item.cgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
+						<span ng-if="item.cgstAmount > 0 && !csgstDisable" ng-disabled="csgstDisable" ng-bind="item.cgstAmount"></span>
 					</td>
 					<td style="text-align:right">
-						<input id="price" type="text" ng-model="item.sgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
-						<span ng-if="item.sgstAmount > 0" ng-bind="item.sgstAmount"></span>
+						<input id="price" type="text" ng-disabled="csgstDisable" ng-model="item.sgstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%"  ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
+						<span ng-if="item.sgstAmount > 0 && !csgstDisable" ng-disabled="csgstDisable" ng-bind="item.sgstAmount" ></span>
 					</td>
 					<td style="text-align:right">
-						<input id="price" type="text" ng-model="item.igstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%" ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
-						<span ng-if="item.igstAmount > 0" ng-bind="item.igstAmount"></span>
+						<input id="price" type="text" ng-disabled="igstDisable" ng-model="item.igstPercentage"  class="form-control input-sm" placeholder="%" style="width:100%;padding-left: 6px;padding-right: 6px;height:10%" ng-minlength="1" ng-pattern="/^[0-9]+[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverse(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage)" only-number /> 
+						<span ng-if="item.igstAmount > 0" ng-disabled="igstDisable" ng-bind="item.igstAmount"></span>
 					</td>
 					<td>
 						<input placeholder="(&#x20b9;)Amount" type="text" ng-model="item.amount"  class="form-control input-sm" style="width:100%;padding-left: 6px;padding-right: 6px;"  ng-required="true" ng-minlength="1" ng-pattern="/^[0-9 .]*$/" ng-change="changeProductTable();calculateTaxReverseTwo(item,item.cgstPercentage,item.sgstPercentage,item.igstPercentage,$index);" only-number /> 

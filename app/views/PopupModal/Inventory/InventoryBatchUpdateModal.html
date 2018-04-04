@@ -350,7 +350,37 @@
 								</div>
 						</div>
 					</div>
+					<div class="col-md-6" >
+					   <div class="form-group">
+						  <label for="input-id-1" class="col-sm-3 control-label">Opening</label>
+						  <div class="col-sm-9">
+							 <input id="input-id-1" name="opening"  ng-model="addInvProduct.opening" ng-change="changeInvProductData('opening',addInvProduct.opening)" type="text" placeholder="Opening Stock" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
+							 
+							<span ng-messages="formProduct.opening.$error" ng-if="formProduct.opening.$dirty || formProduct.opening.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+						   </div>
+					   </div>
+					</div>
+					<div class="col-md-6" >
+						<div class="form-group">
+							<label for="input-id-1" class="col-sm-3 control-label">HSN/SAC#</label>
+							<div class="col-sm-9">
+								<input id="input-id-1" name="hsn" ng-model="addInvProduct.hsn" ng-change="changeInvProductData('hsn',addInvProduct.hsn)" type="text" placeholder="HSN/SAC Number" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="24"/>
+							 
+							<span ng-messages="formProduct.hsn.$error" ng-if="formProduct.hsn.$dirty || formProduct.hsn.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+							
+							</div>
+						</div>
+					</div>
 				</div>
+
 
 			 <button type="button" class="mr mb-sm btn btn-danger pull-right" data-ng-click="cancel()" tabindex="27" onFocus="this.id=this.tabIndex;this.tabIndex=1" onBlur="this.tabIndex=this.id" >Cancel</button>
 			 <button type="button" class="mr mb-sm btn btn-success pull-right" data-ng-click="pop()" ng-disabled="formProduct.$invalid" tabindex="26" >

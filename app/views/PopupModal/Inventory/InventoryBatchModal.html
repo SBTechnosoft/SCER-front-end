@@ -197,6 +197,9 @@
 					 <select chosen ng-model="dropdownData.cessPercentage"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('26',dropdownData.cessPercentage.key)"  class="form-control chosen-select" >
 						 <option value=""></option>
 					 </select>
+					 <select chosen ng-model="dropdownData.opening"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('26',dropdownData.opening.key)"  class="form-control chosen-select" >
+						 <option value=""></option>
+					 </select>
                  
               </div>
 			   
@@ -403,6 +406,11 @@
 										 <option value=""></option>
 									 </select>
 								</th>
+								<th class="myPaddingTh">
+									  <select chosen ng-model="dropdownData.opening"  data-ng-options="s.value for s in vm.batchdropdown" ng-change="changeBatchDropdownData('26',dropdownData.opening.key)"  class="form-control chosen-select" >
+										 <option value=""></option>
+									 </select>
+								</th>
 							</tr>
 							<tr ng-if="inventoryType == 'Product'">
 								<th>CompanyName</th>
@@ -418,10 +426,10 @@
 								<th>TaxMargin</th>
 								<th>TaxMarginFlat</th>
 								<th>SemiTaxMargin</th>
-								<th>Vat</th>
+								<th>Cgst</th>
 								<th>Margin</th>
 								<th>MarginFlat</th>
-								<th>AdditionalTax</th>
+								<th>Sgst</th>
 								<th>MRP</th>
 								<th>minimumStock</th>
 								<th>ProductMenu</th>
@@ -432,6 +440,7 @@
 								<th>BestBeforeType</th>
 								<th>cessFlat</th>
 								<th>cessPercentage</th>
+								<th>opening</th>
 							</tr>
 						</thead>
 						 <tbody ng-if="inventoryType == 'Brand'">
@@ -477,6 +486,7 @@
 								<td>{{item.BestBeforeType}}</td>
 								<td>{{item.CessFlat}}</td>
 								<td>{{item.CessPercentage}}</td>
+								<td>{{item.opening}}</td>
 							</tr>
 						 </tbody>
 					</table>
