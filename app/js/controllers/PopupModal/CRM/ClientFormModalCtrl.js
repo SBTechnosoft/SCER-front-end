@@ -12,10 +12,11 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 	$scope.clientForm = [];	
 
   	$scope.enableDisableAddress = false;
-	// $scope.enableDisableWorkNo = false;
+	$scope.enableDisableWorkNo = false;
 	$scope.enableDisableState = false;
 	$scope.enableDisableCity = false;
 	$scope.enableDisableEmailId = false;
+	$scope.enableDisableProfession = false;
 	
 	var settingResponse = [];
 	//get setting data
@@ -40,10 +41,11 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 				{
 					var arrayData1 = response[arrayData];
 					$scope.enableDisableAddress = arrayData1.clientAddressStatus=="enable" ? true : false;
-					// $scope.enableDisableWorkNo = arrayData1.clientWorkNoStatus=="enable" ? true : false;
+					$scope.enableDisableWorkNo = arrayData1.clientWorkNoStatus=="enable" ? true : false;
 					$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
 					$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
 					$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+					$scope.enableDisableProfession = arrayData1.clientProfessionStatus=="enable" ? true : false;
 					if(arrayData1.clientStateStatus=="disable")
 					{
 						$scope.clientForm.stateDropDown = {};
@@ -74,6 +76,8 @@ function clientFormModalController($rootScope,$scope,$modalInstance,apiCall,apiP
 		$scope.clientForm.emailId = clientEditData.emailId;
 		$scope.clientForm.gst = clientEditData.gst;
 		$scope.clientForm.address1 = clientEditData.address1;
+		$scope.clientForm.creditLimit = clientEditData.creditLimit;
+		$scope.clientForm.creditDays = clientEditData.creditDays;
 		vm.birthDate = moment(clientEditData.birthDate,apiDateFormate).format() == 'Invalid date' ? null : new Date(moment(clientEditData.birthDate,apiDateFormate).format('YYYY-MM-DD'));
 		vm.anniversaryDate = moment(clientEditData.anniversaryDate,apiDateFormate).format() == 'Invalid date' ? null : new Date(moment(clientEditData.anniversaryDate,apiDateFormate).format('YYYY-MM-DD'));
 		

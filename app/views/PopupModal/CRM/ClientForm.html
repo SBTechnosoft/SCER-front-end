@@ -90,7 +90,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6" ng-if="enableDisableProfession">
 					<div class="form-group">
 						<label class="col-sm-3 control-label">Profession</label>
 						<div class="col-sm-9">
@@ -105,7 +105,7 @@
 					<div class="form-group">
 						<label  class="col-sm-2 control-label">GST#</label>
 						<div class="col-sm-10">
-							<input rows="1" name="gst" ng-model="clientForm.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('gst',clientForm.gst)" ng-maxlength="50" style="height:38px;" >
+							<input rows="1" name="gst" ng-model="clientForm.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('gst',clientForm.gst)" ng-maxlength="50" >
 							<span ng-messages="formClient.gst.$error" ng-if="formClient.gst.$dirty || formClient.gst.$touched" role="alert">
 									<span ng-messages-include="errorPatternThisSpecial"></span>
 									<span ng-messages-include="errorLonglength"></span>
@@ -113,19 +113,58 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-6" ng-if="enableDisableAddress">
-					<div class="form-group">
-						<label for="input-id-2" class="col-sm-1 control-label">Address</label>
-					  	<div class="col-sm-10">
-							<textarea rows="1" name="firstAddress" ng-model="clientForm.address1" placeholder="Enter Address"  class="form-control  ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('address1',clientForm.address1)" ng-maxlength="200" style="height:38px;" ></textarea>
-							<span ng-messages="formClient.firstAddress.$error" ng-if="formClient.firstAddress.$dirty || formClient.firstAddress.$touched" role="alert">
-								<span ng-messages-include="errorRequired"></span>
-								<span ng-messages-include="errorPatternThisSpecial"></span>
-								<span ng-messages-include="errorLonglength"></span>
-							</span>
-					    </div>
+			<div class="col-md-6"  ng-if="enableDisableWorkNo">
+				<div class="form-group">
+					<label  class="col-md-2 control-label" style="padding-left: 2px;">Work#</label>
+					<div class="col-md-10">
+					 	<input ng-model="clientForm.clientContact" ng-change="changeInClientData('contactNo1',clientForm.clientContact)" id="input-id-1" type="text" placeholder="Enter Contact Number" class="form-control" dir="ltr" name="contactNo1" id="contactNoSelect"  auto-focus="true" ng-required="true" ng-maxlength="12" ng-pattern="/^[0-9]+$/"  ng-minlength="10"   only-number style="font-size:15px;" />
+						<span ng-messages="formClient.contactNo1.$error" ng-if="formClient.contactNo1.$dirty || formClient.contactNo1.$touched" role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorPatternNumberContact"></span>
+							<span ng-messages-include="errorLonglength"></span>
+							<span ng-messages-include="errorShortlength"></span>
+						</span>
 					</div>
 				</div>
+			</div>
+			<div class="col-md-6" ng-if="enableDisableAddress">
+				<div class="form-group">
+					<label class="col-md-2 control-label">Address</label>
+				  	<div class="col-md-10">
+						<textarea rows="1" name="firstAddress" ng-model="clientForm.address1" placeholder="Enter Address"  class="form-control  ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('address1',clientForm.address1)" ng-maxlength="200" style="height:38px;" ></textarea>
+						<span ng-messages="formClient.firstAddress.$error" ng-if="formClient.firstAddress.$dirty || formClient.firstAddress.$touched" role="alert">
+							<span ng-messages-include="errorRequired"></span>
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+						</span>
+				    </div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<label  class="col-md-2 control-label">Credi Limit</label>
+					<div class="col-md-10">
+						<input rows="1" name="creditLimit" ng-model="clientForm.creditLimit" placeholder="Credit Limit"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('creditLimit',clientForm.creditLimit)" ng-maxlength="50"  >
+						<span ng-messages="formClient.creditLimit.$error" ng-if="formClient.creditLimit.$dirty || formClient.creditLimit.$touched" role="alert">
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group">
+					<label  class="col-md-2 control-label">Credit Days</label>
+					<div class="col-md-10">
+						<input rows="1" name="creditDays" ng-model="clientForm.creditDays" placeholder="Credit Days"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInClientData('creditDays',clientForm.creditDays)" ng-maxlength="50" >
+						<span ng-messages="formClient.creditDays.$error" ng-if="formClient.creditDays.$dirty || formClient.creditDays.$touched" role="alert">
+							<span ng-messages-include="errorPatternThisSpecial"></span>
+							<span ng-messages-include="errorLonglength"></span>
+						</span>
+					</div>
+				</div>
+			</div>
 			<!-- </fieldset> -->
 
 			<!-- <fieldset class="my-fieldset-paddingBottom"> -->

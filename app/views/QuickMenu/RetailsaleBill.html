@@ -23,7 +23,7 @@
 }
 .col-md-3{
 	    min-height: 55px !important;
-	    top: 10px;
+	    
 }
 </style>
 <!-- START panel-->
@@ -168,7 +168,7 @@
 						<div class="form-group" style="margin-bottom: 0px">
 							<label  class="col-sm-3 control-label">Address</label>
 							<div class="col-sm-9">
-								<textarea rows="1" name="firstAddress" ng-model="quickBill.address1" placeholder="Enter Address"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('address1',quickBill.address1)" ng-maxlength="200" style="height:31px;" ></textarea>
+								<textarea rows="1" name="firstAddress" ng-model="quickBill.address1" placeholder="Enter Address"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('address1',quickBill.address1)" ng-maxlength="200" ></textarea>
 								<span ng-messages="formBill.firstAddress.$error" ng-if="formBill.firstAddress.$dirty || formBill.firstAddress.$touched" role="alert">
 										<span ng-messages-include="errorRequired"></span>
 										<span ng-messages-include="errorPatternThisSpecial"></span>
@@ -185,7 +185,7 @@
 						<div class="form-group" style="margin-bottom: 0px">
 							<label class="col-sm-2 control-label style="padding-left: 2px"> *State </label>
 							<div class="col-sm-10">
-								<select chosen="" data-ng-model="quickBill.stateAbb" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',quickBill.stateAbb.stateAbb)"  class="form-control input-sm chosen-select" ng-required="true" style="height:31px;font-size:15px;"></select>
+								<select chosen="" data-ng-model="quickBill.stateAbb" data-ng-options="s.stateName for s in form.statesDrop track by s.stateAbb" ng-change="ChangeState('stateAbb',quickBill.stateAbb.stateAbb)"  class="form-control input-sm chosen-select" ng-required="true" style="font-size:15px;"></select>
 							</div>
 						</div>
 					<!-- </fieldset> -->
@@ -205,7 +205,7 @@
 						<div class="form-group" style="margin-bottom: 0px">
 							<label  class="col-sm-3 control-label">GST#</label>
 							<div class="col-sm-9">
-								<input rows="1" name="gst" ng-model="quickBill.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('gst',quickBill.gst)" ng-maxlength="50" style="height:31px;" >
+								<input rows="1" name="gst" ng-model="quickBill.gst" placeholder="GST Number"  class="form-control input-sm ng-pristine ng-valid ng-touched"  ng-change="changeInBill('gst',quickBill.gst)" ng-maxlength="50" >
 								<span ng-messages="formBill.gst.$error" ng-if="formBill.gst.$dirty || formBill.gst.$touched" role="alert">
 										<span ng-messages-include="errorPatternThisSpecial"></span>
 										<span ng-messages-include="errorLonglength"></span>
@@ -237,7 +237,7 @@
 						<div class="form-group" style="margin-bottom: 0px">
 							<label  class="col-sm-3 control-label" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'"  ng-if="enableDisableProfession">Profession</label>
 							<div  ng-if="enableDisableProfession" class="col-sm-6" ng-class="clientSaveButton ? 'col-sm-6':'col-sm-9'" >
-								<select chosen="" data-ng-model="quickBill.professionId" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId" ng-change="changeInBill('professionId',quickBill.professionId.professionId)" class="form-control input-sm chosen-select"  style="height:31px;"></select>
+								<select chosen="" data-ng-model="quickBill.professionId" data-ng-options="s.professionName for s in form.professionDrop track by s.professionId" ng-change="changeInBill('professionId',quickBill.professionId.professionId)" class="form-control input-sm chosen-select" ></select>
 							</div>
 							
 							<div class="col-sm-3 contentOfForm" ng-if="clientSaveButton">

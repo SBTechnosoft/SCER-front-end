@@ -24,6 +24,7 @@ function ClientModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,
 	$scope.enableDisableState = false;
 	$scope.enableDisableCity = false;
 	$scope.enableDisableEmailId = false;
+	$scope.enableDisableProfession = false;
 	
 	// $scope.divTag = false;
 	// $scope.colspanValue = '6';
@@ -56,6 +57,7 @@ function ClientModalController($rootScope,$scope,$modalInstance,apiCall,apiPath,
 					$scope.enableDisableState = arrayData1.clientStateStatus=="enable" ? true : false;
 					$scope.enableDisableCity = arrayData1.clientCityStatus=="enable" ? true : false;
 					$scope.enableDisableEmailId = arrayData1.clientEmailIdStatus=="enable" ? true : false;
+					$scope.enableDisableProfession = arrayData1.clientProfessionStatus=="enable" ? true : false;
 					if(arrayData1.clientStateStatus=="disable")
 					{
 						$scope.clientForm.stateDropDown = {};

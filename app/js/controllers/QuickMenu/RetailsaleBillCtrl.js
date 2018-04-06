@@ -298,31 +298,24 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 		
 			toaster.clear();
 			if(apiResponse.noContent == response){
-				
-				// data = [];
 				toaster.pop('alert', 'Opps!!', 'No Staff Available');
-				// vm.tableParams.reload();
-				  // vm.tableParams.page(1);
-				
 			}
 			else{
 				vm.userDrop = response;
-
+				// vm.userDrop.push($rootScope.$storage.authUser);
+				// console.log("user response = ",response," authentication user = ",$rootScope.$storage.authUser);
 				$scope.quickBill.userId =  $rootScope.$storage.authUser;
-				// data = response;
-				// filterDataForTable();
 			}
-			// flag = 1;
-			// $scope.TableData();
-			
 		});
 	}
 
 	$scope.filterStaff = function(value , index , array ){
 		// console.log("innnnnnnnnnnnnnnnnn",value.userType);
-		if (value.userType == "salesman"){
-            return true;
-         }
+		
+		if (value.userType == "salesman" || $rootScope.$storage.authUser.userId == value.userId){
+			return true;
+		}
+	   
 
       }
 
