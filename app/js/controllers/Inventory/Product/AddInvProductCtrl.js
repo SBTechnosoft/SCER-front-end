@@ -110,12 +110,62 @@ function AddInvProductController($scope,toaster,$filter,apiCall,apiPath,$statePa
 		});
 	}
 	$scope.getOptionSettingData();
-	
+	$scope.addInvProduct.documentName='';
+	$scope.dateTimeFlag=false;
+	$scope.updateDate = "";
+	$scope.userName = "";
 	//Edit Product
 	if(Object.keys(getSetFactory.get()).length > 0){
 	//if(getSetFactory.get() > 0){
 		var editProductData = getSetFactory.get();
+		$scope.dateTimeFlag=true;
+		if(editProductData.updatedAt!='00-00-0000')
+		{
+			$scope.updateDate = editProductData.updatedAt;
+		}
+		else
+		{
+			$scope.updateDate = editProductData.createdAt;
+		}
 		console.log("product-data",editProductData);
+		//get user data
+		if(editProductData.updatedBy==0 && editProductData.createdBy==0)
+		{
+			var getAllUser = apiPath.getAllStaff;
+			apiCall.getCall(getAllUser).then(function(userResponse){
+				// console.log("user response = ",userResponse);
+				var userResponseLength = userResponse.length;
+				for(var index=0;index<userResponseLength;index++)
+				{
+					if(userResponse[index].userType=="admin")
+					{
+						$scope.userName = userResponse[index].userName;
+						// console.log("user data ",$scope.userName);
+						break;
+					}
+				}
+			});
+		}
+		else if(editProductData.updatedBy!=0 || editProductData.createdBy!=0)
+		{
+			var updatedByUser = 0;
+			if(editProductData.updatedBy!=0)
+			{
+				updatedByUser = editProductData.updatedBy;
+			}
+			else if(editProductData.createdBy!=0)
+			{
+				updatedByUser = editProductData.createdBy;
+			}
+			//get data as per user-id
+			var getAllUser = apiPath.getOneStaff+updatedByUser;
+			apiCall.getCall(getAllUser).then(function(userResponse){
+				$scope.userName = userResponse.userName;
+				// console.log("user response = ",userResponse);
+				
+			});
+		}
+
 		getSetFactory.blank();
 		
 		$scope.addInvProduct.getSetProductId = editProductData.productId;
@@ -170,6 +220,21 @@ function AddInvProductController($scope,toaster,$filter,apiCall,apiPath,$statePa
 			else{
 				$scope.addInvProduct.igst = editProductData.igst;
 			}
+			if(!angular.isArray(editProductData.document)){
+				$scope.addInvProduct.document = [];
+			}
+			else{
+				$scope.addInvProduct.document = [];
+				var documentLength = editProductData.document.length;
+				for(var productIndex=0;productIndex<documentLength;productIndex++)
+				{
+					$scope.addInvProduct.document[productIndex] = [];
+					$scope.addInvProduct.document[productIndex]['documentName'] = editProductData.document[productIndex].documentName;
+					$scope.addInvProduct.document[productIndex]['documentPath'] = editProductData.document[productIndex].documentPath;
+					$scope.addInvProduct.document[productIndex]['documentType'] = editProductData.document[productIndex].documentType;
+				}
+			}
+			// console.log("add product = ",$scope.addInvProduct);
 			$scope.addInvProduct.purchaseCgst = editProductData.purchaseCgst == null ? '' : editProductData.purchaseCgst;
 			$scope.addInvProduct.purchaseSgst = editProductData.purchaseSgst == null ? '' : editProductData.purchaseSgst;
 			$scope.addInvProduct.purchaseIgst = editProductData.purchaseIgst == null ? '' : editProductData.purchaseIgst;

@@ -2,6 +2,9 @@
 .chosen-container .chosen-results {
     max-height:130px;
 }
+.imageHeight{
+	height: 200px !important;
+}
 </style>
 <h3>
    <small>
@@ -18,7 +21,10 @@
    <div class="panel panel-default">
 
 		<div class="panel-heading" data-ng-class="app.theme.brand">
-			<button type="button" class="btn btn-default pull-right btn-sm" ng-click="openProductBatchModal()"  data-ng-class="app.theme.brand" > Mass Insertion </button> 
+			<button type="button" class="btn btn-default pull-right btn-sm panel-title" ng-click="openProductBatchModal()"  data-ng-class="app.theme.brand" > Mass Insertion </button> 
+			<div class=" panel-title pull-right" ng-if="dateTimeFlag">
+				Last Updated By : {{userName}} &nbsp; {{updateDate}} &nbsp;&nbsp;&nbsp;
+			</div>
 			<div class="panel-title">
 				Product Form
 			</div>
@@ -30,7 +36,7 @@
 			<div class="col-md-12" >
 			<h4 class="panel-heading bg-default myHeading">Basic Details</h4>
 				<div class="panel-body">
-					<div class="col-md-4" >
+					<div class="col-md-6" >
 						   <div class="form-group">
 							  <label class="col-sm-3 control-label">*Company</label>
 							  <div class="col-sm-9">
@@ -46,7 +52,7 @@
 						   </div>
 						
 					</div>
-					<div class="col-md-4" >
+					<div class="col-md-6" >
 						   <div class="form-group">
 							  <label class="col-sm-3 control-label">*Branch</label>
 							  <div class="col-sm-9">
@@ -61,27 +67,47 @@
 							  </div>
 						   </div>
 					</div>
-					<div class="col-md-4" >
-						 <div class="form-group">
-						   		<div class="input-group ph-lg">
-								  <span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-sm" data-ng-class="app.theme.brand"  onclick="$(this).parent().find('input[type=file]').click();" tabindex="4">Cover Pic</button>
-									<input id="input-id-1" type="file"  onchange="angular.element(this).scope().uploadFile(this.files);$(this).parent().parent().find('.form-control').html(this.files.length == 1 ?this.files[0].name : '');"  accept="image/png,image/gif,image/jpeg,image/jpg,image/bmp" style="display: none;" />
-								  </span>
-								  <span class="form-control input-sm fileAttachLabel" style="width: 100%;" ></span>
-								</div>
-						   </div>
-						   <div class="form-group">
-						   		<div class="input-group ph-lg">
-								  <span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-sm" data-ng-class="app.theme.brand"  onclick="$(this).parent().find('input[type=file]').click();" tabindex="7" >Other Pics</button>
-									<input name="uploaded_file" onchange="angular.element(this).scope().uploadMultipleFile(this.files);$(this).parent().parent().find('.form-control').html(this.files.length > 1 ? this.files.length+' files' : this.files[0].name);" style="display: none;" type="file" multiple accept="image/png,image/gif,image/jpeg,image/jpg,image/bmp">
-								  </span>
-								  <span class="form-control input-sm multipleFileAttachLabel" style="width: 100%;" ></span>
-								</div>
-						   </div>
+					
+				</div>
+			<h4 class="panel-heading bg-default myHeading">Product Images</h4>
+			<div class="panel-body">
+				<div class="col-md-6" >
+					<div class="col-md-12" ng-repeat="item in addInvProduct.document track by $index" ng-if="item.documentType=='CoverImage'">
+						<img  src="{{erpPath}}{{item.documentPath}}{{item.documentName}}"  onerror="this.style.display='none'" height="200" width="400" class="brand-logo-collapsed"/>
+						<!-- <img ng-src="{{image_source}}"   height="400" width="400"  onerror="this.style.display='none'" class="brand-logo-collapsed showImg" /> -->
+					</div>
+					<div clsss="col-md-12">
+						<div class="form-group">
+							<div class="input-group ph-lg">
+								<span class="input-group-btn">
+								<button type="button" class="btn btn-default btn-sm" data-ng-class="app.theme.brand"  onclick="$(this).parent().find('input[type=file]').click();" tabindex="4">Cover Pic</button>
+								<input id="input-id-1" type="file"  onchange="angular.element(this).scope().uploadFile(this.files);$(this).parent().parent().find('.form-control').html(this.files.length == 1 ?this.files[0].name : '');"  accept="image/png,image/gif,image/jpeg,image/jpg,image/bmp" style="display: none;" />
+								</span>
+								<span class="form-control input-sm fileAttachLabel" style="width: 100%;" ></span>
+							</div>
+						</div>
 					</div>
 				</div>
+				<div class="col-md-6">
+					<div class="col-md-12" ng-class="{'imageHeight':addInvProduct.document!='' && addInvProduct.document.length>0 }">
+						<div class="col-sm-4" ng-repeat="item in addInvProduct.document track by $index" ng-if="item.documentType!='CoverImage'">
+							<img src="{{erpPath}}{{item.documentPath}}{{item.documentName}}"  onerror="this.style.display='none'" height="100" width="150" class="brand-logo-collapsed"/>
+							<!-- <img ng-src="{{image_source}}"   height="200" width="200"  onerror="this.style.display='none'" class="brand-logo-collapsed showImg" /> -->
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+								<div class="input-group ph-lg">
+							  <span class="input-group-btn">
+								<button type="button" class="btn btn-default btn-sm" data-ng-class="app.theme.brand"  onclick="$(this).parent().find('input[type=file]').click();" tabindex="7" >Other Pics</button>
+								<input name="uploaded_file" onchange="angular.element(this).scope().uploadMultipleFile(this.files);$(this).parent().parent().find('.form-control').html(this.files.length > 1 ? this.files.length+' files' : this.files[0].name);" style="display: none;" type="file" multiple accept="image/png,image/gif,image/jpeg,image/jpg,image/bmp">
+							  </span>
+							  <span class="form-control input-sm multipleFileAttachLabel" style="width: 100%;" ></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<h4 class="panel-heading bg-default myHeading">Product Information</h4>
 			<div class="panel-body">
 				<div class="col-md-6" >

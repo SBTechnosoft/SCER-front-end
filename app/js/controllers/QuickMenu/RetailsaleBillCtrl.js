@@ -505,6 +505,15 @@ function RetailsaleBillController($rootScope,$scope,apiCall,apiPath,$http,$windo
 	$scope.csgstDisable = true;
 	$scope.setProductData = function(item,index)
 	{
+		$scope.disableButton = false;
+		if(item.notForSale=="true")
+		{
+			$scope.disableButton = true;
+			// $scope.formBill['productName['+index+']'].$invalid = true;
+			toaster.pop('warning','Cant sale '+item.productName+' product');
+			return false;
+		}
+
 		vm.AccBillTable[index].productId = item.productId;
 		vm.productHsn[index] = item.hsn;
 		

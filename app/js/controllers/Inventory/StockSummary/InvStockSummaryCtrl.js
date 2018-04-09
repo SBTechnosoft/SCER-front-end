@@ -39,11 +39,14 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 	$scope.getOptionSettingData();
   var data = [];
 	var flag = 0;
+	$scope.totalQty=0;
+	$scope.pageQty=0;
 	
 	function filterDataForTable(){
 		//console.time();
 		var count = data.length;
 		var iIndex = 0;
+		
 		while(iIndex < count) {
 		  	var index = fetchArrayService.myIndexOfObject(vm.productCategoryData,data[iIndex].product.productCategory.productCategoryId,'productCategoryId');
 			// console.log("prrrrrrrrrrrrrroooooooooooooodcut = ",data[iIndex].product);
@@ -64,29 +67,23 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 			data[iIndex].size = data[iIndex].product.size;
 			
 			data[iIndex].qty = parseInt(data[iIndex].qty);
-			// $scope.totalQty = $scope.totalQty+data[iIndex].qty;
+			$scope.totalQty = $scope.totalQty+data[iIndex].qty;
 			iIndex++;
 		}
 		//console.timeEnd();
 	}
 
-	$scope.totalQty=0;
+	
 	//calculate total qty
 	$scope.calculateQty = function(){
-		$scope.totalQty=0;
-
-		// vm.eventChannel = new ngTableEventsChannel.onAfterDataFiltered(function(tableParams, filteredData){
-		// 	console.log("innn");
-  //           //DO SOMETHING
-  //       });
-
-		// console.log("daaaaaaaaaatadadatdadad = ",self.tableParams);
-		var dataLength = data.length;
+		// console.log("viewwwwwwwwwwwww");
+		$scope.pageQty=0;
+		var dataLength = $scope.filteredItems.length;
 		for(var index=0;index<dataLength;index++)
 		{
-			$scope.totalQty = $scope.totalQty+data[index].qty;
+			$scope.pageQty = $scope.pageQty+$scope.filteredItems[index].qty;
 		}
-		return $scope.totalQty;
+		return $scope.pageQty;
 	}
 
 	$scope.showProduct = function(){
@@ -173,7 +170,7 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 	
 
 	$scope.TableData = function(){
-		 
+		
 	  vm.tableParams = new ngTableParams({
 		  page: 1,            // show first page
 		  count: 10,          // count per page
@@ -193,9 +190,18 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 					 data;
 
 					  vm.users = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
+					  $scope.searchQty=0; 
 					  params.total(orderedData.length); // set total for recalc pagination
 					  $defer.resolve(vm.users);
+					  var dataLength1 = orderedData.length;
+					    //calculate search qty
+						for(var index=0;index<dataLength1;index++)
+						{
+							$scope.searchQty = $scope.searchQty+orderedData[index].qty;
+						}
+
+					  // $scope.searchQty = $scope.searchQty+orderedData
+					  console.log("vm user = ",orderedData, " search=",$scope.searchQty);
 			  }
 			else
 			{
@@ -211,8 +217,9 @@ function InvStockSummaryController($scope, $filter, ngTableParams,apiCall,apiPat
 						  data;
 		  
 				  $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+
 			  }
-			
+			console.log("order data ",orderedData.slice((params.page() - 1) * params.count(), params.page()));
 			$scope.totalData = data.length;
 			$scope.pageNumber = params.page();
             $scope.itemsPerPage = params.count();
