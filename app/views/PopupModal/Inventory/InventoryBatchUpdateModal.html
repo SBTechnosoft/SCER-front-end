@@ -379,6 +379,20 @@
 								</div>
 						</div>
 					</div>
+					<div class="col-md-6" >
+					   <div class="form-group">
+						  <label class="col-sm-3 control-label">Commission</label>
+						  <div class="col-sm-9">
+							 <input id="input-id-1" name="commission"  ng-model="addInvProduct.commission" ng-change="changeInvProductData('commission',addInvProduct.commission)" type="text" placeholder="commission" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
+							 
+							<span ng-messages="formProduct.commission.$error" ng-if="formProduct.commission.$dirty || formProduct.commission.$touched"  role="alert">
+								<span ng-messages-include="errorRequired"></span>
+								<span ng-messages-include="errorLonglength"></span>
+								<span ng-messages-include="errorPatternThisSpecial"></span>
+							 </span>
+						   </div>
+					   </div>
+					</div>
 					
 				</div>
 

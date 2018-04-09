@@ -115,6 +115,7 @@ function AccProductModalController($scope,toaster, $modalInstance,$rootScope,api
 		$scope.addModelProduct.cessPercentage = editProductData.cessPercentage;
 		$scope.addModelProduct.maxSaleQty = editProductData.maxSaleQty;
 		$scope.addModelProduct.opening = editProductData.opening;
+		$scope.addModelProduct.commission = editProductData.commission;
 		$scope.addModelProduct.remark = editProductData.remark;
 		$scope.addModelProduct.notForSale = editProductData.notForSale=="true"?true : false;
 		

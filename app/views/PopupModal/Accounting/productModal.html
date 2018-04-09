@@ -392,8 +392,21 @@
 							<span ng-messages-include="errorPatternThisSpecial"></span>
 						</span>
 					</div>
-					<label class="col-sm-2 control-label">Quantity Rate</label>
+
+					<label for="input-id-1" class="col-sm-2 control-label">Commission</label>
 					<div class="col-sm-4">
+						<input id="input-id-1" name="commission"  ng-model="addModelProduct.commission" ng-change="changeInvProductData('commission',addModelProduct.commission)" type="text" placeholder="commission" class="form-control" tabindex="25" ng-pattern="/^[0-9]*$/" ng-maxlength="10"  only-number />
+
+						<span ng-messages="formProduct.commission.$error" ng-if="formProduct.commission.$dirty || formProduct.commission.$touched"  role="alert">
+						<span ng-messages-include="errorRequired"></span>
+						<span ng-messages-include="errorLonglength"></span>
+						<span ng-messages-include="errorPatternThisSpecial"></span>
+						</span>
+
+					</div>
+					  
+					<!-- <label class="col-sm-2 control-label">Quantity Rate</label>
+					<div class="col-sm-4"> -->
 						<!-- <input id="input-id-1" name="qtyRate" ng-model="addModelProduct.qtyRate" ng-change="changeInvProductData('qtyRate',addModelProduct.qtyRate)" type="text" placeholder="Per PCS Quantity Rate" class="form-control"  ng-pattern="/^[a-zA-Z0-9 &,\/_`#().\'-]+$/" ng-maxlength="15" tabindex="26"/> -->
 					 
 					<!-- <span ng-messages="formProduct.qtyRate.$error" ng-if="formProduct.qtyRate.$dirty || formProduct.qtyRate.$touched"  role="alert">
@@ -402,7 +415,7 @@
 						<span ng-messages-include="errorPatternThisSpecial"></span>
 					 </span> -->
 					
-					</div>
+					<!-- </div> -->
 
 				</div>
 			</fieldset>
